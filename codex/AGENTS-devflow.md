@@ -1,4 +1,7 @@
-<!-- Add this block to your project's AGENTS.md. Not needed in Claude Code (the SessionStart hook does this instead). -->
+<!-- FALLBACK ONLY. The installer registers a native Codex SessionStart hook (requires
+[features] hooks = true in ~/.codex/config.toml) that injects tree state automatically —
+same as Claude Code. Add this block to a project's AGENTS.md only where hooks are
+unavailable (flag off, or older Codex). Not needed in Claude Code either. -->
 
 ## nano-devflow
 

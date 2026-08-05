@@ -1,4 +1,7 @@
-<!-- 이 블록을 프로젝트 AGENTS.md에 추가하라. Claude Code에서는 불필요(SessionStart 훅이 대신한다). -->
+<!-- 폴백 전용. 설치기가 Codex 네이티브 SessionStart 훅을 등록한다
+(~/.codex/config.toml 에 [features] hooks = true 필요) — Claude와 동일하게 트리 상태가
+자동 주입된다. 이 블록은 훅을 못 쓰는 환경(플래그 꺼짐, 구버전 Codex)에서만
+프로젝트 AGENTS.md에 추가한다. Claude Code에서도 불필요. -->
 
 ## nano-devflow
 

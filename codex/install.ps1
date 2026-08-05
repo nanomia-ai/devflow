@@ -33,6 +33,9 @@ Get-ChildItem (Join-Path $devflowRoot "skills") -Directory | Where-Object { $_.N
 }
 
 Write-Host ""
+node (Join-Path $devflowRoot "scripts\install-codex-hook.js")
+
+Write-Host ""
 Write-Host "완료. Codex에서 /nano-devflow-product ... /nano-devflow-resume 사용 가능."
-Write-Host "남은 한 단계: 프로젝트 AGENTS.md에 아래 파일 내용을 추가하라 (세션 시작 시 재개 동작):"
-Write-Host "  $devflowRoot\codex\AGENTS-devflow.md"
+Write-Host "SessionStart 훅이 등록되어 세션 시작 시 트리 상태가 자동 주입된다 (Claude와 동일)."
+Write-Host "훅을 못 쓰는 환경에서만 폴백으로 codex/AGENTS-devflow.md 블록을 프로젝트 AGENTS.md에 추가."

@@ -1,6 +1,6 @@
 {
   "name": "nano-devflow",
   "description": "기획→아키텍처→디자인→분할→구현→검증→재개 개발 흐름. 파일 트리 기반 상태 관리와 핸드오프.",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "author": { "name": "nanomia" }
 }

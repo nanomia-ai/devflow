@@ -122,6 +122,18 @@ v0.3.0 (2026-08-05). 스킬 8개 + verifier 에이전트 + SessionStart 훅 + Co
 - split에 재귀 분할 절(카드→폴더 승격, 02.3.1 번호), arch에 브라운필드 역산 절차
 - 교차도구 결함 수정: 스킬 상호참조를 단계명으로, install.ps1 BOM, verifier 도구 제한 해제
 
+### 2026-08-05 v0.6.0
+- **Codex 네이티브 SessionStart 훅 지원** — 리서치(서브에이전트 2개, Sonnet)로 확인:
+  Codex CLI v0.124.0+에 Claude와 거의 1:1인 훅 시스템 존재 (`~/.codex/hooks.json`,
+  같은 JSON 스키마, `hookSpecificOutput.additionalContext` 주입, `[features] hooks = true` 필요).
+  이전 "Codex엔 훅이 없다" 판단은 오류였다 — 조사한 유명 이중 지원 플러그인들
+  (mattpocock/skills, obra/superpowers, vercel-labs/skills)이 전부 훅 이전 설계라 안 써서 생긴 착시.
+- `scripts/install-codex-hook.js` 신설 — hooks.json에 idempotent 병합(타 도구 항목 보존),
+  feature flag 검사. 설치기 양쪽에서 호출. **같은 session-start.js가 Claude·Codex 양쪽을 서빙.**
+- AGENTS-devflow 블록은 폴백으로 강등 (훅 불가 환경 전용)
+- 향후 옵션(미적용): Codex는 `~/.codex/skills`도 네이티브 스캔 — 프롬프트 대신 스킬 설치 경로 가능.
+  스킬별 `agents/openai.yaml` 사이드카로 Codex UI 메타데이터 제공 가능 (mattpocock 패턴)
+
 ### 2026-08-05 v0.5.0
 - **영문화**: 배포 실물(스킬 8·에이전트 2·AGENTS 블록·훅 주입 문자열)을 영문으로 전환.
   한글 원본은 `_ko` 접미사로 보존 (에이전트 한글판만 ko/ — 이중 등록 방지)

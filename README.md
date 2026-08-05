@@ -61,10 +61,13 @@ powershell -File D:/Projects/Private/nanomia/nanomia-skills/devflow/codex/instal
 sh /path/to/devflow/codex/install.sh
 ```
 
-`~/.codex/prompts/`에 `/nano-devflow-*` 명령 7개가 생성된다. 규칙 정본은 각 프롬프트에
-동봉된다(Codex 프롬프트 폴더는 평면이라 파일 간 참조가 불안정하기 때문).
-훅 대신 `codex/AGENTS-devflow.md` 블록을 프로젝트 `AGENTS.md`에 추가하면
-세션 시작 시 재개 동작이 걸린다.
+`~/.codex/prompts/`에 `/nano-devflow-*` 명령 7개가 생성되고, **Codex 네이티브
+SessionStart 훅이 `~/.codex/hooks.json`에 등록된다** — Claude와 같은 스크립트
+(`scripts/session-start.js`)가 양쪽에서 돌아 세션 시작 시 트리 상태가 자동 주입된다.
+전제: `~/.codex/config.toml`에 `[features] hooks = true` (설치기가 검사해서 없으면 안내).
+규칙 정본은 각 프롬프트에 동봉된다(Codex 프롬프트 폴더는 평면이라 파일 간 참조가
+불안정하기 때문). 훅을 못 쓰는 환경에서만 `codex/AGENTS-devflow.md` 블록을 프로젝트
+`AGENTS.md`에 폴백으로 추가한다.
 
 **스킬을 수정했으면 설치 스크립트를 다시 실행한다** (프롬프트는 생성물이다).
 
