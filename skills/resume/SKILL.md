@@ -1,38 +1,39 @@
 ---
 name: resume
-description: 재개. 새 세션에서 작업 트리·HANDOFF를 읽고 어디까지 됐는지 파악해 이어간다. 세션 재시작, 작업 이어하기, 어디까지 했는지 확인 시 사용.
+description: Resume. In a new session, reads the task tree and HANDOFF, works out how far things got, and continues. Use for session restarts, continuing work, or checking where things stand.
 ---
 
-# resume — 재개
+# resume — Resume
 
-목적: 새 세션이 다섯 가지 읽기로 상태를 복원하고 이어간다.
+Purpose: a new session restores state from five reads and continues.
 
-## 절차 — 이 순서 그대로
-
-```
-1. devflow/project/product.md 정체성 문단   ← 이 서비스가 무엇인지
-2. devflow/tree/ 전체 목록                  ← 어디까지 왔는지 (.done. / .wip. / 대기)
-3. *.wip.md 가 있으면 통독               ← 진행 로그 포함. 어디서 멈췄는지
-4. devflow/HANDOFF.md                       ← 함정·배운 것·열린 결정
-5. devflow/journal.md 끝부분 (있으면)        ← 작업을 가로지르는 결정들
-```
-
-읽는 동안 규칙 정본의 **정합성 점검** 5항목을 함께 훑는다.
-이상은 고치지 말고 아래 보고에 포함한다.
-
-## 보고 후 승인
-
-읽은 것을 **한 문단**으로 보고한다:
+## Procedure — in exactly this order
 
 ```
-"<서비스>는 지금 <능력>까지 완료됐고, <작업>이 진행 중이었습니다.
-진행 로그상 <마지막 지점>까지 됐고, 다음은 <한 걸음>입니다. 진행할까요?"
+1. devflow/project/product.md identity paragraph   ← what this service is
+2. devflow/tree/ full listing                      ← how far things got (.done. / .wip. / pending)
+3. any *.wip.md — read fully                       ← progress log included. Where it stopped
+4. devflow/HANDOFF.md                              ← traps, learnings, open decisions
+5. tail of devflow/journal.md (if present)         ← cross-task decisions
 ```
 
-승인받으면 work로 이어간다. 승인 전에 코드를 고치지 않는다.
+While reading, also run the canonical rules' **integrity check** (5 items).
+Report anomalies — do not fix them; include them in the report below.
 
-## 예외
+## Report, Then Approval
 
-- `.wip.`가 없으면: 트리에서 의존이 풀린 다음 카드를 제안한다.
-- HANDOFF가 없거나 비어 있으면: 정상이다. 트리만으로 재개한다.
-- 트리 자체가 없으면: devflow 미적용 프로젝트다. product(신규) 또는 arch(기존 코드)를 안내한다.
+Report what you read in **one paragraph**:
+
+```
+"<service> is complete through <capability>, with <task> in progress.
+The progress log reaches <last point>; the next step is <one step>. Proceed?"
+```
+
+Once approved, continue into work. Never modify code before approval.
+
+## Exceptions
+
+- No `.wip.`: propose the next dependency-free card from the tree.
+- HANDOFF missing or empty: normal. Resume from the tree alone.
+- No tree at all: this project doesn't use devflow. Direct to product (new) or
+  arch (existing code).

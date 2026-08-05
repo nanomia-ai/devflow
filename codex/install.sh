@@ -18,7 +18,7 @@ for dir in "$DEVFLOW_ROOT"/skills/*/; do
   {
     echo "<!-- nano-devflow (generated $(date +%Y-%m-%d)) -->"
     echo ""
-    strip_fm "$dir/SKILL.md" | sed 's|`\.\./principles/SKILL\.md`|아래 '\''규칙 정본'\'' 절|g'
+    strip_fm "$dir/SKILL.md" | sed 's|`\.\./principles/SKILL\.md`|the Canonical Rules section below|g'
     echo ""
     echo "---"
     echo ""

@@ -18,7 +18,7 @@ Get-ChildItem (Join-Path $devflowRoot "skills") -Directory | Where-Object { $_.N
     $name = $_.Name
     $body = Get-SkillBody (Join-Path $_.FullName "SKILL.md")
     # 스킬 본문의 상대 경로 참조를 동봉 안내로 치환
-    $body = $body -replace [regex]::Escape('`../principles/SKILL.md`'), "아래 '규칙 정본' 절"
+    $body = $body -replace [regex]::Escape('`../principles/SKILL.md`'), "the Canonical Rules section below"
     $out = @(
         "<!-- nano-devflow (generated $(Get-Date -Format yyyy-MM-dd)) -->"
         ""

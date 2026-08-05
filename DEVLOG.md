@@ -52,6 +52,50 @@ ADR 3조건(domain-modeling), 검증 이중축(code-review), code-style 지향 �
 Red-Green 절차, 냄새 12종 목록, 3에이전트 병렬 설계. 사용자 규칙: 이 저장소에서
 추가 차용 시 반드시 사전 허락.
 
+## 이중 언어 워크플로 (v0.5.0부터 — 모든 수정이 이 절차를 따른다)
+
+**설계는 한글로, 배포는 영문으로.** 사용자가 검토할 수 있는 언어가 한글이고,
+AI가 가장 잘 이해하고 토큰을 적게 쓰는 언어가 영문이기 때문이다.
+
+```
+정본 관계:  *_ko.md = 설계 원본 (사용자 검토용)  →  번역  →  영문 = 배포 실물 (AI 소비용)
+파일 배치:  skills/<name>/SKILL_ko.md ↔ SKILL.md
+           ko/reviewer_ko.md ↔ agents/reviewer.md   ← 에이전트 한글판은 agents/ 밖!
+           codex/AGENTS-devflow_ko.md ↔ AGENTS-devflow.md
+```
+
+⚠ **에이전트 한글판을 agents/에 두면 안 된다** — agents/ 안의 모든 .md가 에이전트로
+등록되어 같은 이름이 이중 등록된다. 그래서 ko/ 폴더에 있다.
+
+수정 절차 (순서 고정):
+1. `_ko` 파일을 먼저 수정한다 → 사용자 검토
+2. 영문 파일에 번역 반영. **의미 변조 절대 금지** — 아래 용어 대역표를 강제 사용
+3. 구조 대조 검증: 헤딩 수·번호 목록 수·수치(%, 개수, 번호 형식)가 한↔영 1:1인지 확인
+4. Codex 재생성(install 스크립트) + DEVLOG 로그 append
+
+용어 대역표 (고정 — 다른 번역어 금지):
+
+| 한글 | 영문 | | 한글 | 영문 |
+|---|---|---|---|---|
+| 규칙 정본 | canonical rules | | 능력 | capability |
+| 작업 카드 | task card | | 골조 | foundation |
+| 목적지 | Destination | | 왜 | Why |
+| 금지 | Forbidden | | 완료 신호 | completion signal |
+| 의존 | Depends | | 읽을 것 | Read first |
+| 등급 T-상/중/하 | Tier T-high/T-mid/T-low | | 좌표 | Coordinates |
+| 정체성 | Identity | | 검증 창구 | verify channel |
+| 조사 카드 | research card | | 실행 제안 | execution proposal |
+| 정합성 점검 | integrity check | | 문서 계층 | document hierarchy |
+| 실패 사다리 | failure ladder | | 진행 로그 | progress log |
+| 승격 | promotion | | 사고량 | reasoning effort |
+| 지향 | Values | | 이 프로젝트의 선택 | Project choices |
+| 신뢰 경계 | Trust boundary | | 하지 않는 것 | Non-goals |
+| 미검증 | unverified | | 통과/실패 | pass/fail |
+
+한글이 남아도 되는 곳: DEVLOG(이 파일), README, `_ko` 파일들, 설치 스크립트의 echo(사람용).
+한글이 남으면 안 되는 곳: skills/*/SKILL.md, agents/*.md, codex/AGENTS-devflow.md,
+scripts/*.js 의 주입 문자열. 검사: `grep -c '[가-힣]' <배포 파일들>` → 전부 0.
+
 ## 보류 중 (다음 버전 후보)
 
 - 버그 진단 스킬 — 맷의 diagnosing-bugs("재현 루프가 스킬의 전부, 나머지는 기계적")를
@@ -77,6 +121,14 @@ v0.3.0 (2026-08-05). 스킬 8개 + verifier 에이전트 + SessionStart 훅 + Co
 - PRINCIPLES.md → skills/principles/SKILL.md 이동 (skills.sh 호환)
 - split에 재귀 분할 절(카드→폴더 승격, 02.3.1 번호), arch에 브라운필드 역산 절차
 - 교차도구 결함 수정: 스킬 상호참조를 단계명으로, install.ps1 BOM, verifier 도구 제한 해제
+
+### 2026-08-05 v0.5.0
+- **영문화**: 배포 실물(스킬 8·에이전트 2·AGENTS 블록·훅 주입 문자열)을 영문으로 전환.
+  한글 원본은 `_ko` 접미사로 보존 (에이전트 한글판만 ko/ — 이중 등록 방지)
+- 이중 언어 워크플로 + 용어 대역표를 이 파일에 명문화 (위 절)
+- 검증: 한↔영 헤딩 수·번호 목록 수·핵심 수치 1:1 일치 확인, 배포 파일 한글 0건,
+  Codex 재생성 통과
+- git 리포 초기화. v0.4.0(한글판)이 첫 커밋 — 번역 전 원형이 이력에 보존됨
 
 ### 2026-08-05 v0.4.0
 - **reviewer 에이전트 신설** — 커밋 전 코드 검토 (의도·논리·범위 3판정).

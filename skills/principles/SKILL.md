@@ -1,105 +1,122 @@
 ---
 name: principles
-description: devflow 규칙 정본. 모든 devflow 스킬이 시작할 때 먼저 따른다 — 프롬프트 7원칙, 모델 등급, 실패 사다리, 상태 표기, 커밋 규율, 검증 철칙.
+description: devflow canonical rules. Every devflow skill follows this document first — the 7 prompt principles, model tiers, failure ladder, status notation, commit discipline, and the verification iron rule.
 ---
 
-# devflow 원칙 (규칙 정본)
+# devflow Principles (Canonical Rules)
 
-모든 devflow 스킬·카드·프롬프트는 이 문서를 따른다. 다른 문서와 충돌하면 이 문서가 이긴다.
+Every devflow skill, card, and prompt follows this document. When any other document
+conflicts with it, this document wins.
 
-## 프롬프트 7원칙
+## The 7 Prompt Principles
 
-1. **1개념 1단어.** 동의어 금지. 프로젝트 고유 용어는 `devflow/project/glossary.md`에 등재하고 끝까지 같은 단어를 쓴다.
-2. **목적지 > 지시.** "무엇을 하라"가 아니라 "무엇이 참이 되어야 하는가"를 적는다.
-3. **방향은 풍부하게, 금지는 짧게.** 맥락·의도·왜는 넉넉히 준다. 하네스(금지)는 3줄 이내.
-4. **방법을 지시하지 않는다.** 구현 방법은 실행하는 모델이 결정한다.
-5. **예시 1개 > 규칙 5개.**
-6. **기성 방법론 용어 회피.** spec-driven, TDD, DDD 같은 단어는 원치 않는 짐을 끌고 온다.
-7. **정체성 반복 주입.** `product.md`의 정체성 문단은 모든 작업 카드에 그대로 복사한다.
-   이것이 유일하게 허용된 중복이다 — 비용은 한 문단, 효과는 "길 잃지 않음".
+1. **One concept, one word.** No synonyms. Register project-specific terms in
+   `devflow/project/glossary.md` and use the same word everywhere, to the end.
+2. **Destination over instruction.** Write "what must become true," not "what to do."
+3. **Rich direction, short prohibitions.** Give context, intent, and the "why" generously.
+   Keep the harness (prohibitions) to 3 lines or fewer.
+4. **Never prescribe the method.** The executing model decides how to implement.
+5. **One example beats five rules.**
+6. **Avoid off-the-shelf methodology terms.** Words like spec-driven, TDD, DDD drag in
+   baggage you did not choose.
+7. **Repeat the identity.** Copy the identity paragraph from `product.md` verbatim into
+   every task card. This is the only duplication allowed — it costs one paragraph and
+   buys "never getting lost."
 
-## 문서 계층 (계약)
+## Document Hierarchy (the contract)
 
-`product ⊃ arch ⊃ design·code-style ⊃ tree(카드)`. **하위는 상위를 어길 수 없다.**
-어겨야 한다면 그것은 상위의 결정이다:
+`product ⊃ arch ⊃ design·code-style ⊃ tree (cards)`. **A lower layer may not violate an
+upper layer.** If it must, that is an upper-layer decision:
 
-1. 멈추고 진행 로그에 "왜" 2줄
-2. 상위 문서를 고친다 (ADR 세 조건을 충족하면 ADR 동반 — arch 참조)
-3. 낡아진 카드에 `.stale.` 표시, journal.md에 1줄
-4. split로 영향 구간을 재분할하고 재개
+1. Stop. Write 2 lines of "why" in the progress log.
+2. Fix the upper document (add an ADR if the three ADR conditions hold — see arch).
+3. Mark invalidated cards `.stale.`; add 1 line to journal.md.
+4. Re-split the affected range, then resume.
 
-무엇을 발견했을 때 어디를 고치는가:
+What you discovered → where to update:
 
-| 발견한 것 | 갱신할 곳 |
+| Discovery | Update target |
 |---|---|
-| 기능·화면·범위가 바뀜 | product.md (+영향 카드 `.stale.`) |
-| 스택·모듈 경계·데이터가 안 맞음 | arch.md (+ADR 검토) |
-| 코딩 방식 결정이 새로 필요 | code-style.md 선택 절에 1줄 |
-| 작업이 예상보다 클 뿐 | 문서 변경 없음 — 카드를 폴더로 승격 |
-| 작업 간 결정 | journal.md 1줄 |
+| Feature, screen, or scope changed | product.md (+ mark affected cards `.stale.`) |
+| Stack, module boundary, or data shape doesn't fit | arch.md (+ consider an ADR) |
+| A new coding-convention decision is needed | one line in code-style.md "Project choices" |
+| The task is merely bigger than expected | no document change — promote the card to a folder |
+| A cross-task decision | one line in journal.md |
 
-코어 문서(`devflow/project/*`)는 **이 절차 또는 해당 스킬의 재실행으로만** 수정한다 —
-작업 중에 지나가며 고치지 않는다. 그리고 수정은 **대체가 기본**이다:
-새 줄을 더했으면 낡은 줄을 지웠는지 본다. 자라기만 하는 문서는 죽은 문서다.
+Core documents (`devflow/project/*`) are modified **only through this procedure or by
+re-running the owning skill** — never edited in passing during a task. And modification
+means **replacement by default**: if you added a line, check whether you deleted the stale
+one. A document that only grows is a dead document.
 
-## 정합성 점검
+## Integrity Check
 
-트리를 여는 관문(split·resume 시작 시)에서 훑는다.
-이상은 **고치지 말고 보고한다** — 자동 교정이 오판하면 오염이 가속된다. 사용자 승인 후 교정.
+Run at the gates that open the tree (start of split and resume).
+**Report anomalies — do not fix them.** Auto-correction that misjudges accelerates
+corruption. Correct only after user approval.
 
-1. `.wip.`가 2개 이상인가 (승인된 병렬이 아닌데)
-2. 같은 번호가 중복되는가
-3. `.done` 폴더 안에 done 아닌 카드가 있는가
-4. 카드의 `의존`이 가리키는 번호가 실존하는가
-5. HANDOFF가 가리키는 경로가 실존하는가
+1. Are there 2 or more `.wip.` cards (without approved parallelism)?
+2. Are any numbers duplicated?
+3. Is there a non-done card inside a `.done` folder?
+4. Does every card's `Depends` point to a number that exists?
+5. Do the paths referenced by HANDOFF exist?
 
-## 모델 등급
+## Model Tiers
 
-**파일에 모델명을 적지 않는다.** 등급만 쓴다. 실제 모델·사고량은 split의
-실행 제안에서 사용자가 그 세션에 한해 결정한다.
+**Never write model names in files.** Use tiers only. The actual model and reasoning
+effort are chosen by the user, per session, in split's execution proposal.
 
-| 등급 | 역할 | 용도 |
+| Tier | Role | Use for |
 |---|---|---|
-| T-상 | 최상위 사고 | 판정·리뷰. 짧게만 — 길게 돌리면 비용이 정당화되지 않는다 |
-| T-중 | 표준 사고 | 기본값. 기획, 분할, 모호하거나 얽힌 작업 |
-| T-하 | 구현 특화 | 카드가 완전한 구현, 기계적 변환, 수집·정리 |
-| 그 이하 | — | 코딩 금지 |
+| T-high | Top-tier reasoning | Judgments and reviews. Keep them short — long runs don't justify the cost |
+| T-mid | Standard reasoning | The default. Planning, splitting, ambiguous or entangled tasks |
+| T-low | Implementation-focused | Implementation with a complete card, mechanical transforms, collection/cleanup |
+| Below that | — | Never for coding |
 
-사고량(effort) 규칙: **판정은 상위 등급 + 낮은 사고량으로 짧게. 설계는 표준 등급 + 높은 사고량으로 깊게.**
+Reasoning-effort rule: **judgments = higher tier + low effort, kept short. Design =
+standard tier + high effort, kept deep.**
 
-하네스 다이얼 — 등급에 반비례한다:
+The harness dial — inversely proportional to tier:
 
-- T-중 이상: 목적지 + 금지 3줄. 경로 지시 없음. 방법을 지시하면 오히려 성능이 깎인다.
-- T-하: `읽을 것` 완전 열거 + 진행 순서 힌트 + 금지 확대 + 완료 신호 명령어 그대로.
-- **T-하 수준의 카드를 쓸 시간이 없으면 그 작업을 T-하에게 주지 않는다.**
+- T-mid and above: destination + 3 lines of prohibitions. No path instructions —
+  prescribing the method actively degrades performance.
+- T-low: fully enumerate `Read first` + ordering hints + expanded prohibitions +
+  the completion-signal commands verbatim.
+- **If you don't have time to write a T-low-grade card, don't give that task to T-low.**
 
-## 실패 사다리 (모든 재시도에 공통)
+## Failure Ladder (applies to every retry)
 
 ```
-1차 실패 → 카드를 보강해 재투입 (같은 프롬프트 재투입 금지 — 실패는 카드 결함의 신호다)
-2차 실패 → 등급을 올리거나 메인이 직접
-3차 실패 → 사람 호출. 4번째 시도는 없다
+1st failure → reinforce the card and re-dispatch (never re-dispatch the same prompt —
+              failure signals a defective card)
+2nd failure → raise the tier, or the main session does it directly
+3rd failure → call the human. There is no 4th attempt
 ```
 
-## 상태 표기
+## Status Notation
 
-**파일 트리가 진행 상태의 정본이다. 문서에 진행률을 적지 않는다.**
+**The file tree is the single source of truth for progress. Never write progress into
+documents.**
 
-- 접미사 없음 = 대기 / `.wip.` = 진행 중 / `.done.` = 완료 / `.stale.` = 상위 결정 변경으로 무효
-- `.wip.`는 동시에 하나만 (승인된 병렬 작업은 예외)
-- `.done.`은 **검증 통과 + 커밋 이후에만**
-- 하위가 전부 `.done.`이면 폴더도 `.done`을 받는다.
-  단, **1층 능력 폴더는 능력층 검증 통과 후에** — 부여는 verify가 한다
-- 파일명 본체와 번호는 불변 식별자. 재정렬·재사용 금지. 중간 삽입은 `02.2b` 형식
-- 카드가 아닌 기록 파일(`verify.md` 등)은 상태 접미사를 갖지 않으며 상태 판정에서 제외한다
+- No suffix = pending / `.wip.` = in progress / `.done.` = complete / `.stale.` =
+  invalidated by an upper-level decision change
+- Only one `.wip.` at a time (approved parallel tasks are the exception)
+- `.done.` **only after verification passes AND the commit lands**
+- When all children are `.done.`, the folder receives `.done` too.
+  Exception: **a depth-1 capability folder only after capability-layer verification** —
+  verify grants it
+- File base names and numbers are immutable identifiers. No renumbering, no reuse.
+  Mid-insertions use the `02.2b` form
+- Record files that are not cards (`verify.md`, etc.) carry no status suffix and are
+  excluded from status judgment
 
-## 커밋 규율
+## Commit Discipline
 
-- **1 작업 = 1 커밋.** 완료 신호 통과 후에만 커밋한다. 메시지는 `02.2 가입 API` 형식(트리 번호 + 제목).
-- 긴 작업의 중간 체크포인트는 `02.2 wip: <내용>` 커밋 허용.
-- 되돌릴 때는 revert 커밋 — 히스토리를 지우지 않는다.
+- **1 task = 1 commit.** Commit only after the completion signal passes. Message format:
+  `02.2 signup API` (tree number + title).
+- Mid-checkpoint commits for long tasks are allowed as `02.2 wip: <what>`.
+- To undo, use a revert commit — never erase history.
 
-## 검증 철칙
+## The Verification Iron Rule
 
-**실행하지 않은 것은 통과가 아니라 미검증이다.**
-코드를 읽고 "맞는 것 같다"는 판정이 아니다.
+**What was not executed is not "passed" — it is "unverified."**
+Reading the code and thinking "it looks right" is not a verdict.

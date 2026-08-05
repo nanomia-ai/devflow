@@ -1,97 +1,110 @@
 ---
 name: work
-description: 구현. 작업 카드 하나를 잡아 코딩하고, 진행 로그를 디스크에 남기고, 완료 신호 실행 후 커밋한다. 코딩 시작, 작업 진행, 구현 착수 시 사용.
+description: Implementation. Takes one task card, codes it, keeps the progress log on disk, runs the completion signal, and commits. Use when starting to code, continuing work, or beginning implementation.
 ---
 
-# work — 구현
+# work — Implementation
 
-먼저 규칙 정본(`../principles/SKILL.md`)를 읽는다.
+First read the canonical rules (`../principles/SKILL.md`).
 
-목적: 작업 카드 하나를 완료 신호까지 끌고 가서 커밋한다.
+Purpose: carry one task card all the way to its completion signal, then commit.
 
-## 시작 조건
+## Preconditions
 
-1. git 리포인가. 아니면 `git init` 제안 (거부 시 진행하되 "복구 불가" 경고 1회).
-2. `devflow/tree/**/*.wip.md`가 이미 있으면 그것부터. 새 작업을 열지 않는다.
-3. 없으면 의존이 풀린 다음 카드를 `.wip.`으로 rename하고 시작한다.
+1. Is this a git repository? If not, propose `git init` (if declined, proceed but warn
+   once: "no recovery possible").
+2. If `devflow/tree/**/*.wip.md` already exists, that comes first. Do not open new work.
+3. Otherwise rename the next dependency-free card to `.wip.` and begin.
 
-## 루프
-
-```
-카드 통독 (좌표·정체성 포함 — 지금 무엇의 일부를 만드는 중인지)
-+ devflow/project/code-style.md 가 있으면 함께 읽는다 (지향·선택·신뢰 경계)
-  ↓
-구현 전: 만들려는 것이 이미 있는지 `읽을 것` 주변과 공유 모듈에서 확인
-         (재구현은 몰라서 일어난다 — 규칙이 아니라 이 확인이 막는다)
-  ↓
-구현  ←→  진행 로그 append (의미 있는 진전·결정·발견마다. 디스크가 정본이다.
-  ↓        세션이 언제 죽어도 이 파일만 읽으면 이어받을 수 있어야 한다)
-완료 신호 실행 — 실제로 실행한다. 결과를 로그에 남긴다
-  ↓
-검토 — 깨끗한 컨텍스트(Claude: reviewer 에이전트)에 **카드 + diff + code-style.md만** 준다.
-       구현 경위는 주지 않는다 — 코드가 스스로를 설명해야 한다.
-       판정 셋: 의도(목적지 달성?) · 논리(신호 밖 경로 결함?) · 범위(금지·조용한 확장?)
-       권장: T-상 + 낮은 사고량으로 짧게. 조사 카드는 검토 생략.
-       지적 → 수정 → 재검토. 실패 사다리 적용 — 3회면 사람
-  ↓
-커밋: `02.2 가입 API` 형식. 1 작업 = 1 커밋 (긴 작업 중간엔 `02.2 wip: ...` 허용)
-  ↓
-카드를 .done. 으로 rename (검증 통과 + 커밋, 둘 다 끝난 뒤에만)
-  ↓
-폴더 내 전부 .done. 이면 → verify(능력층) 제안
-```
-
-## 카드를 벗어나야 할 때 — 멈추고 위로
-
-카드 범위 밖(공유 계약·코어·타 능력)을 고쳐야 하면:
+## The Loop
 
 ```
-① 멈춘다. 진행 로그에 "왜 필요한지" 2줄
-② 상위 폴더에 새 카드를 만든다 (예: 01-foundation/01.7-auth-contract-v2.md, split 카드 형식)
-③ 상위 카드를 먼저 처리한다 — 코어는 절대 병렬 금지
-④ 원래 카드의 의존에 추가하고 재개
+Read the card fully (including Coordinates and Identity — know what this is a part of)
++ read devflow/project/code-style.md alongside, if it exists (values, choices, trust boundary)
+  ↓
+Before implementing: check whether what you're about to build already exists — around
+`Read first` and in shared modules (reinvention happens from not knowing; this check,
+not a rule, is what prevents it)
+  ↓
+Implement  ←→  append to the progress log (at every meaningful advance, decision, or
+  ↓            discovery. Disk is the source of truth. If the session dies at any moment,
+  ↓            reading this file alone must be enough to take over)
+Run the completion signal — actually run it. Record the result in the log
+  ↓
+Review — give a clean context (Claude: the reviewer agent) **only the card + diff +
+        code-style.md**. No implementation backstory — the code must explain itself.
+        Three verdict axes: intent (destination achieved?) · logic (defects on paths the
+        signal doesn't cover?) · scope (Forbidden violated, silent expansion?)
+        Recommended: T-high + low effort, kept short. Research cards skip review.
+        Objection → fix → re-review. Failure ladder applies — 3 strikes calls the human
+  ↓
+Commit: `02.2 signup API` format. 1 task = 1 commit (mid-checkpoints for long tasks
+        allowed as `02.2 wip: ...`)
+  ↓
+Rename the card to .done. (only after BOTH verification passed and the commit landed)
+  ↓
+If every card in the folder is .done. → propose verify (capability layer)
 ```
 
-조용히 범위를 넓히는 것이 최악이다. 멈추는 것은 실패가 아니라 정상 동작이다.
+## When You Must Leave the Card — stop and go up
 
-코드가 아니라 **상위 문서**(product·arch·code-style)와 충돌하는 발견이면
-규칙 정본의 문서 계층 절차를 따른다 — 카드 생성이 아니라 문서 수정이 먼저다.
-
-## 서브에이전트 위임
-
-- **카드가 곧 브리핑이다.** 카드 경로 + 규칙 정본 경로만 넘긴다.
-  T-하 등급이면 카드의 `읽을 것`이 완전한지 먼저 확인하고, 부족하면 보강 후 투입.
-- **반환은 5줄 고정:** 상태(완료/막힘) · 변경 파일 · 완료 신호 실행 결과 · 배운 것 · 열린 것.
-  상세는 서브에이전트가 진행 로그에 직접 쓴다. 메인은 5줄만 소화한다.
-- 실패 시 규칙 정본의 실패 사다리. 같은 프롬프트 재투입 금지.
-
-## 병렬
-
-split의 실행 제안에서 승인된 경우에만. 조건은 split과 동일하다:
-파일이 안 겹치고 + 개발 서버를 안 건드리는 작업만. 프론트엔드는 항상 순차.
-
-## 컨텍스트 임계 — 핸드오프
+If you need to modify something outside the card's scope (shared contracts, core,
+another capability):
 
 ```
-~50%    정상
-50~65%  다음 작업 시작 전에 크기를 본다. 크면 여기서 끊는다
-65%+    새 작업을 시작하지 않는다. HANDOFF 쓰고 종료 권고
+① Stop. Write 2 lines of "why this is needed" in the progress log
+② Create a new card in the upper folder (e.g., 01-foundation/01.7-auth-contract-v2.md,
+   split's card format)
+③ Handle the upper card first — core work is never parallel
+④ Add it to the original card's Depends and resume
 ```
 
-핸드오프는 **작업 경계에서만**. 작업 중간에 넘기지 않는다 — 절반 짠 코드와
-절반만 맞는 설명이 넘어간다.
+Silently widening scope is the worst failure. Stopping is not failure — it is correct
+operation.
 
-`devflow/HANDOFF.md` — 매번 덮어쓴다. **위치·진행률은 적지 않는다** (트리가 답한다). 휘발성만:
+If the conflict is with an **upper document** (product, arch, code-style) rather than
+code, follow the document-hierarchy procedure in the canonical rules — fixing the
+document comes before creating a card.
+
+## Delegating to Subagents
+
+- **The card IS the briefing.** Hand over only the card path + the canonical rules path.
+  For T-low tier, first check the card's `Read first` is complete; reinforce it if not.
+- **Return is fixed at 5 lines:** status (done/blocked) · changed files · completion-signal
+  result · learned · open. Details go straight into the progress log by the subagent
+  itself. The main session digests only the 5 lines.
+- On failure, the canonical rules' failure ladder. Never re-dispatch the same prompt.
+
+## Parallelism
+
+Only when approved in split's execution proposal. Same conditions as split:
+only tasks that don't overlap in files AND don't touch the dev server. Frontend is
+always sequential.
+
+## Context Thresholds — handoff
+
+```
+~50%    normal
+50–65%  before starting the next task, size it. If big, cut here
+65%+    start no new task. Write HANDOFF and recommend ending the session
+```
+
+Handoff happens **only at task boundaries**. Never mid-task — half-written code and a
+half-true explanation get handed over.
+
+`devflow/HANDOFF.md` — overwritten every time. **No position, no progress percentages**
+(the tree answers those). Volatile context only:
 
 ```markdown
-# HANDOFF · <날짜 시각>
-## 다음 한 걸음        <!-- 트리 경로 하나 -->
-## 방금 배운 것        <!-- 트리에도 카드에도 없는 것만 -->
-## 함정
-## 열린 결정 (사람 필요)
+# HANDOFF · <date time>
+## Next single step          <!-- one tree path -->
+## Just learned              <!-- only what is in neither the tree nor any card -->
+## Traps
+## Open decisions (needs a human)
 ```
 
-넷 다 없으면 빈 파일이어도 된다 — 트리만으로 재개 가능한 게 정상이다.
+If all four are empty, an empty file is fine — resuming from the tree alone is the
+normal case.
 
-전역 기록: 작업을 가로지르는 결정만 `devflow/journal.md`에 1줄 append. HANDOFF와 journal은
-메인 세션 전용이다.
+Global record: only cross-task decisions, 1 line appended to `devflow/journal.md`.
+HANDOFF and journal are main-session-only.

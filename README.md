@@ -99,7 +99,8 @@ devflow/
 ```
 devflow/
   DEVLOG.md              이 플러그인 자체의 개발 기록·핸드오프. 수정 전 통독, 수정 후 append
-  skills/<name>/SKILL.md 스킬 8개 (principles 포함. Claude가 그대로 쓰고, Codex 프롬프트의 소스)
+  skills/<name>/SKILL.md 스킬 8개 — 영문 배포 실물. 한글 설계 원본은 SKILL_ko.md (수정은 _ko 먼저 → 번역. DEVLOG 참조)
+  ko/                    에이전트 한글 원본 (agents/에 두면 이중 등록되므로 분리)
   agents/                reviewer(커밋 전 코드 검토)·verifier(실행 검증) — Claude 전용
   hooks/ + scripts/      SessionStart 훅
   codex/                 Codex 설치 스크립트 + AGENTS 블록

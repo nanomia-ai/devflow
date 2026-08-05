@@ -1,67 +1,71 @@
 ---
 name: design
-description: 디자인 기획(선택 단계). UI 베이스 선택, 스타일을 디자인 토큰으로 번역, 디자인 시스템 구축 전략을 정해 devflow/project/design.md를 만든다. 디자인 시스템, UI 스타일, 컴포넌트 라이브러리 결정 시 사용.
+description: Design planning (optional stage). Chooses the UI base, translates style intent into design tokens, and sets the design-system build strategy, producing devflow/project/design.md. Use for design systems, UI style, or component-library decisions.
 ---
 
-# design — 디자인 기획 (선택)
+# design — Design Planning (optional)
 
-먼저 규칙 정본(`../principles/SKILL.md`)와 `devflow/project/arch.md`를 읽는다.
+First read the canonical rules (`../principles/SKILL.md`) and `devflow/project/arch.md`.
 
-**게이트:** `arch.md`의 `frontend: none`이면 이 스킬은 실행하지 않는다 — 그렇게 답하고 끝낸다.
-`needed`여도 사용자가 건너뛸 수 있다: "디자인 기획을 할까요, 기본 스타일로 갈까요?" 먼저 묻는다.
+**Gate:** if arch.md says `frontend: none`, this skill does not run — answer so and end.
+Even with `needed`, the user may skip it: first ask "shall we plan the design, or go with
+default styling?"
 
-목적: UI 플러그인을 가져와 **시스템화**하는 과정을 설계한다. 산출은 문서가 아니라
-토큰 파일과 프리뷰 페이지가 본체다.
+Purpose: design the process of taking a UI plugin and **turning it into a system**. The
+real output is not a document — it is the token file and the preview page.
 
-## 절차
+## Procedure
 
-### 1. 베이스 선택
+### 1. Choose the base
 
-| | 특징 | 언제 |
+| | Traits | When |
 |---|---|---|
-| 소유형 (shadcn/Radix류) | 컴포넌트 소스가 내 리포에 있어 AI가 직접 고친다. 커스터마이즈 상한 없음 | **기본 추천** |
-| 완성형 (MUI류) | 빠르다. 커스터마이즈는 테마 API 안에서만 | 완성도가 급하거나 팀이 익숙할 때 |
-| 유틸리티만 (Tailwind 단독) | 최대 자유, 전부 직접 제작 | 디자인이 제품 정체성일 때 |
+| Owned source (shadcn/Radix family) | Component source lives in your repo, so AI edits it directly. No ceiling on customization | **Default recommendation** |
+| Complete kit (MUI family) | Fast. Customization only within the theme API | When polish is urgent or the team knows it well |
+| Utility-only (Tailwind alone) | Maximum freedom, build everything yourself | When design IS the product's identity |
 
-### 2. 스타일 방향 — 말을 토큰으로 번역
-묶음 질문 한 번 (기본값 포함):
+### 2. Style direction — translate words into tokens
+One batched question round (with defaults):
 
 ```
-레퍼런스 2~3개  : "이런 느낌" (URL 또는 서비스명)
-톤             : 신뢰/전문 · 친근/장난 · 미니멀/절제 · 대담/표현적
-밀도            : 조밀(정보 밀집) · 넉넉(여백)
-성격            : 라운드 정도 / 그림자 / 테두리 / 대비 강도
-브랜드 컬러     : 있으면 hex, 없으면 톤에서 내가 제안
+References (2–3)  : "this kind of feel" (URLs or service names)
+Tone              : trustworthy/professional · friendly/playful · minimal/restrained · bold/expressive
+Density           : dense (information-packed) · airy (whitespace)
+Character         : roundness / shadows / borders / contrast strength
+Brand color       : hex if you have one; otherwise I propose from the tone
 ```
 
-### 3. 시스템화 — 산출물
+### 3. Systematize — outputs
 
-- **토큰 파일 1개** (`theme.ts` 또는 `tokens.css`) — 색·타이포·간격·라운드의 유일한 정본.
-  **문서에 hex를 적지 않는다.** 문서는 이 파일을 가리키기만 한다.
-- **컴포넌트 인벤토리** — product.md 화면 목록에서 역산. 이름 + 있음/만들 것.
-- **`/preview` 페이지 1장** — 모든 컴포넌트를 한 화면에. 이 페이지가 이 단계의
-  완료 신호이자 이후의 회귀 감지기다. 브라우저 MCP로 열어 확인한다.
+- **One token file** (`theme.ts` or `tokens.css`) — the single source of truth for color,
+  typography, spacing, radius. **Never write hex values into documents.** Documents only
+  point at this file.
+- **Component inventory** — reverse-derived from product.md's screen list. Name +
+  exists / to-build.
+- **One `/preview` page** — every component on a single screen. This page is the
+  completion signal of this stage and the regression detector afterward. Open and check
+  it with the browser MCP.
 
-### 4. 빌드 전략 — 사용자가 고른다 (이 선택이 split의 분해 축을 바꾼다)
+### 4. Build strategy — the user chooses (this changes split's decomposition axis)
 
-| | 방식 | 좋을 때 | 대가 |
+| | Approach | Good when | Cost |
 |---|---|---|---|
-| A 목업 선행 | 전 화면을 mock으로 완성 → UI에서 API 계약 도출 → 백엔드 | UX가 제품의 핵심 | 백엔드 현실과 어긋나면 재작업 |
-| **B 수직 슬라이스** | 기능 1개를 프론트~백 관통해 완성, 반복 | **기본 추천.** 기술 리스크 클 때 | 전체 UX 그림이 늦음 |
-| C 계약 선행 | API 스키마 확정 → 프론트·백 병렬 | 병렬 인원/에이전트 쓸 때 | 스키마 변경이 비쌈 |
+| A Mock-first | Finish all screens with mock data → derive the API contract from the UI → backend | UX is the heart of the product | Rework if backend reality diverges |
+| **B Vertical slice** | Complete one feature front-to-back, repeat | **Default recommendation.** High technical risk | Whole-UX picture arrives late |
+| C Contract-first | Fix the API schema → frontend & backend in parallel | Using parallel people/agents | Schema changes are expensive |
 
-## 산출 — devflow/project/design.md
+## Output — devflow/project/design.md
 
 ```markdown
-# 디자인
+# Design
 
-베이스: <선택> — <근거 1줄>
-토큰: <토큰 파일 경로>            <!-- hex 금지, 경로만 -->
-빌드 전략: A | B | C
-프리뷰: <경로 또는 라우트>
+Base: <choice> — <1-line reason>
+Tokens: <token file path>            <!-- no hex; path only -->
+Build strategy: A | B | C
+Preview: <path or route>
 
-## 컴포넌트 인벤토리
-| 이름 | 상태(있음/만들 것) |
+## Component inventory
+| Name | Status (exists / to-build) |
 ```
 
-완료 후: "다음은 split" 안내.
+On completion: one line — "next is split."

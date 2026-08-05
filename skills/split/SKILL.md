@@ -1,152 +1,166 @@
 ---
 name: split
-description: 작업 분할. 작업 트리(devflow/tree/)를 한 층 열고 작업 카드를 만들며, 실행 제안(순서·병렬·모델 등급)을 사용자에게 승인받는다. 작업 쪼개기, 태스크 분해, 다음 작업 계획 시 사용.
+description: Task splitting. Opens the task tree (devflow/tree/) one layer at a time, creates task cards, and gets the execution proposal (order, parallelism, model tiers) approved by the user. Use for breaking down work, task decomposition, or planning what to do next.
 ---
 
-# split — 작업 분할
+# split — Task Splitting
 
-먼저 규칙 정본(`../principles/SKILL.md`)와 `devflow/project/product.md`(정체성 문단·능력 목록),
-`devflow/project/arch.md`를 읽는다.
+First read the canonical rules (`../principles/SKILL.md`), `devflow/project/product.md`
+(identity paragraph, capability list), and `devflow/project/arch.md`.
 
-목적: 작업 트리를 **한 번에 한 층만** 열고, 실행 제안을 승인받는다.
+Purpose: open the task tree **one layer at a time**, and get the execution proposal approved.
 
-## 시작 조건
+## Preconditions
 
-1. **product.md가 없으면 중단한다.** 코드가 없으면 product를, 기존 코드가 있으면
-   arch(브라운필드 = 이해 단계)를 먼저 안내한다. 프로젝트를 모른 채 쪼개지 않는다.
-2. `devflow/tree/`를 훑어 현재 상태를 파악하고, 규칙 정본의 **정합성 점검**을 돌린다.
-   이상은 고치지 말고 보고한다.
-3. **무엇을 열지 선언한 뒤 진행한다:** "02-registration 아래 3층을 엽니다 (현재 02.3.2까지 done)."
-   tree/가 아직 없으면 "트리를 새로 만듭니다"가 선언이다. 어긋난 인식은 이 한 줄에서 사람이 잡는다.
+1. **If product.md is missing, stop.** With no code, direct the user to product first;
+   with existing code, to arch (brownfield = the understanding stage). Never split a
+   project you don't know.
+2. Scan `devflow/tree/` for current state and run the canonical rules' **integrity check**.
+   Report anomalies — do not fix them.
+3. **Declare what you are opening, then proceed:** "Opening layer 3 under
+   02-registration (currently done through 02.3.2)."
+   If tree/ doesn't exist yet, "creating the tree" is the declaration. A misaligned
+   understanding gets caught by the human at this one line.
 
-## 트리 구조
+## Tree Structure
 
 ```
 devflow/tree/
-  01-foundation/            ← 리포 셋업·검증 창구·공유 계약 등 골조
-  02-<능력이름>/            ← product.md의 능력이 그대로 폴더가 된다. 이름도 그대로
-    02.1-<작업>.md
-    02.2-<작업>.wip.md
-  03-<능력이름>.md          ← 아직 안 연 능력은 파일 한 장으로 대기
+  01-foundation/            ← repo setup, verify channel, shared contracts — the skeleton
+  02-<capability>/          ← product.md capabilities become folders, names unchanged
+    02.1-<task>.md
+    02.2-<task>.wip.md
+  03-<capability>.md        ← a capability not yet opened waits as a single file
 ```
 
-- 폴더/파일 이름 = product.md·arch.md의 용어 그대로. 새 단어를 만들지 않는다.
-- 상태 접미사·번호 규칙은 규칙 정본의 상태 표기 절을 따른다.
-- 브라운필드: 기존 완성 코드를 소급해 `.done.` 카드로 채우지 않는다.
-  트리는 도입 이후의 작업만 담는다. 골조(01)도 이미 있으면 만들지 않는다.
+- Folder/file names = the exact terms from product.md and arch.md. Coin no new words.
+- Status suffixes and numbering follow the Status Notation section of the canonical rules.
+- Brownfield: never backfill `.done.` cards for already-finished code. The tree holds
+  only post-adoption work. Skip the foundation (01) too if it already exists.
 
-## 한 번에 한 층만 연다
-
-```
-프로젝트 시작    → 골조(01) + 능력 목록(대기 파일들)까지만
-능력 착수 직전   → 그 능력의 작업들
-작업이 커 보이면 → 그 자리에서 폴더로 승격해 더 쪼갠다
-```
-
-전부 미리 쪼개지 않는다. 앞의 구현이 뒤의 분해를 바꾼다 — 모르는 것은 코드를
-쳐봐야 알게 되고, 그때 쪼개는 게 정확하고 싸다.
-
-`design.md`가 있으면 분해 축은 빌드 전략을 따른다:
-A 목업 선행 → 화면 단위 / B 수직 슬라이스 → 기능을 프론트~백 관통 단위 / C 계약 선행 → 계약 카드 먼저, 그 아래 프론트·백 병렬.
-
-## 크기 판정
+## Open One Layer at a Time
 
 ```
-커밋 1개로 안 끝날 것 같다  → 쪼갠다
-쪼갰더니 7개를 넘는다      → 중간 묶음 폴더를 하나 만든다
-쪼갰더니 3개 미만이다      → 안 쪼갠다. 되돌린다
+Project start            → skeleton (01) + capability list (waiting files) only
+Just before a capability → that capability's tasks
+A task looks big         → promote it to a folder on the spot and split further
 ```
 
-## 트리는 재귀다 — 깊어질 때
+Never split everything upfront. Earlier implementation changes later decomposition —
+what you don't know, you learn by writing code, and splitting then is accurate and cheap.
 
-카드가 폴더로 승격되는 것은 실패가 아니라 정상이다. 몇 층이든 같은 규칙이 반복된다:
+If `design.md` exists, the decomposition axis follows the build strategy:
+A mock-first → by screen / B vertical slice → by feature cut front-to-back /
+C contract-first → contract card first, then frontend/backend cards in parallel beneath it.
+
+## Size Judgment
 
 ```
-02.3-고객관리.md            ← 열어 보니 커밋 1개로 안 끝난다
-  ↓ 승격
-02.3-고객관리/
-  02.3.1-목록.md
-  02.3.2-필터.md
-  02.3.3-모달.md            ← 이것도 크면 다시 02.3.3-모달/ 로 승격
+Looks like more than 1 commit   → split it
+Split produced more than 7      → create one intermediate grouping folder
+Split produced fewer than 3     → don't split. Revert
 ```
 
-승격 절차:
-1. 카드 파일을 **같은 번호·같은 이름의 폴더**로 바꾼다
-2. 원래 카드의 목적지·왜는 자식 카드들에 분배한다 — 폴더 자체는 카드를 갖지 않는다
-   (폴더의 의미는 이름과 자식들이 말한다. 능력 폴더와 같은 원리)
-3. 자식 번호 = 부모 번호 + 한 자리 (`02.3` → `02.3.1`). 번호 불변 규칙은 그대로
+## The Tree Is Recursive — when it deepens
 
-- 능력 안의 분해 축은 **기능 단위가 기본**이다 (사용자가 하나로 인지하는 동작).
-  프론트/백 같은 기술 축 분해는 빌드 전략 C(계약 선행)일 때만
-- 시나리오 검증(verify 능력층)은 깊이와 무관하게 **1층 능력 폴더에서만** 연다.
-  중간 폴더는 자식 전부 `.done.`이면 `.done`을 받을 뿐, 별도 검증 의식이 없다
-- 4층을 넘게 쪼개지고 있다면 멈추고 사용자와 범위를 재검토한다 —
-  트리가 깊은 게 아니라 능력 하나가 프로젝트만큼 큰 것일 수 있다
+A card promoting into a folder is not failure; it is normal. The same rule repeats at
+any depth:
 
-## 조사 카드 — 목적지가 추측이 될 때
+```
+02.3-customer-management.md   ← opened it: won't finish in 1 commit
+  ↓ promote
+02.3-customer-management/
+  02.3.1-list.md
+  02.3.2-filter.md
+  02.3.3-modal.md             ← if this is big too, promote again to 02.3.3-modal/
+```
 
-미지수 하나가 카드의 목적지·완료 신호를 추측으로 만들면, 구현 카드 앞에
-**답이 산출물인 카드**를 놓는다.
+Promotion procedure:
+1. Turn the card file into a **folder with the same number and name**
+2. Distribute the original card's Destination and Why into the child cards — the folder
+   itself holds no card (a folder's meaning is its name and its children; same principle
+   as capability folders)
+3. Child number = parent number + one digit (`02.3` → `02.3.1`). Number immutability
+   still applies
+
+- The decomposition axis inside a capability defaults to **feature units** (what a user
+  perceives as one action). Technical-axis splits (frontend/backend) only under build
+  strategy C (contract-first)
+- Scenario verification (verify's capability layer) opens **only at depth-1 capability
+  folders**, regardless of depth. Intermediate folders just receive `.done` when all
+  children are `.done.` — no separate verification rite
+- Splitting past 4 levels → stop and re-examine scope with the user. The tree isn't
+  deep; one capability may be as big as a project
+
+## Research Cards — when the destination would be a guess
+
+When one unknown turns a card's destination or completion signal into guesswork, place a
+card **whose deliverable is the answer** before the implementation card.
 
 ```markdown
-# 04.1 조사: 토스 API 부분환불 지원 여부
-목적지:   "지원하는가, 한도·제약은 무엇인가"에 답이 나온다
-완료 신호: 진행 로그에 답 + 근거(문서 링크 또는 실제 호출 결과) 기록됨
+# 04.1 Research: does the payment API support partial refunds?
+Destination:       An answer exists to "is it supported — limits and constraints?"
+Completion signal: Answer + evidence (doc link or a real call result) recorded in the progress log
 ```
 
-- 실행 수단은 자유다: 문서 조사, 실제 호출, **버리는 프로토타입**.
-  프로토타입은 버려질 것임을 이름·위치로 명시하고 본 코드에 섞지 않는다 — 결정만 남긴다.
-- 답이 나오면 뒤 카드의 목적지를 확정하고 진행한다. 30분의 조사가 며칠의 갈아엎기를 대체한다.
-- 근거가 트리에 남아, 나중에 "왜 이렇게 설계했나"의 답이 된다.
+- Any means is fine: document research, real calls, a **throwaway prototype**.
+  A prototype must be marked disposable by name and location and never mixed into the
+  real code — only the decision survives.
+- Once answered, fix the following card's destination and proceed. Thirty minutes of
+  research replaces days of rework.
+- The evidence stays in the tree — later it answers "why was it designed this way."
 
-## 수정·추가 요청 라우팅 — 유지보수 단계
+## Routing Change Requests — the maintenance phase
 
-"이 페이지의 필터를 고쳐줘" 같은 요청이 오면:
+When a request like "fix the filter on this page" arrives:
 
-1. 요청을 **능력에 매핑**한다 (product.md 능력 목록 기준 — 폴더명 = 능력명 = 코드 폴더명이라
-   같은 단어로 찾아진다)
-2. 해당 능력 폴더에 카드를 추가한다 — 번호는 이어서 (02.7, 02.8…)
-3. 폴더가 `.done`이었다면 **`.done`을 제거한다** — 자식 전부 done일 때만 .done이므로.
-   이 rename을 잊으면 트리가 거짓말을 한다
-4. 매핑이 애매하면 추측하지 않고 사용자에게 묻는다
+1. **Map the request to a capability** (by product.md's capability list — folder name =
+   capability name = code folder name, so the same word finds it)
+2. Add a card to that capability's folder — numbering continues (02.7, 02.8…)
+3. If the folder was `.done`, **remove the `.done`** — it holds only while all children
+   are done. Forgetting this rename makes the tree lie
+4. If the mapping is ambiguous, don't guess — ask the user
 
-## 작업 카드 형식
+## Task Card Format
 
 ```markdown
-# 02.2 가입 API
-좌표:   <서비스이름> ▸ ①등록 ▸ 02.2
-정체성: <product.md 정체성 문단 그대로 복사>
+# 02.2 signup API
+Coordinates: <service> ▸ ①registration ▸ 02.2
+Identity:    <the identity paragraph from product.md, copied verbatim>
 
-목적지:    이게 끝나면 무엇이 참이 되는가 (1~2문장)
-왜:        이게 없으면 사용자에게 무슨 일이 생기나 (1문장)
-금지:      <3줄 이내>
-완료 신호:  <실행 가능한 명령/확인 — 예: `pnpm test auth` 통과 + .http로 201 확인>
-의존:      02.1
-읽을 것:   <출발점이 될 파일·문서. 울타리가 아니라 출발점이다>
-등급:      T-중 | T-하   <!-- 생략 시 T-중. T-하면 읽을 것·금지·완료 신호를 완전하게 -->
+Destination:       What becomes true when this is done (1–2 sentences)
+Why:               What happens to users without this (1 sentence)
+Forbidden:         <3 lines max>
+Completion signal: <executable command/check — e.g., `pnpm test auth` passes + 201 via .http>
+Depends:           02.1
+Read first:        <files/docs to start from. A starting point, not a fence>
+Tier:              T-mid | T-low   <!-- omitted = T-mid. For T-low, make Read first,
+                                        Forbidden, and the completion signal complete -->
 
-## 진행 로그
-<!-- work가 .wip. 동안 append -->
+## Progress log
+<!-- work appends here while .wip. -->
 ```
 
-**구현 방법은 적지 않는다.** 목적지·완료 신호·금지가 하네스의 전부다.
-T-하 카드만 예외적으로 순서 힌트까지 준다 (규칙 정본의 하네스 다이얼).
+**Never write the implementation method.** Destination, completion signal, and Forbidden
+are the entire harness. Only T-low cards additionally get ordering hints (see the harness
+dial in the canonical rules).
 
-## 실행 제안 — 이 스킬의 마지막 산출이자 관문
+## Execution Proposal — this skill's final output and gate
 
-연 작업들에 대해 제안하고 **사용자 승인을 받는다**:
+Propose, and **get user approval**, for the opened tasks:
 
 ```
-실행 제안
-02.2~02.4  순차 · T-중 추천 (스키마가 얽혀 판단 필요)
-03.1~03.3  병렬 가능 · T-하 + 완전한 카드 (기계적 CRUD, 파일 비겹침 확인함)
-→ 현재 사용 가능한 모델 기준 매핑 예시를 제시하고 선택받는다
+Execution proposal
+02.2–02.4  sequential · T-mid recommended (schemas are entangled; judgment needed)
+03.1–03.3  parallelizable · T-low + complete cards (mechanical CRUD; file overlap checked)
+→ present an example mapping onto currently available models and let the user choose
 ```
 
-병렬 허용 조건: 파일이 안 겹치고 + 개발 서버를 안 건드리는 작업만. **프론트엔드는 항상 순차**
-(개발 서버가 하나라, 한 에이전트의 컴파일 에러가 전체 화면을 깨뜨린다).
+Parallelism conditions: only tasks that don't overlap in files AND don't touch the dev
+server. **Frontend is always sequential** (one dev server — a single agent's compile
+error breaks the whole screen).
 
-커밋 전 검토(work의 reviewer)는 기본 실행이다. 정말 사소한 카드만
-실행 제안에서 "검토 생략"을 명시해 뺄 수 있다.
+Pre-commit review (work's reviewer) runs by default. Only truly trivial cards may opt
+out via an explicit "skip review" in the execution proposal.
 
-승인 후: "다음은 work" 안내.
+After approval: one line — "next is work."

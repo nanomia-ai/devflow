@@ -1,63 +1,70 @@
 ---
 name: product
-description: 서비스 기획 인터뷰. 새 프로젝트가 풀 문제·능력 구성·경계를 정의해 devflow/project/product.md를 만든다. 새 프로젝트 시작, 서비스 기획, 제품 정의, MVP 범위 결정 시 사용.
+description: Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing devflow/project/product.md. Use when starting a new project, planning a service, defining a product, or deciding MVP scope.
 ---
 
-# product — 서비스 기획
+# product — Service Planning
 
-먼저 규칙 정본(`../principles/SKILL.md`)를 읽는다.
+First read the canonical rules (`../principles/SKILL.md`).
 
-목적: 사용자와의 인터뷰로 서비스 기획을 완성해 `devflow/project/product.md`를 만든다.
-이 단계는 **서비스** 기획이다 — 개발 얘기(스택·DB·프레임워크·아키텍처)는 꺼내지도, 받아주지도 않는다.
-사용자가 개발 얘기를 시작하면 "그건 arch에서"라고 한 줄로 미루고 돌아온다.
+Purpose: complete the service plan through an interview with the user, producing
+`devflow/project/product.md`.
+This stage is **service** planning — do not bring up, or entertain, development talk
+(stack, DB, framework, architecture). If the user starts talking development, defer it
+with one line — "that belongs to arch" — and return.
 
-## 판단할 것 여섯 가지 (= product.md의 목차)
+## The Six Judgments (= the table of contents of product.md)
 
-| 판단 | 질문 |
+| Judgment | Question |
 |---|---|
-| 문제 | 누가, 무엇 때문에, 얼마나 불편한가 |
-| 해결 방식 | 왜 이 방식인가. 버린 방식은 무엇인가 |
-| 능력 구성 | 이 문제를 풀려면 어떤 덩어리(능력)가 필요한가 |
-| 경계 | MVP는 어디까지. **안 만들 것**은 무엇인가 |
-| 성공 판정 | 무엇이 되면 성공인가 — 반드시 검증 가능한 서술로 |
-| 화면·창구 | 사용자가 어디로 접근하나 |
+| Problem | Who suffers, because of what, and how badly |
+| Approach | Why this approach. Which approaches were discarded |
+| Capability composition | What chunks (capabilities) are needed to solve this problem |
+| Boundary | How far does the MVP go. What will **not** be built |
+| Success criteria | What counts as success — stated verifiably, always |
+| Screens & access points | Where do users reach the service |
 
-**능력 구성이 심장이다.** 여기서 정한 능력 이름이 이후 아키텍처의 모듈 이름,
-작업 트리의 폴더 이름이 되어 끝까지 같은 단어로 따라간다.
+**Capability composition is the heart.** The capability names chosen here become the
+module names in the architecture and the folder names in the task tree — the same words,
+followed to the very end.
 
-## 인터뷰 규칙
+## Interview Rules
 
-- **질문은 반드시 묶음으로.** 단건 왕복 금지. 한 묶음은 축이 하나(대상·가치 / 경계 / 미결), 3~5개.
-- **모든 질문에 내 기본값(추천안)을 붙인다.** "답 없는 항목은 기본값으로 진행합니다"를 명시.
-- 라운드는 범위에 비례해 능동적으로:
-  - 능력 1~3개 → 1~2라운드. 얕게. 과한 질문 자체가 낭비다
-  - 능력 4~7개 → 3라운드. 능력별로 파고든다
-  - 능력 8개 이상 → 멈추고 "한 프로젝트가 아니다"라고 말한 뒤 분할을 제안한다
-- 능력마다 딱 하나는 반드시 묻는다: **"이게 없으면 서비스가 성립하는가?"** 아니오 → MVP 제외 후보.
+- **Always ask questions in batches.** No single-question round-trips. One batch = one
+  axis (audience & value / boundary / unresolved), 3–5 questions.
+- **Attach my default (recommendation) to every question.** State explicitly:
+  "unanswered items proceed with the default."
+- Scale rounds actively to scope:
+  - 1–3 capabilities → 1–2 rounds. Shallow. Over-questioning is itself waste
+  - 4–7 capabilities → 3 rounds. Dig into each capability
+  - 8+ capabilities → stop, say "this is not one project," and propose a split
+- For every capability, always ask exactly one question: **"Does the service still stand
+  without this?"** If no → MVP-exclusion candidate.
 
-## 산출 — devflow/project/product.md
+## Output — devflow/project/product.md
 
 ```markdown
-# <서비스 이름>
+# <service name>
 
-<정체성 문단 — 아래 형식 그대로. 모든 작업 카드에 복사될 문단이다>
-이 서비스는 <누구>가 <무엇> 때문에 겪는 <문제>를, <방식>으로 해결한다.
-성공하면 <무엇>이 가능해진다.
+<identity paragraph — exactly this form. This paragraph gets copied into every task card>
+This service solves <problem> that <who> suffers because of <what>, by <approach>.
+When it succeeds, <what> becomes possible.
 
-## 문제
-## 해결 방식        <!-- 버린 방식 각 1줄 포함 -->
-## 능력             <!-- ① ② ③ 번호 + 이름 + 한 줄 설명. 이 이름이 끝까지 간다 -->
-## 경계             <!-- MVP 범위 / 안 만들 것 (명시) -->
-## 성공 판정        <!-- 검증 가능한 수용 기준 3~7개 -->
-## 화면·창구        <!-- 화면 또는 인터페이스 목록 -->
-## 열린 질문
+## Problem
+## Approach            <!-- include 1 line per discarded approach -->
+## Capabilities        <!-- ① ② ③ number + name + one-line description. These names go all the way -->
+## Boundary            <!-- MVP scope / will-not-build (explicit) -->
+## Success criteria    <!-- 3–7 verifiable acceptance criteria -->
+## Screens & access points   <!-- list of screens or interfaces -->
+## Open questions
 
 interface: web | cli | server-only | tui | mixed
 ```
 
-같이 만든다: `devflow/project/glossary.md` — 인터뷰 중 확정된 프로젝트 용어를 `용어: 정의` 한 줄씩.
+Create alongside it: `devflow/project/glossary.md` — project terms fixed during the
+interview, one `term: definition` line each.
 
-## 게이트
+## Gates
 
-- 성공 판정이 검증 불가능한 서술이면 통과 못 한다. 되묻는다.
-- 완료 후: "다음은 arch" 한 줄 안내.
+- If a success criterion is not verifiable as written, it does not pass. Ask again.
+- On completion: one line — "next is arch."

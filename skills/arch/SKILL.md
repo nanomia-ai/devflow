@@ -1,134 +1,144 @@
 ---
 name: arch
-description: 개발 기획. product.md를 받아 구성요소·스택·코드 구조·검증 창구를 결정해 devflow/project/arch.md를 만든다. 스택 선택, 아키텍처 설계, 기존 코드베이스 역산 시 사용.
+description: Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, producing devflow/project/arch.md. Use for stack selection, architecture design, or reverse-deriving from an existing codebase.
 ---
 
-# arch — 개발 기획
+# arch — Development Planning
 
-먼저 규칙 정본(`../principles/SKILL.md`)와 `devflow/project/product.md`를 읽는다.
-`product.md`가 없으면: 코드도 없으면 product 단계를 먼저 안내하고,
-**코드가 있으면 아래 브라운필드 절차로 product.md까지 함께 만든다.**
+First read the canonical rules (`../principles/SKILL.md`) and `devflow/project/product.md`.
+If `product.md` is missing: with no code either, direct the user to the product stage
+first; **with existing code, produce product.md too via the brownfield procedure below.**
 
-목적: 서비스 기획을 개발 계획으로 번역해 `devflow/project/arch.md`를 만든다.
+Purpose: translate the service plan into a development plan, producing
+`devflow/project/arch.md`.
 
-**브라운필드(이미 코드가 있는 프로젝트에 중간 참여):** 인터뷰하지 않는다. 역산한다.
-이 절차가 곧 "이해 단계"다 — split은 이것 없이 돌지 않는다.
+**Brownfield (joining a project that already has code):** do not interview. Reverse-derive.
+This procedure IS the "understanding stage" — split does not run without it.
 
-1. **흐름 추적.** 진입점에서 대표 요청 하나를 끝까지 따라가며 능력 경계를 눈으로 확인한다.
-   문서보다 코드가 진실이다.
-2. 코드·README·커밋 이력에서 **정체성 문단과 능력 목록을 역산**해 압축판 `product.md`를
-   만든다. 전체 인터뷰 없이 확인 질문 한 묶음만 (틀리게 역산한 것 교정용).
-   `glossary.md`도 코드가 실제로 쓰는 용어로 시작한다 — 코드의 단어가 정본이다.
-3. arch.md를 역산해 초안으로 제시하고 사용자 확인을 받는다. 이후 영원히 상속.
-4. **code-style.md도 역산한다.** 코드가 이미 하고 있는 방식이 정본이다 —
-   기본 지향을 강요해 스타일을 두 쪽 내지 않는다.
-5. **기존 완성 코드를 트리에 소급 기록하지 않는다.** `devflow/tree/`는 도입 이후의
-   작업부터 시작한다 — 이미 있는 기능을 `.done.` 카드로 채우는 것은 낭비다.
-   능력 폴더 이름만 역산된 능력 목록과 맞춰, 새 작업이 제자리에 쌓이게 한다.
+1. **Trace the flow.** Follow one representative request from the entry point to the end,
+   confirming capability boundaries with your own eyes. Code is truer than documents.
+2. From code, README, and commit history, **reverse-derive the identity paragraph and the
+   capability list** into a condensed `product.md`. No full interview — just one batch of
+   confirmation questions (to correct anything mis-derived).
+   Start `glossary.md` from the terms the code actually uses — the code's words are canonical.
+3. Reverse-derive arch.md, present it as a draft, and get user confirmation. Inherited
+   forever after.
+4. **Reverse-derive code-style.md as well.** What the code already does is canonical —
+   do not impose the default values and split the style in two.
+5. **Never backfill the tree with already-finished code.** `devflow/tree/` starts from
+   work done after adoption — filling it with `.done.` cards for existing features is
+   waste. Only align capability folder names with the reverse-derived capability list,
+   so new work accumulates in the right place.
 
-## 절차 — 이 순서 그대로
+## Procedure — in exactly this order
 
-### 1. 구성요소 도출 — 내가 먼저 판단해 확인만 받는다
-product.md의 능력 목록에서 필요한 구성요소를 도출해 근거 1줄씩 붙여 제시한다.
+### 1. Component derivation — I judge first, you only confirm
+From the capability list in product.md, derive the needed components, each with a
+one-line reason.
 
 ```
-✔ 백엔드 API    (①②③ 전부 서버 상태 필요)
-✔ DB           (등록 데이터 영속)
-✘ 큐/워커       (비동기 작업 없음 — ⑤정산 들어오면 그때)
-맞나요?
+✔ backend API    (①②③ all need server state)
+✔ DB             (registration data must persist)
+✘ queue/worker   (no async work — revisit when ⑤settlement arrives)
+Correct?
 ```
 
-### 2. 스택 질문 — 묶음으로
-구성요소별 후보 2~3개 + 내 추천 + 근거 1줄. 비교표 금지. 기본값 명시.
+### 2. Stack questions — in one batch
+2–3 candidates per component + my recommendation + a one-line reason. No comparison
+tables. State defaults.
 
-### 3. 파생 질문 — 스택이 정해져야 비로소 생기는 결정들
-선택된 스택 때문에 갈리는 결정을 찾아 한 묶음으로 묻는다.
-(예: Next.js 선택 → 서버/클라이언트 경계, 데이터 페칭 위치, 인증 저장소)
-미리 정해둘 수 없다 — 스택을 보고 그 자리에서 만든다.
-**여기서 나온 결정들이 code-style.md의 "이 프로젝트의 선택" 절이 된다.**
+### 3. Derived questions — decisions that only exist once the stack is chosen
+Find the decisions that fork because of the chosen stack and ask them as one batch.
+(e.g., choosing Next.js → server/client boundary, data-fetching location, auth storage)
+These cannot be pre-listed — create them on the spot from the stack.
+**The decisions made here become the "Project choices" section of code-style.md.**
 
-### 4. 코드 구조 결정
-AI가 운용하기 좋은 구조가 기준이다. 사람 기준과 다른 지점:
+### 4. Code structure decision
+The criterion is what AI operates well with. Where that differs from human preference:
 
-- 파일명은 유일하고 검색 가능하게 (`user-repository.ts`, `index.ts` 남발 금지)
-- 암묵 연결 금지 — 코드에 안 적힌 것은 AI가 모른다
-- 폴더 깊이 3단계 이하, 파일 ~400줄 이하
-- 모듈 경계마다 계약(타입·스키마)은 한 파일에
+- File names unique and searchable (`user-repository.ts`; don't multiply `index.ts`)
+- No implicit wiring — what is not written in code does not exist for AI
+- Folder depth ≤ 3, files ≈ 400 lines or fewer
+- Contracts (types/schemas) in one file per module boundary
 
-구조는 규모로 고른다:
+Choose structure by scale:
 
-| | 구조 | 언제 |
+| | Structure | When |
 |---|---|---|
-| A | 도메인 수직 모듈 — `src/<능력>/` 안에 route·service·repo·test 전부 | 기본 추천. 능력 3개 이상 |
-| B | Feature-Sliced | 화면 많은 프론트엔드 |
-| C | 평면 — `src/` 아래 파일만 | 20파일 미만. 여기서 A는 과잉이다 |
+| A | Domain-vertical modules — route·service·repo·test all inside `src/<capability>/` | Default recommendation. 3+ capabilities |
+| B | Feature-Sliced | Screen-heavy frontends |
+| C | Flat — just files under `src/` | Under 20 files. A would be overkill here |
 
-**폴더 이름 = product.md의 능력 이름.** 문서와 코드가 같은 단어를 쓴다.
+**Folder name = capability name from product.md.** Documents and code use the same words.
 
-### 5. 검증 창구 결정 — 통과 게이트
-정해지기 전에는 이 스킬이 끝나지 않는다.
+### 5. Verify-channel decision — a pass-gate
+This skill does not finish until it is decided.
 
-| 유형 | 창구 | 없으면 |
+| Type | Channel | If missing |
 |---|---|---|
-| 프론트엔드 있음 | **브라우저 MCP 필수** (Chrome DevTools MCP 또는 Playwright MCP) | 설치 안내 후 중단. 눈으로 못 보는 UI 검증은 추측이다 |
-| 웹 백엔드 | HTTP 실호출 수단 (`.http` 파일 / curl 스크립트) | 첫 작업으로 만든다 |
-| CLI / 데몬 | 실행 명령 + 기대 출력 (+ 헬스 체크·로그 위치) | 첫 작업으로 만든다 |
-| 라이브러리 | 테스트 러너 | 첫 작업으로 만든다 |
+| Has a frontend | **Browser MCP required** (Chrome DevTools MCP or Playwright MCP) | Guide installation, then stop. UI verification you cannot see is guesswork |
+| Web backend | Real HTTP calls (`.http` file / curl scripts) | Create it as the first task |
+| CLI / daemon | Run command + expected output (+ health check, log location) | Create it as the first task |
+| Library | Test runner | Create it as the first task |
 
-git 확인: 리포가 아니면 `git init`을 제안한다. 이 체계의 복구·되돌리기 전부가 git에 의존한다.
+Git check: if not a repository, propose `git init`. All recovery and undo in this system
+depends on git.
 
-## 산출 — devflow/project/arch.md
+## Output — devflow/project/arch.md
 
 ```markdown
-# 아키텍처
+# Architecture
 
-## 구성요소        <!-- ✔/✘ + 근거 1줄 -->
-## 스택            <!-- 항목: 선택 — 근거 1줄 -->
-## 코드 구조       <!-- A/B/C + 폴더 스케치. 폴더명 = 능력명 -->
-## 데이터          <!-- 핵심 엔티티만 -->
-## 리스크          <!-- 가장 먼저 깨질 곳 3개 + 확인 방법 -->
-## 비범위          <!-- 이번 아키텍처가 감당하지 않는 것 -->
+## Components       <!-- ✔/✘ + 1-line reason -->
+## Stack            <!-- item: choice — 1-line reason -->
+## Code structure   <!-- A/B/C + folder sketch. folder name = capability name -->
+## Data             <!-- core entities only -->
+## Risks            <!-- 3 things that break first + how to check each -->
+## Out of scope     <!-- what this architecture does not carry -->
 
 frontend: none | needed
 verify_channel:
-  작업 서버: <실행 명령 + 포트>     # 검증은 반드시 여기서
-  확인 수단: <브라우저 MCP | .http | CLI 명령>
+  work server: <run command + port>     # verification always happens here
+  means: <browser MCP | .http | CLI command>
 ```
 
-ADR(Architecture Decision Record — 결정 하나당 맥락·선택지·결정·결과 한 장)은
-**세 조건을 모두 충족할 때만** `devflow/project/decisions/ADR-NNN.md`에 남긴다:
+An ADR (Architecture Decision Record — one page per decision: context, options,
+decision, consequences) goes into `devflow/project/decisions/ADR-NNN.md` **only when all
+three conditions hold**:
 
 ```
-① 되돌리기 어렵다  ② 나중에 보면 의아할 만큼 비자명하다  ③ 실제로 대안을 검토했다
-(예: 인증을 세션 대신 JWT로 = 통과 / 라이브러리 A 대신 B = 탈락)
+① hard to reverse  ② non-obvious enough that a future reader would wonder  ③ real alternatives were examined
+(e.g., JWT instead of sessions for auth = passes / library A instead of B = fails)
 ```
 
-## 산출 2 — devflow/project/code-style.md
+## Output 2 — devflow/project/code-style.md
 
-파생 질문(3단계)의 결정들을 받아 적는 곳. **모든 항목은 "무엇을 우선하는가"로 쓴다 —
-"이렇게 하라"로 쓰지 않는다.** 방법은 구현자가 정한다. 상한 1페이지.
+Where the decisions from the derived questions (step 3) get written down. **Every entry
+states "what we prioritize" — never "do it this way."** The implementer decides the
+method. Cap: 1 page.
 
 ```markdown
-# 코드 스타일
+# Code Style
 
-## 지향                          <!-- 아래 7줄을 기본 제시하고 프로젝트 성격에 맞게 취사 -->
-- 적은 수의 깊은 모듈 > 많은 얕은 헬퍼.
-  지웠을 때 복잡성이 호출자로 흩어지는 모듈이 좋은 모듈이다
-- 결과를 반환한다 > 상태를 바꾼다. 같은 입력이면 같은 출력인 코드를 우선한다
-- 명시가 마법을 이긴다. 코드에 적히지 않은 연결은 없는 것이다
-- 테스트는 공개 인터페이스의 행동을 사양처럼 검증한다. 내부 구현을 모킹하지 않는다
-- 오류를 삼키지 않는다. 처리하거나 위로 던진다
-- 죽은 코드는 지운다. 주석 처리된 코드는 git이 기억한다
-- 주석은 "왜"만 적는다. "무엇"은 코드가 말한다
+## Values                        <!-- present these 7 as defaults; curate to fit the project -->
+- Few deep modules > many shallow helpers.
+  A good module is one whose deletion scatters complexity onto its callers
+- Return results > mutate state. Prefer code where the same input yields the same output
+- Explicit beats magic. A connection not written in code does not exist
+- Tests verify public-interface behavior like a spec. Never mock internals
+- Never swallow errors. Handle them or throw them upward
+- Delete dead code. Commented-out code is remembered by git
+- Comments say "why" only. The code says "what"
 
-## 이 프로젝트의 선택             <!-- 모델이 알 수 없는 이 프로젝트의 결정만 -->
-- (예) 검증: zod / 에러: Result 타입, throw 금지 / HTTP: shared/http.ts만 / 시간: UTC
+## Project choices               <!-- only decisions the model cannot know -->
+- (e.g.) validation: zod / errors: Result type, no throw / HTTP: shared/http.ts only / time: UTC
 
-## 신뢰 경계
-- 자세: 엄격 | 표준 | 최소       <!-- 프로젝트 성격이 다이얼을 정한다 -->
-- 경계 목록: <외부 입력이 들어오는 지점들>. 경계를 넘는 입력은 적대적으로 간주한다
+## Trust boundary
+- Posture: strict | standard | minimal    <!-- the project's nature sets the dial -->
+- Boundary list: <points where external input enters>. Input crossing a boundary is
+  treated as hostile
 
-## 하지 않는 것                   <!-- 이 프로젝트의 YAGNI 선언 2~3개 -->
+## Non-goals                     <!-- this project's 2–3 YAGNI declarations -->
 ```
 
-완료 후: `frontend: needed`면 "design(선택) 또는 split", `none`이면 "split" 안내.
+On completion: if `frontend: needed` — "design (optional) or split"; if `none` — "split."
