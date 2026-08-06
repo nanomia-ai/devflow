@@ -93,7 +93,6 @@ depends on git.
 ## Stack            <!-- item: choice — 1-line reason -->
 ## Code structure   <!-- A/B/C + folder sketch. folder name = capability name -->
 ## Data             <!-- core entities only -->
-## Provisional      <!-- values you are guessing. see below — never leave one unmarked -->
 ## Risks            <!-- 3 things that break first + how to check each -->
 ## Out of scope     <!-- what this architecture does not carry -->
 
@@ -102,31 +101,6 @@ verify_channel:
   work server: <run command + port>     # verification always happens here
   means: <browser MCP | .http | CLI command>
 ```
-
-### Provisional — the part of the architecture you do not know yet
-
-Some numbers and mechanisms cannot be settled by thinking: buffer sizes, timeouts, whether
-a backpressure protocol is needed at all. Writing them into Stack or Data as if they were
-decided is how an architecture document starts lying.
-
-**Every value you are guessing goes in this table, and every row names the card that will
-settle it.** No card number means you do not actually intend to find out — then it is not
-provisional, it is decided, and it belongs above.
-
-```markdown
-| Item | Provisional value | Where it came from | Settled by |
-|---|---|---|---|
-| stream batch size | 64 KiB | copied from <reference> | 01.3 |
-| backpressure protocol | credit/ack | assumed necessary | 01.3 |
-```
-
-The contract this creates: when card 01.3 closes, work's upper-document feedback step
-checks this table, and the row must be **replaced** by the measured result — moved up into
-a decision, or deleted because it turned out unnecessary. A row that survives its own
-settling card is a bug in the process, not a detail.
-
-Mark provisional values inline too wherever they appear, so a reader who lands mid-document
-knows the ground is soft.
 
 An ADR (Architecture Decision Record — one page per decision: context, options,
 decision, consequences) goes into `devflow/project/decisions/ADR-NNN.md` **only when all

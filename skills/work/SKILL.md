@@ -20,9 +20,7 @@ Purpose: carry one task card all the way to its completion signal, then commit.
 
 ```
 Read the card fully (including Coordinates and Identity — know what this is a part of)
-+ read devflow/project/code-style.md and devflow/project/arch.md alongside
-  (a decision that never reached the card does not exist for the implementer —
-   read at minimum arch's Stack, Code structure, Provisional, and Risks)
++ read devflow/project/code-style.md alongside, if it exists (values, choices, trust boundary)
   ↓
 Before implementing: check whether what you're about to build already exists — around
 `Read first` and in shared modules (reinvention happens from not knowing; this check,
@@ -31,11 +29,6 @@ not a rule, is what prevents it)
 Implement  ←→  append to the progress log (at every meaningful advance, decision, or
   ↓            discovery. Disk is the source of truth. If the session dies at any moment,
   ↓            reading this file alone must be enough to take over)
-  ↓            **Gate: the log must be current BEFORE you start any build, measurement,
-  ↓            or completion-signal run.** Those are exactly the steps that take minutes,
-  ↓            fail, and tempt you to postpone writing — and exactly when a session dies
-  ↓            leaving nothing on disk. On a long card, checkpoint-commit `NN.N wip: ...`
-  ↓            at the same moments
 Run the completion signal — actually run it. Record the result in the log
   ↓
 Review — give a clean context (Claude: the reviewer agent) **only the card + diff +
@@ -47,13 +40,6 @@ Review — give a clean context (Claude: the reviewer agent) **only the card + d
   ↓
 Commit: `02.2 signup API` format. 1 task = 1 commit (mid-checkpoints for long tasks
         allowed as `02.2 wip: ...`)
-  ↓
-Upper-document feedback — **before renaming**, ask: did this card settle or contradict
-        anything an upper document left open? (a `Provisional` row in arch.md, a success
-        criterion in product.md, a claim in an ADR). If yes, fix that document first via
-        the canonical rules' hierarchy procedure. **A card that measured an answer but
-        left the document that posed the question unchanged is not done** — the stale
-        upper document outranks your finding and the next implementer follows it
   ↓
 Rename the card to .done. (only after BOTH verification passed and the commit landed)
   ↓
@@ -95,25 +81,16 @@ Only when approved in split's execution proposal. Same conditions as split:
 only tasks that don't overlap in files AND don't touch the dev server. Frontend is
 always sequential.
 
-## Handoff Trigger — events, not percentages
-
-**You cannot observe your own context usage.** Any rule phrased as a percentage is a rule
-you will guess at and get wrong. So the trigger is a set of events you *can* observe:
+## Context Thresholds — handoff
 
 ```
-Ask the user how much context is left — and let them decide whether to continue — at:
-  · before opening a new capability folder (the biggest single commitment in the tree)
-  · before starting a card you expect to outlast a normal task
-  · at every `NN.N wip:` checkpoint commit on a long card
-  · whenever the harness warns you, whatever the number says
+~50%    normal
+50–65%  before starting the next task, size it. If big, cut here
+65%+    start no new task. Write HANDOFF and recommend ending the session
 ```
-
-The user sees the number; you don't. Ask, state how big the next step looks, and let them
-choose. Never assume you have room.
 
 Handoff happens **only at task boundaries**. Never mid-task — half-written code and a
-half-true explanation get handed over. Mid-task safety comes from the progress-log gate in
-The Loop, not from a mid-task handoff document.
+half-true explanation get handed over.
 
 `devflow/HANDOFF.md` — overwritten every time. **No position, no progress percentages**
 (the tree answers those). Volatile context only:

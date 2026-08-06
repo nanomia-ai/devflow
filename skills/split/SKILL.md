@@ -6,14 +6,7 @@ description: Task splitting. Opens the task tree (devflow/tree/) one layer at a 
 # split — Task Splitting
 
 First read the canonical rules (`../principles/SKILL.md`), `devflow/project/product.md`
-(identity paragraph, capability list), `devflow/project/arch.md`, and **the tail of
-`devflow/journal.md`** — earlier cards leave their durable findings there with pointers
-into `.done.` cards. That tail is how a finding from a finished capability reaches the one
-you are about to open; HANDOFF is overwritten and will not carry it.
-
-When a card you are opening depends on a `.done.` card, read that card's progress-log
-conclusions and carry the constraints it names into `Read first`. Evidence that stays in
-the tree only helps if someone goes and gets it.
+(identity paragraph, capability list), and `devflow/project/arch.md`.
 
 Purpose: open the task tree **one layer at a time**, and get the execution proposal approved.
 
@@ -115,11 +108,6 @@ Completion signal: Answer + evidence (doc link or a real call result) recorded i
   real code — only the decision survives.
 - Once answered, fix the following card's destination and proceed. Thirty minutes of
   research replaces days of rework.
-- **The answer must also travel upward.** A research card usually resolves something an
-  upper document deliberately left open ("start from these numbers, adjust after
-  measuring"). Settling it without replacing that text leaves the upper document winning
-  the hierarchy with a value you just disproved. work's upper-document feedback step
-  enforces this before the card can be renamed `.done.`
 - The evidence stays in the tree — later it answers "why was it designed this way."
 
 ## Routing Change Requests — the maintenance phase
