@@ -34,7 +34,12 @@ The duality of roles — they never cross:
 3. Actually execute through the channel — browser-MCP clicks, HTTP calls, CLI runs
 4. The verdict is exactly one of three: pass · fail · unverified
 5. Capability layer adds three checks:
-   - **Regression**: rerun the completion signals of the `.done.` cards in the same folder
+   - **Regression**: rerun the completion signals of the `.done.` cards in the same folder,
+     **plus the folders this capability depends on** — a capability that breaks the one
+     below it is invisible if regression never leaves its own folder
+   - **Upper-document truth**: for every `Provisional` row in arch.md settled by a card in
+     this folder, confirm the row was actually replaced. A document still posing a question
+     its own card already answered will misdirect the next capability
    - **Boundary**: run one scenario input as hostile/abnormal
      (intensity per the posture level in code-style.md's Trust boundary)
    - **Standards**: scan for visible code-style.md violations — an axis separate from

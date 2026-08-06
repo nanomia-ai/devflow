@@ -39,6 +39,8 @@ What you discovered → where to update:
 |---|---|
 | Feature, screen, or scope changed | product.md (+ mark affected cards `.stale.`) |
 | Stack, module boundary, or data shape doesn't fit | arch.md (+ consider an ADR) |
+| **A value the upper document called provisional is now measured** | **arch.md's `Provisional` row — replace it, don't add beside it. Also fix any ADR that assumed the old value** |
+| A success criterion turns out unrunnable as written | product.md (+ the cards whose signals quote it) |
 | A new coding-convention decision is needed | one line in code-style.md "Project choices" |
 | The task is merely bigger than expected | no document change — promote the card to a folder |
 | A cross-task decision | one line in journal.md |

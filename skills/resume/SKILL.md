@@ -17,6 +17,12 @@ Purpose: a new session restores state from five reads and continues.
 5. tail of devflow/journal.md (if present)         ← cross-task decisions
 ```
 
+**Check HANDOFF's freshness before trusting it.** Compare its date against the last commit.
+HANDOFF is written only at task boundaries, so a session that died mid-task leaves the
+*previous* boundary's file behind — describing a next step already taken. If it is older
+than the last commit, report it as stale and let the tree and the `.wip.` card decide.
+**When HANDOFF conflicts with the tree, the tree wins.**
+
 While reading, also run the canonical rules' **integrity check** (5 items).
 Report anomalies — do not fix them; include them in the report below.
 
