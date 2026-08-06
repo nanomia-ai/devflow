@@ -33,15 +33,27 @@ upper layer.** If it must, that is an upper-layer decision:
 3. Mark invalidated cards `.stale.`; add 1 line to journal.md.
 4. Re-split the affected range, then resume.
 
+**A contradiction between documents is a defect, not a precedence question.** Silently
+adopt neither side — stop, reconcile through this procedure, then proceed. A delegated
+implementer stops and reports only; reconciling is the main session's job.
+
 What you discovered → where to update:
 
 | Discovery | Update target |
 |---|---|
 | Feature, screen, or scope changed | product.md (+ mark affected cards `.stale.`) |
 | Stack, module boundary, or data shape doesn't fit | arch.md (+ consider an ADR) |
+| A value the upper document called provisional is now measured | that row of arch.md's Provisional table — **replace it, don't add beside it**. An ADR that assumed the old value gets a dated update note |
+| A success criterion turns out unrunnable as written | product.md (+ the cards that quote it) |
+| A `.done.` card's completion signal turns out unrunnable | fix that card's signal text too — regression must stay runnable |
 | A new coding-convention decision is needed | one line in code-style.md "Project choices" |
+| A new term becomes necessary | one line in glossary.md |
 | The task is merely bigger than expected | no document change — promote the card to a folder |
 | A cross-task decision | one line in journal.md |
+
+An update per this table (replacing a provisional value, fixing a signal text, etc.) is
+itself a sanctioned modification path. Steps 1–4 run only when a lower layer must
+**violate** an upper one.
 
 Core documents (`devflow/project/*`) are modified **only through this procedure or by
 re-running the owning skill** — never edited in passing during a task. And modification
@@ -54,7 +66,7 @@ Run at the gates that open the tree (start of split and resume).
 **Report anomalies — do not fix them.** Auto-correction that misjudges accelerates
 corruption. Correct only after user approval.
 
-1. Are there 2 or more `.wip.` cards (without approved parallelism)?
+1. Are there 2 or more `.wip.` cards (with no parallel-approval or evidence-wait record in journal)?
 2. Are any numbers duplicated?
 3. Is there a non-done card inside a `.done` folder?
 4. Does every card's `Depends` point to a number that exists?
@@ -99,11 +111,17 @@ documents.**
 
 - No suffix = pending / `.wip.` = in progress / `.done.` = complete / `.stale.` =
   invalidated by an upper-level decision change
-- Only one `.wip.` at a time (approved parallel tasks are the exception)
-- `.done.` **only after verification passes AND the commit lands**
+- Only one `.wip.` at a time (exceptions: approved parallelism, evidence-wait — both
+  grounded in a journal record)
+- `.done.` **only after the completion signal passes, the review that applies to the card
+  passes, and the commit lands.** In this system, "verification" is reserved for verify's
+  capability and product layers
 - When all children are `.done.`, the folder receives `.done` too.
   Exception: **a depth-1 capability folder only after capability-layer verification** —
-  verify grants it
+  verify grants it. The foundation folder (01) is not a capability: it closes with no
+  scenario rite once all children are `.done.`
+- A retired capability folder gets `.stale` — every card status inside it is void.
+  The hook and the integrity check do not count inside `.stale` folders
 - File base names and numbers are immutable identifiers. No renumbering, no reuse.
   Mid-insertions use the `02.2b` form
 - Record files that are not cards (`verify.md`, etc.) carry no status suffix and are
@@ -111,9 +129,19 @@ documents.**
 
 ## Commit Discipline
 
-- **1 task = 1 commit.** Commit only after the completion signal passes. Message format:
+- **1 task = 1 commit.** Commit only after the completion signal passes (see the
+  exception below when only remote evidence remains). Message format:
   `02.2 signup API` (tree number + title).
 - Mid-checkpoint commits for long tasks are allowed as `02.2 wip: <what>`.
+- When only remote evidence (CI, etc.) remains in the completion signal: get the review
+  first, then push the real task commit. The card stays `.wip.` (evidence-wait) until the
+  evidence arrives, with 1 journal line. When it arrives, the rename and the journal
+  line's deletion ride in the boundary commit.
+- **Boundary commit**: bundle status renames, HANDOFF, journal, and documents fixed by
+  upper-document feedback (see work) into one commit. Message: `boundary — <what closed>`.
+  HANDOFF never gets a dedicated commit — it only rides here.
+- **git belongs to the main session.** Subagents implement and write the progress log —
+  they never commit, rename, or push.
 - To undo, use a revert commit — never erase history.
 
 ## The Verification Iron Rule

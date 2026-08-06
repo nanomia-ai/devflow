@@ -28,8 +28,10 @@ function walk(dir, acc) {
   }
   for (const e of entries) {
     const p = path.join(dir, e.name);
-    if (e.isDirectory()) walk(p, acc);
-    else if (e.name.endsWith(".md")) acc.push(p);
+    if (e.isDirectory()) {
+      if (/\.stale$/.test(e.name)) continue; // retired capability: inner card statuses are void
+      walk(p, acc);
+    } else if (e.name.endsWith(".md")) acc.push(p);
   }
   return acc;
 }
@@ -59,7 +61,7 @@ for (const p of files) {
   seen.set(n, p);
 }
 if (dups.size) parts.push(`⚠ duplicate numbers detected: ${[...dups].join(", ")} — integrity check needed (report, do not fix)`);
-if (wip.length > 1) parts.push(`⚠ ${wip.length} .wip. cards — an integrity anomaly unless parallelism was approved`);
+if (wip.length > 1) parts.push(`⚠ ${wip.length} .wip. cards — an integrity anomaly unless parallelism or evidence-wait is recorded in journal`);
 
 // Identity paragraph (body before the first blank line within the first 20 lines of product.md)
 const product = safeRead(path.join(cwd, "devflow", "project", "product.md"), 4000);
@@ -77,7 +79,7 @@ if (wip.length) {
   parts.push("\nNo card in progress. Next pending card example: " + rel(pending[0]));
 }
 
-const handoff = safeRead(path.join(cwd, "devflow", "HANDOFF.md"), 3000);
+const handoff = safeRead(path.join(cwd, "devflow", "HANDOFF.md"), 6000);
 if (handoff && handoff.trim()) parts.push("\nHANDOFF:\n" + handoff.trim());
 
 parts.push("\nFollow the nano-devflow resume skill to resume. Do not modify code before approval.");

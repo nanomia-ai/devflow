@@ -52,10 +52,13 @@ description: 서비스 기획 인터뷰. 새 프로젝트가 풀 문제·능력 
 ## 화면·창구        <!-- 화면 또는 인터페이스 목록 -->
 ## 열린 질문
 
-interface: web | cli | server-only | tui | mixed
+interface: web | desktop | cli | server-only | tui | mixed
 ```
 
 같이 만든다: `devflow/project/glossary.md` — 인터뷰 중 확정된 프로젝트 용어를 `용어: 정의` 한 줄씩.
+
+유지보수 중 능력이 은퇴하면 목록에서 지우지 않는다 — `④ ~~이름~~ — 은퇴(날짜, 근거 포인터)`
+1줄로 남긴다 (번호는 불변 식별자다). 트리의 해당 폴더는 `.stale` 처리한다 (규칙 정본 상태 표기).
 
 ## 게이트
 

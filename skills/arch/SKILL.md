@@ -77,6 +77,7 @@ This skill does not finish until it is decided.
 | Type | Channel | If missing |
 |---|---|---|
 | Has a frontend | **Browser MCP required** (Chrome DevTools MCP or Playwright MCP) | Guide installation, then stop. UI verification you cannot see is guesswork |
+| Non-web with a screen (desktop app · TUI) | A tool that reads the screen/accessibility tree or real output + an operating-procedure document (process safety included) | Guide installation, then stop. Same reason |
 | Web backend | Real HTTP calls (`.http` file / curl scripts) | Create it as the first task |
 | CLI / daemon | Run command + expected output (+ health check, log location) | Create it as the first task |
 | Library | Test runner | Create it as the first task |
@@ -93,14 +94,38 @@ depends on git.
 ## Stack            <!-- item: choice — 1-line reason -->
 ## Code structure   <!-- A/B/C + folder sketch. folder name = capability name -->
 ## Data             <!-- core entities only -->
+## Provisional      <!-- values you are guessing. see below. omit the section if empty -->
 ## Risks            <!-- 3 things that break first + how to check each -->
 ## Out of scope     <!-- what this architecture does not carry -->
 
 frontend: none | needed
 verify_channel:
   work server: <run command + port>     # verification always happens here
-  means: <browser MCP | .http | CLI command>
+  means: <browser MCP | .http | CLI command | screen/accessibility tool>
 ```
+
+### Provisional — the architecture you do not know yet
+
+Buffer sizes, timeouts, whether a backpressure protocol is needed at all — some things
+cannot be settled by thinking. The moment a guess is written in the same sentence form
+as a decision, the architecture document starts lying.
+
+**Every value you are guessing goes in this table, and every row names the card that
+will settle it.** No settling card means you do not intend to find out — then it is not
+provisional, it is a decision, and it belongs in the sections above. This table is not a
+progress record; it is a list of the unknown.
+
+```markdown
+| Item | Provisional value | Where it came from | Settled by |
+|---|---|---|---|
+| stream batch size | 64 KiB | copied from <reference> | 01.3 |
+```
+
+The contract: when the settling card closes, work's upper-document feedback step checks
+this table, and the row is **replaced** by the measured result — promoted into a
+decision, or deleted as unnecessary. A row that outlives its own settling card is a bug
+in the process, not a detail. Where a provisional value also appears elsewhere in the
+body, mark it provisional there too.
 
 An ADR (Architecture Decision Record — one page per decision: context, options,
 decision, consequences) goes into `devflow/project/decisions/ADR-NNN.md` **only when all

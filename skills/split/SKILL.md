@@ -6,7 +6,9 @@ description: Task splitting. Opens the task tree (devflow/tree/) one layer at a 
 # split — Task Splitting
 
 First read the canonical rules (`../principles/SKILL.md`), `devflow/project/product.md`
-(identity paragraph, capability list), and `devflow/project/arch.md`.
+(identity paragraph, capability list), `devflow/project/arch.md`, and **`devflow/journal.md`**
+— the durable findings of earlier cards live there, and HANDOFF is overwritten and will
+not carry them.
 
 Purpose: open the task tree **one layer at a time**, and get the execution proposal approved.
 
@@ -48,6 +50,12 @@ A task looks big         → promote it to a folder on the spot and split furthe
 
 Never split everything upfront. Earlier implementation changes later decomposition —
 what you don't know, you learn by writing code, and splitting then is accurate and cheap.
+
+When a card you are opening depends on a `.done.` card, read that card's progress-log
+conclusions and carry the constraints it names into the new card's `Read first`. For
+T-mid cards, as a pointer to the original path; for T-low cards, as a quote with its
+source cited — a closed card's log is a frozen record, so quoting it cannot drift.
+Evidence left in the tree only helps if someone goes and gets it.
 
 If `design.md` exists, the decomposition axis follows the build strategy:
 A mock-first → by screen / B vertical slice → by feature cut front-to-back /
@@ -108,6 +116,10 @@ Completion signal: Answer + evidence (doc link or a real call result) recorded i
   real code — only the decision survives.
 - Once answered, fix the following card's destination and proceed. Thirty minutes of
   research replaces days of rework.
+- **The answer also travels upward.** If the research settled an open statement in an
+  upper document (a Provisional row in arch, etc.) and that text is not replaced, the
+  value you just disproved keeps winning the hierarchy. work's upper-document feedback
+  step enforces this before `.done.`
 - The evidence stays in the tree — later it answers "why was it designed this way."
 
 ## Routing Change Requests — the maintenance phase
@@ -159,6 +171,8 @@ Execution proposal
 Parallelism conditions: only tasks that don't overlap in files AND don't touch the dev
 server. **Frontend is always sequential** (one dev server — a single agent's compile
 error breaks the whole screen).
+When parallelism is approved, leave 1 journal line — the integrity check judges multiple
+`.wip.` cards against that record.
 
 Pre-commit review (work's reviewer) runs by default. Only truly trivial cards may opt
 out via an explicit "skip review" in the execution proposal.

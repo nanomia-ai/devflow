@@ -58,11 +58,16 @@ When it succeeds, <what> becomes possible.
 ## Screens & access points   <!-- list of screens or interfaces -->
 ## Open questions
 
-interface: web | cli | server-only | tui | mixed
+interface: web | desktop | cli | server-only | tui | mixed
 ```
 
 Create alongside it: `devflow/project/glossary.md` — project terms fixed during the
 interview, one `term: definition` line each.
+
+When a capability retires during maintenance, do not delete it from the list — leave one
+line: `④ ~~name~~ — retired (date, evidence pointer)` (numbers are immutable
+identifiers). The capability's tree folder gets `.stale` (the canonical rules' status
+notation).
 
 ## Gates
 

@@ -14,8 +14,17 @@ Purpose: a new session restores state from five reads and continues.
 2. devflow/tree/ full listing                      ← how far things got (.done. / .wip. / pending)
 3. any *.wip.md — read fully                       ← progress log included. Where it stopped
 4. devflow/HANDOFF.md                              ← traps, learnings, open decisions
-5. tail of devflow/journal.md (if present)         ← cross-task decisions
+5. devflow/journal.md in full (if present — the sweep discipline keeps it short)
+                                                   ← cross-task decisions
 ```
+
+**Check HANDOFF's freshness before trusting it.** Compare its date against the newest
+task commit (`NN.N` message form, wip included). Handoff is written only at boundaries,
+so a session that died mid-task leaves the previous boundary's file behind — one that
+points at a step already taken. If any task commit is newer than the HANDOFF date,
+report it as stale and let the tree and the `.wip.` card decide. A missing date header
+also counts as stale. **When HANDOFF conflicts with the tree, the tree wins.**
+Even from a stale HANDOFF, include its Open decisions in the report.
 
 While reading, also run the canonical rules' **integrity check** (5 items).
 Report anomalies — do not fix them; include them in the report below.

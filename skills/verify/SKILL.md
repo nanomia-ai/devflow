@@ -33,17 +33,32 @@ The duality of roles — they never cross:
 2. Read the target layer's criteria (capability: the scenario / product: success criteria)
 3. Actually execute through the channel — browser-MCP clicks, HTTP calls, CLI runs
 4. The verdict is exactly one of three: pass · fail · unverified
-5. Capability layer adds three checks:
-   - **Regression**: rerun the completion signals of the `.done.` cards in the same folder
+5. Capability layer adds four checks:
+   - **Regression**: rerun the completion signals of the `.done.` cards in the same
+     folder, **plus the signals of the cards this folder's cards name in `Depends`**
+     (the number prefix tells you the folder. Named cards only, one hop — a capability
+     that breaks the layer below it is invisible from its own folder)
    - **Boundary**: run one scenario input as hostile/abnormal
      (intensity per the posture level in code-style.md's Trust boundary)
    - **Standards**: scan for visible code-style.md violations — an axis separate from
      spec conformance
+   - **Provisional**: confirm the arch.md Provisional rows settled by this folder's cards
+     were actually replaced — a document still posing a question its own card already
+     answered will misdirect the next capability
 6. Fail → create a fix card in the same folder (e.g., 02.3b-fix-...) and reflect it in
    the tree
 7. **Capability layer passes → grant `.done` to that capability folder.** Never before —
    a capability that looks complete without verification is the worst lie a tree can tell
+8. With the `.done` grant, sweep journal — lines about this capability that still carry
+   force get promoted into core documents (the discovery→update table); expired lines
+   get deleted. Record the sweep in one line of verify.md. journal aims to stay within
+   one screen
 ```
+
+Role ownership: **execution and verdicts belong to the verifier.** The document-reading
+axes (Standards, Provisional), assembling the regression list, the journal sweep, and
+fix-card creation belong to the main session running verify — the verifier reads neither
+implementation nor documents.
 
 **Iron rule: what was not executed is not "passed" — it is "unverified."**
 Reading code and thinking "looks right" is not a verdict. Record the channel's execution
@@ -72,5 +87,7 @@ Executed:  <channel + what was actually run>
 Verdict:   pass | fail | unverified
 Regression: <completion signals rerun + results>
 Standards: <code-style violations found or none. Violations become fix cards>
+Provisional: <arch rows confirmed replaced, or none>
+Journal sweep: <lines promoted/deleted, or none>
 On fail:   <fix cards created>
 ```

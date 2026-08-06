@@ -23,5 +23,5 @@ Rules:
 - Never critique taste. Only what code-style.md declares counts as a standards violation.
 - Mark any objection you are not sure of as "speculative."
 
-Return 5 lines: verdict (pass/objections) · objection list (where + what + why) ·
-evidence · speculative or not · if passing, just the single line "pass."
+Return: if passing, just the single line "pass." With objections, 4 lines — verdict
+(objections) · objection list (where + what + why) · evidence · speculative or not.

@@ -91,6 +91,10 @@ AI가 가장 잘 이해하고 토큰을 적게 쓰는 언어가 영문이기 때
 | 지향 | Values | | 이 프로젝트의 선택 | Project choices |
 | 신뢰 경계 | Trust boundary | | 하지 않는 것 | Non-goals |
 | 미검증 | unverified | | 통과/실패 | pass/fail |
+| 잠정값 | Provisional | | 증거 대기 | evidence-wait |
+| 경계 정리 커밋 | boundary commit | | 환류 | upper-document feedback |
+| 신선도 | freshness | | (journal) 정리 | sweep |
+| 은퇴 | retired | | 성공 판정 | success criteria |
 
 한글이 남아도 되는 곳: DEVLOG(이 파일), README, `_ko` 파일들, 설치 스크립트의 echo(사람용).
 한글이 남으면 안 되는 곳: skills/*/SKILL.md, agents/*.md, codex/AGENTS-devflow.md,
@@ -100,18 +104,51 @@ scripts/*.js 의 주입 문자열. 검사: `grep -c '[가-힣]' <배포 파일�
 
 - 버그 진단 스킬 — 맷의 diagnosing-bugs("재현 루프가 스킬의 전부, 나머지는 기계적")를
   청사진으로. 한 사이클 실전 후 재평가.
-- 트리 아카이브 규칙 — 유지보수 장기화로 트리가 수백 파일이 되면. 그 전엔 YAGNI.
+- 트리 아카이브 규칙 — 발동 조건: resume의 트리 전체 목록 읽기가 부담될 때.
+  이관 시 이름 보존, 유지보수 라우팅은 아카이브도 검색. 그 전엔 YAGNI.
 - GitHub 공개 + `npx skills add` 지원 — 구조는 이미 호환.
+
+0.7.0에서 검토 후 **기각한 안** (재제안 시 기각 사유부터 반박할 것):
+중간 인계 문서(반쪽 진실을 넘긴다) / work의 카드 승격 트리거(조용한 범위 확장의 문) /
+훅의 journal 주입(resume이 읽는 것의 중복) / verify-channel 문서 위치 이전(arch 포인터로 충분) /
+열린 결정의 journal 이관(한 개념 두 거처 — HANDOFF 이월 규칙으로 대체).
 
 ## 현재 상태
 
-v0.3.0 (2026-08-05). 스킬 8개 + verifier 에이전트 + SessionStart 훅 + Codex 설치기 완성.
-설치·훅·생성 스크립트는 격리 환경에서 테스트 통과. **실전 프로젝트 적용은 아직 0회** —
-첫 사이클에서 나오는 마찰이 다음 버전의 입력이다.
+v0.7.0 (2026-08-07). 스킬 8개 + 에이전트 2개(reviewer·verifier) + SessionStart 훅(Claude·Codex
+공용) + Codex 설치기. 실전 적용 1사이클(nanomia-ade 01-foundation) 완료 — 그 마찰이 0.7.0의
+입력이 됐다. 다음 입력: nanomia-ade 02(project-vault) 사이클.
 
 ---
 
 ## 변경 로그 (append-only)
+
+### 2026-08-07 v0.7.0 — 세션 인계·문서 환류·git 소유권 (재작성)
+8/6의 v0.7.0 커밋(9e67612)은 내용은 대체로 옳았으나 이중 언어 워크플로(_ko 우선·DEVLOG)를
+어겨 revert됐다. 이번 판은 그 5개 결함 진단을 독립 재검증(반증·문자적 실행 시뮬레이션
+fork 2개 + 메인 교차)으로 확정하고, 추가 결함 15건과 신규 보호 7건을 더해 절차대로 재작성한 것.
+실증 근거: nanomia-ade 1사이클(01-foundation, 13h, 세션 중간 사망 1회, credit/ack 문서 모순).
+
+- principles: 발견→갱신 표 4행 추가(잠정값 실측·성공 판정 불능·done 카드 신호 부패·새 용어) /
+  "문서 간 모순 = 결함, 조용한 채택 금지" / 표 갱신은 공인 경로(4단계는 위반 시만) /
+  커밋 규율에 증거 대기·경계 정리 커밋·git 메인 전유 / 단일 wip 예외 2종(journal 근거) /
+  골조 폴더 폐쇄 조건 / 폴더 .stale(은퇴) / ".done. = 신호+검토+커밋"으로 용어 충돌 해소
+- work: arch 동반 읽기(잠정값·verify_channel 포함) / 진행 로그 게이트(오래 걸리거나 실패
+  가능한 실행 전) / 환류 단계(개명 전 상위 문서 교체 강제) / 인계 방아쇠를 %에서 사건으로
+  (질문은 능력 폴더 개방 전만, 나머지는 보고) / 위임 단계 분할(서브에이전트=구현·신호·로그,
+  메인=검토·커밋·환류·개명) / 열린 결정 이월 의무
+- resume: HANDOFF 신선도 검사(작업 커밋 대조, 트리 우선, 낡아도 열린 결정은 보고) /
+  journal 전체 읽기
+- split: 첫 읽기에 journal / .done 의존 카드의 결론 당겨 읽기(T-중 포인터·T-하 인용) /
+  조사 카드 "답은 위로도" / 병렬 승인 journal 기록
+- arch: 잠정값(Provisional) 절 신설(해소 카드 계약) / 검증 창구에 데스크톱·TUI 행
+- verify: 회귀를 Depends 지목 카드까지 1홉 / 잠정값 교체 확인 축 / journal 정리(능력 폐쇄 시,
+  기록 1줄) / 역할 소유권(실행=verifier, 문서 축·정리=메인)
+- product: interface에 desktop / 능력 은퇴 표기(번호 불변)
+- reviewer: 반환 형식 자기 모순 정리(통과 1줄 / 지적 4줄)
+- hook: .stale 폴더 스킵, 다중 wip 경고 문구 동기화, HANDOFF 절단 3000→6000
+- 결정: HANDOFF는 git에 커밋하되 전용 커밋 금지 — 경계 정리 커밋에 동승만
+  (8/6 revert된 전용 HANDOFF 커밋 사례가 근거)
 
 ### 2026-08-05 v0.1.0
 최초 구현. 스킬 7개(product/arch/design/split/work/verify/resume), 훅 1개, Codex 설치기.
