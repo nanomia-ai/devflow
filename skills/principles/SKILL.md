@@ -47,7 +47,7 @@ multi: **only `.wip-<my id>.` is my work.** The precondition, full-read, and con
 rules apply to my claim only. Another's claimed card is read-only reference — never write
 a card you have not claimed.
 Reassigning a stalled claim = release, then re-claim. Only on the user's explicit
-instruction, with 1 journal line.
+instruction, with 1 journal line (the sanctioned exception to claim inviolability).
 
 Mode transitions — each is a single-commit procedure:
 
@@ -115,7 +115,7 @@ corruption. Correct only after user approval.
 5. Do the paths referenced by HANDOFF exist?
 6. multi: is there a bare `.wip.` (ownerless claim, or an incomplete transition)?
 7. multi: do two or more owner.md files claim the same git identity?
-8. multi: are there commits touching a card claimed by someone else?
+8. multi: are there commits whose author is not the claimant of the card they touch?
 
 ## Model Tiers
 
