@@ -174,6 +174,13 @@ error breaks the whole screen).
 When parallelism is approved, leave 1 journal line — the integrity check judges multiple
 `.wip.` cards against that record.
 
+multi: **number minting is single-flight per capability folder.** Announce the start with
+1 journal line (a binding decision — land it on integration now). Mint no numbers in a
+folder with a standing announcement — move to another folder or tell the user. A minted
+number stands only once the waiting-card commit lands on integration. An announcement
+with no minting commit after days is reported as lapsed.
+The execution proposal records per-member assignments in journal.
+
 Pre-commit review (work's reviewer) runs by default. Only truly trivial cards may opt
 out via an explicit "skip review" in the execution proposal.
 

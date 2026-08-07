@@ -23,6 +23,45 @@ conflicts with it, this document wins.
    every task card. This is the only duplication allowed — it costs one paragraph and
    buys "never getting lost."
 
+## Modes and Identity
+
+devflow runs in one of two modes. The test is a single file:
+
+- If any `devflow/users/*/owner.md` exists — **multi mode**: several people run their own
+  sessions in one repository.
+- If none exists — **solo mode**: ignore every rule in this document marked "multi:".
+  Solo behavior is identical to the version before those rules existed.
+
+multi: resolve your id before writing to the tree, journal, or shared documents — match
+your git identity (name or email) against `devflow/users/*/owner.md`. No match → ask the
+user once and create your room. A session that cannot resolve an identity (CI, bots)
+only reads.
+ids are lowercase `[a-z0-9]{2,8}`. Names devflow uses (project, tree, users, decisions)
+are forbidden; ids are never reused.
+
+Room = `devflow/users/<id>/` = owner.md (identity declaration) + HANDOFF.md + digest.md
+(the digest marker). Write only in your own room. Rooms are readable by the whole team —
+write with that premise.
+
+multi: **only `.wip-<my id>.` is my work.** The precondition, full-read, and continuation
+rules apply to my claim only. Another's claimed card is read-only reference — never write
+a card you have not claimed.
+
+Mode transitions — each is a single-commit procedure:
+
+- Joining: create your room (owner.md) + marker = current HEAD. Past understanding comes
+  from the shared documents, not from commit archaeology.
+- Solo→multi: create the room + move `devflow/HANDOFF.md` into it + `.wip.` →
+  `.wip-<id>.` + marker = HEAD. Solo traces seen in multi mode (a bare `.wip.`,
+  `devflow/HANDOFF.md`) mean the transition is incomplete — report, confirm the owner
+  with the user, and finish it. Never guess.
+- Departure: the user declares it. Any remaining member — promote the departed room's
+  open decisions into journal (attributed), release their claims, delete the room,
+  1 journal line. This is the sanctioned exception to both "write only in your own room"
+  and claim inviolability.
+- Multi→solo (last member): HANDOFF back to devflow/, delete users/, suffixes back to
+  `.wip.`, remove arch's multi-only config lines (integration, merge).
+
 ## Document Hierarchy (the contract)
 
 `product ⊃ arch ⊃ design·code-style ⊃ tree (cards)`. **A lower layer may not violate an
@@ -66,11 +105,15 @@ Run at the gates that open the tree (start of split and resume).
 **Report anomalies — do not fix them.** Auto-correction that misjudges accelerates
 corruption. Correct only after user approval.
 
-1. Are there 2 or more `.wip.` cards (with no parallel-approval or evidence-wait record in journal)?
+1. Are there 2 or more `.wip.` cards (with no parallel-approval or evidence-wait record
+   in journal — multi: judged per id)?
 2. Are any numbers duplicated?
 3. Is there a non-done card inside a `.done` folder?
 4. Does every card's `Depends` point to a number that exists?
 5. Do the paths referenced by HANDOFF exist?
+6. multi: is there a bare `.wip.` (ownerless claim, or an incomplete transition)?
+7. multi: do two or more owner.md files claim the same git identity?
+8. multi: are there commits touching a card claimed by someone else?
 
 ## Model Tiers
 
@@ -111,8 +154,12 @@ documents.**
 
 - No suffix = pending / `.wip.` = in progress / `.done.` = complete / `.stale.` =
   invalidated by an upper-level decision change
-- Only one `.wip.` at a time (exceptions: approved parallelism, evidence-wait — both
-  grounded in a journal record)
+- multi: a claim is written `.wip-<id>.` — a bare `.wip.` is an ownerless claim = an
+  integrity anomaly. Release strips the whole suffix back to pending (the progress log
+  stays in the card). `.done.` and `.stale.` stay unattributed — completion's ownership
+  is git's memory
+- Only one `.wip.` at a time (multi: one per id. Exceptions: approved parallelism,
+  evidence-wait — both grounded in a journal record)
 - `.done.` **only after the completion signal passes, the review that applies to the card
   passes, and the commit lands.** In this system, "verification" is reserved for verify's
   capability and product layers
@@ -142,6 +189,19 @@ documents.**
   HANDOFF never gets a dedicated commit — it only rides here.
 - **git belongs to the main session.** Subagents implement and write the progress log —
   they never commit, rename, or push.
+- multi: prefix commit messages with your id — `<id> 02.2 signup API`,
+  `<id> 02.2 wip: ...`, `<id> boundary — ...`. Solo formats are unchanged.
+- multi: a **binding decision** — one that affects shared documents, tree structure or
+  numbers, or a card someone else claims. Land a commit containing only that change
+  (document + journal line) on the integration branch (arch config) now — nothing else
+  rides along. Everything else rides your own branch.
+- multi: if pulling integration shows someone else's claim already landed on the same
+  number, you lost — copy your progress log into the surviving card and step back.
+- multi: duplicate numbers from concurrent minting — the later-merged side moves to the
+  mid-insertion form (`03.2` → `03.2b`). Allowed only before `.done.`; 1 journal line.
+- multi: journal merge conflicts resolve as a union — keep both sides, date-ordered.
+  Squash merges are forbidden (they erode every rule built on `NN.N` history) — the
+  policy is declared in arch's config.
 - To undo, use a revert commit — never erase history.
 
 ## The Verification Iron Rule

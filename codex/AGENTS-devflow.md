@@ -9,8 +9,11 @@ This project is managed with nano-devflow. At session start:
 
 1. If `devflow/tree/` exists, scan its listing to grasp state (`.wip.` = in progress,
    `.done.` = complete).
-2. If any `*.wip.md` exists, read it fully — its progress log says where things stopped.
-3. If `devflow/HANDOFF.md` exists, read it (traps, learnings, open decisions).
+2. If a card you claimed exists, read it fully — its progress log says where things
+   stopped. (Multi mode — `devflow/users/` exists: only your `.wip-<id>.`; others'
+   claims are read-only.)
+3. If `devflow/HANDOFF.md` exists, read it (multi mode: your room,
+   `devflow/users/<id>/HANDOFF.md`) — traps, learnings, open decisions.
 4. Report the state you grasped in one paragraph and modify code only after approval.
 
 Work discipline: progress state is expressed only through filename suffixes

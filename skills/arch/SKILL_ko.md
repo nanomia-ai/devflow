@@ -95,6 +95,8 @@ frontend: none | needed
 verify_channel:
   작업 서버: <실행 명령 + 포트>     # 검증은 반드시 여기서
   확인 수단: <브라우저 MCP | .http | CLI 명령 | 화면·접근성 도구>
+integration: <통합 브랜치>          # 다중 모드 전용. 발급·폐쇄·구속 결정이 착지하는 곳
+merge: merge-commit | rebase        # 다중 모드 전용. squash 금지 — NN.N 이력이 침식된다
 ```
 
 ### 잠정값 — 아직 모르는 아키텍처

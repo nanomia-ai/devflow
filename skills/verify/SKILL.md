@@ -46,7 +46,8 @@ The duality of roles — they never cross:
      were actually replaced — a document still posing a question its own card already
      answered will misdirect the next capability
 6. Fail → create a fix card in the same folder (e.g., 02.3b-fix-...) and reflect it in
-   the tree
+   the tree. multi: fix cards are born unclaimed (pending) — assignment goes through the
+   normal path (proposal · claim)
 7. **Capability layer passes → grant `.done` to that capability folder.** Never before —
    a capability that looks complete without verification is the worst lie a tree can tell
 8. With the `.done` grant, sweep journal — lines about this capability that still carry
@@ -59,6 +60,12 @@ Role ownership: **execution and verdicts belong to the verifier.** The document-
 axes (Standards, Provisional), assembling the regression list, the journal sweep, and
 fix-card creation belong to the main session running verify — the verifier reads neither
 implementation nor documents.
+
+multi: capability closure happens **only on the integration branch, after a fetch** —
+on a stale branch view, "folder all done" can be falsely true. A completion signal that
+cannot run on the closer's platform is satisfied by CI/remote evidence or delegated to
+the owning member — record the split in verify.md. The journal sweep is done by the
+member performing the closure.
 
 **Iron rule: what was not executed is not "passed" — it is "unverified."**
 Reading code and thinking "looks right" is not a verdict. Record the channel's execution

@@ -13,10 +13,16 @@ Purpose: carry one task card all the way to its completion signal, then commit.
 
 1. Is this a git repository? If not, propose `git init` (if declined, proceed but warn
    once: "no recovery possible").
-2. If `devflow/tree/**/*.wip.md` already exists, that comes first. Do not open new work.
+2. If a `.wip.` (solo) or `.wip-<my id>.` (multi) card already exists, that comes first.
+   Do not open new work. multi: others' claims do not count — they are read-only
+   reference (the canonical rules' "Modes and Identity").
    (Exception: an evidence-wait card recorded in journal does not block the next card —
    see the canonical rules' commit discipline.)
-3. Otherwise rename the next dependency-free card to `.wip.` and begin.
+3. Otherwise claim the next dependency-free card and begin — the rename commit to
+   `.wip.` (solo) or `.wip-<my id>.` (multi) IS the claim.
+   multi: before claiming, pull the integration branch and finish the digest (resume's
+   digest procedure). A card assigned to someone else in the execution proposal — ask
+   before claiming.
 
 ## The Loop
 
@@ -98,7 +104,7 @@ document comes before creating a card.
   session's too — a subagent's protection is its log (if it dies, main redispatches).
 - **Return is fixed at 5 lines:** status (done/blocked) · changed files · completion-signal
   result · learned · open. Details go straight into the progress log by the subagent
-  itself. The main session digests only the 5 lines.
+  itself. The main session takes only the 5 lines.
 - On failure, the canonical rules' failure ladder. Never re-dispatch the same prompt.
 
 ## Parallelism
@@ -125,8 +131,9 @@ Handoff happens **only at task boundaries**. Never mid-task — half-written cod
 half-true explanation get handed over. Mid-task safety belongs to the loop's log gate,
 not to a handoff document.
 
-`devflow/HANDOFF.md` — overwritten every time. **No position, no progress percentages**
-(the tree answers those). Volatile context only:
+`devflow/HANDOFF.md` (multi: my room, `devflow/users/<my id>/HANDOFF.md`) — overwritten
+every time. **No position, no progress percentages** (the tree answers those). Volatile
+context only:
 
 ```markdown
 # HANDOFF · <date time>
