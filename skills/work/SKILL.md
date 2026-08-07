@@ -54,8 +54,8 @@ Review — give a clean context (Claude: the reviewer agent) **only the card + d
         Recommended: T-high + low effort, kept short. Research cards skip review.
         Objection → fix → re-review. Failure ladder applies — 3 strikes calls the human
   ↓
-Commit: `02.2 signup API` format. 1 task = 1 commit (mid-checkpoints for long tasks
-        allowed as `02.2 wip: ...`)
+Commit: `02.2 signup API` format (multi: `<id>` prefix — canonical rules). 1 task =
+        1 commit (mid-checkpoints for long tasks allowed as `02.2 wip: ...`)
   ↓
 Upper-document feedback — before renaming, ask: did this card settle or contradict
         anything an upper document left open? (a Provisional row in arch, a success

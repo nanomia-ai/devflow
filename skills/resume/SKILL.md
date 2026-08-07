@@ -24,11 +24,11 @@ task commit (`NN.N` message form, wip included; multi: commits bearing my id pre
 touching my claimed-card paths). Handoff is written only at boundaries,
 so a session that died mid-task leaves the previous boundary's file behind — one that
 points at a step already taken. If any task commit is newer than the HANDOFF date,
-report it as stale and let the tree and the `.wip.` card decide. A missing date header
+report it as stale and let the tree and my claimed card decide. A missing date header
 also counts as stale. **When HANDOFF conflicts with the tree, the tree wins.**
 Even from a stale HANDOFF, include its Open decisions in the report.
 
-While reading, also run the canonical rules' **integrity check** (5 items).
+While reading, also run the canonical rules' **integrity check**.
 Report anomalies — do not fix them; include them in the report below.
 
 ## Report, Then Approval
