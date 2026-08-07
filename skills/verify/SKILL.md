@@ -37,7 +37,9 @@ The duality of roles — they never cross:
    - **Regression**: rerun the completion signals of the `.done.` cards in the same
      folder, **plus the signals of the cards this folder's cards name in `Depends`**
      (the number prefix tells you the folder. Named cards only, one hop — a capability
-     that breaks the layer below it is invisible from its own folder)
+     that breaks the layer below it is invisible from its own folder). A signal that
+     cannot run in this environment (remote-only, e.g. CI) is satisfied by the latest
+     result of its remote evidence
    - **Boundary**: run one scenario input as hostile/abnormal
      (intensity per the posture level in code-style.md's Trust boundary)
    - **Standards**: scan for visible code-style.md violations — an axis separate from
@@ -50,11 +52,14 @@ The duality of roles — they never cross:
    normal path (proposal · claim)
 7. **Capability layer passes → grant `.done` to that capability folder.** Never before —
    a capability that looks complete without verification is the worst lie a tree can tell
-8. With the `.done` grant, sweep journal — lines about this capability that still carry
-   force get promoted into core documents (the discovery→update table); expired lines
-   get deleted. Record the sweep in one line of verify.md. journal aims to stay within
-   one screen
+8. With the `.done` grant, sweep the whole journal — whichever capability a line came
+   from, delete lines whose force has ended; lines still carrying force get promoted
+   into core documents (the discovery→update table) or stay (cross-cutting matters).
+   Record the sweep in one line of verify.md. journal aims to stay within one screen
 ```
+
+Re-closure of a reopened capability may scope the scenario to the changed behavior —
+**regression always reruns the whole folder's signals.**
 
 Role ownership: **execution and verdicts belong to the verifier.** The document-reading
 axes (Standards, Provisional), assembling the regression list, the journal sweep, and
@@ -62,10 +67,10 @@ fix-card creation belong to the main session running verify — the verifier rea
 implementation nor documents.
 
 multi: capability closure happens **only on the integration branch, after a fetch** —
-on a stale branch view, "folder all done" can be falsely true. A completion signal that
-cannot run on the closer's platform is satisfied by CI/remote evidence or delegated to
-the owning member — record the split in verify.md. The journal sweep is done by the
-member performing the closure.
+on a stale branch view, "folder all done" can be falsely true. A signal that cannot run
+on the closer's platform is handled by remote-evidence substitution (Regression — mode-
+neutral) or delegated to the owning member — record the split in verify.md. The journal
+sweep is done by the member performing the closure.
 
 **Iron rule: what was not executed is not "passed" — it is "unverified."**
 Reading code and thinking "looks right" is not a verdict. Record the channel's execution
@@ -86,6 +91,9 @@ Same target fails 3 times → stop and call the human. There is no 4th attempt
 (the canonical rules' failure ladder).
 
 ## Record — devflow/tree/<capability folder>/verify.md
+
+The product layer records at `devflow/tree/verify.md` (tree root), same format.
+Re-verification overwrites the same file — git remembers the history.
 
 ```markdown
 # Verification · <capability> · <date>

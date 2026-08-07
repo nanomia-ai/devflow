@@ -102,8 +102,8 @@ frontend: none | needed
 verify_channel:
   work server: <run command + port>     # verification always happens here
   means: <browser MCP | .http | CLI command | screen/accessibility tool>
-integration: <branch>                   # multi mode only. Where minting, closure, and binding decisions land
-merge: merge-commit | rebase            # multi mode only. Squash forbidden — it erodes NN.N history
+integration: <branch>                   # multi only — solo omits these two lines. Where minting, closure, and binding decisions land
+merge: merge-commit | rebase            # multi only. Squash forbidden — it erodes NN.N history
 ```
 
 ### Provisional — the architecture you do not know yet

@@ -50,8 +50,9 @@ first.** Digest runs after that card closes, or right before a new claim.
 ```
 1. Pull the integration branch (arch config)
 2. From commits after my room's digest.md marker, pick the digest targets:
-   everything not authored by me + anything authored by me whose message's
-   `<my id> NN.N` does not correspond to a card in my tree (= work outside my sessions)
+   everything not authored by me + anything authored by me without my `<my id>` prefix
+   (= work outside my sessions. Prefixed commits — task, wip, claim, boundary — are
+   already mine)
 3. Skim them; anything that contradicts the shared documents lands via the
    discovery→update table. Fixing a shared document is a binding decision
    (the canonical rules' commit discipline)

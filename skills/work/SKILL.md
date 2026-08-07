@@ -18,11 +18,12 @@ Purpose: carry one task card all the way to its completion signal, then commit.
    reference (the canonical rules' "Modes and Identity").
    (Exception: an evidence-wait card recorded in journal does not block the next card —
    see the canonical rules' commit discipline.)
-3. Otherwise claim the next dependency-free card and begin — the rename commit to
-   `.wip.` (solo) or `.wip-<my id>.` (multi) IS the claim.
-   multi: before claiming, pull the integration branch and finish the digest (resume's
-   digest procedure). A card assigned to someone else in the execution proposal — ask
-   before claiming.
+3. Otherwise claim the next dependency-free card and begin.
+   solo: rename to `.wip.` and begin — the rename rides the next boundary commit.
+   multi: the rename commit to `.wip-<my id>.` IS the claim (message: `<id> 02.4 claim`)
+   — it makes the claim visible to others. Before claiming, pull the integration branch
+   and finish the digest (resume's digest procedure). A card assigned to someone else in
+   the execution proposal — ask before claiming.
 
 ## The Loop
 
@@ -47,8 +48,9 @@ Implement  ←→  append to the progress log (at every meaningful advance, deci
   ↓            (the main session commits)
 Run the completion signal — actually run it. Record the result in the log
   ↓
-Review — give a clean context (Claude: the reviewer agent) **only the card + diff +
-        code-style.md**. No implementation backstory — the code must explain itself.
+Review — give a clean context (Claude: the reviewer agent) **only the card (Progress log
+        section excluded) + diff + code-style.md**. No implementation backstory — the
+        progress log IS the backstory. The code must explain itself.
         Three verdict axes: intent (destination achieved?) · logic (defects on paths the
         signal doesn't cover?) · scope (Forbidden violated, silent expansion?)
         Recommended: T-high + low effort, kept short. Research cards skip review.
@@ -71,7 +73,9 @@ Rename the card to .done. (only after the completion signal and review passed AN
 Boundary commit — bundle renames, HANDOFF, journal, and the documents fixed by feedback
         (the canonical rules' commit discipline)
   ↓
-If every card in the folder is .done. → propose verify (capability layer)
+If every card in a depth-1 capability folder is .done. → propose verify (capability
+        layer). Foundation and intermediate folders just receive `.done` (the canonical
+        rules' status notation)
 ```
 
 ## When You Must Leave the Card — stop and go up

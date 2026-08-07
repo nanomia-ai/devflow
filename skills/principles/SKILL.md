@@ -46,6 +46,8 @@ write with that premise.
 multi: **only `.wip-<my id>.` is my work.** The precondition, full-read, and continuation
 rules apply to my claim only. Another's claimed card is read-only reference — never write
 a card you have not claimed.
+Reassigning a stalled claim = release, then re-claim. Only on the user's explicit
+instruction, with 1 journal line.
 
 Mode transitions — each is a single-commit procedure:
 
@@ -187,14 +189,17 @@ documents.**
 - **Boundary commit**: bundle status renames, HANDOFF, journal, and documents fixed by
   upper-document feedback (see work) into one commit. Message: `boundary — <what closed>`.
   HANDOFF never gets a dedicated commit — it only rides here.
+  multi: documents already landed on integration as binding decisions do not ride again —
+  the boundary commit carries renames, HANDOFF, journal, and the marker only.
 - **git belongs to the main session.** Subagents implement and write the progress log —
   they never commit, rename, or push.
 - multi: prefix commit messages with your id — `<id> 02.2 signup API`,
   `<id> 02.2 wip: ...`, `<id> boundary — ...`. Solo formats are unchanged.
 - multi: a **binding decision** — one that affects shared documents, tree structure or
-  numbers, or a card someone else claims. Land a commit containing only that change
-  (document + journal line) on the integration branch (arch config) now — nothing else
-  rides along. Everything else rides your own branch.
+  numbers (folders, minting — not status renames of cards I claim), or a card someone
+  else claims. Land a commit containing only that change (document + journal line) on
+  the integration branch (arch config) now — nothing else rides along. Everything else
+  rides your own branch.
 - multi: if pulling integration shows someone else's claim already landed on the same
   number, you lost — copy your progress log into the surviving card and step back.
 - multi: duplicate numbers from concurrent minting — the later-merged side moves to the
