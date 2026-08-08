@@ -6,6 +6,42 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.1 — 2026-08-08 — promotion of in-progress cards defined (split · principles)
+
+The promotion procedure distributed only Destination·Why, so promoting a card with a
+non-empty progress log destroyed the log — violating "if the session dies at any moment,
+reading this file alone must be enough to take over" — and in multi mode the claim
+suffix vanished, leaving children born unowned. Found by the v0.9.0 literal-execution
+audit; the draft wording was then attacked by a refutation fork, which extracted 10
+findings — all applied. Key ones: the git guarantee requires a checkpoint commit before
+the file disappears (an uncommitted log would die with it); the trigger keys on a
+non-empty log, not the `.wip.` suffix (released cards keep their logs; multi suffixes
+carry an id); the in-progress portion moves into the continuing child's progress log —
+conclusions alone are not enough to resume; the inherited suffix is born inside the
+promotion commit, closing the claim race window; promotion is an immediate dedicated
+commit (`NN.N promote`); a promotion's child numbers count as minting.
+
+A full-repository final verification then ran on the applied text and extracted 10 more
+findings — chiefly: the checkpoint commit was ordered after the file's transformation
+(the very window it exists to close), and the suffix inheritance was trapped inside the
+non-empty-log branch, so the most common path (claim → read → discover it is too big,
+log still empty) lost the claim. The procedure was restructured into 7 steps with the
+checkpoint first and the suffix rule as an independent condition.
+
+- split: promotion procedure is now 7 steps — multi minting declaration in the preamble /
+  1 checkpoint commit (if log non-empty) / 2 transform / 3 distribute the card head
+  (Destination · Why · Forbidden · Depends · carried quotations) / 4 numbering /
+  5 suffix inheritance (independent of the log; the inheriting child is born inside the
+  promotion commit) / 6 log contents (conclusions → affected children's `Read first`;
+  in-progress portion → the inheriting child's progress log, or a quotation if no child
+  continues) / 7 immediate dedicated commit `NN.N promote` (multi: binding decision) /
+  the minting clause covers promotion child numbers
+- principles: the discovery→update table's promotion row points to split's promotion
+  procedure / the binding-decision "nothing else rides along" rule gains its authorized
+  exception (the promotion commit carries the claim-suffix inheritance)
+- resume: the prefixed-commit enumeration gains promote / work: the solo "rename rides
+  the next boundary commit" rule notes that riding a wip checkpoint commit is fine
+
 ## 0.9.0 — 2026-08-08 — rename to devflow + documentation restructure for publication
 
 - **Renamed nano-devflow → devflow** (plugin name, Codex command prefix `devflow-*`,

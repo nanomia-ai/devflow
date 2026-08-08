@@ -19,7 +19,8 @@ Purpose: carry one task card all the way to its completion signal, then commit.
    (Exception: an evidence-wait card recorded in journal does not block the next card —
    see the canonical rules' commit discipline.)
 3. Otherwise claim the next dependency-free card and begin.
-   solo: rename to `.wip.` and begin — the rename rides the next boundary commit.
+   solo: rename to `.wip.` and begin — the rename rides the next boundary commit
+   (riding a wip checkpoint commit is fine).
    multi: the rename commit to `.wip-<my id>.` IS the claim (message: `<id> 02.4 claim`)
    — it makes the claim visible to others. Before claiming, pull the integration branch
    and finish the digest (resume's digest procedure). A card assigned to someone else in

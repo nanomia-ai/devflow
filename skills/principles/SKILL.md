@@ -89,7 +89,7 @@ What you discovered → where to update:
 | A `.done.` card's completion signal turns out unrunnable | fix that card's signal text too — regression must stay runnable |
 | A new coding-convention decision is needed | one line in code-style.md "Project choices" |
 | A new term becomes necessary | one line in glossary.md |
-| The task is merely bigger than expected | no document change — promote the card to a folder |
+| The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | A cross-task decision | one line in journal.md |
 
 An update per this table (replacing a provisional value, fixing a signal text, etc.) is
@@ -198,8 +198,9 @@ documents.**
 - multi: a **binding decision** — one that affects shared documents, tree structure or
   numbers (folders, minting — not status renames of cards I claim), or a card someone
   else claims. Land a commit containing only that change (document + journal line) on
-  the integration branch (arch config) now — nothing else rides along. Everything else
-  rides your own branch.
+  the integration branch (arch config) now — nothing else rides along (authorized
+  exception: split's promotion commit carries the claim-suffix inheritance). Everything
+  else rides your own branch.
 - multi: if pulling integration shows someone else's claim already landed on the same
   number, you lost — copy your progress log into the surviving card and step back.
 - multi: duplicate numbers from concurrent minting — the later-merged side moves to the

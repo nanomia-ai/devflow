@@ -83,13 +83,27 @@ any depth:
   02.3.3-modal.md             ← if this is big too, promote again to 02.3.3-modal/
 ```
 
-Promotion procedure:
-1. Turn the card file into a **folder with the same number and name**
-2. Distribute the original card's Destination and Why into the child cards — the folder
-   itself holds no card (a folder's meaning is its name and its children; same principle
-   as capability folders)
-3. Child number = parent number + one digit (`02.3` → `02.3.1`). Number immutability
+Promotion procedure (multi: declare the minting first — child numbers are minted
+numbers, per the execution proposal section):
+1. If the card's progress log is non-empty, commit the card as a checkpoint before
+   transforming it (`NN.N wip:` — this commit creates the git guarantee for the log;
+   multi: your own branch suffices)
+2. Turn the card file into a **folder with the same number and name**
+3. Distribute the original card's Destination · Why · Forbidden · Depends and any carried
+   quotations into the child cards — the folder itself holds no card (a folder's meaning
+   is its name and its children; same principle as capability folders)
+4. Child number = parent number + one digit (`02.3` → `02.3.1`). Number immutability
    still applies
+5. If the card wore a claim suffix (`.wip.`, multi: `.wip-<my id>.`): the one child the
+   claimant will pick up next is born wearing it inside the promotion commit — no
+   separate claim commit (the promotion commit doubles as the claim's visibility). No
+   child becomes `.done.` without its completion signal and review
+6. If there was a progress log: conclusions and constraints go into the affected child
+   cards' `Read first`; the in-progress portion goes into the progress log of the child
+   from step 5, or, if there is none, into the `Read first` of the child it belongs to,
+   as a quotation — the file disappears, so move content, not pointers
+7. Promotion is its own commit, never deferred (`NN.N promote`. multi: a binding
+   decision — lands on integration)
 
 - The decomposition axis inside a capability defaults to **feature units** (what a user
   perceives as one action). Technical-axis splits (frontend/backend) only under build
@@ -174,7 +188,8 @@ error breaks the whole screen).
 When parallelism is approved, leave 1 journal line — the integrity check judges multiple
 `.wip.` cards against that record.
 
-multi: **number minting is single-flight per capability folder.** Announce the start with
+multi: **number minting is single-flight per capability folder** (a promotion's child
+numbers count as minting too — they stand when the promotion commit lands). Announce the start with
 1 journal line (a binding decision — land it on integration now). Mint no numbers in a
 folder with a standing announcement — move to another folder or tell the user. A minted
 number stands only once the waiting-card commit lands on integration. An announcement
