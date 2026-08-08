@@ -62,6 +62,7 @@ stateDiagram-v2
     waiting --> wip: start — rename to .wip. (in multi mode, a claim commit)
     wip --> waiting: release (multi mode) — suffix stripped
     wip --> done: completion signal executed + review passed + 1 commit
+    waiting --> promoted_to_folder: opened it — too big for 1 commit
     wip --> promoted_to_folder: too big for 1 commit — recursively split under the same number
     done --> stale: an upper document changed, so it went stale
     note right of stale : a card in any state can become .stale. when an upper document changes

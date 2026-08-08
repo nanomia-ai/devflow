@@ -13,7 +13,9 @@ Purpose: a new session restores state from five reads and continues.
 1. devflow/project/product.md identity paragraph   ← what this service is
 2. devflow/tree/ full listing                      ← how far things got (.done. / .wip. / pending)
 3. my claimed card, read fully                     ← progress log included. Where it stopped
-   (solo `.wip.` / multi `.wip-<my id>.`. multi: others' claims as a one-line list only)
+   (solo `.wip.` / multi `.wip-<my id>.`. multi: others' claims as a one-line list only.
+   Compare uncommitted changes (git status) against the log's last entry — a session
+   that died mid-task leaves uncommitted code)
 4. devflow/HANDOFF.md (multi: my room's HANDOFF.md) ← traps, learnings, open decisions
 5. devflow/journal.md in full (if present — the sweep discipline keeps it short)
                                                    ← cross-task decisions

@@ -85,8 +85,11 @@ simulation against a literal reader, run adversarially:
    modifications themselves.
 5. Watch for the classic defect classes: ambiguous judgment words ("related", "relevant",
    "as needed"), one concept with two names, two concepts with one name, and unbounded
-   reading rules. All four have shipped real defects before; the rejection lineage in
-   `docs/design.md` records them.
+   reading rules — all four have shipped real defects before; the rejection lineage in
+   `docs/design.md` records them. Watch the reverse class too: a sentence whose deletion
+   breaks nothing (method prescription, duplication of the canonical rules). Demand a
+   concrete failure path for every sentence a change adds — adversarial review only ever
+   pushes toward more text, so harness without a failure path is a defect as well.
 
 External contributors: demonstrate the equivalent in your PR description — what you tried
 to break, and what a literal reader does at each step you touched.

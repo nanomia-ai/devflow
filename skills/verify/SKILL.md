@@ -30,7 +30,9 @@ The duality of roles — they never cross:
 ```
 1. Read verify_channel. Verification always runs on the work server (working tree) —
    it is the new code being verified
-2. Read the target layer's criteria (capability: the scenario / product: success criteria)
+2. Establish the target layer's criteria (capability: the scenario — the main session
+   composes it from product.md's capability description and the cards' Destinations /
+   product: success criteria)
 3. Actually execute through the channel — browser-MCP clicks, HTTP calls, CLI runs
 4. The verdict is exactly one of three: pass · fail · unverified
 5. Capability layer adds four checks:

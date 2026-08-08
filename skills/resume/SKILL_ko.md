@@ -13,7 +13,9 @@ description: 재개. 새 세션에서 작업 트리·HANDOFF를 읽고 어디까
 1. devflow/project/product.md 정체성 문단   ← 이 서비스가 무엇인지
 2. devflow/tree/ 전체 목록                  ← 어디까지 왔는지 (.done. / .wip. / 대기)
 3. 내 점유 카드가 있으면 통독               ← 진행 로그 포함. 어디서 멈췄는지
-   (솔로 `.wip.` / 다중 `.wip-<내 id>.`. 다중: 남의 점유는 한 줄씩 목록만)
+   (솔로 `.wip.` / 다중 `.wip-<내 id>.`. 다중: 남의 점유는 한 줄씩 목록만.
+   미커밋 변경(git status)을 로그 마지막 항목과 대조 — 중간에 죽은 세션은
+   미커밋 코드를 남긴다)
 4. devflow/HANDOFF.md (다중: 내 방의 HANDOFF.md) ← 함정·배운 것·열린 결정
 5. devflow/journal.md 전체 (있으면 — 정리 규율로 항상 짧다) ← 작업을 가로지르는 결정들
 ```

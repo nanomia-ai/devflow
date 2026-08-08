@@ -6,6 +6,38 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.2 — 2026-08-08 — balance audit: philosophy-axis review + flow simulation
+
+Prompted by the owner's concern that this session's high finding count might indicate
+over-interpretation, two independent reviews ran with opposite lenses: an over-harness
+audit (forbidden from proposing more specification) and a capable-AI flow simulation
+(three full walks: solo lifecycle, multi collaboration, death-and-resume). Verdict: the
+0.9.1 additions are invariants, not rigidity — every promotion step has a concrete
+failure path if deleted; flow fit rated 9/10, "no decorative rituals". Changes:
+
+- split: deleted the ".done." sentence from promotion step 5 — a weaker duplicate of the
+  canonical rules (it had already drifted: the commit-landing condition was missing) /
+  "frontend is always sequential" relaxed to "frontend work sharing a dev server is
+  sequential" — the rule now dies with its reason instead of outliving it
+- verify: the capability scenario's origin defined (the main session composes it from
+  product.md's capability description and the cards' Destinations) — "read" had sent
+  sessions searching for a document that never exists
+- resume: read 3 gains the uncommitted-changes cross-check (a session that died mid-card
+  leaves uncommitted code; the log alone can overstate progress)
+- AGENTS.md: the verification protocol gains the reverse defect class — a sentence whose
+  deletion breaks nothing is a defect too; every added sentence must name its concrete
+  failure path (counterweight to adversarial review's one-way pressure toward more text)
+- README pair: the card state diagram gains the waiting→promotion transition (promotion
+  at opening was documented in split but missing from the diagram)
+- Deliberately left unchanged (reviewed; fixing judged to be over-polish): arch's
+  browser-MCP halt, the claim "visibility" phrasing, the `wip:` checkpoint message on a
+  suffix-less card
+- A full re-verification on the applied text then caught the relaxation failing to reach
+  its replication sites: work still declared "same conditions as split" over the old
+  absolute sentence, and split's own general condition ("don't touch the dev server",
+  singular) made the relaxed sentence unreachable — both aligned to "a shared dev
+  server"; resume's new "mid-card" unified to the existing "mid-task"
+
 ## 0.9.1 — 2026-08-08 — promotion of in-progress cards defined (split · principles)
 
 The promotion procedure distributed only Destination·Why, so promoting a card with a

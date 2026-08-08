@@ -96,8 +96,7 @@ numbers, per the execution proposal section):
    still applies
 5. If the card wore a claim suffix (`.wip.`, multi: `.wip-<my id>.`): the one child the
    claimant will pick up next is born wearing it inside the promotion commit — no
-   separate claim commit (the promotion commit doubles as the claim's visibility). No
-   child becomes `.done.` without its completion signal and review
+   separate claim commit (the promotion commit doubles as the claim's visibility)
 6. If there was a progress log: conclusions and constraints go into the affected child
    cards' `Read first`; the in-progress portion goes into the progress log of the child
    from step 5, or, if there is none, into the `Read first` of the child it belongs to,
@@ -182,9 +181,9 @@ Execution proposal
 → present an example mapping onto currently available models and let the user choose
 ```
 
-Parallelism conditions: only tasks that don't overlap in files AND don't touch the dev
-server. **Frontend is always sequential** (one dev server — a single agent's compile
-error breaks the whole screen).
+Parallelism conditions: only tasks that don't overlap in files AND don't touch a shared
+dev server. **Frontend work sharing a dev server is sequential** (a single agent's
+compile error breaks the whole screen).
 When parallelism is approved, leave 1 journal line — the integrity check judges multiple
 `.wip.` cards against that record.
 

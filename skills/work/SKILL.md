@@ -115,8 +115,8 @@ document comes before creating a card.
 ## Parallelism
 
 Only when approved in split's execution proposal. Same conditions as split:
-only tasks that don't overlap in files AND don't touch the dev server. Frontend is
-always sequential.
+only tasks that don't overlap in files AND don't touch a shared dev server. Frontend
+work sharing a dev server is sequential.
 
 ## Handoff Trigger — events, not percentages
 
