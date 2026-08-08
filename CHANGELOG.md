@@ -6,6 +6,28 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.5 — 2026-08-09 — role terms made platform-neutral (work · verify · README)
+
+An owner report caught the README claiming the two agents are "Claude only — not part
+of the Codex install." That was literally true of the packaging, and that is the
+defect: the installers convert only skills/*/SKILL.md, so the parts of the reviewer
+and verifier terms that lived solely in agents/*.md (never execute / never fix, the
+taste exclusion, speculative marking, a fail reported with reproduction steps) never
+reached non-Claude platforms — the same prescribed process ran under thinner terms.
+The fix follows the recorded principles-in-skills logic (what must travel lives in the
+skill text): work's review step now states the reviewer terms; verify's bias-removal
+section states the verifier terms platform-neutrally and defines the Claude agents as
+their packaging; the README paragraph now says the process is identical on every
+platform. agents/*.md unchanged — they restate the same terms, and drift between the
+two is a defect (decision recorded in docs/design.md). Files:
+skills/work/SKILL{_ko,}.md, skills/verify/SKILL{_ko,}.md, README{_ko,}.md,
+docs/design{_ko,}.md, .claude-plugin/plugin.json. Codex prompts regenerated. The
+wording survived an adversarial pass — 3 minor findings: the execute obligation made
+explicit in the verifier terms, the English README aligned to "execute" (it had coined
+"runs"), and the reply-layout delta (the agents' fixed return shapes) adjudicated as
+packaging, since the verdict triad and evidence-recording obligations already ship
+platform-neutrally in the skill.
+
 ## 2026-08-09 — docs only: README gains the work ⇄ verify loop section (no version change)
 
 Between work and verify the README named the two agents but never showed the loop

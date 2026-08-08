@@ -52,6 +52,9 @@ Run the completion signal — actually run it. Record the result in the log
 Review — give a clean context (Claude: the reviewer agent) **only the card (Progress log
         section excluded) + diff + code-style.md**. No implementation backstory — the
         progress log IS the backstory. The code must explain itself.
+        The review only reads — it neither executes nor fixes; taste not declared in
+        code-style.md is not an objection, and an objection it is unsure of comes
+        marked "speculative."
         Three verdict axes: intent (destination achieved?) · logic (defects on paths the
         signal doesn't cover?) · scope (Forbidden violated, silent expansion?)
         Recommended: T-high + low effort, kept short. Research cards skip review

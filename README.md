@@ -94,11 +94,13 @@ beats a measurement.**
 | resume | new session | nothing — a state report, then approval (only multi mode's digest procedure corrects shared documents) | when HANDOFF and the tree conflict, the tree wins |
 | principles | read before running by the six skills product–verify | — | the canonical rules live in exactly one place |
 
-Two agents ride along (Claude only — not part of the Codex install): **reviewer** judges
-before each commit by reading only the card (progress log excluded), the diff, and
-code-style.md (never runs). **verifier** judges by running alone, knowing nothing of the
-implementation history (never reads). Neither crossing into the other's territory is the
-bias-prevention device.
+Two roles ride along: **reviewer** judges before each commit by reading only the card
+(progress log excluded), the diff, and code-style.md (never executes). **verifier**
+judges by executing alone, knowing nothing of the implementation history (never reads). Neither
+crossing into the other's territory is the bias-prevention device. The terms of both
+roles live in the skill text, so **the process is the same on every platform** — the
+Claude plugin packages them as two installed agents; other platforms fulfill them by
+giving a clean subagent/fresh session the same terms.
 
 ### work ⇄ verify — the inner and outer loops
 
