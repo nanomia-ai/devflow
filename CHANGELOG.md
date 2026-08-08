@@ -6,6 +6,21 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 2026-08-09 — docs only: README opens with the approach (no version change)
+
+The README jumped from the memory hook straight into structure — a first-time reader
+got mechanics before stance. A new section, "The approach — rich direction, minimal
+harness," now opens the body: what devflow makes explicit (Destination · Forbidden ·
+completion signal · Coordinates/Identity) versus what it leaves to the model, the
+harness-dial baseline note, and the balance the system aims at (structure without
+weight; the same failure never repeated the same way; the harness grows only on a
+defect actually met). An independent fact-check pass compared every sentence against
+the rule files — 5 findings folded in before landing: the T-low harness-dial
+qualifier added under the table, "implementation history" restored (the reviewer does
+read the code — it never sees the process), and the regression claim rescoped to the
+skill's own wording ("regression reruns it from then on"). Files: README_ko.md,
+README.md.
+
 ## 2026-08-09 — docs only: install path fixed to the published repository (no version change)
 
 First publication to GitHub (nanomia-ai/devflow). The README's marketplace-add line

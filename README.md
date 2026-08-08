@@ -9,6 +9,35 @@ not in conversation** — documents answer what you are building, the file tree 
 far you have come, and the records answer why it was decided that way. Whenever a session
 dies, the next one reads the files and picks up where it left off.
 
+## The approach — rich direction, minimal harness
+
+Today's top models already know how to implement. The more tightly you script the
+procedure, the more the model stops judging and starts following. devflow goes the
+other way: make clear what must become true (the Destination), what must not happen
+(Forbidden — 3 lines max), and how done is known (an executable completion signal) —
+and **never prescribe the method.** It is the smallest set of devices that keeps the
+work flowing in the intended direction without getting in the model's way.
+
+| Made explicit | Left to the model |
+|---|---|
+| Destination — what must become true | implementation method and code patterns |
+| Forbidden — 3 lines max | the choice of tools and paths |
+| Completion signal — an executable check | the order of solving |
+| Coordinates · Identity — part of what? | every point that needs judgment |
+
+This split is the baseline for T-mid (standard) tier and above — the harness scales
+inversely with model tier: the lower the tier a card is written for, the more
+Read-first, ordering hints, and prohibitions it carries.
+
+Light does not mean unstructured. Progress lives in file names, not documents; review
+and verification run in independent contexts that never saw the implementation
+history; what was not executed is not "passed" — it is "unverified." Nor is the same
+failure ever repeated the same way — a failed prompt is never re-dispatched as-is
+(3 strikes calls the human), and a defect that escaped verification becomes a
+completion signal that reproduces it, and regression reruns it from then on. Yet the harness grows one
+step only on a defect actually met — never on imagined risk. Running light while
+letting no lived failure leak twice — that is the balance devflow aims at.
+
 ## The flow
 
 ```mermaid
