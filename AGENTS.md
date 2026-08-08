@@ -55,9 +55,10 @@ exception to _ko-first.
 Deploy artifacts must contain no Korean: `skills/*/SKILL.md`, `agents/*.md`,
 `codex/AGENTS-devflow.md`, `codex/install.ps1`, `codex/install.sh`, `scripts/*.js`,
 `.claude-plugin/*.json`, `docs/design.md`, `CHANGELOG.md`, and `README.md`.
-Check: `grep -c '[가-힣]'` over those files returns **0 for every file except
-`README.md`, which returns exactly 1** — its single language-switcher link `[한국어]`,
-which is intentional and must stay. This file (AGENTS.md) is exempt from the check: its
+Check: count `[가-힣]` matches per file with ripgrep run directly (`rg -c`) or a Perl
+Unicode scan — proxied grep rewrites have produced false positives on this repository.
+The result must be **0 for every file except `README.md`, which returns exactly 1** —
+its single language-switcher link `[한국어]`, which is intentional and must stay. This file (AGENTS.md) is exempt from the check: its
 terminology table IS the Korean↔English reference data.
 
 ## The verification protocol
@@ -70,13 +71,18 @@ simulation against a literal reader, run adversarially:
    dedicated refuter, and a literal-execution simulator that walks the text as a naive
    AI would. How to run one: start a fresh session or subagent that carries **no
    implementation context**, give it only the changed files, and instruct it to refute
-   the change or walk it literally. This pattern found real defects every round it ran —
+   the change or walk it literally. Differentiate the lenses across passes (refuter ·
+   literal-execution simulator · capable-reader flow walk · over-harness auditor) —
+   identical lenses re-walk the same paths (item 6) — and always state that **zero
+   findings is a valid result**: an agent told to find defects will otherwise
+   manufacture them. This pattern found real defects every round it ran —
    internal per-round finding counts converged 13→13→12→13→2 over successive campaigns
    (not every round is itemized in the CHANGELOG), so skipping it is not a shortcut, it
    is a defect generator.
 2. **Proportionality.** Typo or formatting fix — a literal re-read of the touched
    section suffices. Wording or rule changes — at least one independent refutation pass.
-   Structural or multi-file changes — the full protocol including the re-audit.
+   Structural or multi-file changes — the full protocol including the re-audit and the
+   coordinate sweep (item 6).
 3. **Report first; apply after approval.** The owner works in a "report only" → review →
    "proceed" rhythm. Clear-cut defects (literal rule conflicts, violations of a rule the
    text itself declares) may be fixed directly — but always list them separately from
@@ -90,6 +96,21 @@ simulation against a literal reader, run adversarially:
    breaks nothing (method prescription, duplication of the canonical rules). Demand a
    concrete failure path for every sentence a change adds — adversarial review only ever
    pushes toward more text, so harness without a failure path is a defect as well.
+   Also watch for a sanctioned exception declared outside the canon: exceptions to a
+   canonical rule are declared inside `skills/principles/` itself (subordinate documents
+   may reference it) — a subordinate-only declaration loses to the canon on conflict
+   and goes dead.
+6. **Walks find paths; coordinate sweeps find coverage.** Narrative simulations only
+   find defects on the paths they walk — convergence across rounds proves the walked
+   paths are clean, not that the space is exhausted (the research-card gaps of v0.9.3
+   survived every earlier campaign this way). After structural changes, run a
+   coordinate sweep: enumerate the axes of what changed (e.g. card kinds × gates) and
+   judge every cell — defined / not-applicable / self-evident / gap. Fresh-angle
+   reviews, including external ones, are how unwalked paths get found: adjudicate their
+   claims against the actual text, never accept or dismiss them wholesale.
+7. **Read finding counts honestly.** Text written this round yields double-digit
+   findings on its first adversarial pass — that is the pattern working, not the system
+   regressing. Only findings against previously-verified text count as escaped defects.
 
 External contributors: demonstrate the equivalent in your PR description — what you tried
 to break, and what a literal reader does at each step you touched.
@@ -106,8 +127,9 @@ to break, and what a literal reader does at each step you touched.
   pre-0.9.0 name `nano-devflow-*`.
 - `codex/install.ps1` must keep its UTF-8 **BOM** — PowerShell 5.1 parses BOM-less files
   as ANSI and corrupts non-ASCII text (reproduced in practice).
-- Reinstall to verify on both platforms: Claude (`/plugin` update) and Codex
-  (`codex/install.ps1` or `install.sh`).
+- Reinstall to verify on both platforms: Claude (`claude plugin install
+  devflow@nanomia`, or `/plugin` in-session) and Codex (`codex/install.ps1` or
+  `install.sh`).
 
 ## Pre-flight checklist
 

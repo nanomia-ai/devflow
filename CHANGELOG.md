@@ -6,6 +6,20 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 2026-08-09 — docs only: maintenance protocol hardened (no version change)
+
+AGENTS.md verification protocol: two items amended, two added, distilled from the 0.9.x
+campaigns — lens differentiation + "zero findings is valid" for verification agents
+(item 1); sanctioned-exceptions-outside-the-canon added to the watched defect classes
+(item 5); walks-vs-coordinate-sweeps geometry — narrative simulations prove walked
+paths only, structural changes get a coordinate sweep, external reviews are adjudicated
+against the text (new item 6); honest reading of finding counts — first-pass findings
+on new text are the pattern working (new item 7). The Korean-check definition now names
+the tool directly (ripgrep run directly or a Perl scan — proxied grep rewrites
+false-positive here); Releasing gains the CLI reinstall command. The additions were
+themselves refuted before landing (11 findings applied across AGENTS.md and the new
+kickoff prompt).
+
 ## 0.9.3 — 2026-08-08 — research-card path closed (verify · split · work · principles)
 
 Three gaps on the research-card axis, reported by an external session's review and
