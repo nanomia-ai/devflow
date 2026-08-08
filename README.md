@@ -223,7 +223,7 @@ git: "Jaemin Park", jmp@example.com
 ## Install — Claude Code
 
 ```
-/plugin marketplace add nanomia/devflow
+/plugin marketplace add nanomia-ai/devflow
 /plugin install devflow@nanomia
 ```
 

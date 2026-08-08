@@ -6,6 +6,13 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 2026-08-09 — docs only: install path fixed to the published repository (no version change)
+
+First publication to GitHub (nanomia-ai/devflow). The README's marketplace-add line
+said `nanomia/devflow` — a placeholder from before the org existed; both READMEs now
+point at `nanomia-ai/devflow`. The marketplace name (`devflow@nanomia`) is unchanged —
+it comes from marketplace.json, not the repo path. Files: README_ko.md, README.md.
+
 ## 0.9.7 — 2026-08-09 — rename gate aligned with the canon's qualifier (work)
 
 Found by the whole-flow coordinate sweep that closed the 0.9.4–0.9.6 campaign (card
