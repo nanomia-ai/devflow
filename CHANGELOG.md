@@ -6,6 +6,16 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 2026-08-09 — docs only: README gains the work ⇄ verify loop section (no version change)
+
+Between work and verify the README named the two agents but never showed the loop
+geometry. A new subsection under "The 8 skills" draws the inner loop (implement →
+signal → review → commit, with the fix path re-running the signal) and the outer loop
+(scenario + regression → verdict, with fail birthing a reproduction-signal fix card),
+then states the three ways the loop improves and the outcome it drives (a defect met
+once cannot escape again; the harness grows only on real defects). Files: README_ko.md,
+README.md.
+
 ## 0.9.4 — 2026-08-09 — loop closure: signal freshness + fix-card reproduction signals (work · verify)
 
 Two literal-walkable gaps in the work⇄verify loop, flagged by an external

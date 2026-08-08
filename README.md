@@ -100,6 +100,39 @@ code-style.md (never runs). **verifier** judges by running alone, knowing nothin
 implementation history (never reads). Neither crossing into the other's territory is the
 bias-prevention device.
 
+### work ⇄ verify — the inner and outer loops
+
+```mermaid
+flowchart TB
+    subgraph W["work — task loop (per card)"]
+        I[implement] --> CS[run the completion signal]
+        CS --> RV{{"review · reviewer — reads, never executes"}}
+        RV -->|objection| FX[fix]
+        FX -->|"if the diff changed, signal first"| CS
+        RV -->|pass| CM["commit → card .done."]
+    end
+    subgraph V["verify — capability loop (when the folder is all .done.)"]
+        SC{{"run the real scenario · verifier — executes, never reads"}} --> RG["regression — rerun every completion signal in the folder"]
+        RG --> VD{verdict}
+        VD -->|pass| CD["capability folder .done"]
+        VD -->|fail| FC["fix card — its completion signal reproduces that failure"]
+    end
+    CM --> SC
+    FC -->|back to work| I
+```
+
+The loop improves in exactly three ways, and none of them repeats the same failure the
+same way:
+
+- **Objection → fix → signal re-run.** The evidence behind a commit is always a pass
+  against the last code — a stale pass is unverified.
+- **Verification fail → fix card.** An escaped defect becomes a completion signal that
+  reproduces the failure, and future regression keeps rerunning it.
+- **3 strikes → the human.** There is no 4th attempt.
+
+The outcome this drives: **a defect met once cannot escape again, and the harness grows
+one step only on a real defect — never on imagined risk.**
+
 ## Design principles
 
 - **Progress state lives in the file tree, not in documents.** Suffixes (`.wip.` `.done.` `.stale.`) and location are canonical.
