@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-// Registers the nano-devflow SessionStart hook in ~/.codex/hooks.json.
-// Idempotent: replaces an existing nano-devflow entry, appends otherwise,
+// Registers the devflow SessionStart hook in ~/.codex/hooks.json.
+// Idempotent: replaces an existing devflow entry, appends otherwise,
 // and never touches entries owned by other tools.
 "use strict";
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
 
-const MARKER = "nano-devflow"; // identifies our entry among others
+const MARKER = "devflow"; // identifies our entry among others ("nano-devflow" era entries also match)
 const scriptPath = path.join(__dirname, "session-start.js");
 const codexDir = path.join(os.homedir(), ".codex");
 const hooksPath = path.join(codexDir, "hooks.json");
@@ -36,7 +36,7 @@ const entry = {
       // marker comment travels inside the command string so we can find our entry later
       command: `node "${scriptPath}"`,
       timeout: 15,
-      statusMessage: "Loading nano-devflow state",
+      statusMessage: "Loading devflow state",
     },
   ],
 };
@@ -48,10 +48,10 @@ const isOurs = (g) =>
 const idx = root.hooks.SessionStart.findIndex(isOurs);
 if (idx >= 0) {
   root.hooks.SessionStart[idx] = entry;
-  console.log("hook updated: SessionStart (nano-devflow)");
+  console.log("hook updated: SessionStart (devflow)");
 } else {
   root.hooks.SessionStart.push(entry);
-  console.log("hook registered: SessionStart (nano-devflow)");
+  console.log("hook registered: SessionStart (devflow)");
 }
 
 fs.writeFileSync(hooksPath, JSON.stringify(root, null, 2) + "\n");

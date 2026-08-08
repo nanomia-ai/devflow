@@ -3,9 +3,9 @@
   "owner": { "name": "nanomia" },
   "plugins": [
     {
-      "name": "nano-devflow",
+      "name": "devflow",
       "source": "./",
-      "description": "기획→아키텍처→디자인→분할→구현→검증→재개 개발 흐름"
+      "description": "Planning → architecture → design → split → work → verify → resume development flow"
     }
   ]
 }

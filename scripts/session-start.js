@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// nano-devflow SessionStart hook: injects tree state and HANDOFF into new sessions (start/resume/post-compact).
+// devflow SessionStart hook: injects tree state and HANDOFF into new sessions (start/resume/post-compact).
 // Exits silently in projects without devflow (no devflow/tree).
 // Multi mode (any devflow/users/*/owner.md): resolves my id via git config, scopes wip to my claim.
 "use strict";
@@ -86,7 +86,7 @@ const otherWip = multi ? wip.filter((p) => !myWip.includes(p)) : [];
 const bareWip = wip.filter((p) => wipOwner(p) === null);
 
 const parts = [];
-parts.push("[nano-devflow] This project is managed with devflow. Tree state:");
+parts.push("[devflow] This project is managed with devflow. Tree state:");
 parts.push(`- done ${done.length} / in progress ${wip.length} / pending ${pending.length}`);
 if (multi) {
   parts.push(myId
@@ -161,7 +161,7 @@ if (multi) {
   if (handoff && handoff.trim()) parts.push("\nHANDOFF:\n" + handoff.trim());
 }
 
-parts.push("\nFollow the nano-devflow resume skill to resume. Do not modify code before approval.");
+parts.push("\nFollow the devflow resume skill to resume. Do not modify code before approval.");
 
 process.stdout.write(
   JSON.stringify({

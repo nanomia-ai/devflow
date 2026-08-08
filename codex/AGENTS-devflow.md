@@ -3,9 +3,9 @@
 same as Claude Code. Add this block to a project's AGENTS.md only where hooks are
 unavailable (flag off, or older Codex). Not needed in Claude Code either. -->
 
-## nano-devflow
+## devflow
 
-This project is managed with nano-devflow. At session start:
+This project is managed with devflow. At session start:
 
 1. If `devflow/tree/` exists, scan its listing to grasp state (`.wip.` = in progress,
    `.done.` = complete).
@@ -19,6 +19,6 @@ This project is managed with nano-devflow. At session start:
 Work discipline: progress state is expressed only through filename suffixes
 (`.wip.` `.done.`). 1 task = 1 commit (message format `02.2 signup API`, only after the
 completion signal passes). What was not executed is not "passed" — it is "unverified."
-For detailed procedures follow the /nano-devflow-product /nano-devflow-arch
-/nano-devflow-design /nano-devflow-split /nano-devflow-work /nano-devflow-verify
-/nano-devflow-resume commands.
+For detailed procedures follow the /devflow-product /devflow-arch
+/devflow-design /devflow-split /devflow-work /devflow-verify
+/devflow-resume commands.
