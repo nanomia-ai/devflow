@@ -23,8 +23,8 @@ English is what AI consumes best at the lowest token cost.
 ```
 Canonical relation:  *_ko.md = design original (owner review)  →  translate  →  English = deploy artifact (AI consumption)
 Pairs:               skills/<name>/SKILL_ko.md ↔ SKILL.md
-                     ko/reviewer_ko.md ↔ agents/reviewer.md
-                     ko/verifier_ko.md ↔ agents/verifier.md    ← agent Korean files live OUTSIDE agents/!
+                     skills/work/reviewer_ko.md ↔ reviewer.md (role contract)
+                     skills/verify/verifier_ko.md ↔ verifier.md (role contract)
                      codex/AGENTS-devflow_ko.md ↔ AGENTS-devflow.md
                      README_ko.md ↔ README.md
                      docs/design_ko.md ↔ docs/design.md
@@ -32,8 +32,10 @@ English-only (no pair): AGENTS.md (this file), CHANGELOG.md,
                      CLAUDE.md (a one-line import pointer to this file — never expand it)
 ```
 
-⚠ **Never put agent Korean files inside `agents/`** — every .md in agents/ registers as
-an agent, so the same name would register twice. That is why they live in `ko/`.
+The role contracts (`reviewer.md` · `verifier.md`) are companion files beside their
+skills — briefing documents delivered verbatim to a clean context on every platform,
+not registered agents. The Codex installers embed every non-`_ko` companion `.md` of a
+skill folder into that skill's generated prompt.
 
 Modification procedure (order is fixed):
 
@@ -52,7 +54,8 @@ exception to _ko-first.
 
 **Where Korean lives**: the `_ko.md` design originals (including `README_ko.md` and
 `docs/design_ko.md`) and the Korean column of the terminology table below — nowhere else.
-Deploy artifacts must contain no Korean: `skills/*/SKILL.md`, `agents/*.md`,
+Deploy artifacts must contain no Korean: `skills/*/SKILL.md`, the role contracts
+(`skills/work/reviewer.md`, `skills/verify/verifier.md`),
 `codex/AGENTS-devflow.md`, `codex/install.ps1`, `codex/install.sh`, `scripts/*.js`,
 `.claude-plugin/*.json`, `docs/design.md`, `CHANGELOG.md`, and `README.md`.
 Check: count `[가-힣]` matches per file with ripgrep run directly (`rg -c`) or a Perl

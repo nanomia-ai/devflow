@@ -6,6 +6,37 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.6 — 2026-08-09 — role contracts unified: one file, every platform, no registration (work · verify · installers)
+
+The owner challenged the platform asymmetry that survived 0.9.5: Claude got the role
+contracts as registered agents, everyone else a summary. Verified empirically before
+redesigning — an A/B/C test ran one review fixture with 4 planted defects through the
+registered reviewer agent (×2), a prompt-briefed generic Claude subagent (×2), and
+Codex CLI given the same briefing (×1): all five runs detected 4/4 with the same bonus
+findings and full contract adherence. Registration's assumed robustness edge was not
+observed; the one thing that DID fail was ad-hoc transport (shell interpolation
+truncated a briefing — the Codex session recovered by reading the file itself). Three
+repositories were surveyed for mature patterns (mattpocock/skills, obra/superpowers,
+Q00/ouroboros — structure ideas only, no text borrowed): superpowers, the most
+multi-harness-mature, ships no registry and keeps contract prompt files beside skills.
+
+So: agents/reviewer.md → skills/work/reviewer.md and agents/verifier.md →
+skills/verify/verifier.md (git mv; _ko pairs moved beside them; agents/ and ko/
+folders retired; agent frontmatter stripped — they are briefing documents now, not
+registrations). work and verify dispatch identically on every platform: brief a clean
+context with the contract file **verbatim — never summarized** plus the fixed inputs;
+the 0.9.5 inline term summaries and the Claude/elsewhere fork were removed as
+duplication whose failure path had disappeared. The Codex installers now embed every
+non-_ko companion .md of a skill folder into that skill's generated prompt and repoint
+"`<file>` beside this skill" to the embedded section (the principles pattern,
+generalized). AGENTS.md pair table and Korean-check list updated; the "never put agent
+Korean files inside agents/" hazard retired with the registry. The decision, the
+Plan-B rejection, and a transport observation item are recorded in docs/design.md.
+Files: skills/work/{SKILL,SKILL_ko,reviewer,reviewer_ko}.md,
+skills/verify/{SKILL,SKILL_ko,verifier,verifier_ko}.md, codex/install.{ps1,sh},
+README{_ko,}.md, AGENTS.md, docs/design{_ko,}.md, .claude-plugin/plugin.json.
+Codex prompts regenerated and the generated output inspected.
+
 ## 0.9.5 — 2026-08-09 — role terms made platform-neutral (work · verify · README)
 
 An owner report caught the README claiming the two agents are "Claude only — not part

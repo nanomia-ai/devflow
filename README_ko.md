@@ -93,9 +93,10 @@ stateDiagram-v2
 역할 2개가 동행한다: **reviewer**는 커밋 전에 카드(진행 로그는 제외)·diff·
 code-style.md만 읽고 판정한다(실행하지 않음). **verifier**는 구현 이력을 모른 채
 실행만으로 판정한다(읽지 않음). 서로의 영역을 침범하지 않는 것이 편향을 막는
-장치다. 두 역할의 조건은 스킬 본문에 있어 **어느 플랫폼에서든 처리가 같다** —
-Claude 플러그인은 이를 에이전트 2개로 포장해 설치하고, 다른 플랫폼은 깨끗한
-서브에이전트/새 세션에 같은 조건을 주어 수행한다.
+장치다. 두 역할의 조건은 스킬 옆의 파일 하나씩이다(`skills/work/reviewer.md` ·
+`skills/verify/verifier.md`) — 어느 플랫폼에서든 깨끗한 서브에이전트/새 세션에
+그 파일을 원문 그대로 브리핑해 수행하므로 **처리가 같고**, Codex 설치는 이를
+프롬프트에 동봉한다.
 
 ### work ⇄ verify — 안쪽 루프와 바깥 루프
 
@@ -218,7 +219,7 @@ git: "Jaemin Park", jmp@example.com
 
 (GitHub 공개 전이라면 marketplace add에 로컬 클론 경로를 넣는다.)
 
-스킬 8개 + 에이전트 2개 + SessionStart 훅이 설치된다. 명령은 `/devflow:product` 형식 —
+스킬 8개(역할 조건 파일 동반) + SessionStart 훅이 설치된다. 명령은 `/devflow:product` 형식 —
 플러그인 이름이 네임스페이스라 충돌이 원천 차단되고, `/devflow`까지만 쳐도 자동완성에
 전체가 모여 보인다. 훅은 `devflow/tree/`가 있는 프로젝트에서만 동작하고, 세션 시작·
 재개·컨텍스트 압축 직후에 트리 상태와 HANDOFF를 자동 주입한다 (그래서 resume을 안 쳐도

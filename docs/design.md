@@ -56,7 +56,8 @@ Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/in
 | The multi-mode split axis is the **scope of truth**, not people | Documents with a single truth (project·tree·journal) are shared; only person-owned state (HANDOFF·marker·identity) is isolated into rooms (users/<id>/). Adopted after refutation-fork verification of 4 candidates (5 rounds total, real defects extracted each round) — rejection lineage below |
 | HANDOFF is committed to git but never in a dedicated commit — it rides the boundary commit only | A dedicated HANDOFF commit polluted history and was reverted in practice (2026-08-06) |
 | Design in Korean, deploy in English (dual language) | Korean is the language the user can review; English is what AI understands best at the lowest token cost. Procedure and terminology table: AGENTS.md |
-| The terms of the review and verification roles live in the skill text — agents/*.md is Claude packaging (v0.9.5) | Same reason principles lives inside skills/: on installs that copy only skills/, the terms must travel along or platforms diverge. Found via an owner report (2026-08-09) — never-execute/never-fix, the taste exclusion, speculative marking, and fail-with-reproduction-steps shipped only in the Claude-only agent files. The agent files are a restatement of the same terms; drift between the two is a defect |
+| The terms of the review and verification roles live in the skill text — agents/*.md is Claude packaging (v0.9.5) | Same reason principles lives inside skills/: on installs that copy only skills/, the terms must travel along or platforms diverge. Found via an owner report (2026-08-09) — never-execute/never-fix, the taste exclusion, speculative marking, and fail-with-reproduction-steps shipped only in the Claude-only agent files. The agent files are a restatement of the same terms; drift between the two is a defect. Superseded in v0.9.6: the terms moved into one contract file beside each skill and Claude registration was dropped — see the v0.9.6 row |
+| Role contracts are one companion file beside each skill (reviewer.md · verifier.md); every platform runs them by briefing a clean context with the file verbatim — no Claude agent registration (v0.9.6) | An A/B/C test (2× registered agent · 2× prompt-briefed Claude subagent · 1× Codex CLI, one fixture with 4 planted defects) found all five runs identical — 4/4 detection and full contract adherence — so registration's assumed robustness edge was not observed. One mechanism dissolves the platform fork entirely. The mature precedent is superpowers (7+ harnesses, no registry, contract prompt files beside skills). Delivery must be static — verbatim file briefing (Claude · skills.sh) or install-time embedding (Codex); the only transport that failed in testing was shell interpolation |
 | A signal pass goes stale when the diff changes + a fix card's completion signal is the verifier's reproduction steps (v0.9.4) | Two gaps flagged by an external loop-engineering review (2026-08-09) and confirmed against the text: a post-review fix could ride a pre-fix pass into commit (a stale-evidence path), and a fix-card signal could be written unrelated to the observed failure. Backing research verified against sources (blind-retry recovery 0.0 on latent/semantic errors; verifier +14.8%p from real misjudgment cases). Regulates only evidence freshness and signal provenance, not execution order — no red-green reintroduction, the TDD rejection stands (the failing "before" evidence already lives in the verify record) |
 
 ## Borrowings and their boundary
@@ -108,6 +109,12 @@ Rejected in the v0.9.4 loop-engineering review (2026-08-09):
   philosophy of steering without self-modification. Self-improvement stops at folding
   escaped defects into signals (adopted in v0.9.4).
 
+Rejected in the v0.9.6 role-contract redesign:
+
+- **Plan B (contract files + keeping Claude agent registration alongside)** — its
+  premise, "registration = harness enforcement = more robust," was not observed in the
+  A/B/C test; it would keep a per-platform mechanism fork for no measured benefit.
+
 Other:
 
 - **Any "skim the related records" rule for maintenance reopening** — "related" is a
@@ -140,6 +147,8 @@ Other:
   wording only if friction is observed.
 - As fix cards accumulate, per-folder regression rerun cost grows — if it gets heavy,
   re-evaluate together with the tree-archive rule (the on-hold list).
+- Whether the contract file is actually briefed verbatim at dispatch (summarized-delivery
+  friction) — if the transport lesson from testing recurs in practice, review the wording.
 
 ## On hold — candidates for coming versions
 

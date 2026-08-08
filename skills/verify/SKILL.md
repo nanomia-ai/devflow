@@ -85,15 +85,10 @@ results (responses, screens, output) as the evidence for every verdict.
 
 ## Bias Removal
 
-Verification runs in a context that has **never seen the implementation history** —
-its input is the verification target (card or scenario) + verify_channel only; it
-actually executes through the channel and judges by those results alone, fixes
-nothing, and reports a fail together with reproduction steps. Whatever the platform,
-these terms are the same.
-- Claude: run as the `verifier` agent (bundled with the plugin — the packaging of
-  these terms)
-- Elsewhere: run a fresh session/agent under the terms above. Never tell it what code
-  was changed or how.
+Verification runs in a context that has **never seen the implementation history**:
+brief a clean subagent/fresh session with `verifier.md` beside this skill, **verbatim
+— never summarized**, and give it only the verification target (card or scenario) +
+verify_channel. Never tell it what code was changed or how.
 
 Recommended tier: T-high + low effort, kept short (it is a verdict, not an exploration).
 

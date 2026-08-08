@@ -22,15 +22,24 @@ Get-ChildItem (Join-Path $devflowRoot "skills") -Directory | Where-Object { $_.N
     $body = Get-SkillBody (Join-Path $_.FullName "SKILL.md")
     # Replace the relative canon reference with the embedded-section pointer
     $body = $body -replace [regex]::Escape('`../principles/SKILL.md`'), "the Canonical Rules section below"
-    $out = @(
+    # Embed companion documents (role contracts etc.) and repoint their references
+    $tick = [char]96
+    $companions = @()
+    Get-ChildItem $_.FullName -Filter "*.md" | Where-Object { $_.Name -ne "SKILL.md" -and $_.Name -notlike "*_ko.md" } | ForEach-Object {
+        $cname = $_.Name
+        $body = $body -replace [regex]::Escape("$tick$cname$tick beside this skill"), "the $cname section below"
+        $companions += @("", "---", "", "# $cname", "", (Get-SkillBody $_.FullName).TrimEnd())
+    }
+    $out = (@(
         "<!-- devflow (generated $(Get-Date -Format yyyy-MM-dd)) -->"
         ""
         $body.TrimEnd()
+    ) + $companions + @(
         ""
         "---"
         ""
         $principles.TrimEnd()
-    ) -join "`n"
+    )) -join "`n"
     Set-Content -Encoding utf8 (Join-Path $promptsDir "devflow-$name.md") $out
     Write-Host "installed: /devflow-$name"
 }

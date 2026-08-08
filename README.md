@@ -97,10 +97,11 @@ beats a measurement.**
 Two roles ride along: **reviewer** judges before each commit by reading only the card
 (progress log excluded), the diff, and code-style.md (never executes). **verifier**
 judges by executing alone, knowing nothing of the implementation history (never reads). Neither
-crossing into the other's territory is the bias-prevention device. The terms of both
-roles live in the skill text, so **the process is the same on every platform** — the
-Claude plugin packages them as two installed agents; other platforms fulfill them by
-giving a clean subagent/fresh session the same terms.
+crossing into the other's territory is the bias-prevention device. Each role's terms
+are one file beside its skill (`skills/work/reviewer.md` · `skills/verify/verifier.md`)
+— every platform runs them by briefing a clean subagent/fresh session with that file
+verbatim, so **the process is the same**, and the Codex install embeds them into the
+prompts.
 
 ### work ⇄ verify — the inner and outer loops
 
@@ -228,7 +229,7 @@ git: "Jaemin Park", jmp@example.com
 
 (Before the GitHub release, point marketplace add at a local clone path instead.)
 
-Installs 8 skills + 2 agents + the SessionStart hook. Commands take the `/devflow:product`
+Installs 8 skills (with the role-terms files riding along) + the SessionStart hook. Commands take the `/devflow:product`
 form — the plugin name is the namespace, so collisions are blocked at the source, and
 typing just `/devflow` groups the whole set in autocompletion. The hook activates only in
 projects that have `devflow/tree/`, and injects tree state and HANDOFF at session start,

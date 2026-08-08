@@ -18,15 +18,39 @@ PRINCIPLES="$(strip_fm "$DEVFLOW_ROOT/skills/principles/SKILL.md")"
 for dir in "$DEVFLOW_ROOT"/skills/*/; do
   name="$(basename "$dir")"
   [ "$name" = "principles" ] && continue
+  body="$(strip_fm "$dir/SKILL.md" | sed 's|`\.\./principles/SKILL\.md`|the Canonical Rules section below|g')"
+  # Repoint companion-document references (role contracts etc.)
+  for comp in "$dir"*.md; do
+    cbase="$(basename "$comp")"
+    [ "$cbase" = "SKILL.md" ] && continue
+    case "$cbase" in *_ko.md) continue ;; esac
+    body="$(printf '%s\n' "$body" | sed "s|\`$cbase\` beside this skill|the $cbase section below|g")"
+  done
   {
     echo "<!-- devflow (generated $(date +%Y-%m-%d)) -->"
     echo ""
-    strip_fm "$dir/SKILL.md" | sed 's|`\.\./principles/SKILL\.md`|the Canonical Rules section below|g'
+    printf '%s\n' "$body"
+  } > "$PROMPTS_DIR/devflow-$name.md"
+  # Embed the companion documents as sections
+  for comp in "$dir"*.md; do
+    cbase="$(basename "$comp")"
+    [ "$cbase" = "SKILL.md" ] && continue
+    case "$cbase" in *_ko.md) continue ;; esac
+    {
+      echo ""
+      echo "---"
+      echo ""
+      echo "# $cbase"
+      echo ""
+      strip_fm "$comp"
+    } >> "$PROMPTS_DIR/devflow-$name.md"
+  done
+  {
     echo ""
     echo "---"
     echo ""
     printf '%s\n' "$PRINCIPLES"
-  } > "$PROMPTS_DIR/devflow-$name.md"
+  } >> "$PROMPTS_DIR/devflow-$name.md"
   echo "installed: /devflow-$name"
 done
 
