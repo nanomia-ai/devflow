@@ -6,6 +6,18 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.7 — 2026-08-09 — rename gate aligned with the canon's qualifier (work)
+
+Found by the whole-flow coordinate sweep that closed the 0.9.4–0.9.6 campaign (card
+kinds × gates, 20 cells): work's rename step abbreviated the canon's `.done.` condition
+to "the completion signal and review passed," dropping the qualifier that exempts cards
+whose review is skipped by rule — a literal reader could dispatch a pointless review on
+a research card just to satisfy the gate. The parenthetical now quotes the canon
+verbatim: "the review that applies to the card." Every end-to-end walk of the campaign
+(E1–E6: full lifecycle, verify-fail → fix card → re-closure, delegation, evidence-wait,
+research card, fix-on-fix) passed with no other finding. Files:
+skills/work/SKILL{_ko,}.md, .claude-plugin/plugin.json. Codex prompts regenerated.
+
 ## 0.9.6 — 2026-08-09 — role contracts unified: one file, every platform, no registration (work · verify · installers)
 
 The owner challenged the platform asymmetry that survived 0.9.5: Claude got the role

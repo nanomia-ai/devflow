@@ -71,8 +71,8 @@ Upper-document feedback — before renaming, ask: did this card settle or contra
         upper document outranks your finding, and the next implementer follows it.
         Only edits that change product.md's scope need user confirmation
   ↓
-Rename the card to .done. (only after the completion signal and review passed AND the
-        commit landed)
+Rename the card to .done. (only after the completion signal and the review that
+        applies to the card passed AND the commit landed)
   ↓
 Boundary commit — bundle renames, HANDOFF, journal, and the documents fixed by feedback
         (the canonical rules' commit discipline)
