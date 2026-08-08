@@ -20,7 +20,8 @@ conflicts with it, this document wins.
 6. **Avoid off-the-shelf methodology terms.** Words like spec-driven, TDD, DDD drag in
    baggage you did not choose.
 7. **Repeat the identity.** Copy the identity paragraph from `product.md` verbatim into
-   every task card. This is the only duplication allowed — it costs one paragraph and
+   every task card (exception: research cards — split's research card section).
+   This is the only duplication allowed — it costs one paragraph and
    buys "never getting lost."
 
 ## Modes and Identity
@@ -198,7 +199,7 @@ documents.**
 - multi: a **binding decision** — one that affects shared documents, tree structure or
   numbers (folders, minting — not status renames of cards I claim), or a card someone
   else claims. Land a commit containing only that change (document + journal line) on
-  the integration branch (arch config) now — nothing else rides along (authorized
+  the integration branch (arch config) now — nothing else rides along (sanctioned
   exception: split's promotion commit carries the claim-suffix inheritance). Everything
   else rides your own branch.
 - multi: if pulling integration shows someone else's claim already landed on the same

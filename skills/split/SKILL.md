@@ -124,6 +124,10 @@ Destination:       An answer exists to "is it supported — limits and constrain
 Completion signal: Answer + evidence (doc link or a real call result) recorded in the progress log
 ```
 
+- A research card carries no Coordinates or Identity (the sanctioned exception to the
+  canonical rules' identity re-injection — a card whose log freezes once the answer
+  lands has no use for the injection). Depends · Read first · Tier are used as needed,
+  unchanged.
 - Any means is fine: document research, real calls, a **throwaway prototype**.
   A prototype must be marked disposable by name and location and never mixed into the
   real code — only the decision survives.
@@ -196,6 +200,9 @@ with no minting commit after days is reported as lapsed.
 The execution proposal records per-member assignments in journal.
 
 Pre-commit review (work's reviewer) runs by default. Only truly trivial cards may opt
-out via an explicit "skip review" in the execution proposal.
+out via an explicit "skip review" in the execution proposal. Research cards need no such
+marking — they are not review subjects to begin with (same as work's review rule — the
+deliverable is an answer, not code. If a diff touched the real code, it does get
+reviewed).
 
 After approval: one line — "next is work."

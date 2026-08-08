@@ -6,6 +6,36 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.3 — 2026-08-08 — research-card path closed (verify · split · work · principles)
+
+Three gaps on the research-card axis, reported by an external session's review and
+adjudicated against the actual text (one claim reported as a literal contradiction was
+downgraded to an undefined relation — task card and research card are distinct named
+concepts, so principle 7 never bound research cards; what was missing was the
+declaration). No prior verification round had walked this axis — narrative walks only
+find defects on paths they take, which is also why these survived earlier convergence.
+
+- verify: a research card's completion signal ("answer + evidence recorded in the log")
+  is a record, not a run — regression no longer demands a re-execution the verifier is
+  forbidden to perform (it may not read documents); the main session confirms the record
+  instead (a document axis). The verify.md regression line now counts rerun,
+  substituted, and confirmed signals.
+- principles + split: principle 7 (identity re-injection) gains its exception in the
+  canon — research cards carry no Coordinates or Identity (the log freezes once the
+  answer lands); Depends · Read first · Tier remain usable. Declared in principles,
+  where every sanctioned exception lives — a split-only declaration would lose to the
+  canon on conflict.
+- split + work: the review gate is one rule stated identically at both ends — research
+  cards are not review subjects (the deliverable is an answer, not code), with the same
+  limit on both sides: a diff touching the real code does get reviewed (work's bare
+  exemption would have blanket-covered a prototype leaking into real code).
+- principles: "authorized exception" unified to "sanctioned exception" (one concept,
+  one word).
+- The wording was attacked by a refutation fork before landing (7 findings applied —
+  among them: the exception must live in the canon; "complete with two fields"
+  over-exempted Depends/Tier; "question card" coined a second name; "no code to review"
+  was a false ground).
+
 ## 0.9.2 — 2026-08-08 — balance audit: philosophy-axis review + flow simulation
 
 Prompted by the owner's concern that this session's high finding count might indicate

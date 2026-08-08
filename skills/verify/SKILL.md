@@ -41,7 +41,9 @@ The duality of roles — they never cross:
      (the number prefix tells you the folder. Named cards only, one hop — a capability
      that breaks the layer below it is invisible from its own folder). A signal that
      cannot run in this environment (remote-only, e.g. CI) is satisfied by the latest
-     result of its remote evidence
+     result of its remote evidence. A research card's signal is a record, not a run —
+     instead of re-running, the main session confirms the answer and evidence exist in
+     the card's progress log (a document axis)
    - **Boundary**: run one scenario input as hostile/abnormal
      (intensity per the posture level in code-style.md's Trust boundary)
    - **Standards**: scan for visible code-style.md violations — an axis separate from
@@ -102,7 +104,7 @@ Re-verification overwrites the same file — git remembers the history.
 Scenario:  <one line>
 Executed:  <channel + what was actually run>
 Verdict:   pass | fail | unverified
-Regression: <completion signals rerun + results>
+Regression: <completion signals rerun, substituted, or confirmed + results>
 Standards: <code-style violations found or none. Violations become fix cards>
 Provisional: <arch rows confirmed replaced, or none>
 Journal sweep: <lines promoted/deleted, or none>

@@ -1,6 +1,6 @@
 {
   "name": "devflow",
   "description": "Planning → architecture → design → split → work → verify → resume development flow. File-tree state management and handoff.",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "author": { "name": "nanomia" }
 }

@@ -54,7 +54,8 @@ Review — give a clean context (Claude: the reviewer agent) **only the card (Pr
         progress log IS the backstory. The code must explain itself.
         Three verdict axes: intent (destination achieved?) · logic (defects on paths the
         signal doesn't cover?) · scope (Forbidden violated, silent expansion?)
-        Recommended: T-high + low effort, kept short. Research cards skip review.
+        Recommended: T-high + low effort, kept short. Research cards skip review
+        (if a diff touched the real code, it does get reviewed).
         Objection → fix → re-review. Failure ladder applies — 3 strikes calls the human
   ↓
 Commit: `02.2 signup API` format (multi: `<id>` prefix — canonical rules). 1 task =
