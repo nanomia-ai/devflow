@@ -60,6 +60,21 @@ flowchart LR
 | Continuing in a new session | automatic (SessionStart hook — see the install sections), or resume |
 | A teammate joins | make a room — see "Using it in a team" below |
 
+### The first step — starting fresh vs adopting into existing code
+
+**A new project** starts with an interview: product asks about the problem, the
+capabilities, and the success criteria (questions come in batches, every question with
+a default attached), arch decides the stack, structure, and verify channel, split
+breaks the first capability into cards, and the work ⇄ verify loop begins.
+
+**A project that already has code** starts with reverse-derivation instead of an
+interview: arch traces one representative flow through the code end to end, then
+reverse-derives product.md · arch.md · code-style.md — product.md is filled in the
+product skill's own format, and only what code cannot answer (will-not-build · success
+criteria · gaps in Problem and Approach) is asked of the owner. Already-finished code is never backfilled
+into the tree — the tree accumulates only work done after adoption. From there the
+path is the same: split → work ⇄ verify.
+
 ## What accumulates in your project
 
 Using devflow creates a single `devflow/` folder in the target project, and documents
@@ -153,17 +168,17 @@ flowchart TB
     FC -->|back to work| I
 ```
 
-The loop improves in exactly three ways, and none of them repeats the same failure the
-same way:
+No loop circles in place — to repeat, something must change first, and every pass
+leaves something behind:
 
-- **Objection → fix → signal re-run.** The evidence behind a commit is always a pass
-  against the last code — a stale pass is unverified.
-- **Verification fail → fix card.** An escaped defect becomes a completion signal that
-  reproduces the failure, and future regression keeps rerunning it.
-- **3 strikes → the human.** There is no 4th attempt.
+| Where the loop turns | What changes before the retry | What the pass leaves behind |
+|---|---|---|
+| Completion signal fails | 1st: reinforce the card → 2nd: raise the tier or main does it → 3rd: the human. Never the same prompt again (the failure ladder) | the attempts and causes in the progress log |
+| Review objection | fix + signal re-run — against the changed code, an earlier pass is unverified | a diff that passed re-review |
+| Capability verification fails | a fix card — its completion signal reproduces that failure | a signal permanently folded into regression |
+| A provisional value gets measured | that row of the upper document is replaced (upper-document feedback) | a measurement the documents remember |
 
-The outcome this drives: **a defect met once cannot escape again, and the harness grows
-one step only on a real defect — never on imagined risk.**
+The outcome this drives: **a defect met once cannot escape through the same door twice.**
 
 ## Design principles
 

@@ -17,9 +17,14 @@ This procedure IS the "understanding stage" — split does not run without it.
 
 1. **Trace the flow.** Follow one representative request from the entry point to the end,
    confirming capability boundaries with your own eyes. Code is truer than documents.
-2. From code, README, and commit history, **reverse-derive the identity paragraph and the
-   capability list** into a condensed `product.md`. No full interview — just one batch of
-   confirmation questions (to correct anything mis-derived).
+2. From code, README, and commit history, reverse-derive `product.md` **in the product
+   skill's output format**. What code can answer (the identity paragraph, the capability
+   list with one-line descriptions, Boundary's MVP scope — what is already built is
+   the answer, screens & access points, interface) is filled by derivation; what code cannot answer (Boundary's "will-not-build" · success criteria ·
+   whatever the derived identity paragraph missed of Problem and Approach) is asked of
+   the owner. No full interview — the single batch of confirmation questions serves both
+   correcting anything mis-derived and filling those fields. What goes unanswered is
+   left in 'Open questions,' never invented.
    Start `glossary.md` from the terms the code actually uses — the code's words are canonical.
 3. Reverse-derive arch.md, present it as a draft, and get user confirmation. Inherited
    forever after.

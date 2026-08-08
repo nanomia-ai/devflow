@@ -6,6 +6,30 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.8 — 2026-08-09 — brownfield product.md reaches field parity (arch) + README first-step and loop-mechanics visuals
+
+The owner questioned whether starting brownfield adoption at arch starves the project
+of product knowledge. Adjudicated against the text: structurally no — arch's brownfield
+procedure already reverse-derives a product.md, and split refuses to run without one —
+but the condensed form (identity + capability list) left real consumers unserved:
+verify's product layer checks "every success criterion in product.md," work's
+upper-document feedback names success criteria as settle targets, and code cannot
+answer why/direction/will-not-build at all. Step 2 now derives product.md in the
+product skill's output format: code-answerable fields by derivation (identity,
+capabilities with one-line descriptions, Boundary's MVP scope — what is built is the
+answer, screens & access points, interface), code-blind fields asked of the owner in
+the same single batch (will-not-build · success criteria · Problem/Approach gaps),
+unanswered items left in Open questions, never invented. Full product-interview parity
+was deliberately NOT adopted — re-interviewing what code answers is the recorded
+waste. README: a "first step" walkthrough (fresh vs adopting into existing code) and
+the work ⇄ verify bullets replaced by a loop-mechanics table (where the loop turns /
+what changes before the retry / what each pass leaves behind — no loop circles in
+place). Verification: one adversarial pass on the rule change (4 targeted checks
+clean; 1 finding — the MVP-scope subfield unassigned to either bucket — fixed) and a
+fact-check on the README walkthrough (1 finding — "the why" under-stated the Approach
+gaps — fixed). Files: skills/arch/SKILL{_ko,}.md, README{_ko,}.md,
+.claude-plugin/plugin.json. Codex prompts regenerated.
+
 ## 2026-08-09 — docs only: README opens with the approach (no version change)
 
 The README jumped from the memory hook straight into structure — a first-time reader
