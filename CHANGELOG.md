@@ -6,6 +6,42 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.4 — 2026-08-09 — loop closure: signal freshness + fix-card reproduction signals (work · verify)
+
+Two literal-walkable gaps in the work⇄verify loop, flagged by an external
+loop-engineering review and confirmed against the text before adoption:
+
+- work: after a review objection was fixed, nothing required the completion signal to
+  run again — a pre-fix pass could ride into the commit as stale evidence (the verified
+  code being version A, the committed code version B). The loop's review step now
+  states: a fix that changed the diff re-runs the signal — against the changed code, an
+  earlier pass is unverified (the iron rule's own vocabulary; no new status word). The
+  delegation stage split names the owner of that re-run (main, for its own fixes) —
+  two independent verification passes hit the same seam, which earned the parenthetical.
+- verify: a fix card's completion signal had no tie to the failure that created it — a
+  weak signal ("build passes") satisfied the letter. A fix card born from the verifier's
+  fail now carries those reproduction steps rerun through the channel — the escaped
+  defect becomes a signal and joins every future regression rerun. This is the only
+  self-improvement adopted: the harness grows exactly one step when a real defect
+  escaped, never for imagined risk. Not red-green reintroduced — the failing "before"
+  evidence already lives in the verify record; work still runs the signal once.
+
+Verification: the review's cited papers checked against arXiv (the two load-bearing
+results match to the digit; one paper's claimed numbers are absent from its abstract and
+were dropped from the rationale); a fresh-literature sweep supported both rules
+(evidence-freshness gating; failures promoted to regression checks) and flagged
+regression-set growth as the cost to watch. Draft wording survived refuter +
+literal-walk passes (12 findings folded in — v1's "failing before / passing after"
+clause was deleted as a red-green reading colliding with the recorded TDD rejection);
+the applied text was re-audited with fresh lenses (capable-reader walk + over-harness
+audit): one garden-path phrasing fixed in the English delegation parenthetical, all
+additions judged clean. Rejection lineage (graph engineering, root-cause stage,
+held-out gates, harness self-evolution) and two field-observation items
+(intermittent-failure reproduction power, per-folder regression cost growth) recorded
+in docs/design.md. Files: skills/work/SKILL{_ko,}.md, skills/verify/SKILL{_ko,}.md,
+docs/design{_ko,}.md, .claude-plugin/plugin.json, CHANGELOG.md. Codex prompts
+regenerated locally.
+
 ## 2026-08-09 — docs only: maintenance protocol hardened (no version change)
 
 AGENTS.md verification protocol: two items amended, two added, distilled from the 0.9.x

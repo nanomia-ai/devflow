@@ -56,6 +56,7 @@ Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/in
 | The multi-mode split axis is the **scope of truth**, not people | Documents with a single truth (project·tree·journal) are shared; only person-owned state (HANDOFF·marker·identity) is isolated into rooms (users/<id>/). Adopted after refutation-fork verification of 4 candidates (5 rounds total, real defects extracted each round) — rejection lineage below |
 | HANDOFF is committed to git but never in a dedicated commit — it rides the boundary commit only | A dedicated HANDOFF commit polluted history and was reverted in practice (2026-08-06) |
 | Design in Korean, deploy in English (dual language) | Korean is the language the user can review; English is what AI understands best at the lowest token cost. Procedure and terminology table: AGENTS.md |
+| A signal pass goes stale when the diff changes + a fix card's completion signal is the verifier's reproduction steps (v0.9.4) | Two gaps flagged by an external loop-engineering review (2026-08-09) and confirmed against the text: a post-review fix could ride a pre-fix pass into commit (a stale-evidence path), and a fix-card signal could be written unrelated to the observed failure. Backing research verified against sources (blind-retry recovery 0.0 on latent/semantic errors; verifier +14.8%p from real misjudgment cases). Regulates only evidence freshness and signal provenance, not execution order — no red-green reintroduction, the TDD rejection stands (the failing "before" evidence already lives in the verify record) |
 
 ## Borrowings and their boundary
 
@@ -91,6 +92,21 @@ Rejected or absorbed in the v0.8.0 multi-mode design:
   rejected: kept as the answer for teams that must leave no devflow traces in the
   repository. Not used on the normal adoption path.
 
+Rejected in the v0.9.4 loop-engineering review (2026-08-09):
+
+- **Adopting graph engineering (typed evidence graphs · an orchestration agent)** — the
+  tree, Depends, status suffixes, and revert already form a low-cost graph. A negative
+  result was also confirmed: typed-graph retrieval scored 11.2%p below a strong hybrid
+  ranker (p=0.0007).
+- **A root-cause documentation stage** — the progress log is already where diagnosis
+  lives. Demanding a separate artifact is method prescription.
+- **Held-out / candidate-comparison promotion gates** — for probabilistic optimization
+  of prompts and harnesses only. For devflow's own maintenance, the AGENTS.md
+  refutation protocol already plays that role.
+- **Harness self-evolution (rewriting its own prompts)** — collides head-on with the
+  philosophy of steering without self-modification. Self-improvement stops at folding
+  escaped defects into signals (adopted in v0.9.4).
+
 Other:
 
 - **Any "skim the related records" rule for maintenance reopening** — "related" is a
@@ -118,6 +134,11 @@ Other:
   capability candidate".
 - Document bloat over a multi-year horizon — the big cleanup is not a new rule but a
   re-run of product/arch (an authorized re-baseline).
+- A fix-card signal born from an intermittent failure (races, etc.) has weak
+  reproduction power — a single pass can overstate that the defect is gone. Review the
+  wording only if friction is observed.
+- As fix cards accumulate, per-folder regression rerun cost grows — if it gets heavy,
+  re-evaluate together with the tree-archive rule (the on-hold list).
 
 ## On hold — candidates for coming versions
 

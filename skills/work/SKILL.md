@@ -56,7 +56,9 @@ Review — give a clean context (Claude: the reviewer agent) **only the card (Pr
         signal doesn't cover?) · scope (Forbidden violated, silent expansion?)
         Recommended: T-high + low effort, kept short. Research cards skip review
         (if a diff touched the real code, it does get reviewed).
-        Objection → fix → re-review. Failure ladder applies — 3 strikes calls the human
+        Objection → fix → re-review. A fix that changed the diff re-runs the completion
+        signal — against the changed code, an earlier pass is unverified. Failure ladder
+        applies — 3 strikes calls the human
   ↓
 Commit: `02.2 signup API` format (multi: `<id>` prefix — canonical rules). 1 task =
         1 commit (mid-checkpoints for long tasks allowed as `02.2 wip: ...`)
@@ -106,7 +108,8 @@ document comes before creating a card.
   A delegated card names the arch sections it needs in `Read first`. For T-low tier,
   first check the card's `Read first` is complete; reinforce it if not.
 - **The stage split is fixed: subagent = implement + run the completion signal + progress
-  log. Main = review + commit + feedback + rename.** Checkpoint commits are the main
+  log. Main = review + commit + feedback + rename (plus the signal re-run triggered by
+  its own fix).** Checkpoint commits are the main
   session's too — a subagent's protection is its log (if it dies, main redispatches).
 - **Return is fixed at 5 lines:** status (done/blocked) · changed files · completion-signal
   result · learned · open. Details go straight into the progress log by the subagent

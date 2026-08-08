@@ -52,8 +52,11 @@ The duality of roles — they never cross:
      were actually replaced — a document still posing a question its own card already
      answered will misdirect the next capability
 6. Fail → create a fix card in the same folder (e.g., 02.3b-fix-...) and reflect it in
-   the tree. multi: fix cards are born unclaimed (pending) — assignment goes through the
-   normal path (proposal · claim)
+   the tree. A fix card born from the verifier's fail carries as its completion signal
+   those reproduction steps rerun through the channel — the escaped defect becomes a
+   signal, and regression reruns it from then on.
+   multi: fix cards are born unclaimed (pending) — assignment goes through the normal
+   path (proposal · claim)
 7. **Capability layer passes → grant `.done` to that capability folder.** Never before —
    a capability that looks complete without verification is the worst lie a tree can tell
 8. With the `.done` grant, sweep the whole journal — whichever capability a line came
