@@ -1,6 +1,8 @@
 ﻿# devflow → Codex CLI installer (Windows)
-# Converts skills/*/SKILL.md into ~/.codex/prompts/devflow-<name>.md.
-# The canonical rules (principles) are embedded in each prompt, so no separate prompt is made for them.
+# Three channels: 1) native plugin (marketplace add + plugin add) — skills with
+# frontmatter become model-invocable, same as Claude; 2) ~/.codex/prompts/devflow-<name>.md
+# slash prompts — the explicit channel (canonical rules and companion documents embedded);
+# 3) SessionStart hook via ~/.codex/hooks.json (plugin-delivered hooks are removed in Codex).
 $ErrorActionPreference = "Stop"
 
 $devflowRoot = Split-Path $PSScriptRoot -Parent
@@ -42,6 +44,23 @@ Get-ChildItem (Join-Path $devflowRoot "skills") -Directory | Where-Object { $_.N
     )) -join "`n"
     Set-Content -Encoding utf8 (Join-Path $promptsDir "devflow-$name.md") $out
     Write-Host "installed: /devflow-$name"
+}
+
+Write-Host ""
+# Native plugin channel — registers the repo as a marketplace and installs the plugin,
+# so the skills (frontmatter intact) are model-invocable inside Codex.
+if (Get-Command codex -ErrorAction SilentlyContinue) {
+    $ea = $ErrorActionPreference; $ErrorActionPreference = "Continue"
+    cmd /c "codex plugin marketplace remove nanomia >nul 2>nul"
+    cmd /c "codex plugin marketplace add ""$devflowRoot"" >nul 2>nul"
+    cmd /c "codex plugin remove devflow >nul 2>nul"
+    cmd /c "codex plugin add devflow@nanomia >nul 2>nul"
+    $pluginOk = ($LASTEXITCODE -eq 0)
+    $ErrorActionPreference = $ea
+    if ($pluginOk) { Write-Host "plugin installed: devflow@nanomia (native Codex skills - model-invocable)" }
+    else { Write-Host "NOTE: codex plugin add failed - the slash prompts above still work." }
+} else {
+    Write-Host "NOTE: codex CLI not on PATH - skipped native plugin registration (slash prompts still work)."
 }
 
 Write-Host ""

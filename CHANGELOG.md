@@ -6,6 +6,29 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.9 — 2026-08-09 — Codex install leads with the native plugin channel (installers · marketplace)
+
+The owner asked whether either platform was being installed through a legacy channel.
+Audit results: Claude — everything current per the official plugin docs (hooks.json,
+${CLAUDE_PLUGIN_ROOT}, convention-based skills discovery), one fix: marketplace.json
+gained its recommended top-level description (this was the standing validate warning).
+Codex — the prompts-only channel WAS legacy: Codex now supports native plugins and
+model-invocable SKILL.md skills (features `plugins` and `skill_search` stable), and
+probing confirmed both that `codex plugin marketplace add` consumes our Claude-format
+marketplace directly and that a clean Codex session recognizes all 8 devflow skills by
+name — restoring auto-invocation parity that prompts (user-typed slash commands,
+frontmatter stripped) could never provide. The installers now set up three channels:
+native plugin (marketplace add + plugin add, idempotent remove-then-add), the slash
+prompts as the explicit channel (unchanged mechanics), and the SessionStart hook —
+still registered via ~/.codex/hooks.json because plugin-delivered hooks are a removed
+Codex feature. Recurrence guard: a new pre-flight checklist item requires install
+channels to target each platform's current native mechanism, re-verified when
+platforms update. Also repaired in passing, with the owner informed: a dangling
+`scroll-world` marketplace entry (path no longer exists) was blocking every
+`codex plugin` command and was removed. Files: codex/install.{ps1,sh},
+.claude-plugin/marketplace.json, README{_ko,}.md, AGENTS.md, docs/design{_ko,}.md,
+.claude-plugin/plugin.json.
+
 ## 0.9.8 — 2026-08-09 — brownfield product.md reaches field parity (arch) + README first-step and loop-mechanics visuals
 
 The owner questioned whether starting brownfield adoption at arch starves the project

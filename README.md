@@ -295,15 +295,19 @@ powershell -File codex/install.ps1
 sh codex/install.sh
 ```
 
-Creates the 7 `/devflow-*` commands in `~/.codex/prompts/` and registers the native Codex
-SessionStart hook — the same `scripts/session-start.js` serves both Claude and Codex.
-Prerequisite: `[features] hooks = true` in `~/.codex/config.toml` (the installer checks
-and explains if missing). The canonical rules are embedded in each prompt (the Codex
-prompt folder is flat, so cross-file references are unreliable). Only in hook-incapable
-environments, add the `codex/AGENTS-devflow.md` block to the project's `AGENTS.md` as a
-fallback.
+The installer sets up three channels at once: ① a **native plugin** — it registers the
+repository as a marketplace and installs `devflow@nanomia`, so the 8 skills are visible
+to the model with their frontmatter intact (auto-invocation — the same way Claude works).
+② the 7 `/devflow-*` commands in `~/.codex/prompts/` — the explicit channel; the
+canonical rules and companion documents are embedded in each prompt (the prompt folder
+is flat, so cross-file references are unreliable). ③ the native Codex SessionStart
+hook — the same `scripts/session-start.js` serves both Claude and Codex. Prerequisite:
+`[features] hooks = true` in `~/.codex/config.toml` (the installer checks and explains
+if missing). Only in hook-incapable environments, add the `codex/AGENTS-devflow.md`
+block to the project's `AGENTS.md` as a fallback.
 
-**After editing any skill, run the installer again** (prompts are build artifacts).
+**After editing any skill, run the installer again** (the plugin snapshot and the
+prompts are build artifacts).
 
 ## Other agents (Cursor, Copilot, opencode, …)
 

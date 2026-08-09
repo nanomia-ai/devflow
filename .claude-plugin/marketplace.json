@@ -1,5 +1,6 @@
 {
   "name": "nanomia",
+  "description": "nanomia's AI-session development tooling — devflow: planning → implementation → verification flow",
   "owner": { "name": "nanomia" },
   "plugins": [
     {

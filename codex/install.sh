@@ -1,7 +1,9 @@
 #!/usr/bin/env sh
 # devflow → Codex CLI installer (macOS/Linux)
-# Converts skills/*/SKILL.md into ~/.codex/prompts/devflow-<name>.md.
-# The canonical rules (principles) are embedded in each prompt, so no separate prompt is made for them.
+# Three channels: 1) native plugin (marketplace add + plugin add) — skills with
+# frontmatter become model-invocable, same as Claude; 2) ~/.codex/prompts/devflow-<name>.md
+# slash prompts — the explicit channel (canonical rules and companion documents embedded);
+# 3) SessionStart hook via ~/.codex/hooks.json (plugin-delivered hooks are removed in Codex).
 set -e
 
 DEVFLOW_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -53,6 +55,22 @@ for dir in "$DEVFLOW_ROOT"/skills/*/; do
   } >> "$PROMPTS_DIR/devflow-$name.md"
   echo "installed: /devflow-$name"
 done
+
+echo ""
+# Native plugin channel — registers the repo as a marketplace and installs the plugin,
+# so the skills (frontmatter intact) are model-invocable inside Codex.
+if command -v codex >/dev/null 2>&1; then
+  codex plugin marketplace remove nanomia >/dev/null 2>&1 || true
+  codex plugin marketplace add "$DEVFLOW_ROOT" >/dev/null 2>&1 || true
+  codex plugin remove devflow >/dev/null 2>&1 || true
+  if codex plugin add devflow@nanomia >/dev/null 2>&1; then
+    echo "plugin installed: devflow@nanomia (native Codex skills - model-invocable)"
+  else
+    echo "NOTE: codex plugin add failed - the slash prompts above still work."
+  fi
+else
+  echo "NOTE: codex CLI not on PATH - skipped native plugin registration (slash prompts still work)."
+fi
 
 echo ""
 node "$DEVFLOW_ROOT/scripts/install-codex-hook.js"
