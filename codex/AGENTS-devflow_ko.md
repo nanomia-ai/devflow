@@ -15,5 +15,5 @@
 
 작업 규율: 진행 상태는 파일명 접미사(`.wip.` `.done.`)로만 표현한다. 1 작업 = 1 커밋
 (메시지는 `02.2 가입 API` 형식, 완료 신호 통과 후에만). 실행하지 않은 것은 통과가 아니라
-미검증이다. 상세 절차는 /devflow-product /devflow-arch /devflow-design
+미검증이다. 상세 절차는 /devflow-product /devflow-arch /devflow-adopt /devflow-design
 /devflow-split /devflow-work /devflow-verify /devflow-resume 명령을 따른다.

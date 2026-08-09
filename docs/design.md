@@ -29,7 +29,7 @@ Core philosophy — every modification must keep to it:
 ## Structure at a glance
 
 ```
-Layer 0 (once, or inherited): product → arch → [design]     Layer 1 (loop): split → work ⇄ verify
+Layer 0 (once, or inherited): product → arch → [design] · existing code: adopt back-derives     Layer 1 (loop): split → work ⇄ verify
 Shared: resume, principles (canonical rules)
 Created in the target project: devflow/{project/, tree/, HANDOFF.md, journal.md}
                                (multi mode: plus users/<id>/ personal rooms)
@@ -59,6 +59,7 @@ Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/in
 | The terms of the review and verification roles live in the skill text — agents/*.md is Claude packaging (v0.9.5) | Same reason principles lives inside skills/: on installs that copy only skills/, the terms must travel along or platforms diverge. Found via an owner report (2026-08-09) — never-execute/never-fix, the taste exclusion, speculative marking, and fail-with-reproduction-steps shipped only in the Claude-only agent files. The agent files are a restatement of the same terms; drift between the two is a defect. Superseded in v0.9.6: the terms moved into one contract file beside each skill and Claude registration was dropped — see the v0.9.6 row |
 | The Codex install leads with the native plugin channel (marketplace add + plugin add); generated slash prompts stay as the explicit channel; the hook stays separately registered in ~/.codex/hooks.json (v0.9.9) | Probed live: Codex consumes Claude-format marketplaces directly and model-invokes SKILL.md skills — a clean Codex session recognized all 8 devflow skills. Plugin-delivered hooks are a removed feature in Codex, so hook registration stays separate. The old prompts-only channel predates these capabilities and made auto-invocation Claude-only — the last platform asymmetry. Recurrence is guarded by the pre-flight item "install channels target each platform's current native mechanism" |
 | Role contracts are one companion file beside each skill (reviewer.md · verifier.md); every platform runs them by briefing a clean context with the file verbatim — no Claude agent registration (v0.9.6) | An A/B/C test (2× registered agent · 2× prompt-briefed Claude subagent · 1× Codex CLI, one fixture with 4 planted defects) found all five runs identical — 4/4 detection and full contract adherence — so registration's assumed robustness edge was not observed. One mechanism dissolves the platform fork entirely. The mature precedent is superpowers (7+ harnesses, no registry, contract prompt files beside skills). Delivery must be static — verbatim file briefing (Claude · skills.sh) or install-time embedding (Codex); the only transport that failed in testing was shell interpolation |
+| Brownfield entry is its own skill, adopt — split out of arch (v0.9.10) | arch held two concepts under one name — development planning and whole-Layer-0 reverse-derivation — so entry discoverability died (the derivation trigger lived only in the tail of the skill description) and the seam in the body was ambiguous (a literal reader could not settle whether the interview procedure and the verify-channel gate applied after derivation — owner report 2026-08-10). The derivation procedure and field split moved per the 0.9.8 decision — new sentences bounded to the entry guards, the evidence-order line, the gate pointer, and the design note; 0.9.8's "re-interviewing is waste" verdict stands. The output formats stay canonical in product·arch; adopt references them by stage name + the Codex prompt embeds them at install time (same grounds as the flat-folder decision). "adopt" is standard developer vocabulary — the Nx docs section "Adopting Nx", Next.js·React official "Incremental Adoption", the Tech Radar top ring "Adopt" |
 | A signal pass goes stale when the diff changes + a fix card's completion signal is the verifier's reproduction steps (v0.9.4) | Two gaps flagged by an external loop-engineering review (2026-08-09) and confirmed against the text: a post-review fix could ride a pre-fix pass into commit (a stale-evidence path), and a fix-card signal could be written unrelated to the observed failure. Backing research verified against sources (blind-retry recovery 0.0 on latent/semantic errors; verifier +14.8%p from real misjudgment cases). Regulates only evidence freshness and signal provenance, not execution order — no red-green reintroduction, the TDD rejection stands (the failing "before" evidence already lives in the verify record) |
 
 ## Borrowings and their boundary
@@ -109,6 +110,20 @@ Rejected in the v0.9.4 loop-engineering review (2026-08-09):
 - **Harness self-evolution (rewriting its own prompts)** — collides head-on with the
   philosophy of steering without self-modification. Self-improvement stops at folding
   escaped defects into signals (adopted in v0.9.4).
+
+Attempted and reverted in v0.9.12 (2026-08-10):
+
+- **Unifying contradiction resolution onto the table** — a rewrite sending
+  document-vs-document contradictions to the discovery→update table instead of steps
+  1–4. The refutation pass run right after applying extracted two regressions, and the
+  original text was restored: steps 1–4's side effects (`.stale.` marking, re-split)
+  vanish on the contradiction path, and some wrong sides have no landing row in the
+  table (design.md · an existing code-style line · a completion signal that runs but
+  asserts the contradicted behavior). Any re-proposal must solve both. The literal
+  collision between the contradiction sentence ("reconcile through this procedure")
+  and the steps-1–4 scoping sentence ("only when a lower layer must violate") remains
+  an open observation item — the field-observed Layer 0 freeze is already covered by
+  the draft clause (adopted in the same version).
 
 Rejected in the v0.9.6 role-contract redesign:
 

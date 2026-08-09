@@ -30,7 +30,7 @@ report it as stale and let the tree and my claimed card decide. A missing date h
 also counts as stale. **When HANDOFF conflicts with the tree, the tree wins.**
 Even from a stale HANDOFF, include its Open decisions in the report.
 
-While reading, also run the canonical rules' **integrity check**.
+While reading, also run the **integrity check** from the canonical rules (`../principles/SKILL.md`).
 Report anomalies — do not fix them; include them in the report below.
 
 ## Report, Then Approval
@@ -74,4 +74,4 @@ the re-anchor procedure.
   multi: include a one-line summary of others' claims (who holds what) in the report.
 - HANDOFF missing or empty: normal. Resume from the tree alone.
 - No tree at all: this project doesn't use devflow. Direct to product (new) or
-  arch (existing code).
+  adopt (existing code).

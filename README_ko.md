@@ -38,8 +38,9 @@ AI 세션은 매번 기억을 잃고 시작한다. devflow는 그 기억을 **�
 
 ```mermaid
 flowchart LR
-    subgraph L0["Layer 0 · 프로젝트 정의 — 1회, 기존 코드면 역산 상속"]
+    subgraph L0["Layer 0 · 프로젝트 정의 — 1회"]
         P[product<br>무엇을·왜] --> A[arch<br>어떻게] --> D["design (선택)<br>프론트엔드 있을 때만"]
+        AD["adopt<br>기존 코드면 역산 상속"]
     end
     subgraph L1["Layer 1 · 작업 루프 — 반복"]
         S[split<br>쪼개기] --> W[work<br>구현] <--> V[verify<br>검증]
@@ -51,7 +52,7 @@ flowchart LR
 | 상황 | 진입점 |
 |---|---|
 | 새 프로젝트 | product 부터 순서대로 |
-| 기존 프로젝트에 도입 | arch (코드에서 역산) → split |
+| 기존 프로젝트에 도입 | adopt (코드에서 역산) → split |
 | 기능 추가·고도화 | split |
 | 새 세션에서 이어하기 | 자동 (SessionStart 훅 — 설치 절 참조) 또는 resume |
 | 팀원 합류 | 방 만들기 — 아래 "팀에서 쓸 때" |
@@ -62,7 +63,7 @@ flowchart LR
 묶음으로, 모든 질문에 기본값이 붙는다), arch가 스택·구조·검증 창구를 결정하고,
 split이 첫 능력을 카드로 쪼개면 work ⇄ verify 루프에 들어간다.
 
-**이미 코드가 있는 프로젝트**는 인터뷰 대신 역산으로 시작한다: arch가 대표 흐름
+**이미 코드가 있는 프로젝트**는 인터뷰 대신 역산으로 시작한다: adopt가 대표 흐름
 하나를 코드에서 끝까지 추적한 뒤 product.md·arch.md·code-style.md를 역산 생성한다 —
 product.md는 product 스킬과 같은 형식으로 채우되, 코드가 답할 수 없는 것(안 만들 것 ·
 성공 판정 · 문제와 해결 방식의 빈 곳)만 소유자에게 묻는다. 이미 완성된 코드는 트리에 소급 기록하지 않는다 —
@@ -115,18 +116,19 @@ stateDiagram-v2
 남긴다. 실측된 값은 work의 환류 단계에서 이미 arch의 잠정값 표를 교체했고, verify는
 그 교체를 확인한다 — **낡은 문서가 실측을 이기는 일이 없다.**
 
-## 스킬 8개
+## 스킬 9개
 
 | 스킬 | 언제 | 만드는 것 | 설계 의도 |
 |---|---|---|---|
 | product | 새 프로젝트 | product.md · glossary.md | 여기서 정한 능력 이름이 모듈명·폴더명으로 끝까지 같은 단어로 이어진다 |
-| arch | product 후, 또는 기존 코드 역산 | arch.md · code-style.md | 추측(잠정값)과 결정을 문장 차원에서 분리해 문서가 거짓말하지 못하게 한다 |
+| arch | product 후 | arch.md · code-style.md | 추측(잠정값)과 결정을 문장 차원에서 분리해 문서가 거짓말하지 못하게 한다 |
+| adopt | 기존 코드에 도입 | product.md · arch.md · code-style.md (역산) | 인터뷰 대신 역산 — 코드가 답하는 것은 묻지 않고, 코드가 답 못 하는 것만 소유자에게 묻는다 |
 | design | 프론트엔드 있을 때만 (선택) | design.md · 토큰 파일 · /preview | 색·간격의 정본은 문서가 아니라 토큰 파일 하나다 |
 | split | 작업 쪼개기 | tree/의 능력 폴더·작업 카드 + 실행 제안(순서·병렬·모델 등급 — 사용자 승인 게이트) | 한 번에 한 층만 연다 — 앞선 구현이 뒤의 분해를 바꾼다 |
 | work | 구현 | 코드 · 카드 안 진행 로그 · 커밋 | 실행 전에 로그를 디스크에 — 세션이 언제 죽어도 카드만 읽으면 이어진다 |
 | verify | 능력 완료 · MVP 도달 | verify.md · (실패 시) 수정 카드 | 실행하지 않은 것은 통과가 아니라 미검증이다 |
 | resume | 새 세션 | 없음 — 상태 보고 후 승인 (다중 모드의 소화 절차만 공유 문서를 정정한다) | HANDOFF와 트리가 충돌하면 트리가 이긴다 |
-| principles | product–verify 여섯 스킬이 실행 전에 읽는다 | — | 규칙의 정본은 한 곳에만 산다 |
+| principles | product–verify·adopt 일곱 스킬이 실행 전에 읽는다 | — | 규칙의 정본은 한 곳에만 산다 |
 
 역할 2개가 동행한다: **reviewer**는 커밋 전에 카드(진행 로그는 제외)·diff·
 code-style.md만 읽고 판정한다(실행하지 않음). **verifier**는 구현 이력을 모른 채
@@ -258,7 +260,7 @@ git: "Jaemin Park", jmp@example.com
 
 (GitHub 공개 전이라면 marketplace add에 로컬 클론 경로를 넣는다.)
 
-스킬 8개(역할 조건 파일 동반) + SessionStart 훅이 설치된다. 명령은 `/devflow:product` 형식 —
+스킬 9개(역할 조건 파일 동반) + SessionStart 훅이 설치된다. 명령은 `/devflow:product` 형식 —
 플러그인 이름이 네임스페이스라 충돌이 원천 차단되고, `/devflow`까지만 쳐도 자동완성에
 전체가 모여 보인다. 훅은 `devflow/tree/`가 있는 프로젝트에서만 동작하고, 세션 시작·
 재개·컨텍스트 압축 직후에 트리 상태와 HANDOFF를 자동 주입한다 (그래서 resume을 안 쳐도
@@ -279,8 +281,8 @@ sh codex/install.sh
 ```
 
 설치기가 세 채널을 한 번에 구성한다: ① **네이티브 플러그인** — 저장소를 마켓플레이스로
-등록하고 `devflow@nanomia`를 설치해, 스킬 8종이 frontmatter 그대로 모델에 보인다
-(자동 호출 — Claude와 같은 방식). ② `~/.codex/prompts/`의 `/devflow-*` 명령 7개 —
+등록하고 `devflow@nanomia`를 설치해, 스킬 9종이 frontmatter 그대로 모델에 보인다
+(자동 호출 — Claude와 같은 방식). ② `~/.codex/prompts/`의 `/devflow-*` 명령 8개 —
 명시 호출 채널. 규칙 정본과 동반 문서가 각 프롬프트에 동봉된다(프롬프트 폴더는
 평면이라 파일 간 참조가 불안정하기 때문). ③ Codex 네이티브 SessionStart 훅 — 같은
 `scripts/session-start.js`가 Claude와 Codex 양쪽을 서빙한다. 전제:

@@ -1,39 +1,17 @@
 ---
 name: arch
-description: Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, producing devflow/project/arch.md. Use for stack selection, architecture design, or reverse-deriving from an existing codebase.
+description: Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, producing devflow/project/arch.md. Use for stack selection or architecture design.
 ---
 
 # arch — Development Planning
 
 First read the canonical rules (`../principles/SKILL.md`) and `devflow/project/product.md`.
 If `product.md` is missing: with no code either, direct the user to the product stage
-first; **with existing code, produce product.md too via the brownfield procedure below.**
+first; with existing code, to adopt (existing-project adoption — it produces
+product.md too, by reverse-derivation).
 
 Purpose: translate the service plan into a development plan, producing
 `devflow/project/arch.md`.
-
-**Brownfield (joining a project that already has code):** do not interview. Reverse-derive.
-This procedure IS the "understanding stage" — split does not run without it.
-
-1. **Trace the flow.** Follow one representative request from the entry point to the end,
-   confirming capability boundaries with your own eyes. Code is truer than documents.
-2. From code, README, and commit history, reverse-derive `product.md` **in the product
-   skill's output format**. What code can answer (the identity paragraph, the capability
-   list with one-line descriptions, Boundary's MVP scope — what is already built is
-   the answer, screens & access points, interface) is filled by derivation; what code cannot answer (Boundary's "will-not-build" · success criteria ·
-   whatever the derived identity paragraph missed of Problem and Approach) is asked of
-   the owner. No full interview — the single batch of confirmation questions serves both
-   correcting anything mis-derived and filling those fields. What goes unanswered is
-   left in 'Open questions,' never invented.
-   Start `glossary.md` from the terms the code actually uses — the code's words are canonical.
-3. Reverse-derive arch.md, present it as a draft, and get user confirmation. Inherited
-   forever after.
-4. **Reverse-derive code-style.md as well.** What the code already does is canonical —
-   do not impose the default values and split the style in two.
-5. **Never backfill the tree with already-finished code.** `devflow/tree/` starts from
-   work done after adoption — filling it with `.done.` cards for existing features is
-   waste. Only align capability folder names with the reverse-derived capability list,
-   so new work accumulates in the right place.
 
 ## Procedure — in exactly this order
 
@@ -121,6 +99,10 @@ as a decision, the architecture document starts lying.
 will settle it.** No settling card means you do not intend to find out — then it is not
 provisional, it is a decision, and it belongs in the sections above. This table is not a
 progress record; it is a list of the unknown.
+If the settling card's number is not known yet (no tree, or its layer not yet opened),
+write 'unminted' in the Settled-by cell — split, when opening the layer that settles
+that row, creates the card and replaces the cell with its number (that row of the
+discovery→update table).
 
 ```markdown
 | Item | Provisional value | Where it came from | Settled by |

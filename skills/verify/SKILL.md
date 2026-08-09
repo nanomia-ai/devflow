@@ -28,8 +28,8 @@ The duality of roles — they never cross:
 ## Procedure
 
 ```
-1. Read verify_channel. Verification always runs on the work server (working tree) —
-   it is the new code being verified
+1. Read verify_channel. Verification always runs on the work server (the one running
+   the currently checked-out code) — it is the new code being verified
 2. Establish the target layer's criteria (capability: the scenario — the main session
    composes it from product.md's capability description and the cards' Destinations /
    product: success criteria)
@@ -79,16 +79,16 @@ on the closer's platform is handled by remote-evidence substitution (Regression 
 neutral) or delegated to the owning member — record the split in verify.md. The journal
 sweep is done by the member performing the closure.
 
-**Iron rule: what was not executed is not "passed" — it is "unverified."**
-Reading code and thinking "looks right" is not a verdict. Record the channel's execution
-results (responses, screens, output) as the evidence for every verdict.
+Record the channel's execution results (responses, screens, output) as the evidence for
+every verdict.
 
 ## Bias Removal
 
 Verification runs in a context that has **never seen the implementation history**:
 brief a clean subagent/fresh session with `verifier.md` beside this skill, **verbatim
-— never summarized**, and give it only the verification target (card or scenario) +
-verify_channel. Never tell it what code was changed or how.
+— never summarized**, and give it only the verification target (the card with its
+progress-log section removed, or the scenario) + verify_channel. Never tell it what
+code was changed or how — the progress log IS that history.
 
 Recommended tier: T-high + low effort, kept short (it is a verdict, not an exploration).
 

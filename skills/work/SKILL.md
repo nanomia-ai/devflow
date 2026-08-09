@@ -60,8 +60,8 @@ Review — brief a clean subagent/fresh session with `reviewer.md` beside this s
         signal — against the changed code, an earlier pass is unverified. Failure ladder
         applies — 3 strikes calls the human
   ↓
-Commit: `02.2 signup API` format (multi: `<id>` prefix — canonical rules). 1 task =
-        1 commit (mid-checkpoints for long tasks allowed as `02.2 wip: ...`)
+Commit: `02.2 signup API` format — exactly the canonical rules' commit discipline
+        (multi: `<id>` prefix)
   ↓
 Upper-document feedback — before renaming, ask: did this card settle or contradict
         anything an upper document left open? (a Provisional row in arch, a success
@@ -71,8 +71,8 @@ Upper-document feedback — before renaming, ask: did this card settle or contra
         upper document outranks your finding, and the next implementer follows it.
         Only edits that change product.md's scope need user confirmation
   ↓
-Rename the card to .done. (only after the completion signal and the review that
-        applies to the card passed AND the commit landed)
+Rename the card to .done. — only once the canonical rules' status-notation conditions
+        for `.done.` are all met
   ↓
 Boundary commit — bundle renames, HANDOFF, journal, and the documents fixed by feedback
         (the canonical rules' commit discipline)

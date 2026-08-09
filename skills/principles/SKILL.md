@@ -86,6 +86,7 @@ What you discovered → where to update:
 | Feature, screen, or scope changed | product.md (+ mark affected cards `.stale.`) |
 | Stack, module boundary, or data shape doesn't fit | arch.md (+ consider an ADR) |
 | A value the upper document called provisional is now measured | that row of arch.md's Provisional table — **replace it, don't add beside it**. An ADR that assumed the old value gets a dated update note |
+| A Provisional row's settling card is 'unminted' and the tree has reached its layer | create the settling card and replace 'unminted' in that arch.md row with its number |
 | A success criterion turns out unrunnable as written | product.md (+ the cards that quote it) |
 | A `.done.` card's completion signal turns out unrunnable | fix that card's signal text too — regression must stay runnable |
 | A new coding-convention decision is needed | one line in code-style.md "Project choices" |
@@ -102,6 +103,11 @@ re-running the owning skill** — never edited in passing during a task. And mod
 means **replacement by default**: if you added a line, check whether you deleted the stale
 one. A document that only grows is a dead document.
 
+A document still being produced by a running product, arch, design, or adopt session is
+a draft until the user confirms it — reconcile a draft's contradictions by editing the
+draft on the spot, not through the procedures above, and when an already-inherited upper
+document must change, put that edit into the same confirmation batch.
+
 ## Integrity Check
 
 Run at the gates that open the tree (start of split and resume).
@@ -114,7 +120,7 @@ corruption. Correct only after user approval.
 3. Is there a non-done card inside a `.done` folder?
 4. Does every card's `Depends` point to a number that exists?
 5. Do the paths referenced by HANDOFF exist?
-6. multi: is there a bare `.wip.` (ownerless claim, or an incomplete transition)?
+6. multi: is there a bare `.wip.` or a root `devflow/HANDOFF.md` (ownerless claim, or an incomplete transition)?
 7. multi: do two or more owner.md files claim the same git identity?
 8. multi: are there commits whose author is not the claimant of the card they touch?
 

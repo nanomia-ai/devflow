@@ -47,6 +47,19 @@ for dir in "$DEVFLOW_ROOT"/skills/*/; do
       strip_fm "$comp"
     } >> "$PROMPTS_DIR/devflow-$name.md"
   done
+  # adopt references the product/arch output formats by stage name — embed them (flat prompt folder)
+  if [ "$name" = "adopt" ]; then
+    for ref in product arch; do
+      {
+        echo ""
+        echo "---"
+        echo ""
+        echo "# $ref skill (referenced output formats)"
+        echo ""
+        strip_fm "$DEVFLOW_ROOT/skills/$ref/SKILL.md" | sed 's|`\.\./principles/SKILL\.md`|the Canonical Rules section below|g'
+      } >> "$PROMPTS_DIR/devflow-$name.md"
+    done
+  fi
   {
     echo ""
     echo "---"
@@ -62,7 +75,7 @@ echo ""
 if command -v codex >/dev/null 2>&1; then
   codex plugin marketplace remove nanomia >/dev/null 2>&1 || true
   codex plugin marketplace add "$DEVFLOW_ROOT" >/dev/null 2>&1 || true
-  codex plugin remove devflow >/dev/null 2>&1 || true
+  codex plugin remove devflow@nanomia >/dev/null 2>&1 || true
   if codex plugin add devflow@nanomia >/dev/null 2>&1; then
     echo "plugin installed: devflow@nanomia (native Codex skills - model-invocable)"
   else

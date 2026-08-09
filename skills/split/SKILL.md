@@ -15,7 +15,7 @@ Purpose: open the task tree **one layer at a time**, and get the execution propo
 ## Preconditions
 
 1. **If product.md is missing, stop.** With no code, direct the user to product first;
-   with existing code, to arch (brownfield = the understanding stage). Never split a
+   with existing code, to adopt (brownfield = the understanding stage). Never split a
    project you don't know.
 2. Scan `devflow/tree/` for current state and run the canonical rules' **integrity check**.
    Report anomalies — do not fix them.
@@ -56,6 +56,10 @@ conclusions and carry the constraints it names into the new card's `Read first`.
 T-mid cards, as a pointer to the original path; for T-low cards, as a quote with its
 source cited — a closed card's log is a frozen record, so quoting it cannot drift.
 Evidence left in the tree only helps if someone goes and gets it.
+
+If arch.md's Provisional table has rows whose settling card is 'unminted', create the
+settling cards for the rows this layer resolves and replace 'unminted' with their
+numbers (the discovery→update table).
 
 If `design.md` exists, the decomposition axis follows the build strategy:
 A mock-first → by screen / B vertical slice → by feature cut front-to-back /

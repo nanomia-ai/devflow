@@ -6,7 +6,7 @@
     {
       "name": "devflow",
       "source": "./",
-      "description": "Planning → architecture → design → split → work → verify → resume development flow"
+      "description": "Planning → architecture → design → split → work → verify → resume development flow, with adopt for existing codebases"
     }
   ]
 }

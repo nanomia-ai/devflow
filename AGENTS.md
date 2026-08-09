@@ -178,7 +178,10 @@ to break, and what a literal reader does at each step you touched.
 | 통합 브랜치 | integration branch | | 무주 점유 | ownerless claim |
 | 배정 | assignment | | 전환 미완 | incomplete transition |
 | 무기명 | bare | | 발견→갱신 표 | discovery→update table |
+| 도입 | adoption | | 브라운필드 | brownfield |
+| 미발급 | unminted | | 해소 카드 | settling card |
 
 Note: as the field name inside `arch.md` the verify channel is written `verify_channel` —
 the underscore form is the field identifier; the spaced form is prose. They are one
-concept, not two.
+concept, not two. Likewise `Settled by` is the arch.md column-header form of the
+settling card (해소 카드) — header and prose name one concept.

@@ -42,8 +42,9 @@ letting no lived failure leak twice — that is the balance devflow aims at.
 
 ```mermaid
 flowchart LR
-    subgraph L0["Layer 0 · project definition — once, or back-derived from existing code"]
+    subgraph L0["Layer 0 · project definition — once"]
         P[product<br>what & why] --> A[arch<br>how] --> D["design (optional)<br>only with a frontend"]
+        AD["adopt<br>existing code: back-derived"]
     end
     subgraph L1["Layer 1 · work loop — repeats"]
         S[split<br>break down] --> W[work<br>implement] <--> V[verify<br>check]
@@ -55,7 +56,7 @@ flowchart LR
 | Situation | Entry point |
 |---|---|
 | New project | product, then in order |
-| Adopting in an existing project | arch (back-derive from code) → split |
+| Adopting in an existing project | adopt (back-derive from code) → split |
 | Adding or extending features | split |
 | Continuing in a new session | automatic (SessionStart hook — see the install sections), or resume |
 | A teammate joins | make a room — see "Using it in a team" below |
@@ -68,7 +69,7 @@ a default attached), arch decides the stack, structure, and verify channel, spli
 breaks the first capability into cards, and the work ⇄ verify loop begins.
 
 **A project that already has code** starts with reverse-derivation instead of an
-interview: arch traces one representative flow through the code end to end, then
+interview: adopt traces one representative flow through the code end to end, then
 reverse-derives product.md · arch.md · code-style.md — product.md is filled in the
 product skill's own format, and only what code cannot answer (will-not-build · success
 criteria · gaps in Problem and Approach) is asked of the owner. Already-finished code is never backfilled
@@ -125,18 +126,19 @@ place. Measured values already replaced arch's Provisional table during work's
 upper-document feedback step; verify confirms the replacement — **a stale document never
 beats a measurement.**
 
-## The 8 skills
+## The 9 skills
 
 | Skill | When | Produces | Design intent |
 |---|---|---|---|
 | product | new project | product.md · glossary.md | the capability names chosen here carry through as module and folder names, one word to the end |
-| arch | after product, or back-derived from existing code | arch.md · code-style.md | separates guesses (Provisional) from decisions at the sentence level, so documents cannot lie |
+| arch | after product | arch.md · code-style.md | separates guesses (Provisional) from decisions at the sentence level, so documents cannot lie |
+| adopt | adopting in existing code | product.md · arch.md · code-style.md (back-derived) | reverse-derivation instead of an interview — never ask what code answers, ask the owner only what code cannot |
 | design | only with a frontend (optional) | design.md · token file · /preview | the canon for colors and spacing is a token file, not a document |
 | split | breaking down work | capability folders · task cards in tree/ + the execution proposal (order · parallelism · model tiers — a user approval gate) | opens one layer at a time — earlier implementation reshapes later decomposition |
 | work | implementation | code · in-card progress log · commits | log to disk before running — whenever the session dies, reading the card is enough to continue |
 | verify | capability complete · MVP reached | verify.md · fix cards (on failure) | what was not executed is not passed — it is unverified |
 | resume | new session | nothing — a state report, then approval (only multi mode's digest procedure corrects shared documents) | when HANDOFF and the tree conflict, the tree wins |
-| principles | read before running by the six skills product–verify | — | the canonical rules live in exactly one place |
+| principles | read before running by the seven skills product–verify and adopt | — | the canonical rules live in exactly one place |
 
 Two roles ride along: **reviewer** judges before each commit by reading only the card
 (progress log excluded), the diff, and code-style.md (never executes). **verifier**
@@ -273,7 +275,7 @@ git: "Jaemin Park", jmp@example.com
 
 (Before the GitHub release, point marketplace add at a local clone path instead.)
 
-Installs 8 skills (with the role-terms files riding along) + the SessionStart hook. Commands take the `/devflow:product`
+Installs 9 skills (with the role-terms files riding along) + the SessionStart hook. Commands take the `/devflow:product`
 form — the plugin name is the namespace, so collisions are blocked at the source, and
 typing just `/devflow` groups the whole set in autocompletion. The hook activates only in
 projects that have `devflow/tree/`, and injects tree state and HANDOFF at session start,
@@ -296,9 +298,9 @@ sh codex/install.sh
 ```
 
 The installer sets up three channels at once: ① a **native plugin** — it registers the
-repository as a marketplace and installs `devflow@nanomia`, so the 8 skills are visible
+repository as a marketplace and installs `devflow@nanomia`, so the 9 skills are visible
 to the model with their frontmatter intact (auto-invocation — the same way Claude works).
-② the 7 `/devflow-*` commands in `~/.codex/prompts/` — the explicit channel; the
+② the 8 `/devflow-*` commands in `~/.codex/prompts/` — the explicit channel; the
 canonical rules and companion documents are embedded in each prompt (the prompt folder
 is flat, so cross-file references are unreliable). ③ the native Codex SessionStart
 hook — the same `scripts/session-start.js` serves both Claude and Codex. Prerequisite:

@@ -32,6 +32,14 @@ Get-ChildItem (Join-Path $devflowRoot "skills") -Directory | Where-Object { $_.N
         $body = $body -replace [regex]::Escape("$tick$cname$tick beside this skill"), "the $cname section below"
         $companions += @("", "---", "", "# $cname", "", (Get-SkillBody $_.FullName).TrimEnd())
     }
+    # adopt references the product/arch output formats by stage name — embed them (flat prompt folder)
+    if ($name -eq "adopt") {
+        foreach ($ref in @("product", "arch")) {
+            $refBody = Get-SkillBody (Join-Path $devflowRoot "skills\$ref\SKILL.md")
+            $refBody = $refBody -replace [regex]::Escape('`../principles/SKILL.md`'), "the Canonical Rules section below"
+            $companions += @("", "---", "", "# $ref skill (referenced output formats)", "", $refBody.TrimEnd())
+        }
+    }
     $out = (@(
         "<!-- devflow (generated $(Get-Date -Format yyyy-MM-dd)) -->"
         ""
@@ -53,7 +61,7 @@ if (Get-Command codex -ErrorAction SilentlyContinue) {
     $ea = $ErrorActionPreference; $ErrorActionPreference = "Continue"
     cmd /c "codex plugin marketplace remove nanomia >nul 2>nul"
     cmd /c "codex plugin marketplace add ""$devflowRoot"" >nul 2>nul"
-    cmd /c "codex plugin remove devflow >nul 2>nul"
+    cmd /c "codex plugin remove devflow@nanomia >nul 2>nul"
     cmd /c "codex plugin add devflow@nanomia >nul 2>nul"
     $pluginOk = ($LASTEXITCODE -eq 0)
     $ErrorActionPreference = $ea

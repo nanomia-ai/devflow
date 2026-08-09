@@ -80,7 +80,7 @@ const wipOwner = (p) => {
 };
 const wip = files.filter((p) => wipRe.test(p));
 const done = files.filter((p) => /\.done\.md$/.test(p));
-const pending = files.filter((p) => !wipRe.test(p) && !/\.(done|stale)\.md$/.test(p) && !/verify\.md$/.test(p));
+const pending = files.filter((p) => !wipRe.test(p) && !/\.(done|stale)\.md$/.test(p) && path.basename(p) !== "verify.md");
 const myWip = multi ? (myId ? wip.filter((p) => wipOwner(p) === myId) : []) : wip;
 const otherWip = multi ? wip.filter((p) => !myWip.includes(p)) : [];
 const bareWip = wip.filter((p) => wipOwner(p) === null);
@@ -91,7 +91,7 @@ parts.push(`- done ${done.length} / in progress ${wip.length} / pending ${pendin
 if (multi) {
   parts.push(myId
     ? `- multi mode · my id: ${myId}`
-    : "⚠ multi mode, identity unresolved (git config name/email matches no devflow/users/*/owner.md) — read-only until resolved; ask the user which room is theirs. Rooms: " + rooms.map((r) => r.id).join(", "));
+    : "⚠ multi mode, identity unresolved (git config name/email matches no devflow/users/*/owner.md) — read-only until resolved; ask the user once, then create their room per the canonical rules (or match an existing one). Rooms: " + rooms.map((r) => r.id).join(", "));
 }
 
 // Integrity warning: duplicate card numbers (numbers are immutable identifiers; duplication = corruption)
@@ -102,7 +102,7 @@ const numOf = (p) => {
 const seen = new Map();
 const dups = new Set();
 for (const p of files) {
-  if (/verify\.md$/.test(path.basename(p))) continue;
+  if (path.basename(p) === "verify.md") continue;
   const n = numOf(p);
   if (!n) continue;
   if (seen.has(n)) dups.add(n);
@@ -146,19 +146,36 @@ if (otherWip.length) {
 
 // HANDOFF: solo = devflow/HANDOFF.md; multi = my room's. A root HANDOFF.md in multi mode
 // signals an incomplete solo→multi transition — inject it with a warning, never drop it silently.
+// Truncation is never silent: the HANDOFF format ends with open decisions (human calls),
+// so a cut tail must be flagged with an instruction to read the file in full.
+const HANDOFF_MAX = 6000;
+function readHandoff(p) {
+  let t;
+  try { t = fs.readFileSync(p, "utf8"); } catch { return null; }
+  return t.length > HANDOFF_MAX ? { text: t.slice(0, HANDOFF_MAX), truncated: true } : { text: t, truncated: false };
+}
+const truncNote = (relPath) =>
+  `⚠ HANDOFF exceeds ${HANDOFF_MAX} chars — truncated below; read ${relPath} in full (tail sections, e.g. open decisions, may be cut)`;
 const rootHandoffPath = path.join(cwd, "devflow", "HANDOFF.md");
 if (multi) {
   if (myId) {
-    const h = safeRead(path.join(usersDir, myId, "HANDOFF.md"), 6000);
-    if (h && h.trim()) parts.push("\nHANDOFF (my room):\n" + h.trim());
+    const h = readHandoff(path.join(usersDir, myId, "HANDOFF.md"));
+    if (h && h.text.trim()) {
+      if (h.truncated) parts.push("\n" + truncNote(`devflow/users/${myId}/HANDOFF.md`));
+      parts.push("\nHANDOFF (my room):\n" + h.text.trim());
+    }
   }
-  const rootH = safeRead(rootHandoffPath, 6000);
-  if (rootH && rootH.trim()) {
-    parts.push("\n⚠ devflow/HANDOFF.md exists in multi mode — incomplete solo→multi transition. Confirm its owner with the user, then finish the transition. Its content:\n" + rootH.trim());
+  const rootH = readHandoff(rootHandoffPath);
+  if (rootH && rootH.text.trim()) {
+    if (rootH.truncated) parts.push("\n" + truncNote("devflow/HANDOFF.md"));
+    parts.push("\n⚠ devflow/HANDOFF.md exists in multi mode — incomplete solo→multi transition. Confirm its owner with the user, then finish the transition. Its content:\n" + rootH.text.trim());
   }
 } else {
-  const handoff = safeRead(rootHandoffPath, 6000);
-  if (handoff && handoff.trim()) parts.push("\nHANDOFF:\n" + handoff.trim());
+  const handoff = readHandoff(rootHandoffPath);
+  if (handoff && handoff.text.trim()) {
+    if (handoff.truncated) parts.push("\n" + truncNote("devflow/HANDOFF.md"));
+    parts.push("\nHANDOFF:\n" + handoff.text.trim());
+  }
 }
 
 parts.push("\nFollow the devflow resume skill to resume. Do not modify code before approval.");

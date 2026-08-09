@@ -6,6 +6,129 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.12 — 2026-08-10 — Layer 0 draft clause; unminted settling cards; two canon copies deleted; contradiction re-route attempted and reverted
+
+Owner adjudication of the four deferred judgment calls, with a canon-grade refutation
+pass that reversed one of them mid-round. (1) The arch→adopt routing sentence for the
+partial-docs state is RETRACTED, not applied: its trigger ("code exists") cannot
+distinguish a mature brownfield from a greenfield project that has merely started
+coding without introducing a judgment word, and greenfield arch must keep
+interviewing — the state is rare and self-correcting. (2) Provisional-table settling
+cards gain an honest placeholder: at arch time the tree does not exist, so the old
+rule forced a literal reader to invent a plausible card number — fabricated
+bookkeeping of exactly the kind the owner observed in the field. arch now writes
+'unminted' when the settling card's number is not yet known (no tree, or its layer
+not yet opened — the refutation pass widened this from "no tree", which an arch
+re-run falsified), a new discovery→update row sanctions the replacement, and split —
+when opening the layer that resolves a row — creates the settling card and fills the
+number. Known bounded gap, recorded: a row no layer ever resolves lingers visible in
+arch.md with no terminal gate — the prior fabricated-number path was equally orphaned
+and also lied. (3) Of the three canonical-duplication deletion candidates, two
+deleted (verify's closing restatement of the iron rule — the load-bearing copy stays
+in verifier.md, which briefs clean contexts that never read the canon; work's two
+verbatim commit/rename parentheticals became pointers to the canon sections) and one
+KEPT: split's "evidence left in the tree only helps if someone goes and gets it" is a
+why-sentence sanctioned by prompt principle 3, not a rule copy. (4) The contradiction
+re-route (discovery→update table instead of steps 1–4) was applied, REFUTED, and
+REVERTED within the round: the independent pass showed the table path loses steps
+1–4's side effects (staling, re-split) and lacks landing rows for several wrong sides
+(design.md; an existing code-style line; a runnable-but-wrong signal). The original
+paragraph is restored byte-identical; the sentence-collision deadlock stays open, and
+the re-proposal conditions are recorded in the design doc's rejection lineage. What
+DID ship for the owner-witnessed freeze is the draft clause: documents still being
+produced by a running product/arch/design/adopt session are drafts until user
+confirmation — draft contradictions are fixed in the draft on the spot, and edits to
+already-inherited upper documents join the same confirmation batch (the Layer 0 case,
+where the freeze was actually observed; refutation: zero defects, two mild notes).
+Terminology rows added (unminted · settling card) plus an AGENTS note that arch's
+'Settled by' header is the column form of settling card. Verification: refutation +
+literal walk on the canon changes (5 defects → 1 revert, 1 repair, 1 recorded gap;
+draft clause and deletions clean), re-audit of the repairs, Korean scan, installers
+rerun. Files: skills/principles/SKILL{_ko,}.md, skills/arch/SKILL{_ko,}.md,
+skills/split/SKILL{_ko,}.md, skills/verify/SKILL{_ko,}.md, skills/work/SKILL{_ko,}.md,
+AGENTS.md, docs/design{_ko,}.md, .claude-plugin/plugin.json.
+
+## 0.9.11 — 2026-08-10 — whole-corpus audit: verifier blindness sealed, a term un-collided, hook detector fixes
+
+An owner-prompted trust check ran two fresh lenses over the whole corpus
+(cross-document contradiction audit · capable-reader lifecycle walk). Every finding
+below predates 0.9.10 — escaped defects, not regressions. Fixed: (1) the Korean term
+for "work tree" collided two concepts — the devflow card tree vs the git working
+tree; verify and the
+verifier contract now say "the work server (the one running the currently checked-out
+code)". (2) The verifier's input included the whole card, whose progress log narrates
+exactly the implementation history the same sentence forbids handing over — input is
+now the card with its progress-log section removed, mirroring the reviewer's existing
+exclusion. (3) Integrity-check item 6 now also flags a root devflow/HANDOFF.md in
+multi mode — canon prose and README already called that state an incomplete
+transition, but the checklist omitted it. (4) resume's integrity-check line now names
+the canonical-rules path (resume deliberately skips the read-canon-first opener, so
+the checklist's location was unstated for a literal reader). Hook, code only: the
+identity-unresolved message now matches the canon (create a room, not pick one), the
+verify.md exclusion matches only the exact record filename (a legitimate card named
+...-auto-verify.md was silently dropped from pending and duplicate-number checks), and
+HANDOFF truncation at 6000 chars is no longer quiet — a ⚠ line instructs reading the
+file in full, because the format's tail section is open decisions (fixture-tested:
+oversized HANDOFF and an auto-verify card). Deferred as judgment calls, recorded not
+applied: pre-tree settle-card numbers in arch's Provisional table; brownfield
+first-closure scenario scope (adjudicated acceptable as-is); three
+canonical-duplication deletion candidates in verify/work/split. Also caught live
+during the reinstall: the installers' cleanup step called `codex plugin remove
+devflow` bare, which Codex rejects (it requires plugin@marketplace), leaving the old
+plugin in place and failing the subsequent add — both installers now remove
+`devflow@nanomia`; rerun verified idempotent. Files: skills/verify/SKILL{_ko,}.md,
+skills/verify/verifier{_ko,}.md, skills/principles/SKILL{_ko,}.md,
+skills/resume/SKILL{_ko,}.md, scripts/session-start.js, codex/install.{ps1,sh},
+.claude-plugin/plugin.json.
+
+## 0.9.10 — 2026-08-10 — brownfield entry becomes its own skill: adopt (split out of arch)
+
+The owner judged the brownfield entry unintuitive and adjudication against the text
+agreed: arch carried two concepts under one name — development planning, and
+whole-Layer-0 reverse-derivation for existing code — which killed entry
+discoverability (the derivation trigger lived only in the tail of arch's description)
+and left the seam ambiguous (a literal reader could not settle whether arch's
+interview sections and verify-channel gate applied after the brownfield block). The
+alternative — running the greenfield product→arch pair with brownfield branches —
+was rejected: derivation is one code-reading act yielding all three documents,
+splitting it forces either double reading or a mid-flow handoff artifact (the
+rejected half-truth), and it would transplant the same two-concepts-one-name defect
+into product. New skill `adopt` (its Korean name is the word the Korean README
+already used for this event; "adopt" verified as standard developer vocabulary: Nx
+"Adopting Nx", Next.js/React "Incremental Adoption", Tech Radar's "Adopt" ring) now
+owns the procedure. Content moved verbatim from arch — 0.9.8's field split and
+"re-interviewing is waste" verdict stand; genuinely new text is bounded: an
+applicability guard (complete project/ = re-baseline via product·arch re-run;
+partial = respect existing docs, derive only the missing), an evidence-order line
+(code > existing docs as claims > commit history), an explicit verify-channel-gate
+pointer into arch (resolving the old ambiguity), and a design-skill note (existing
+screens are the de-facto design canon). Entry pointers updated in split, resume,
+README (flow table, mermaid, first-step, skill table 8→9), design docs, and the
+Codex fallback block. The installers embed the product and arch skill bodies into
+the generated devflow-adopt prompt (flat-folder grounds, same as the canon
+embedding); the plugin channels pick the new folder up by convention. Verification:
+mechanical loss-check of the arch diff against adopt (every removed line accounted
+for), plus an independent-context campaign per AGENTS.md — refuter (5 findings),
+literal-execution walk (2 + 1 inherited observation), coordinate sweep over entry
+situations × guidance surfaces (matrix clean except one shared gap candidate) — the
+expected first-pass pattern for round-written text. Fixed: step 4 gained the arch
+"Output 2" format pointer (the one derived artifact without a format anchor, and the
+"default values" antecedent), the description trigger "understanding an existing
+codebase" narrowed to derivation-with-adoption-intent, the re-baseline term dropped
+(it collided with resume's digest re-baseline), step 5's folder alignment now names
+split as the tree opener, the design-row "no content change" claim corrected to the
+bounded-new-sentences list, marketplace.json description aligned with plugin.json.
+Deferred as judgment calls (recorded, not applied): routing the
+partial-docs-with-existing-code state from arch/split into adopt (both currently
+branch only on product.md missing), and an explicit stop verb on arch's redirect.
+A re-audit pass over the fixes surfaced two residuals, both repaired: the English
+design row's "moved verbatim" overclaim (now anchored to "per the 0.9.8 decision")
+and the mid-way trigger naming a devflow project instead of a code-bearing one (the
+already-complete guard now also points continuation to resume). Files: skills/adopt/SKILL{_ko,}.md (new),
+skills/{arch,split,resume}/SKILL{_ko,}.md, README{_ko,}.md, docs/design{_ko,}.md,
+codex/AGENTS-devflow{_ko,}.md, codex/install.{ps1,sh}, AGENTS.md,
+.claude-plugin/plugin.json, .claude-plugin/marketplace.json.
+
 ## 0.9.9 — 2026-08-09 — Codex install leads with the native plugin channel (installers · marketplace)
 
 The owner asked whether either platform was being installed through a legacy channel.

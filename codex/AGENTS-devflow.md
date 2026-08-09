@@ -20,5 +20,5 @@ Work discipline: progress state is expressed only through filename suffixes
 (`.wip.` `.done.`). 1 task = 1 commit (message format `02.2 signup API`, only after the
 completion signal passes). What was not executed is not "passed" — it is "unverified."
 For detailed procedures follow the /devflow-product /devflow-arch
-/devflow-design /devflow-split /devflow-work /devflow-verify
+/devflow-adopt /devflow-design /devflow-split /devflow-work /devflow-verify
 /devflow-resume commands.
