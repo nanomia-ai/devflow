@@ -6,6 +6,54 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.13 — 2026-08-10 — stuck-escape: in-card fixation gets an exit (research-grounded)
+
+A research round (four lower-tier collector agents: methodology landscape · academic
+results · practitioner field reports · harness-minimalism evidence, prioritizing the
+last month) concluded the architecture needs no replacement — recent controlled
+results land on exactly devflow's boundary (feedback structure like verify channels
+and executable signals helps at every model tier; procedure prescription hurts strong
+models) — and located one gap, matching the owner's felt friction: the failure ladder
+counts only card re-dispatches, so a main session grinding inside one card on the
+same hypothesis trips no rule. Grounding: agents repeat identical actions in 58.4% of
+clean trajectories and fail to revise hypotheses on feedback (StressWeb); behavioral
+"you are looping" advisories rescued 0/13 stuck runs while a single
+causal-interpretive sentence rescued 7/7 (controlled study); practitioners
+consistently report fresh restarts beating continued iteration. Adopted, with the
+wording first hardened by a pre-application literal-walk/refutation simulation that
+extracted five defects from the draft (a self-classification gaming hole → an
+observable event floor "same command, same error, twice"; "execution" → "fix
+attempt" so instrumented reruns stay legal; an unconditional two-option menu → gated
+on "the hypothesis still stands"; card "conversion" → research-card insertion with a
+Depends edit; the diagnosis briefing inheriting reviewer's progress-log exclusion so
+the failed hypothesis cannot anchor the fresh diagnoser): (1) canon — the ladder's
+first rung now defines reinforcement as the failure's causality (1–2 sentences: what
+failed, why, with what consequence), not added instructions, and the ladder declares
+its counting unit (per card re-dispatch; in-card attempts belong to stuck-escape).
+(2) work — a new event-based "Stuck-Escape" section: stop before the third fix
+attempt under an unchanged hypothesis, write the hypothesis and its refuting evidence
+as one log line, and only if the hypothesis survives that line choose between
+inserting a research card (minimal reproduction as deliverable) or a clean-context
+diagnosis. Deferred with recorded re-evaluation conditions (design docs, observation
+items): competing attempts as an execution-proposal option (test-time-scaling
+evidence vs judge bias and cost — trigger: repeated third-rung exhaustion), and a
+simplification-card usage experiment for post-closure mediocrity. Checked and upheld
+without change: the self-evolving-harness rejection (new gains are mid-tier-model
+evidence and do not refute the philosophy ground), the TDD rejection, file-tree state
+over JSON trackers. Terminology: stuck-escape · cause hypothesis. Verification:
+post-application independent refutation + literal walk on the canon and work changes —
+3 findings, all repaired: the ladder-counting sentence was rescoped to
+same-hypothesis fix attempts (its general form falsified verify's and the review
+loop's standing ladder citations), stuck-escape gained the delegated-implementer
+scoping clause from the hierarchy precedent (both exits are main-session powers —
+a multi-mode subagent cannot land a card issuance), and one ko↔en drift aligned
+("causes stuckness"). Four mild judgment calls accepted as residuals (ladder heading
+breadth, a pre-hypothesis floor fire, the diagnosis briefing leaning on the verifier
+precedent with no fixed return format, "in front" realized by the Depends edge).
+Korean scan, installers rerun. Files:
+skills/principles/SKILL{_ko,}.md, skills/work/SKILL{_ko,}.md, docs/design{_ko,}.md,
+AGENTS.md, .claude-plugin/plugin.json.
+
 ## 0.9.12 — 2026-08-10 — Layer 0 draft clause; unminted settling cards; two canon copies deleted; contradiction re-route attempted and reverted
 
 Owner adjudication of the four deferred judgment calls, with a canon-grade refutation

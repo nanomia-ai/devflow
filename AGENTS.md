@@ -180,6 +180,7 @@ to break, and what a literal reader does at each step you touched.
 | 무기명 | bare | | 발견→갱신 표 | discovery→update table |
 | 도입 | adoption | | 브라운필드 | brownfield |
 | 미발급 | unminted | | 해소 카드 | settling card |
+| 고착 탈출 | stuck-escape | | 원인 가설 | cause hypothesis |
 
 Note: as the field name inside `arch.md` the verify channel is written `verify_channel` —
 the underscore form is the field identifier; the spaced form is prose. They are one

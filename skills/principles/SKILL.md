@@ -152,9 +152,15 @@ The harness dial — inversely proportional to tier:
 ```
 1st failure → reinforce the card and re-dispatch (never re-dispatch the same prompt —
               failure signals a defective card)
+              The heart of reinforcement is the failure's causality, not added
+              instructions — one or two sentences on the card: what failed, why,
+              and what happens as a result
 2nd failure → raise the tier, or the main session does it directly
 3rd failure → call the human. There is no 4th attempt
 ```
+
+Repeated fix attempts under the same hypothesis during implementation are not ladder
+counts — those belong to work's stuck-escape.
 
 ## Status Notation
 

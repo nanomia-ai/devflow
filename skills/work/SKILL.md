@@ -102,6 +102,21 @@ If the conflict is with an **upper document** (product, arch, code-style) rather
 code, follow the document-hierarchy procedure in the canonical rules — fixing the
 document comes before creating a card.
 
+## Stuck-Escape — event-based
+
+If the same cause hypothesis has failed twice — the same command failing with the same
+error twice qualifies with no judgment needed — stop before the third fix attempt.
+Write the hypothesis and its refuting evidence as one line in the progress log. If the
+hypothesis still stands after writing that line, pick one:
+
+- **Insert a research card in front** — a minimal reproduction is the deliverable
+  (split's research-card format; add it to the current card's Depends)
+- **A clean-context diagnosis** — hand over only the card (Progress log section
+  excluded) and the failure evidence, and receive a cause diagnosis. A failed
+  hypothesis blinding the eyes is what causes stuckness.
+
+A delegated implementer stops and reports blocked — both exits belong to the main session.
+
 ## Delegating to Subagents
 
 - **The card IS the briefing.** Hand over only the card path + the canonical rules path.

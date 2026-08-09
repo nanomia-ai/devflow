@@ -165,6 +165,12 @@ Other:
   re-evaluate together with the tree-archive rule (the on-hold list).
 - Whether the contract file is actually briefed verbatim at dispatch (summarized-delivery
   friction) — if the transport lesson from testing recurs in practice, review the wording.
+- Whether the failure ladder's third rung (call the human) gets exhausted repeatedly in
+  practice — if observed, re-evaluate competing attempts (2 independent implementations +
+  comparative selection) as an option in split's execution proposal. Grounds for
+  non-adoption: judge bias and cost (the 0.9.13 research plan).
+- Whether capabilities settle into "works but mediocre" form after closing — before any
+  rule, experiment with requesting simplification cards through maintenance routing.
 
 ## On hold — candidates for coming versions
 
