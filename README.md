@@ -219,32 +219,31 @@ leaves something behind:
 | An audit finding is adopted | user approval — only adopted findings become cards | a hole outside the sample found, its fix folded into regression |
 | A retrospective finding is adopted | user approval — adopted only, becoming cards or a re-baseline | a recorded re-evaluation of the design's options |
 
-**The audit — an event-triggered device for what verification structurally cannot
-see.** Verification checks against the scenarios, signals, and success criteria this
-flow wrote for itself, so holes outside the scenario and expectations the spec missed
-stay invisible to it. On exactly three events — MVP reached, the closure of a
-capability whose record shows a verification failure, or a user request — the auditor
-hunts those two by actually executing through the channel. Findings are not verdicts:
-they never block a pass, and only user-adopted findings become cards. A cleanly
-closed capability gets no audit.
+**The audit looks for what verification structurally cannot see.** Verification checks
+against the scenarios, signals, and success criteria this flow wrote for itself, so holes
+outside the scenario and expectations the spec missed never surface there. The audit hunts
+those two, and it runs in only three cases: when you reach MVP, when you close a capability
+that failed verification before, and when you ask for one. The auditor executes through the
+channel to look, but issues no verdict, so nothing is blocked, and only findings the user
+adopts become cards. A capability that closed cleanly the first time gets no audit at all.
 
-**The retrospective — the one question aimed at the design itself.** Implementers and
-reviewers alike work on the current design's premise, so "was there a better option?"
-is a question nobody asks. The retrospective asks it once when a capability first
-closes, at that scope, and once when the MVP is reached, for the whole. It reads no
-code — only the traces the project left behind: folders where fix cards clustered,
-`.stale.` cards, ADRs' update comments. A finding stands only with a concrete
-alternative and this project's strain evidence, and adoption belongs to the user.
+**The retrospective asks one question about the design itself.** Implementers and reviewers
+alike work on the premise of the current design, so nobody ever asks "was there a better
+option?" That question gets asked twice: once when a capability closes for the first time,
+scoped to it, and once when you reach MVP, for the whole. It reads no code. It looks only
+at what the project left behind — folders where fix cards piled up, `.stale.` cards, the
+update comments on ADRs. A finding stands only with a concrete alternative and strain
+evidence observed in this project, and the user decides whether to adopt it.
 
-Three layers stand at the closure boundary — the verdict is mandatory, findings are
-event-triggered, and the dotted lines block nothing:
+Three layers stand where something gets closed. The verdict always runs, findings attach
+only when an event fires, and the dotted lines block nothing.
 
 ```mermaid
 flowchart TB
-    CL["capability · product closure"] --> VF{{"verifier — verdict: pass · fail · unverified"}}
-    VF ==>|"the verdict is mandatory · only a pass closes it"| DN["capability folder gets .done"]
-    VF -.->|"closure of a capability that recorded a fail · MVP once · request"| AU{{"auditor — findings"}}
-    VF -.->|"first capability closure · after the first product-layer verdict · request"| RT{{"retrospector — findings"}}
+    CL["closing a capability · reaching MVP"] --> VF{{"verifier — verdict: pass · fail · unverified"}}
+    VF ==>|"the verdict always runs · only a pass closes it"| DN["capability folder gets .done"]
+    VF -.->|"closing a capability that failed before · once at MVP · on request"| AU{{"auditor — findings"}}
+    VF -.->|"closing a capability for the first time · once after the MVP verdict · on request"| RT{{"retrospector — findings"}}
     AU -.->|"only findings the user adopts"| MC["maintenance cards"]
     RT -.->|"only findings the user adopts"| RB["maintenance cards or a re-baseline"]
 ```

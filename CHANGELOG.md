@@ -6,6 +6,23 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-11 — README_ko reads like a person wrote it (no version change)
+
+The owner flagged the Korean README as machine-toned, pointing at the phrase built from
+"product" + "closure" — each word correct on its own, the compound something no Korean
+speaker would say. Measured against a published taxonomy of Korean AI-writing tells, the
+document was clean of translation-ese (zero hits on the decisive patterns) but heavy on
+three: em-dashes (77), bold spans (41), and bureaucratic noun compounds (5 uses of the
+"closure" word). Following that taxonomy's own rule — subtract tells, never insert new
+ones, and keep the edit local — closure vocabulary became plain verbs ("when a capability
+is closed", "when MVP is reached"), mid-sentence dashes became full stops where they were
+decoration (77 → 49; the ones separating a heading or a defined term stay), and emphasis
+was thinned to the claims that carry the section. The audit and retrospective paragraphs
+were re-sentenced for rhythm rather than trimmed. English mirrors the same fix where the
+oddity was shared, most visibly "capability · product closure" → "closing a capability ·
+reaching MVP". No facts, numbers, or terms changed; structure parity ko↔en holds
+(headings 15/15, table rows 39/39, bullets 17/17, fences 24/24). Files: README{_ko,}.md.
+
 ## 0.9.20 — 2026-08-11 — Codex installs in two remote lines; the handoff rhythm gets its own section
 
 Probing why devflow's Codex install was heavier than comparable skill repositories found
