@@ -6,6 +6,24 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.17 — 2026-08-10 — the retrospective also fires at each capability's first closure
+
+Owner direction (2026-08-10) overturned v0.9.16's capability-level exclusion, with
+both recorded grounds refuted in the design row: thin evidence is answered by
+narrowing the input to the capability (cost thins with it; zero-findings-valid makes
+a clean capability's retrospective a fast "no findings"), and early detection —
+before dependent capabilities build on the design — is cheaper than MVP-time
+detection; the standing-step objection dissolves because the owner specified the
+rhythm itself (the planner is human; a check-in per large unit beats running solo).
+The retrospective's event list becomes three: a depth-1 capability's FIRST closure
+(scoped to that capability — its product.md description, its folder listing and
+verify.md; arch.md and journal unchanged; re-closure never re-runs it), the first
+product-layer verdict, and user request. Card-level retrospectives remain excluded.
+The capability-layer verify.md Retrospective field, previously dead, is now live.
+The mid-point observation item is struck as implemented. README: retrospective
+paragraph and boundary diagram updated. Files: skills/verify/SKILL{_ko,}.md,
+README{_ko,}.md, docs/design{_ko,}.md, .claude-plugin/plugin.json.
+
 ## 0.9.16 — 2026-08-10 — the retrospective: a fourth role asks whether the design had better options
 
 Grounded in owner testimony (2026-08-10): AI never doubts the plan it made itself,

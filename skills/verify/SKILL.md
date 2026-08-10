@@ -126,8 +126,11 @@ through maintenance routing (split), and declined findings are not recorded
 ## The Retrospective — event-triggered
 
 The retrospective is findings, not verification — a post-hoc evaluation of design
-alternatives that neither blocks nor delays anything. It runs on exactly two events:
+alternatives that neither blocks nor delays anything. It runs on exactly three events:
 
+- When a depth-1 capability first closes — once, scoped to that capability. Narrow
+  the input: product.md's description of that capability · that folder's listing and
+  verify.md (arch.md and journal are given in full). Re-closure never re-runs it
 - After the product-layer verdict is first recorded — once, whatever the verdict.
   A re-verification that fixes a fail does not re-run it — only a new MVP produced
   by a re-baseline (a product/arch re-run) is a new event

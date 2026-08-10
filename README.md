@@ -145,8 +145,8 @@ bias-prevention device:
   implementation history. Never reads.
 - **auditor** — reads and executes, but knows no implementation history. Issues
   findings, never verdicts — and only on events (the audit paragraph below).
-- **retrospector** — reads devflow artifacts only and never executes. At the MVP
-  boundary it evaluates, as findings only, whether the design had better options
+- **retrospector** — reads devflow artifacts only and never executes. It evaluates,
+  as findings only, whether the design had better options — and only on events
   (the retrospective paragraph below).
 
 Each role's terms are one contract file beside its skill (`skills/work/reviewer.md` ·
@@ -199,9 +199,10 @@ closed capability gets no audit — the harness grows only on defects actually m
 
 **The retrospective — the one question aimed at the design itself.** Implementers and
 reviewers alike work on the current design's premise, so "was there a better option?"
-is a question nobody asks. When the MVP is reached, the retrospective asks it once —
-reading no code, only the traces the project left behind: folders where fix cards
-clustered, `.stale.` cards, ADRs' update comments. A finding stands only with a
+is a question nobody asks. When a capability first closes, the retrospective
+asks it once at that scope; when the MVP is reached, once for the whole — reading no
+code, only the traces the project left behind: folders where fix cards clustered,
+`.stale.` cards, ADRs' update comments. A finding stands only with a
 concrete alternative and this project's strain evidence, and adoption belongs to the
 user.
 
@@ -212,7 +213,7 @@ event-triggered, and the dotted lines block nothing:
 flowchart TB
     CL["capability/product closure"] --> VF{{"verifier — verdict: pass·fail·unverified"}}
     VF -.->|"closure of a capability that recorded a fail · MVP once · request"| AU{{"auditor — findings"}}
-    VF -.->|"after the first product-layer verdict, once · request"| RT{{"retrospector — findings"}}
+    VF -.->|"first capability closure · after the first product-layer verdict · request"| RT{{"retrospector — findings"}}
     AU -.->|"adopted findings only — the user"| MC["maintenance cards"]
     RT -.->|"adopted findings only — the user"| RB["maintenance cards or a re-baseline"]
 ```
