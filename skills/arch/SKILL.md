@@ -31,7 +31,8 @@ Correct?
 tables. State defaults.
 
 ### 3. Derived questions — decisions that only exist once the stack is chosen
-Find the decisions that fork because of the chosen stack and ask them as one batch.
+Find the decisions that fork because of the chosen stack and ask them as one batch —
+per decision, same format as step 2.
 (e.g., choosing Next.js → server/client boundary, data-fetching location, auth storage)
 These cannot be pre-listed — create them on the spot from the stack.
 **The decisions made here become the "Project choices" section of code-style.md.**

@@ -171,6 +171,15 @@ Other:
   non-adoption: judge bias and cost (the 0.9.13 research plan).
 - Whether capabilities settle into "works but mediocre" form after closing — before any
   rule, experiment with requesting simplification cards through maintenance routing.
+- The hole-hunt sample width at the capability layer — is one scenario + one boundary
+  input enough? If holes outside the scenario, or cross-capability interactions, are
+  observed as friction, design the widening then (0.9.14 inspection verdict: the
+  behavioral half is designed; undesigned are the sample width, a re-run rule for a
+  full pass at re-closure, and the absence of a "pass-with-findings" verdict slot and
+  a zero-findings-valid clause).
+- Product-layer (MVP) verification checks only against self-authored success criteria —
+  it structurally cannot catch the spec's own blind spots. If observed as friction,
+  consider an independent-perspective axis at MVP close.
 
 ## On hold — candidates for coming versions
 

@@ -6,6 +6,36 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.14 — 2026-08-10 — arch derived questions inherit the candidate format (anti-anchoring)
+
+An owner-requested evaluation round on the deferred candidates located the flow's
+highest-leverage uncovered point for first-idea anchoring: arch step 2 (stack
+questions) forces candidate enumeration (2–3 + recommendation + one-line reason, no
+comparison tables, defaults stated), but step 3 (derived questions) — where decisions
+like polling-vs-push actually live — allowed single proposals. Step 3 now inherits
+step 2's format per decision, by bare reference ("per decision, same format as
+step 2"). The shipped wording is the refutation pass's own counter-proposal: the
+first draft enumerated part of the format in a parenthetical, which a literal reader
+takes as the exhaustive import list (silently dropping no-comparison-tables and
+state-defaults), and carried a negative sentence ("never propose only your first
+thought") with no failure path the format clause did not already cover — both
+extracted pre-commit and replaced by the shorter bare inheritance; the fork
+criterion ("decisions that fork because of the chosen stack") pre-filters to
+≥2-candidate decisions, so no manufactured alternatives. Also this round,
+assessment only — recorded, nothing built: the owner asked whether a larger-unit
+top-down re-check after completion ("look down at the whole for holes the maker
+did not recognize") already exists. Verdict PARTIAL: the behavioral half is
+designed (capability close runs one scenario + one hostile boundary input + full
+folder regression + a declared-style skim, in a maker-blind context), while the
+sample width beyond that, spec blind spots at MVP close (verification against
+self-authored success criteria), and beyond-declared-style quality are not; the
+loop-risk analysis found the convergence machinery is execution-shaped (no
+pass-with-findings verdict slot, no zero-findings-valid clause anywhere in the
+deploy skills, no re-run narrowing rule for a full pass at re-closure) — so a
+grafted holistic pass would risk exactly the endless-polish loop the owner fears.
+Recorded as two design-doc observation items for a future design round. Files:
+skills/arch/SKILL{_ko,}.md, docs/design{_ko,}.md, .claude-plugin/plugin.json.
+
 ## 0.9.13 — 2026-08-10 — stuck-escape: in-card fixation gets an exit (research-grounded)
 
 A research round (four lower-tier collector agents: methodology landscape · academic
