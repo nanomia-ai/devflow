@@ -6,6 +6,42 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.18 — 2026-08-11 — knowledge reachability: what lands on disk must land on a skill's read path
+
+Grounded in cross-corroborated field evidence: a structural diagnosis from the rdsf
+project (2026-08-11 — knowledge vanishing at handoff, disproved auto-injected memory
+surviving every session, a replan document self-created outside the model and reachable
+only through a hand-written HANDOFF pointer), owner testimony (a six-hour
+stuck-to-breakthrough conversation omitted from a HANDOFF), and matching traces in ade
+(a self-grown reference layer claiming decision ownership until a wrong statement
+entered ADR-002; HANDOFF format overflow). Two causes: being on disk is not enough — a
+fact off every skill's read path does not exist for the next session; and the only
+landing gate (upper-document feedback) fires at card boundaries, so decisions made in
+conversation evaporate. Also proven textually: product.md's heaviest sections were the
+only ones modifiable with no user gate. The changes, all bounded, zero new terms:
+principles — outside-records standing (claims, not canon; report contradictions; the
+devflow document wins until confirmed), conversation-confirmed decisions land through
+the discovery→update table immediately, a user-confirmation gate on product.md's
+identity paragraph · Capabilities · Boundary · success criteria, a disproof row
+(replace the statement, or re-run product when the fix is a planning question again —
+the next session may take it up), and a means row (a new or changed verification means
+lands in arch's verify_channel); work — the feedback gate becomes a pointer to the
+canon gate, and a pre-HANDOFF landing check (nothing to land is the normal case);
+split — a research answer that is also a tool escapes the throwaway-prototype rule via
+a following card; verify — a fail caused by a disproved criterion routes to the
+disproof row, not a fix card. Rejected with reasons recorded (design.md): the
+observation_cache field (a field no skill reads), promoting "re-baseline" to a canon
+noun (0.9.10 collision recorded), HANDOFF format changes, Obsidian-style free linking.
+Verified by three independent clean-context lenses (refuter · literal-execution
+simulator over 8 scenarios · whole-system coordinate sweep), repaired, re-verified
+(all three prior majors confirmed fixed), then locally re-worded per the re-audit.
+The maintenance-dependency wording stays an observation item — rdsf's evidence is
+suggestive but confounded, so the lineage's activation condition (observed friction)
+is not declared met; its prepared wording is upgraded in place (guard, plural, section
+pointer). Files: skills/principles/SKILL{_ko,}.md, skills/work/SKILL{_ko,}.md,
+skills/split/SKILL{_ko,}.md, skills/verify/SKILL{_ko,}.md, docs/design{_ko,}.md,
+.claude-plugin/plugin.json.
+
 ## 0.9.17 — 2026-08-10 — the retrospective also fires at each capability's first closure
 
 Owner direction (2026-08-10) overturned v0.9.16's capability-level exclusion, with

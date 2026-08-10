@@ -88,8 +88,10 @@ What you discovered → where to update:
 | A value the upper document called provisional is now measured | that row of arch.md's Provisional table — **replace it, don't add beside it**. An ADR that assumed the old value gets a dated update note |
 | A Provisional row's settling card is 'unminted' and the tree has reached its layer | create the settling card and replace 'unminted' in that arch.md row with its number |
 | A success criterion turns out unrunnable as written | product.md (+ the cards that quote it) |
+| A measurement disproves the content of the confirmed identity paragraph or a success criterion (not unrunnable as written — running it as written gives a wrong signal) | After user confirmation — if the replacement statement is settled, replace just that statement; if what to replace it with is a planning question again, re-run product (and arch if the change reaches it) + mark affected cards `.stale.` + 1 journal line. The next session may take up the re-run, on the strength of that line |
 | A `.done.` card's completion signal turns out unrunnable | fix that card's signal text too — regression must stay runnable |
 | A new coding-convention decision is needed | one line in code-style.md "Project choices" |
+| A verification means is newly created or changed | the means line of arch.md's verify_channel |
 | A new term becomes necessary | one line in glossary.md |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | A cross-task decision | one line in journal.md |
@@ -97,6 +99,13 @@ What you discovered → where to update:
 An update per this table (replacing a provisional value, fixing a signal text, etc.) is
 itself a sanctioned modification path. Steps 1–4 run only when a lower layer must
 **violate** an upper one.
+
+Discoveries do not come only from card work — a decision confirmed in conversation also
+lands through this table, immediately. The confirmed product.md's identity paragraph,
+Capabilities, Boundary, and success criteria are modified only after user confirmation,
+whichever path the change arrives by — the conversation in which the user confirmed that
+change IS the confirmation. Planning lives as edits to product.md, arch.md, design.md,
+and ADRs — never create a new planning document beyond them.
 
 Core documents (`devflow/project/*`) are modified **only through this procedure or by
 re-running the owning skill** — never edited in passing during a task. And modification
@@ -107,6 +116,15 @@ A document still being produced by a running product, arch, design, or adopt ses
 a draft until the user confirms it — reconcile a draft's contradictions by editing the
 draft on the spot, not through the procedures above, and when an already-inherited upper
 document must change, put that edit into the same confirmation batch.
+
+Records outside devflow — the memory and task lists an execution environment injects
+into a session, documents in the repository that are not devflow's — are claims, not
+canon. This is not an instruction to seek them out — it applies only to what is already
+in context. When such a record contradicts a confirmed devflow document, do not silently
+pass over it — report it. Until confirmation, follow the devflow document; after
+confirmation, fix the side that is wrong — a devflow document through the
+discovery→update table's path; an outside record with no means to fix it, the report is
+the end.
 
 ## Integrity Check
 

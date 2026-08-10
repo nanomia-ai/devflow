@@ -135,6 +135,11 @@ Completion signal: Answer + evidence (doc link or a real call result) recorded i
 - Any means is fine: document research, real calls, a **throwaway prototype**.
   A prototype must be marked disposable by name and location and never mixed into the
   real code — only the decision survives.
+- When the answer is not only a fact but also a procedure or tool that will run again —
+  "does it support partial refunds" answers with a fact; "the comparison procedure
+  against the reference data" answers with a tool — the throwaway-prototype rule does
+  not apply to that tool. A following card brings it into the real code or registers it
+  as the verify channel's means (the discovery→update table's means row).
 - Once answered, fix the following card's destination and proceed. Thirty minutes of
   research replaces days of rework.
 - **The answer also travels upward.** If the research settled an open statement in an

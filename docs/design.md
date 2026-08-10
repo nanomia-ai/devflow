@@ -64,6 +64,7 @@ Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/in
 | The retrospective — a fourth role that post-hoc evaluates design alternatives at the MVP boundary; findings are not verdicts (v0.9.16) | Grounds: owner testimony (2026-08-10): AI never doubts the plan it made itself, reviewer/verifier catch only clear problems, and nobody ever asks whether a better option existed — detection does not happen on its own, which refutes the premise (the user notices) of the "simplification-card experiment first" observation item. The judgment word ("better") is bounded by three requirements: a concretely named alternative + this project's strain evidence as mandatory (fix-card density, `.stale.`, ADR update comments, unresolved Provisional rows — only artifact-observable signals; the refutation pass extracted and cut the draft's escape-card and provisional-churn signals as unobservable) + a switching-cost estimate marked presumed. Input is devflow artifacts only, zero code — reading fully bounded. An auditor second mode was rejected (opposite blinding axes — one name, two concepts). Fires only after the product-layer verdict is recorded (once) and on user request; non-blocking, zero-findings-valid, adopted findings only become cards or a re-baseline (the event list gained capability first closure in v0.9.17 — see that row) |
 | The retrospective also runs when a capability first closes — scoped to that capability (v0.9.17) | Overturns v0.9.16's capability-level exclusion on owner direction (2026-08-10), refuting both recorded grounds: "strain evidence is thin" — narrowing the input to the capability thins the cost with it, zero-findings-valid makes it harmless, and early detection before dependent capabilities build on the design is cheaper than MVP-time detection. "It becomes a standing step" — the owner specified this rhythm directly: the planner is human, and a check-in at every large unit beats running solo; an operating direction is direction itself, not imagined risk. Card-level retrospectives remain excluded |
 | A signal pass goes stale when the diff changes + a fix card's completion signal is the verifier's reproduction steps (v0.9.4) | Two gaps flagged by an external loop-engineering review (2026-08-09) and confirmed against the text: a post-review fix could ride a pre-fix pass into commit (a stale-evidence path), and a fix-card signal could be written unrelated to the observed failure. Backing research verified against sources (blind-retry recovery 0.0 on latent/semantic errors; verifier +14.8%p from real misjudgment cases). Regulates only evidence freshness and signal provenance, not execution order — no red-green reintroduction, the TDD rejection stands (the failing "before" evidence already lives in the verify record) |
+| The knowledge-reachability set — standing of outside records · conversation decisions land immediately · a user-confirmation gate on product's four core sections · a disproof row (replace the statement, or re-run product) · a means row · a pre-HANDOFF landing check · a survival path for research answers that are tools · verify's disproof arbitration (v0.9.18) | Grounds: cross-corroborated field evidence — the rdsf structural diagnosis (2026-08-11: knowledge vanishing at handoff, disproved auto-injected memory surviving every session, a replan document self-created outside the model and reachable only through a hand-written HANDOFF pointer), owner testimony (a stuck-to-breakthrough conversation omitted from HANDOFF), and matching traces in ade (a self-grown reference layer claiming decision ownership until a wrong statement entered ADR-002; HANDOFF format overflow). Two causes: being on disk is not enough — a fact off every skill's read path does not exist for the next session; and the only landing gate (upper-document feedback) fires at card boundaries, so conversation decisions evaporate. product's heaviest sections were also the only ones modifiable with no user gate (steps 1–4 and the table rows carry no confirmation step — proven from the text). Verification: three independent lenses (refuter · literal-execution over 8 scenarios · whole-system coordinate sweep) → repair → re-verification (all three prior majors confirmed fixed) → local wording repairs. Zero new terms |
 
 ## Borrowings and their boundary
 
@@ -134,6 +135,26 @@ Rejected in the v0.9.6 role-contract redesign:
   premise, "registration = harness enforcement = more robust," was not observed in the
   A/B/C test; it would keep a per-platform mechanism fork for no measured benefit.
 
+Rejected in the v0.9.18 knowledge-reachability verification (2026-08-11):
+
+- **An observation-cache registration field (an observation_cache line in arch's output
+  format)** — rejected by convergence of all three independent lenses: a field no skill's
+  rule ever reads cannot change literal execution; its only meaning (a cache of facts —
+  decisions stay devflow's) duplicates the outside-records standing declaration; and it
+  opens a drift path that splits where observed facts live. The shape of an external
+  observation cache stays project-owned — two field projects inventing two different
+  shapes is the evidence for not prescribing one.
+- **Promoting "re-baseline" to a canon noun** — 0.9.10 recorded deliberately dropping
+  this term for colliding with resume's digest re-baseline, and that reason still holds.
+  The table carries the descriptive form ("re-run product") instead.
+- **Changing the HANDOFF format (allowing a skill name in Next single step)** — the
+  existing Open decisions section plus the disproof row's journal waiting line already
+  close the same path. The format stands.
+- **Obsidian-style free linking** — falls to the no-unbounded-reading lineage and would
+  be a second structure competing with the tree (one concept, two homes). devflow's
+  relation model stays the typed edges (Depends · Coordinates · Read first · settling
+  card) plus the content-carrying discipline.
+
 Other:
 
 - **Any "skim the related records" rule for maintenance reopening** — "related" is a
@@ -143,15 +164,20 @@ Other:
 
 ## Field observation items — watch during coming cycles, without adding rules
 
-- **Reaching prior records when maintenance reopens a capability** (verified 2026-08-08,
-  design ready): maintenance cards formally have no dependency, so split's rule that
-  carries a dependency's conclusions into `Read first` may not fire. The promotion
-  machinery (upper-document feedback · journal sweep) has already lifted binding knowledge
-  into shared documents, so the gap is cost-type (rework from re-discovering traps), not
-  catastrophic. If friction is observed, insert the confirmed wording into split's routing
-  section: "A maintenance card names, in `Depends`, the card that built what it modifies
-  (findable by name in the tree listing) — the carry rule then brings that card's
-  conclusions into `Read first`." (2 lines, 0 new concepts, bounded reading)
+- **Reaching prior records when maintenance reopens a capability** (verified 2026-08-08 ·
+  wording improved 2026-08-11): maintenance cards formally have no dependency, so split's
+  dependency rule may not fire. The promotion machinery (upper-document feedback · journal
+  sweep) has already lifted binding knowledge into shared documents, so the gap is
+  cost-type (rework from re-discovering traps), not catastrophic. rdsf field use
+  (2026-08-11) produced suggestive evidence, but the environment carried reference-layer
+  conflicts, so it is not accepted as the observed friction — if friction is observed,
+  insert the confirmed wording (the 0.9.18 re-audit extracted and repaired the prepared
+  wording's unguarded imperative and its undefined name "carry rule"): "A maintenance
+  card names, in `Depends`, the cards that built or fixed what it modifies, when they
+  exist in the tree (findable by name in the tree listing — all of them if several).
+  The dependency rule of the 'Open One Layer at a Time' section then brings their
+  conclusions into `Read first`." (guard · plural · section pointer, 0 new concepts,
+  bounded reading)
 - In the maintenance phase, when cards keep appending in a capability folder (02.7…02.40),
   does the intermediate grouping-folder rule actually get applied?
 - Are ADRs actually used for large scope pivots (e.g. shrinking ade's MVP ①②)? — the
@@ -186,6 +212,20 @@ Other:
 - ~~Mid-point retrospectives~~ — implemented by v0.9.17: the owner specified the
   rhythm directly without waiting for observed friction (at every capability's first
   closure, scoped to it).
+- The retrospective never firing on long-unclosed capabilities — when a capability stays
+  open for a long stretch (extended research or maintenance), none of the retrospective's
+  three events fires. Watch whether the user-request trigger actually gets used; if
+  friction is observed, consider defining a mid-point event.
+- The research card's identity-injection exemption — hypothesis (rdsf): in projects where
+  research cards are the bulk of the work, the unanchored stretch grows long. If drift is
+  observed again, re-evaluate the exemption's recorded ground ("a frozen log has no use
+  for the injection").
+- The scope of HANDOFF's carry-forward duty — currently only Open decisions carry over.
+  The landing check (0.9.18) moves durable knowledge into canon, so the remaining gap is
+  small — review if loss of Traps or Just-learned content is observed again.
+- resume's missing re-run branch — resume carries the disproof row's journal waiting line
+  into its report, but "on approval, continue with work" is its only branch. Review the
+  wording if a pending product re-run actually crosses a session boundary.
 
 ## On hold — candidates for coming versions
 

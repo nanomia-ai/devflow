@@ -69,7 +69,8 @@ Upper-document feedback — before renaming, ask: did this card settle or contra
         canonical rules' discovery→update table. **A card that measured an answer but
         left the document that posed the question unchanged is not done** — the stale
         upper document outranks your measurement, and the next implementer follows it.
-        Only edits that change product.md's scope need user confirmation
+        User confirmation for product.md edits follows the canonical rules' Document
+        Hierarchy section (identity paragraph · Capabilities · Boundary · success criteria)
   ↓
 Rename the card to .done. — only once the canonical rules' status-notation conditions
         for `.done.` are all met
@@ -154,6 +155,11 @@ When the harness warns about context       → whatever the number, open no new 
 Handoff happens **only at task boundaries**. Never mid-task — half-written code and a
 half-true explanation get handed over. Mid-task safety belongs to the loop's log gate,
 not to a handoff document.
+
+Before writing HANDOFF, check: did this session's conversation produce anything that
+matches a row of the discovery→update table but is not yet in that document? If so,
+land it through the table first — HANDOFF carries only the volatile remainder. Nothing
+to land is the normal case — if you landed things as they happened, this check is empty.
 
 `devflow/HANDOFF.md` (multi: my room, `devflow/users/<my id>/HANDOFF.md`) — overwritten
 every time. **No position, no progress percentages** (the tree answers those). Volatile

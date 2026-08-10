@@ -60,6 +60,10 @@ section below).
    the tree. A fix card born from the verifier's fail carries as its completion signal
    those reproduction steps rerun through the channel — the escaped defect becomes a
    signal, and regression reruns it from then on.
+   When the cause of the fail is not the code but a disproved success criterion (one
+   that gives a wrong signal when run as written), report it into the discovery→update
+   table's disproof row (identity paragraph · success criteria) instead of creating a
+   fix card.
    multi: fix cards are born unclaimed (pending) — assignment goes through the normal
    path (proposal · claim)
 7. **Capability layer passes → grant `.done` to that capability folder.** Never before —
