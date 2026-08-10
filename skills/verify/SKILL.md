@@ -25,7 +25,10 @@ The separation of roles — they never cross:
 **the reviewer reads but never executes** (white-box — is the inside right?),
 **the verifier executes but never reads** (black-box — is the outside right?),
 **the auditor reads and executes but knows no implementation history** (the audit —
-findings only, never verdicts. See the Audit section below).
+findings only, never verdicts. See the Audit section below),
+**the retrospector reads only devflow artifacts and never executes** (the
+retrospective — post-hoc evaluation of design alternatives. See the Retrospective
+section below).
 
 ## Procedure
 
@@ -120,6 +123,25 @@ Findings go into the report to the user — only user-adopted findings become ca
 through maintenance routing (split), and declined findings are not recorded
 (declining is a decision too).
 
+## The Retrospective — event-triggered
+
+The retrospective is findings, not verification — a post-hoc evaluation of design
+alternatives that neither blocks nor delays anything. It runs on exactly two events:
+
+- After the product-layer verdict is first recorded — once, whatever the verdict.
+  A re-verification that fixes a fail does not re-run it — only a new MVP produced
+  by a re-baseline (a product/arch re-run) is a new event
+- When the user requests it — mid-project, the scope is everything so far
+
+Brief a clean subagent/fresh session with `retrospector.md` beside this skill,
+**verbatim — never summarized**, and give it devflow artifacts only: product.md ·
+arch.md (+decisions/) · the tree listing (filenames and statuses only) · journal.md ·
+the verify.md files (tree root included). Code is not given. Recommended: T-mid +
+high effort.
+Findings go into the report to the user — only adopted findings lead to cards
+through maintenance routing (split), or to a re-baseline, and declined findings are
+not recorded.
+
 ## Record — devflow/tree/<capability folder>/verify.md
 
 The product layer records at `devflow/tree/verify.md` (tree root), same format.
@@ -136,4 +158,5 @@ Provisional: <arch rows confirmed replaced, or none>
 Journal sweep: <lines promoted/deleted, or none>
 On fail:   <fix cards created>
 Audit:     <n findings · m adopted | no findings | not run>
+Retrospective: <n findings · m adopted | no findings | not run>
 ```

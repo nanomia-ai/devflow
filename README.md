@@ -132,11 +132,11 @@ place.
 | design | only with a frontend (optional) | design.md · token file · /preview | the canon for colors and spacing is a token file, not a document |
 | split | breaking down work | capability folders · task cards in tree/ + the execution proposal (order · parallelism · model tiers — a user approval gate) | opens one layer at a time — earlier implementation reshapes later decomposition |
 | work | implementation | code · in-card progress log · commits | log to disk before running — whenever the session dies, reading the card is enough to continue |
-| verify | capability complete · MVP reached | verify.md · fix cards (on failure) · audit findings (event-triggered) | what was not executed is not passed — it is unverified |
+| verify | capability complete · MVP reached | verify.md · fix cards (on failure) · audit and retrospective findings (event-triggered) | what was not executed is not passed — it is unverified |
 | resume | new session | nothing — a state report, then approval (only multi mode's digest procedure corrects shared documents) | when HANDOFF and the tree conflict, the tree wins |
 | principles | read before running by the other seven skills (all but resume) | — | the canonical rules live in exactly one place |
 
-Three roles ride along — none crossing into another's territory is the
+Four roles ride along — none crossing into another's territory is the
 bias-prevention device:
 
 - **reviewer** — judges before each commit by reading only the card (progress log
@@ -145,11 +145,14 @@ bias-prevention device:
   implementation history. Never reads.
 - **auditor** — reads and executes, but knows no implementation history. Issues
   findings, never verdicts — and only on events (the audit paragraph below).
+- **retrospector** — reads devflow artifacts only and never executes. At the MVP
+  boundary it evaluates, as findings only, whether the design had better options
+  (the retrospective paragraph below).
 
 Each role's terms are one contract file beside its skill (`skills/work/reviewer.md` ·
-`skills/verify/verifier.md` · `skills/verify/auditor.md`) — every platform runs them
-by briefing a clean subagent/fresh session with that file verbatim, so **the process
-is the same**.
+`skills/verify/verifier.md` · `skills/verify/auditor.md` ·
+`skills/verify/retrospector.md`) — every platform runs them by briefing a clean
+subagent/fresh session with that file verbatim, so **the process is the same**.
 
 ### work ⇄ verify — the inner and outer loops
 
@@ -183,6 +186,7 @@ leaves something behind:
 | Capability verification fails | a fix card — its completion signal reproduces that failure | a signal permanently folded into regression |
 | A provisional value gets measured | that row of the upper document is replaced (upper-document feedback) | a measurement the documents remember |
 | An audit finding is adopted | user approval — only adopted findings become cards | a hole outside the sample found, its fix folded into regression |
+| A retrospective finding is adopted | user approval — adopted only, becoming cards or a re-baseline | a recorded re-evaluation of the design's options |
 
 **The audit — an event-triggered device for what verification structurally cannot
 see.** Verification checks against the scenarios, signals, and success criteria this
@@ -192,6 +196,14 @@ capability whose record shows a verification failure, or a user request — the 
 hunts those two by actually executing through the channel. Findings are not verdicts:
 they never block a pass, and only user-adopted findings become cards. A cleanly
 closed capability gets no audit — the harness grows only on defects actually met.
+
+**The retrospective — the one question aimed at the design itself.** Implementers and
+reviewers alike work on the current design's premise, so "was there a better option?"
+is a question nobody asks. When the MVP is reached, the retrospective asks it once —
+reading no code, only the traces the project left behind: folders where fix cards
+clustered, `.stale.` cards, ADRs' update comments. A finding stands only with a
+concrete alternative and this project's strain evidence, and adoption belongs to the
+user.
 
 The outcome this drives: **a defect met once cannot escape through the same door twice.**
 

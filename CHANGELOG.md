@@ -6,6 +6,39 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.16 — 2026-08-10 — the retrospective: a fourth role asks whether the design had better options
+
+Grounded in owner testimony (2026-08-10): AI never doubts the plan it made itself,
+reviewer/verifier catch only clear problems, and following the plan downward, better
+alternatives go unseen — detection does not happen on its own, which refutes the
+premise (the user notices mediocrity) of the "simplification-card experiment first"
+observation item; that item is struck with the refutation recorded, satisfying the
+lineage gate. An existence check confirmed nothing in the flow asks this question
+(reviewer forbids taste, the auditor's two prey presuppose the current design,
+feedback corrects facts not choices, maintenance routing and re-baselines fire only
+after someone already noticed). New: the retrospective — a fourth role
+(retrospector) that fires only after the product-layer verdict is recorded (a
+re-baseline's new MVP is a new event) or on user request, reads devflow artifacts
+ONLY (product.md, arch.md +ADRs, tree listing, journal, verify.md files — zero code,
+reading fully bounded), and evaluates whether the design had better options. The
+judgment word is bounded by three finding requirements: a concretely named
+alternative; this project's strain evidence as MANDATORY (fix-card clustering read
+from tree filenames — verify.md is overwritten; `.stale.` cards; journal lines;
+ADRs' dated update comments; unresolved Provisional rows; verify.md audit/fail
+records) with generic "measurable improvement" demoted to supplementary; and a switching-cost estimate marked presumed,
+grounded on card counts. Findings are not verdicts — nothing is blocked or delayed,
+zero findings is valid, only user-adopted findings become maintenance cards or a
+re-baseline, declined findings are not recorded. Design provenance: the pre-adoption
+validation extracted two fantasy evidence signals from the draft (escape-hatch cards
+and provisional churn — unobservable from the declared inputs), closed the
+measurable-improvement OR-leg (a manufactured-finding backdoor), rejected an
+auditor second mode (opposite blinding axes — one name, two concepts), and priced
+the pass at ≈0.5–1 verify-equivalent with zero execution round-trips, once per
+project. Adoption condition assessed for the owner: purely additive — no canon
+change, no existing mechanism modified, non-blocking, deletion-safe. Files:
+skills/verify/SKILL{_ko,}.md, skills/verify/retrospector{_ko,}.md (new),
+README{_ko,}.md, docs/design{_ko,}.md, AGENTS.md, .claude-plugin/plugin.json.
+
 ## 0.9.15 — 2026-08-10 — the audit: event-triggered deep inspection (third role, findings not verdicts)
 
 Grounded in owner field reports (2026-08-10, running ade): one-pass results leave
