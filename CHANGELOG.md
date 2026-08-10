@@ -6,6 +6,57 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.15 — 2026-08-10 — the audit: event-triggered deep inspection (third role, findings not verdicts)
+
+Grounded in owner field reports (2026-08-10, running ade): one-pass results leave
+holes, and mistakes pass verification unrecognized — the exact class verification
+cannot see because it checks against scenarios, signals, and success criteria the
+flow wrote for itself. New: the audit, a third role (auditor) beside reviewer and
+verifier — reads AND executes, blinded only to implementation history, hunting
+exactly two prey (holes on paths the scenario never traverses; expected-but-unspecified
+behavior), with reading bounded to executed paths plus the capability's folder
+(honoring the no-unbounded-reading rejection). Fires on exactly three events, never
+as a standing step: once with product-layer verification; after the closure of a
+capability whose verify.md recorded a fail (checked when the closing verify starts —
+the runtime application of "the harness grows only on defects actually met": a
+cleanly closed capability costs zero); and on user request. Findings are not
+verdicts: the pass/fail/unverified trichotomy is untouched, `.done` is never blocked
+or delayed, every finding names a concrete failure path or violated expectation with
+execution-confirmed marked apart from presumed, zero findings is a valid result,
+only user-adopted findings become cards (maintenance routing), declined findings are
+not recorded, and re-closure never re-runs the audit (a new leak is a new event) —
+the endless-polish loop is structurally closed. verify's role sentences widened to
+the three-role split (scenario/regression execution and verdicts stay the
+verifier's); verify.md gains an Audit field (doubles as the crash-window marker);
+recommended tier T-mid + high effort (exploration, not judgment). Design provenance:
+the draft passed a dual independent validation (refutation walk · whole-system
+coherence audit) which repaired the trigger anchor (the verify.md-overwrite reading
+killed it; the folder-durable reading fired forever — now anchored at
+verify-session start), cut the quality prey (unrefuted against the
+simplification-card experiment-first lineage), and demanded the reading bound —
+walk result: 2 audit runs vs 6 verify runs on a 3-capability project, ≈2–3
+verify-equivalents of overhead. README: the approach section's dense balance
+paragraph deduplicated into a pointer at the loop table; roles rewritten as a
+three-role list; an audit paragraph and loop-table row added. English "finding"
+collision swept (split "discoveries", work "measurement", README digest diagram
+"discoveries") before minting the finding terminology row. Post-application
+verification (two independent lenses — applied-text refutation + literal walk;
+README accuracy/flow/parity audit): zero refutations landed on the trigger design,
+contract, or convergence devices; repaired from findings — the English "duality"
+remnant over three roles, the trigger quote now matching the record template's
+casing ("Verdict: fail"), the product-scope referent of the auditor's reading bound,
+a user-request scope clause (whole-so-far → product-layer form, the owner's
+mid-project top-down usage), README card-lifecycle "signal passed" (was "executed"),
+adopt outputs gaining glossary.md, role-file naming unified to "contract file", the
+audit cost clause reworded to the harness principle (the old wording rewarded
+lenient verification), a stuck-escape row added to the loop table, a tier gloss,
+and four dedup/reorder flow trims. Owner guidance folded in: initial plans are
+never complete — the audit judges built-vs-expectation, never plan evolution
+(evolution's sanctioned paths — provisional table, discovery→update, ADR, drafts —
+are untouched). Files: skills/verify/SKILL{_ko,}.md,
+skills/verify/auditor{_ko,}.md (new), skills/split/SKILL.md, skills/work/SKILL.md,
+README{_ko,}.md, docs/design{_ko,}.md, AGENTS.md, .claude-plugin/plugin.json.
+
 ## 0.9.14 — 2026-08-10 — arch derived questions inherit the candidate format (anti-anchoring)
 
 An owner-requested evaluation round on the deferred candidates located the flow's

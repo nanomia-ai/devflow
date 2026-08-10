@@ -60,6 +60,7 @@ Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/in
 | The Codex install leads with the native plugin channel (marketplace add + plugin add); generated slash prompts stay as the explicit channel; the hook stays separately registered in ~/.codex/hooks.json (v0.9.9) | Probed live: Codex consumes Claude-format marketplaces directly and model-invokes SKILL.md skills — a clean Codex session recognized all 8 devflow skills. Plugin-delivered hooks are a removed feature in Codex, so hook registration stays separate. The old prompts-only channel predates these capabilities and made auto-invocation Claude-only — the last platform asymmetry. Recurrence is guarded by the pre-flight item "install channels target each platform's current native mechanism" |
 | Role contracts are one companion file beside each skill (reviewer.md · verifier.md); every platform runs them by briefing a clean context with the file verbatim — no Claude agent registration (v0.9.6) | An A/B/C test (2× registered agent · 2× prompt-briefed Claude subagent · 1× Codex CLI, one fixture with 4 planted defects) found all five runs identical — 4/4 detection and full contract adherence — so registration's assumed robustness edge was not observed. One mechanism dissolves the platform fork entirely. The mature precedent is superpowers (7+ harnesses, no registry, contract prompt files beside skills). Delivery must be static — verbatim file briefing (Claude · skills.sh) or install-time embedding (Codex); the only transport that failed in testing was shell interpolation |
 | Brownfield entry is its own skill, adopt — split out of arch (v0.9.10) | arch held two concepts under one name — development planning and whole-Layer-0 reverse-derivation — so entry discoverability died (the derivation trigger lived only in the tail of the skill description) and the seam in the body was ambiguous (a literal reader could not settle whether the interview procedure and the verify-channel gate applied after derivation — owner report 2026-08-10). The derivation procedure and field split moved per the 0.9.8 decision — new sentences bounded to the entry guards, the evidence-order line, the gate pointer, and the design note; 0.9.8's "re-interviewing is waste" verdict stands. The output formats stay canonical in product·arch; adopt references them by stage name + the Codex prompt embeds them at install time (same grounds as the flat-folder decision). "adopt" is standard developer vocabulary — the Nx docs section "Adopting Nx", Next.js·React official "Incremental Adoption", the Tech Radar top ring "Adopt" |
+| The audit — event-triggered deep inspection; findings are not verdicts (v0.9.15) | Grounds: owner field reports (2026-08-10, running ade): one-pass results leave holes, and mistakes pass verification unrecognized as mistakes. Implements two observation items (capability-layer sample width · MVP spec blind spots). Not an always-on step — exactly three events fire it (product layer once · closure of a capability whose verify.md records a fail · user request): the runtime application of "the harness grows only on defects actually met," so a cleanly closed capability costs zero. Convergence devices: non-blocking findings · zero-findings-valid · only user-adopted findings become cards · re-closure never re-runs it (a new leak is a new event) · bounded reading (executed paths + the capability folder). Adopted only after dual independent validation (refutation walk · whole-system audit) extracted and repaired/cut the draft's trigger-anchor misreadings (dies-by-overwrite / fires-forever), unbounded reading, and the quality prey (unrefuted against the simplification-card experiment-first lineage) |
 | A signal pass goes stale when the diff changes + a fix card's completion signal is the verifier's reproduction steps (v0.9.4) | Two gaps flagged by an external loop-engineering review (2026-08-09) and confirmed against the text: a post-review fix could ride a pre-fix pass into commit (a stale-evidence path), and a fix-card signal could be written unrelated to the observed failure. Backing research verified against sources (blind-retry recovery 0.0 on latent/semantic errors; verifier +14.8%p from real misjudgment cases). Regulates only evidence freshness and signal provenance, not execution order — no red-green reintroduction, the TDD rejection stands (the failing "before" evidence already lives in the verify record) |
 
 ## Borrowings and their boundary
@@ -171,15 +172,13 @@ Other:
   non-adoption: judge bias and cost (the 0.9.13 research plan).
 - Whether capabilities settle into "works but mediocre" form after closing — before any
   rule, experiment with requesting simplification cards through maintenance routing.
-- The hole-hunt sample width at the capability layer — is one scenario + one boundary
-  input enough? If holes outside the scenario, or cross-capability interactions, are
-  observed as friction, design the widening then (0.9.14 inspection verdict: the
-  behavioral half is designed; undesigned are the sample width, a re-run rule for a
-  full pass at re-closure, and the absence of a "pass-with-findings" verdict slot and
-  a zero-findings-valid clause).
-- Product-layer (MVP) verification checks only against self-authored success criteria —
-  it structurally cannot catch the spec's own blind spots. If observed as friction,
-  consider an independent-perspective axis at MVP close.
+  (The v0.9.15 audit respects this: quality is not among its prey — this experiment
+  comes first.)
+- ~~The hole-hunt sample width at the capability layer~~ — implemented by the v0.9.15
+  audit: hunting holes outside the sample belongs to the event-triggered audit
+  (verify's own sample width is unchanged — one scenario + one boundary input).
+- ~~Product-layer (MVP) spec blind spots~~ — implemented by the v0.9.15 audit: one
+  audit rides product-layer verification (the independent-perspective axis).
 
 ## On hold — candidates for coming versions
 

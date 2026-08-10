@@ -7,7 +7,7 @@ description: Task splitting. Opens the task tree (devflow/tree/) one layer at a 
 
 First read the canonical rules (`../principles/SKILL.md`), `devflow/project/product.md`
 (identity paragraph, capability list), `devflow/project/arch.md`, and **`devflow/journal.md`**
-— the durable findings of earlier cards live there, and HANDOFF is overwritten and will
+— the durable discoveries of earlier cards live there, and HANDOFF is overwritten and will
 not carry them.
 
 Purpose: open the task tree **one layer at a time**, and get the execution proposal approved.

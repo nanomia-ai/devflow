@@ -68,7 +68,7 @@ Upper-document feedback — before renaming, ask: did this card settle or contra
         criterion in product, an ADR's premise) If yes, fix that document first via the
         canonical rules' discovery→update table. **A card that measured an answer but
         left the document that posed the question unchanged is not done** — the stale
-        upper document outranks your finding, and the next implementer follows it.
+        upper document outranks your measurement, and the next implementer follows it.
         Only edits that change product.md's scope need user confirmation
   ↓
 Rename the card to .done. — only once the canonical rules' status-notation conditions

@@ -25,6 +25,7 @@ Canonical relation:  *_ko.md = design original (owner review)  →  translate  �
 Pairs:               skills/<name>/SKILL_ko.md ↔ SKILL.md
                      skills/work/reviewer_ko.md ↔ reviewer.md (role contract)
                      skills/verify/verifier_ko.md ↔ verifier.md (role contract)
+                     skills/verify/auditor_ko.md ↔ auditor.md (role contract)
                      codex/AGENTS-devflow_ko.md ↔ AGENTS-devflow.md
                      README_ko.md ↔ README.md
                      docs/design_ko.md ↔ docs/design.md
@@ -32,7 +33,7 @@ English-only (no pair): AGENTS.md (this file), CHANGELOG.md,
                      CLAUDE.md (a one-line import pointer to this file — never expand it)
 ```
 
-The role contracts (`reviewer.md` · `verifier.md`) are companion files beside their
+The role contracts (`reviewer.md` · `verifier.md` · `auditor.md`) are companion files beside their
 skills — briefing documents delivered verbatim to a clean context on every platform,
 not registered agents. The Codex installers embed every non-`_ko` companion `.md` of a
 skill folder into that skill's generated prompt.
@@ -55,7 +56,7 @@ exception to _ko-first.
 **Where Korean lives**: the `_ko.md` design originals (including `README_ko.md` and
 `docs/design_ko.md`) and the Korean column of the terminology table below — nowhere else.
 Deploy artifacts must contain no Korean: `skills/*/SKILL.md`, the role contracts
-(`skills/work/reviewer.md`, `skills/verify/verifier.md`),
+(`skills/work/reviewer.md`, `skills/verify/verifier.md`, `skills/verify/auditor.md`),
 `codex/AGENTS-devflow.md`, `codex/install.ps1`, `codex/install.sh`, `scripts/*.js`,
 `.claude-plugin/*.json`, `docs/design.md`, `CHANGELOG.md`, and `README.md`.
 Check: count `[가-힣]` matches per file with ripgrep run directly (`rg -c`) or a Perl
@@ -181,6 +182,7 @@ to break, and what a literal reader does at each step you touched.
 | 도입 | adoption | | 브라운필드 | brownfield |
 | 미발급 | unminted | | 해소 카드 | settling card |
 | 고착 탈출 | stuck-escape | | 원인 가설 | cause hypothesis |
+| 감리 | audit | | 소견 | finding |
 
 Note: as the field name inside `arch.md` the verify channel is written `verify_channel` —
 the underscore form is the field identifier; the spaced form is prose. They are one

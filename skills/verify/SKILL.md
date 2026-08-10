@@ -21,9 +21,11 @@ Purpose: check criteria through real execution.
 This skill's core is the capability and product layers. The task layer (signal run +
 review) is absorbed into work.
 
-The duality of roles — they never cross:
+The separation of roles — they never cross:
 **the reviewer reads but never executes** (white-box — is the inside right?),
-**the verifier executes but never reads** (black-box — is the outside right?).
+**the verifier executes but never reads** (black-box — is the outside right?),
+**the auditor reads and executes but knows no implementation history** (the audit —
+findings only, never verdicts. See the Audit section below).
 
 ## Procedure
 
@@ -68,7 +70,7 @@ The duality of roles — they never cross:
 Re-closure of a reopened capability may scope the scenario to the changed behavior —
 **regression always reruns the whole folder's signals.**
 
-Role ownership: **execution and verdicts belong to the verifier.** The document-reading
+Role ownership: **scenario and regression execution, and verdicts, belong to the verifier.** The document-reading
 axes (Standards, Provisional), assembling the regression list, the journal sweep, and
 fix-card creation belong to the main session running verify — the verifier reads neither
 implementation nor documents.
@@ -97,6 +99,27 @@ Recommended tier: T-high + low effort, kept short (it is a verdict, not an explo
 Same target fails 3 times → stop and call the human. There is no 4th attempt
 (the canonical rules' failure ladder).
 
+## The Audit — event-triggered
+
+The audit is findings, not verification — it issues no verdicts and neither blocks
+nor delays the pass or the `.done` grant. It runs on exactly three events:
+
+- Together with product-layer verification — once
+- When the verify that closes a capability starts and that folder's verify.md records
+  "Verdict: fail" — once, after this closure's pass and `.done` grant. Re-closure
+  never re-runs the audit — a new leak is a new event
+- When the user requests it — if the requested scope is the whole so far, use the
+  product-layer form
+
+Brief a clean subagent/fresh session with `auditor.md` beside this skill, **verbatim —
+never summarized**, and give it only product.md's description of that capability (the
+whole product.md at the product layer) and verify_channel. Implementation history and
+progress logs are withheld.
+Recommended: T-mid + high effort (it is an exploration, not a verdict).
+Findings go into the report to the user — only user-adopted findings become cards
+through maintenance routing (split), and declined findings are not recorded
+(declining is a decision too).
+
 ## Record — devflow/tree/<capability folder>/verify.md
 
 The product layer records at `devflow/tree/verify.md` (tree root), same format.
@@ -112,4 +135,5 @@ Standards: <code-style violations found or none. Violations become fix cards>
 Provisional: <arch rows confirmed replaced, or none>
 Journal sweep: <lines promoted/deleted, or none>
 On fail:   <fix cards created>
+Audit:     <n findings · m adopted | no findings | not run>
 ```

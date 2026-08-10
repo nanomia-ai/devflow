@@ -25,18 +25,16 @@ work flowing in the intended direction without getting in the model's way.
 | Completion signal — an executable check | the order of solving |
 | Coordinates · Identity — part of what? | every point that needs judgment |
 
-This split is the baseline for T-mid (standard) tier and above — the harness scales
-inversely with model tier: the lower the tier a card is written for, the more
-Read-first, ordering hints, and prohibitions it carries.
+This split is the baseline for the standard tier (T-mid) and above — models are named
+only as tiers T-high/T-mid/T-low, and the actual mapping is chosen in split's
+execution proposal. The harness scales inversely with model tier: the lower the tier
+a card is written for, the more Read-first, ordering hints, and prohibitions it carries.
 
-Light does not mean unstructured. Progress lives in file names, not documents; review
-and verification run in independent contexts that never saw the implementation
-history; what was not executed is not "passed" — it is "unverified." Nor is the same
-failure ever repeated the same way — a failed prompt is never re-dispatched as-is
-(3 strikes calls the human), and a defect that escaped verification becomes a
-completion signal that reproduces it, and regression reruns it from then on. Yet the harness grows one
-step only on a defect actually met — never on imagined risk. Running light while
-letting no lived failure leak twice — that is the balance devflow aims at.
+Light does not mean unstructured. Review and verification run in independent contexts
+that never saw the implementation history; what was not executed is not "passed" — it
+is "unverified"; and the harness grows one step only on a defect actually met — never
+on imagined risk. How the loops turn, and what every pass leaves behind, is one table
+in the work ⇄ verify section below.
 
 ## The flow
 
@@ -70,7 +68,7 @@ breaks the first capability into cards, and the work ⇄ verify loop begins.
 
 **A project that already has code** starts with reverse-derivation instead of an
 interview: adopt traces one representative flow through the code end to end, then
-reverse-derives product.md · arch.md · code-style.md — product.md is filled in the
+reverse-derives product.md · arch.md · code-style.md · glossary.md — product.md is filled in the
 product skill's own format, and only what code cannot answer (will-not-build · success
 criteria · gaps in Problem and Approach) is asked of the owner. Already-finished code is never backfilled
 into the tree — the tree accumulates only work done after adoption. From there the
@@ -106,7 +104,7 @@ stateDiagram-v2
     [*] --> waiting: created by split — Destination · Why · Forbidden · completion signal
     waiting --> wip: start — rename to .wip. (in multi mode, a claim commit)
     wip --> waiting: release (multi mode) — suffix stripped
-    wip --> done: completion signal executed + review passed + 1 commit
+    wip --> done: completion signal passed + review passed + 1 commit
     waiting --> promoted_to_folder: opened it — too big for 1 commit
     wip --> promoted_to_folder: too big for 1 commit — recursively split under the same number
     done --> stale: an upper document changed, so it went stale
@@ -122,9 +120,7 @@ When every card in a **depth-1 capability folder** is `.done.`, verify checks it
 actually running it, and only a pass earns the folder its `.done` (foundation 01 and
 intermediate folders close without a verification rite). At that moment the journal is
 swept — spent lines deleted, still-valid lines promoted into upper documents or left in
-place. Measured values already replaced arch's Provisional table during work's
-upper-document feedback step; verify confirms the replacement — **a stale document never
-beats a measurement.**
+place.
 
 ## The 9 skills
 
@@ -132,22 +128,28 @@ beats a measurement.**
 |---|---|---|---|
 | product | new project | product.md · glossary.md | the capability names chosen here carry through as module and folder names, one word to the end |
 | arch | after product | arch.md · code-style.md | separates guesses (Provisional) from decisions at the sentence level, so documents cannot lie |
-| adopt | adopting in existing code | product.md · arch.md · code-style.md (back-derived) | reverse-derivation instead of an interview — never ask what code answers, ask the owner only what code cannot |
+| adopt | adopting in existing code | product.md · arch.md · code-style.md · glossary.md (back-derived) | reverse-derivation instead of an interview — never ask what code answers, ask the owner only what code cannot |
 | design | only with a frontend (optional) | design.md · token file · /preview | the canon for colors and spacing is a token file, not a document |
 | split | breaking down work | capability folders · task cards in tree/ + the execution proposal (order · parallelism · model tiers — a user approval gate) | opens one layer at a time — earlier implementation reshapes later decomposition |
 | work | implementation | code · in-card progress log · commits | log to disk before running — whenever the session dies, reading the card is enough to continue |
-| verify | capability complete · MVP reached | verify.md · fix cards (on failure) | what was not executed is not passed — it is unverified |
+| verify | capability complete · MVP reached | verify.md · fix cards (on failure) · audit findings (event-triggered) | what was not executed is not passed — it is unverified |
 | resume | new session | nothing — a state report, then approval (only multi mode's digest procedure corrects shared documents) | when HANDOFF and the tree conflict, the tree wins |
-| principles | read before running by the seven skills product–verify and adopt | — | the canonical rules live in exactly one place |
+| principles | read before running by the other seven skills (all but resume) | — | the canonical rules live in exactly one place |
 
-Two roles ride along: **reviewer** judges before each commit by reading only the card
-(progress log excluded), the diff, and code-style.md (never executes). **verifier**
-judges by executing alone, knowing nothing of the implementation history (never reads). Neither
-crossing into the other's territory is the bias-prevention device. Each role's terms
-are one file beside its skill (`skills/work/reviewer.md` · `skills/verify/verifier.md`)
-— every platform runs them by briefing a clean subagent/fresh session with that file
-verbatim, so **the process is the same**, and the Codex install embeds them into the
-prompts.
+Three roles ride along — none crossing into another's territory is the
+bias-prevention device:
+
+- **reviewer** — judges before each commit by reading only the card (progress log
+  excluded), the diff, and code-style.md. Never executes.
+- **verifier** — judges by channel execution alone, knowing nothing of the
+  implementation history. Never reads.
+- **auditor** — reads and executes, but knows no implementation history. Issues
+  findings, never verdicts — and only on events (the audit paragraph below).
+
+Each role's terms are one contract file beside its skill (`skills/work/reviewer.md` ·
+`skills/verify/verifier.md` · `skills/verify/auditor.md`) — every platform runs them
+by briefing a clean subagent/fresh session with that file verbatim, so **the process
+is the same**.
 
 ### work ⇄ verify — the inner and outer loops
 
@@ -176,9 +178,20 @@ leaves something behind:
 | Where the loop turns | What changes before the retry | What the pass leaves behind |
 |---|---|---|
 | Completion signal fails | 1st: reinforce the card → 2nd: raise the tier or main does it → 3rd: the human. Never the same prompt again (the failure ladder) | the attempts and causes in the progress log |
+| The same hypothesis repeats during implementation | stop at 2 failures — one hypothesis-and-refutation line; if it stands, a research card or a clean-context diagnosis (stuck-escape) | the hypothesis and its refutation in the log |
 | Review objection | fix + signal re-run — against the changed code, an earlier pass is unverified | a diff that passed re-review |
 | Capability verification fails | a fix card — its completion signal reproduces that failure | a signal permanently folded into regression |
 | A provisional value gets measured | that row of the upper document is replaced (upper-document feedback) | a measurement the documents remember |
+| An audit finding is adopted | user approval — only adopted findings become cards | a hole outside the sample found, its fix folded into regression |
+
+**The audit — an event-triggered device for what verification structurally cannot
+see.** Verification checks against the scenarios, signals, and success criteria this
+flow wrote for itself, so holes outside the scenario and expectations the spec missed
+stay invisible to it. On exactly three events — MVP reached, the closure of a
+capability whose record shows a verification failure, or a user request — the auditor
+hunts those two by actually executing through the channel. Findings are not verdicts:
+they never block a pass, and only user-adopted findings become cards. A cleanly
+closed capability gets no audit — the harness grows only on defects actually met.
 
 The outcome this drives: **a defect met once cannot escape through the same door twice.**
 
@@ -233,7 +246,7 @@ sequenceDiagram
     participant Git as git history
     participant Docs as shared documents
     Me->>Git: skim others' commits since my marker
-    Me->>Docs: correct documents that findings contradict
+    Me->>Docs: correct documents that discoveries contradict
     Me->>Me: advance my marker to now
     Note over Docs: one person digests, the result lands in documents, everyone benefits
 ```
@@ -275,7 +288,7 @@ git: "Jaemin Park", jmp@example.com
 
 (Before the GitHub release, point marketplace add at a local clone path instead.)
 
-Installs 9 skills (with the role-terms files riding along) + the SessionStart hook. Commands take the `/devflow:product`
+Installs 9 skills (with the role contract files riding along) + the SessionStart hook. Commands take the `/devflow:product`
 form — the plugin name is the namespace, so collisions are blocked at the source, and
 typing just `/devflow` groups the whole set in autocompletion. The hook activates only in
 projects that have `devflow/tree/`, and injects tree state and HANDOFF at session start,
