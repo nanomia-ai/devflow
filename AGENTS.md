@@ -121,6 +121,35 @@ simulation against a literal reader, run adversarially:
 External contributors: demonstrate the equivalent in your PR description — what you tried
 to break, and what a literal reader does at each step you touched.
 
+## Writing the README
+
+The skills are executed by a literal reader; the README is read by a person deciding
+whether to try this at all. Precision bought with stiffness is a fair trade in skill text
+and a losing one here — a newcomer who hits a phrase no human would say stops reading.
+An AI writing prose drifts toward the same tells every time, so check for them by counting,
+not by feel (owner report and measured pass, 2026-08-11):
+
+- **Verbs, not noun compounds.** "when a capability is closed", never "capability closure".
+  Each half of such a compound is correct and the whole is bureaucratese. This one shipped:
+  the diagram said "product closure" for months.
+- **Em-dashes separate, they don't breathe.** Keep them between a heading and its subtitle,
+  or a defined term and its definition. Inside a sentence, use a full stop.
+- **Bold carries the claim a section rests on**, not every key word in it.
+- **Vary sentence length.** A paragraph of same-length sentences reads as machine output.
+- Korean also: no translation-ese (`~에 대하여`, `가지고 있다`, `판단되어진다`, `~에 의해`
+  passives). These were already absent — keep them absent.
+
+Two rules govern the edit itself. **Subtract, never insert**: removing a tell must not
+plant a replacement cliché, and facts, numbers, and canonical terms stay byte-identical.
+**Keep it local**: if more than half the document changed, the meaning drifted — stop and
+re-read instead. Canonical terms stay canonical inside skills; the README may explain one
+in plain words but must never coin a second name for the same concept.
+
+Report the counts (`—`, `**`, bureaucratic compounds) before and after in the CHANGELOG
+entry, so the next pass can tell drift from noise. The taxonomy that produced this list is
+external (`github.com/epoko77-ai/im-not-ai`, humanize-korean) and is cited, not vendored —
+borrowing text into this repository still needs prior permission.
+
 ## Releasing
 
 - The canonical version is `.claude-plugin/plugin.json`. Bump it whenever any deploy
@@ -150,6 +179,7 @@ to break, and what a literal reader does at each step you touched.
 - [ ] Terminology table applied; structure parity ko↔en checked (headings / lists / tables / figures)
 - [ ] Korean check passed: 0 matches in every deploy artifact, exactly 1 in README.md (the switcher link)
 - [ ] Verification run at the proportional level; findings listed (defects vs judgment calls separated)
+- [ ] README touched? Tone rules applied and the before/after counts recorded (Writing the README)
 - [ ] Codex install rerun locally — plugin snapshot + prompts (or the PR states it was not)
 - [ ] Install channels still target each platform's **current** native mechanism
       (skills · plugins · hooks) — re-verify against platform docs when platforms update

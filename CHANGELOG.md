@@ -6,6 +6,18 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-11 — the README tone rules become part of the maintenance gate (no version change)
+
+The tone pass below fixed one document; without a written rule the next session would
+drift back, since an AI writing prose reproduces the same tells by default. AGENTS.md gains
+a "Writing the README" section stating why the README cannot buy precision with stiffness,
+the four tells to check by counting (noun compounds where a verb belongs, em-dashes used
+as breath, bold on every key word, uniform sentence length), the Korean translation-ese
+list to keep absent, and the two rules that bound the edit itself — subtract rather than
+insert, and keep it local or the meaning has drifted. The pre-flight checklist gains a line
+so a README change cannot pass review without the counts. The external taxonomy behind the
+list is cited, not vendored; borrowing text still needs prior permission. Files: AGENTS.md.
+
 ## docs — 2026-08-11 — README_ko reads like a person wrote it (no version change)
 
 The owner flagged the Korean README as machine-toned, pointing at the phrase built from
