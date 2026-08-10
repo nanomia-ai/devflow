@@ -182,6 +182,11 @@ Other:
   (verify's own sample width is unchanged — one scenario + one boundary input).
 - ~~Product-layer (MVP) spec blind spots~~ — implemented by the v0.9.15 audit: one
   audit rides product-layer verification (the independent-perspective axis).
+- Mid-point retrospectives — mid-project retrospectives open on user request only
+  (an automatic per-capability event was excluded: strain evidence is thin at one
+  folder, and it would become a standing step). If friction is observed — the user
+  never thinks to request one and design problems accumulate to MVP — re-evaluate an
+  automatic mid-point event (e.g., at half the capabilities closed).
 
 ## On hold — candidates for coming versions
 

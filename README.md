@@ -205,6 +205,18 @@ clustered, `.stale.` cards, ADRs' update comments. A finding stands only with a
 concrete alternative and this project's strain evidence, and adoption belongs to the
 user.
 
+Three layers stand at the closure boundary — the verdict is mandatory, findings are
+event-triggered, and the dotted lines block nothing:
+
+```mermaid
+flowchart TB
+    CL["capability/product closure"] --> VF{{"verifier — verdict: pass·fail·unverified"}}
+    VF -.->|"closure of a capability that recorded a fail · MVP once · request"| AU{{"auditor — findings"}}
+    VF -.->|"after the first product-layer verdict, once · request"| RT{{"retrospector — findings"}}
+    AU -.->|"adopted findings only — the user"| MC["maintenance cards"]
+    RT -.->|"adopted findings only — the user"| RB["maintenance cards or a re-baseline"]
+```
+
 The outcome this drives: **a defect met once cannot escape through the same door twice.**
 
 ## Design principles
