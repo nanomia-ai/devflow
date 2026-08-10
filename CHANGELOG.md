@@ -6,6 +6,18 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-11 — README: quick start up front, leaner closure prose (no version change)
+
+README only, both languages. A Quick start section right after the premise (install
+commands + which skill to run first), fixing the first-time-reader path that reached
+install at the 87% mark of the document. The premise now says the next session reads a
+small, fixed set of files. The audit paragraph drops its duplicated philosophy tail
+(already stated in The approach), the retrospective paragraph is re-sentenced for
+natural reading, and the HANDOFF enumerations gain the missing "next single step"
+(matching work's format). Structure parity ko↔en verified (headings 16/16, table rows
+39/39, bullets 17/17, fences 26/26); README.md's Korean count stays exactly 1 (the
+language switcher). Files: README_ko.md, README.md.
+
 ## 0.9.18 — 2026-08-11 — knowledge reachability: what lands on disk must land on a skill's read path
 
 Grounded in cross-corroborated field evidence: a structural diagnosis from the rdsf

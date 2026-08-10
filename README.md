@@ -7,7 +7,22 @@
 Every AI session starts with its memory wiped. devflow accumulates that memory **on disk,
 not in conversation** — documents answer what you are building, the file tree answers how
 far you have come, and the records answer why it was decided that way. Whenever a session
-dies, the next one reads the files and picks up where it left off.
+dies, the next one reads a small, fixed set of files and picks up where it left off.
+
+## Quick start
+
+```
+/plugin marketplace add nanomia-ai/devflow      # Claude Code
+/plugin install devflow@nanomia
+```
+
+For Codex CLI, run `codex/install.ps1` (Windows) or `codex/install.sh` (macOS/Linux) once.
+
+The first command after installing depends on where you stand — a new project starts
+with product (the planning interview), a project that already has code starts with
+adopt (back-derived from the code), and open work resumes automatically when you start
+a new session (the hook). Platform details live in the two install sections below;
+team setup lives in "Using it in a team".
 
 ## The approach — rich direction, minimal harness
 
@@ -94,7 +109,7 @@ devflow/
       02.3-webhook.md               a waiting card
       verify.md                     capability verification record (left by verify)
   journal.md                   ← one-line decisions that cross cards (swept when a capability closes)
-  HANDOFF.md                   ← volatile handoff — traps · learnings · open decisions only, overwritten each time
+  HANDOFF.md                   ← volatile handoff — next single step · just learned · traps · open decisions only, overwritten each time
 ```
 
 **The life of a task card:**
@@ -195,16 +210,15 @@ stay invisible to it. On exactly three events — MVP reached, the closure of a
 capability whose record shows a verification failure, or a user request — the auditor
 hunts those two by actually executing through the channel. Findings are not verdicts:
 they never block a pass, and only user-adopted findings become cards. A cleanly
-closed capability gets no audit — the harness grows only on defects actually met.
+closed capability gets no audit.
 
 **The retrospective — the one question aimed at the design itself.** Implementers and
 reviewers alike work on the current design's premise, so "was there a better option?"
-is a question nobody asks. When a capability first closes, the retrospective
-asks it once at that scope; when the MVP is reached, once for the whole — reading no
-code, only the traces the project left behind: folders where fix cards clustered,
-`.stale.` cards, ADRs' update comments. A finding stands only with a
-concrete alternative and this project's strain evidence, and adoption belongs to the
-user.
+is a question nobody asks. The retrospective asks it once when a capability first
+closes, at that scope, and once when the MVP is reached, for the whole. It reads no
+code — only the traces the project left behind: folders where fix cards clustered,
+`.stale.` cards, ADRs' update comments. A finding stands only with a concrete
+alternative and this project's strain evidence, and adoption belongs to the user.
 
 Three layers stand at the closure boundary — the verdict is mandatory, findings are
 event-triggered, and the dotted lines block nothing:
@@ -228,7 +242,8 @@ The outcome this drives: **a defect met once cannot escape through the same door
 - **1 task = 1 commit.** Only after the completion signal and review pass. Rollback = one revert.
 - **Measured answers flow back into documents (upper-document feedback).** Guesses live in the Provisional table and are replaced once measured.
 - **Handoff carries crumbs only.** The tree answers where, the progress log answers how —
-  HANDOFF keeps only traps · learnings · open decisions, and an empty file is normal.
+  HANDOFF keeps only the next single step · just learned · traps · open decisions, and an
+  empty file is normal.
 
 The full "why" (decision table · rejection lineage) is in [docs/design.md](docs/design.md).
 **To overturn a decision, refute its recorded reason first.**
