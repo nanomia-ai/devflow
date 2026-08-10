@@ -134,6 +134,25 @@ intermediate folders close without a verification rite). At that moment the jour
 swept — spent lines deleted, still-valid lines promoted into upper documents or left in
 place.
 
+## Handoff — you choose when it happens
+
+Every session ends eventually. In devflow, **you** decide when.
+
+An AI cannot see how much context it has left, so instead of a rule hung on a percentage,
+the session signals only at events it can actually observe — before opening a new
+capability folder, before starting a long card, at checkpoint commits — and it reports
+**the size of the next step**. Watching the gauge and saying "hand it over now" are yours.
+
+When you say so, the handoff is produced right there, in a fixed order: anything confirmed
+in this conversation that has not yet landed in a document lands **first** (through the
+discovery→update table), and only the volatile remainder goes into HANDOFF. And it happens
+**at a task boundary, never mid-task** — half-written code and a half-true explanation are
+not handed over.
+
+The next session picks up from the hook, which injects the tree and HANDOFF automatically.
+An empty HANDOFF is normal — resuming from the tree alone is the default, and HANDOFF
+carries only the crumbs that live in neither the tree nor any card.
+
 ## The 9 skills
 
 | Skill | When | Produces | Design intent |
@@ -319,10 +338,9 @@ git: "Jaemin Park", jmp@example.com
 
 ## Install
 
-Both platforms work by **registering** this repository with your tool. Claude Code takes
-the GitHub address directly; Codex CLI clones the repository and runs an install script
-once. Either way you get the same thing — 9 skills (with the role contract files riding
-along) and the SessionStart hook.
+Both platforms **register** this repository by its GitHub address and install the plugin —
+two lines each, and you get the same thing either way: 9 skills (with the role contract
+files riding along) and the SessionStart hook.
 
 ### Claude Code
 
@@ -343,43 +361,31 @@ Before the GitHub release, pass `marketplace add` the local path of your clone i
 
 ### Codex CLI
 
-First get the repository. **This folder becomes the installation source, so put it
-somewhere you will not delete or move.**
+The same two lines. Skills and the hook install together.
 
-```sh
-git clone https://github.com/nanomia-ai/devflow.git
-cd devflow
+```
+codex plugin marketplace add nanomia-ai/devflow
+codex plugin add devflow@nanomia
 ```
 
-Then run the install script for your operating system, once.
+For the hook you need one line in `~/.codex/config.toml`, and on the first session Codex
+asks once whether to trust it.
 
-```powershell
-powershell -File codex/install.ps1      # Windows
-```
-```sh
-sh codex/install.sh                     # macOS/Linux
+```toml
+[features]
+hooks = true
 ```
 
-The installer sets up three channels at once. ① A **native plugin** — it registers this
-folder as a marketplace and installs `devflow@nanomia`, so the 9 skills are visible to
-the model with their frontmatter intact (auto-invocation — the same way Claude works).
-② **Slash prompts** — the 8 `/devflow-*` commands in `~/.codex/prompts/`, the channel you
-invoke explicitly; the canonical rules and companion documents are embedded in each
-prompt (the prompt folder is flat, so cross-file references are unreliable).
-③ The **SessionStart hook** — the same `scripts/session-start.js` that serves Claude
-serves Codex too. It needs one line, `[features] hooks = true` in
-`~/.codex/config.toml`; the installer checks and explains if it is missing. Only in
-environments where hooks are unavailable, add the `codex/AGENTS-devflow.md` block to the
-project's `AGENTS.md` as a fallback.
+Skills are invoked by the model on its own. If you also want **explicit slash commands**
+like `/devflow-work`, clone the repository and run `codex/install.ps1` (Windows) or
+`codex/install.sh` (macOS/Linux) — that script writes the 8 commands into
+`~/.codex/prompts/` (embedding the canonical rules and companion documents in each
+prompt, since the prompt folder is flat and cross-file references are unreliable there).
 
 After installing, `codex plugin list` should show `devflow@nanomia`. If it does not, the
 usual cause is **another marketplace in your Codex config whose folder is gone** — a
 single dead entry makes every `codex plugin` command fail. Remove that entry from
-`config.toml` (under `CODEX_HOME`, or `~/.codex`) and run the installer again. The
-installer detects this case and tells you.
-
-**After editing any skill, run the installer again** (the plugin snapshot and the
-prompts are build artifacts).
+`config.toml` (under `CODEX_HOME`, or `~/.codex`) and try again.
 
 > Why there is only one hook: the covenant of writing the progress log to disk at every
 > step makes PreCompact protection unnecessary, and a Stop hook fires every turn — noise.

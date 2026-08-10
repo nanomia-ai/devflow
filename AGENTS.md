@@ -126,14 +126,17 @@ to break, and what a literal reader does at each step you touched.
 - The canonical version is `.claude-plugin/plugin.json`. Bump it whenever any deploy
   artifact changes behavior (skills, agents, hook, installers); docs-only changes need no
   bump. Version bump and CHANGELOG entry travel in the same change.
-- The Codex install is build output generated **outside the repository** by
-  `codex/install.ps1` / `install.sh`: a native plugin snapshot (marketplace add +
-  plugin add — skills model-invocable, frontmatter intact), the `~/.codex/prompts/`
-  slash prompts, and the SessionStart hook (registered separately — plugin-delivered
-  hooks are removed in Codex). After any skill edit, rerun the installer on your
-  machine if you use Codex — reviewers cannot see the result in a PR, so state in the
-  PR whether you ran it. The installers also purge prompts under the pre-0.9.0 name
-  `nano-devflow-*`.
+- **Users install from GitHub; this repository installs from disk.** README documents the
+  remote two-line install on both platforms (`marketplace add nanomia-ai/devflow` +
+  `plugin add`). Maintainers testing local edits use `codex/install.ps1` / `install.sh`,
+  which register **this folder** as the marketplace and also write the `~/.codex/prompts/`
+  slash prompts. After any skill edit, rerun the installer on your machine if you use
+  Codex — reviewers cannot see the result in a PR, so state in the PR whether you ran it.
+  The installers also purge prompts under the pre-0.9.0 name `nano-devflow-*`.
+- The SessionStart hook ships **inside the plugin** on both platforms: Claude
+  auto-discovers `hooks/hooks.json`; Codex needs it declared, which
+  `.codex-plugin/plugin.json` does (`"hooks": "./hooks/hooks.json"`). Keep that manifest's
+  `version` in step with `.claude-plugin/plugin.json` — they are the same release.
 - `codex/install.ps1` must keep its UTF-8 **BOM** — PowerShell 5.1 parses BOM-less files
   as ANSI and corrupts non-ASCII text (reproduced in practice).
 - Reinstall to verify on both platforms: Claude (`claude plugin install

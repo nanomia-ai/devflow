@@ -125,6 +125,24 @@ stateDiagram-v2
 그 순간 journal이 정리된다 — 효력이 끝난 줄은 삭제, 유효한 줄은 상위 문서로 승격하거나
 남긴다.
 
+## 인계 — 넘기는 시점은 사람이 고른다
+
+세션은 언젠가 끝난다. devflow에서 그 시점을 정하는 것은 **사람**이다.
+
+AI는 자기 컨텍스트 잔량을 볼 수 없다. 그래서 퍼센트에 건 규칙 대신, 세션은 자기가 관측할
+수 있는 사건에서만 신호를 보낸다 — 새 능력 폴더를 열기 전, 긴 카드에 착수하기 전,
+체크포인트 커밋 시점에 **다음 걸음의 크기**를 보고한다. 잔량을 보는 것도, "이제 넘기자"고
+말하는 것도 사람이다.
+
+넘기라고 말하면 그 자리에서 인계가 만들어진다. 순서가 정해져 있다: 이번 대화에서 확정된
+결정 중 아직 문서에 착지하지 않은 것을 **먼저** 착지시키고(발견→갱신 표), 남는 휘발성만
+HANDOFF에 적는다. 그리고 **작업 중간이 아니라 작업 경계에서만** 넘긴다 — 절반 짠 코드와
+절반만 맞는 설명은 넘기지 않는다.
+
+다음 세션은 훅이 트리와 HANDOFF를 자동으로 주입해 이어받는다. HANDOFF가 비어 있어도
+정상이다 — 트리만으로 재개되는 것이 기본이고, HANDOFF는 트리에도 카드에도 없는 부스러기만
+담는다.
+
 ## 스킬 9개
 
 | 스킬 | 언제 | 만드는 것 | 설계 의도 |
@@ -295,9 +313,8 @@ git: "Jaemin Park", jmp@example.com
 
 ## 설치
 
-두 플랫폼 모두 이 저장소를 자기 도구에 **등록**하는 방식이다. Claude Code는 GitHub 주소를
-그대로 받고, Codex CLI는 저장소를 내려받아 설치 스크립트를 한 번 돌린다. 어느 쪽이든
-설치되는 내용은 같다 — 스킬 9개(역할 계약 파일 동반)와 SessionStart 훅.
+두 플랫폼 모두 이 저장소를 GitHub 주소로 **등록**하고 플러그인을 설치한다 — 각각 두 줄이면
+끝나고, 설치되는 내용도 같다: 스킬 9개(역할 계약 파일 동반)와 SessionStart 훅.
 
 ### Claude Code
 
@@ -317,39 +334,30 @@ GitHub 공개 전이라면 `marketplace add` 뒤에 저장소를 클론한 로�
 
 ### Codex CLI
 
-먼저 저장소를 내려받는다. **이 폴더가 그대로 설치 원본이 되므로 지우거나 옮기지 않을 자리에
-둔다.**
+같은 두 줄이다. 스킬과 훅이 함께 설치된다.
 
-```sh
-git clone https://github.com/nanomia-ai/devflow.git
-cd devflow
+```
+codex plugin marketplace add nanomia-ai/devflow
+codex plugin add devflow@nanomia
 ```
 
-그다음 자기 운영체제의 설치 스크립트를 한 번 실행한다.
+훅을 쓰려면 `~/.codex/config.toml`에 다음 한 줄이 필요하고, 첫 세션에서 Codex가 이 훅을
+신뢰할지 한 번 묻는다.
 
-```powershell
-powershell -File codex/install.ps1      # Windows
-```
-```sh
-sh codex/install.sh                     # macOS/Linux
+```toml
+[features]
+hooks = true
 ```
 
-설치기가 세 채널을 한 번에 구성한다. ① **네이티브 플러그인** — 이 폴더를 마켓플레이스로
-등록하고 `devflow@nanomia`를 설치해, 스킬 9종이 frontmatter 그대로 모델에 보인다(자동
-호출 — Claude와 같은 방식). ② **슬래시 프롬프트** — `~/.codex/prompts/`의 `/devflow-*`
-명령 8개로 명시 호출하는 통로다. 규칙 정본과 동반 문서가 각 프롬프트에 동봉된다(프롬프트
-폴더는 평면이라 파일 간 참조가 불안정하기 때문). ③ **SessionStart 훅** — Claude와 같은
-`scripts/session-start.js`가 Codex도 서빙한다. 전제는 `~/.codex/config.toml`의
-`[features] hooks = true` 한 줄이며, 설치기가 검사해 없으면 안내한다. 훅을 쓸 수 없는
-환경에서만 `codex/AGENTS-devflow.md` 블록을 프로젝트 `AGENTS.md`에 폴백으로 붙인다.
+스킬은 모델이 알아서 호출한다. `/devflow-work`처럼 **명시 호출용 슬래시 명령**을 함께 두고
+싶다면 저장소를 클론해 `codex/install.ps1`(Windows) 또는 `codex/install.sh`(macOS/Linux)를
+실행한다 — 그 스크립트가 `~/.codex/prompts/`에 명령 8개를 만든다(규칙 정본과 동반 문서를
+프롬프트마다 동봉한다. 프롬프트 폴더는 평면이라 파일 간 참조가 불안정하기 때문이다).
 
 설치 후 `codex plugin list`에 `devflow@nanomia`가 보이면 성공이다. 안 보인다면 Codex 설정에
 **폴더가 사라진 다른 마켓플레이스**가 남아 있는 경우가 많다 — 그런 항목 하나가
 `codex plugin` 명령 전체를 실패시킨다. `config.toml`(`CODEX_HOME` 또는 `~/.codex`)에서 그
-항목을 지우고 설치기를 다시 실행하면 된다. 설치기도 이 상황을 감지해 알려준다.
-
-**스킬을 수정했으면 설치 스크립트를 다시 실행한다** (플러그인 스냅숏과 프롬프트는
-생성물이다).
+항목을 지우고 다시 시도한다.
 
 > 훅이 하나뿐인 이유: 진행 로그를 매 단계 디스크에 쓰는 규약 덕에 PreCompact 보호가
 > 불필요하고, Stop 훅은 매 턴 발화라 소음이다. SessionStart 하나로 충분하다.

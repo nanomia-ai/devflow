@@ -6,6 +6,33 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.20 — 2026-08-11 — Codex installs in two remote lines; the handoff rhythm gets its own section
+
+Probing why devflow's Codex install was heavier than comparable skill repositories found
+the weight was ours, not Codex's. Two facts, both verified live: `codex plugin
+marketplace add` accepts `owner/repo` and Git URLs, so the clone step and the
+"don't move this folder" warning were self-inflicted; and plugin-delivered hooks are not
+a removed feature — the Codex binary carries `hooks/hooks.json` and `CLAUDE_PLUGIN_ROOT`,
+a plugin in real use declares hooks in `.codex-plugin/plugin.json`, and giving devflow the
+same manifest made its SessionStart hook fire with the manual registration moved aside.
+That refutes v0.9.9's recorded ground for registering the hook separately (recorded in
+design.md). New file `.codex-plugin/plugin.json` declares skills and hooks for Codex;
+the Claude manifest keeps auto-discovery and gained nothing. README's Codex section is now
+the same two lines as Claude's, plus the `[features] hooks = true` prerequisite and the
+one-time trust prompt; the slash-prompt channel is documented as the optional extra it is,
+reached by cloning and running the installer. The installers remain the local-development
+path — AGENTS.md now states the split (users install from GitHub, this repository installs
+from disk) and how the hook rides along on each platform.
+
+README also gains a **Handoff** section. Handing over at a moment the user picks is one of
+devflow's defining behaviors, and it was only visible as a folder-tree line and a design
+bullet: an AI cannot see its own context gauge, so the session signals at observable events
+(before a new capability folder, before a long card, at checkpoint commits) and reports the
+next step's size, while the decision stays with the user; on the word, decisions confirmed
+in conversation land in their documents first and only the volatile remainder goes into
+HANDOFF, at a task boundary and never mid-task. Files: .codex-plugin/plugin.json (new),
+README{_ko,}.md, AGENTS.md, docs/design{_ko,}.md, .claude-plugin/plugin.json.
+
 ## 0.9.19 — 2026-08-11 — the Codex installer confirms what it claims; README install and diagrams reworked
 
 The installer reported "plugin installed" from an exit code while registration had in
