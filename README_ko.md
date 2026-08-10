@@ -8,20 +8,6 @@ AI 세션은 매번 기억을 잃고 시작한다. devflow는 그 기억을 **�
 쌓는다 — 무엇을 만드는지는 문서가, 어디까지 왔는지는 파일 트리가, 왜 그렇게 정했는지는
 기록이 답한다. 어느 세션이 언제 죽어도, 다음 세션은 정해진 몇 개의 파일만 읽고 이어받는다.
 
-## 빠른 시작
-
-```
-/plugin marketplace add nanomia-ai/devflow      # Claude Code
-/plugin install devflow@nanomia
-```
-
-Codex CLI는 `codex/install.ps1`(Windows) 또는 `codex/install.sh`(macOS/Linux)를 한 번
-실행하면 된다.
-
-설치 후 첫 명령은 상황이 정한다 — 새 프로젝트는 product(기획 인터뷰)로 시작하고, 코드가
-이미 있는 프로젝트는 adopt(코드에서 역산)로 시작하며, 하던 일은 세션을 새로 열면 훅이
-자동으로 재개한다. 플랫폼별 상세는 아래 두 설치 절에, 팀 설정은 "팀에서 쓸 때" 절에 있다.
-
 ## 접근 — 방향은 풍부하게, 하네스는 최소로
 
 최신 상위 모델은 구현 방법을 이미 안다. 절차를 촘촘히 지시할수록 모델은 판단을
@@ -50,15 +36,21 @@ Codex CLI는 `codex/install.ps1`(Windows) 또는 `codex/install.sh`(macOS/Linux)
 
 ```mermaid
 flowchart LR
-    subgraph L0["Layer 0 · 프로젝트 정의 — 1회"]
-        P[product<br>무엇을·왜] --> A[arch<br>어떻게] --> D["design (선택)<br>프론트엔드 있을 때만"]
-        AD["adopt<br>기존 코드면 역산 상속"]
+    subgraph L0["Layer 0 · 한 번 정해 끝까지 물려받는다"]
+        P["product<br>무엇을 · 왜"] --> A["arch<br>어떻게 만드나"]
+        A --> D["design · 선택<br>프론트엔드가 있을 때"]
+        AD["adopt<br>기존 코드에서 역산"]
     end
-    subgraph L1["Layer 1 · 작업 루프 — 반복"]
-        S[split<br>쪼개기] --> W[work<br>구현] <--> V[verify<br>검증]
+    subgraph L1["Layer 1 · 능력마다 되풀이한다"]
+        S["split<br>한 층만 쪼갠다"] --> W["work<br>카드 하나를 끝까지"]
+        W --> V["verify<br>실제로 실행해 판정"]
+        V -->|"실패 → 수정 카드"| W
+        V -->|"통과 → 다음 층"| S
     end
-    L0 --> L1
-    R[resume · 재개] -.->|훅이 자동 실행| L1
+    A --> S
+    D --> S
+    AD --> S
+    R(["새 세션 · resume"]) -.->|"훅이 자동 실행"| W
 ```
 
 | 상황 | 진입점 |
@@ -108,14 +100,20 @@ devflow/
 
 ```mermaid
 stateDiagram-v2
-    [*] --> 대기: split이 생성 — 목적지·왜·금지·완료 신호
-    대기 --> wip: 착수 — .wip.으로 rename (다중 모드에선 점유 커밋)
-    wip --> 대기: 해제 (다중 모드) — 접미사 제거
-    wip --> done: 완료 신호 통과 + 검토 통과 + 커밋 1개
-    대기 --> 폴더로_승격: 열어 보니 커밋 1개로 안 끝나는 크기
-    wip --> 폴더로_승격: 커밋 1개로 안 끝나는 크기 — 같은 번호로 재귀 분할
-    done --> stale: 상위 문서가 바뀌어 낡음
-    note right of stale : 어느 상태의 카드든 상위 문서가 바뀌면 .stale.이 될 수 있다
+    state "대기 — 접미사 없음" as WAIT
+    state "진행 중 — .wip." as WIP
+    state "완료 — .done." as DONE
+    state "낡음 — .stale." as STALE
+    state "폴더로 승격" as FOLDER
+    [*] --> WAIT: split이 카드를 만든다
+    WAIT --> WIP: 착수 · 다중은 점유 커밋
+    WIP --> WAIT: 해제 · 접미사를 뗀다
+    WIP --> DONE: 신호 · 검토 · 커밋 통과
+    WAIT --> FOLDER: 커밋 1개로 안 끝난다
+    WIP --> FOLDER: 커밋 1개로 안 끝난다
+    FOLDER --> WAIT: 자식 카드들이 태어난다
+    DONE --> STALE: 상위 문서가 바뀌었다
+    note right of STALE : 어느 상태의 카드든 .stale.이 될 수 있다
 ```
 
 트리는 재귀다 — 큰 카드는 같은 번호의 폴더로 승격되어 계속 쪼개진다(`02.3` → `02.3.1`).
@@ -157,21 +155,21 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TB
-    subgraph W["work — 작업 루프 (카드마다)"]
-        I[구현] --> CS[완료 신호 실행]
-        CS --> RV{{"검토 · reviewer — 읽되 실행하지 않음"}}
-        RV -->|지적| FX[수정]
-        FX -->|"diff가 바뀌었으면 신호부터"| CS
-        RV -->|통과| CM["커밋 → 카드 .done."]
+    subgraph W["work — 카드 한 장의 안쪽 루프"]
+        I["구현한다"] --> CS["완료 신호를 실제로 실행한다"]
+        CS --> RV{{"검토 · reviewer<br>읽되 실행하지 않는다"}}
+        RV -->|"고칠 것이 있다"| FX["수정한다"]
+        FX -->|"diff가 바뀌면 신호부터 다시"| CS
+        RV -->|"통과"| CM["커밋한다 → 카드 .done."]
     end
-    subgraph V["verify — 능력 루프 (폴더 전부 .done.일 때)"]
-        SC{{"시나리오 실제 실행 · verifier — 실행하되 읽지 않음"}} --> RG["회귀 — 폴더의 완료 신호 전부 재실행"]
-        RG --> VD{판정}
-        VD -->|통과| CD["능력 폴더 .done"]
-        VD -->|실패| FC["수정 카드 — 완료 신호는 그 실패의 재현"]
+    subgraph V["verify — 능력 하나의 바깥 루프"]
+        SC{{"시나리오를 창구로 실제 실행<br>verifier · 읽지 않고 실행한다"}} --> RG["회귀 — 폴더의 완료 신호를<br>전부 재실행한다"]
+        RG --> VD{"판정"}
+        VD -->|"통과"| CD["능력 폴더에 .done"]
+        VD -->|"실패"| FC["수정 카드<br>완료 신호 = 그 실패의 재현"]
     end
-    CM --> SC
-    FC -->|work로| I
+    CM ==>|"폴더의 카드가 전부 .done."| SC
+    FC ==>|"work로 되돌아간다"| I
 ```
 
 같은 자리를 도는 루프는 없다 — 반복하려면 반드시 무언가를 먼저 바꾸고, 돌 때마다
@@ -205,11 +203,12 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    CL["능력·제품 폐쇄"] --> VF{{"verifier — 판정: 통과·실패·미검증"}}
+    CL["능력 · 제품 폐쇄"] --> VF{{"verifier — 판정: 통과 · 실패 · 미검증"}}
+    VF ==>|"판정은 의무 · 통과해야 닫힌다"| DN["능력 폴더에 .done"]
     VF -.->|"실패를 기록했던 능력의 폐쇄 · MVP 1회 · 요청"| AU{{"auditor · 감리 — 소견"}}
     VF -.->|"능력 첫 폐쇄 · 제품층 첫 판정 뒤 · 요청"| RT{{"retrospector · 회고 — 소견"}}
-    AU -.->|"채택된 소견만 — 사용자"| MC["유지보수 카드"]
-    RT -.->|"채택된 소견만 — 사용자"| RB["유지보수 카드 또는 재기준선"]
+    AU -.->|"사용자가 채택한 소견만"| MC["유지보수 카드"]
+    RT -.->|"사용자가 채택한 소견만"| RB["유지보수 카드 또는 재기준선"]
 ```
 
 유도하는 결과: **한 번 겪은 결함은 같은 문을 두 번 빠져나가지 못한다.**
@@ -294,47 +293,66 @@ id: jmp
 git: "Jaemin Park", jmp@example.com
 ```
 
-## 설치 — Claude Code
+## 설치
+
+두 플랫폼 모두 이 저장소를 자기 도구에 **등록**하는 방식이다. Claude Code는 GitHub 주소를
+그대로 받고, Codex CLI는 저장소를 내려받아 설치 스크립트를 한 번 돌린다. 어느 쪽이든
+설치되는 내용은 같다 — 스킬 9개(역할 계약 파일 동반)와 SessionStart 훅.
+
+### Claude Code
+
+세션 안에서 두 줄이면 끝난다.
 
 ```
 /plugin marketplace add nanomia-ai/devflow
 /plugin install devflow@nanomia
 ```
 
-(GitHub 공개 전이라면 marketplace add에 로컬 클론 경로를 넣는다.)
+명령은 `/devflow:product` 형식이다 — 플러그인 이름이 네임스페이스라 다른 스킬과 충돌하지
+않고, `/devflow`까지만 쳐도 자동완성에 전체가 모여 보인다. 훅은 `devflow/tree/`가 있는
+프로젝트에서만 동작하며, 세션 시작·재개·컨텍스트 압축 직후에 트리 상태와 HANDOFF를 자동
+주입한다 (그래서 resume을 안 쳐도 재개된다).
 
-스킬 9개(역할 계약 파일 동반) + SessionStart 훅이 설치된다. 명령은 `/devflow:product` 형식 —
-플러그인 이름이 네임스페이스라 충돌이 원천 차단되고, `/devflow`까지만 쳐도 자동완성에
-전체가 모여 보인다. 훅은 `devflow/tree/`가 있는 프로젝트에서만 동작하고, 세션 시작·
-재개·컨텍스트 압축 직후에 트리 상태와 HANDOFF를 자동 주입한다 (그래서 resume을 안 쳐도
-재개된다).
+GitHub 공개 전이라면 `marketplace add` 뒤에 저장소를 클론한 로컬 경로를 넣는다.
 
-> 훅이 하나뿐인 이유: 진행 로그를 매 단계 디스크에 쓰는 규약 덕에 PreCompact 보호가
-> 불필요하고, Stop 훅은 매 턴 발화라 소음이다. SessionStart 하나로 충분하다.
+### Codex CLI
 
-## 설치 — Codex CLI
+먼저 저장소를 내려받는다. **이 폴더가 그대로 설치 원본이 되므로 지우거나 옮기지 않을 자리에
+둔다.**
+
+```sh
+git clone https://github.com/nanomia-ai/devflow.git
+cd devflow
+```
+
+그다음 자기 운영체제의 설치 스크립트를 한 번 실행한다.
 
 ```powershell
-# Windows
-powershell -File codex/install.ps1
+powershell -File codex/install.ps1      # Windows
 ```
 ```sh
-# macOS/Linux
-sh codex/install.sh
+sh codex/install.sh                     # macOS/Linux
 ```
 
-설치기가 세 채널을 한 번에 구성한다: ① **네이티브 플러그인** — 저장소를 마켓플레이스로
-등록하고 `devflow@nanomia`를 설치해, 스킬 9종이 frontmatter 그대로 모델에 보인다
-(자동 호출 — Claude와 같은 방식). ② `~/.codex/prompts/`의 `/devflow-*` 명령 8개 —
-명시 호출 채널. 규칙 정본과 동반 문서가 각 프롬프트에 동봉된다(프롬프트 폴더는
-평면이라 파일 간 참조가 불안정하기 때문). ③ Codex 네이티브 SessionStart 훅 — 같은
-`scripts/session-start.js`가 Claude와 Codex 양쪽을 서빙한다. 전제:
-`~/.codex/config.toml`에 `[features] hooks = true` (설치기가 검사해서 없으면 안내).
-훅을 못 쓰는 환경에서만 `codex/AGENTS-devflow.md` 블록을 프로젝트 `AGENTS.md`에
-폴백으로 추가한다.
+설치기가 세 채널을 한 번에 구성한다. ① **네이티브 플러그인** — 이 폴더를 마켓플레이스로
+등록하고 `devflow@nanomia`를 설치해, 스킬 9종이 frontmatter 그대로 모델에 보인다(자동
+호출 — Claude와 같은 방식). ② **슬래시 프롬프트** — `~/.codex/prompts/`의 `/devflow-*`
+명령 8개로 명시 호출하는 통로다. 규칙 정본과 동반 문서가 각 프롬프트에 동봉된다(프롬프트
+폴더는 평면이라 파일 간 참조가 불안정하기 때문). ③ **SessionStart 훅** — Claude와 같은
+`scripts/session-start.js`가 Codex도 서빙한다. 전제는 `~/.codex/config.toml`의
+`[features] hooks = true` 한 줄이며, 설치기가 검사해 없으면 안내한다. 훅을 쓸 수 없는
+환경에서만 `codex/AGENTS-devflow.md` 블록을 프로젝트 `AGENTS.md`에 폴백으로 붙인다.
+
+설치 후 `codex plugin list`에 `devflow@nanomia`가 보이면 성공이다. 안 보인다면 Codex 설정에
+**폴더가 사라진 다른 마켓플레이스**가 남아 있는 경우가 많다 — 그런 항목 하나가
+`codex plugin` 명령 전체를 실패시킨다. `config.toml`(`CODEX_HOME` 또는 `~/.codex`)에서 그
+항목을 지우고 설치기를 다시 실행하면 된다. 설치기도 이 상황을 감지해 알려준다.
 
 **스킬을 수정했으면 설치 스크립트를 다시 실행한다** (플러그인 스냅숏과 프롬프트는
 생성물이다).
+
+> 훅이 하나뿐인 이유: 진행 로그를 매 단계 디스크에 쓰는 규약 덕에 PreCompact 보호가
+> 불필요하고, Stop 훅은 매 턴 발화라 소음이다. SessionStart 하나로 충분하다.
 
 ## 다른 에이전트 (Cursor, Copilot, opencode 등)
 

@@ -9,21 +9,6 @@ not in conversation** — documents answer what you are building, the file tree 
 far you have come, and the records answer why it was decided that way. Whenever a session
 dies, the next one reads a small, fixed set of files and picks up where it left off.
 
-## Quick start
-
-```
-/plugin marketplace add nanomia-ai/devflow      # Claude Code
-/plugin install devflow@nanomia
-```
-
-For Codex CLI, run `codex/install.ps1` (Windows) or `codex/install.sh` (macOS/Linux) once.
-
-The first command after installing depends on where you stand — a new project starts
-with product (the planning interview), a project that already has code starts with
-adopt (back-derived from the code), and open work resumes automatically when you start
-a new session (the hook). Platform details live in the two install sections below;
-team setup lives in "Using it in a team".
-
 ## The approach — rich direction, minimal harness
 
 Today's top models already know how to implement. The more tightly you script the
@@ -55,15 +40,21 @@ in the work ⇄ verify section below.
 
 ```mermaid
 flowchart LR
-    subgraph L0["Layer 0 · project definition — once"]
-        P[product<br>what & why] --> A[arch<br>how] --> D["design (optional)<br>only with a frontend"]
-        AD["adopt<br>existing code: back-derived"]
+    subgraph L0["Layer 0 · decided once, inherited from then on"]
+        P["product<br>what & why"] --> A["arch<br>how it gets built"]
+        A --> D["design · optional<br>when there is a frontend"]
+        AD["adopt<br>back-derived from existing code"]
     end
-    subgraph L1["Layer 1 · work loop — repeats"]
-        S[split<br>break down] --> W[work<br>implement] <--> V[verify<br>check]
+    subgraph L1["Layer 1 · repeated for every capability"]
+        S["split<br>open one layer only"] --> W["work<br>one card, all the way"]
+        W --> V["verify<br>judged by real execution"]
+        V -->|"fail → fix card"| W
+        V -->|"pass → next layer"| S
     end
-    L0 --> L1
-    R[resume · continue] -.->|the hook runs it automatically| L1
+    A --> S
+    D --> S
+    AD --> S
+    R(["a new session · resume"]) -.->|"run by the hook"| W
 ```
 
 | Situation | Entry point |
@@ -71,7 +62,7 @@ flowchart LR
 | New project | product, then in order |
 | Adopting in an existing project | adopt (back-derive from code) → split |
 | Adding or extending features | split |
-| Continuing in a new session | automatic (SessionStart hook — see the install sections), or resume |
+| Continuing in a new session | automatic (SessionStart hook — see the install section), or resume |
 | A teammate joins | make a room — see "Using it in a team" below |
 
 ### The first step — starting fresh vs adopting into existing code
@@ -116,14 +107,20 @@ devflow/
 
 ```mermaid
 stateDiagram-v2
-    [*] --> waiting: created by split — Destination · Why · Forbidden · completion signal
-    waiting --> wip: start — rename to .wip. (in multi mode, a claim commit)
-    wip --> waiting: release (multi mode) — suffix stripped
-    wip --> done: completion signal passed + review passed + 1 commit
-    waiting --> promoted_to_folder: opened it — too big for 1 commit
-    wip --> promoted_to_folder: too big for 1 commit — recursively split under the same number
-    done --> stale: an upper document changed, so it went stale
-    note right of stale : a card in any state can become .stale. when an upper document changes
+    state "waiting — no suffix" as WAIT
+    state "in progress — .wip." as WIP
+    state "done — .done." as DONE
+    state "stale — .stale." as STALE
+    state "promoted to a folder" as FOLDER
+    [*] --> WAIT: split creates the card
+    WAIT --> WIP: start · multi mode claims it
+    WIP --> WAIT: release · the suffix comes off
+    WIP --> DONE: signal · review · commit passed
+    WAIT --> FOLDER: too big for one commit
+    WIP --> FOLDER: too big for one commit
+    FOLDER --> WAIT: child cards are born
+    DONE --> STALE: an upper document changed
+    note right of STALE : a card in any state can become .stale.
 ```
 
 The tree is recursive — a big card is promoted to a folder with the same number and keeps
@@ -173,21 +170,21 @@ subagent/fresh session with that file verbatim, so **the process is the same**.
 
 ```mermaid
 flowchart TB
-    subgraph W["work — task loop (per card)"]
-        I[implement] --> CS[run the completion signal]
-        CS --> RV{{"review · reviewer — reads, never executes"}}
-        RV -->|objection| FX[fix]
-        FX -->|"if the diff changed, signal first"| CS
-        RV -->|pass| CM["commit → card .done."]
+    subgraph W["work — the inner loop, one card at a time"]
+        I["implement"] --> CS["actually run the completion signal"]
+        CS --> RV{{"review · reviewer<br>reads, never executes"}}
+        RV -->|"something to fix"| FX["fix"]
+        FX -->|"diff changed — signal first"| CS
+        RV -->|"pass"| CM["commit → card .done."]
     end
-    subgraph V["verify — capability loop (when the folder is all .done.)"]
-        SC{{"run the real scenario · verifier — executes, never reads"}} --> RG["regression — rerun every completion signal in the folder"]
-        RG --> VD{verdict}
-        VD -->|pass| CD["capability folder .done"]
-        VD -->|fail| FC["fix card — its completion signal reproduces that failure"]
+    subgraph V["verify — the outer loop, one capability"]
+        SC{{"run the scenario through the channel<br>verifier · executes without reading"}} --> RG["regression — rerun every<br>completion signal in the folder"]
+        RG --> VD{"verdict"}
+        VD -->|"pass"| CD["capability folder gets .done"]
+        VD -->|"fail"| FC["fix card<br>completion signal = that failure, reproduced"]
     end
-    CM --> SC
-    FC -->|back to work| I
+    CM ==>|"every card in the folder is .done."| SC
+    FC ==>|"back into work"| I
 ```
 
 No loop circles in place — to repeat, something must change first, and every pass
@@ -225,11 +222,12 @@ event-triggered, and the dotted lines block nothing:
 
 ```mermaid
 flowchart TB
-    CL["capability/product closure"] --> VF{{"verifier — verdict: pass·fail·unverified"}}
+    CL["capability · product closure"] --> VF{{"verifier — verdict: pass · fail · unverified"}}
+    VF ==>|"the verdict is mandatory · only a pass closes it"| DN["capability folder gets .done"]
     VF -.->|"closure of a capability that recorded a fail · MVP once · request"| AU{{"auditor — findings"}}
     VF -.->|"first capability closure · after the first product-layer verdict · request"| RT{{"retrospector — findings"}}
-    AU -.->|"adopted findings only — the user"| MC["maintenance cards"]
-    RT -.->|"adopted findings only — the user"| RB["maintenance cards or a re-baseline"]
+    AU -.->|"only findings the user adopts"| MC["maintenance cards"]
+    RT -.->|"only findings the user adopts"| RB["maintenance cards or a re-baseline"]
 ```
 
 The outcome this drives: **a defect met once cannot escape through the same door twice.**
@@ -319,50 +317,73 @@ id: jmp
 git: "Jaemin Park", jmp@example.com
 ```
 
-## Install — Claude Code
+## Install
+
+Both platforms work by **registering** this repository with your tool. Claude Code takes
+the GitHub address directly; Codex CLI clones the repository and runs an install script
+once. Either way you get the same thing — 9 skills (with the role contract files riding
+along) and the SessionStart hook.
+
+### Claude Code
+
+Two lines inside a session, and you are done.
 
 ```
 /plugin marketplace add nanomia-ai/devflow
 /plugin install devflow@nanomia
 ```
 
-(Before the GitHub release, point marketplace add at a local clone path instead.)
+Commands take the `/devflow:product` form — the plugin name is the namespace, so nothing
+collides with other skills, and typing just `/devflow` groups the whole set in
+autocompletion. The hook activates only in projects that have `devflow/tree/`, and
+injects tree state and HANDOFF at session start, resume, and right after context
+compaction (which is why resuming works without typing resume).
 
-Installs 9 skills (with the role contract files riding along) + the SessionStart hook. Commands take the `/devflow:product`
-form — the plugin name is the namespace, so collisions are blocked at the source, and
-typing just `/devflow` groups the whole set in autocompletion. The hook activates only in
-projects that have `devflow/tree/`, and injects tree state and HANDOFF at session start,
-resume, and right after context compaction (which is why resuming works without typing
-resume).
+Before the GitHub release, pass `marketplace add` the local path of your clone instead.
+
+### Codex CLI
+
+First get the repository. **This folder becomes the installation source, so put it
+somewhere you will not delete or move.**
+
+```sh
+git clone https://github.com/nanomia-ai/devflow.git
+cd devflow
+```
+
+Then run the install script for your operating system, once.
+
+```powershell
+powershell -File codex/install.ps1      # Windows
+```
+```sh
+sh codex/install.sh                     # macOS/Linux
+```
+
+The installer sets up three channels at once. ① A **native plugin** — it registers this
+folder as a marketplace and installs `devflow@nanomia`, so the 9 skills are visible to
+the model with their frontmatter intact (auto-invocation — the same way Claude works).
+② **Slash prompts** — the 8 `/devflow-*` commands in `~/.codex/prompts/`, the channel you
+invoke explicitly; the canonical rules and companion documents are embedded in each
+prompt (the prompt folder is flat, so cross-file references are unreliable).
+③ The **SessionStart hook** — the same `scripts/session-start.js` that serves Claude
+serves Codex too. It needs one line, `[features] hooks = true` in
+`~/.codex/config.toml`; the installer checks and explains if it is missing. Only in
+environments where hooks are unavailable, add the `codex/AGENTS-devflow.md` block to the
+project's `AGENTS.md` as a fallback.
+
+After installing, `codex plugin list` should show `devflow@nanomia`. If it does not, the
+usual cause is **another marketplace in your Codex config whose folder is gone** — a
+single dead entry makes every `codex plugin` command fail. Remove that entry from
+`config.toml` (under `CODEX_HOME`, or `~/.codex`) and run the installer again. The
+installer detects this case and tells you.
+
+**After editing any skill, run the installer again** (the plugin snapshot and the
+prompts are build artifacts).
 
 > Why there is only one hook: the covenant of writing the progress log to disk at every
 > step makes PreCompact protection unnecessary, and a Stop hook fires every turn — noise.
 > SessionStart alone covers it.
-
-## Install — Codex CLI
-
-```powershell
-# Windows
-powershell -File codex/install.ps1
-```
-```sh
-# macOS/Linux
-sh codex/install.sh
-```
-
-The installer sets up three channels at once: ① a **native plugin** — it registers the
-repository as a marketplace and installs `devflow@nanomia`, so the 9 skills are visible
-to the model with their frontmatter intact (auto-invocation — the same way Claude works).
-② the 8 `/devflow-*` commands in `~/.codex/prompts/` — the explicit channel; the
-canonical rules and companion documents are embedded in each prompt (the prompt folder
-is flat, so cross-file references are unreliable). ③ the native Codex SessionStart
-hook — the same `scripts/session-start.js` serves both Claude and Codex. Prerequisite:
-`[features] hooks = true` in `~/.codex/config.toml` (the installer checks and explains
-if missing). Only in hook-incapable environments, add the `codex/AGENTS-devflow.md`
-block to the project's `AGENTS.md` as a fallback.
-
-**After editing any skill, run the installer again** (the plugin snapshot and the
-prompts are build artifacts).
 
 ## Other agents (Cursor, Copilot, opencode, …)
 

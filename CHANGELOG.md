@@ -6,6 +6,33 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.19 — 2026-08-11 — the Codex installer confirms what it claims; README install and diagrams reworked
+
+The installer reported "plugin installed" from an exit code while registration had in
+fact failed — observed live: one marketplace entry in the user's Codex config pointed at
+a folder that no longer existed, and that single dead entry makes every `codex plugin`
+command fail, so devflow's native plugin channel was silently absent while the installer
+declared success. Both installers now confirm by listing (`codex plugin list` must show
+`devflow@nanomia`) instead of trusting exit codes, and when registration does not take
+they print the likely cause and the fix. install.ps1 keeps its UTF-8 BOM.
+
+README, both languages. The install section is now one section with two symmetric
+subsections: Claude Code takes the GitHub address in two lines; Codex CLI gets the steps
+it was missing — clone the repository, keep that folder (it becomes the registered
+marketplace), run the script for your OS — plus how to confirm the install and what to do
+when a dead marketplace blocks it. The quick-start block added earlier the same day is
+removed; it duplicated the install section and the entry-point table. Diagrams were
+reworked against actual rendered output rather than source reading: adopt is connected
+into the flow instead of floating, entry nodes that duplicated the entry-point table are
+gone, cross-subgraph edges are declared after their subgraphs so nodes no longer escape
+their boxes, the card lifecycle reads top-down and its promotion branch returns to
+waiting instead of dead-ending, the closure diagram now shows the mandatory verdict path,
+and labels were shortened or explicitly broken so no word splits mid-render. Structure
+parity ko↔en verified (headings 14/14, table rows 39/39, bullets 17/17, fences 26/26,
+five diagrams line-for-line); README.md's Korean count stays exactly 1 (the language
+switcher). Files: codex/install.ps1, codex/install.sh, README{_ko,}.md,
+.claude-plugin/plugin.json.
+
 ## docs — 2026-08-11 — README: quick start up front, leaner closure prose (no version change)
 
 README only, both languages. A Quick start section right after the premise (install

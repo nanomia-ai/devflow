@@ -74,12 +74,22 @@ echo ""
 # so the skills (frontmatter intact) are model-invocable inside Codex.
 if command -v codex >/dev/null 2>&1; then
   codex plugin marketplace remove nanomia >/dev/null 2>&1 || true
-  codex plugin marketplace add "$DEVFLOW_ROOT" >/dev/null 2>&1 || true
+  add_out=$(codex plugin marketplace add "$DEVFLOW_ROOT" 2>&1 || true)
   codex plugin remove devflow@nanomia >/dev/null 2>&1 || true
-  if codex plugin add devflow@nanomia >/dev/null 2>&1; then
+  codex plugin add devflow@nanomia >/dev/null 2>&1 || true
+  # Confirm by listing — exit codes alone have reported success while registration failed.
+  list_out=$(codex plugin list 2>&1 || true)
+  if printf '%s' "$list_out" | grep -q "devflow@nanomia"; then
     echo "plugin installed: devflow@nanomia (native Codex skills - model-invocable)"
   else
-    echo "NOTE: codex plugin add failed - the slash prompts above still work."
+    echo "NOTE: native plugin registration did not take - the slash prompts above still work."
+    broken=$(printf '%s\n%s' "$add_out" "$list_out" | grep -E "does not contain a supported manifest|failed to load" || true)
+    if [ -n "$broken" ]; then
+      echo "  Cause: another marketplace in your Codex config points at a folder that no longer exists,"
+      echo "  which makes every 'codex plugin' command fail. Remove that entry from config.toml"
+      echo "  (\$CODEX_HOME, or ~/.codex) and run this installer again. Codex reported:"
+      printf '%s\n' "$broken" | sed 's/^/    /'
+    fi
   fi
 else
   echo "NOTE: codex CLI not on PATH - skipped native plugin registration (slash prompts still work)."

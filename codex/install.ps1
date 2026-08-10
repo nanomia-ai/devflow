@@ -60,13 +60,24 @@ Write-Host ""
 if (Get-Command codex -ErrorAction SilentlyContinue) {
     $ea = $ErrorActionPreference; $ErrorActionPreference = "Continue"
     cmd /c "codex plugin marketplace remove nanomia >nul 2>nul"
-    cmd /c "codex plugin marketplace add ""$devflowRoot"" >nul 2>nul"
+    $addOut = cmd /c "codex plugin marketplace add ""$devflowRoot"" 2>&1"
     cmd /c "codex plugin remove devflow@nanomia >nul 2>nul"
     cmd /c "codex plugin add devflow@nanomia >nul 2>nul"
-    $pluginOk = ($LASTEXITCODE -eq 0)
+    # Confirm by listing — exit codes alone have reported success while registration failed.
+    $listOut = cmd /c "codex plugin list 2>&1"
     $ErrorActionPreference = $ea
-    if ($pluginOk) { Write-Host "plugin installed: devflow@nanomia (native Codex skills - model-invocable)" }
-    else { Write-Host "NOTE: codex plugin add failed - the slash prompts above still work." }
+    if ($listOut -match "devflow@nanomia") {
+        Write-Host "plugin installed: devflow@nanomia (native Codex skills - model-invocable)"
+    } else {
+        Write-Host "NOTE: native plugin registration did not take - the slash prompts above still work."
+        $broken = @($addOut) + @($listOut) | Select-String -Pattern "does not contain a supported manifest|failed to load"
+        if ($broken) {
+            Write-Host "  Cause: another marketplace in your Codex config points at a folder that no longer exists,"
+            Write-Host "  which makes every 'codex plugin' command fail. Remove that entry from config.toml"
+            Write-Host '  ($env:CODEX_HOME, or ~/.codex) and run this installer again. Codex reported:'
+            $broken | ForEach-Object { Write-Host "    $_" }
+        }
+    }
 } else {
     Write-Host "NOTE: codex CLI not on PATH - skipped native plugin registration (slash prompts still work)."
 }
