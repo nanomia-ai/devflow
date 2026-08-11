@@ -20,16 +20,17 @@ tree, it derives the next stage from the Layer 0 documents and continues.
 2. devflow/tree/ full listing                      ← how far things got (.done. / .wip. / pending)
 3. my claimed card in full. For others' claims, path and claimant only. From every
    pending card, read only `Depends`, `Approval`, and `Review`
-4. Run a mechanical query that does not put every verify.md into model context. For each
-   file, it emits only the four revisions and `Verdict`; the maximum source id per section;
+4. **Bounded verify projection** — Run a mechanical query that does not put every verify.md
+   into model context. For each file, it emits only the four revisions and `Verdict`; the
+   maximum source id per section;
    whether an entry lacks a source id; the path, state, source id, and event key of entries
    in `routing prepared`, `routing: pending`, `awaiting user decision`, event `routing`, or
    event `pending`; and whether a record exists for each finite event key currently due
    under the verification predicates. It emits no completed description or finding and no
    event key that is not currently due. Read through the end of only one active or missing-
    source-id entry selected by that output. Until the state table selects the exact file and
-   state and calls verify, do not read `Scenario`, `Execution`, `Regression`, `Standards`,
-   `Provisional`, or `journal sweep`
+   state and calls verify, do not read `Scenario`, `Executed`, `Regression`, `Standards`,
+   `Provisional`, or `Journal sweep`
 5. devflow/HANDOFF.md (multi: my room's HANDOFF.md) ← traps, learnings, open decisions
 6. devflow/journal.md in full (if present — the sweep discipline keeps it short)
                                                    ← cross-task decisions
@@ -68,7 +69,7 @@ matching row:
 |---|---|
 | `git status` reports an open rebase or merge | resume — stop normal routing and obtain the user's decision through the canonical open-Git-operation gate |
 | Any verify.md in HEAD contains a valid `routing prepared` object | verify — compare and apply its payload, then finish the completed state and specified route commit without committing the prepared object again |
-| One or both of journal and verify.md differ from HEAD in the working tree, and the full working-tree diff is a canonical verification transition, product-result write prefix, uncommitted route with its output, or prepared-route prefix | verify — without repeating execution, first finish the missing output and that state or routing commit |
+| One or both of journal and verify.md differ from HEAD in the working tree, and the full working-tree diff is a canonical verification-state transition, product-result write prefix, uncommitted route with its output, or prepared-route prefix | verify — without repeating execution, first finish the missing output and that state or routing commit |
 | Any verify.md has a legacy Failure history, Audit, or Retrospective entry without a source id | verify — first finish the canonical source-id migration commit |
 | A valid layer-opening marker exists in the working tree or HEAD | split — finish the earliest marker's interrupted planning commit from its durable source and minted numbers |
 | journal contains a `product verification running` line | verify — rerun the recorded flight |
@@ -78,14 +79,14 @@ matching row:
 | An Audit or Retrospective section contains findings `awaiting user decision` | verify — present the recorded findings verbatim and record the decision |
 | Any verify.md Failure history has `routing: pending` | verify — without executing, route one entry: first verify.md in canonical path order, then lowest source id in that file |
 | journal contains an exact `product re-run pending` line | product |
-| A valid capability-closing marker exists in the working tree or HEAD | verify — finish the interrupted capability closure |
+| A valid capability-closing marker exists in HEAD | verify — finish the interrupted capability closure |
 | journal contains an exact `re-split pending` line | split — finish the replacement-card plan for the earliest marker |
 | journal contains an exact `maintenance routing pending` line | split — plan the earliest line's request through maintenance routing |
 | arch.md lacks the Brownfield field | ask once, "Did implementation code exist before devflow entered?"; yes makes adopt add only the field, no makes arch add only the field |
 | `devflow/project/glossary.md` is missing | with `Brownfield: yes`, adopt reverse-derives only glossary.md; with `no`, product creates only glossary.md without changing the confirmed product.md |
 | A task card has a `Depends` member that the state predicates cannot parse, or a dependency number does not point to exactly one card | split — replace it with the user-confirmed canonical dependency value and finish the planning commit |
 | My claimed card lacks `Approval` or `Review`, has `Approval: pending`, or has noncanonical `Depends` | split — checkpoint any current diff and progress log, release the card, normalize legacy dependencies, finish execution-proposal approval and the planning commit, then reclaim it |
-| My claimed card has a `Depends` target that is not `.done.` | split — release the original card and finish the prerequisite; if an out-of-scope transition is underway, finish its plan approval too |
+| My claimed card has a `Depends` target that is not `.done.` | split — release the original card and finish the prerequisite |
 | A card of mine is claimed | work |
 | journal contains an exact `product verification requested` line | verify — product layer |
 | A Retrospective section has a `pending · source id:` state, or an Audit `pending · source id:` state passes the Audit execution boundary | verify — run and record one runnable pending event |

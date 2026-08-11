@@ -82,11 +82,16 @@ When a capability retires during maintenance, do not delete it from the list —
 line: `④ ~~name~~ — retired (date, evidence pointer)` (numbers are immutable
 identifiers). The capability's tree folder gets `.stale` (the canonical rules' status
 notation). If the capability is still a waiting file, give that file `.stale.md` instead.
+Under `Brownfield: no`, when a retired capability has no tree representation, create its
+`.stale.md` waiting file in the same retirement commit.
 When a brownfield has no tree representation for it, create none.
 
 ## Gates
 
 - If a success criterion is not verifiable as written, it does not pass. Ask again.
+- Immediately after the user confirms product.md, or glossary.md created alongside it,
+  land it in the canonical Layer 0 commit; a run grounded by `product re-run pending` uses
+  the binding-decision commit below instead.
 - When this run was grounded by `product re-run pending` journal lines, after the user
   confirms the identity paragraph, Capabilities, Boundary, and success criteria, perform
   every action in the canonical discovery→update row that matches each change. Put the

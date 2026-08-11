@@ -52,16 +52,17 @@ instruction, with 1 journal line (the sanctioned exception to claim inviolabilit
 
 multi: shared state for next-stage routing and the integrity check comes from the tip of
 arch.md's integration branch, not the current branch: `devflow/project/`, `devflow/tree/`,
-`devflow/journal.md`, and resume's bounded projection of every verify.md. Fetch integration and read this shared state
-before routing. When the integration tip is not an ancestor of the current branch and its
-history through that tip contains an unfinished transition commit, include the integration
+`devflow/journal.md`, and resume's bounded verify projection. Fetch integration and read this shared state
+before routing. When the integration tip is not an ancestor of the current branch and, at
+that tip, journal or any verify.md contains an active marker, an active request or
+product-verification line, or an event `pending` or `routing` state, include the integration
 tip in the current branch before local claimed work. Checkpoint unrelated uncommitted
 changes first. This is state synchronization
 and runs even while a card is claimed. Digest diff reading and marker advancement remain
 clean-boundary-only.
 
-all modes: apply the following gate only when `git rev-parse --is-inside-work-tree` returns
-`true`. Otherwise skip the gate and do not initialize Git. Immediately on entry before normal
+all modes: apply the following gate (the **open-Git-operation gate**) only when
+`git rev-parse --is-inside-work-tree` returns `true`. Otherwise skip the gate and do not initialize Git. Immediately on entry before normal
 routing, execution, or any path change, and immediately after an integration rebase or merge
 command, product, arch, design, adopt, split, work, verify, and resume check whether `git status` reports an open rebase or merge.
 When either is open, stop normal routing and report
@@ -220,7 +221,8 @@ re-running the owning skill** — never edited in passing during a task. And mod
 means **replacement by default**: if you added a line, check whether you deleted the stale
 one. A document that only grows is a dead document.
 Target ownership is fixed: product owns product.md and glossary.md; arch owns arch.md,
-code-style.md, and decisions/; design owns design.md; adopt owns arch.md `Existing records`;
+code-style.md, and decisions/; design owns design.md; adopt owns arch.md `Existing records`
+and may add only a missing `Brownfield` field to an existing arch.md;
 split owns the tree and task cards; verify owns verify.md.
 
 A document still being produced by a running product, arch, design, or adopt session is
@@ -371,9 +373,12 @@ decisions. These records do not directly change card or folder status. A task ca
   **A depth-1 capability folder receives it
   only after capability-layer verification** — verify grants it. The foundation folder
   (01) is not a capability: it closes with no scenario rite under the same condition
-- At the tree root, a `.md` whose number and name exactly match a non-retired product.md
-  capability is a waiting capability file, not a task card. Its body is the single line
-  `# <number> <capability name>`; it has no `Approval`, `Review`, or completion signal.
+- Tree numbers are assigned once: foundation is `01`; capabilities receive `02`, `03`, …
+  in product.md's capability-list order at first root opening, and a capability added
+  later receives the next unused number. At the tree root, a `.md` is a
+  waiting capability file, not a task card, when its name equals a non-retired product.md
+  capability's name and its number is that assigned tree number. Its body is the single
+  line `# <number> <capability name>`; it has no `Approval`, `Review`, or completion signal.
   When opening the capability, split turns this file into the same-numbered, same-named
   folder and creates its direct task cards
 - A retired capability gets `.stale` when it is an opened folder, or `.stale.md` when it
@@ -386,6 +391,12 @@ decisions. These records do not directly change card or folder status. A task ca
 
 ## Commit Discipline
 
+- **Layer 0 commit**: product, arch, design, and adopt land each core document in one
+  commit immediately after the user confirms it — message `<skill> — <document filename>`
+  (adopt lands all adoption documents together as `adopt — layer 0`). A document created
+  alongside another (glossary.md with product.md) rides the same commit. A single-field
+  completion of an existing document uses the same message form. In multi this commit is a
+  binding decision.
 - **Planning commit**: split bundles newly created or revised pending cards,
   user-confirmed card-dependency format corrections, tree structure, card Approval and
   Review, arch.md `Settled by` replacements, verify.md
@@ -499,7 +510,10 @@ decisions. These records do not directly change card or folder status. A task ca
   Land an Audit/Retrospective event's pending, result, and decision states respectively as
   `boundary — verify event <Audit|Retrospective> <source id> <pending|result|decision>`.
   In multi every verification-state commit, including `boundary — verify source ids`, is
-  shared state, so land it on the integration branch.
+  shared state, so land it on the integration branch. A working-tree state that one of these
+  commits, or the `boundary — begin <capability number>` commit, specifies before that commit
+  lands is a **canonical verification-state transition**; a consumer finishes its specified
+  commit first without re-executing.
 - **git belongs to the main session.** Subagents implement and write the progress log —
   they never commit, rename, or push.
 - multi: prefix commit messages with your id — `<id> 02.2 signup API`,

@@ -70,4 +70,6 @@ Preview: <path or route>
 | Name | Status (exists / to-build) |
 ```
 
+Immediately after the user confirms design.md, land it in the canonical Layer 0 commit.
+
 On completion: one line — "next is split."

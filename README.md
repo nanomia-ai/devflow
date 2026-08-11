@@ -114,7 +114,7 @@ devflow/
       02.3-webhook.md               a waiting card
       verify.md                     capability verification record (left by verify)
     03-reporting.md               one-heading waiting file for an unopened capability
-  journal.md                   ← one-line cross-card decisions and interruption-recovery markers (swept when a capability closes)
+  journal.md                   ← one-line cross-task decisions and interruption-recovery markers (swept when a capability closes)
   HANDOFF.md                   ← volatile handoff — next single step · just learned · traps · open decisions only, overwritten each time
 ```
 
@@ -349,9 +349,9 @@ Every mode transition is a single-commit procedure:
 | Teammate leaves | (after the user declares it) anyone remaining: promote open decisions to journal (attributed) → release their claims → delete the room |
 
 Half-finished transitions (multi mode but a bare `.wip.` or a root HANDOFF remains)
-are detected and reported by resume's integrity check — nothing goes wrong
-silently. Sessions find their room via git identity; sessions that cannot resolve one
-(CI · bots) only read.
+are detected and reported by the integrity check at the gates that open the tree (split
+and resume) — nothing goes wrong silently. Sessions find their room via git identity;
+sessions that cannot resolve one (CI · bots) only read.
 
 owner.md is two lines:
 

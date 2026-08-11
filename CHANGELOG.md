@@ -6,6 +6,68 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.22 — 2026-08-11 — the seams between v0.9.21's flows close
+
+An independent verification campaign over the v0.9.21 redesign — six fresh-context passes
+(two literal-execution simulators, a refuter, a design-lineage audit, a mechanical
+fact-check, a platform review) — confirmed the redesign's core flows recover
+deterministically, and found its defects concentrated at the seams between flows. This
+release closes them without touching the v0.9.21 architecture.
+
+Vocabulary and reference repairs: resume's read-prohibition list now names the Record's
+actual `Executed` and `Journal sweep` fields; "canonical verification-state transition" is
+defined once in the canonical rules and covers the capability begin commit, so a session
+that died after writing the passing record and closing marker resumes into finishing that
+begin commit instead of a false integrity anomaly (resume's marker row now requires HEAD,
+and verify step 8 requires the landed begin commit); four phantom procedure names
+(final-task recovery, lost-claim procedure, bounded projection, interrupted-boundary
+repair) now resolve to real text; "durably approved" collapsed into the state predicates'
+"effective"; the multi state-sync gate tests tip state instead of the undefined
+"unfinished transition commit"; the open-Git-operation gate carries its name; the Audit's
+scope calculation no longer imports step 5's unverified-and-route action.
+
+State-seam repairs: a canonical **Layer 0 commit** lands each core document immediately
+after user confirmation (`<skill> — <document filename>`, `adopt — layer 0`), so verify's
+refusal of uncommitted revision inputs has a sanctioned upstream; the product layer's
+dirty-path refusal now lands through the running→result single flight with verdict
+`unverified` (the capability layer follows the step-2 pattern through step 6); cancelling
+a committed maintenance request deletes its layer-opening marker with it; work checks for
+an active layer-opening marker naming its own claimed card before resuming an interrupted
+promotion; tree numbers have an assignment convention (foundation `01`, capabilities in
+product.md list order from `02`, later additions take the next unused number), making the
+waiting-file predicate satisfiable; arch gained the Brownfield field-only clause and the
+canon sanctions adopt's equivalent; split gained the correspondence-restoration procedure
+resume was already routing to, and product covers the retired-without-representation cell;
+step 5's Standards scope terms are bounded and judgeable from arch.md alone; the
+evidence-finalizing recovery list includes the compatible document update and foundation
+closures; the Approval-reset rule is scoped to split's start. The legacy Codex hook
+remover now also matches the pre-0.9.0 "Loading nano-devflow state" registration.
+
+docs/design.md: philosophy item 3 now distinguishes task progress (file tree + progress
+log) from canonical transition state (journal and verify.md lines with fixed formats);
+three missing v0.9.21 lineage rows were added (the remote-evidence state machine, Approval
+freshness, and the Windows `cmd /d /s /c` binary pipe — recorded with its 2026-08-11
+reproduction in this repository: the PowerShell object pipeline actually corrupts the
+hash while POSIX and cmd pipes agree); the durable-knowledge row cites the v0.9.18
+observation-cache rejection that `Existing records` avoids; the decision table's three
+detached tail rows render again. README: "cross-task decisions" (the canonical term)
+replaces a coinage, and the integrity check is attributed to both gates; the two-line
+edit adds and removes no `—` or `**` (verified by diff).
+
+Verification of this entry: three Fable passes — a 22-case repair verification that
+re-walked every original defect (21 closed, one repair itself introduced a
+conflicting-instruction defect), then a micro-batch closing that finding plus two
+low-severity ones and one Korean-side phrase variant, spot-checked afterward. 51/51 Node
+tests; ko↔en structure parity on every changed pair; zero Korean lines in changed English
+deploy artifacts. Codex/Claude reinstall is pending the owner's rerun (noted, not yet
+performed).
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `README.md`;
+`README_ko.md`; `docs/design.md`; `docs/design_ko.md`; all Korean/English SKILL pairs for
+principles, product, arch, design, adopt, split, work, verify, and resume;
+`scripts/remove-legacy-codex-hook.js`; `scripts/remove-legacy-codex-hook.test.js`;
+`scripts/repository-invariants.test.js`; `CHANGELOG.md`.
+
 ## docs — 2026-08-11 — capability knowledge is planned and validated without runtime adoption
 
 JGNote, Nanomia ADE, and RDSF Data Server are treated as failure-path clues rather than

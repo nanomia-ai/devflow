@@ -8,7 +8,8 @@ const os = require("node:os");
 const path = require("node:path");
 
 function isLegacyDevflowHook(hook) {
-  if (hook.type !== "command" || hook.statusMessage !== "Loading devflow state" ||
+  const statusMessages = ["Loading devflow state", "Loading nano-devflow state"];
+  if (hook.type !== "command" || !statusMessages.includes(hook.statusMessage) ||
       hook.timeout !== 15 || typeof hook.command !== "string") return false;
   const command = hook.command.trim();
   return [

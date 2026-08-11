@@ -26,8 +26,9 @@ Purpose: carry one task card all the way to its completion signal, then commit.
      judgment below. If feedback enters the Document Hierarchy procedure, that procedure
      deletes the evidence line and this completion path ends. Apply a compatible update to
      the working tree through the discovery→update table before the `.done.` rename and
-     land it in the boundary commit below. Make no final task commit; finish only the card's `.done.` rename, applicable intermediate-folder
-     closures, HANDOFF, and line deletion in a boundary commit. If that rename and deletion
+     land it in the boundary commit below. Make no final task commit; finish only the card's
+     `.done.` rename, the compatible document update above, applicable foundation and
+     intermediate-folder closures, HANDOFF, and line deletion in a boundary commit. If that rename and deletion
      already started in the working tree, finish that boundary first
    - When `evidence-wait`→`evidence-finalizing` and its pass result exist only in the
      working tree, run `check-json` again. On a current pass, make no final task commit yet;
@@ -54,8 +55,9 @@ Purpose: carry one task card all the way to its completion signal, then commit.
 
    After remote-evidence transitions, if the canonical claim→done move is uncommitted, or
    the last commit changing one of my claimed cards that no evidence record names has the
-   canonical final task subject, open no new work. Follow the canonical final-task recovery
-   and finish only upper-document feedback and the boundary.
+   canonical final task subject, open no new work. The final task commit is already complete
+   under the canonical commit discipline; make no second final task commit and finish only
+   upper-document feedback and the boundary.
 
    Exclude a remaining valid `evidence-wait` card from the claim count below. If one
    `.wip.` (solo) or `.wip-<my id>.` (multi) card remains, it comes first; open no new work.
@@ -72,6 +74,9 @@ Purpose: carry one task card all the way to its completion signal, then commit.
    member is unparseable, or a number does not resolve to exactly one card, report an
    integrity anomaly and stop. If any resolved card is not `.done.`, do not resume
    implementation; return to split, release the original card, and finish the prerequisite.
+   If journal in HEAD or the working tree has an active layer-opening marker whose
+   `source-json` decodes to a `card:` locator naming my claimed card, do not resume
+   implementation; return to split to finish that marker's planning commit first.
 3. When no claim of mine remains after excluding evidence-wait, claim the next pending card
    that is ready under the state predicates and begin. Return to split to normalize a
    noncanonical `Depends`; report and stop on an integrity anomaly. Do not claim a card
@@ -83,7 +88,7 @@ Purpose: carry one task card all the way to its completion signal, then commit.
    `<id> 02.4 claim`). Land this initial claim on integration as the canonical binding
    decision and include that tip in the current branch before implementation. If a
    competing claim rejects the integration update, fetch again and follow the canonical
-   lost-claim procedure.
+   rules' lost-claim rule (copy my progress log into the surviving card and step back).
 
 ## The Loop
 

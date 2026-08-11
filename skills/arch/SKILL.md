@@ -102,7 +102,8 @@ merge: merge-commit | rebase            # multi only. Squash forbidden — it er
 `Brownfield` records whether implementation code existed before devflow entered this
 repository. arch writes `no` for a new project; adopt writes `yes` when deriving from
 existing code. This value selects how the first tree is created; it is not implementation
-progress.
+progress. When an existing arch.md lacks only the `Brownfield` field, ask that one
+question, add only the field, and change nothing else.
 
 `Existing records` is only a locator index for handoff and specification files that
 adopt checked against code. Each line contains a product.md capability name or `shared`,
@@ -175,5 +176,8 @@ method. Cap: 1 page.
 
 ## Non-goals                     <!-- this project's 2–3 YAGNI declarations -->
 ```
+
+Immediately after the user confirms arch.md or code-style.md, land it in the canonical
+Layer 0 commit.
 
 On completion: if `frontend: needed` — "design (optional) or split"; if `none` — "split."

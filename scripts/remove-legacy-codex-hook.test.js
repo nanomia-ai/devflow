@@ -86,6 +86,24 @@ test("matches single-quoted and unquoted predecessor commands", () => {
   }
 });
 
+test("removes a predecessor registered under the nano-devflow status message", () => {
+  const root = {
+    hooks: {
+      SessionStart: [{
+        hooks: [{
+          type: "command",
+          command: 'node "C:/plugins/nano-devflow/scripts/session-start.js"',
+          timeout: 15,
+          statusMessage: "Loading nano-devflow state",
+        }],
+      }],
+    },
+  };
+
+  assert.equal(removeLegacyDevflowHook(root), 1);
+  assert.equal(root.hooks.SessionStart, undefined);
+});
+
 test("preserves similarly named hooks that lack the predecessor's exact shape", () => {
   const custom = {
     hooks: [{

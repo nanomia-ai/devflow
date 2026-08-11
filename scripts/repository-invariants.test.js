@@ -282,7 +282,7 @@ test("explicit product verification and capability closure markers have resume c
   assert.match(verify, /rejoin the branch determined by steps 4 and 5/);
   assert.match(verify, /before selecting the entry, first land this run's complete verify\.md and all its\s+new pending entries as `boundary — capability verification result <capability number>`/);
   assert.match(principles, /Land a capability verification's fail or unverified result[\s\S]*`boundary — capability verification result <capability number>`/);
-  assert.match(resume, /valid capability-closing marker exists in the working tree or HEAD/);
+  assert.match(resume, /valid capability-closing marker exists in HEAD/);
   assert.match(resume, /first finish the missing output and that state or routing commit/);
 });
 
@@ -448,7 +448,7 @@ test("normal task completion has one final commit and a restartable boundary", (
   assert.match(principles, /Whether git reports a rename or a deletion plus untracked\s+file is not part of the judgment/);
   assert.match(principles, /that commit includes the claimed card and its progress log/);
   assert.match(principles, /before writing any status rename, HANDOFF, journal, verify\.md, or feedback\s+document change/);
-  assert.match(work, /Follow the canonical final-task recovery/);
+  assert.match(work, /make no second final task commit/);
   assert.match(work, /rename rides the next wip checkpoint or final\s+task commit that contains the card/);
   assert.ok(
     work.indexOf("Multi integration gate") > work.indexOf("Final task commit")

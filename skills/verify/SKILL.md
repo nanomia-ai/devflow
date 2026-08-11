@@ -72,17 +72,29 @@ line in neither class is an integrity anomaly; report it and do not verify.
 Start the capability layer only when the target depth-1 capability folder has at least
 one direct child that is not `.stale.`, and every such child has a `.done` status. An
 empty folder, a folder with no active direct child, or an active direct child without
-`.done` returns to split or resume's interrupted-boundary repair. A `.stale.` task card
+`.done` returns to split, or to resume's non-capability-folder boundary row (add `.done`
+from the deepest matching folder upward). A `.stale.` task card
 is history and is excluded from this judgment. At the start of either layer, calculate
 the revisions by the verification predicates. Step 2 routes an `unresolved` Capability revision.
 
 Before either layer, combine the non-empty output
 of `git diff --name-only`, `git diff --cached --name-only`, and
-`git ls-files --others --exclude-standard`. If any path does not start with `devflow/`,
-record unverified and do not execute. Neither layer executes with an uncommitted change to
-the revision inputs product.md, arch.md, code-style.md, or glossary.md. The capability layer
-also refuses an uncommitted change inside its target capability folder or any resolved
-direct-dependency card. A product verdict is reusable only for the current Product revision,
+`git ls-files --others --exclude-standard`. Neither layer executes with an uncommitted
+change to the revision inputs product.md, arch.md, code-style.md, or glossary.md. The
+capability layer also refuses an uncommitted change inside its target capability folder or
+any resolved direct-dependency card. In those two cases, report the exact blocking paths,
+write no Record, and stop. Otherwise, if any path does not start with `devflow/`,
+record unverified and do not execute. At the product layer, take the running-marker
+transition below with trigger `requested` when a request line exists and `automatic`
+otherwise, do not brief the verifier, write the complete tree-root Record with verdict
+`unverified` and `source id: <new id>; timestamp: <timestamp>; unverified: uncommitted
+paths outside devflow — <exact paths>; routing: pending` in Failure history, then replace
+the running marker with that verdict's result marker and land
+`boundary — product verification result`. At the capability layer, write that capability's
+verify.md Record with verdict `unverified` and `source id: <new id>; timestamp:
+<timestamp>; unverified: uncommitted paths outside devflow — <exact paths>; routing:
+pending` in Failure history, and send it through step 6, which lands the capability result
+commit. A product verdict is reusable only for the current Product revision,
 Verification revision, and Code revision combination.
 
 Product verification has exactly one active journal-state kind: `product verification
@@ -174,8 +186,10 @@ section below).
      the capability to exact repository-relative folders or files, use those paths. When
      no exact mapping exists, start at every external entry point for that capability in
      product.md's Screens & access points and arch.md's Components, trace repository-owned
-     code, stop before an already-identified boundary of another capability, and use the
-     exact traversed files plus directly used shared-contract files. A folder is a scope
+     code, stop before a boundary of another capability identified earlier in this trace or
+     mapped exactly by arch.md's Code structure, and use the exact traversed files plus
+     directly used shared files (paths arch.md maps as shared or assigns to no single
+     capability). A folder is a scope
      only when arch.md maps it exactly to that capability. If an entry point or boundary
      does not resolve uniquely, record `unverified`, route to arch to correct Code
      structure, and stop. Compare the exact files and current repository-owned source
@@ -233,9 +247,10 @@ section below).
    `git ls-files --others --exclude-standard`. Every path in that set must start with
    `devflow/`. If any condition then fails, rerun the capability layer and replace the pass and
    marker in a new begin commit.
-8. When a valid capability-closing marker exists, finish its interrupted closure. Classify
-   every journal line. Do not delete a marker, request, evidence-wait, or evidence-
-   finalizing line whose exact format the canonical rules define during this sweep; only
+8. When a valid capability-closing marker exists in HEAD with its begin commit landed,
+   finish its interrupted closure. Classify every journal line. Do not delete a marker,
+   request, evidence-wait, or evidence-finalizing line whose exact format the canonical
+   rules define during this sweep; only
    the current capability-closing marker is deleted when closure below finishes. Retain a
    cross-task decision with no target. A cross-task decision that now has an exact core-
    document target is a valid late decision: retain the marker, report its source line and
@@ -381,7 +396,9 @@ never summarized**, and give it only product.md's description of that capability
 whole product.md at the product layer), verify_channel, and `capability code scope`. Mark
 each item `root: <repository-relative folder>` or `file: <repository-relative file>`.
 Before an Audit, regardless of verdict, calculate every needed capability scope at that
-time by the current-topology rule in step 5's Standards gate. A capability Audit uses its
+time by the current-topology rule in step 5's Standards gate. When a needed scope does not
+resolve uniquely, do not apply step 5's unverified-and-route action; apply this section's
+scope-unresolved handling instead. A capability Audit uses its
 one target; a product Audit uses the union for every non-retired capability. If any scope of a pending event does
 not resolve exactly, do not brief the role. Replace pending with `source id: <same id> ·
 event timestamp: <same timestamp> · event key: <same key> · not run: scope unresolved —

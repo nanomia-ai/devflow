@@ -57,13 +57,22 @@ Never split everything upfront. Earlier implementation changes later decompositi
 what you don't know, you learn by writing code, and splitting then is accurate and cheap.
 
 When first opening the tree root under `Brownfield: no`, create exactly one waiting file
-with the same number and name for each non-retired product.md capability. This file is not
+for each non-retired product.md capability, named with its assigned tree number and the
+capability name. This file is not
 a task card and has no fields beyond the one heading line shown above. Present the
 number-to-name mapping for user approval, then land the waiting files and deletion of the
 layer-opening marker in one planning commit. Before opening the first capability, the next
 split creates `01-foundation/` together with the direct task cards required for repo setup
 and the verify channel. `01-foundation/` must have at least one direct card and must never
 be committed empty.
+
+**Restoring product.md-to-tree correspondence** (routed by resume): for each non-retired
+product.md capability with neither a matching folder nor waiting file, create its waiting
+file with its assigned tree number; under `Brownfield: no`, for each retired capability
+with neither a `.stale` folder nor `.stale.md` file, create the `.stale.md` file. Write
+the canonical layer-opening marker first with source
+`core:devflow/project/product.md#Capabilities` and the numbers as `children`, present the
+plan for approval, and land the files and marker deletion in one planning commit.
 
 Before first changing the parent folder, children, or waiting file, including when adding
 direct children to an existing folder, determine every direct-child number to create and
@@ -96,8 +105,8 @@ missing, from that same source. Mint no number outside the marker. If the source
 determine one Destination, ask the user only for that Destination and create no child
 before the answer. A marker child exists when its number matches the leading number of
 exactly one direct child under the parent; multiple matches are an integrity anomaly.
-Once every number has one match, reapprove only an execution proposal not yet durably
-approved, then finish the cards, approvals, structure, and marker deletion in that layer's
+Once every number has one match, reapprove any execution proposal whose cards' `Approval`
+is not effective under the state predicates, then finish the cards, approvals, structure, and marker deletion in that layer's
 planning commit. A layer interrupted after its begin commit mints no new number.
 
 When journal has a `re-split pending` marker, process one before a normal layer: choose
@@ -263,8 +272,11 @@ create a card or folder, or delete the line before canonical item-12 recovery fi
 
 Delete the request line and layer-opening marker in the same planning commit that lands
 the cards, approvals, and required folder rename. If the user cancels while the line is
-uncommitted, delete it; if it is already committed, land deletion of the line alone as a
-binding-decision commit. Keep it while a mapping question or execution-proposal approval
+uncommitted, delete it together with any uncommitted marker and draft cards minted for it.
+If the line is already committed and its layer-opening marker
+exists in HEAD or the working tree, land one binding-decision commit that deletes both the
+marker and the line and discards any uncommitted draft cards minted for it; with no marker,
+land deletion of the line alone as a binding-decision commit. Keep it while a mapping question or execution-proposal approval
 remains unresolved. After interruption, its decoded value is the current request.
 
 1. **Map the request's scope to a location.** Shared foundations, cross-capability
@@ -321,10 +333,10 @@ delete trailing prose and replace the field with the canonical value. Ask the us
 unparseable replacement; never infer it. Put the confirmed correction in a planning
 commit without changing other fields or status. Release a claimed card first.
 
-When a pending card's `Approval` is not `pending` but is ineffective under the state
-predicates, report the exact reason and reset it to `pending`. Present the whole current
-card in a new execution proposal, then land the new approval value and card change together
-in the planning commit.
+When split starts with a pending card whose
+`Approval` is not `pending` but is ineffective under the state predicates, report the
+exact reason and reset it to `pending`. Present the whole current card in a new execution
+proposal, then land the new approval value and card change together in the planning commit.
 
 **Never write the implementation method.** Destination, completion signal, and Forbidden
 are the entire harness. Only T-low cards additionally get ordering hints (see the harness

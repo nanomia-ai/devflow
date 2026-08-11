@@ -94,6 +94,9 @@ normalized string to contain the other. A test with either normalized string emp
    waste. Opening the tree is split's job — capability folder names must be the same
    words as the reverse-derived capability list, so new work accumulates in the right place.
 
+Immediately after the user confirms the adoption documents, land them together in the
+canonical Layer 0 commit.
+
 On completion: if the user already requested a post-adoption change, first write split's
 exact `maintenance routing pending` line in journal and put it in the same commit as the
 confirmed adoption documents, then say "next is split." If no change was requested, say "adoption complete — waiting for a new change
