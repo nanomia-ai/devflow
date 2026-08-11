@@ -6,6 +6,31 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.10.1 — 2026-08-11 — the README explains the baseline to humans; the installers say which Codex home they target
+
+0.10.0 shipped the capability knowledge baseline as machine contract and wiring, with
+nothing a person could read to decide whether to turn it on. The README now carries one
+section, "Entering a domain — the capability knowledge baseline", placed after the
+closing-rite material and before the design principles: what gets written when a
+capability closes on a pass, the one `capability_baseline` line in arch.md that turns it
+on (and which project shape each value suits), the three devices that keep the file from
+going stale (wholesale rewrite, two git-command freshness checks, demotion to hypothesis),
+how split and work pick it up without being asked, what little a human does with it, and
+the hand-run domain handoff it systematizes. Tone rules applied, counts for this entry:
+README_ko `—` 49→50, raw `**` markers 66→70; README `—` 81→82, raw `**` markers 80→84 —
+the added em-dash is the new heading's subtitle separator, the added markers are two bold
+spans per language, and bureaucratic closure compounds stay 0→0.
+
+Both Codex installers now print `Codex home: <path>` before doing anything, and a second
+NOTE line when the `CODEX_HOME` environment variable is set. The reason is an observed
+incident: a host tool set `CODEX_HOME` to its own runtime copy of the Codex home, so the
+plugin install landed there and the real `~/.codex` silently missed it, with nothing in
+the output to show where anything went. The line is visibility only — no path the
+installers write to changed.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `README.md`;
+`README_ko.md`; `codex/install.ps1`; `codex/install.sh`; `CHANGELOG.md`.
+
 ## 0.10.0 — 2026-08-11 — the capability knowledge baseline runs: verified closures write domain blueprints
 
 The v2.2 contract leaves the proposal and enters the runtime. A new canonical companion,

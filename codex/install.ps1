@@ -6,6 +6,15 @@
 $ErrorActionPreference = "Stop"
 
 $devflowRoot = Split-Path $PSScriptRoot -Parent
+
+# Show which Codex home this run targets. A tool that sets CODEX_HOME to its own runtime
+# copy makes an install land there and silently miss ~/.codex.
+$codexHome = if ($env:CODEX_HOME) { $env:CODEX_HOME } else { Join-Path $HOME ".codex" }
+Write-Host "Codex home: $codexHome"
+if ($env:CODEX_HOME) {
+    Write-Host "NOTE: CODEX_HOME is set - the codex CLI installs the plugin into that home; generated prompts go to ~/.codex/prompts."
+}
+
 $promptsDir = Join-Path $HOME ".codex\prompts"
 New-Item -ItemType Directory -Force $promptsDir | Out-Null
 

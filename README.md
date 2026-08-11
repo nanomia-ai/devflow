@@ -185,7 +185,7 @@ in neither the tree nor any card.
 | design | only with a frontend (optional) | design.md · token file · /preview | the canon for colors and spacing is a token file, not a document |
 | split | breaking down work | capability folders · task cards in tree/ + the execution proposal (order · parallelism · model tiers — a user approval gate) | opens one layer at a time — earlier implementation reshapes later decomposition |
 | work | implementation | code · in-card progress log · commits | log to disk before running — whenever the session dies, reading the card is enough to continue |
-| verify | capability complete · MVP reached | verify.md · fix cards (on failure) · audit and retrospective findings (event-triggered) | what was not executed is not passed — it is unverified |
+| verify | capability complete · MVP reached | verify.md · fix cards (on failure) · audit and retrospective findings (event-triggered) · capability knowledge baseline (when enabled) | what was not executed is not passed — it is unverified |
 | resume | new session | nothing — a state report, then approval (only multi mode's digest procedure corrects shared documents) | when HANDOFF and the tree conflict, the tree wins |
 | principles | read before running by the other eight skills | — | the canonical rules live in exactly one place |
 
@@ -272,6 +272,40 @@ flowchart TB
 ```
 
 The outcome this drives: **a defect met once cannot escape through the same door twice.**
+
+## Entering a domain — the capability knowledge baseline
+
+When a capability passes verification and closes, devflow writes that domain's blueprint.
+One capability, one file, at `devflow/project/capabilities/NN-<name>.md`. **The next
+session, and a teammate who just joined, read that one file and are inside the domain.**
+It holds the conceptual model, a main flow diagram, what a user can do right now, the
+invariants, the traps that must not recur, and how to verify it.
+
+One arch.md line turns it on. The arch and adopt interviews ask for the value, recommending
+yes for a large service meant to live long and no for a small MVP. A missing line means no.
+
+```
+capability_baseline: yes | no
+```
+
+Three devices keep it from going stale. First, **every time a capability closes on a pass,
+devflow rewrites the file whole.** No history section, no old layer patched on top. Second,
+the machine block at the end of the file checks freshness with two git commands. Third, a
+statement whose inputs that check found moved is demoted to a hypothesis. The reader does
+not take it as written and rechecks it against current code. The baseline is not canonical.
+On a conflict, code and ADRs win.
+
+It flows into the work on its own. Once the file exists, whenever split creates a new
+implementation card it puts that capability's baseline into the card's `Read first`, and
+work reports one freshness line as it opens the card.
+
+Your part is small. Read it when you enter a domain. You may delete a line you have confirmed wrong.
+Never add one. Additions arrive only when the capability next closes on a pass. A retired
+capability needs no cleanup.
+
+This systematizes the domain handoff the owner ran by hand, one briefing document per
+domain. The strengths stay. The traps, the verification procedures, the orientation you get
+on first read. Freshness and size are now the machine's job.
 
 ## Design principles
 

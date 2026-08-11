@@ -7,6 +7,15 @@
 set -e
 
 DEVFLOW_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+
+# Show which Codex home this run targets. A tool that sets CODEX_HOME to its own runtime
+# copy makes an install land there and silently miss ~/.codex.
+CODEX_HOME_RESOLVED="${CODEX_HOME:-$HOME/.codex}"
+echo "Codex home: $CODEX_HOME_RESOLVED"
+if [ -n "${CODEX_HOME:-}" ]; then
+  echo "NOTE: CODEX_HOME is set - the codex CLI installs the plugin into that home; generated prompts go to ~/.codex/prompts."
+fi
+
 PROMPTS_DIR="$HOME/.codex/prompts"
 mkdir -p "$PROMPTS_DIR"
 
