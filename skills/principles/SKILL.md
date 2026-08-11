@@ -190,6 +190,8 @@ What you discovered → where to update:
 | Discovery | Update target |
 |---|---|
 | Feature, screen, or scope changed | product.md (+ mark affected cards that need replacement work `.stale.` + the `re-split pending` markers above) |
+| A capability's name changed | product.md's capability row + the same-numbered tree folder or waiting file (a waiting file's body line takes the new name too) + that capability's baseline file + every arch.md `Existing records` line that names it, renamed together in one binding-decision commit (+ replace the old baseline path in `Read first` on pending or claimed cards carrying it, and any path inside that folder that HANDOFF names). Code paths and arch.md's Code structure keep naming what exists on disk, and that sketch entry still maps to this capability; moving code is a separate card. The number never changes and no card moves. Land it only while no canonical journal marker or evidence record names that folder or a path inside it |
+| A capability turns out to be two | product.md — narrow the existing row and append the new capability — and arch.md's Code structure for the path split. The existing folder keeps its number, its cards, and its history; the new capability gets no folder and no card now. No card is backfilled or moved. When narrowing also changes the existing capability's name, it goes through the rename row above as well |
 | Stack, module boundary, or data shape doesn't fit | arch.md (+ consider an ADR) |
 | A value the upper document called provisional is now measured | that row of arch.md's Provisional table — **replace it, don't add beside it**. An ADR that assumed the old value gets a dated update note |
 | A Provisional row's settling card is 'unminted' and the tree has reached its layer | create the settling card and replace 'unminted' in that arch.md row with its number |
@@ -199,6 +201,7 @@ What you discovered → where to update:
 | A new coding-convention decision is needed | one line in code-style.md "Project choices" |
 | A verification means is newly created or changed | the means line of arch.md's verify_channel |
 | A file in arch.md's `Existing records` moved or no longer matches current code | replace or delete that exact path (+ `Read first` in pending or claimed cards carrying it) |
+| A decision recorded in an ADR is reversed or no longer applies | write the successor ADR, add a dated update note to the superseded one naming that successor path, and replace the superseded path in `Read first` on pending or claimed cards carrying it |
 | A new term becomes necessary | one line in glossary.md |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | A cross-task decision | one line in journal.md |
@@ -391,8 +394,10 @@ decisions. These records do not directly change card or folder status. A task ca
 - A retired capability gets `.stale` when it is an opened folder, or `.stale.md` when it
   is an unopened waiting file. Every card status inside an opened retired folder is void.
   The hook and the integrity check do not count inside `.stale` folders
-- File base names and numbers are immutable identifiers. No renumbering, no reuse.
-  Mid-insertions use the `02.2b` form
+- File base names and numbers are immutable identifiers. No renumbering, no reuse. A
+  capability's number is likewise immutable; only the name half of its product.md row, its
+  tree folder or waiting file, and its baseline file changes, and only together through the
+  discovery→update row above. Mid-insertions use the `02.2b` form
 - Record files that are not cards (`verify.md`, etc.) carry no status suffix and are
   excluded from status judgment
 

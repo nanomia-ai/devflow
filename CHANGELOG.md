@@ -6,6 +6,66 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.10.2 — 2026-08-11 — year-two events get a landing, and the README catches up to the runtime
+
+A completeness audit asked a different question than the defect hunts had: given what this
+is for, what is missing? The execution and recovery machinery came back complete, and the
+gaps clustered entirely at the events a service meets in its second year rather than its
+first week.
+
+Three of them now land through the discovery→update table. **Renaming a capability** used
+to corrupt the tree — the folder stopped matching product.md, split's correspondence
+restoration minted a second file at the same number, and the integrity check reported a
+duplicate with no repair path, while the baseline contract already assumed a rename event no
+skill could produce. One row now renames the product row, the same-numbered folder or
+waiting file with its body line, the baseline, and every arch.md `Existing records` line
+that names the capability, in a single binding-decision commit that also repairs the paths
+`Read first` and HANDOFF carry. The number never moves, code paths keep naming what exists
+on disk, and the commit lands only while no canonical journal or evidence record names that
+folder. **A capability that turns out to be two** had a signal recommending a split whose
+only documented landing was incoherent, because the new capability owned code that already
+existed and backfilling cards for it is forbidden. It now narrows the product row, appends
+the new capability, splits the paths in arch.md's Code structure, and gives the new
+capability no folder and no card yet. **A reversed ADR** can be superseded: write the
+successor, add a dated update note naming it to the old one, and replace that path in the
+cards carrying it. resume's report now names the baseline path when the next stage has one,
+so a person can open a domain without holding one of its cards.
+
+The README was two releases behind. 0.9.22, 0.9.23, and 0.10.0 had landed almost nothing in
+it, so a documentation audit found 23 factual errors and several mechanisms a human operator
+needs but could not learn there. Corrected: resume produces folder closures and a boundary
+commit rather than nothing; the journal sweep protects canonical state lines and routes
+decisions to their owning skill instead of promoting them; the verdict has three values, not
+two; split runs three times before the first capability, with work starting after the
+second; the card read set includes product.md and design.md; multi has three standing
+habits; reviewer gates the task commit and only the user waives it; the integrity check
+moved out of the team section because it runs in solo too. Added: an ownership table naming
+every path under `devflow/` with who writes it, who reads it, and when it changes; a **When
+devflow stops and asks you** section listing the nine points where a human decides; a
+first-time entry in the flow diagram, so the picture no longer answers "where do I start"
+with resume; and the three-state-classes principle from v0.9.22, whose absence had made the
+whole disk-state layer invisible to a README reader.
+
+docs/design.md records six observations the audit found and this release deliberately leaves
+open, including the canon's growth from 217 lines at v0.9.9 to 553, which every skill and
+every delegated implementer reads in full. Splitting that read scope by consumer is the next
+release's candidate; it changes no on-disk data, so it can wait without a migration.
+
+Verification: two Opus audits (completeness, README accuracy), then a cross-source
+verification that found 9 defects at the seams — an incomplete rename guard that could
+strand a capability closure unrecoverably, a self-contradictory Code-structure clause, and
+seven README claims contradicting their own adjacent text — all repaired and re-audited.
+51/51 Node tests; ko↔en structure parity on every pair; zero Korean lines in English deploy
+artifacts. README tone counts: README.md em-dash 82→89, raw `**` 84→105; README_ko.md
+em-dash 50→59, raw `**` 70→91. The added em-dashes are all the term-definition form, and the
+added bold spans are the lead-ins of the new decision-point list.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `README.md`;
+`README_ko.md`; `docs/design.md`; `docs/design_ko.md`; `skills/principles/SKILL.md`;
+`skills/principles/SKILL_ko.md`; `skills/principles/baseline-predicates.md`;
+`skills/principles/baseline-predicates_ko.md`; `skills/resume/SKILL.md`;
+`skills/resume/SKILL_ko.md`; `CHANGELOG.md`.
+
 ## 0.10.1 — 2026-08-11 — the README explains the baseline to humans; the installers say which Codex home they target
 
 0.10.0 shipped the capability knowledge baseline as machine contract and wiring, with

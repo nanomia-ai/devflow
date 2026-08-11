@@ -50,7 +50,7 @@ Each file has only these 12 sections, in this order.
   at two consecutive baselines. The preceding baseline is the existing file being
   replaced, and an absent predecessor file means no. When it
   fires, report the possibility of splitting the capability and let the user decide. An
-  adopted split is a product.md change through the discovery→update table's feature-scope row.
+  adopted split is a product.md change through the discovery→update table's capability-split row.
 - Rows marked `external` in the Traps section are excluded from the cap count. Only
   non-external rows count toward the cap and the split signal; when external rows exceed the
   cap, only report a request for a human deletion pass.
@@ -168,10 +168,11 @@ three comparisons.
   mandatory: `baseline no-op: <reason>`. That report is not durable, and while the cause
   remains the next closure reports the same line again. A format anomaly in another file is
   reported only, and this refresh proceeds.
-- Outside the refresh at closure, the only change permitted to a baseline file is a deletion,
-  and it lands in a binding-decision commit.
-- Derive capability retirement from current product.md and tree state. Neither edit nor rename
-  the baseline file.
+- Outside the refresh at closure, the only changes permitted to a baseline file are a deletion
+  and the rename specified by the discovery→update table's capability-rename row, and both land
+  in a binding-decision commit.
+- Derive capability retirement from current product.md and tree state. A retirement neither
+  edits nor renames the baseline file.
 
 ## Accepted limits
 

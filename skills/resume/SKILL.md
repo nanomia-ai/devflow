@@ -62,6 +62,10 @@ Report what you read in **one paragraph**:
 The progress log reaches <last point>; the next step is <one step>. Proceed?"
 ```
 
+When arch.md `capability_baseline` is `yes` and the next stage names a capability whose
+baseline file exists, name that file's exact path in the report so a human can open it; do
+not read its contents.
+
 Once approved, continue into the stage named in the report. Never modify code before
 approval.
 

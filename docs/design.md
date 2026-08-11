@@ -246,6 +246,22 @@ Other:
 - ~~resume's missing re-run branch~~ — implemented in v0.9.21: resume judges a waiting
   product re-run in journal before work, then branches to product, split, work, or verify
   from disk state.
+- The foundation folder (01) is not a capability, so it has neither a knowledge baseline nor
+  a verification rite — the component-baseline rejection ground (no independent verification
+  boundary) was not aimed at the foundation. Re-examine if the foundation comes to hold many
+  shared contracts.
+- A change to shared code (the foundation, shared contracts) does not rerun the regressions
+  of the capabilities that use it. The baseline may detect this as a hypothesis, but it fires
+  no verification. Re-examine if shared changes become frequent.
+- The retrospective does not take capability knowledge baselines as input — even though they
+  are the densest design record there is. Unlike the audit's blindness, the retrospective has
+  no recorded ground for the exclusion.
+- design.md has no row in the discovery→update table (only the upper-violation path exists).
+  It is not an input to Verification revision either, so a design.md change does not make a
+  verdict stale.
+- verify.md preserves its Failure history, Audit, and Retrospective sections forever and so
+  grows without bound. resume is protected by its bounded projection, but the retrospector
+  reads every verify.md in full at the product layer.
 
 ## On hold — candidates for coming versions
 
@@ -274,3 +290,10 @@ gate forces this document to be read).
   base. The choices are (A) make design produce the plan only and put real artifacts in a
   foundation card, or (B) return to design after foundation work. This changes the Layer 0
   and task-tree boundary, so the current order is not forcibly rearranged before the owner chooses.
+- **The size of the canonical rules** — the canonical rules grew from 217 lines (v0.9.9) to
+  553 lines (v0.10.1), and all 8 skills plus every delegated implementer read the whole document.
+  For a solo T-low card, the journal formats, the 16 integrity items, the routing write order,
+  the remote-evidence state machine, the verification-state commits, and the multi rules never
+  fire once. The proportional answer is not deletion but **splitting the read scope per
+  consumer** (what an implementer needs versus what a router or a recoverer needs), and it
+  changes no on-disk data format, so it can be done safely at any time.
