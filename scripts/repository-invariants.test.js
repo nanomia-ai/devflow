@@ -14,6 +14,7 @@ const pairRelatives = [
   ...skillDirs.map((dir) => path.relative(root, path.join(dir, "SKILL_ko.md"))),
   "skills/principles/state-predicates_ko.md",
   "skills/principles/verification-predicates_ko.md",
+  "skills/principles/baseline-predicates_ko.md",
   "skills/work/reviewer_ko.md",
   "skills/verify/verifier_ko.md",
   "skills/verify/auditor_ko.md",
@@ -127,6 +128,7 @@ test("both Codex installers embed each predicate companion only for its consumer
   const ps1 = fs.readFileSync(path.join(root, "codex", "install.ps1"), "utf8");
   const sh = fs.readFileSync(path.join(root, "codex", "install.sh"), "utf8");
   const verificationPredicates = fs.readFileSync(path.join(root, "skills", "principles", "verification-predicates.md"), "utf8");
+  const baselinePredicates = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
   const consumers = skillDirs
     .filter((dir) => fs.readFileSync(path.join(dir, "SKILL.md"), "utf8")
       .includes("`../principles/state-predicates.md`"))
@@ -139,6 +141,19 @@ test("both Codex installers embed each predicate companion only for its consumer
     .map((dir) => path.basename(dir))
     .sort();
   assert.deepEqual(verificationConsumers, ["resume", "verify"]);
+  const baselineConsumers = skillDirs
+    .filter((dir) => fs.readFileSync(path.join(dir, "SKILL.md"), "utf8")
+      .includes("`../principles/baseline-predicates.md`"))
+    .map((dir) => path.basename(dir))
+    .sort();
+  assert.deepEqual(baselineConsumers, ["resume", "verify"]);
+  for (const name of ["split", "work"]) {
+    assert.doesNotMatch(
+      fs.readFileSync(path.join(root, "skills", name, "SKILL.md"), "utf8"),
+      /baseline-predicates\.md/,
+      `${name} must not pull the baseline companion into its generated prompt`,
+    );
+  }
   assert.match(ps1, /\$usesStatePredicates = \$body\.Contains\('\`\.\.\/principles\/state-predicates\.md\`'\)/);
   assert.match(ps1, /if \(\$usesStatePredicates\) \{\s+\$companions \+= @\("", "---", "", \$statePredicates\.TrimEnd\(\)\)/);
   assert.match(sh, /resume\|split\|verify\|work\)/);
@@ -147,7 +162,11 @@ test("both Codex installers embed each predicate companion only for its consumer
   assert.match(ps1, /if \(\$usesVerificationPredicates\) \{\s+\$companions \+= @\("", "---", "", \$verificationPredicates\.TrimEnd\(\)\)/);
   assert.match(sh, /resume\|verify\)/);
   assert.match(sh, /printf '%s\\n' "\$VERIFICATION_PREDICATES"/);
+  assert.match(ps1, /\$usesBaselinePredicates = \$body\.Contains\('\`\.\.\/principles\/baseline-predicates\.md\`'\)/);
+  assert.match(ps1, /if \(\$usesBaselinePredicates\) \{\s+\$companions \+= @\("", "---", "", \$baselinePredicates\.TrimEnd\(\)\)/);
+  assert.match(sh, /printf '%s\\n' "\$BASELINE_PREDICATES"/);
   assert.doesNotMatch(verificationPredicates, /`state-predicates\.md`|`\.\.\//);
+  assert.doesNotMatch(baselinePredicates, /`state-predicates\.md`|`\.\.\//);
 });
 
 test("task-local execution state stays on the card, not in journal or an assignment field", () => {
@@ -354,12 +373,12 @@ test("the capability-knowledge proposal separates coverage from mutable task sta
   assert.match(proposal, /Any other diff under\s+`capabilities\/` is still an anomaly\./);
   assert.match(proposal, /\*\*add the baseline to all four exclusivity phrasings\*\*/);
   assert.match(proposal, /Step 8's three operations \(verify\.md sweep → journal → folder rename\) are unchanged\./);
-  assert.match(proposal, /Closure and the Scope head calculation happen on the integration branch\s+after a fetch, so a stored head always remains an ancestor\./);
+  assert.match(proposal, /Closure and both head calculations happen on the integration branch\s+after a fetch, so a stored head always remains an ancestor\./);
   assert.match(proposal, /\*\*Durability — shape tolerance\*\*: a file with a different section or field set is a\s+hypothesis, and the next closure heals it\./);
   assert.match(proposal, /a baseline failure\s+is a report plus a no-op, and closure proceeds/);
-  assert.match(proposal, /One line in the closure report is\s+mandatory: “baseline no-op: <reason>”\./);
+  assert.match(proposal, /Reporting one line to the user at that\s+closure is mandatory: “baseline no-op: <reason>”\./);
   assert.match(proposal, /delete a trap or a Verify item only when its\s+reproduction condition has vanished from current code/);
-  assert.match(proposal, /put the baseline path and the existing paths from the Binding ADRs\s+section in `Read first` on a new implementation card/);
+  assert.match(proposal, /whenever split creates or revises a pending implementation card[\s\S]*put the baseline path and the\s+existing paths from the Binding ADRs section in each such card's `Read first`/);
   assert.match(proposal, /it is an anomaly\s+when a pending or claimed implementation card below a capability whose switch is yes\s+and whose baseline file exists lacks that baseline's exact path in `Read first`/);
   assert.match(proposal, /resume reads only the list of filenames under\s+`capabilities\/` in step 1 \(never the contents\)/);
   assert.match(proposal, /\*\*Wiring — the full machine contract\*\* lives in\s+`skills\/principles\/baseline-predicates\.md`/);

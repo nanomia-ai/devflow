@@ -7,7 +7,8 @@ description: Verification. Checks acceptance criteria at the capability and prod
 
 First read all of the canonical rules (`../principles/SKILL.md`), the canonical state
 predicates (`../principles/state-predicates.md`), the canonical verification predicates
-(`../principles/verification-predicates.md`), `devflow/project/product.md`,
+(`../principles/verification-predicates.md`), the canonical capability knowledge baseline
+predicates (`../principles/baseline-predicates.md`), `devflow/project/product.md`,
 `devflow/project/arch.md`, and
 `devflow/project/code-style.md`. If present, also read all of
 `devflow/project/glossary.md` and `devflow/journal.md`.
@@ -39,11 +40,12 @@ finish the result commit. Current revisions and a new verdict with any completen
 missing are a partial write. Do not commit that file. Repeat the product procedure from step
 2, replace the partial file with the complete result, and finish the same result transition.
 
-At the capability layer, when the whole diff is only that capability's verify.md and it has
+At the capability layer, when the whole diff is only that capability's verify.md and, when
+present, bytes at that capability's exact baseline path, and that verify.md has
 current revisions, a new pass, execution evidence, and every preserved section, but either
 `Standards: pending for current pass` or `Provisional: pending for current pass`, do not
 brief the verifier again. Recalculate both step-5 gates, replace both fields, and take the
-branch below. When that sole changed file is complete, do not execute again. Finish
+branch below. When that verify.md file is complete, do not execute again. Finish
 `boundary — capability verification result
 <capability number>` for fail, unverified, or pass with a closure-gate failure. A pass that
 clears both gates proceeds to step 7's capability-closing begin commit. Current revisions
@@ -232,11 +234,20 @@ section below).
    path
 7. **Capability layer passes → capability-closing begin commit.** Write the passing result
    to verify.md and create the canonical capability-closing marker. Its `head` is HEAD
-   immediately before committing those two files; `product`, `verification`, and
-   `capability` are the run's three revisions. First land only passing verify.md and
-   the marker in `boundary — begin <capability number>`; before that commit, do not rename
-   the folder or change another journal line. An interruption that leaves the pass and
-   marker only in the working tree finishes the same begin commit first.
+   immediately before committing those files; `product`, `verification`, and
+   `capability` are the run's three revisions. When arch.md `capability_baseline` is `yes`,
+   refresh the closing capability's baseline by the baseline predicates — read the standard
+   refresh set once and replace the file wholesale — before creating the marker. When the
+   refresh cannot run or a format anomaly involving the closing capability's number or path
+   is found, write no baseline, let closure proceed,
+   and report one line to the user at that closure: `baseline no-op: <reason>`.
+   First land only the passing verify.md, the marker, and — when arch.md
+   `capability_baseline` is `yes` — the closing capability's refreshed baseline file in
+   `boundary — begin <capability number>`; before that commit, do not rename
+   the folder or change another journal line. An interruption that leaves in the working tree
+   only the pass, any bytes at the closing capability's baseline path, and — when already
+   created — the marker finishes the same begin commit first; the baseline predicates govern
+   regenerating that baseline file before the commit.
 
    After interruption, when the whole working-tree diff is a canonical step-8 closure
    prefix, skip the following checks and go to step 8. Otherwise first reapply the

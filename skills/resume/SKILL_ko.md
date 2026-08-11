@@ -7,7 +7,8 @@ description: 재개. 새 세션에서 Layer 0 문서·작업 트리·검증 기�
 
 먼저 규칙 정본(`../principles/SKILL.md`)·상태 판정 정본
 (`../principles/state-predicates.md`)·검증 판정 정본
-(`../principles/verification-predicates.md`)을 읽는다.
+(`../principles/verification-predicates.md`)·능력 지식 기준선 판정 정본
+(`../principles/baseline-predicates.md`)을 읽는다.
 
 목적: 새 세션이 트리가 있으면 아래의 유계 읽기로 상태를 복원하고, 없으면 Layer 0 문서에서
 다음 단계를 판정해 이어간다.
@@ -15,7 +16,9 @@ description: 재개. 새 세션에서 Layer 0 문서·작업 트리·검증 기�
 ## 절차 — 트리가 있을 때, 이 순서 그대로
 
 ```
-1. product.md의 정체성 문단·능력 목록과 arch.md의 브라운필드·integration 필드
+1. product.md의 정체성 문단·능력 목록과 arch.md의 브라운필드·integration·`capability_baseline`
+   필드. arch.md `capability_baseline`이 `yes`이면 `devflow/project/capabilities/` 바로 아래
+   파일 이름 목록까지 (이름만 — 내용은 절대 읽지 않는다)
 2. devflow/tree/ 전체 목록                  ← 어디까지 왔는지 (.done. / .wip. / 대기)
 3. 내 점유 카드는 통독. 남의 점유는 경로와 점유자만. 모든 대기 카드에서는
    `의존`·`승인`·`검토` 필드만 읽는다

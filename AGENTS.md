@@ -25,6 +25,7 @@ Canonical relation:  *_ko.md = design original (owner review)  →  translate  �
 Pairs:               skills/<name>/SKILL_ko.md ↔ SKILL.md
                      skills/principles/state-predicates_ko.md ↔ state-predicates.md
                      skills/principles/verification-predicates_ko.md ↔ verification-predicates.md
+                     skills/principles/baseline-predicates_ko.md ↔ baseline-predicates.md
                      skills/work/reviewer_ko.md ↔ reviewer.md (role contract)
                      skills/verify/verifier_ko.md ↔ verifier.md (role contract)
                      skills/verify/auditor_ko.md ↔ auditor.md (role contract)
@@ -41,9 +42,10 @@ English-only (no pair): AGENTS.md (this file), CHANGELOG.md,
 The role contracts (`reviewer.md` · `verifier.md` · `auditor.md` · `retrospector.md`) are companion files beside their
 skills — briefing documents delivered verbatim to a clean context on every platform,
 not registered agents. The Codex installers embed each role contract into its skill's
-generated prompt. `state-predicates.md` and `verification-predicates.md` are canonical
-companions, not role contracts. The installers embed task-card predicates into split,
-work, verify, and resume, and verification predicates into verify and resume only.
+generated prompt. `state-predicates.md`, `verification-predicates.md`, and
+`baseline-predicates.md` are canonical companions, not role contracts. The installers embed
+task-card predicates into split, work, verify, and resume, and verification predicates and
+baseline predicates into verify and resume only.
 
 Modification procedure (order is fixed):
 
@@ -230,7 +232,11 @@ borrowing text into this repository still needs prior permission.
 | 유지보수 라우팅 대기 | maintenance routing pending | | 재분할 대기 | re-split pending |
 | 상태 판정 정본 | canonical state predicates | | 검증 판정 정본 | canonical verification predicates |
 | 정본 경로 순서 | canonical path order | | 정본 카드 번호 순서 | canonical card-number order |
-| 라우팅 준비 | routing prepared | | | |
+| 라우팅 준비 | routing prepared | | 능력 지식 기준선 | capability knowledge baseline |
+| 가설 | hypothesis | | | |
+
+Note: a hypothesis is the trust state of a capability knowledge baseline — a separate
+concept from the `unverified` verdict, which is a verification result.
 
 Note: as the field name inside `arch.md` the verify channel is written `verify_channel` —
 the underscore form is the field identifier; the spaced form is prose. They are one

@@ -20,16 +20,19 @@ function Get-SkillBody($path) {
 $principles = Get-SkillBody (Join-Path $devflowRoot "skills\principles\SKILL.md")
 $statePredicates = Get-SkillBody (Join-Path $devflowRoot "skills\principles\state-predicates.md")
 $verificationPredicates = Get-SkillBody (Join-Path $devflowRoot "skills\principles\verification-predicates.md")
+$baselinePredicates = Get-SkillBody (Join-Path $devflowRoot "skills\principles\baseline-predicates.md")
 
 Get-ChildItem (Join-Path $devflowRoot "skills") -Directory | Where-Object { $_.Name -ne "principles" } | ForEach-Object {
     $name = $_.Name
     $body = Get-SkillBody (Join-Path $_.FullName "SKILL.md")
     $usesStatePredicates = $body.Contains('`../principles/state-predicates.md`')
     $usesVerificationPredicates = $body.Contains('`../principles/verification-predicates.md`')
+    $usesBaselinePredicates = $body.Contains('`../principles/baseline-predicates.md`')
     # Replace the relative canon reference with the embedded-section pointer
     $body = $body -replace [regex]::Escape('`../principles/SKILL.md`'), "the Canonical Rules section below"
     $body = $body -replace [regex]::Escape('`../principles/state-predicates.md`'), "the Canonical State Predicates section below"
     $body = $body -replace [regex]::Escape('`../principles/verification-predicates.md`'), "the Canonical Verification Predicates section below"
+    $body = $body -replace [regex]::Escape('`../principles/baseline-predicates.md`'), "the Canonical Capability Knowledge Baseline Predicates section below"
     # Embed companion documents (role contracts etc.) and repoint their references
     $tick = [char]96
     $companions = @()
@@ -52,6 +55,9 @@ Get-ChildItem (Join-Path $devflowRoot "skills") -Directory | Where-Object { $_.N
     }
     if ($usesVerificationPredicates) {
         $companions += @("", "---", "", $verificationPredicates.TrimEnd())
+    }
+    if ($usesBaselinePredicates) {
+        $companions += @("", "---", "", $baselinePredicates.TrimEnd())
     }
     $out = (@(
         "<!-- devflow (generated $(Get-Date -Format yyyy-MM-dd)) -->"

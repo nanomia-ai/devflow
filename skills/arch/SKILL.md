@@ -32,6 +32,8 @@ Correct?
 ### 2. Stack questions — in one batch
 2–3 candidates per component + my recommendation + a one-line reason. No comparison
 tables. State defaults.
+Ask `capability_baseline` as one question in the same batch — recommend yes for a large,
+long-lived service and no for a small MVP.
 
 ### 3. Derived questions — decisions that only exist once the stack is chosen
 Find the decisions that fork because of the chosen stack and ask them as one batch —
@@ -91,6 +93,7 @@ Brownfield: no
 ## Risks            <!-- 3 things that break first + how to check each -->
 ## Out of scope     <!-- what this architecture does not carry -->
 
+capability_baseline: yes | no            # absent = no. yes: every capability's capability-layer closure refreshes its capability knowledge baseline
 frontend: none | needed
 verify_channel:
   work server: <run command + port>     # verification always happens here
@@ -110,6 +113,12 @@ adopt checked against code. Each line contains a product.md capability name or `
 a colon, and one exact file path. The same name may repeat on multiple lines. A path here
 is not a read instruction and does not make the file canonical. work opens it only after
 split rechecks it for the change scope and puts it in the card's `Read first`.
+
+`capability_baseline` turns the capability knowledge baseline on. With `yes`, every
+capability's capability-layer closure refreshes that capability's baseline under
+`devflow/project/capabilities/`; absent means `no`. Changing the value is a binding decision
+that lands through the arch row of the discovery→update table, and the baseline predicates
+own the full judgment.
 
 ### Provisional — the architecture you do not know yet
 

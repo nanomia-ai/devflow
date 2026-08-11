@@ -77,6 +77,8 @@ normalized string to contain the other. A test with either normalized string emp
 3. Reverse-derive `arch.md` **in the arch skill's output format**, write
    `Brownfield: yes`, present it as a draft, and get user confirmation. If an existing
    arch.md lacks only this field, add the field without re-deriving its other content.
+   Include `capability_baseline` in the confirmation-question batch — recommend yes for a
+   large, long-lived service, and absent means no.
    Inherited forever after. The verify channel
    applies arch's "Verify-channel decision" section as-is, gate included — this skill
    does not finish until it is decided. The git check (propose `git init` if not a

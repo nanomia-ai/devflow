@@ -63,9 +63,9 @@ baseline's Covered cards`. Covered cards is an array of the non-`.stale.` `.done
 task-card numbers summarized by the baseline, stored in canonical card-number order (for
 example, `["02.2","02.2b","02.10"]`). Every current pending, claimed, or done card absent
 from that array and not `.stale.` is a post-baseline change. This does not tell work to
-read every change card automatically. work keeps its existing read set; at final
-capability closure, verify reads the standard refresh set once and replaces the baseline
-wholesale. An existing-record index becomes such an input only after split rechecks it
+read every change card automatically. work keeps its existing read set; at
+capability-layer closure, verify reads the standard refresh set once and replaces the
+baseline wholesale. An existing-record index becomes such an input only after split rechecks it
 against the current change scope and puts it in a card's `Read first`. A baseline file
 copies no current card status, progress, assignee, or next work; Covered cards records
 only past inclusion. Capability expertise therefore does not replace task splitting or
@@ -160,12 +160,13 @@ prose. Each file has only these 12 sections, in this order.
 
 - The total cap is ~140 lines, and the first 40 lines are the domain itself. Restate no
   contract body; keep only locations and invariants. Leave out anything self-evident.
-- A write over the cap still succeeds. It leaves one repair-needed line in the closure
-  report instead. **The “twice in a row” judgment asks whether the existing file being
+- A write over the cap still succeeds. Report one repair-needed line to the user at that
+  closure instead. **The “twice in a row” judgment asks whether the existing file being
   replaced already exceeded the cap in the same section** — it is read straight from
-  disk, so no counter is needed, and an absent predecessor file means no. When it fires,
-  report the possibility of splitting the capability and let the user decide; an adopted
-  split takes the existing maintenance routing path.
+  disk, so no counter is needed, and an absent predecessor file means no. The total cap
+  belongs to the same two-in-a-row signal. When it fires,
+  report the possibility of splitting the capability and let the user decide. An adopted
+  split is a product.md change through the discovery→update table's feature-scope row.
 - **Rows marked `external` in the Traps section are excluded from the cap count.**
   Accumulating external-system traps is intended preservation, so only non-external rows
   count toward the cap and the split signal; when external rows overflow, only report a
@@ -180,7 +181,7 @@ prose. Each file has only these 12 sections, in this order.
 
 - **A one-line arch.md switch**: `capability_baseline: yes | no`. **Absent means no** (the
   existing absence-detection pattern, unchanged). In a project set to yes, every
-  capability's final closure refreshes its baseline. Creation and refresh share one name,
+  capability's capability-layer closure refreshes its baseline. Creation and refresh share one name,
   “refresh”; the first refresh is the creation.
 - A flip is a binding decision routed through the arch row of the discovery→update table.
   no→yes starts producing baselines at the next closure, and a capability that is never
@@ -208,23 +209,24 @@ prose. Each file has only these 12 sections, in this order.
   baseline has already landed by then.
 - In multi mode, the baseline of a begin that is not yet shared is machine-local, so it
   needs no regeneration rule; the existing pass-reuse condition governs tip advance
-  unchanged. Closure and the Scope head calculation happen on the integration branch
+  unchanged. Closure and both head calculations happen on the integration branch
   after a fetch, so a stored head always remains an ancestor. The reading cost of another
   capability's baseline diff is accepted.
 - **Durability — shape tolerance**: a file with a different section or field set is a
   hypothesis, and the next closure heals it. No version field.
 - **Durability — the knowledge layer never blocks the execution axis**: a baseline failure
-  is a report plus a no-op, and closure proceeds. One line in the closure report is
-  mandatory: “baseline no-op: <reason>”.
+  is a report plus a no-op, and closure proceeds. Reporting one line to the user at that
+  closure is mandatory: “baseline no-op: <reason>”.
 - **Durability — the deletion predicate**: delete a trap or a Verify item only when its
   reproduction condition has vanished from current code. A trap marked `external` is
   deleted only by a human.
 - **Durability — human edits may only delete** (in a binding-decision commit). No detector
   is added. The next closure's wholesale replacement erases human-added narrative, so
   exposure is bounded to one cycle.
-- **Wiring — split**: put the baseline path and the existing paths from the Binding ADRs
-  section in `Read first` on a new implementation card for a capability whose switch is
-  yes and whose baseline exists. The integrity-check predicate reads: it is an anomaly
+- **Wiring — split**: whenever split creates or revises a pending implementation card for a
+  capability whose switch is yes and whose baseline exists, put the baseline path and the
+  existing paths from the Binding ADRs section in each such card's `Read first` — one rule,
+  independent of the card-creation path. The integrity-check predicate reads: it is an anomaly
   when a pending or claimed implementation card below a capability whose switch is yes
   and whose baseline file exists lacks that baseline's exact path in `Read first`
   (research cards excluded).

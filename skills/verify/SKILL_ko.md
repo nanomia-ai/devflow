@@ -7,7 +7,8 @@ description: 검증. 능력 단위·제품 단위로 실제 실행을 통해 수
 
 먼저 규칙 정본(`../principles/SKILL.md`)·상태 판정 정본
 (`../principles/state-predicates.md`)·검증 판정 정본
-(`../principles/verification-predicates.md`)·`devflow/project/product.md`·
+(`../principles/verification-predicates.md`)·능력 지식 기준선 판정 정본
+(`../principles/baseline-predicates.md`)·`devflow/project/product.md`·
 `devflow/project/arch.md`·`devflow/project/code-style.md`를 통독한다. 존재하면
 `devflow/project/glossary.md`와 `devflow/journal.md`도 각각 통독한다.
 
@@ -33,10 +34,11 @@ diff를 본다. 그 diff가 정규 검증 상태 전환 하나 또는 실패 이
 끝낸다. 현재 revision과 새 판정은 있지만 완성 조건 중 하나라도 없으면 부분 작성이다. 그 파일을
 커밋하지 말고 제품 절차를 2단계부터 다시 수행해 완성본으로 교체한 뒤 같은 결과 전환을 끝낸다.
 
-능력층에서 전체 diff가 대상 능력의 verify.md 하나뿐이고 현재 revision·새 통과·실행 근거·보존할
-절을 모두 가지지만 `Standards: pending for current pass` 또는 `Provisional: pending for current pass`가
+능력층에서 전체 diff가 대상 능력의 verify.md와, 있다면 그 능력의 정확한 기준선 경로의 바이트뿐이고
+그 verify.md가 현재 revision·새 통과·실행 근거·보존할 절을 모두 가지지만
+`Standards: pending for current pass` 또는 `Provisional: pending for current pass`가
 있으면 verifier를 다시 부르지 않고 5단계의 두 게이트를 모두 다시 계산해 두 필드를 교체한다. 그
-결과로 아래 분기를 고른다. 같은 diff의 파일이 완성본이면 실행을 반복하지 않는다. 실패·미검증
+결과로 아래 분기를 고른다. 그 verify.md 파일이 완성본이면 실행을 반복하지 않는다. 실패·미검증
 또는 폐쇄 게이트 실패가 붙은 통과이면 `경계 정리 — 능력 검증 결과 <능력 번호>`
 커밋을 끝내고, 게이트까지 통과한 통과이면 7단계의 능력 닫기 시작 커밋으로 간다. 현재 revision과
 새 판정은 있지만 완성 조건 중 하나라도 없으면 부분 작성이다. 그 파일을 커밋하지 말고 능력 절차를
@@ -191,11 +193,18 @@ Product revision·Verification revision·Code revision을 쓰고, verifier를 �
    `verify:<verify.md 경로>#실패 이력@<출처 id>`다. 한 판정의 여러 실패는 각각 자기 라우팅을 갖는다.
    다중: 수정 카드는 무기명(대기)으로 만들고 통상 실행 제안·점유 경로를 따른다
 7. **능력층 통과 → 능력 닫기 시작 커밋.** 통과 결과를 verify.md에 쓰고 규칙 정본 형식의 능력
-   닫기 마커를 만든다. 마커의 `head`는 이 두 파일을 커밋하기 직전 HEAD고 `product`·
-   `verification`·`capability`은 이번 판정의 세 revision이다. 통과 verify.md와
-   마커만 `경계 정리 — begin <능력 번호>` 커밋으로 먼저 착지시키고, 그 전에는 폴더를 rename하거나
-   다른 journal 줄을 바꾸지 않는다. 통과 결과와 마커가 현재 체크아웃에만 남은 중단도 같은 시작
-   커밋부터 끝낸다.
+   닫기 마커를 만든다. 마커의 `head`는 이 파일들을 커밋하기 직전 HEAD고 `product`·
+   `verification`·`capability`은 이번 판정의 세 revision이다. arch.md `capability_baseline`이
+   `yes`이면 마커를 만들기 전에 기준선 판정 정본대로 폐쇄 능력의 기준선을 갱신한다 — 표준 갱신
+   집합을 한 번 읽고 파일을 전면 교체한다. 갱신을 실행할 수 없거나 폐쇄 능력의 번호·경로에
+   관련된 형식 이상을 찾으면 기준선을
+   쓰지 않고 폐쇄를 그대로 진행하며 그 폐쇄에서 사용자에게 `기준선 무연산: <이유>` 한 줄을
+   보고한다.
+   통과 verify.md와 마커, 그리고 arch.md `capability_baseline`이 `yes`이면 폐쇄 능력의 갱신된
+   기준선 파일만 `경계 정리 — begin <능력 번호>` 커밋으로 먼저 착지시키고, 그 전에는 폴더를 rename하거나
+   다른 journal 줄을 바꾸지 않는다. 통과 결과와 폐쇄 능력의 기준선 경로에 있는 임의 바이트,
+   그리고 이미 만들었다면 마커만 현재 체크아웃에 남은 중단도 같은 시작 커밋부터 끝내며, 그 커밋
+   전 그 기준선 파일의 재생성은 기준선 판정 정본이 지배한다.
 
    중단 뒤 전체 working-tree diff가 8단계의 정규 폐쇄 접두 상태이면 아래 판정을 건너뛰고 8단계로
    간다. 그 밖에는 기존 마커를 판정하기 전에 위의 미커밋 revision 입력 금지를 다시 적용한다. 대상 카드·

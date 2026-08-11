@@ -78,6 +78,10 @@ When a confirmed product.md exists and only glossary.md is missing, do not repea
 interview or modify product.md. Copy terms whose meanings product.md already fixes, ask
 one question batch only for terms that lack definitions, and create only glossary.md.
 
+The capability list is append-only — a retired row keeps its place, rows are never deleted
+or reordered, and additions go at the end of the list. The number of a capability not yet
+holding one on disk is derived from that position (the canonical rules' status notation).
+
 When a capability retires during maintenance, do not delete it from the list — leave one
 line: `④ ~~name~~ — retired (date, evidence pointer)` (numbers are immutable
 identifiers). The capability's tree folder gets `.stale` (the canonical rules' status

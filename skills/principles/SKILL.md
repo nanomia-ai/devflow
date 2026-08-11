@@ -149,9 +149,10 @@ YYYY-MM-DDTHH:MM:SSZ evidence-finalizing: card-json: <JSON string containing the
 
 Before creating a layer's first child or folder, land its layer-opening record together
 with any uncommitted source record in a `split — begin <parent>` commit. Land a capability-
-closing record together with the passing verify.md record in a
+closing record together with the passing verify.md record and, when arch.md's
+`capability_baseline` is `yes`, the closing capability's baseline file, in a
 `boundary — begin <capability number>` commit, before the folder rename or any other
-journal change. Both remain active until the
+journal change (the baseline predicates govern that baseline file's absence). Both remain active until the
 next commit deletes them. If the working tree lacks one but HEAD contains it and its deletion
 is uncommitted, a consumer treats it as active and finishes the interrupted commit first.
 These begin commits are not task commits.
@@ -223,7 +224,8 @@ one. A document that only grows is a dead document.
 Target ownership is fixed: product owns product.md and glossary.md; arch owns arch.md,
 code-style.md, and decisions/; design owns design.md; adopt owns arch.md `Existing records`
 and may add only a missing `Brownfield` field to an existing arch.md;
-split owns the tree and task cards; verify owns verify.md.
+split owns the tree and task cards; verify owns verify.md and
+`devflow/project/capabilities/`.
 
 A document still being produced by a running product, arch, design, or adopt session is
 a draft until the user confirms it — reconcile a draft's contradictions by editing the
@@ -294,6 +296,9 @@ corruption. Correct only after user approval.
     more than one `product verification running` or `product verification result` line;
     or a result line whose product, verification, code, or verdict field differs from the
     corresponding tree-root verify.md field?
+16. With arch.md `capability_baseline` at `yes`, does a pending or claimed implementation
+    card under a capability whose baseline file exists omit that baseline's exact path from
+    `Read first` (research cards excluded)?
 
 An item-12, item-13, item-14, or item-15 anomaly blocks later routing and every tree write. Present the raw line, the
 expected format, and the whole proposed replacement to the user. Use in that proposal
@@ -374,8 +379,10 @@ decisions. These records do not directly change card or folder status. A task ca
   only after capability-layer verification** — verify grants it. The foundation folder
   (01) is not a capability: it closes with no scenario rite under the same condition
 - Tree numbers are assigned once: foundation is `01`; capabilities receive `02`, `03`, …
-  in product.md's capability-list order at first root opening, and a capability added
-  later receives the next unused number. At the tree root, a `.md` is a
+  in product.md's capability-list order at first root opening. A capability not yet holding a number on disk
+  derives it from its product.md list position — the first capability is 02, and a retired
+  row keeps its place and counts. Once a folder, waiting file, or baseline holds a number,
+  disk is the sole authority. At the tree root, a `.md` is a
   waiting capability file, not a task card, when its name equals a non-retired product.md
   capability's name and its number is that assigned tree number. Its body is the single
   line `# <number> <capability name>`; it has no `Approval`, `Review`, or completion signal.
@@ -513,7 +520,12 @@ decisions. These records do not directly change card or folder status. A task ca
   shared state, so land it on the integration branch. A working-tree state that one of these
   commits, or the `boundary — begin <capability number>` commit, specifies before that commit
   lands is a **canonical verification-state transition**; a consumer finishes its specified
-  commit first without re-executing.
+  commit first without re-executing. For the `boundary — begin <capability number>` commit,
+  the specified state is the passing verify.md record, one exact baseline path of the closing
+  capability (absent, partial, or any bytes), and — when already created — the
+  capability-closing record; the baseline predicates govern that baseline file's regeneration
+  before that commit lands. Any other
+  `devflow/project/capabilities/` diff is an integrity anomaly.
 - **git belongs to the main session.** Subagents implement and write the progress log —
   they never commit, rename, or push.
 - multi: prefix commit messages with your id — `<id> 02.2 signup API`,

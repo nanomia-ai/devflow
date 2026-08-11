@@ -6,8 +6,9 @@ description: Resume. In a new session, reads the Layer 0 documents, task tree, v
 # resume — Resume
 
 First read the canonical rules (`../principles/SKILL.md`), canonical state predicates
-(`../principles/state-predicates.md`), and canonical verification predicates
-(`../principles/verification-predicates.md`).
+(`../principles/state-predicates.md`), canonical verification predicates
+(`../principles/verification-predicates.md`), and canonical capability knowledge baseline
+predicates (`../principles/baseline-predicates.md`).
 
 Purpose: a new session restores state from the bounded reads below when the tree exists; without a
 tree, it derives the next stage from the Layer 0 documents and continues.
@@ -15,8 +16,10 @@ tree, it derives the next stage from the Layer 0 documents and continues.
 ## Procedure — when the tree exists, in exactly this order
 
 ```
-1. product.md's identity paragraph and capability list; arch.md's Brownfield and
-   integration fields
+1. product.md's identity paragraph and capability list; arch.md's Brownfield,
+   integration, and capability_baseline fields; and the list of file names directly under
+   `devflow/project/capabilities/` when arch.md `capability_baseline` is `yes`
+   (names only — never the contents)
 2. devflow/tree/ full listing                      ← how far things got (.done. / .wip. / pending)
 3. my claimed card in full. For others' claims, path and claimant only. From every
    pending card, read only `Depends`, `Approval`, and `Review`

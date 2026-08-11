@@ -149,6 +149,21 @@ description: 구현. 작업 카드 하나를 잡아 코딩하고, 진행 로그�
 1층 능력 폴더가 규칙 정본의 검증 게이트에 닿으면 → verify(능력층) 제안
 ```
 
+`읽을 것`이 `devflow/project/capabilities/` 아래의 능력 지식 기준선을 지목하면, 그것은 그
+능력의 마지막 검증 폐쇄 시점이다. 세 비교를 한다. `git log -1 --format=%H --`에 `Scope paths`의
+각 멤버를 `:(literal)` 패스스펙 하나씩으로, 각각 인용된 인자 하나로 주어 실행한다. 출력이
+`Scope head`와 같으면 코드 진술은 신선하고 — 다르거나 비면 가설이다.
+`git log -1 --format=%H -- devflow/project/product.md devflow/project/arch.md
+devflow/project/code-style.md devflow/project/glossary.md devflow/project/design.md`를
+실행한다. 출력이 `Docs head`와 다르거나 비면 제품·문서 진술은 가설이다. 그 능력 트리 폴더 아래
+비-`.stale.` `.done.` 카드 번호를 이름만으로 정본 카드 번호 순서로 열거해 `Covered cards`와
+다르면 기준선 전체가 가설이다. 코드 진술은 주 흐름·수명주기·진입점·함정·Verify 절이고,
+제품·문서 진술은 목적 한 줄·개념 모델·현재 행위·불변식·하지 않기로 한 것 절이다. 가설 진술은
+구현에 쓰기 전에 기존 읽기 집합과 코드 탐색 경계 안의 현재 권위 경로에서 재확인하고, 어느
+경계도 넓히지 않는다.
+`기준선 <Verified at>, <N>개 포함, 이후 <M>개 카드` 한 줄을 보고한다. 이 문단은 능력 지식
+기준선 판정 정본을 그대로 옮긴 것이며 그것을 다르게 정의하지 않는다.
+
 ## 카드를 벗어나야 할 때 — 멈추고 위로
 
 카드 범위 밖(공유 계약·코어·타 능력)을 고쳐야 하면:
@@ -187,7 +202,8 @@ description: 구현. 작업 카드 하나를 잡아 코딩하고, 진행 로그�
 - **카드가 작업 단위를 정의한다.** 브리핑은 카드 경로 + 규칙 정본 경로 +
   `devflow/project/product.md` + `devflow/project/arch.md` + `devflow/project/code-style.md` + 존재하는
   `devflow/project/design.md` +
-  `devflow/project/glossary.md`·`devflow/journal.md` + 직접 의존 카드 경로 전부다.
+  `devflow/project/glossary.md`·`devflow/journal.md` + 직접 의존 카드 경로 전부 +
+  `읽을 것`이 능력 지식 기준선을 지목하면 세 신선도 비교의 결과(어느 진술군이 가설인지)다.
   그 밖의 대화 경위는 넘기지 않는다. 위임자는 카드를 읽은 뒤 그 카드의 `읽을 것` 경로를
   그대로 연다. arch 절 이름을 `읽을 것`에 넣지 않는다. T-하 등급이면 카드의 `읽을 것`이
   완전한지 먼저 확인하고, 부족하면 보강 후 투입.

@@ -18,6 +18,7 @@ strip_fm() { awk 'BEGIN{fm=0} /^---$/{if(fm<2){fm++; next}} fm!=1{print}' "$1"; 
 PRINCIPLES="$(strip_fm "$DEVFLOW_ROOT/skills/principles/SKILL.md")"
 STATE_PREDICATES="$(strip_fm "$DEVFLOW_ROOT/skills/principles/state-predicates.md")"
 VERIFICATION_PREDICATES="$(strip_fm "$DEVFLOW_ROOT/skills/principles/verification-predicates.md")"
+BASELINE_PREDICATES="$(strip_fm "$DEVFLOW_ROOT/skills/principles/baseline-predicates.md")"
 
 for dir in "$DEVFLOW_ROOT"/skills/*/; do
   name="$(basename "$dir")"
@@ -25,7 +26,8 @@ for dir in "$DEVFLOW_ROOT"/skills/*/; do
   body="$(strip_fm "$dir/SKILL.md" | sed \
     -e 's|`\.\./principles/SKILL\.md`|the Canonical Rules section below|g' \
     -e 's|`\.\./principles/state-predicates\.md`|the Canonical State Predicates section below|g' \
-    -e 's|`\.\./principles/verification-predicates\.md`|the Canonical Verification Predicates section below|g')"
+    -e 's|`\.\./principles/verification-predicates\.md`|the Canonical Verification Predicates section below|g' \
+    -e 's|`\.\./principles/baseline-predicates\.md`|the Canonical Capability Knowledge Baseline Predicates section below|g')"
   # Repoint companion-document references (role contracts etc.)
   for comp in "$dir"*.md; do
     cbase="$(basename "$comp")"
@@ -82,6 +84,16 @@ for dir in "$DEVFLOW_ROOT"/skills/*/; do
         echo "---"
         echo ""
         printf '%s\n' "$VERIFICATION_PREDICATES"
+      } >> "$PROMPTS_DIR/devflow-$name.md"
+      ;;
+  esac
+  case "$name" in
+    resume|verify)
+      {
+        echo ""
+        echo "---"
+        echo ""
+        printf '%s\n' "$BASELINE_PREDICATES"
       } >> "$PROMPTS_DIR/devflow-$name.md"
       ;;
   esac

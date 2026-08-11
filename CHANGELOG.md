@@ -6,6 +6,55 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.10.0 — 2026-08-11 — the capability knowledge baseline runs: verified closures write domain blueprints
+
+The v2.2 contract leaves the proposal and enters the runtime. A new canonical companion,
+`skills/principles/baseline-predicates.md`, owns the whole machine contract: identity by
+capability number (name slug non-authoritative, two format anomalies only, numbers
+compared as integers), the blueprint-first 12-section document contract with per-section
+caps and a ~140-line total (the first 40 lines are the domain itself; `external` trap
+rows are kept out of the split signal), the six-field machine block with two git-command
+freshness heads (`:(literal)` pathspecs as quoted arguments, full-object-ID validation,
+empty output demotes to hypothesis), the standard refresh set with wholesale replacement
+and byte stability, the begin-commit ride with marker-optional recognition of interrupted
+states, the `capability_baseline` switch (absent means no; neither flip deletes or
+anomalizes files), and the durability rules — shape tolerance without a version field,
+the knowledge layer never blocking the execution axis, delete-only human edits, derived
+retirement.
+
+Wiring: verify reads the companion and refreshes the baseline inside step 7's begin
+transaction (no-op failures report one line to the user and closure proceeds); split
+carries one creation-path-neutral rule that wires the baseline and its cited binding-ADR
+paths into every new implementation card's `Read first` — maintenance, re-split
+replacements, promotion children, prerequisite cards, and fix cards alike; work carries a
+self-contained consumption paragraph (three comparisons, the statement-group map, the
+recheck-without-expansion rule, a one-line freshness report) and passes the freshness
+result to delegated implementers; resume lists the `capabilities/` filenames at step 1;
+integrity item 16 detects a baselined capability's card missing the baseline from
+`Read first` without blocking tree writes. Both Codex installers embed the companion into
+verify and resume only, and the invariants test pins that matrix plus a mis-embedding
+guard on split and work. principles grew by the ownership sentence, the begin-ride
+recognition, and the brownfield number-derivation rule (product.md's capability list is
+now explicitly append-only); arch asks the one switch question; adopt asks it in its
+confirmation batch.
+
+Verification: a two-pass Fable campaign (a six-front refuter and an eight-walk literal
+simulator) found twelve defects and eleven judgment calls; every one was adjudicated, the
+repairs landed as batch C3, and a re-audit of the repairs walked all four begin-commit
+kill states to single continuations and surfaced three one-clause conflicts plus one
+judgment call, all closed. 51/51 Node tests; ko↔en structure parity on every pair
+including the new companion; zero Korean lines in English deploy artifacts. The proposal
+pair was micro-synced to the shipped wording. Recorded accepted limits: shallow-clone
+false staleness, command-line length on very long scope lists, working-tree invisibility
+to the heads, and registry-mediated cross-capability changes.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `AGENTS.md`;
+`skills/principles/baseline-predicates.md` and `_ko` (new); all Korean/English SKILL
+pairs for principles, product, arch, adopt, split, work, verify, and resume;
+`codex/install.ps1`; `codex/install.sh`; `docs/design.md`; `docs/design_ko.md`;
+`docs/capability-knowledge-proposal.md`; `docs/capability-knowledge-proposal_ko.md`;
+`scripts/repository-invariants.test.js`; `CHANGELOG.md`.
+
 ## docs — 2026-08-11 — the capability-knowledge contract becomes v2.2
 
 The GPT candidate contract was revised by an independent verification and research

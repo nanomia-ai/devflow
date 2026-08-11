@@ -180,6 +180,25 @@ If a depth-1 capability folder reaches the canonical verification gate → propo
         (capability layer)
 ```
 
+When `Read first` names a capability knowledge baseline under
+`devflow/project/capabilities/`, it is that capability at its last verification closure.
+Make three comparisons. Run `git log -1 --format=%H --` with one `:(literal)` pathspec per
+`Scope paths` member, each passed as one quoted argument; when the output equals
+`Scope head`, the code statements are fresh — when it differs or is empty, they are a
+hypothesis. Run `git log -1 --format=%H -- devflow/project/product.md
+devflow/project/arch.md devflow/project/code-style.md devflow/project/glossary.md
+devflow/project/design.md`; when the output differs from `Docs head` or is empty, the
+product and document statements are a hypothesis. Enumerate the non-`.stale.` `.done.`
+card numbers below that capability's tree folder from names alone in canonical card-number
+order; when that differs from `Covered cards`, the whole baseline is a hypothesis. The
+code statements are the Main flow, Lifecycle, Entrypoints, Traps, and Verify sections; the
+product and document statements are the purpose, Conceptual model, Current behavior,
+Invariants, and What we decided not to do sections. Before
+using a hypothesis statement in implementation, recheck it at a current authority path
+inside the existing read set and code-search boundary; expand neither. Report one line:
+`baseline <Verified at>, covers <N>, <M> cards since`. This paragraph reproduces the
+canonical baseline predicates and never defines them differently.
+
 ## When You Must Leave the Card — stop and go up
 
 If you need to modify something outside the card's scope (shared contracts, core,
@@ -227,7 +246,9 @@ A delegated implementer stops and reports blocked — both exits belong to the m
   rules path + `devflow/project/product.md` + `devflow/project/arch.md` +
   `devflow/project/code-style.md` + the existing `devflow/project/design.md` + the existing
   `devflow/project/glossary.md` and `devflow/journal.md` + every direct dependency-card
-  path. Give no other conversation backstory. After reading the card, the delegate opens
+  path + when `Read first` names a capability knowledge baseline, the result of the three
+  freshness comparisons (which statement groups are hypotheses). Give no other conversation
+  backstory. After reading the card, the delegate opens
   its `Read first` paths exactly. Never put arch section names in `Read first`. For T-low
   tier, first check the card's `Read first` is complete; reinforce it if not.
 - **The stage split is fixed: subagent = implement + run the completion signal + progress
