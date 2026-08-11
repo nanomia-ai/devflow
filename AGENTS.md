@@ -32,6 +32,8 @@ Pairs:               skills/<name>/SKILL_ko.md ↔ SKILL.md
                      codex/AGENTS-devflow_ko.md ↔ AGENTS-devflow.md
                      README_ko.md ↔ README.md
                      docs/design_ko.md ↔ docs/design.md
+                     docs/capability-knowledge-proposal_ko.md ↔ docs/capability-knowledge-proposal.md
+                     docs/v0.9.21-redesign-report_ko.md ↔ docs/v0.9.21-redesign-report.md
 English-only (no pair): AGENTS.md (this file), CHANGELOG.md,
                      CLAUDE.md (a one-line import pointer to this file — never expand it)
 ```
@@ -63,7 +65,8 @@ exception to _ko-first.
 Deploy artifacts must contain no Korean: every non-`_ko` `skills/**/*.md` (entry skills,
 predicate companions, and role contracts),
 `codex/AGENTS-devflow.md`, `codex/install.ps1`, `codex/install.sh`, `scripts/*.js`,
-`.claude-plugin/*.json`, `docs/design.md`, `CHANGELOG.md`, and `README.md`.
+`.claude-plugin/*.json`, `docs/design.md`, `docs/capability-knowledge-proposal.md`,
+`docs/v0.9.21-redesign-report.md`, `CHANGELOG.md`, and `README.md`.
 Check: count `[가-힣]` matches per file with ripgrep run directly (`rg -c`) or a Perl
 Unicode scan — proxied grep rewrites have produced false positives on this repository.
 The result must be **0 for every file except `README.md`, which returns exactly 1** —

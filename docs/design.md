@@ -267,3 +267,9 @@ gate forces this document to be read).
   base. The choices are (A) make design produce the plan only and put real artifacts in a
   foundation card, or (B) return to design after foundation work. This changes the Layer 0
   and task-tree boundary, so the current order is not forcibly rearranged before the owner chooses.
+- **Capability knowledge baseline** — see the [validated proposal](capability-knowledge-proposal.md).
+  v0.9.21 rejected a second domain-handoff layer forced on every project and unbounded
+  reading. The candidate avoids that reason by copying no current task state and combining one
+  last-verified capability baseline with active cards created afterward. Its creation
+  trigger, stable key, and retirement preservation change documentation cost and migration,
+  so runtime adoption remains on hold for the owner's choice.

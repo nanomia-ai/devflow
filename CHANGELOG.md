@@ -6,6 +6,41 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-11 — capability knowledge is planned and validated without runtime adoption
+
+JGNote, Nanomia ADE, and RDSF Data Server are treated as failure-path clues rather than
+proof of the new runtime. The validated candidate keeps execution in tree, task cards, and
+users while combining the last successfully refreshed passing capability baseline with
+current cards outside Covered cards. It creates no unverified seed. work keeps its bounded
+read set; verify reads one standard refresh set at final closure and adds Covered history only
+when the stored comparison changed. Shared dependency paths are deduplicated, retained
+historical-stale dependencies are hash-only inputs, binding ADRs enter future cards, and
+external references remain nonbinding. A refresh replaces current sections instead of
+appending chronology. A long-open capability leaves the baseline as a hypothesis when current
+done numbers differ from Covered cards. Component baselines remain excluded until devflow has
+an independent component-verification boundary.
+
+The exact template separates stored-Covered comparison from final replacement coverage and
+fixes identity, section, byte, and digest rules across Claude, Codex, Windows, and POSIX. Its
+candidate begin transaction preserves final baseline bytes, validates empty and nonempty
+prefixes and descendant state, and deletes enrollment only with the same successful create.
+`Depends: none` is an explicit valid empty set. The recommended product-row owner has one exact
+terminal stable-key field, and every enrollment policy uses the same durable pending file.
+The candidate integrity check rejects malformed, orphaned, duplicate, or simultaneous
+baseline/enrollment files without guessing repairs. Three owner choices remain: enrollment
+policy, stable-key owner, and retirement preservation. No skill executes this proposal. The
+old-to-new report records evidence, simulations, prompt cost, limitations, and the requested
+independent-Claude review procedure.
+
+Verification: the proposal-focused invariant joins the v0.9.21 checks for 50/50 Node tests;
+Korean/English structure and meaning-bearing figures match; deploy-language checks pass; and
+the earlier independent literal, over-harness, and parity attacks plus the grouped post-fix
+re-audit report zero remaining clear defects. Files:
+`docs/capability-knowledge-proposal.md`; `docs/capability-knowledge-proposal_ko.md`;
+`docs/v0.9.21-redesign-report.md`; `docs/v0.9.21-redesign-report_ko.md`;
+`scripts/repository-invariants.test.js`; `AGENTS.md`; `docs/design.md`; `docs/design_ko.md`;
+`CHANGELOG.md`.
+
 ## 0.9.21 — 2026-08-11 — disk-state contracts survive brownfields, interruption, and multiple checkouts
 
 The v0.9.20 philosophy remains: product direction, a tree opened one layer at a time,
