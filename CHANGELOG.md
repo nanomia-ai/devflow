@@ -6,6 +6,84 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.11.1 — 2026-08-12 — capability-document recovery keys on HEAD
+
+An independent literal execution of the interruption and damage paths, run against the
+shipped 0.11.0 text, opened four blocking readings. The prefix test for an interrupted
+capability-design write required the uncommitted bytes to equal the current writer's final
+re-derivation from HEAD. A design zone is prose the model compressed, not a mechanical
+transform, so that condition is false on every session change and an ordinary interruption
+became an integrity anomaly with no repair route. It is deleted: the next sentence already
+orders a whole regeneration from HEAD, so the outcome is unchanged and one unsatisfiable
+gate is gone.
+
+Absence for initial creation is now defined in HEAD alone. Defining it over both the working
+tree and HEAD meant one torn write of a brand-new capability document blocked creation
+forever, because the torn file made the path non-absent while its zero boundaries made every
+writer refuse it. Working-tree bytes with no HEAD counterpart have nothing to preserve, so
+the creation replaces them. For the same reason, writer eligibility and begin recovery judge
+the boundary count in the HEAD file, and the working-tree count now appears only in the
+report a person reads. A user-confirmed boundary reset leaves no disk trace, so it is no
+longer recovered as a prefix; an interruption between the confirmation and its commit is
+reported and the next run confirms the reset again.
+
+The v0.10 migration gate demanded that both head values parse even though the migration
+discards them, so a single field broken by a bad merge dropped the file into the damage
+route, where restoring a pre-0.11 revision is impossible by construction and the only
+remaining exit discards every verified body. The gate now covers exactly the three fields
+the migration carries. A restore also lands only at the damaged file's current expected
+path: after a rename, restoring the old path created two same-numbered files that no
+ordinary routing row reports.
+
+Smaller repairs from the same pass: arch's and adopt's skip gates both read "missing or need
+repair", so a boundary reset or a v0.10 migration no longer re-runs the whole Layer 0 stage
+for one document; resume's no-tree branch regained the one-boundary qualifier its table row already
+had, so it can no longer rewrite a damaged file without the data-loss statement; the deferral
+sentence names three baseline rows instead of two; verify adds an unparseable refresh input
+to its no-op list and recalculates capability code scope and consumed paths on the recovery
+path; a no-op now leaves the path at its HEAD content instead of orphaning working-tree
+bytes; the `baseline no-op` payload has one grammar; and `Design head`'s three paths are
+described as sources for that field rather than for the design zone, which the creation-input
+list contradicted. The artifact has one prose name, the capability document — `baseline`
+remains only as the identifier prefix, and a waiting capability file stays a different thing.
+
+The README gains one plain-words sentence saying what a capability is, and drops the noun
+compound the 0.11.0 migration paragraph introduced. README tone counts: README.md em-dash
+92→92, raw `**` 107→107; README_ko.md em-dash 62→62, raw `**` 93→93; bureaucratic compounds
+1→0.
+
+An independent literal execution of the repaired text then found two defects the repair batch
+had introduced, and both are fixed here. Splitting the boundary judgment left resume's routing
+rows measuring the working-tree count while the writers measured HEAD, so a torn uncommitted
+write over an intact HEAD file raised a false alarm whose offered remedy discarded a verified
+zone that was never damaged, while the mirror state — a valid uncommitted reset over a damaged
+HEAD file — matched no row at all and stalled. resume's machine query now runs against the
+HEAD file, so every routing judgment uses the same values as writer eligibility, and the
+report names both counts. The prefix test also still required an interrupted v0.10 file to
+carry "the mechanical migration", whose design half is re-derived prose — the same
+unsatisfiable comparison this release deleted elsewhere. It now names the mechanical
+verified-zone transformation alone. The naming note in `AGENTS.md` was corrected too: it
+claimed `baseline` survives only inside identifiers while ninety-odd prose uses remain, so it
+now records one full name and one short form, and names the third form as the one removed.
+
+Verification: 52/52 Node repository-invariant and extractor tests, with the stale wording
+pins replaced by pins on the repaired properties and eight new pins covering this release's
+rules; structure and figure parity on every registered Korean/English pair; zero Korean in
+each English deploy artifact except README.md's one language-switch line; whitespace checks
+pass; both manifests report 0.11.1 and `codex/install.ps1` keeps BOM `ef-bb-bf`. Codex
+prompt regeneration must be rerun locally — this release changes companion text that the
+installer embeds.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `AGENTS.md`; `README.md`;
+`README_ko.md`; `docs/design.md`; `docs/design_ko.md`;
+`scripts/repository-invariants.test.js`; `skills/adopt/SKILL.md`; `skills/adopt/SKILL_ko.md`;
+`skills/arch/SKILL.md`; `skills/arch/SKILL_ko.md`; `skills/principles/SKILL.md`;
+`skills/principles/SKILL_ko.md`; `skills/principles/baseline-predicates.md`;
+`skills/principles/baseline-predicates_ko.md`; `skills/resume/SKILL.md`;
+`skills/resume/SKILL_ko.md`; `skills/verify/SKILL.md`; `skills/verify/SKILL_ko.md`;
+`skills/verify/retrospector.md`; `skills/verify/retrospector_ko.md`; `skills/work/SKILL.md`;
+`skills/work/SKILL_ko.md`; `CHANGELOG.md`.
+
 ## 0.11.0 — 2026-08-11 — capability knowledge becomes the automatic domain-entry layer
 
 The approved domain-knowledge handoff and its second-edition implementation plan now run as

@@ -239,7 +239,7 @@ Expand neither. Keep every design reconfirmation as `exact path#heading`, withou
 and in canonical path order, in the reviewer projection. Use the canon's current path/status
 notation for the symmetric difference of current completed cards and `Covered cards` as the
 post-baseline change list. Report one line: `baseline <Verified at>, design <fresh|
-hypothesis|missing>, verification <fresh|hypothesis|missing>, <M> cards since`; with no
+hypothesis|missing>, verification <fresh|hypothesis|missing>, <M> card changes since`; with no
 baseline, the Verified-at value is `missing`.
 
 ## When You Must Leave the Card — stop and go up

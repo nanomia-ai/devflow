@@ -106,7 +106,7 @@ The progress log reaches <last point>; capability documents are
 <non-retired filenames|none>. The next step is <one step>. Proceed?"
 ```
 
-Exclude retired capability files from the list. When the next stage names a capability or
+Exclude retired capability documents from the list. When the next stage names a capability or
 foundation, include that numbered document's exact path. Append any shape-projection anomaly
 as one line naming the path and zone.
 
@@ -140,8 +140,8 @@ matching row:
 | My claimed card has a `Depends` target that is not `.done.` | split — release the original card and finish the prerequisite |
 | A card of mine is claimed | work |
 | An expected file has the canonical baseline predicates' exact `legacy v0.10` shape | with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone |
-| An expected file under the canonical baseline predicates is missing, or an expected file with exactly one fixed boundary has a design section, design metadata, or current Design head that differs from the contract | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |
-| An expected file has zero or more than one `## Verified state` boundary | resume — instead of the whole original, report its path, working-tree boundary count and line count, the HEAD blob object ID for that exact path or `none`, and the expected boundary, then offer only two choices: (1) after confirming that a user-identified Git revision and path has one boundary, the user restores and commits only that complete file; (2) state the discarded verified prose and HEAD blob ID, obtain confirmation, and route `Brownfield: yes` to adopt or `no` to arch for a whole reset from current Layer 0 plus an empty verified scaffold under the ordinary design-batch confirmation. Search no history for a known-good revision; resume writes no file, and deferral changes no file |
+| An expected file under the canonical baseline predicates is missing from HEAD, or an expected HEAD file with exactly one fixed boundary has a design section, design metadata, or current Design head that differs from the contract | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |
+| An expected HEAD file has zero or more than one `## Verified state` boundary | resume — instead of the whole original, report its path, the HEAD boundary count that selected this route, the working-tree boundary count and line count, the HEAD blob object ID for that exact path or `none`, and the expected boundary, then offer only two choices: (1) after confirming that a user-identified Git revision and path has one boundary, the user restores those bytes to the damaged file's current expected path and commits only that file; (2) state the discarded verified prose and HEAD blob ID, obtain confirmation, and route `Brownfield: yes` to adopt or `no` to arch for a whole reset from current Layer 0 plus an empty verified scaffold under the ordinary design-batch confirmation. Search no history for a known-good revision; resume writes no file, and deferral changes no file |
 | journal contains an exact `product verification requested` line | verify — product layer |
 | A Retrospective section has a `pending · source id:` state, or an Audit `pending · source id:` state passes the Audit execution boundary | verify — run and record one runnable pending event |
 | Under the verification predicates, an automatic Retrospective is unrun; an automatic Audit is unrun and passes the Audit boundary; a user-request Retrospective has its target record; or a user-request Audit has its target record and passes the Audit boundary | verify — run and record one new event |
@@ -171,7 +171,7 @@ session's table scans. Judge them again next session because the execution bound
 
 Report a file whose verified-zone sections or verification metadata alone have malformed
 shape, but open no separate stage. The next capability closure's verify run replaces that
-zone in full and heals it. If the user defers baseline repair, skip only the two baseline
+zone in full and heals it. If the user defers baseline repair, skip only the three baseline
 rows above during the rest of this session's table scans; do not block the execution axis.
 
 When no earlier row matches and `Brownfield: yes`, report the tracked post-adoption work
@@ -245,9 +245,11 @@ the re-anchor procedure.
      `Brownfield: yes`; no makes arch write only `Brownfield: no`.
   6. If Layer 0 is complete and an expected file has the canonical baseline predicates'
      exact `legacy v0.10` shape, adopt with `Brownfield: yes`, or arch with `no`, runs its
-     mechanical migration. Otherwise, when an expected file or valid design zone is missing,
-     the same branch creates only the capability documents. Any other fixed-boundary anomaly
-     follows the user-confirmation route above.
+     mechanical migration. Otherwise, when an expected file is missing, or an expected file
+     with exactly one fixed boundary has a design section, design metadata, or current Design
+     head that differs from the contract, the same branch creates or refreshes only the
+     capability documents. Any other fixed-boundary anomaly follows the user-confirmation
+     route above.
   7. If a valid layer-opening marker exists in the working tree or HEAD, split selects the
      earliest one and finishes its planning commit from the durable source and minted
      numbers.

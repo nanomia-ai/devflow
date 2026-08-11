@@ -15,7 +15,7 @@ first; with existing code, to adopt (existing-project adoption — it produces
 product.md too, by reverse-derivation).
 
 If resume routed here because Layer 0 is complete and only capability documents are
-missing or their design zones need repair, do not run steps 1–5 or modify arch.md or
+missing or need repair, do not run steps 1–5 or modify arch.md or
 code-style.md. Keep the confirmed documents unchanged and run only `Capability documents`
 below.
 
@@ -207,7 +207,7 @@ current command output for those three paths.
 - For any other file, if it is absent under the canon's initial-creation definition, create its initial verified zone too. If an existing file has
   exactly one fixed boundary, preserve its verified-zone bytes. If it has zero or more
   than one boundary and the user did not choose in resume to discard the old verified
-  prose and reset it, do not write it; report `baseline no-op: <path and reason>`. After
+  prose and reset it, do not write it; report `baseline no-op: <reason naming the exact path>`. After
   the user chooses reset with the data loss and HEAD blob ID stated, reset the whole file from
   current Layer 0 design plus the empty initial verified scaffold and include it in the
   ordinary design-batch confirmation below.

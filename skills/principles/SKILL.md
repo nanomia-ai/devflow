@@ -191,7 +191,7 @@ What you discovered → where to update:
 |---|---|
 | Feature, screen, or scope changed | product.md (+ mark affected cards that need replacement work `.stale.` + the `re-split pending` markers above) |
 | A capability's name changed | first update product.md's capability row + the same-numbered tree folder or waiting file (a waiting file's body line takes the new name too) + every arch.md `Existing records` line naming it in one binding decision (+ replace any path inside that folder named by HANDOFF). The following arch capability-design commit, or adopt in a brownfield, updates the same-numbered baseline path and design zone together. The baseline predicates own recovery between the two commits. Code paths and arch.md's Code structure keep naming what exists on disk, and that sketch entry still maps to this capability; moving code is a separate card. The number never changes and no card moves. Land the first commit only while no canonical journal marker or evidence record names that folder or a path inside it |
-| A capability turns out to be two | product.md — narrow the existing row and append the new capability — and arch.md's Code structure for the path split. The existing folder keeps its number, cards, and history; the new capability gets no folder or card now. No card is backfilled or moved. arch, or adopt in a brownfield, re-derives affected design zones and the new capability file and reports the canonical registered-consumer projection. When narrowing also changes the existing capability's name, use the rename row above too |
+| A capability turns out to be two | product.md — narrow the existing row and append the new capability — and arch.md's Code structure for the path split. The existing folder keeps its number, cards, and history; the new capability gets no folder or card now. No card is backfilled or moved. arch, or adopt in a brownfield, re-derives affected design zones and the new capability document and reports the canonical registered-consumer projection. When narrowing also changes the existing capability's name, use the rename row above too |
 | Stack, module boundary, or data shape doesn't fit | arch.md (+ consider an ADR) |
 | A value the upper document called provisional is now measured | that row of arch.md's Provisional table — **replace it, don't add beside it**. An ADR that assumed the old value gets a dated update note |
 | A Provisional row's settling card is 'unminted' and the tree has reached its layer | create the settling card and replace 'unminted' in that arch.md row with its number |
@@ -409,8 +409,8 @@ decisions. These records do not directly change card or folder status. A task ca
   completion of an existing document uses the same message form. In multi this commit is a
   binding decision.
 - **Capability-design commit**: after every confirmed Layer 0 commit has landed, arch, or
-  adopt in a brownfield, writes the design zones for the expected capability baselines as
-  its final output. Land only those capability files as `arch — capabilities` or
+  adopt in a brownfield, writes the design zones for the expected capability documents as
+  its final output. Land only those capability documents as `arch — capabilities` or
   `adopt — capabilities`; if no capability bytes change, do not commit. In multi this is a
   binding decision.
 - **Planning commit**: split bundles newly created or revised pending cards,
@@ -535,7 +535,7 @@ decisions. These records do not directly change card or folder status. A task ca
   capability-closing record; the baseline predicates govern that baseline file's regeneration
   before that commit lands. Outside a canonical capability-design commit, the mechanical
   exact-path replacement for a superseded ADR, the canonical human-deletion exception,
-  restoration of one complete one-boundary file from a user-identified Git revision, or this begin transition, any
+  restoration of one complete one-boundary file from a user-identified Git revision to its current expected path, or this begin transition, any
   `devflow/project/capabilities/` diff is an integrity anomaly.
 - **git belongs to the main session.** Subagents implement and write the progress log —
   they never commit, rename, or push.

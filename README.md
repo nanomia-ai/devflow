@@ -350,6 +350,9 @@ The AI judges everything else. At these points it stops and waits for you.
 
 ## Entering a domain — the capability knowledge baseline
 
+A capability is one thing the product can do, told end to end. Its screen, its API, and its
+data are one piece. product.md names them, and every later stage keeps those same words.
+
 One capability has one file at `devflow/project/capabilities/NN-<name>.md`. **The next
 session and a newly joined person enter the domain through this one page.** Purpose and
 ownership boundary, concepts, invariants, verified main flows and current behavior, entry
@@ -359,8 +362,9 @@ The file exists from the beginning. In a new project, after product and arch are
 arch writes the design zones for foundation and every non-retired capability. In a project
 that already has code, adopt writes the same zones from reverse-derived Layer 0. For a
 0.10.x project that has Layer 0 but no capability documents, resume detects the gap and
-routes only document creation to adopt for a brownfield or arch for a new project. It does
-not repeat the interview or code reverse-derivation. There is no per-project on/off switch.
+sends a brownfield to adopt or a new project to arch, which then write only those documents.
+It does not repeat the interview or code reverse-derivation. There is no per-project
+on/off switch.
 
 One file has two lifecycles.
 

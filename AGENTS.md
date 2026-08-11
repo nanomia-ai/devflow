@@ -237,10 +237,17 @@ borrowing text into this repository still needs prior permission.
 | 정본 경로 순서 | canonical path order | | 정본 카드 번호 순서 | canonical card-number order |
 | 라우팅 준비 | routing prepared | | 능력 지식 기준선 | capability knowledge baseline |
 | 가설 | hypothesis | | 설계 구역 | design zone |
-| 검증 구역 | verified zone | | | |
+| 검증 구역 | verified zone | | 능력 문서 | capability document |
 
 Note: a hypothesis is the trust state of a capability knowledge baseline — a separate
 concept from the `unverified` verdict, which is a verification result.
+
+Note: the artifact has one full name, the **capability document**, and one short form,
+**baseline**, which the predicate canon and the report tokens `baseline no-op:`,
+`baseline missing:`, and `legacy baseline:` use. Those two forms name one concept, as with
+`verify_channel` below; do not add a third. "capability file" and "capability baseline" were
+that third form and are gone — do not reintroduce them. A **waiting capability file** is a
+different thing: the tree-root placeholder for an unopened capability.
 
 Note: as the field name inside `arch.md` the verify channel is written `verify_channel` —
 the underscore form is the field identifier; the spaced form is prose. They are one

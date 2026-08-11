@@ -28,8 +28,9 @@ knowledge baselines are always on; there is no per-project switch.
 - The expected set is the foundation plus every non-retired capability number in
   product.md. A retired capability's file leaves this set but is neither deleted nor
   renamed.
-- For initial creation, absent means no same-numbered baseline in either the working tree or
-  HEAD. A file absent from the working tree but present in HEAD is recovery, not creation.
+- For initial creation, absent means no same-numbered baseline in HEAD. A file present in
+  HEAD but absent from the working tree is recovery, not creation. Working-tree bytes with
+  no HEAD counterpart have nothing to preserve, so the creation replaces them.
 
 ## Document contract and zone boundary
 
@@ -131,8 +132,8 @@ Scope head: <output of the Scope head command | none>
   Standards gate in canonical path order. `Consumed paths` stores, in the same order, the
   exact paths where that trace stopped at another capability boundary. Consumed paths do
   not expand the capability code scope, Standards gate, or Audit scope.
-- The **Design head command** is the following single line. Only those three paths are
-  sources for the design zone.
+- The **Design head command** is the following single line. Those three paths are the only
+  sources for `Design head`.
 
   ```text
   git log -1 --format=%H -- devflow/project/product.md devflow/project/arch.md devflow/project/glossary.md
@@ -194,12 +195,13 @@ follows the canonical Document Hierarchy.
   on the integration branch.
 - An uncommitted diff from a post-confirmation interrupted write is a capability-design
   commit prefix only when it touches current and final expected capability-document paths
-  alone (a rename may delete the old same-numbered path and add the final path), equals the
-  current writer's final re-derivation from HEAD, preserves each number-matched existing
-  file's HEAD verified zone, gives an exact v0.10 file the mechanical migration below, and gives each new file or
-  user-confirmed boundary-reset file the initial
-  scaffold below. Use no partial bytes as input; regenerate the whole expected set from HEAD
-  and finish that commit. Any mismatch is an integrity anomaly.
+  alone (a rename may delete the old same-numbered path and add the final path), preserves
+  each number-matched existing file's HEAD verified zone, gives each new file the initial
+  scaffold below, and gives an exact v0.10 file the mechanical verified-zone transformation below. Use no
+  partial bytes as input; regenerate the whole expected set from HEAD and finish that
+  commit. Any mismatch is an integrity anomaly. A user-confirmed boundary reset is not
+  recovered as a prefix. When one is interrupted after confirmation and before its commit,
+  report that diff as an integrity anomaly and let the next run confirm the reset again.
 - When a file is absent or the user confirms a boundary reset, arch or adopt creates both
   zones; verified sections start as
   `None.`, and verification metadata starts with `Verified at: none`, three empty arrays,
@@ -212,12 +214,18 @@ follows the canonical Document Hierarchy.
   never input.
 - With one valid boundary, the next arch or adopt run heals design-shape damage and the next
   capability closure heals verified-shape damage. Except for the exact v0.10 migration below,
-  never auto-heal zero or multiple boundaries. Do not load the whole original into the report. Report its path, working-tree
+  never auto-heal zero or multiple boundaries. Writer eligibility and begin recovery judge
+  the boundary count in the HEAD file; uncommitted working-tree bytes are not an input and
+  the write replaces them. Only the report below also states the working-tree count.
+  Do not load the whole original into the report. Report its path, the HEAD boundary count
+  that selected this route, the working-tree
   boundary count and line count, the HEAD blob object ID for that exact path or `none`, and
   the expected boundary. The HEAD blob identifies provenance; it is not presumed valid.
   resume writes no file and offers only two choices: after confirming that a user-identified
-  Git revision and path has one boundary, the user restores and commits only that complete
-  file; or the user discards the old verified prose and lets arch, or adopt in a brownfield,
+  Git revision and path has one boundary, the user restores those bytes to the damaged
+  file's current expected path and commits only that file (restoring to any other path
+  leaves two same-numbered files, a format anomaly); or the user discards the old verified
+  prose and lets arch, or adopt in a brownfield,
   reset the whole file from current Layer 0 design plus the empty initial verified scaffold.
   Search no history for a known-good revision. State the data loss and HEAD blob ID before
   confirmation; a reset follows the ordinary design-batch confirmation and commit procedure.
@@ -233,7 +241,8 @@ Only a HEAD file satisfying every condition below is a known v0.10 predecessor.
   `## Verify`, `## Binding ADRs`, and `## Machine block`, in that order.
 - Its Machine block has only `Capability number`, `Verified at`, `Covered cards`, `Scope
   paths`, `Scope head`, and `Docs head`; the number equals the filename number, and the
-  arrays, timestamp, and two complete Git object IDs parse.
+  `Verified at`, `Covered cards`, and `Scope paths` the migration carries parse. The two
+  head values the migration discards take no part in this judgment.
 
 Apply this section to no other zero-boundary file. resume labels this shape `legacy v0.10`
 and routes it after any active claim or verification transition to arch, or adopt in a
@@ -308,8 +317,8 @@ verified zone's sole writer.
   with no baseline, `design: baseline missing — judge from the card and supplied shared
   documents`. Put multiple reconfirmation paths without duplicates in canonical path order.
   Review cannot pass when implementation used an unreconfirmed hypothesis statement.
-- Give retrospector one capability file for a capability event, and the foundation plus all
-  non-retired capability files for a product event. Attach both statement groups' freshness
+- Give retrospector one capability document for a capability event, and the foundation plus
+  all non-retired capability documents for a product event. Attach both statement groups' freshness
   projection to each file; a hypothetical verified statement cannot support a code-blind
   retrospective finding.
 - For domain entry, when any of product.md, arch.md, or glossary.md is absent or arch.md lacks
@@ -392,9 +401,12 @@ verified zone's sole writer.
   on the old ADR. This is not an `arch — capabilities` commit and changes no capability-
   document byte except the old exact path to the new exact path in Binding ADRs. Replace the
   path too on pending or claimed cards that name it directly in `Read first`.
-- resume uses a machine query that exposes only filename number, fixed-boundary count, fixed
+- resume uses a machine query **against the HEAD file** that exposes only filename number,
+  fixed-boundary count, fixed
   section order and presence, metadata field presence and parse status, and the Boolean result
-  of the v0.10 heading-and-field predicate above. When an expected
+  of the v0.10 heading-and-field predicate above. Every routing judgment, including absence
+  and boundary count, therefore uses the same HEAD values as writer eligibility, and the
+  working-tree count only joins the report a person reads. When an expected
   file is absent, or its boundary is valid but its design shape differs, route at a clean
   boundary after any active claim or verification transition: `Brownfield: yes` to adopt,
   `no` to arch, for design-zone writing only.
@@ -408,7 +420,10 @@ verified zone's sole writer.
   put the passing verify.md, capability-closing record, and refreshed baseline together in
   `boundary — begin <capability number>`.
 - When a boundary anomaly, number conflict, or input parse failure prevents refresh, write no
-  baseline, report `baseline no-op: <reason>`, and continue closure.
+  baseline, report `baseline no-op: <reason>`, and continue closure. Restore that path to its HEAD
+  content, and leave no working-tree file there when HEAD has none. Every skill
+  reports the one same form, and a writer-side no-op, which may concern more than one file,
+  names the exact path inside the reason.
 - A canonical begin transition permits a baseline diff at the closing capability's exact
   path only. That working-tree path may be absent, partial, or arbitrary bytes and is
   regenerated from the same-numbered HEAD file's design zone and the standard refresh set

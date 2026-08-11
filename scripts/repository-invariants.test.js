@@ -387,7 +387,9 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.match(baseline, /arch, or adopt in a brownfield, replaces from file start up to but excluding[\s\S]*verify replaces from `## Verified state` through end of file/);
   assert.match(baseline, /The expected set is the foundation plus every non-retired capability number/);
   assert.match(baseline, /Before either exists, use the product\.md\s+capability name exactly as split would use it in the tree; invent no separate slug\s+normalization/);
-  assert.match(baseline, /absent means no same-numbered baseline in either the working tree or\s+HEAD/);
+  assert.match(baseline, /absent means no same-numbered baseline in HEAD/);
+  assert.match(baseline, /Working-tree bytes with\s+no HEAD counterpart have nothing to preserve, so the creation replaces them/);
+  assert.match(baseline, /Those three paths are the only\s+sources for `Design head`/);
   assert.match(baseline, /work parses the leading number of the depth-1 ancestor directly below `devflow\/tree\/`/);
   assert.match(baseline, /Do not copy\s+baseline or ADR paths into cards/);
   assert.match(baseline, /remains in a card's\s+`Read first` is legacy wiring[\s\S]*select and shape-gate only through the number rule/);
@@ -444,15 +446,31 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(resume, /expected file has the canonical baseline predicates' exact `legacy v0\.10` shape[\s\S]*mechanically carried verified zone/);
   assert.match(work, /legacy baseline:\s+migration pending — <path>[\s\S]*open no body/);
   assert.match(verify, /baseline no-op: legacy v0\.10 migration pending[\s\S]*do not migrate its verified zone/);
-  assert.match(baseline, /uncommitted diff from a post-confirmation interrupted write is a capability-design[\s\S]*re-derivation from HEAD[\s\S]*regenerate the whole expected set/);
+  assert.match(baseline, /uncommitted diff from a post-confirmation interrupted write is a capability-design[\s\S]*regenerate the whole expected set/);
+  assert.doesNotMatch(baseline, /equals the\s+current writer's final re-derivation from HEAD/);
+  assert.match(baseline, /user-confirmed boundary reset is not\s+recovered as a prefix/);
+  assert.match(baseline, /Writer eligibility and begin recovery judge\s+the boundary count in the HEAD file/);
+  assert.match(baseline, /restores those bytes to the damaged\s+file's current expected path/);
+  assert.match(baseline, /head values the migration discards take no part in this judgment/);
+  assert.match(baseline, /Restore that path to its HEAD\s+content, and leave no working-tree file there when HEAD has none/);
+  assert.match(baseline, /machine query \*\*against the HEAD file\*\*/);
+  assert.match(baseline, /Every routing judgment, including absence\s+and boundary count, therefore uses the same HEAD values as writer eligibility/);
+  assert.match(baseline, /gives an exact v0\.10 file the mechanical verified-zone transformation below/);
+  assert.match(arch, /only capability documents are\s+missing or need repair/);
+  assert.match(resume, /An expected HEAD file has zero or more than one `## Verified state` boundary/);
+  assert.match(principles, /user-identified Git revision to its current expected path/);
+  assert.match(verify, /a standard-refresh-set input cannot\s+be parsed/);
+  assert.match(verify, /recalculate this closure's capability code\s+scope and consumed paths from current topology/);
+  assert.match(resume, /skip only the three baseline\s+rows above/);
+  assert.match(adopt, /When Layer 0 is complete and\s+only capability documents are missing or need repair/);
   assert.match(baseline, /present them as one batch; change no\s+capability-document path before the user confirms that batch/);
   assert.match(arch, /Before changing disk, present all design zones that would change as one batch and obtain\s+user confirmation/);
   assert.match(adopt, /Before changing disk, present all design zones that would change as one batch and obtain\s+user confirmation/);
-  assert.match(baseline, /Do not load the whole original into the report\. Report its path, working-tree\s+boundary count and line count, the HEAD blob object ID for that exact path or `none`, and\s+the expected boundary/);
+  assert.match(baseline, /Do not load the whole original into the report\. Report its path, the HEAD boundary count\s+that selected this route, the working-tree\s+boundary count and line count, the HEAD blob object ID for that exact path or `none`, and\s+the expected boundary/);
   assert.match(baseline, /The HEAD blob identifies provenance; it is not presumed valid/);
-  assert.match(baseline, /resume writes no file and offers only two choices: after confirming that a user-identified\s+Git revision and path has one boundary, the user restores and commits only that complete\s+file; or the user discards the old verified prose/);
+  assert.match(baseline, /resume writes no file and offers only two choices: after confirming that a user-identified\s+Git revision and path has one boundary, the user restores those bytes to the damaged\s+file's current expected path and commits only that file[\s\S]*or the user discards the old verified\s+prose/);
   assert.match(baseline, /Search no history for a known-good revision/);
-  assert.match(resume, /offer only two choices: \(1\) after confirming that a user-identified Git revision and path has one boundary, the user restores and commits only that complete file; \(2\)[\s\S]*route `Brownfield: yes` to adopt or `no` to arch/);
+  assert.match(resume, /offer only two choices: \(1\) after confirming that a user-identified Git revision and path has one boundary, the user restores those bytes to the damaged file's current expected path and commits only that file; \(2\)[\s\S]*route `Brownfield: yes` to adopt or `no` to arch/);
   assert.match(resume, /Search no history for a known-good revision; resume writes no file/);
   assert.match(arch, /zero or more\s+than one boundary and the user did not choose in resume[\s\S]*reset the whole file from\s+current Layer 0 design plus the empty initial verified scaffold/);
   assert.match(adopt, /zero or more than one boundary and the user did not choose in resume[\s\S]*reset the whole file from current Layer 0 design plus the empty initial\s+verified scaffold/);
@@ -502,7 +520,7 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
     "new-adoption maintenance state must land before the final capability-document commit",
   );
   assert.match(principles, /A capability's name changed[\s\S]*first update product\.md[\s\S]*following arch capability-design commit/);
-  assert.match(principles, /Outside a canonical capability-design commit, the mechanical\s+exact-path replacement for a superseded ADR, the canonical human-deletion exception,\s+restoration of one complete one-boundary file from a user-identified Git revision, or this begin transition, any\s+`devflow\/project\/capabilities\/` diff is an integrity anomaly/);
+  assert.match(principles, /Outside a canonical capability-design commit, the mechanical\s+exact-path replacement for a superseded ADR, the canonical human-deletion exception,\s+restoration of one complete one-boundary file from a user-identified Git revision to its current expected path, or this begin transition, any\s+`devflow\/project\/capabilities\/` diff is an integrity anomaly/);
 
   assert.ok(
     resume.indexOf("| A card of mine is claimed | work |") <

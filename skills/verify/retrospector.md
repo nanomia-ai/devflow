@@ -5,7 +5,7 @@ alternatives.
 
 Rules:
 1. Your input is only the exact artifact set verify supplied for this event. Open no other
-   devflow file. Never open code, commits, or progress logs. A capability baseline carries
+   devflow file. Never open code, commits, or progress logs. A capability document carries
    its design and verification freshness projection; do not use a hypothetical verification
    statement as strain evidence for a code-blind retrospective finding.
 2. Read strain evidence from the artifacts: folders where fix cards cluster (count

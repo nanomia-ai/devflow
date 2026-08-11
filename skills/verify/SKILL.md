@@ -251,11 +251,15 @@ section below).
    same-numbered one-boundary HEAD file. Outside that recovery, when the HEAD file has the
    canon's exact `legacy v0.10` shape, report `baseline no-op: legacy v0.10 migration pending`
    and do not migrate its verified zone. Otherwise, if HEAD has no unique
-   same-numbered baseline, that HEAD file's boundary is not exactly one, or a format anomaly
-   involves the closing capability's number or path, write no baseline, let closure proceed,
-   and report `baseline no-op: <reason>` in one line. Otherwise this full
-   replacement also heals malformed verified-zone shape.
-   First land only the passing verify.md, the marker, and the closing capability baseline
+   same-numbered baseline, that HEAD file's boundary is not exactly one, a format anomaly
+   involves the closing capability's number or path, or a standard-refresh-set input cannot
+   be parsed, write no baseline, let closure proceed, and apply the canon's disposition while
+   reporting `baseline no-op: <reason>` in one line. Boundary count is judged in the HEAD
+   file. Otherwise the regeneration from HEAD also heals working-tree
+   verified-zone shape damage in this full replacement.
+   In prefix recovery and in a new closure alike, recalculate this closure's capability code
+   scope and consumed paths from current topology.
+   First land only the passing verify.md, the marker, and the closing capability document
    whose refresh succeeded in `boundary — begin <capability number>`; before that commit,
    do not rename
    the folder or change another journal line. An interruption that leaves in the working tree
@@ -463,11 +467,11 @@ Brief a clean subagent/fresh session with `retrospector.md` beside this skill,
 - Capability first closure or a capability-number user request: all of product.md and
   arch.md · glossary.md when present · every `.md` directly under `devflow/project/decisions/` · that capability
   folder's filenames and statuses · all of journal.md · that capability's verify.md · that
-  capability's one baseline and its design and verification freshness projection.
+  capability's one capability document and its design and verification freshness projection.
 - First product-layer verdict or a `product`-target user request: all of product.md and
   arch.md · glossary.md when present · every `.md` directly under `devflow/project/decisions/` · the whole tree's filenames and
   statuses · journal.md · every verify.md (including the tree root) · foundation and every
-  non-retired capability baseline and each design and verification freshness projection.
+  non-retired capability document and each design and verification freshness projection.
 
 Code is not given. Recommended: T-mid + high effort.
 Findings go into the report to the user — only adopted findings follow the shared

@@ -28,8 +28,8 @@ When it applies:
 - `devflow/project/` has product.md, code-style.md, glossary.md, and arch.md with its
   `Brownfield` field, and every
   expected file under the canonical baseline predicates has a valid design zone and current
-  `Design head` — nothing to do; continuing is resume's job. When Layer 0 is complete but
-  an expected file is missing or only its design zone or Design head is stale, skip steps
+  `Design head` — nothing to do; continuing is resume's job. When Layer 0 is complete and
+  only capability documents are missing or need repair, skip steps
   1–5 and run only `Capability documents` below. If the confirmed identity paragraph,
   capabilities, Boundary, or success criteria must change, re-run product.
 - Only some documents exist — respect what exists as upper documents and reverse-derive
@@ -120,7 +120,7 @@ code details or flows into the capability documents again.
   exactly one fixed boundary, preserve its verified-zone bytes and replace only its design
   zone. If it has zero or more than one boundary and the user did not choose in resume to
   discard the old verified prose and reset it, do not write it; report
-  `baseline no-op: <path and reason>`. After the user chooses reset with the data loss and
+  `baseline no-op: <reason naming the exact path>`. After the user chooses reset with the data loss and
   HEAD blob ID stated, reset the whole file from current Layer 0 design plus the empty initial
   verified scaffold and include it in the ordinary design-batch confirmation below.
 - Do not change retired files. When re-derivation yields the same bytes, preserve them.
