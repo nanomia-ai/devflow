@@ -34,6 +34,7 @@ Pairs:               skills/<name>/SKILL_ko.md ↔ SKILL.md
                      README_ko.md ↔ README.md
                      docs/design_ko.md ↔ docs/design.md
                      docs/capability-knowledge-proposal_ko.md ↔ docs/capability-knowledge-proposal.md
+                     docs/v0.11.0-domain-knowledge-redesign-report_ko.md ↔ docs/v0.11.0-domain-knowledge-redesign-report.md
                      docs/v0.9.21-redesign-report_ko.md ↔ docs/v0.9.21-redesign-report.md
 English-only (no pair): AGENTS.md (this file), CHANGELOG.md,
                      CLAUDE.md (a one-line import pointer to this file — never expand it)
@@ -44,8 +45,9 @@ skills — briefing documents delivered verbatim to a clean context on every pla
 not registered agents. The Codex installers embed each role contract into its skill's
 generated prompt. `state-predicates.md`, `verification-predicates.md`, and
 `baseline-predicates.md` are canonical companions, not role contracts. The installers embed
-task-card predicates into split, work, verify, and resume, and verification predicates and
-baseline predicates into verify and resume only.
+task-card predicates into split, work, verify, and resume, and verification predicates into
+verify and resume only. The installers embed baseline predicates into arch, adopt, verify,
+and resume. work and the role contracts carry only their bounded baseline projections.
 
 Modification procedure (order is fixed):
 
@@ -68,7 +70,8 @@ Deploy artifacts must contain no Korean: every non-`_ko` `skills/**/*.md` (entry
 predicate companions, and role contracts),
 `codex/AGENTS-devflow.md`, `codex/install.ps1`, `codex/install.sh`, `scripts/*.js`,
 `.claude-plugin/*.json`, `docs/design.md`, `docs/capability-knowledge-proposal.md`,
-`docs/v0.9.21-redesign-report.md`, `CHANGELOG.md`, and `README.md`.
+`docs/v0.11.0-domain-knowledge-redesign-report.md`, `docs/v0.9.21-redesign-report.md`,
+`CHANGELOG.md`, and `README.md`.
 Check: count `[가-힣]` matches per file with ripgrep run directly (`rg -c`) or a Perl
 Unicode scan — proxied grep rewrites have produced false positives on this repository.
 The result must be **0 for every file except `README.md`, which returns exactly 1** —
@@ -233,7 +236,8 @@ borrowing text into this repository still needs prior permission.
 | 상태 판정 정본 | canonical state predicates | | 검증 판정 정본 | canonical verification predicates |
 | 정본 경로 순서 | canonical path order | | 정본 카드 번호 순서 | canonical card-number order |
 | 라우팅 준비 | routing prepared | | 능력 지식 기준선 | capability knowledge baseline |
-| 가설 | hypothesis | | | |
+| 가설 | hypothesis | | 설계 구역 | design zone |
+| 검증 구역 | verified zone | | | |
 
 Note: a hypothesis is the trust state of a capability knowledge baseline — a separate
 concept from the `unverified` verdict, which is a verification result.

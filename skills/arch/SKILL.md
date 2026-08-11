@@ -1,17 +1,23 @@
 ---
 name: arch
-description: Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, producing devflow/project/arch.md. Use for stack selection or architecture design.
+description: Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, then writes capability design zones. Use for stack selection, architecture design, or creating and repairing capability documents in a new project.
 ---
 
 # arch — Development Planning
 
-First read the canonical rules (`../principles/SKILL.md`) and all of
+First read the canonical rules (`../principles/SKILL.md`), the canonical capability
+knowledge baseline predicates (`../principles/baseline-predicates.md`), and all of
 `devflow/project/product.md`. If present, read all of `devflow/project/arch.md`,
 `devflow/project/code-style.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each `.md` file directly under
 `devflow/project/decisions/`.
 If `product.md` is missing: with no code either, direct the user to the product stage
 first; with existing code, to adopt (existing-project adoption — it produces
 product.md too, by reverse-derivation).
+
+If resume routed here because Layer 0 is complete and only capability documents are
+missing or their design zones need repair, do not run steps 1–5 or modify arch.md or
+code-style.md. Keep the confirmed documents unchanged and run only `Capability documents`
+below.
 
 Purpose: translate the service plan into a development plan, producing
 `devflow/project/arch.md`.
@@ -32,9 +38,6 @@ Correct?
 ### 2. Stack questions — in one batch
 2–3 candidates per component + my recommendation + a one-line reason. No comparison
 tables. State defaults.
-Ask `capability_baseline` as one question in the same batch — recommend yes for a large,
-long-lived service and no for a small MVP.
-
 ### 3. Derived questions — decisions that only exist once the stack is chosen
 Find the decisions that fork because of the chosen stack and ask them as one batch —
 per decision, same format as step 2.
@@ -93,7 +96,6 @@ Brownfield: no
 ## Risks            <!-- 3 things that break first + how to check each -->
 ## Out of scope     <!-- what this architecture does not carry -->
 
-capability_baseline: yes | no            # absent = no. yes: every capability's capability-layer closure refreshes its capability knowledge baseline
 frontend: none | needed
 verify_channel:
   work server: <run command + port>     # verification always happens here
@@ -113,12 +115,6 @@ adopt checked against code. Each line contains a product.md capability name or `
 a colon, and one exact file path. The same name may repeat on multiple lines. A path here
 is not a read instruction and does not make the file canonical. work opens it only after
 split rechecks it for the change scope and puts it in the card's `Read first`.
-
-`capability_baseline` turns the capability knowledge baseline on. With `yes`, every
-capability's capability-layer closure refreshes that capability's baseline under
-`devflow/project/capabilities/`; absent means `no`. Changing the value is a binding decision
-that lands through the arch row of the discovery→update table, and the baseline predicates
-own the full judgment.
 
 ### Provisional — the architecture you do not know yet
 
@@ -188,5 +184,43 @@ method. Cap: 1 page.
 
 Immediately after the user confirms arch.md or code-style.md, land it in the canonical
 Layer 0 commit.
+
+## Capability documents — final output after Layer 0
+
+When confirmed arch.md says `Brownfield: yes`, do not run this section. Route to adopt's
+capability-document-only branch; adopt owns the last commit of that run, and give the
+completion guidance below only after it finishes.
+
+After confirmed product.md, arch.md, and glossary.md have all landed in HEAD, run the
+canonical baseline predicates' design-writer procedure. Calculate `Design head` from the
+current command output for those three paths.
+
+- The expected set is `01-foundation.md` plus one document for every non-retired
+  capability in product.md. Assign numbers by the canonical baseline predicates'
+  disk-first rule.
+- Derive only purpose, boundary, Concept model, invariants, non-goals, and the binding
+  ADRs cited by current statements, organized per capability. Do not put planned flows,
+  entry points, code fields, code-style.md content, or design.md content in the design zone.
+- When a HEAD file has the canon's exact `legacy v0.10` shape, apply the canonical mechanical
+  migration and include it in the design-confirmation batch. Do not treat it as boundary
+  damage or a data-loss reset.
+- For any other file, if it is absent under the canon's initial-creation definition, create its initial verified zone too. If an existing file has
+  exactly one fixed boundary, preserve its verified-zone bytes. If it has zero or more
+  than one boundary and the user did not choose in resume to discard the old verified
+  prose and reset it, do not write it; report `baseline no-op: <path and reason>`. After
+  the user chooses reset with the data loss and HEAD blob ID stated, reset the whole file from
+  current Layer 0 design plus the empty initial verified scaffold and include it in the
+  ordinary design-batch confirmation below.
+- Do not change retired files. When re-derivation yields the same design zone, preserve
+  the existing bytes.
+- Before changing disk, present all design zones that would change as one batch and obtain
+  user confirmation. Change no capability-document path before confirmation. Then put only
+  changed capability documents in one `arch — capabilities` commit. It is this run's last
+  commit and carries no Layer 0 path. If no file changes, ask no confirmation question and
+  do not commit.
+
+When a capability retires or splits, or another code-boundary change alters path ownership, run
+the canonical baseline predicates' consumer projection and report the registered
+consumers in one line. The report triggers neither verification nor card creation.
 
 On completion: if `frontend: needed` — "design (optional) or split"; if `none` — "split."

@@ -107,8 +107,16 @@ Read the card fully (including Coordinates and Identity — know what this is a 
   full if they exist
 + read every direct dependency card named in `Depends` in full
 + unless `Read first` is `none`, read every exact path it names. If a path is missing,
-  report it; do not guess a substitute. Do not open a path listed only in arch.md's
-  `Existing records`
+  report it; do not guess a substitute. A baseline path directly under
+  `devflow/project/capabilities/` is legacy wiring: do not open it or report its absence
+  through this field; defer it to the number judgment below. Do not open a path listed only
+  in arch.md's `Existing records`
++ take the leading number from the claimed card's depth-1 ancestor directly below
+  `devflow/tree/`. Comparing numbers as integers, if exactly one document under
+  `devflow/project/capabilities/` has that number, select its path but do not open the body
+  yet. Apply the consumer judgment below first; only when its shape gate permits, read both
+  zones and the exact Binding ADR paths regardless of `Read first`. Foundation and research
+  cards follow the same rule
   ↓
 When the current card, its direct-dependency cards, or arch's Code structure or shared
 contracts name one or more exact code paths, search only those paths for the responsibility
@@ -132,8 +140,13 @@ Review — omit this step when the card's `Review` is `waived`. Omit `not-applic
         subagent/fresh session with `reviewer.md` beside this skill,
         **verbatim — never summarized** — main holds the implementation history, so
         main can never be the clean one — and give it **only the card (Progress log section
-        excluded) + diff + code-style.md + glossary.md + journal.md** (the last three only
-        when they exist). No implementation backstory — the
+        excluded) + diff + code-style.md + glossary.md + journal.md + this card's capability
+        document design zone and every existing file at an exact path listed in that zone's
+        Binding ADRs section when that zone exists +
+        exactly one design-freshness, reconfirmation, or baseline-missing projection**
+        (project files only when they exist). Do not enter
+        review when a design hypothesis used by
+        the implementation has not been reconfirmed. No implementation backstory — the
         progress log IS the backstory. The code must explain itself.
         Recommended: T-high + low effort, kept short.
         Objection → fix → re-review. A fix that changed the diff re-runs the completion
@@ -180,24 +193,54 @@ If a depth-1 capability folder reaches the canonical verification gate → propo
         (capability layer)
 ```
 
-When `Read first` names a capability knowledge baseline under
-`devflow/project/capabilities/`, it is that capability at its last verification closure.
-Make three comparisons. Run `git log -1 --format=%H --` with one `:(literal)` pathspec per
-`Scope paths` member, each passed as one quoted argument; when the output equals
-`Scope head`, the code statements are fresh — when it differs or is empty, they are a
-hypothesis. Run `git log -1 --format=%H -- devflow/project/product.md
-devflow/project/arch.md devflow/project/code-style.md devflow/project/glossary.md
-devflow/project/design.md`; when the output differs from `Docs head` or is empty, the
-product and document statements are a hypothesis. Enumerate the non-`.stale.` `.done.`
-card numbers below that capability's tree folder from names alone in canonical card-number
-order; when that differs from `Covered cards`, the whole baseline is a hypothesis. The
-code statements are the Main flow, Lifecycle, Entrypoints, Traps, and Verify sections; the
-product and document statements are the purpose, Conceptual model, Current behavior,
-Invariants, and What we decided not to do sections. Before
-using a hypothesis statement in implementation, recheck it at a current authority path
-inside the existing read set and code-search boundary; expand neither. Report one line:
-`baseline <Verified at>, covers <N>, <M> cards since`. This paragraph reproduces the
-canonical baseline predicates and never defines them differently.
+The consumer judgment for an automatically read capability document is as follows. Compare
+numbers as integers. If the document is absent, report `baseline missing: <number>` in one
+line, continue from Layer 0 and the card, and give reviewer
+`design: baseline missing — judge from the card and supplied shared documents`. If two or more documents have
+the same number, report their exact paths, select none, and continue with the same projection.
+
+When the unique file has the canon's exact `legacy v0.10` shape, report `legacy baseline:
+migration pending — <path>` in one line, open no body, and continue active work with the same
+baseline-missing projection.
+
+When the selected file has zero or multiple fixed boundaries, guess no zone and read no
+body. Report the bounded shape facts in one line and continue with the baseline-missing
+projection above. With one boundary but malformed section or metadata shape, read the zones
+and mark the affected zone a hypothesis.
+
+With one boundary, open only exact paths from a valid Binding ADRs section. If that section is
+absent or unparseable, open and infer no ADR path and make the design zone a hypothesis. If a
+path named by a valid section is missing, report it, make the design zone a hypothesis, and
+guess no substitute.
+
+With exactly one fixed `## Verified state` boundary, check section and
+metadata shape. A malformed zone is a hypothesis. Run the single-line command
+`git log -1 --format=%H -- devflow/project/product.md devflow/project/arch.md devflow/project/glossary.md`. When its
+output equals `Design head`, design statements in Purpose, Boundary, Concept model,
+Invariants, and Non-goals are fresh; when it differs or is empty, they are a hypothesis.
+
+Put `Scope paths ∪ Consumed paths` in canonical path order without duplicates. When the
+union is empty, run no git command and treat verification statements as a hypothesis. When
+it is nonempty, pass every path to `git log -1 --format=%H --` as one `:(literal)` pathspec
+and one shell-quoted argument. When the output equals `Scope head`, this comparison is
+fresh; when it differs or is empty, it is a hypothesis. Verification statements are also a
+hypothesis when the exact-path set in Consumed contracts differs from `Consumed paths`, or
+when a row's other-capability number differs from or is ambiguous under the current provider
+mapping in arch.md's Code structure. Enumerate non-`.stale.` `.done.`
+card numbers below that capability's folder from names alone in canonical card-number
+order. When they differ from `Covered cards`, or when `Verified at` is `none`, verification
+statements are a hypothesis. Verification statements are Main flow, Lifecycle, Current
+behavior, Entrypoints, Consumed contracts, Traps, and Verify.
+
+Before implementation uses a design hypothesis, reconfirm it in the exact authoritative
+section already read from product.md, arch.md, or glossary.md. Reconfirm a verification
+hypothesis in current code or cards inside the existing read set and code-search boundary.
+Expand neither. Keep every design reconfirmation as `exact path#heading`, without duplicates
+and in canonical path order, in the reviewer projection. Use the canon's current path/status
+notation for the symmetric difference of current completed cards and `Covered cards` as the
+post-baseline change list. Report one line: `baseline <Verified at>, design <fresh|
+hypothesis|missing>, verification <fresh|hypothesis|missing>, <M> cards since`; with no
+baseline, the Verified-at value is `missing`.
 
 ## When You Must Leave the Card — stop and go up
 
@@ -246,8 +289,8 @@ A delegated implementer stops and reports blocked — both exits belong to the m
   rules path + `devflow/project/product.md` + `devflow/project/arch.md` +
   `devflow/project/code-style.md` + the existing `devflow/project/design.md` + the existing
   `devflow/project/glossary.md` and `devflow/journal.md` + every direct dependency-card
-  path + when `Read first` names a capability knowledge baseline, the result of the three
-  freshness comparisons (which statement groups are hypotheses). Give no other conversation
+  path + the automatically selected capability document and Binding ADR paths + the design
+  and verification freshness and reconfirmation projection. Give no other conversation
   backstory. After reading the card, the delegate opens
   its `Read first` paths exactly. Never put arch section names in `Read first`. For T-low
   tier, first check the card's `Read first` is complete; reinforce it if not.

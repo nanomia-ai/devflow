@@ -1,6 +1,6 @@
 ---
 name: resume
-description: Resume. In a new session, reads the Layer 0 documents, task tree, verification records, HANDOFF, journal, and git state, then continues from the stage recorded on disk. Use for session restarts, continuing work, or checking where things stand.
+description: Resume and domain entry. Restores a new session from disk and continues to the next stage, or finds a capability document by number or name and explains the domain. Use for session restarts, continuing work, status checks, or capability and domain onboarding questions.
 ---
 
 # resume — Resume
@@ -13,13 +13,56 @@ predicates (`../principles/baseline-predicates.md`).
 Purpose: a new session restores state from the bounded reads below when the tree exists; without a
 tree, it derives the next stage from the Layer 0 documents and continues.
 
+## Domain-Entry Questions
+
+When the user's request is to explain or enter a capability or domain rather than resume
+state, run this section before normal routing.
+
+1. If any of product.md, arch.md, or glossary.md is absent or arch.md lacks `Brownfield`,
+   report only each exact missing path or field and `domain knowledge not initialized`; open no capability body. When the user asks
+   to initialize it, leave this section and use normal resume routing. With all three present,
+   read product.md's identity paragraph and capability list, plus the file names and shape
+   projection under `devflow/project/capabilities/`. Select `01-foundation.md` when the
+   request semantically identifies foundation or contains a standalone `01` token. Otherwise
+   select product.md rows when it contains a complete capability name or standalone number
+   token, comparing file numbers as integers. With zero matches, present only foundation plus
+   non-retired number/name candidates and ask; with multiple matches, present only matched
+   candidates and ask. Open no body before the answer. With exactly one match, select its
+   number. When no same-numbered file exists for the selection, including foundation,
+   report only the expected path and the repair route — adopt with `Brownfield: yes`, arch
+   with `no` — and invent no explanation. Open foundation and every non-retired capability
+   file only when the user explicitly requests the full expected set. A general domain
+   question is not such a request. When the unique same-numbered file has the canon's exact
+   `legacy v0.10` shape, open no body and report only its path and the arch or adopt mechanical
+   migration route. Before opening a body, require exactly one same-numbered
+   file with valid fixed boundary, sections, and metadata shape. For a single request, a
+   duplicate or shape anomaly returns only bounded shape facts and the repair route. The user
+   resolves a duplicate number/path anomaly. Zero or multiple boundaries follow the canon's
+   recovery procedure; arch or adopt repairs one-boundary design shape, while the next
+   capability closure's verify repairs a verified-only shape anomaly. For a
+   full-set request, open only valid files, report each anomalous number the same way, and
+   continue with the rest.
+2. Read the selected file's design and verified zones and the exact paths named by Binding
+   ADRs. Run the canonical baseline predicates' Design head, Scope head, and Covered cards
+   comparisons. Do not present a hypothesis as current fact. When a Binding ADR path is
+   absent, report the exact path, make the design zone a hypothesis, and search for no
+   substitute.
+3. Answer in this order: path; purpose and boundary; concepts and invariants; verified
+   current behavior and entry points; consumed contracts and traps; freshness of both zones;
+   and the symmetric difference in completed cards since the baseline. When the evidence is
+   `None.`, say so.
+
+This answer changes no file or state and asks no normal-resume approval question. If the
+user then requests implementation, return to the normal procedure, report state, obtain
+approval, and let work automatically read the same numbered document.
+
 ## Procedure — when the tree exists, in exactly this order
 
 ```
-1. product.md's identity paragraph and capability list; arch.md's Brownfield,
-   integration, and capability_baseline fields; and the list of file names directly under
-   `devflow/project/capabilities/` when arch.md `capability_baseline` is `yes`
-   (names only — never the contents)
+1. product.md's identity paragraph and capability list; arch.md's Brownfield and
+   integration fields; and the file names directly under `devflow/project/capabilities/`
+   plus the canonical baseline predicates' shape projection
+   (mechanical query results only — never the body)
 2. devflow/tree/ full listing                      ← how far things got (.done. / .wip. / pending)
 3. my claimed card in full. For others' claims, path and claimant only. From every
    pending card, read only `Depends`, `Approval`, and `Review`
@@ -59,12 +102,13 @@ Report what you read in **one paragraph**:
 
 ```
 "<service> is complete through <capability>, with <task> in progress.
-The progress log reaches <last point>; the next step is <one step>. Proceed?"
+The progress log reaches <last point>; capability documents are
+<non-retired filenames|none>. The next step is <one step>. Proceed?"
 ```
 
-When arch.md `capability_baseline` is `yes` and the next stage names a capability whose
-baseline file exists, name that file's exact path in the report so a human can open it; do
-not read its contents.
+Exclude retired capability files from the list. When the next stage names a capability or
+foundation, include that numbered document's exact path. Append any shape-projection anomaly
+as one line naming the path and zone.
 
 Once approved, continue into the stage named in the report. Never modify code before
 approval.
@@ -95,6 +139,9 @@ matching row:
 | My claimed card lacks `Approval` or `Review`, has `Approval: pending`, or has noncanonical `Depends` | split — checkpoint any current diff and progress log, release the card, normalize legacy dependencies, finish execution-proposal approval and the planning commit, then reclaim it |
 | My claimed card has a `Depends` target that is not `.done.` | split — release the original card and finish the prerequisite |
 | A card of mine is claimed | work |
+| An expected file has the canonical baseline predicates' exact `legacy v0.10` shape | with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone |
+| An expected file under the canonical baseline predicates is missing, or an expected file with exactly one fixed boundary has a design section, design metadata, or current Design head that differs from the contract | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |
+| An expected file has zero or more than one `## Verified state` boundary | resume — instead of the whole original, report its path, working-tree boundary count and line count, the HEAD blob object ID for that exact path or `none`, and the expected boundary, then offer only two choices: (1) after confirming that a user-identified Git revision and path has one boundary, the user restores and commits only that complete file; (2) state the discarded verified prose and HEAD blob ID, obtain confirmation, and route `Brownfield: yes` to adopt or `no` to arch for a whole reset from current Layer 0 plus an empty verified scaffold under the ordinary design-batch confirmation. Search no history for a known-good revision; resume writes no file, and deferral changes no file |
 | journal contains an exact `product verification requested` line | verify — product layer |
 | A Retrospective section has a `pending · source id:` state, or an Audit `pending · source id:` state passes the Audit execution boundary | verify — run and record one runnable pending event |
 | Under the verification predicates, an automatic Retrospective is unrun; an automatic Audit is unrun and passes the Audit boundary; a user-request Retrospective has its target record; or a user-request Audit has its target record and passes the Audit boundary | verify — run and record one new event |
@@ -121,6 +168,11 @@ The blocked-Audit reporting row does not gate a verdict, `.done`, product-result
 or other work. After reporting the current candidates, leave disk unchanged and treat only
 those candidates as nonmatching event rows and as not unrun events for the rest of this
 session's table scans. Judge them again next session because the execution boundary can change.
+
+Report a file whose verified-zone sections or verification metadata alone have malformed
+shape, but open no separate stage. The next capability closure's verify run replaces that
+zone in full and heals it. If the user defers baseline repair, skip only the two baseline
+rows above during the rest of this session's table scans; do not block the execution axis.
 
 When no earlier row matches and `Brownfield: yes`, report the tracked post-adoption work
 complete and wait for a new request. Run the product layer only when the user explicitly
@@ -191,14 +243,19 @@ the re-anchor procedure.
   5. product.md, arch.md, code-style.md, and glossary.md all exist but arch.md lacks Brownfield: ask,
      "Did implementation code exist before devflow entered?" Yes makes adopt write only
      `Brownfield: yes`; no makes arch write only `Brownfield: no`.
-  6. If a valid layer-opening marker exists in the working tree or HEAD, split selects the
+  6. If Layer 0 is complete and an expected file has the canonical baseline predicates'
+     exact `legacy v0.10` shape, adopt with `Brownfield: yes`, or arch with `no`, runs its
+     mechanical migration. Otherwise, when an expected file or valid design zone is missing,
+     the same branch creates only the capability documents. Any other fixed-boundary anomaly
+     follows the user-confirmation route above.
+  7. If a valid layer-opening marker exists in the working tree or HEAD, split selects the
      earliest one and finishes its planning commit from the durable source and minted
      numbers.
-  7. If journal has an exact `re-split pending` line, run split.
-  8. If journal has an exact `maintenance routing pending` line, run split's maintenance routing.
-  9. If journal has an exact `product verification requested` line, run verify's product
+  8. If journal has an exact `re-split pending` line, run split.
+  9. If journal has an exact `maintenance routing pending` line, run split's maintenance routing.
+  10. If journal has an exact `product verification requested` line, run verify's product
      layer.
-  10. With `Brownfield: yes`, use split's maintenance routing only when the current
+  11. With `Brownfield: yes`, use split's maintenance routing only when the current
      conversation contains a post-adoption change request. With no request, report
      adoption complete and no active work, then wait.
-  11. With `Brownfield: no`, run split. Run design only when the user explicitly selects it.
+  12. With `Brownfield: no`, run split. Run design only when the user explicitly selects it.

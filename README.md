@@ -117,6 +117,9 @@ devflow/
     arch.md                       how (stack · structure · Provisional values · verify channel)
     design.md  code-style.md      (optional) design · code taste declarations
     glossary.md  decisions/       glossary · ADRs
+    capabilities/                 number-keyed capability docs — design + verified zones
+      01-foundation.md              foundation's shared boundary
+      02-payment.md                 current domain entry for the payment capability
   tree/                        ← canonical progress state — the filename IS the state
     01-foundation/                foundation (shared groundwork)
     02-payment/                   one capability = one folder
@@ -177,7 +180,7 @@ One table shows what gets written where, and who reads it:
 | `project/glossary.md` | product (adopt reverse-derives it in a brownfield) | work, reviewer, verify | a term becomes necessary |
 | `project/decisions/ADR-*.md` | arch | work when a card names one, retrospector | a binding decision arrives or is superseded |
 | `project/design.md` | design | work, split, adopt | a design run |
-| `project/capabilities/NN-*.md` | verify, when a capability closes on a pass | work when the card names it, and a person entering the domain | rewritten whole at every closing pass, and renamed when the capability is |
+| `project/capabilities/NN-*.md` | arch owns the design zone (adopt in a brownfield); verify owns the verified zone | work by automatic number lookup · resume for domain questions · reviewer · retrospector · people | the design zone after Layer 0 confirmation, and the verified zone when a capability passes, each replaced whole |
 | `tree/**` task cards | split creates them, work fills the progress log | split · work · verify · reviewer · resume | planning, implementation, every status transition |
 | `tree/<capability>/verify.md` | verify | resume through its bounded projection, retrospector | every capability verification |
 | `tree/verify.md` | verify, at the product layer | resume, retrospector | every product verification |
@@ -188,7 +191,7 @@ One table shows what gets written where, and who reads it:
 These are the only state files devflow keeps. Your code and every other document in the
 repository stay yours.
 
-Both gates that open the tree, split and resume, run a 16-item integrity check the moment
+Both gates that open the tree, split and resume, run a 15-item integrity check the moment
 they start. It runs in solo mode too. It looks for duplicate numbers, a live card inside a
 closed folder, a dependency that points at no card, a journal line that does not parse, and
 **reports without correcting**, because an auto-correction that misjudges spreads
@@ -220,20 +223,20 @@ in neither the tree nor any card.
 | Skill | When | Produces | Design intent |
 |---|---|---|---|
 | product | new project | product.md · glossary.md | the capability names chosen here carry through as module and folder names, one word to the end |
-| arch | after product | arch.md · code-style.md | separates guesses (Provisional) from decisions at the sentence level, so documents cannot lie |
-| adopt | adopting in existing code | product.md · arch.md · code-style.md · glossary.md (back-derived) | reverse-derivation instead of an interview — never ask what code answers, ask the owner only what code cannot |
+| arch | after product | arch.md · code-style.md · foundation and capability design zones | separates guesses (Provisional) from decisions and leaves domain boundaries before the first card |
+| adopt | adopting in existing code | product.md · arch.md · code-style.md · glossary.md · capability design zones (back-derived) | reverse-derivation instead of an interview — never ask what code answers, ask the owner only what code cannot |
 | design | only with a frontend (optional) | design.md · token file · /preview | the canon for colors and spacing is a token file, not a document |
 | split | breaking down work | capability folders · task cards in tree/ + the execution proposal (order · parallelism · model tiers — a user approval gate) | opens one layer at a time — earlier implementation reshapes later decomposition |
 | work | implementation | code · in-card progress log · commits | log to disk before running — whenever the session dies, reading the card is enough to continue |
-| verify | capability complete · MVP reached | verify.md · fix cards (on failure) · audit and retrospective findings (event-triggered) · capability knowledge baseline (when enabled) | what was not executed is not passed — it is unverified |
-| resume | new session | a state report and approval. It also closes non-capability folders from the deepest up, landing them in one boundary commit (multi: the digest procedure corrects shared documents) | when HANDOFF and the tree conflict, the tree wins |
+| verify | capability complete · MVP reached | verify.md · fix cards (on failure) · audit and retrospective findings (event-triggered) · capability document verified zone | what was not executed is not passed — it is unverified |
+| resume | new session · domain entry | a state report and approval, or a domain explanation selected by number. It also closes non-capability folders from the deepest up | when HANDOFF and the tree conflict, the tree wins; never present a hypothesis as fact |
 | principles | read before running by the other eight skills | — | the canonical rules live in exactly one place |
 
 Four roles ride along — none crossing into another's territory is the
 bias-prevention device:
 
-- **reviewer** — judges before the task commit by reading only the card (progress log
-  excluded), the diff, and the code-style.md · glossary.md · journal.md files that exist.
+- **reviewer** — judges before the task commit by reading the card (progress log excluded),
+  the diff, coding conventions, and that capability's design zone and freshness projection.
   Never executes. Only the user can waive a review, and the sole other exception is a
   research card with no code diff.
 - **verifier** — judges by channel execution alone, knowing nothing of the
@@ -339,45 +342,70 @@ The AI judges everything else. At these points it stops and waits for you.
   only once you confirm it.
 - **Disproving a confirmed statement** — when a measurement contradicts the confirmed identity
   paragraph or a success criterion, devflow will not rewrite it without your confirmation.
-- **A capability that looks like two** — when a baseline exceeds the same section cap, or the
-  total, twice in a row, devflow reports that the capability may need splitting. Whether to
-  split is yours.
+- **A capability that looks like two** — when the design and verified zones cannot express
+  current structure within the roughly 185-line contract, devflow reports the reason and
+  the sections over their caps. Whether to split is yours.
 - **An open rebase or merge** — every skill stops on entry and asks whether to continue or
   abort. It never aborts on its own.
 
 ## Entering a domain — the capability knowledge baseline
 
-When a capability passes verification and closes, devflow writes that domain's blueprint.
-One capability, one file, at `devflow/project/capabilities/NN-<name>.md`. **The next
-session, and a teammate who just joined, read that one file and are inside the domain.**
-It holds the conceptual model, a main flow diagram, what a user can do right now, the
-invariants, the traps that must not recur, and how to verify it.
+One capability has one file at `devflow/project/capabilities/NN-<name>.md`. **The next
+session and a newly joined person enter the domain through this one page.** Purpose and
+ownership boundary, concepts, invariants, verified main flows and current behavior, entry
+points, consumed contracts, traps, and real verification methods live together.
 
-One arch.md line turns it on. The arch and adopt interviews ask for the value, recommending
-yes for a large service meant to live long and no for a small MVP. A missing line means no.
+The file exists from the beginning. In a new project, after product and arch are confirmed,
+arch writes the design zones for foundation and every non-retired capability. In a project
+that already has code, adopt writes the same zones from reverse-derived Layer 0. For a
+0.10.x project that has Layer 0 but no capability documents, resume detects the gap and
+routes only document creation to adopt for a brownfield or arch for a new project. It does
+not repeat the interview or code reverse-derivation. There is no per-project on/off switch.
 
-```
-capability_baseline: yes | no
-```
+One file has two lifecycles.
 
-Three devices keep it from going stale. First, **every time a capability closes on a pass,
-devflow rewrites the file whole.** No history section, no old layer patched on top. Second,
-the machine block at the end of the file checks freshness with two git commands. Third, a
-statement whose inputs that check found moved is demoted to a hypothesis. The reader does
-not take it as written and rechecks it against current code. The baseline is not canonical.
-On a conflict, code and ADRs win.
+- **Design zone** — arch writes it before the first card, or adopt in a brownfield. It holds
+  purpose, boundary, concepts, invariants, non-goals, and exact Binding ADR paths.
+- **Verified zone** — begins at `## Verified state` and runs through EOF. verify rewrites it
+  from current code when the capability actually passes verification.
 
-It flows into the work on its own. Once the file exists, whenever split creates a new
-implementation card it puts that capability's baseline into the card's `Read first`, and
-work reports one freshness line as it opens the card.
+Neither zone edits the other's statements. Each carries its own freshness stamp, and when
+an input changes only that zone becomes a hypothesis. A hypothesis is neither deletion nor
+failure. It marks that AI must reconfirm the statement at current authority. The baseline
+itself is not canonical, so current code, Layer 0, and ADRs win on conflict.
 
-Your part is small. Read it when you enter a domain. You may delete a line you have confirmed wrong.
-Never add one. Additions arrive only when the capability next closes on a pass. A retired
-capability needs no cleanup.
+It enters work without card wiring. work finds the capability document from the claimed
+card's depth-1 folder number, or `01-foundation.md` for a foundation card. Research cards
+are no exception. It also reads only the exact paths the document lists under Binding ADRs.
+No user or card needs to duplicate a baseline path. A capability-document path left in a
+v0.10 card's `Read first` is legacy wiring and is deferred to automatic number entry. When
+an exact v0.10 baseline already exists, current Layer 0 supplies its new design zone while
+the old verified bodies, timestamp, scope, and card set move mechanically into the new
+verified zone. It is not treated as damage reset. The old head did not include consumed
+paths, so it does not carry forward; the verified zone remains a hypothesis until that
+capability next passes verification and is refreshed from the new inputs.
 
-This systematizes the domain handoff the owner ran by hand, one briefing document per
-domain. The strengths stay. The traps, the verification procedures, the orientation you get
-on first read. Freshness and size are now the machine's job.
+To understand a domain first, ask in natural language. For example: “explain the payment
+domain,” “what should I know before entering capability 05?”, “explain foundation's shared
+contracts,” or “show every domain boundary.” resume selects one file by name or number;
+if the name is absent or ambiguous, it first shows only number/name candidates. It reads all
+files only when you explicitly request the full expected set. Its answer includes the path,
+freshness of both zones, and entries added to or removed from the completed-card set since
+the baseline. It does not describe hypothetical verified content as
+current fact.
+
+A domain relation is recorded only on the consuming side. Exact contract paths participate
+in freshness calculation; closing, splitting, or retiring a provider reports registered
+consumers and each one's current freshness in one line. This is an awareness mechanism. It
+does not automatically run another capability's verification or create cards.
+
+Your part is small. At first, confirm Layer 0, then confirm the batch of design zones arch
+or adopt derives from it. Later, read one when entering a domain; you may delete a body row
+or item you confirm is wrong when that does not empty its section. For the last item, let the
+writer skill replace the section with `None.`. Do not touch fixed headings or metadata;
+commit a direct deletion by itself before the next devflow skill. Each zone's writer owns
+additions and replacement. A retired capability remains as history and normally disappears
+only from the entry list.
 
 ## Design principles
 

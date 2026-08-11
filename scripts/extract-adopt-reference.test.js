@@ -36,6 +36,7 @@ test("arch reference carries the required gate and both output contracts", () =>
   assert.doesNotMatch(text, /derived questions \(step 3\)/);
   assert.doesNotMatch(text, /^## Procedure/m);
   assert.doesNotMatch(text, /^### 1\. Component derivation/m);
+  assert.doesNotMatch(text, /^## Capability documents/m);
   assert.doesNotMatch(text, /^On completion:/m);
 });
 

@@ -88,7 +88,9 @@ identifiers). The capability's tree folder gets `.stale` (the canonical rules' s
 notation). If the capability is still a waiting file, give that file `.stale.md` instead.
 Under `Brownfield: no`, when a retired capability has no tree representation, create its
 `.stale.md` waiting file in the same retirement commit.
-When a brownfield has no tree representation for it, create none.
+When a brownfield has no tree representation for it, create none. Leave the baseline file
+in place; the next capability-design refresh reports registered consumers from the retired
+file's stored Scope paths.
 
 ## Gates
 
@@ -102,8 +104,12 @@ When a brownfield has no tree representation for it, create none.
   product.md change, every status rename and marker required by those rows, and deletion
   of the lines addressed by this run in one binding-decision commit. If interrupted before
   that commit, delete no pending line. Leave any line this run did not address.
-- After the first creation, one line — "next is arch." After a re-run, compare the
-  confirmed changes with arch's Components, Stack, Code structure, Data, and
-  verify_channel. If any confirmed change contradicts a current statement in those
-  sections, say "next is arch." If none contradicts them and a tree exists, say "next is
+- After the first creation, one line — "next is arch." For every re-run, first compare the
+  confirmed changes with arch's Components, Stack, Code structure, Data, and verify_channel.
+  If any confirmed change contradicts a current statement there, say "next is arch." If arch
+  retains `Brownfield: yes`, adopt refreshes only the capability design zones after that run.
+  When there is no contradiction but the capability list, a capability name, or a capability
+  boundary changed, direct the next stage to adopt's capability-design refresh with
+  `Brownfield: yes`, and to arch's with `Brownfield: no`. Those two refreshes repeat neither
+  the Layer 0 interview nor reverse-derivation. Otherwise, if a tree exists say "next is
   resume"; if no tree exists, say "next is split."

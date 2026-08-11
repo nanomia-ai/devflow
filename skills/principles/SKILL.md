@@ -149,10 +149,10 @@ YYYY-MM-DDTHH:MM:SSZ evidence-finalizing: card-json: <JSON string containing the
 
 Before creating a layer's first child or folder, land its layer-opening record together
 with any uncommitted source record in a `split — begin <parent>` commit. Land a capability-
-closing record together with the passing verify.md record and, when arch.md's
-`capability_baseline` is `yes`, the closing capability's baseline file, in a
-`boundary — begin <capability number>` commit, before the folder rename or any other
-journal change (the baseline predicates govern that baseline file's absence). Both remain active until the
+closing record together with the passing verify.md record and, when the canonical baseline
+predicates' verified-zone refresh succeeds, the closing capability's baseline file, in a
+`boundary — begin <capability number>` commit before the folder rename or any other journal
+change. The canonical baseline predicates govern a refresh no-op. Both remain active until the
 next commit deletes them. If the working tree lacks one but HEAD contains it and its deletion
 is uncommitted, a consumer treats it as active and finishes the interrupted commit first.
 These begin commits are not task commits.
@@ -190,8 +190,8 @@ What you discovered → where to update:
 | Discovery | Update target |
 |---|---|
 | Feature, screen, or scope changed | product.md (+ mark affected cards that need replacement work `.stale.` + the `re-split pending` markers above) |
-| A capability's name changed | product.md's capability row + the same-numbered tree folder or waiting file (a waiting file's body line takes the new name too) + that capability's baseline file + every arch.md `Existing records` line that names it, renamed together in one binding-decision commit (+ replace the old baseline path in `Read first` on pending or claimed cards carrying it, and any path inside that folder that HANDOFF names). Code paths and arch.md's Code structure keep naming what exists on disk, and that sketch entry still maps to this capability; moving code is a separate card. The number never changes and no card moves. Land it only while no canonical journal marker or evidence record names that folder or a path inside it |
-| A capability turns out to be two | product.md — narrow the existing row and append the new capability — and arch.md's Code structure for the path split. The existing folder keeps its number, its cards, and its history; the new capability gets no folder and no card now. No card is backfilled or moved. When narrowing also changes the existing capability's name, it goes through the rename row above as well |
+| A capability's name changed | first update product.md's capability row + the same-numbered tree folder or waiting file (a waiting file's body line takes the new name too) + every arch.md `Existing records` line naming it in one binding decision (+ replace any path inside that folder named by HANDOFF). The following arch capability-design commit, or adopt in a brownfield, updates the same-numbered baseline path and design zone together. The baseline predicates own recovery between the two commits. Code paths and arch.md's Code structure keep naming what exists on disk, and that sketch entry still maps to this capability; moving code is a separate card. The number never changes and no card moves. Land the first commit only while no canonical journal marker or evidence record names that folder or a path inside it |
+| A capability turns out to be two | product.md — narrow the existing row and append the new capability — and arch.md's Code structure for the path split. The existing folder keeps its number, cards, and history; the new capability gets no folder or card now. No card is backfilled or moved. arch, or adopt in a brownfield, re-derives affected design zones and the new capability file and reports the canonical registered-consumer projection. When narrowing also changes the existing capability's name, use the rename row above too |
 | Stack, module boundary, or data shape doesn't fit | arch.md (+ consider an ADR) |
 | A value the upper document called provisional is now measured | that row of arch.md's Provisional table — **replace it, don't add beside it**. An ADR that assumed the old value gets a dated update note |
 | A Provisional row's settling card is 'unminted' and the tree has reached its layer | create the settling card and replace 'unminted' in that arch.md row with its number |
@@ -201,7 +201,7 @@ What you discovered → where to update:
 | A new coding-convention decision is needed | one line in code-style.md "Project choices" |
 | A verification means is newly created or changed | the means line of arch.md's verify_channel |
 | A file in arch.md's `Existing records` moved or no longer matches current code | replace or delete that exact path (+ `Read first` in pending or claimed cards carrying it) |
-| A decision recorded in an ADR is reversed or no longer applies | write the successor ADR, add a dated update note to the superseded one naming that successor path, and replace the superseded path in `Read first` on pending or claimed cards carrying it |
+| A decision recorded in an ADR is reversed or no longer applies | write the successor ADR and add a dated update note to the superseded one naming that successor path. In the same binding decision, arch replaces the old path in every baseline design zone whose Binding ADRs lists it, and replaces it on pending or claimed cards that name it directly in `Read first` |
 | A new term becomes necessary | one line in glossary.md |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | A cross-task decision | one line in journal.md |
@@ -227,8 +227,11 @@ one. A document that only grows is a dead document.
 Target ownership is fixed: product owns product.md and glossary.md; arch owns arch.md,
 code-style.md, and decisions/; design owns design.md; adopt owns arch.md `Existing records`
 and may add only a missing `Brownfield` field to an existing arch.md;
-split owns the tree and task cards; verify owns verify.md and
-`devflow/project/capabilities/`.
+split owns the tree and task cards; verify owns verify.md. arch, or adopt in a brownfield,
+owns the design zone under `devflow/project/capabilities/`; verify owns the verified zone
+after creation. The canonical baseline predicates govern the initial empty verified
+scaffold, mechanical path replacement when an ADR is superseded, the exact byte boundary,
+the exact mechanical v0.10 migration, and the human-deletion exception.
 
 A document still being produced by a running product, arch, design, or adopt session is
 a draft until the user confirms it — reconcile a draft's contradictions by editing the
@@ -299,10 +302,6 @@ corruption. Correct only after user approval.
     more than one `product verification running` or `product verification result` line;
     or a result line whose product, verification, code, or verdict field differs from the
     corresponding tree-root verify.md field?
-16. With arch.md `capability_baseline` at `yes`, does a pending or claimed implementation
-    card under a capability whose baseline file exists omit that baseline's exact path from
-    `Read first` (research cards excluded)?
-
 An item-12, item-13, item-14, or item-15 anomaly blocks later routing and every tree write. Present the raw line, the
 expected format, and the whole proposed replacement to the user. Use in that proposal
 only values that parse from the raw line or are uniquely determined on disk; ask for
@@ -408,6 +407,11 @@ decisions. These records do not directly change card or folder status. A task ca
   (adopt lands all adoption documents together as `adopt — layer 0`). A document created
   alongside another (glossary.md with product.md) rides the same commit. A single-field
   completion of an existing document uses the same message form. In multi this commit is a
+  binding decision.
+- **Capability-design commit**: after every confirmed Layer 0 commit has landed, arch, or
+  adopt in a brownfield, writes the design zones for the expected capability baselines as
+  its final output. Land only those capability files as `arch — capabilities` or
+  `adopt — capabilities`; if no capability bytes change, do not commit. In multi this is a
   binding decision.
 - **Planning commit**: split bundles newly created or revised pending cards,
   user-confirmed card-dependency format corrections, tree structure, card Approval and
@@ -529,7 +533,9 @@ decisions. These records do not directly change card or folder status. A task ca
   the specified state is the passing verify.md record, one exact baseline path of the closing
   capability (absent, partial, or any bytes), and — when already created — the
   capability-closing record; the baseline predicates govern that baseline file's regeneration
-  before that commit lands. Any other
+  before that commit lands. Outside a canonical capability-design commit, the mechanical
+  exact-path replacement for a superseded ADR, the canonical human-deletion exception,
+  restoration of one complete one-boundary file from a user-identified Git revision, or this begin transition, any
   `devflow/project/capabilities/` diff is an integrity anomaly.
 - **git belongs to the main session.** Subagents implement and write the progress log —
   they never commit, rename, or push.

@@ -194,7 +194,9 @@ section below).
      no exact mapping exists, start at every external entry point for that capability in
      product.md's Screens & access points and arch.md's Components, trace repository-owned
      code, stop before a boundary of another capability identified earlier in this trace or
-     mapped exactly by arch.md's Code structure, and use the exact traversed files plus
+     mapped exactly by arch.md's Code structure. Collect the exact path at that other
+     capability boundary separately as a `Consumed paths` candidate; do not put it in the
+     capability code scope. Use the exact traversed files plus
      directly used shared files (paths arch.md maps as shared or assigns to no single
      capability). A folder is a scope
      only when arch.md maps it exactly to that capability. If an entry point or boundary
@@ -235,19 +237,41 @@ section below).
 7. **Capability layer passes → capability-closing begin commit.** Write the passing result
    to verify.md and create the canonical capability-closing marker. Its `head` is HEAD
    immediately before committing those files; `product`, `verification`, and
-   `capability` are the run's three revisions. When arch.md `capability_baseline` is `yes`,
-   refresh the closing capability's baseline by the baseline predicates — read the standard
-   refresh set once and replace the file wholesale — before creating the marker. When the
-   refresh cannot run or a format anomaly involving the closing capability's number or path
-   is found, write no baseline, let closure proceed,
-   and report one line to the user at that closure: `baseline no-op: <reason>`.
-   First land only the passing verify.md, the marker, and — when arch.md
-   `capability_baseline` is `yes` — the closing capability's refreshed baseline file in
-   `boundary — begin <capability number>`; before that commit, do not rename
+   `capability` are the run's three revisions. Before creating the marker, refresh the
+   closing capability's verified zone under the canonical baseline predicates. Read the
+   standard refresh set from HEAD once and replace from exactly one `## Verified state`
+   heading through EOF. Do not change the design zone, `Capability number`, or
+   `Design head` bytes. Write exact paths where this run's Standards gate stopped at another
+   capability boundary as `Consumed paths`, the capability code scope as `Scope paths`, and
+   calculate `Scope head` from the union of those two sets. When the union is empty, run no
+   git command and write `Scope head: none`.
+
+   In canonical begin-prefix recovery, do not treat an absent, partial, or arbitrary
+   working-tree path as baseline absence; recover the design zone from the unique
+   same-numbered one-boundary HEAD file. Outside that recovery, when the HEAD file has the
+   canon's exact `legacy v0.10` shape, report `baseline no-op: legacy v0.10 migration pending`
+   and do not migrate its verified zone. Otherwise, if HEAD has no unique
+   same-numbered baseline, that HEAD file's boundary is not exactly one, or a format anomaly
+   involves the closing capability's number or path, write no baseline, let closure proceed,
+   and report `baseline no-op: <reason>` in one line. Otherwise this full
+   replacement also heals malformed verified-zone shape.
+   First land only the passing verify.md, the marker, and the closing capability baseline
+   whose refresh succeeded in `boundary — begin <capability number>`; before that commit,
+   do not rename
    the folder or change another journal line. An interruption that leaves in the working tree
-   only the pass, any bytes at the closing capability's baseline path, and — when already
+   only the pass, any working-tree state including absence at the closing capability's baseline path, and — when already
    created — the marker finishes the same begin commit first; the baseline predicates govern
-   regenerating that baseline file before the commit.
+   regenerating that baseline's verified zone before the commit.
+
+   When the baseline refresh is a no-op, run no consumer projection and report only the
+   canonical `registered consumers: unknown — provider baseline no-op: <same reason>` line.
+   Once a successful refresh's begin commit lands, read only the canon's bounded consumer
+   projection from other non-retired capability documents. For each registered consumer whose `Consumed paths` matches the
+   union of the closing baseline's HEAD-before and refreshed-after Scope paths under the
+   canonical baseline predicates, apply the canon's `fresh`, `hypothesis`, or `unknown` judgment,
+   and report one line: `registered consumers: <number (status), ... | none>`. Do not read a
+   body, execute consumer verification, or create a card, and do not claim this closure
+   caused a state change.
 
    After interruption, when the whole working-tree diff is a canonical step-8 closure
    prefix, skip the following checks and go to step 8. Otherwise first reapply the
@@ -436,12 +460,14 @@ alternatives that does not gate a verdict or status transition.
 Brief a clean subagent/fresh session with `retrospector.md` beside this skill,
 **verbatim — never summarized**, and give it exactly one input set for the event:
 
-- Capability first closure or a capability-number user request: that capability's description from product.md · all of
-  arch.md and every `.md` directly under `devflow/project/decisions/` · that capability
-  folder's filenames and statuses · all of journal.md · that capability's verify.md.
-- First product-layer verdict or a `product`-target user request: all of product.md · arch.md and every
-  `.md` directly under `devflow/project/decisions/` · the whole tree's filenames and
-  statuses · journal.md · every verify.md (including the tree root).
+- Capability first closure or a capability-number user request: all of product.md and
+  arch.md · glossary.md when present · every `.md` directly under `devflow/project/decisions/` · that capability
+  folder's filenames and statuses · all of journal.md · that capability's verify.md · that
+  capability's one baseline and its design and verification freshness projection.
+- First product-layer verdict or a `product`-target user request: all of product.md and
+  arch.md · glossary.md when present · every `.md` directly under `devflow/project/decisions/` · the whole tree's filenames and
+  statuses · journal.md · every verify.md (including the tree root) · foundation and every
+  non-retired capability baseline and each design and verification freshness projection.
 
 Code is not given. Recommended: T-mid + high effort.
 Findings go into the report to the user — only adopted findings follow the shared

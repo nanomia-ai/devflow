@@ -23,6 +23,7 @@ const pairRelatives = [
   "README_ko.md",
   "docs/design_ko.md",
   "docs/capability-knowledge-proposal_ko.md",
+  "docs/v0.11.0-domain-knowledge-redesign-report_ko.md",
   "docs/v0.9.21-redesign-report_ko.md",
 ];
 
@@ -70,6 +71,7 @@ test("English deploy artifacts contain no Korean except README's language switch
     "CHANGELOG.md",
     "docs/design.md",
     "docs/capability-knowledge-proposal.md",
+    "docs/v0.11.0-domain-knowledge-redesign-report.md",
     "docs/v0.9.21-redesign-report.md",
     "codex/AGENTS-devflow.md",
     "codex/install.ps1",
@@ -146,7 +148,7 @@ test("both Codex installers embed each predicate companion only for its consumer
       .includes("`../principles/baseline-predicates.md`"))
     .map((dir) => path.basename(dir))
     .sort();
-  assert.deepEqual(baselineConsumers, ["resume", "verify"]);
+  assert.deepEqual(baselineConsumers, ["adopt", "arch", "resume", "verify"]);
   for (const name of ["split", "work"]) {
     assert.doesNotMatch(
       fs.readFileSync(path.join(root, "skills", name, "SKILL.md"), "utf8"),
@@ -164,6 +166,7 @@ test("both Codex installers embed each predicate companion only for its consumer
   assert.match(sh, /printf '%s\\n' "\$VERIFICATION_PREDICATES"/);
   assert.match(ps1, /\$usesBaselinePredicates = \$body\.Contains\('\`\.\.\/principles\/baseline-predicates\.md\`'\)/);
   assert.match(ps1, /if \(\$usesBaselinePredicates\) \{\s+\$companions \+= @\("", "---", "", \$baselinePredicates\.TrimEnd\(\)\)/);
+  assert.match(sh, /adopt\|arch\|resume\|verify\)/);
   assert.match(sh, /printf '%s\\n' "\$BASELINE_PREDICATES"/);
   assert.doesNotMatch(verificationPredicates, /`state-predicates\.md`|`\.\.\//);
   assert.doesNotMatch(baselinePredicates, /`state-predicates\.md`|`\.\.\//);
@@ -265,7 +268,7 @@ test("existing-record compatibility is an indexed, bounded read path", () => {
   assert.match(adopt, /under arch\.md's `Existing records`/);
   assert.match(arch, /`Existing records` is only a locator index/);
   assert.match(split, /mapped capability and `shared` in arch\.md's\s+`Existing records`/);
-  assert.match(work, /Do not open a path listed only in arch\.md's\s+`Existing records`/);
+  assert.match(work, /Do not open a path listed only\s+in arch\.md's\s+`Existing records`/);
 });
 
 test("glossary has a producer and deterministic recovery on both project types", () => {
@@ -345,68 +348,175 @@ test("a capability pass cannot close with old gates and its closure is prefix-re
   assert.match(verify, /canonical step-8 closure\s+prefix/);
 });
 
-test("the capability-knowledge proposal separates coverage from mutable task state", () => {
+test("capability knowledge has one executable canon and bounded consumers", () => {
   const proposal = fs.readFileSync(path.join(root, "docs", "capability-knowledge-proposal.md"), "utf8");
-  assert.match(proposal, /Status: \*\*candidate contract v2\.2/);
-  assert.match(proposal, /Until skills execute this contract, no skill\s+executes this proposal/);
-  assert.match(proposal, /no separate baseline per `arch\.md` component[\s\S]*no\s+independent component-level verification closure/);
-  assert.match(proposal, /A baseline file\s+copies no current card status, progress, assignee, or next work; Covered cards records\s+only past inclusion\./);
-  assert.match(proposal, /Covered cards[\s\S]*canonical card-number order[\s\S]*\["02\.2","02\.2b","02\.10"\]/);
-  assert.match(proposal, /Covered cards holds every non-`\.stale\.` `\.done\.` card number below that\s+capability folder at closure/);
-  assert.match(proposal, /This does not tell work to\s+read every change card automatically\. work keeps its existing read set/);
-  assert.match(proposal, /An existing-record index becomes such an input only after split rechecks it\s+against the current change scope and puts it in a card's `Read first`\./);
+  const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
+  const arch = fs.readFileSync(path.join(root, "skills", "arch", "SKILL.md"), "utf8");
+  const adopt = fs.readFileSync(path.join(root, "skills", "adopt", "SKILL.md"), "utf8");
+  const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const reviewer = fs.readFileSync(path.join(root, "skills", "work", "reviewer.md"), "utf8");
+  const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  const retrospector = fs.readFileSync(path.join(root, "skills", "verify", "retrospector.md"), "utf8");
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  const active = [arch, adopt, split, work, reviewer, verify, retrospector, resume].join("\n");
 
-  assert.match(proposal, /devflow\/project\/capabilities\/NN-<capability-name-slug>\.md/);
-  assert.match(proposal, /Derive the number of a capability not yet assigned one on disk from its position in the\s+product\.md capability list/);
-  assert.match(proposal, /\*\*Once a folder, a pending file, or a baseline already holds a\s+number, disk is the sole authority\.\*\*/);
-  assert.match(proposal, /the capability list is append-only — a retired\s+row keeps its place, rows are never deleted or reordered, and additions go at the end\s+of the list\./);
-  assert.match(proposal, /The name slug carries no authority[\s\S]*Judgment uses the number only\./);
-  assert.match(proposal, /There are exactly two format anomalies: a file whose number cannot be parsed, and two\s+files for one capability\./);
+  assert.match(proposal, /Historical record of an adopted design\. Not an executable contract/);
+  assert.match(proposal, /executable contract exists only in\s+`skills\/principles\/baseline-predicates\.md`/);
+  assert.doesNotMatch(proposal, /capability_baseline/);
 
-  assert.match(proposal, /Each file has only these 12 sections, in this order\./);
-  assert.match(proposal, /The total cap is ~140 lines, and the first 40 lines are the domain itself\.[\s\S]*A write over the cap still succeeds\.[\s\S]*\*\*Rows marked `external` in the Traps section are excluded from the cap count\.\*\*/);
-  assert.match(proposal, /Write exactly `None\.` in a section with no verified content\. Invent nothing without\s+evidence\./);
+  assert.match(baseline, /Capability\s+knowledge baselines are always on; there is no\s+per-project switch/);
+  assert.match(baseline, /arch, adopt, verify, and resume read this canon directly; work,\s+reviewer, and retrospector receive only their required projections/);
+  assert.match(baseline, /Each file contains exactly one `## Verified state` H2 heading/);
+  assert.match(baseline, /bytes before it are the \*\*design zone\*\*[\s\S]*heading through end of file is the \*\*verified\s+zone\*\*/);
+  assert.match(baseline, /\| 6 \| Design metadata \| design \|[\s\S]*\| 14 \| Verification metadata \| verified \|/);
+  assert.match(baseline, /^Capability number: 02$/m);
+  assert.match(baseline, /^Purpose: <why it exists and what it implements, one line>$/m);
+  assert.match(baseline, /^Boundary: owns <owned scope>; does not own <neighbor capability number and name, or none>$/m);
+  assert.match(baseline, /^Trust: design reflects confirmed Layer 0; verified state reflects the last passing capability verification, or contains no evidence before one\. Judge each zone by its metadata\.$/m);
+  assert.match(baseline, /^Design head: <output of the Design head command>$/m);
+  assert.match(baseline, /^Verified at: <YYYY-MM-DDTHH:MM:SSZ \| none>$/m);
+  assert.match(baseline, /^Covered cards: \["02\.1","02\.2","02\.2b"\]$/m);
+  assert.match(baseline, /^Scope paths: \["src\/payment\/\.\.\.", \.\.\.\]$/m);
+  assert.match(baseline, /^Consumed paths: \["src\/customer\/contract\.ts", \.\.\.\]$/m);
+  assert.match(baseline, /^Scope head: <output of the Scope head command \| none>$/m);
+  assert.match(baseline, /git log -1 --format=%H --\s+devflow\/project\/product\.md devflow\/project\/arch\.md devflow\/project\/glossary\.md/);
+  assert.match(baseline, /^  git log -1 --format=%H -- devflow\/project\/product\.md devflow\/project\/arch\.md devflow\/project\/glossary\.md$/m);
+  assert.match(baseline, /union is empty[\s\S]{0,120}`Scope head: none`/);
+  assert.match(baseline, /Never run\s+pathless `git log -1`/);
+  assert.match(baseline, /arch, or adopt in a brownfield, replaces from file start up to but excluding[\s\S]*verify replaces from `## Verified state` through end of file/);
+  assert.match(baseline, /The expected set is the foundation plus every non-retired capability number/);
+  assert.match(baseline, /Before either exists, use the product\.md\s+capability name exactly as split would use it in the tree; invent no separate slug\s+normalization/);
+  assert.match(baseline, /absent means no same-numbered baseline in either the working tree or\s+HEAD/);
+  assert.match(baseline, /work parses the leading number of the depth-1 ancestor directly below `devflow\/tree\/`/);
+  assert.match(baseline, /Do not copy\s+baseline or ADR paths into cards/);
+  assert.match(baseline, /remains in a card's\s+`Read first` is legacy wiring[\s\S]*select and shape-gate only through the number rule/);
+  assert.match(baseline, /With all\s+three present, resume selects foundation when the request semantically identifies it/);
+  assert.match(baseline, /With zero matches it reports only foundation plus non-retired number\/name\s+candidates and asks; with multiple matches it reports only matched candidates and asks/);
+  assert.match(baseline, /registered consumers: <number \(status\), \.\.\. \| none>/);
 
-  assert.match(proposal, /`capability_baseline: yes \| no`\. \*\*Absent means no\*\*[\s\S]*\*\*When the switch is\s+no, an existing file is caught by no wiring, no integrity-check item, and no resume\s+listing\.\*\*/);
-  assert.match(proposal, /\*\*Riding the begin commit\*\*: the begin commit carries the passing verify\.md, the\s+capability-closing marker, and the closing capability's baseline file together\./);
-  assert.match(proposal, /Regenerate it from the standard refresh set[\s\S]*before completing the begin commit\./);
-  assert.match(proposal, /Any other diff under\s+`capabilities\/` is still an anomaly\./);
-  assert.match(proposal, /\*\*add the baseline to all four exclusivity phrasings\*\*/);
-  assert.match(proposal, /Step 8's three operations \(verify\.md sweep → journal → folder rename\) are unchanged\./);
-  assert.match(proposal, /Closure and both head calculations happen on the integration branch\s+after a fetch, so a stored head always remains an ancestor\./);
-  assert.match(proposal, /\*\*Durability — shape tolerance\*\*: a file with a different section or field set is a\s+hypothesis, and the next closure heals it\./);
-  assert.match(proposal, /a baseline failure\s+is a report plus a no-op, and closure proceeds/);
-  assert.match(proposal, /Reporting one line to the user at that\s+closure is mandatory: “baseline no-op: <reason>”\./);
-  assert.match(proposal, /delete a trap or a Verify item only when its\s+reproduction condition has vanished from current code/);
-  assert.match(proposal, /whenever split creates or revises a pending implementation card[\s\S]*put the baseline path and the\s+existing paths from the Binding ADRs section in each such card's `Read first`/);
-  assert.match(proposal, /it is an anomaly\s+when a pending or claimed implementation card below a capability whose switch is yes\s+and whose baseline file exists lacks that baseline's exact path in `Read first`/);
-  assert.match(proposal, /resume reads only the list of filenames under\s+`capabilities\/` in step 1 \(never the contents\)/);
-  assert.match(proposal, /\*\*Wiring — the full machine contract\*\* lives in\s+`skills\/principles\/baseline-predicates\.md`/);
-  assert.match(proposal, /The\s+principles body grows by one ownership sentence, the begin-ride wording change, and one\s+brownfield sentence in the number convention\./);
+  assert.match(arch, /`arch — capabilities`[\s\S]*run's last\s+commit/);
+  assert.match(adopt, /`adopt — capabilities`[\s\S]*run's last\s+commit/);
+  assert.doesNotMatch(split, /capability_baseline|baseline's exact path/);
+  assert.match(work, /depth-1 ancestor directly below\s+`devflow\/tree\/`/);
+  assert.match(work, /baseline path directly under\s+`devflow\/project\/capabilities\/` is legacy wiring[\s\S]*defer it to the number judgment/);
+  assert.match(work, /select its path but do not open the body\s+yet[\s\S]*only when its shape gate permits, read both\s+zones and the exact Binding ADR paths/);
+  assert.match(reviewer, /design zone of the capability document[\s\S]*every existing file at an exact path listed in that zone's Binding\s+ADRs section/);
+  assert.match(reviewer, /baseline missing[\s\S]{0,80}judge from the card and supplied shared documents/);
+  assert.match(reviewer, /Apply supplied Binding ADRs as binding intent\. A baseline summary cannot override them/);
+  assert.match(reviewer, /design: hypothesis — <exact path#heading reconfirmed\[, \.\.\.\]>/);
+  assert.match(verify, /replace from exactly one `## Verified state`\s+heading through EOF/);
+  assert.match(verify, /union of the closing baseline's HEAD-before and refreshed-after Scope paths/);
+  assert.match(verify, /Capability first closure[\s\S]*all of product\.md and\s+arch\.md · glossary\.md when present · every `\.md` directly under `devflow\/project\/decisions\/`/);
+  assert.match(retrospector, /do not use a hypothetical verification\s+statement as strain evidence/);
+  assert.match(retrospector, /supplied product\.md, arch\.md,\s+glossary\.md, or ADRs/);
+  assert.match(resume, /^## Domain-Entry Questions$/m);
+  assert.match(resume, /If any of product\.md, arch\.md, or glossary\.md is absent or arch\.md lacks `Brownfield`[\s\S]*domain knowledge not initialized[\s\S]*open no capability body/);
+  assert.match(resume, /no same-numbered file exists for the selection, including foundation/);
+  assert.match(resume, /Zero or multiple boundaries follow the canon's\s+recovery procedure[\s\S]*verified-only shape anomaly/);
+  assert.match(resume, /With zero matches, present only foundation plus\s+non-retired number\/name candidates and ask; with multiple matches, present only matched\s+candidates and ask\. Open no body before the answer/);
+  assert.match(resume, /only when the user explicitly requests the full expected set/);
+  assert.doesNotMatch(active, /capability_baseline/);
+});
 
-  assert.match(proposal, /The machine block at the very end of a baseline has six fields, all `key: value`\./);
-  assert.match(proposal, /Scope head: <output of git log -1 --format=%H -- <one :\(literal\) pathspec per Scope paths member>>/);
-  assert.match(proposal, /Scope paths is the exact path list that verify step 5 produced for this closure\./);
-  assert.match(proposal, /\*\*Pass every Scope paths member as a `:\(literal\)` pathspec\*\*/);
-  assert.match(proposal, /\*\*Pass each pathspec to the shell as one quoted argument\*\* —\s+parentheses are metacharacters in both POSIX shells and PowerShell\./);
-  assert.match(proposal, /The five paths of Docs head are fixed\. When design\.md does not exist, that path\s+contributes nothing, which keeps the computation deterministic and blocks false\s+freshness for design\.md\./);
-  assert.match(proposal, /\*\*Scope head and Docs head must parse as complete Git object IDs\.\*\* Empty output or a\s+malformed value makes that group of statements a hypothesis/);
-  assert.match(proposal, /The GPT contract's four revision fields are out of the machine block; the verify Record\s+already holds the verification lineage\./);
-  assert.match(proposal, /when it differs or the output is empty,[\s>]+the code statements are a hypothesis/);
-  assert.match(proposal, /when that differs from `Covered cards`, the whole baseline is a hypothesis/);
-  assert.match(proposal, /recheck it at a current[\s>]+authority path inside the existing read set and code-search boundary\. Do not expand[\s>]+those boundaries\./);
+test("capability knowledge lifecycle has deterministic creation, recovery, and rename routes", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
+  const product = fs.readFileSync(path.join(root, "skills", "product", "SKILL.md"), "utf8");
+  const arch = fs.readFileSync(path.join(root, "skills", "arch", "SKILL.md"), "utf8");
+  const adopt = fs.readFileSync(path.join(root, "skills", "adopt", "SKILL.md"), "utf8");
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const reviewer = fs.readFileSync(path.join(root, "skills", "work", "reviewer.md"), "utf8");
+  const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  const retrospector = fs.readFileSync(path.join(root, "skills", "verify", "retrospector.md"), "utf8");
 
-  assert.match(proposal, /The refresh at closure compares nothing: read the \*\*standard refresh set\*\* once and\s+replace the file wholesale\./);
-  assert.match(proposal, /baseline-predicates enumerates that set: the existing\s+baseline[\s\S]*always the \*\*baseline at HEAD\*\*,\s+and working-tree bytes are never an input/);
-  assert.match(proposal, /the current non-`\.stale\.` `\.done\.` cards outside Covered\s+cards together with those cards' direct `Depends` and `Read first` paths\./);
-  assert.match(proposal, /\*\*Byte stability is a writing instruction, not a predicate\*\*[\s\S]*Rephrasing an unchanged fact is a\s+defect/);
-  assert.match(proposal, /canonical Document Hierarchy applies unchanged/);
-  assert.match(proposal, /An ADR in the Binding ADRs section\s+overrides a binding decision only within the scope that a canonical document explicitly\s+delegates to that exact path\./);
-  assert.match(proposal, /A conclusion from a `\.stale\.` card cannot support the current baseline\. Retain only\s+content reconfirmed from the full `capability code scope` that step 5 produced\./);
-  assert.match(proposal, /Derive capability retirement from current product\.md and tree state\. Neither edit nor\s+rename the baseline file\./);
-  assert.doesNotMatch(proposal, /reconfirmed from current code/);
-  assert.doesNotMatch(proposal, /canonical responsibility search|exactly indexed existing records|git hash-object -- <actual path>/);
-  assert.doesNotMatch(proposal, /stable-key=|<stable-key>|\.pending\.md|baseline-operations|Product-capability-(?:row|number)-json|input digest|Covered-history extension/);
+  assert.match(baseline, /initialization exception[\s\S]*absent file or after the user explicitly chooses to\s+reset a zero- or multiple-boundary file[\s\S]*verify is the sole writer/);
+  assert.match(baseline, /^## v0\.10 Baseline Migration$/m);
+  assert.match(baseline, /zero `## Verified state` headings[\s\S]*`## Conceptual model`[\s\S]*`## Machine block`, in that order/);
+  assert.match(baseline, /Machine block has only `Capability number`, `Verified at`, `Covered cards`, `Scope[\s\S]*paths`, `Scope head`, and `Docs head`/);
+  assert.match(baseline, /Apply this section to no other zero-boundary file/);
+  assert.match(baseline, /Preserve the body bytes of the old Main\s+flow, Lifecycle, Current behavior, Entrypoints, Traps, and Verify[\s\S]*add `Consumed paths: \[\]` and `Scope\s+head: none`[\s\S]*discard the old `Scope head` and `Docs head`/);
+  assert.match(baseline, /old `Scope head` was\s+calculated from Scope paths alone[\s\S]*verified statements are hypotheses immediately after migration/);
+  assert.match(principles, /exact mechanical v0\.10 migration/);
+  assert.match(arch, /exact `legacy v0\.10` shape[\s\S]*canonical mechanical\s+migration[\s\S]*not treat it as boundary\s+damage or a data-loss reset/);
+  assert.match(adopt, /exact `legacy v0\.10` shape[\s\S]*canonical mechanical\s+migration[\s\S]*not treat it as boundary\s+damage or a data-loss reset/);
+  assert.match(resume, /expected file has the canonical baseline predicates' exact `legacy v0\.10` shape[\s\S]*mechanically carried verified zone/);
+  assert.match(work, /legacy baseline:\s+migration pending — <path>[\s\S]*open no body/);
+  assert.match(verify, /baseline no-op: legacy v0\.10 migration pending[\s\S]*do not migrate its verified zone/);
+  assert.match(baseline, /uncommitted diff from a post-confirmation interrupted write is a capability-design[\s\S]*re-derivation from HEAD[\s\S]*regenerate the whole expected set/);
+  assert.match(baseline, /present them as one batch; change no\s+capability-document path before the user confirms that batch/);
+  assert.match(arch, /Before changing disk, present all design zones that would change as one batch and obtain\s+user confirmation/);
+  assert.match(adopt, /Before changing disk, present all design zones that would change as one batch and obtain\s+user confirmation/);
+  assert.match(baseline, /Do not load the whole original into the report\. Report its path, working-tree\s+boundary count and line count, the HEAD blob object ID for that exact path or `none`, and\s+the expected boundary/);
+  assert.match(baseline, /The HEAD blob identifies provenance; it is not presumed valid/);
+  assert.match(baseline, /resume writes no file and offers only two choices: after confirming that a user-identified\s+Git revision and path has one boundary, the user restores and commits only that complete\s+file; or the user discards the old verified prose/);
+  assert.match(baseline, /Search no history for a known-good revision/);
+  assert.match(resume, /offer only two choices: \(1\) after confirming that a user-identified Git revision and path has one boundary, the user restores and commits only that complete file; \(2\)[\s\S]*route `Brownfield: yes` to adopt or `no` to arch/);
+  assert.match(resume, /Search no history for a known-good revision; resume writes no file/);
+  assert.match(arch, /zero or more\s+than one boundary and the user did not choose in resume[\s\S]*reset the whole file from\s+current Layer 0 design plus the empty initial verified scaffold/);
+  assert.match(adopt, /zero or more than one boundary and the user did not choose in resume[\s\S]*reset the whole file from current Layer 0 design plus the empty initial\s+verified scaffold/);
+  assert.match(baseline, /user-confirmed deletion exception changes no path and has a diff with zero added lines/);
+  assert.match(baseline, /fixed section headings[\s\S]*metadata fields are not deletion-exception targets/);
+  assert.match(baseline, /Do not use this exception for the last admissible body item in a section[\s\S]*replace the section body with `None\.`/);
+  assert.match(baseline, /person making a direct deletion commits that deletion alone before the next devflow\s+skill runs/);
+  assert.match(baseline, /Preserve an\s+`external` Trap's HEAD row byte-for-byte unless a person authorizes deletion/);
+  assert.match(baseline, /complete capability name or standalone number token, comparing file numbers as\s+integers/);
+  assert.match(baseline, /Before opening a body, exactly one same-numbered file[\s\S]*read only valid files, skip anomalous\s+numbers, and continue/);
+  assert.match(resume, /Before opening a body, require exactly one same-numbered\s+file with valid fixed boundary, sections, and metadata shape/);
+  assert.match(resume, /When a Binding ADR path is\s+absent, report the exact path, make the design zone a hypothesis, and search for no\s+substitute/);
+  assert.match(baseline, /union of that provider's Scope paths before the\s+refresh in HEAD and after the refresh/);
+  assert.match(baseline, /Consumed contracts has exactly one row per `Consumed paths` member in the same canonical\s+path order and no other row/);
+  assert.match(baseline, /every\s+other-capability number equals the provider currently mapped by arch\.md's Code structure/);
+  assert.match(baseline, /projects only number, `Verified\s+at`, `Consumed paths`, `Scope paths`, `Covered cards`, `Scope head`, and the exact-path and\s+other-capability-number columns of Consumed contracts/);
+  assert.match(baseline, /`fresh` only when `Verified at` is not `none`[\s\S]*both relation representations and the current provider mapping agree[\s\S]*When\s+the required fields parse and any condition is false, it is `hypothesis`[\s\S]*Git comparison cannot execute, it is\s+`unknown`/);
+  assert.match(baseline, /visits, in ascending integer order, every non-retired capability\s+number in the current expected set except the provider[\s\S]*foundation is not a candidate/);
+  assert.match(baseline, /first zero or multiple match[\s\S]*registered consumers: unknown/);
+  assert.match(baseline, /candidate's number or `Consumed paths` cannot be parsed[\s\S]*same\s+unknown form/);
+  assert.match(baseline, /valid Binding ADRs section[\s\S]*absent or unparseable[\s\S]*open and infer no ADR path/);
+  assert.match(work, /With one boundary, open only exact paths from a valid Binding ADRs section[\s\S]*absent or unparseable[\s\S]*guess no substitute/);
+  assert.match(baseline, /A provider closure, capability retirement or split, and any other binding decision that\s+changes path ownership reports one line/);
+  assert.match(baseline, /retirement or split that does not change path\s+ownership, use the original capability's stored Scope paths/);
+  assert.match(baseline, /A rename re-derives every expected design zone[\s\S]*identified by the other capability's number and exact code path/);
+  assert.match(baseline, /current and final expected capability-document paths[\s\S]*rename may delete the old same-numbered path and add the final path[\s\S]*number-matched existing\s+file's HEAD verified zone/);
+  assert.match(baseline, /This is not an `arch — capabilities` commit and changes no capability-[\s\S]*except the old exact path to the new exact path in Binding ADRs/);
+  assert.match(baseline, /registered consumers: unknown —\s+provider baseline no-op: <same reason>/);
+  assert.match(verify, /When the baseline refresh is a no-op, run no consumer projection/);
+  assert.match(baseline, /Delete any other Trap only when its reproduction condition[\s\S]*Replace the Verify section every time with only the\s+commands and scenarios actually run at this closure/);
+  assert.match(baseline, /symmetric difference between the current completed-card set and\s+`Covered cards`[\s\S]*`<number> missing`[\s\S]*`<number> ambiguous`/);
+  assert.match(baseline, /working-tree path may be absent, partial, or arbitrary bytes[\s\S]*same-numbered HEAD file's design zone[\s\S]*exactly one such HEAD file with one boundary exists[\s\S]*baseline no-op rather than prefix recovery/);
+  assert.match(verify, /do not treat an absent, partial, or arbitrary\s+working-tree path as baseline absence[\s\S]*unique\s+same-numbered one-boundary HEAD file/);
+  assert.match(resume, /symmetric difference in completed cards since the baseline/);
+  assert.doesNotMatch(baseline, /Delete a Trap or Verify item/);
+
+  const contradictionCheck = product.indexOf("For every re-run, first compare");
+  const documentOnlyBranch = product.indexOf("When there is no contradiction but the capability list");
+  assert.ok(contradictionCheck >= 0 && contradictionCheck < documentOnlyBranch);
+  assert.match(arch, /When confirmed arch\.md says `Brownfield: yes`, do not run this section[\s\S]*adopt's\s+capability-document-only branch/);
+  assert.match(arch, /When a capability retires or splits, or another code-boundary change alters path ownership/);
+  assert.match(adopt, /When a capability retires or splits, or another code-boundary change alters path ownership/);
+  const adoptionMarker = adopt.indexOf("first append\nsplit's exact `maintenance routing pending`");
+  const capabilityDocuments = adopt.indexOf("## Capability documents — final output after the adoption commit");
+  assert.ok(
+    adoptionMarker >= 0 && capabilityDocuments >= 0 && adoptionMarker < capabilityDocuments,
+    "new-adoption maintenance state must land before the final capability-document commit",
+  );
+  assert.match(principles, /A capability's name changed[\s\S]*first update product\.md[\s\S]*following arch capability-design commit/);
+  assert.match(principles, /Outside a canonical capability-design commit, the mechanical\s+exact-path replacement for a superseded ADR, the canonical human-deletion exception,\s+restoration of one complete one-boundary file from a user-identified Git revision, or this begin transition, any\s+`devflow\/project\/capabilities\/` diff is an integrity anomaly/);
+
+  assert.ok(
+    resume.indexOf("| A card of mine is claimed | work |") <
+      resume.indexOf("| An expected file under the canonical baseline predicates is missing"),
+    "an active claimed card must outrank baseline repair",
+  );
+  assert.match(work, /baseline missing: <number>[\s\S]*continue from Layer 0 and the card/);
+  assert.match(work, /exact-path set in Consumed contracts differs from `Consumed paths`[\s\S]*other-capability number differs from or is ambiguous under the current provider\s+mapping/);
+  assert.match(work, /zero or multiple fixed boundaries, guess no zone and read no\s+body[\s\S]*baseline-missing\s+projection/);
+  assert.doesNotMatch(work, /git log -1 --format=%H --\r?\n/);
+  assert.doesNotMatch([arch, adopt, work].join("\n"), /conceptual model/i);
+  assert.match(reviewer, /A baseline-missing projection is not itself an objection/);
+  assert.doesNotMatch(verify, /indeterminate/);
+  assert.match(retrospector, /At a product event only,[\s\S]*each exact Consumed path relation[\s\S]*provider named by that row's other-capability number[\s\S]*single-capability event cannot claim a cross-capability conflict/);
 });
 
 test("product verification is a committed single-flight state machine", () => {

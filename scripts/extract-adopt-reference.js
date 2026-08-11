@@ -28,7 +28,10 @@ if (stage === "product") {
     "### 5. Verify-channel decision — a pass-gate",
     "## Output — devflow/project/arch.md",
   );
-  const outputs = range("## Output — devflow/project/arch.md", "On completion:");
+  const outputs = range(
+    "## Output — devflow/project/arch.md",
+    "## Capability documents — final output after Layer 0",
+  );
   result = `${verifyChannel}\n\n${outputs}`;
 }
 

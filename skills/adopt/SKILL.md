@@ -1,11 +1,12 @@
 ---
 name: adopt
-description: Existing-project adoption. In a repository that already has code, traces one representative flow per capability candidate and reverse-derives product.md, arch.md, and code-style.md to inherit. Use for adopting devflow in an existing project, reverse-deriving devflow documents from an existing codebase, or joining a project that already has code mid-way.
+description: Existing-project adoption. In a repository that already has code, traces one representative flow per capability candidate and reverse-derives Layer 0 and capability design zones. Use for adopting an existing project, reverse-deriving codebase documents, or creating and repairing capability documents in a brownfield.
 ---
 
 # adopt — Existing-Project Adoption
 
-First read the canonical rules (`../principles/SKILL.md`). If present, read all of
+First read the canonical rules (`../principles/SKILL.md`) and the canonical capability
+knowledge baseline predicates (`../principles/baseline-predicates.md`). If present, read all of
 `devflow/project/product.md`, `devflow/project/arch.md`, `devflow/project/code-style.md`,
 `devflow/project/design.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each
 `.md` file directly under `devflow/project/decisions/`.
@@ -18,16 +19,19 @@ This procedure IS the "understanding stage" — split does not run without it.
 The output-format reference is bounded. From `../product/SKILL.md`, read from
 `Output — devflow/project/product.md` up to but not including `Gates`. From
 `../arch/SKILL.md`, read `Verify-channel decision` and from `Output — devflow/project/arch.md` up to but not
-including `On completion`. Do not read or execute interview or procedure text outside those
+including `Capability documents — final output after Layer 0`. Do not read or execute interview or procedure text outside those
 ranges. In the Codex slash prompt, the installer embeds only those same ranges below.
 
 When it applies:
 
 - No code — then this is not the skill; that is product.
 - `devflow/project/` has product.md, code-style.md, glossary.md, and arch.md with its
-  `Brownfield` field — nothing to do; continuing is resume's job. If the confirmed
-  identity paragraph, capabilities, Boundary, or success criteria must change, re-run
-  product; product's gate decides whether arch follows.
+  `Brownfield` field, and every
+  expected file under the canonical baseline predicates has a valid design zone and current
+  `Design head` — nothing to do; continuing is resume's job. When Layer 0 is complete but
+  an expected file is missing or only its design zone or Design head is stale, skip steps
+  1–5 and run only `Capability documents` below. If the confirmed identity paragraph,
+  capabilities, Boundary, or success criteria must change, re-run product.
 - Only some documents exist — respect what exists as upper documents and reverse-derive
   only what is missing. If code contradicts an existing devflow document, do not overwrite
   it; report and confirm the change through the canonical Document Hierarchy procedure.
@@ -77,8 +81,6 @@ normalized string to contain the other. A test with either normalized string emp
 3. Reverse-derive `arch.md` **in the arch skill's output format**, write
    `Brownfield: yes`, present it as a draft, and get user confirmation. If an existing
    arch.md lacks only this field, add the field without re-deriving its other content.
-   Include `capability_baseline` in the confirmation-question batch — recommend yes for a
-   large, long-lived service, and absent means no.
    Inherited forever after. The verify channel
    applies arch's "Verify-channel decision" section as-is, gate included — this skill
    does not finish until it is decided. The git check (propose `git init` if not a
@@ -96,12 +98,46 @@ normalized string to contain the other. A test with either normalized string emp
    waste. Opening the tree is split's job — capability folder names must be the same
    words as the reverse-derived capability list, so new work accumulates in the right place.
 
-Immediately after the user confirms the adoption documents, land them together in the
-canonical Layer 0 commit.
+In a new adoption, when the user has already requested a post-adoption change, first append
+split's exact `maintenance routing pending` line to journal and land it with the confirmed
+adoption documents in the canonical Layer 0 commit. With no request, put only the adoption
+documents in that commit. An existing project's capability-document-only branch makes no
+new Layer 0 commit here.
 
-On completion: if the user already requested a post-adoption change, first write split's
-exact `maintenance routing pending` line in journal and put it in the same commit as the
-confirmed adoption documents, then say "next is split." If no change was requested, say "adoption complete — waiting for a new change
-request." Even with a frontend, the existing screens
+## Capability documents — final output after the adoption commit
+
+After confirmed product.md, arch.md, and glossary.md have landed in HEAD, run the canonical
+baseline predicates' brownfield design-writer procedure. Representative flows traced during
+a new adoption are already evidence for reverse-deriving product.md and arch.md; do not copy
+code details or flows into the capability documents again.
+
+- Derive purpose, boundary, Concept model, invariants, non-goals, and binding ADRs for
+  `01-foundation.md` and every non-retired capability from Layer 0, organized per capability.
+- When a HEAD file has the canon's exact `legacy v0.10` shape, apply the canonical mechanical
+  migration and include it in the design-confirmation batch. Do not treat it as boundary
+  damage or a data-loss reset.
+- For any other file, if it is absent under the canon's initial-creation definition, create its initial verified zone too. If an existing file has
+  exactly one fixed boundary, preserve its verified-zone bytes and replace only its design
+  zone. If it has zero or more than one boundary and the user did not choose in resume to
+  discard the old verified prose and reset it, do not write it; report
+  `baseline no-op: <path and reason>`. After the user chooses reset with the data loss and
+  HEAD blob ID stated, reset the whole file from current Layer 0 design plus the empty initial
+  verified scaffold and include it in the ordinary design-batch confirmation below.
+- Do not change retired files. When re-derivation yields the same bytes, preserve them.
+- Before changing disk, present all design zones that would change as one batch and obtain
+  user confirmation. Change no capability-document path before confirmation. Then put only
+  changed capability documents in one `adopt — capabilities` commit. It is this run's last
+  commit and carries no Layer 0 file. If no file changes, ask no confirmation question and
+  do not commit.
+
+When a capability retires or splits, or another code-boundary change alters path ownership, report
+the registered-consumer projection in one line. The report triggers neither verification
+nor card creation.
+
+On completion: if the new-adoption Layer 0 commit included `maintenance routing pending`, or
+the current conversation contains an existing-project change request, say "next is split."
+split first makes a capability-document-only branch's request durable through its own
+maintenance procedure. If no change was requested, say "adoption complete — waiting for a
+new change request." Even with a frontend, the existing screens
 are the de-facto design canon — recommend design (optional) only when a new screen
 system is being built.

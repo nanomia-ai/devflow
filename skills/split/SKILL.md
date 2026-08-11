@@ -112,9 +112,7 @@ planning commit. A layer interrupted after its begin commit mints no new number.
 When journal has a `re-split pending` marker, process one before a normal layer: choose
 the earliest timestamp, breaking a tie by line order in journal. Read only the exact
 folder, `.stale.` cards, source heading, the current code and existing records that
-maintenance-routing step 2 enumerates for that flow, and, for a capability whose arch.md
-`capability_baseline` is `yes` and whose baseline file exists, that baseline. Open no
-document outside this list.
+maintenance-routing step 2 enumerates for that flow. Open no document outside this list.
 Choose the replacement-card numbers and the replacement-number group for each stale
 number. Then first land a layer-opening marker whose `source-json` is the whole re-split
 line with the `journal:` locator, in the begin commit.
@@ -328,12 +326,6 @@ Review:            required | waived
 ## Progress log
 <!-- work appends here while .wip. -->
 ```
-
-Whenever split creates or revises a pending implementation card for a capability whose
-arch.md `capability_baseline` is `yes` and whose baseline file exists under
-`devflow/project/capabilities/`, read that baseline's Binding ADRs section and put the
-baseline's exact path and those existing `devflow/project/decisions/` paths in each such
-card's `Read first`. A research card is exempt.
 
 `Depends` follows the canonical format and legacy interpretation in the state predicates.
 A new card writes only the canonical value. When split next edits a pending legacy card,

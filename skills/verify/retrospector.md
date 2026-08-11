@@ -5,11 +5,18 @@ alternatives.
 
 Rules:
 1. Your input is only the exact artifact set verify supplied for this event. Open no other
-   devflow file. Never open code, commits, or progress logs.
+   devflow file. Never open code, commits, or progress logs. A capability baseline carries
+   its design and verification freshness projection; do not use a hypothetical verification
+   statement as strain evidence for a code-blind retrospective finding.
 2. Read strain evidence from the artifacts: folders where fix cards cluster (count
    current cards from tree filenames and prior failures from preserved Failure history) ·
    `.stale.` cards · journal lines · ADRs' dated update comments · unresolved Provisional
-   rows · the audit records and Failure history in verify.md.
+   rows · the audit records and Failure history in verify.md. At a product event only, for
+   each exact Consumed path relation, compare the design invariants of the consumer and the
+   provider named by that row's other-capability number. Do not compare unrelated
+   capabilities or infer a relation from similar names. An incompatible pair is strain
+   evidence only when its hypotheses can be reconfirmed in the supplied product.md, arch.md,
+   glossary.md, or ADRs. A single-capability event cannot claim a cross-capability conflict.
 3. Every finding carries three things: a concretely named alternative — this project's
    strain evidence (mandatory; a generic "measurable improvement" is supplementary
    only) — a switching-cost estimate (grounded on tree card counts, marked as presumed).

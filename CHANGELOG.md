@@ -6,6 +6,74 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.11.0 — 2026-08-11 — capability knowledge becomes the automatic domain-entry layer
+
+The approved domain-knowledge handoff and its second-edition implementation plan now run as
+one canonical system. Every non-retired product capability has exactly one expected document
+under `devflow/project/capabilities/`, keyed by its depth-1 capability number; `01-foundation`
+uses the same shape for shared contracts. Each document has two byte-disjoint ownership
+zones separated by the exact `## Verified state` H2. arch or adopt writes the design zone
+from confirmed Layer 0, and verify replaces the verified zone only after the capability
+passes real execution. The 14-row schema itself filters admissible knowledge, so the prompt
+does not grow a second judgment vocabulary for deciding what counts as domain knowledge.
+
+Freshness is now split along the same ownership boundary. `Design head` covers only
+product.md, arch.md, and glossary.md and is calculated after those documents land. `Scope
+head` covers the literal, duplicate-free union of code scope and consumed paths; an empty
+union never runs pathless `git log`. Card-set drift is a separate comparison. Each failed
+comparison demotes only its statement group to a hypothesis instead of deleting knowledge or
+trusting stale prose. Consumer relationships live only on the consuming capability, use
+exact paths plus provider numbers, and produce one bounded status line after provider events;
+the system does not invent an unbounded per-consumer regression harness.
+
+The whole lifecycle is wired through the existing skills. product owns capability identity
+events; arch and adopt create, re-derive, rename, split, retire, and repair design zones at
+explicit commit boundaries; split and work reach one document automatically by the card's
+depth-1 number; reviewer receives the same bounded projection and exact listed ADRs; verify
+refreshes verified knowledge and metadata as its final commit; resume handles domain questions,
+missing or damaged shapes, interrupted transitions, and upgrades; retrospector receives the
+authority inputs needed to judge design hypotheses. Exact v0.10 files preserve their verified
+bodies, timestamp, covered cards, and scope, but discard the old `Scope head`: it never
+covered consumed paths, so migration stores `Scope head: none` and remains a hypothesis until
+the capability next passes verification. Legacy card wiring is ignored in favor of number
+entry, preventing a second read route.
+
+The former proposal is now explicitly historical; the executable contract lives only in
+`baseline-predicates`. The design lineage records the accepted choices and rejected
+alternatives, and the new bilingual implementation report records I1–I7, D1–D25, lifecycle
+walks, relationship scenarios, a coordinate sweep, every defect repaired during the broad
+final campaign, operating instructions, and independent Claude re-review coordinates. The
+final pass also removed one README noun compound introduced by the migration explanation.
+README tone counts: README.md em-dash 89→92, raw `**` 105→107; README_ko.md em-dash 59→62,
+raw `**` 91→93; bureaucratic closure compounds 0→0. The added dashes are heading or defined-
+term separators, and the two added raw markers per language form one section-level claim.
+
+Verification: 52/52 Node repository-invariant and extractor tests; structure and
+meaning-bearing-figure parity on every registered Korean/English pair; zero Korean in each
+English deploy artifact except README.md's single language-switch link; 9/9 skill directories
+pass frontmatter validation under UTF-8; tracked and new-file whitespace checks pass. Both
+manifests report 0.11.0 and `codex/install.ps1` retains BOM `ef-bb-bf`. The Windows Codex
+installer completed, generated all eight slash prompts, and embedded the baseline only in
+arch, adopt, resume, and verify. Claude reports the current 0.11.0 plugin with nine skills and
+one SessionStart hook, and marketplace validation passes.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `AGENTS.md`; `README.md`;
+`README_ko.md`; `codex/install.sh`; `docs/capability-knowledge-proposal.md`;
+`docs/capability-knowledge-proposal_ko.md`; `docs/design.md`; `docs/design_ko.md`;
+`docs/v0.11.0-domain-knowledge-redesign-report.md`;
+`docs/v0.11.0-domain-knowledge-redesign-report_ko.md`;
+`scripts/extract-adopt-reference.js`; `scripts/extract-adopt-reference.test.js`;
+`scripts/repository-invariants.test.js`; `skills/adopt/SKILL.md`;
+`skills/adopt/SKILL_ko.md`; `skills/arch/SKILL.md`; `skills/arch/SKILL_ko.md`;
+`skills/principles/SKILL.md`; `skills/principles/SKILL_ko.md`;
+`skills/principles/baseline-predicates.md`;
+`skills/principles/baseline-predicates_ko.md`; `skills/product/SKILL.md`;
+`skills/product/SKILL_ko.md`; `skills/resume/SKILL.md`; `skills/resume/SKILL_ko.md`;
+`skills/split/SKILL.md`; `skills/split/SKILL_ko.md`; `skills/verify/SKILL.md`;
+`skills/verify/SKILL_ko.md`; `skills/verify/retrospector.md`;
+`skills/verify/retrospector_ko.md`; `skills/work/SKILL.md`; `skills/work/SKILL_ko.md`;
+`skills/work/reviewer.md`; `skills/work/reviewer_ko.md`; `CHANGELOG.md`.
+
 ## 0.10.2 — 2026-08-11 — year-two events get a landing, and the README catches up to the runtime
 
 A completeness audit asked a different question than the defect hunts had: given what this

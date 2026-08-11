@@ -97,7 +97,7 @@ for dir in "$DEVFLOW_ROOT"/skills/*/; do
       ;;
   esac
   case "$name" in
-    resume|verify)
+    adopt|arch|resume|verify)
       {
         echo ""
         echo "---"

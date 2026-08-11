@@ -83,7 +83,9 @@ Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/in
 | Tree-input revision hashes are computed only through a binary pipe inside `cmd /d /s /c` on Windows (v0.9.21) | Actually reproduced: on 2026-08-11 in this repository, the PowerShell 5.1 object pipeline touched the NUL-bearing stdout of `git ls-tree -r -z` and corrupted the hash — the POSIX binary pipe and the `cmd` pipe produced the same hash, and only the object pipeline differed. Same "actually reproduced" class as the install.ps1 BOM row |
 | An approved parallel group is claimed together in one step (v0.9.23) | The cards' own reciprocal parallel Approval (v0.9.21), the branch that permits two claims, and integrity item 1 all existed, but no entry procedure created that state, so the `parallel` field was a dead state nothing could reach (inherited from 0.9.20). One entry rule closes it — solo claims the group together; multi distributes it through ordinary single claims. The single-claim-first principle stands unchanged outside a group |
 | A Record states its own entry count — New entries (v0.9.23) | Right after a verdict and before the commit, disk alone could not judge whether a dead session's partial Record was complete — the total of required entries lived only in that dead session's context. The self-describing field mechanizes the completeness judgment. A value that does not match is judged a partial write and recovers through the approved rerun path that repeats from step 2. A committed Record with no such field is complete as committed — tolerating an absent field is the same class as verification-predicates' pre-v0.9.21 record |
-| The capability knowledge baseline — the domain blueprint a verification closure produces (v0.10.0) | Grounds are three measurements: across jgnote's 12 existing handoffs the chronology sections held 60–68% of each document while hand-written freshness declarations failed; ade's G-T2 produced a dual-ownership incident; and the rdsf knowledge-reachability diagnosis pointed at the same gap. Option D of the [validated proposal](capability-knowledge-proposal.md) is therefore adopted — one writer replaces one file wholesale at the last verification closure, and current state reads as the baseline plus current cards outside Covered cards. A verification campaign (16 refutation findings → 3 research passes → 2 Fable refutation passes with 15 findings → a re-audit with 13) revised the original GPT contract into v2.2, and that proposal holds the full contract. Rejection lineage: time decay (owning the boundary makes a real signal computable) · continuous refresh (different concurrency, sharing, and trust properties) · append-only inheritance (history is an ADR's payload, but the present is a baseline's payload) · Assumptions and Open Questions sections (they break the only guarantee of a verification-only document) · a consumer-list section · an index file · automatic glob attachment · staging consumption · symbol binding and hash tooling (a named promotion path to take if precision problems are observed). Four accepted limits are on record: conservative false staleness on a shallow clone, the command-line limit for a very long scope list, invisibility of an uncommitted working tree, and residual false freshness through a registry |
+| The capability knowledge baseline — the domain blueprint a verification closure produces (v0.10.0, lifecycle extended by v0.11.0) | Grounds are three measurements: across jgnote's 12 existing handoffs the chronology sections held 60–68% of each document while hand-written freshness declarations failed; ade's G-T2 produced a dual-ownership incident; and the rdsf knowledge-reachability diagnosis pointed at the same gap. v0.10.0 adopted option D, where one writer replaces one file wholesale at the last verification closure. A verification campaign (16 refutation findings → 3 research passes → 2 Fable refutation passes with 15 findings → a re-audit with 13) refined that candidate contract. The [proposal](capability-knowledge-proposal.md) now preserves only the grounds and rejection lineage; the executable contract lives in exactly one place, the canonical baseline predicates. The rejections of time decay, continuous refresh, append-only inheritance, Assumptions and Open Questions, an index, automatic glob attachment, staging consumption, and symbol binding all carry forward |
+| Capability documents physically separate a design zone born with Layer 0 from a verified zone refreshed at closure, and are always on (v0.11.0) | The owner's operating intent is that a new MVP, a brownfield, and a mid-project join all obtain domain boundaries and concepts before the first card and reach them by number without card wiring. arch, or adopt in a brownfield, replaces the design zone; verify replaces the verified zone. They own disjoint byte ranges separated by the fixed `## Verified state` boundary. This decomposes rather than overturns v0.10.0's one-writer grounds: the two writing moments are serial, no byte is shared, design declares trust through `Design head`, and verification through `Scope head` and `Covered cards`. One seven-field machine block would overlap the two owners again, so the two design-metadata fields sit before the boundary and the five verification-metadata fields after it. The switch is removed because the adopted shape is not a 1,100–1,700-line relay-note second handoff layer: it is capped near 185 lines per capability, forbids chronology, and costs O(1) reads per card; even a small project gets the same lifecycle from a six-section design zone. Design freshness uses only the actual sources product.md, arch.md, and glossary.md. Including code-style.md or design.md would make every capability hypothetical with no failure path that changes its design zone — an over-harness. The exact v0.10 predecessor is separated from damage reset: design is re-derived from current Layer 0 and verified bodies plus compatible metadata migrate mechanically, but its old `Scope head` did not include consumed paths and therefore does not carry forward; verified statements remain hypotheses until the next capability closure |
+| Domain reachability is owned by the depth-1 number rule and resume's domain-entry branch, not by card fields (v0.11.0) | If split copies a baseline and ADRs into every card, the path lives in two places and requires a research-card exception. work uses the claimed card's depth-1 number to read one document and only the exact ADRs named by that document. A baseline path left in a v0.10 card's `Read first` is treated only as legacy wiring and deferred to that number rule. resume normally reads only file names and a shape projection, but when the user asks to explain a capability it opens one document by number or name and answers with both freshness states. It opens the entire expected set only when the user explicitly requests that full set. Foundation is reached by the same `01` number rule. Relationships live on the consuming side as exact paths in `Consumed paths`; provider closure, retirement, and split project only bounded metadata plus the Consumed-contract path/number columns and report consumers with their actual current freshness. That column projection detects an unchanged path reassigned to another capability without opening other prose. With no observed failure, this does not automatically expand into execution, card creation, or cross-capability regression |
 
 ## Borrowings and their boundary
 
@@ -174,6 +176,28 @@ Rejected in the v0.9.18 knowledge-reachability verification (2026-08-11):
   relation model stays the typed edges (Depends · Coordinates · Read first · settling
   card) plus the content-carrying discipline.
 
+Rejected in the v0.11.0 domain-knowledge-layer redesign:
+
+- **Expanding the full design per capability inside product.md** — makes the Layer 0 file
+  that work reads for every card grow in proportion to the capability count.
+- **Splitting design and verified zones into two files** — creates two paths per capability
+  and doubles reading and rename costs.
+- **Pulling the first closure earlier, or having split create documents** — still leaves no
+  document during design or in a brownfield with no split, and makes task decomposition own
+  domain design.
+- **Having arch create and split refresh** — split's task structure is not a design-zone
+  input, and two writers would own the same bytes.
+- **Recording planned main flows and entry points in the design zone** — duplicates the
+  same concepts in the verified zone after first closure. Planned entry points already live
+  in product.md and arch.md.
+- **Putting all seven fields for both zones in one block at EOF** — places arch-owned
+  `Capability number` and `Design head` inside the suffix verify replaces, so the fixed
+  boundary no longer separates byte ownership. Physically separating two design fields
+  from five verification fields closes this failure.
+- **Assuming resume can answer a domain question after seeing filenames only** — showing a
+  path is not an execution branch that makes AI read the document. A separate bounded
+  branch must open exactly one document by number or name.
+
 Other:
 
 - **Any "skim the related records" rule for maintenance reopening** — "related" is a
@@ -246,16 +270,16 @@ Other:
 - ~~resume's missing re-run branch~~ — implemented in v0.9.21: resume judges a waiting
   product re-run in journal before work, then branches to product, split, work, or verify
   from disk state.
-- The foundation folder (01) is not a capability, so it has neither a knowledge baseline nor
-  a verification rite — the component-baseline rejection ground (no independent verification
-  boundary) was not aimed at the foundation. Re-examine if the foundation comes to hold many
-  shared contracts.
+- Does foundation's (01) design zone reduce the cost of rediscovering shared-contract
+  boundaries and invariants in real cards? With no independent verification boundary, its
+  verified zone remains `None.`. If no use trace appears, this is the first cut candidate
+  from the domain-knowledge layer.
 - A change to shared code (the foundation, shared contracts) does not rerun the regressions
   of the capabilities that use it. The baseline may detect this as a hypothesis, but it fires
   no verification. Re-examine if shared changes become frequent.
-- The retrospective does not take capability knowledge baselines as input — even though they
-  are the densest design record there is. Unlike the audit's blindness, the retrospective has
-  no recorded ground for the exclusion.
+- ~~The retrospective does not take capability knowledge baselines as input~~ — implemented
+  in v0.11.0: a capability event gets that capability's one document; a product event gets
+  foundation and every non-retired capability document, all with freshness projections.
 - design.md has no row in the discovery→update table (only the upper-violation path exists).
   It is not an input to Verification revision either, so a design.md change does not make a
   verdict stale.
@@ -292,7 +316,7 @@ gate forces this document to be read).
   and task-tree boundary, so the current order is not forcibly rearranged before the owner chooses.
 - **The size of the canonical rules** — the canonical rules grew from 217 lines (v0.9.9) to
   553 lines (v0.10.1), and all 8 skills plus every delegated implementer read the whole document.
-  For a solo T-low card, the journal formats, the 16 integrity items, the routing write order,
+  For a solo T-low card, the journal formats, the 15 integrity items, the routing write order,
   the remote-evidence state machine, the verification-state commits, and the multi rules never
   fire once. The proportional answer is not deletion but **splitting the read scope per
   consumer** (what an implementer needs versus what a router or a recoverer needs), and it
