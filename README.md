@@ -54,7 +54,13 @@ flowchart LR
     A --> S
     D --> S
     AD --> S
-    R(["a new session · resume"]) -.->|"run by the hook"| W
+    R(["a new session"]) -.->|"hook routes to resume"| X{"resume judges disk state"}
+    X -.-> P
+    X -.-> A
+    X -.-> AD
+    X -.-> S
+    X -.-> W
+    X -.-> V
 ```
 
 | Situation | Entry point |
@@ -73,12 +79,20 @@ a default attached), arch decides the stack, structure, and verify channel, spli
 breaks the first capability into cards, and the work ⇄ verify loop begins.
 
 **A project that already has code** starts with reverse-derivation instead of an
-interview: adopt traces one representative flow through the code end to end, then
+interview: adopt enumerates capability candidates and traces one representative flow
+through the code end to end for each candidate, then
 reverse-derives product.md · arch.md · code-style.md · glossary.md — product.md is filled in the
 product skill's own format, and only what code cannot answer (will-not-build · success
-criteria · gaps in Problem and Approach) is asked of the owner. Already-finished code is never backfilled
+criteria · gaps in Problem and Approach) is asked of the owner. The owner must answer the
+success criteria and pass product's gate; only the other unanswered items stay in Open questions. Already-finished code is never backfilled
 into the tree — the tree accumulates only work done after adoption. From there the
 path is the same: split → work ⇄ verify.
+Existing handoff and specification files are not copied. adopt indexes only their exact
+paths by capability in `arch.md`; a change opens one only after rechecking it against
+current code and naming it in the card's `Read first`. The old record system remains
+usable without gaining global read cost or canonical standing.
+When tracked post-adoption work finishes, devflow closes that work and waits. It opens
+product-layer verification for the existing service only on an explicit user request.
 
 ## What accumulates in your project
 
@@ -99,9 +113,14 @@ devflow/
       02.2-api.wip.md               a card in progress (its progress log lives inside)
       02.3-webhook.md               a waiting card
       verify.md                     capability verification record (left by verify)
-  journal.md                   ← one-line decisions that cross cards (swept when a capability closes)
+    03-reporting.md               one-heading waiting file for an unopened capability
+  journal.md                   ← one-line cross-card decisions and interruption-recovery markers (swept when a capability closes)
   HANDOFF.md                   ← volatile handoff — next single step · just learned · traps · open decisions only, overwritten each time
 ```
+
+A new project's first tree contains only capability waiting files. The next layer creates
+`01-foundation/` together with its direct cards, so an empty folder cannot remain as if it
+were finished groundwork.
 
 **The life of a task card:**
 
@@ -124,15 +143,17 @@ stateDiagram-v2
 ```
 
 The tree is recursive — a big card is promoted to a folder with the same number and keeps
-splitting (`02.3` → `02.3.1`). Why progress never goes into documents: **progress written
-into a document always goes stale, but a filename changes only when the state changes.**
-One `ls` is the progress report.
+splitting (`02.3` → `02.3.1`). Aggregate progress stays out of planning documents because
+**progress there always goes stale, while a filename changes only when the state changes.**
+Detailed progress inside one task stays only in that card's progress log. One `ls` is the
+whole-project progress report.
 
-When every card in a **depth-1 capability folder** is `.done.`, verify checks it by
-actually running it, and only a pass earns the folder its `.done` (foundation 01 and
+When a **depth-1 capability folder** has at least one direct child that is not `.stale.`
+and every such child has a `.done` status, verify checks it by actually running it, and only a pass earns the folder its `.done` (foundation 01 and
 intermediate folders close without a verification rite). At that moment the journal is
 swept — spent lines deleted, still-valid lines promoted into upper documents or left in
-place.
+place. `.stale.` cards are excluded from this count but remain as history for the
+retrospective.
 
 ## Handoff — you choose when it happens
 
@@ -149,9 +170,10 @@ discovery→update table), and only the volatile remainder goes into HANDOFF. An
 **at a task boundary, never mid-task** — half-written code and a half-true explanation are
 not handed over.
 
-The next session picks up from the hook, which injects the tree and HANDOFF automatically.
-An empty HANDOFF is normal — resuming from the tree alone is the default, and HANDOFF
-carries only the crumbs that live in neither the tree nor any card.
+The hook routes the next session to resume, which reads disk state and HANDOFF. The hook
+itself neither injects file content nor decides the next stage. An empty HANDOFF is normal.
+Resuming from the tree alone is the default, and HANDOFF carries only the crumbs that live
+in neither the tree nor any card.
 
 ## The 9 skills
 
@@ -165,13 +187,14 @@ carries only the crumbs that live in neither the tree nor any card.
 | work | implementation | code · in-card progress log · commits | log to disk before running — whenever the session dies, reading the card is enough to continue |
 | verify | capability complete · MVP reached | verify.md · fix cards (on failure) · audit and retrospective findings (event-triggered) | what was not executed is not passed — it is unverified |
 | resume | new session | nothing — a state report, then approval (only multi mode's digest procedure corrects shared documents) | when HANDOFF and the tree conflict, the tree wins |
-| principles | read before running by the other seven skills (all but resume) | — | the canonical rules live in exactly one place |
+| principles | read before running by the other eight skills | — | the canonical rules live in exactly one place |
 
 Four roles ride along — none crossing into another's territory is the
 bias-prevention device:
 
 - **reviewer** — judges before each commit by reading only the card (progress log
-  excluded), the diff, and code-style.md. Never executes.
+  excluded), the diff, and the code-style.md · glossary.md · journal.md files that exist.
+  Never executes.
 - **verifier** — judges by channel execution alone, knowing nothing of the
   implementation history. Never reads.
 - **auditor** — reads and executes, but knows no implementation history. Issues
@@ -202,7 +225,7 @@ flowchart TB
         VD -->|"pass"| CD["capability folder gets .done"]
         VD -->|"fail"| FC["fix card<br>completion signal = that failure, reproduced"]
     end
-    CM ==>|"every card in the folder is .done."| SC
+    CM ==>|"at least one active direct child<br>all active children .done"| SC
     FC ==>|"back into work"| I
 ```
 
@@ -253,7 +276,9 @@ The outcome this drives: **a defect met once cannot escape through the same door
 ## Design principles
 
 - **Progress state lives in the file tree, not in documents.** Suffixes (`.wip.` `.done.` `.stale.`) and location are canonical.
-- **The task card is the whole briefing.** Destination · Why · Forbidden · completion signal, on one card.
+- **The task card completely defines the work unit.** Destination · Why · Forbidden ·
+  completion signal stay on one card; fixed shared records (arch · code-style · glossary ·
+  journal · direct dependency cards) are read alongside it.
 - **What was not executed is not passed — it is unverified.**
 - **1 task = 1 commit.** Only after the completion signal and review pass. Rollback = one revert.
 - **Measured answers flow back into documents (upper-document feedback).** Guesses live in the Provisional table and are replaced once measured.
@@ -324,7 +349,7 @@ Every mode transition is a single-commit procedure:
 | Teammate leaves | (after the user declares it) anyone remaining: promote open decisions to journal (attributed) → release their claims → delete the room |
 
 Half-finished transitions (multi mode but a bare `.wip.` or a root HANDOFF remains)
-are detected and reported by the hook and the integrity check — nothing goes wrong
+are detected and reported by resume's integrity check — nothing goes wrong
 silently. Sessions find their room via git identity; sessions that cannot resolve one
 (CI · bots) only read.
 
@@ -352,9 +377,9 @@ Two lines inside a session, and you are done.
 
 Commands take the `/devflow:product` form — the plugin name is the namespace, so nothing
 collides with other skills, and typing just `/devflow` groups the whole set in
-autocompletion. The hook activates only in projects that have `devflow/tree/`, and
-injects tree state and HANDOFF at session start, resume, and right after context
-compaction (which is why resuming works without typing resume).
+autocompletion. The hook activates only in projects that have `devflow/tree/` or Layer 0
+documents, and routes session start, resume, and post-compaction turns to the shared resume
+procedure. resume, not the hook, reads files and decides the next stage.
 
 Before the GitHub release, pass `marketplace add` the local path of your clone instead.
 
@@ -378,8 +403,11 @@ hooks = true
 Skills are invoked by the model on its own. If you also want **explicit slash commands**
 like `/devflow-work`, clone the repository and run `codex/install.ps1` (Windows) or
 `codex/install.sh` (macOS/Linux) — that script writes the 8 commands into
-`~/.codex/prompts/` (embedding the canonical rules and companion documents in each
-prompt, since the prompt folder is flat and cross-file references are unreliable there).
+`~/.codex/prompts/`. It removes the global hook registration left by pre-0.9.20 installs
+only after the native plugin install is confirmed. If installation fails, it leaves the
+existing hook untouched and tells you to invoke `/devflow-resume` explicitly. It embeds
+the canonical rules and companion documents in each prompt, since the prompt
+folder is flat and cross-file references are unreliable there.
 
 After installing, `codex plugin list` should show `devflow@nanomia`. If it does not, the
 usual cause is **another marketplace in your Codex config whose folder is gone** — a

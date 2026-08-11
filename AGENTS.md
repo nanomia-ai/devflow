@@ -23,6 +23,8 @@ English is what AI consumes best at the lowest token cost.
 ```
 Canonical relation:  *_ko.md = design original (owner review)  →  translate  →  English = deploy artifact (AI consumption)
 Pairs:               skills/<name>/SKILL_ko.md ↔ SKILL.md
+                     skills/principles/state-predicates_ko.md ↔ state-predicates.md
+                     skills/principles/verification-predicates_ko.md ↔ verification-predicates.md
                      skills/work/reviewer_ko.md ↔ reviewer.md (role contract)
                      skills/verify/verifier_ko.md ↔ verifier.md (role contract)
                      skills/verify/auditor_ko.md ↔ auditor.md (role contract)
@@ -36,8 +38,10 @@ English-only (no pair): AGENTS.md (this file), CHANGELOG.md,
 
 The role contracts (`reviewer.md` · `verifier.md` · `auditor.md` · `retrospector.md`) are companion files beside their
 skills — briefing documents delivered verbatim to a clean context on every platform,
-not registered agents. The Codex installers embed every non-`_ko` companion `.md` of a
-skill folder into that skill's generated prompt.
+not registered agents. The Codex installers embed each role contract into its skill's
+generated prompt. `state-predicates.md` and `verification-predicates.md` are canonical
+companions, not role contracts. The installers embed task-card predicates into split,
+work, verify, and resume, and verification predicates into verify and resume only.
 
 Modification procedure (order is fixed):
 
@@ -56,9 +60,8 @@ exception to _ko-first.
 
 **Where Korean lives**: the `_ko.md` design originals (including `README_ko.md` and
 `docs/design_ko.md`) and the Korean column of the terminology table below — nowhere else.
-Deploy artifacts must contain no Korean: `skills/*/SKILL.md`, the role contracts
-(`skills/work/reviewer.md`, `skills/verify/verifier.md`, `skills/verify/auditor.md`,
-`skills/verify/retrospector.md`),
+Deploy artifacts must contain no Korean: every non-`_ko` `skills/**/*.md` (entry skills,
+predicate companions, and role contracts),
 `codex/AGENTS-devflow.md`, `codex/install.ps1`, `codex/install.sh`, `scripts/*.js`,
 `.claude-plugin/*.json`, `docs/design.md`, `CHANGELOG.md`, and `README.md`.
 Check: count `[가-힣]` matches per file with ripgrep run directly (`rg -c`) or a Perl
@@ -219,6 +222,12 @@ borrowing text into this repository still needs prior permission.
 | 고착 탈출 | stuck-escape | | 원인 가설 | cause hypothesis |
 | 감리 | audit | | 소견 | finding |
 | 회고 | retrospective | | 긴장 증거 | strain evidence |
+| 증거 마감 | evidence-finalizing | | 원격 증거 점검 | remote evidence check |
+| 적대 입력 | hostile input | | 능력 코드 범위 | capability code scope |
+| 유지보수 라우팅 대기 | maintenance routing pending | | 재분할 대기 | re-split pending |
+| 상태 판정 정본 | canonical state predicates | | 검증 판정 정본 | canonical verification predicates |
+| 정본 경로 순서 | canonical path order | | 정본 카드 번호 순서 | canonical card-number order |
+| 라우팅 준비 | routing prepared | | | |
 
 Note: as the field name inside `arch.md` the verify channel is written `verify_channel` —
 the underscore form is the field identifier; the spaced form is prose. They are one

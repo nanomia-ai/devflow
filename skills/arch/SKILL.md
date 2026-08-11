@@ -5,7 +5,10 @@ description: Development planning. Takes product.md and decides components, stac
 
 # arch — Development Planning
 
-First read the canonical rules (`../principles/SKILL.md`) and `devflow/project/product.md`.
+First read the canonical rules (`../principles/SKILL.md`) and all of
+`devflow/project/product.md`. If present, read all of `devflow/project/arch.md`,
+`devflow/project/code-style.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each `.md` file directly under
+`devflow/project/decisions/`.
 If `product.md` is missing: with no code either, direct the user to the product stage
 first; with existing code, to adopt (existing-project adoption — it produces
 product.md too, by reverse-derivation).
@@ -45,13 +48,8 @@ The criterion is what AI operates well with. Where that differs from human prefe
 - Folder depth ≤ 3, files ≈ 400 lines or fewer
 - Contracts (types/schemas) in one file per module boundary
 
-Choose structure by scale:
-
-| | Structure | When |
-|---|---|---|
-| A | Domain-vertical modules — route·service·repo·test all inside `src/<capability>/` | Default recommendation. 3+ capabilities |
-| B | Feature-Sliced | Screen-heavy frontends |
-| C | Flat — just files under `src/` | Under 20 files. A would be overkill here |
+The A/B/C table under Output is the canonical registry of structure choices and their
+conditions. Select one for the scale.
 
 **Folder name = capability name from product.md.** Documents and code use the same words.
 
@@ -60,7 +58,7 @@ This skill does not finish until it is decided.
 
 | Type | Channel | If missing |
 |---|---|---|
-| Has a frontend | **Browser MCP required** (Chrome DevTools MCP or Playwright MCP) | Guide installation, then stop. UI verification you cannot see is guesswork |
+| Has a frontend | **A browser-control tool that can inspect rendered output and interact with it is required** (one provided by the active platform) | Guide connection of an available tool, then stop. UI verification you cannot see is guesswork |
 | Non-web with a screen (desktop app · TUI) | A tool that reads the screen/accessibility tree or real output + an operating-procedure document (process safety included) | Guide installation, then stop. Same reason |
 | Web backend | Real HTTP calls (`.http` file / curl scripts) | Create it as the first task |
 | CLI / daemon | Run command + expected output (+ health check, log location) | Create it as the first task |
@@ -71,13 +69,24 @@ depends on git.
 
 ## Output — devflow/project/arch.md
 
+The `Code structure` value must use one of these choices.
+
+| | Structure | When |
+|---|---|---|
+| A | Domain-vertical modules — route·service·repo·test all inside `src/<capability>/` | Default recommendation. 3+ capabilities |
+| B | Feature-Sliced | Screen-heavy frontends |
+| C | Flat — just files under `src/` | Under 20 files. A would be overkill here |
+
 ```markdown
 # Architecture
+
+Brownfield: no
 
 ## Components       <!-- ✔/✘ + 1-line reason -->
 ## Stack            <!-- item: choice — 1-line reason -->
 ## Code structure   <!-- A/B/C + folder sketch. folder name = capability name -->
 ## Data             <!-- core entities only -->
+## Existing records <!-- Brownfield only. each line: <capability name|shared>: <exact path>. omit if empty -->
 ## Provisional      <!-- values you are guessing. see below. omit the section if empty -->
 ## Risks            <!-- 3 things that break first + how to check each -->
 ## Out of scope     <!-- what this architecture does not carry -->
@@ -85,10 +94,21 @@ depends on git.
 frontend: none | needed
 verify_channel:
   work server: <run command + port>     # verification always happens here
-  means: <browser MCP | .http | CLI command | screen/accessibility tool>
+  means: <browser-control tool | .http | CLI command | screen/accessibility tool>
 integration: <branch>                   # multi only — solo omits these two lines. Where minting, closure, and binding decisions land
 merge: merge-commit | rebase            # multi only. Squash forbidden — it erodes NN.N history
 ```
+
+`Brownfield` records whether implementation code existed before devflow entered this
+repository. arch writes `no` for a new project; adopt writes `yes` when deriving from
+existing code. This value selects how the first tree is created; it is not implementation
+progress.
+
+`Existing records` is only a locator index for handoff and specification files that
+adopt checked against code. Each line contains a product.md capability name or `shared`,
+a colon, and one exact file path. The same name may repeat on multiple lines. A path here
+is not a read instruction and does not make the file canonical. work opens it only after
+split rechecks it for the change scope and puts it in the card's `Read first`.
 
 ### Provisional — the architecture you do not know yet
 
@@ -128,7 +148,7 @@ three conditions hold**:
 
 ## Output 2 — devflow/project/code-style.md
 
-Where the decisions from the derived questions (step 3) get written down. **Every entry
+Where the project-specific decisions created by the selected stack get written down. **Every entry
 states "what we prioritize" — never "do it this way."** The implementer decides the
 method. Cap: 1 page.
 

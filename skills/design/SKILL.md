@@ -5,7 +5,9 @@ description: Design planning (optional stage). Chooses the UI base, translates s
 
 # design — Design Planning (optional)
 
-First read the canonical rules (`../principles/SKILL.md`) and `devflow/project/arch.md`.
+First read the canonical rules (`../principles/SKILL.md`), `devflow/project/product.md`,
+and all of `devflow/project/arch.md`. If present, read all of
+`devflow/project/design.md`, `devflow/project/glossary.md`, and `devflow/journal.md`.
 
 **Gate:** if arch.md says `frontend: none`, this skill does not run — answer so and end.
 Even with `needed`, the user may skip it: first ask "shall we plan the design, or go with
@@ -44,7 +46,7 @@ Brand color       : hex if you have one; otherwise I propose from the tone
   exists / to-build.
 - **One `/preview` page** — every component on a single screen. This page is the
   completion signal of this stage and the regression detector afterward. Open and check
-  it with the browser MCP.
+  it with the browser-control tool recorded in arch.md's verify channel.
 
 ### 4. Build strategy — the user chooses (this changes split's decomposition axis)
 

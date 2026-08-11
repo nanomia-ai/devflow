@@ -5,7 +5,9 @@ description: 디자인 기획(선택 단계). UI 베이스 선택, 스타일을 
 
 # design — 디자인 기획 (선택)
 
-먼저 규칙 정본(`../principles/SKILL.md`)와 `devflow/project/arch.md`를 읽는다.
+먼저 규칙 정본(`../principles/SKILL.md`)와 `devflow/project/product.md`,
+`devflow/project/arch.md`를 통독한다. 존재하면 `devflow/project/design.md`·
+`devflow/project/glossary.md`와 `devflow/journal.md`를 각각 통독한다.
 
 **게이트:** `arch.md`의 `frontend: none`이면 이 스킬은 실행하지 않는다 — 그렇게 답하고 끝낸다.
 `needed`여도 사용자가 건너뛸 수 있다: "디자인 기획을 할까요, 기본 스타일로 갈까요?" 먼저 묻는다.
@@ -40,7 +42,7 @@ description: 디자인 기획(선택 단계). UI 베이스 선택, 스타일을 
   **문서에 hex를 적지 않는다.** 문서는 이 파일을 가리키기만 한다.
 - **컴포넌트 인벤토리** — product.md 화면 목록에서 역산. 이름 + 있음/만들 것.
 - **`/preview` 페이지 1장** — 모든 컴포넌트를 한 화면에. 이 페이지가 이 단계의
-  완료 신호이자 이후의 회귀 감지기다. 브라우저 MCP로 열어 확인한다.
+  완료 신호이자 이후의 회귀 감지기다. arch.md 검증 창구의 브라우저 조작 도구로 열어 확인한다.
 
 ### 4. 빌드 전략 — 사용자가 고른다 (이 선택이 split의 분해 축을 바꾼다)
 

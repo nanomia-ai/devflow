@@ -6,6 +6,68 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.21 — 2026-08-11 — disk-state contracts survive brownfields, interruption, and multiple checkouts
+
+The v0.9.20 philosophy remains: product direction, a tree opened one layer at a time,
+task cards, completion signals, and separated quality roles. The redesign closes the disk
+states that a new Claude or Codex session previously had to infer. Brownfield provenance,
+card Approval and Review, canonical and legacy Depends parsing, layer-opening and closing
+markers, product-verification single flight, source ids, routed failures and findings,
+remote evidence, and capability revisions now have explicit producers, landing commits,
+and resume consumers. In multi, shared routing and initial claims are visible at the
+integration tip before implementation; devflow still neither creates nor assigns
+worktrees.
+
+Independent literal and over-harness attacks exposed concrete interruption paths: a
+write-first product or capability verdict could execute twice or land incomplete; route
+output could be duplicated or fail to represent deletion; a requested product run or event
+could preempt its caller's claim; an unresolved or dirty Audit could loop forever; stale
+Approval could survive a card change; a task checkpoint could be absent from integration;
+and a local hook could inject stale state. The repairs use one `routing prepared` transaction
+with an exact base, final result, ordered write/move/delete operations, and exact-prefix
+recovery; committed nonclosing capability results; non-preempting requests; nonblocking
+dirty Audits; Git-normalized Approval freshness; and activation-only hooks. Multi integrates
+task and planning-source checkpoints before any dependent tree mutation.
+Every entry skill returns an open Git rebase or merge before normal routing when inside a Git
+work tree; non-Git projects skip that gate without initialization. Locators use Git's full
+object ID instead of assuming SHA-1 length, while path and card ordering have one byte/numeric
+comparator across platforms and task-card syntax bounds that comparator's full input domain.
+A capability pass records pending Standards and Provisional gates, and closure accepts only exact prefixes
+of `verify.md` → `journal.md` → folder rename. A journal decision for a core revision input
+routes to that document's owning skill before closure is judged again.
+
+Shared task-card predicates now live once in `state-predicates.md` and reach split, work,
+verify, and resume. Revision and event predicates live separately in
+`verification-predicates.md` and reach only verify and resume. Duplicate hook classification,
+HANDOFF injection, verification-route restatements, and repeated folder-closure prose were
+removed rather than patched around. Codex installation also verifies that the enabled
+plugin and marketplace entry both resolve to this repository, not merely the same name and
+version.
+
+The brownfield evidence came from JGNote, Nanomia ADE, and RDSF Data Server, but those older
+outputs are treated as failure-path clues, not proof of this release. Exact existing-record
+paths can be indexed per capability without becoming canon or an automatic read.
+
+Verification before this boundary: 50/50 Node checks; Korean/English structural and figure parity;
+zero Korean lines in English deploy artifacts except README.md's one language-switcher
+line; strict Claude manifest validation; native Claude and Codex installs both at 0.9.21;
+eight regenerated Codex prompts with each predicate companion only in its consumers; and
+`git diff --check`. The Windows installer retains its UTF-8 BOM. README tone measurements,
+from v0.9.20 to this entry: README_ko `—` 49→49, raw `**` markers 66→66, bureaucratic
+closure compounds 0→0; README `—` 82→81, raw `**` markers 80→80, closure compounds 0→0.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `AGENTS.md`; `README.md`;
+`README_ko.md`; `codex/AGENTS-devflow.md`; `codex/AGENTS-devflow_ko.md`;
+`codex/install.ps1`; `codex/install.sh`; `docs/design.md`; `docs/design_ko.md`;
+`scripts/session-start.js`; removed `scripts/install-codex-hook.js`;
+`scripts/extract-adopt-reference.js`; `scripts/extract-adopt-reference.test.js`;
+`scripts/remove-legacy-codex-hook.js`; `scripts/remove-legacy-codex-hook.test.js`;
+`scripts/session-start.test.js`;
+`scripts/verify-codex-plugin-install.js`; `scripts/verify-codex-plugin-install.test.js`;
+all Korean/English `skills/*/SKILL` pairs; `skills/principles/state-predicates.md` and
+`skills/principles/verification-predicates.md` with their Korean pairs; all Korean/English reviewer, verifier, auditor, and retrospector role-contract
+pairs; `CHANGELOG.md`.
+
 ## docs — 2026-08-11 — the README tone rules become part of the maintenance gate (no version change)
 
 The tone pass below fixed one document; without a written rule the next session would
