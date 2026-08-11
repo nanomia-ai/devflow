@@ -6,6 +6,29 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-11 — the capability-knowledge contract becomes v2.2
+
+The GPT candidate contract was revised by an independent verification and research
+campaign: sixteen refutation findings, three research passes (AI consumption and token
+economy; human operations and irreversibility; external practice with sources), a
+synthesis, two Fable adversarial passes (15 findings), and a re-audit of the fixes (13
+findings), all adjudicated. The evidence and option analysis of sections 1–3 stand; the
+contract of sections 4–7 is superseded. What changed: identity is the capability number
+(the stable-key scheme is deleted); freshness is a six-field machine block and two git
+commands (the three digests, their NUL pipes, and the comparison digests are deleted);
+lifecycle is an arch.md `capability_baseline` switch and the baseline riding the begin
+commit (enrollment files and the marker payload array are deleted); the document contract
+is a blueprint-first 12-section design with caps, and four durability rules (shape
+tolerance, the knowledge layer never blocks the execution axis, byte stability,
+delete-only human edits) govern the long horizon. Three owner choices reduce to one — the
+per-project switch default. The invariants test re-pins every surviving invariant against
+the revised wording, drops only assertions whose mechanism was deleted or whose rule the
+revision inverted, and adds pins for the absent-switch default, the size cap, and the
+coverage-is-not-task-state rule. Runtime wiring is the next release.
+
+Files: `docs/capability-knowledge-proposal.md`; `docs/capability-knowledge-proposal_ko.md`;
+`scripts/repository-invariants.test.js`; `CHANGELOG.md`.
+
 ## 0.9.23 — 2026-08-11 — two inherited gaps close: parallel-group entry and Record self-description
 
 Two gaps that v0.9.22's verification campaign deferred are now judged solvable with low
