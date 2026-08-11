@@ -25,7 +25,11 @@ for that layer; the new verdict and execution evidence; every new `routing: pend
 required by each failure, unverified reason, or closure-gate violation; and the Failure
 history, Audit, and Retrospective sections from HEAD. A complete capability-layer pass has
 neither `Standards` nor `Provisional` equal to the exact value `pending for current pass`;
-both contain this run's step-5 result.
+both contain this run's step-5 result. A current Record is complete only when its
+`New entries` value equals the count of Failure-history entries whose source id exceeds
+the maximum in HEAD's record (treat that maximum as 0 when no HEAD record exists). A committed Record
+without a `New entries` field is complete as committed; only a working-tree Record is
+judged by this field.
 
 When a product-verification running marker remains, the whole diff is only tree-root
 verify.md, and that file is a complete Record matching the marker's three revisions with
@@ -167,7 +171,8 @@ section below).
 4. The verifier verdict is exactly one of three: pass · fail · unverified. Immediately
    after it returns, write the verdict, current Product revision, Verification revision,
    Code revision, the capability layer's Capability revision, and execution evidence to
-   verify.md. For a capability-layer pass, write or replace the two fields in that same
+   verify.md. In the same write, set `New entries` to the count of Failure-history entries
+   this run has added (0 when none). For a capability-layer pass, write or replace the two fields in that same
    write with `Standards: pending for current pass` and `Provisional: pending for current
    pass`. For fail or unverified, give each reproduction, criterion, or unverified
    reason one canonical new source id. Add
@@ -198,7 +203,8 @@ section below).
      task-card number below this folder was replaced by the measured result.
    If either gate fails, record the exact violation and path or row in verify.md and add
    `source id: <new id>; timestamp: <timestamp>; unverified: <violation and path or row>;
-   routing: pending` to Failure history. Step 6 creates a card whose completion signal is the exact command or check
+   routing: pending` to Failure history. Each write that adds a Failure-history entry
+   replaces `New entries` with the current count of this run's entries. Step 6 creates a card whose completion signal is the exact command or check
    procedure that executes proof that the violation is gone. Do not change the verifier's
    pass verdict, but write no capability-closing marker.
 6. The lowest-source-id Failure history entry with `routing: pending` → at the capability
@@ -449,6 +455,7 @@ Capability revision: <target capability and direct-dependency card input hash | 
 Scenario:  <one line>
 Executed:  <channel + what was actually run>
 Verdict:   pass | fail | unverified
+New entries: <count of this run's Failure history entries>
 Failure history:
 - source id: <id>; timestamp: <timestamp>; <failure: reproduction or criterion | unverified: evidence, Standards, or Provisional repair>; routing: <pending | canonical final routing value>
 Regression: <completion signals rerun, substituted, or confirmed + results>

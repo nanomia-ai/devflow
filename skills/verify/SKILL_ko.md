@@ -22,6 +22,10 @@ diff를 본다. 그 diff가 정규 검증 상태 전환 하나 또는 실패 이
 각 실패·미검증 이유 또는 폐쇄 게이트 위반에 필요한 새 `라우팅: 대기` 항목, HEAD에 있던 실패
 이력·감리·회고 절을 모두 가진다. 능력층 통과 완성본은 `Standards`와 `Provisional` 어느 쪽에도
 정확한 `pending for current pass` 값이 없고 둘 다 이번 실행의 5단계 결과를 가진다.
+현재 Record는 `New entries` 값이 HEAD 기록의 최대 출처 id보다 큰 출처 id를 가진 실패 이력
+항목의 수와 같을 때만 완성본이다(HEAD 기록이 없으면 그 최대 출처 id를 0으로 본다). 커밋된 Record에
+`New entries` 필드가 없으면 커밋된 그대로 완성본이다 — 이 필드로는 현재 체크아웃의 Record만
+판정한다.
 
 제품 검증 실행 마커가 남아 있고 전체 diff가 트리 루트 verify.md 하나뿐이며, 그 파일이 마커의
 세 revision과 일치하고 Capability revision이 `해당 없음`인 완성본이면 제품 결과 작성의 정규
@@ -139,7 +143,8 @@ Product revision·Verification revision·Code revision을 쓰고, verifier를 �
    현재 실행 결과를 확인한다. 포인터를 열 수 없거나 실행 결과가 없으면 미검증이다
 4. verifier 판정은 셋 중 하나로만: 통과 · 실패 · 미검증. 반환 직후 verify.md에 판정·현재
    Product revision·Verification revision·Code revision·능력층의 Capability revision·실행 근거를
-   쓴다. 능력층 통과이면 같은 쓰기에서 `Standards: pending for current pass`와
+   쓴다. 같은 쓰기에서 `New entries`를 이번 실행이 실패 이력에 추가한 항목 수로 적는다
+   (추가가 없으면 0). 능력층 통과이면 같은 쓰기에서 `Standards: pending for current pass`와
    `Provisional: pending for current pass` 두 필드를 쓰거나 교체한다. 실패 또는 미검증이면 각각의
    재현·판정·미검증 이유마다 규칙 정본의 새 출처 id를
    하나씩 부여하고 실패 이력에
@@ -164,7 +169,8 @@ Product revision·Verification revision·Code revision을 쓰고, verifier를 �
      교체됐는지 확인한다.
    어느 게이트든 실패하면 정확한 위반과 경로 또는 행을 verify.md에 기록하고 실패 이력에
    `출처 id: <새 id>; timestamp: <timestamp>; 미검증: <위반과 경로 또는 행>; 라우팅: 대기`를
-   추가한다. 6단계가 완료 신호에
+   추가한다. 실패 이력 항목을 추가하는 쓰기마다 `New entries`를 이번 실행의 현재 항목 수로
+   교체한다. 6단계가 완료 신호에
    해당 위반이 사라졌음을 실행으로 증명하는 정확한 명령 또는 점검 절차를 가진 카드를 만든다.
    verifier의 통과 판정은 바꾸지 않지만 능력 닫기 마커는 쓰지 않는다.
 6. 실패 이력에서 출처 id가 가장 작은 `라우팅: 대기` 항목 → 능력층이면 항목을 고르기 전에
@@ -375,6 +381,7 @@ Capability revision: <대상 능력·직계 의존 카드 입력 hash | 미해�
 시나리오: <한 줄>
 실행: <창구 + 실제 실행 내용>
 판정: 통과 | 실패 | 미검증
+New entries: <이번 실행의 실패 이력 항목 수>
 실패 이력:
 - 출처 id: <id>; timestamp: <timestamp>; <실패: 재현 또는 판정 | 미검증: 보완할 증거·표준·잠정값>; 라우팅: <대기 | 규칙 정본의 최종 라우팅 값>
 회귀: <재실행·갈음·확인한 완료 신호 목록 + 결과>

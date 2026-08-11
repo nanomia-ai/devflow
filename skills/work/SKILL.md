@@ -81,6 +81,11 @@ Purpose: carry one task card all the way to its completion signal, then commit.
    that is ready under the state predicates and begin. Return to split to normalize a
    noncanonical `Depends`; report and stop on an integrity anomaly. Do not claim a card
    that is not ready.
+   solo: when the next card's effective `Approval` names a reciprocal parallel group and
+   every card of that group is ready, claim the whole group in one step — rename every card
+   of the group to `.wip.` together; otherwise claim exactly one card. multi: always claim
+   exactly one card — an approved parallel group is distributed across members through
+   ordinary claims.
    solo: rename to `.wip.` and begin — the rename rides the next wip checkpoint or final
    task commit that contains the card.
    multi: before claiming, pull the integration branch and finish the digest (resume's

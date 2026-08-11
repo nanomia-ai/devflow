@@ -6,6 +6,42 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.9.23 — 2026-08-11 — two inherited gaps close: parallel-group entry and Record self-description
+
+Two gaps that v0.9.22's verification campaign deferred are now judged solvable with low
+variance and closed before real use, per the owner's direction.
+
+The approved-parallel-group machinery — the cards' reciprocal `parallel` Approval, the
+two-claim tolerance branch, and integrity item 1 — governed a state no procedure could
+create, because work's single-claim-first rule blocked every second claim (inherited from
+0.9.20). One entry rule closes it: in solo, when the next card's effective Approval names
+a reciprocal parallel group and every member is ready, the whole group is claimed in one
+step; in multi, claims stay single and an approved group is distributed across members
+through ordinary claims — the verification pass showed a group-claim mandate in multi
+would foreclose exactly the distribution the approval exists for.
+
+A verify Record now describes itself: a `New entries` field written with the verdict
+carries the count of this run's Failure-history entries, and a current Record is complete
+only when that value equals the count of entries whose source id exceeds the maximum in
+HEAD's record (treat that maximum as 0 with no HEAD record). Previously an interrupted
+session's partial Record was unjudgeable — the required entry count existed only in the
+dead session's context — so recovery had to choose between committing silent loss and
+re-running every interruption. A mismatch is now a partial write that repeats from step 2,
+the sanctioned re-run path. A committed Record without the field is complete as committed
+(the same absence-tolerance pattern as pre-v0.9.21 records).
+
+Verification: an independent Fable pass walked both closures (solo crash-resume, the
+multi race with one colliding number, partial-ready groups; six Record kill points
+including the no-verifier-briefing paths and legacy records) — both CLOSED, with one
+terminology drift and two wording tightenings applied afterward and the multi scoping
+decided as recorded above. 51 Node tests: the 50 in scope pass; the one failure pins the
+capability-knowledge proposal's old wording against its in-progress revision and is
+re-targeted in that document's own change.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `skills/work/SKILL.md`;
+`skills/work/SKILL_ko.md`; `skills/verify/SKILL.md`; `skills/verify/SKILL_ko.md`;
+`docs/design.md`; `docs/design_ko.md`; `CHANGELOG.md`.
+
 ## 0.9.22 — 2026-08-11 — the seams between v0.9.21's flows close
 
 An independent verification campaign over the v0.9.21 redesign — six fresh-context passes
