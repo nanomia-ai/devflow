@@ -12,8 +12,15 @@ Purpose: carry one task card all the way to its completion signal, then commit.
 
 ## Preconditions
 
-1. Is this a git repository? If not, propose `git init` (if declined, proceed but warn
-   once: "no recovery possible").
+When this project is coming up from a version without rooms, finish the canonical room
+transition before anything below. For each bare `.wip.` card, ask the user whether it is
+mine: rename a confirmed one to `.wip-<my id>.`, and release one the user does not
+attribute to me by stripping the whole suffix back to pending — its progress log stays in
+the card. Independently of that answer, move a root `devflow/HANDOFF.md` into my room. Land
+whichever of these applies in one `<id> boundary — room upgrade` commit.
+
+1. In a folder that is not a Git work tree, follow the canonical `git init` proposal and
+   its `no recovery possible` warning before anything below commits.
 2. Before choosing an ordinary claim, finish remote-evidence transitions for my claimed
    cards in the order below. Within each state, use timestamp order and then journal line
    order.
@@ -59,12 +66,11 @@ Purpose: carry one task card all the way to its completion signal, then commit.
    under the canonical commit discipline; make no second final task commit and finish only
    upper-document feedback and the boundary.
 
-   Exclude a remaining valid `evidence-wait` card from the claim count below. If one
-   `.wip.` (solo) or `.wip-<my id>.` (multi) card remains, it comes first; open no new work.
-   If two or more remain, report an integrity anomaly unless their cards carry reciprocal
-   parallel Approval. When they do, use the first full card path in canonical path order for
-   this invocation. multi: others' claims do not count — they are read-only reference
-   (the canonical rules' "Modes and Identity").
+   Exclude a remaining valid `evidence-wait` card from the claim count below. Group my
+   remaining claims by depth-1 unit. Claims in different units are ordinary concurrent work;
+   two or more inside one unit are an integrity anomaly unless those cards carry reciprocal
+   parallel Approval. Others' claims do not count —
+   they are read-only reference (the canonical rules' "Identity and Rooms").
    If the claimed card lacks `Approval` or `Review`, has `Approval: pending`, or has
    noncanonical `Depends`, make no new implementation change. First land any current diff
    or progress log in an `NN.N wip: legacy card migration` checkpoint. Then release the
@@ -77,20 +83,25 @@ Purpose: carry one task card all the way to its completion signal, then commit.
    If journal in HEAD or the working tree has an active layer-opening marker whose
    `source-json` decodes to a `card:` locator naming my claimed card, do not resume
    implementation; return to split to finish that marker's planning commit first.
-3. When no claim of mine remains after excluding evidence-wait, claim the next pending card
-   that is ready under the state predicates and begin. Return to split to normalize a
-   noncanonical `Depends`; report and stop on an integrity anomaly. Do not claim a card
-   that is not ready.
-   solo: when the next card's effective `Approval` names a reciprocal parallel group and
-   every card of that group is ready, claim the whole group in one step — rename every card
-   of the group to `.wip.` together; otherwise claim exactly one card. multi: always claim
-   exactly one card — an approved parallel group is distributed across members through
-   ordinary claims.
-   solo: rename to `.wip.` and begin — the rename rides the next wip checkpoint or final
-   task commit that contains the card.
-   multi: before claiming, pull the integration branch and finish the digest (resume's
+3. Select this invocation's card and begin. When this session already reported an exact
+   card path and the user approved it, that card. Otherwise the first entry in canonical
+   candidate order over my remaining claims plus every pending card that is ready under the
+   state predicates. Continue a claim of mine; claim a ready pending card as below. Never
+   claim a pending card in a depth-1 unit where I already hold a claim, and never claim a
+   card that is not ready. When the user named a card and this selection does not take it,
+   say which card it took and why before claiming anything. When a claim of mine in another
+   unit holds uncommitted changes, land them as that card's `NN.N wip:` checkpoint first —
+   one working tree runs one build. Return to split to normalize a
+   noncanonical `Depends`; report and stop on an integrity anomaly.
+   When the next card's effective `Approval` names a reciprocal parallel group and
+   every card of that group is ready, either claim the whole group in one step — renaming
+   every card of the group to `.wip-<my id>.` together — or claim one card of it. The same
+   approval permits both. Otherwise claim exactly one card.
+   Before claiming, pull the integration branch and finish the digest (resume's
    digest procedure). The rename commit to `.wip-<my id>.` is the claim (message:
-   `<id> 02.4 claim`). Land this initial claim on integration as the canonical binding
+   `<id> 02.4 claim`). A group claim renames every card of the group in that one commit, and
+   its message joins their numbers with `+` in canonical card-number order
+   (`<id> 02.4+02.5 claim`). Land this initial claim on integration as the canonical binding
    decision and include that tip in the current branch before implementation. If a
    competing claim rejects the integration update, fetch again and follow the canonical
    rules' lost-claim rule (copy my progress log into the surviving card and step back).
@@ -117,6 +128,11 @@ Read the card fully (including Coordinates and Identity — know what this is a 
   yet. Apply the consumer judgment below first; only when its shape gate permits, read both
   zones and the exact Binding ADR paths regardless of `Read first`. Foundation and research
   cards follow the same rule
++ run a mechanical query over every non-`.stale.` `.done.` card below that depth-1 unit whose
+  number is not in the capability document's `Covered cards`, emitting each card's number and
+  the last `carry:` line of its progress log and nothing else. Read only that output and open
+  no card body. With no capability document, or one whose shape gate blocked its body, the
+  complement is every such card, and a card with no `carry:` line contributes nothing
   ↓
 When the current card, its direct-dependency cards, or arch's Code structure or shared
 contracts name one or more exact code paths, search only those paths for the responsibility
@@ -134,13 +150,15 @@ Implement  ←→  append to the progress log (after completing one named card s
   ↓            On a long card, checkpoint-commit `02.2 wip:` at the same moments
   ↓            (the main session commits)
 Run the completion signal — actually run it. Record the result in the log
+  ↓            A signal scoped to this capability's paths survives another flow's
+  ↓            uncommitted code in the same working tree; a repository-wide one does not
   ↓
 Review — omit this step when the card's `Review` is `waived`. Omit `not-applicable` only
         when the diff contains no real-code change. Otherwise brief a clean
         subagent/fresh session with `reviewer.md` beside this skill,
         **verbatim — never summarized** — main holds the implementation history, so
         main can never be the clean one — and give it **only the card (Progress log section
-        excluded) + diff + code-style.md + glossary.md + journal.md + this card's capability
+        excluded) + the diff limited to this card's paths + code-style.md + glossary.md + journal.md + this card's capability
         document design zone and every existing file at an exact path listed in that zone's
         Binding ADRs section when that zone exists +
         exactly one design-freshness, reconfirmation, or baseline-missing projection**
@@ -166,11 +184,13 @@ Upper-document feedback judgment — before the final task commit, ask whether t
         write the exact document path, heading, and replacement text in the progress log
         and continue
   ↓
+Carry line — append the canonical `carry:` line to the progress log
+  ↓
 Final task commit — the canonical 1 task = 1 commit discipline. On a remote-evidence pass,
         this commit replaces `evidence-wait` with `evidence-finalizing` while preserving
         its fields
   ↓
-Multi integration gate — under the canonical rules, integrate the task commit before any
+Integration gate — under the canonical rules, integrate the task commit before any
         boundary working-tree change
   ↓
 Land upper-document feedback — when the judgment recorded an update, fix that document
@@ -228,14 +248,17 @@ hypothesis when the exact-path set in Consumed contracts differs from `Consumed 
 when a row's other-capability number differs from or is ambiguous under the current provider
 mapping in arch.md's Code structure. Enumerate non-`.stale.` `.done.`
 card numbers below that capability's folder from names alone in canonical card-number
-order. When they differ from `Covered cards`, or when `Verified at` is `none`, verification
+order. When they differ from `Covered cards`, when any non-`.stale.` card below that folder
+lacks a `.done` status, or when `Verified at` is `none`, verification
 statements are a hypothesis. Verification statements are Main flow, Lifecycle, Current
 behavior, Entrypoints, Consumed contracts, Traps, and Verify.
 
 Before implementation uses a design hypothesis, reconfirm it in the exact authoritative
-section already read from product.md, arch.md, or glossary.md. Reconfirm a verification
-hypothesis in current code or cards inside the existing read set and code-search boundary.
-Expand neither. Keep every design reconfirmation as `exact path#heading`, without duplicates
+section already read from product.md, arch.md, or glossary.md, or at an already-open exact
+path from a valid Binding ADRs section. Reconfirm a verification
+hypothesis in current code or cards inside the existing read set and code-search boundary,
+which for reconfirmation alone also holds `Consumed paths`.
+Expand neither further. Keep every design reconfirmation as `exact path#heading`, without duplicates
 and in canonical path order, in the reviewer projection. Use the canon's current path/status
 notation for the symmetric difference of current completed cards and `Covered cards` as the
 post-baseline change list. Report one line: `baseline <Verified at>, design <fresh|
@@ -267,6 +290,21 @@ If the conflict is with an **upper document** (product, arch, code-style) rather
 code, follow the document-hierarchy procedure in the canonical rules — fixing the
 document comes before creating a card.
 
+## Switching Inside One Capability — park, then release
+
+Moving to another depth-1 unit needs no procedure: claim a card there. One is needed only
+for switching inside a unit.
+
+```
+① Land the current diff and progress log as an `NN.N wip: <reason for stopping>`
+   checkpoint. With nothing changed, make no commit
+② Remove the claim suffix, returning the card to pending
+③ Route by canonical candidate order. Integrate the checkpoint first, then land the release
+   as the canonical binding decision it is
+```
+
+This does not collide with the ban on mid-task handoff: parking is a release, not a handoff.
+
 ## Stuck-Escape — event-based
 
 If the same cause hypothesis has failed twice — the same command failing with the same
@@ -289,7 +327,8 @@ A delegated implementer stops and reports blocked — both exits belong to the m
   rules path + `devflow/project/product.md` + `devflow/project/arch.md` +
   `devflow/project/code-style.md` + the existing `devflow/project/design.md` + the existing
   `devflow/project/glossary.md` and `devflow/journal.md` + every direct dependency-card
-  path + the automatically selected capability document and Binding ADR paths + the design
+  path + the automatically selected capability document and Binding ADR paths + the carry-
+  line query output + the design
   and verification freshness and reconfirmation projection. Give no other conversation
   backstory. After reading the card, the delegate opens
   its `Read first` paths exactly. Never put arch section names in `Read first`. For T-low
@@ -332,21 +371,30 @@ matches a row of the discovery→update table but is not yet in that document? I
 land it through the table first — HANDOFF carries only the volatile remainder. Nothing
 to land is the normal case — if you landed things as they happened, this check is empty.
 
-`devflow/HANDOFF.md` (multi: my room, `devflow/users/<my id>/HANDOFF.md`) — overwritten
+My room's `devflow/users/<my id>/HANDOFF.md` — overwritten
 every time. **No position, no progress percentages** (the tree answers those). Volatile
 context only:
 
 ```markdown
 # HANDOFF · <YYYY-MM-DDTHH:MM:SSZ>
-## Next single step          <!-- one tree path -->
-## Just learned              <!-- only what is in neither the tree nor any card -->
-## Traps
+## Next single step          <!-- one tree path | none -->
 ## Open decisions (needs a human)
 ```
 
-If all four are empty, an empty file is fine — resuming from the tree alone is the
-normal case.
+`Next single step` is mandatory and holds one tree path — the one the canonical candidate
+order would take next. Write `none` only when the tree has no pending and no claimed card
+at all. Anything else this session learned lands durably
+instead — the card's carry line inside this unit, a journal `capability note` about
+another capability.
+Re-read this file from disk immediately before overwriting it: carry forward the
+`Open decisions` it holds now, not the copy read earlier in this session.
 Unresolved items from the previous HANDOFF's Open decisions must be carried forward.
 Once resolved, record the decision in journal or the owning document, then drop it.
+
+The first time this room's HANDOFF still carries a `## Just learned` or `## Traps` section,
+land that content before overwriting: through the discovery→update table where a row takes it, as a
+`capability note` where it belongs to another capability, and in this card's carry line
+where it belongs to this one. Overwrite only after that landing. Do not backfill carry lines
+onto older `.done.` cards.
 
 HANDOFF and journal are main-session-only.

@@ -73,7 +73,7 @@ flowchart LR
 | Adopting in an existing project | adopt (back-derive from code) → split |
 | Adding or extending features | split |
 | Continuing in a new session | automatic (SessionStart hook — see the install section), or resume |
-| A teammate joins | make a room — see "Using it in a team" below |
+| A teammate joins | make a room — see "Rooms, claims, and the integration branch" below |
 
 Nothing on disk yet and you ran resume anyway? It asks one question and sends you to product
 or adopt. It is also the safety net when you are not sure where you are.
@@ -124,12 +124,12 @@ devflow/
     01-foundation/                foundation (shared groundwork)
     02-payment/                   one capability = one folder
       02.1-model.done.md            a completed card
-      02.2-api.wip.md               a card in progress (its progress log lives inside)
+      02.2-api.wip-jmp.md           a card jmp claimed (its progress log lives inside)
       02.3-webhook.md               a waiting card
       verify.md                     capability verification record (left by verify)
     03-reporting.md               one-heading waiting file for an unopened capability
   journal.md                   ← one-line cross-task decisions + the fixed-format state lines the canonical rules define (only the decisions are swept)
-  HANDOFF.md                   ← volatile handoff — next single step · just learned · traps · open decisions only, overwritten each time
+  users/<id>/                  ← your room — owner.md (identity) · digest.md (marker) · HANDOFF.md (the next single step and open decisions, overwritten each time)
 ```
 
 A new project's first tree contains only capability waiting files. The next layer creates
@@ -146,7 +146,7 @@ stateDiagram-v2
     state "stale — .stale." as STALE
     state "promoted to a folder" as FOLDER
     [*] --> WAIT: split creates the card
-    WAIT --> WIP: start · multi mode claims it
+    WAIT --> WIP: a claim commit renames it
     WIP --> WAIT: release · the suffix comes off
     WIP --> DONE: signal · review · commit passed
     WAIT --> FOLDER: too big for one commit
@@ -185,14 +185,14 @@ One table shows what gets written where, and who reads it:
 | `tree/<capability>/verify.md` | verify | resume through its bounded projection, retrospector | every capability verification |
 | `tree/verify.md` | verify, at the product layer | resume, retrospector | every product verification |
 | `journal.md` | any skill — cross-task decisions and the fixed-format lines | verify classifies it before every run; split · work · resume · reviewer · retrospector | cross-task decisions and transition state |
-| `HANDOFF.md` | work, at a task boundary | resume, work | overwritten whole at every boundary |
+| `users/<id>/HANDOFF.md` | work, at a task boundary | resume, work | overwritten whole at every boundary |
 | `users/<id>/` | that member | that member, and others read owner.md to resolve identity | joining, claiming, leaving |
 
 These are the only state files devflow keeps. Your code and every other document in the
 repository stay yours.
 
 Both gates that open the tree, split and resume, run a 15-item integrity check the moment
-they start. It runs in solo mode too. It looks for duplicate numbers, a live card inside a
+they start. It looks for duplicate numbers, a live card inside a
 closed folder, a dependency that points at no card, a journal line that does not parse, and
 **reports without correcting**, because an auto-correction that misjudges spreads
 corruption faster than the anomaly it was fixing. A malformed journal line or verification
@@ -214,9 +214,26 @@ discovery→update table), and only the volatile remainder goes into HANDOFF. An
 not handed over.
 
 The hook routes the next session to resume, which reads disk state and HANDOFF. The hook
-itself neither injects file content nor decides the next stage. An empty HANDOFF is normal.
-Resuming from the tree alone is the default, and HANDOFF carries only the crumbs that live
-in neither the tree nor any card.
+itself neither injects file content nor decides the next stage. HANDOFF holds two things
+now: the one next step, and the decisions that need a person. Everything else a session
+learns lands somewhere durable instead.
+
+### Where what a card learned goes
+
+A handoff gets overwritten, so anything parked there was one session from being lost. Two
+lines carry it now, and both survive.
+
+- **The carry line.** Just before its last commit, a card writes one line into its own
+  progress log — the fact that could make the next card in this capability wrong. Usually it
+  is `none`. The next card in that capability reads those lines automatically, and only the
+  ones written since the capability last passed verification, so the set stays small. A
+  passing verification folds them into the capability document and empties the set again.
+- **The capability note.** Notice something about a *different* capability while you work
+  and it goes into journal.md tagged with that capability's number. That capability's next
+  verification picks it up and deletes the line.
+
+A trap found in 04.5 reaches 04.7 on its own, and something you noticed about payment while
+fixing customer management reaches payment.
 
 ## The 9 skills
 
@@ -425,27 +442,17 @@ only from the entry list.
 - **What was not executed is not passed — it is unverified.**
 - **1 task = 1 commit.** Only after the completion signal and review pass. Rollback = one revert.
 - **Measured answers flow back into documents (upper-document feedback).** Guesses live in the Provisional table and are replaced once measured.
-- **Handoff carries crumbs only.** The tree answers where, the progress log answers how —
-  HANDOFF keeps only the next single step · just learned · traps · open decisions, and an
-  empty file is normal.
+- **Handoff carries a pointer and open decisions.** The tree answers where, the progress
+  log answers how, and what a card learned rides its carry line. HANDOFF keeps the next
+  single step and the decisions that need a person.
 
 The full "why" (decision table · rejection lineage) is in [docs/design.md](docs/design.md).
 **To overturn a decision, refute its recorded reason first.**
 
-## Using it in a team — two modes
+## Rooms, claims, and the integration branch
 
-devflow decides its mode **by file existence** (no settings, no flags):
-
-```
-any devflow/users/*/owner.md exists  →  multi mode
-none exists                          →  solo mode (all multi rules are ignored)
-```
-
-**Solo mode** is the default. It is exactly what was described above — nothing new to learn.
-
-**Multi mode** is for several people sharing one repository. Premise: not everyone on the
-team needs devflow — adopters must not collide with each other, and non-adopters' work
-must still be caught up on. The split axis is not people but the **scope of truth**:
+devflow has one mode. Whether you are alone at one terminal or five people share the
+repository, every session works out of its own room. No flag to set, no mode to switch.
 
 ```
 devflow/
@@ -453,16 +460,24 @@ devflow/
   users/<id>/                   ← personal room — owner.md (identity) · HANDOFF.md (my handoff) · digest.md (marker)
 ```
 
-The four key concepts:
+The split axis is not people but the **scope of truth**. Documents with a single truth are
+shared, and only what one person owns lives in a room. Not everyone on the team needs
+devflow either: adopters must not collide with each other, and non-adopters' work must
+still be caught up on.
 
+The five key concepts:
+
+- **id** — who you are. A session reads your git name and email and matches them against
+  each room's owner.md. In a fresh project with no room, it proposes an id and creates the
+  room once you confirm it.
 - **claim** — the commit that renames a card to `.wip-<my id>.`. From then on the card is
   mine; others' claimed cards are read-only. On completion it becomes a bare `.done.`
   (git remembers ownership).
-- **room** — where my session state lives. Everyone writes only in their own room; every
-  room is readable by the whole team. The marker (digest.md) is the commit position that
-  says "caught up to here".
-- **digest** — the procedure for catching up on others' commits (including teammates who
-  do not use devflow):
+- **integration branch** — where minting, closure, and binding decisions land, named by
+  `integration` in arch.md. **Alone, that value is the branch you are already on**, and
+  every integration step shrinks to an ordinary commit.
+- **digest** — catching up on commits made outside your own sessions. A teammate's commits
+  land here, and so do your own hand edits:
 
 ```mermaid
 sequenceDiagram
@@ -476,27 +491,33 @@ sequenceDiagram
 ```
 
 - **binding decision** — a decision that affects shared documents, tree structure, or
-  someone else's card. Never shipped inside feature work — it lands immediately on the
-  integration branch (the multi-only branch designated in arch's settings).
+  someone else's card. Never shipped inside feature work — it lands on the integration
+  branch immediately.
 
 Three habits are added to daily work: **pull and digest** before claiming a new card,
-claim via a **rename commit**, and fetch the integration branch before routing to read
-shared state from its tip (an active marker there gets pulled into the current branch
+claim via a **rename commit**, and read shared state from the integration branch before
+routing (an active marker there gets pulled into the current branch
 first). The first two happen at boundaries; the third runs even while a card is claimed.
-Everything else is the same as solo.
 
-Every mode transition is a single-commit procedure:
+Working alone, all of this costs **one commit per card** — the claim. That one commit is
+what lets two terminals, or two worktrees, see each other's work in progress. Two
+qualifications on worktrees: one of them has to sit on the integration branch, because Git
+will not let a second worktree update a branch the first has checked out; and two sessions
+of one person share one id, so disk cannot tell them apart — either may finish the other's
+boundary, and the approval on resume's report is what keeps them from picking up the same
+card.
+
+Every room transition is a single-commit procedure:
 
 | Transition | Procedure |
 |---|---|
 | Teammate joins | make a room (owner.md) + marker = current HEAD. Done |
-| Solo → multi | create the room + move HANDOFF into it + `.wip.` → `.wip-<id>.` + marker = HEAD |
-| Multi → solo | (the last person) HANDOFF moves back + delete users/ + restore suffixes + remove arch's multi-only config lines (integration · merge) |
+| Upgrading from a pre-0.12 project | arch adds `integration` and `merge` → identity resolution makes your room → work renames `.wip.` to `.wip-<id>.` and moves HANDOFF into the room |
 | Teammate leaves | (after the user declares it) anyone remaining: promote open decisions to journal (attributed) → release their claims → delete the room |
 
-Half-finished transitions (multi mode but a bare `.wip.` or a root HANDOFF remains) are
-among the things the integrity check above catches. Nothing goes wrong silently.
-Sessions find their room via git identity;
+Half-finished upgrades (a bare `.wip.` or a root HANDOFF still sitting there) are
+among the things the integrity check above catches, and resume sends them back to work.
+Nothing goes wrong silently. Sessions find their room via git identity;
 sessions that cannot resolve one (CI · bots) only read.
 
 owner.md is two lines:

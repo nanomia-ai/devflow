@@ -88,7 +88,7 @@ in verification uses the `verify:<path>#Failure history@<source id>` locator of 
 `routing: pending` failure, or the
 `verify:<path>#<Audit|Retrospective>@<source id>/<finding number>` locator of an adopted
 finding. The source id and finding number remain in that entry through the planning commit.
-In multi, when a `card:` source commit is not an ancestor of integration, integrate the
+When a `card:` source commit is not an ancestor of integration, integrate the
 current branch through that commit by arch.md's `merge` method before writing a marker or
 tree diff. When rebase changes the hash, put the changed full commit object ID output by Git in the locator.
 The begin commit then lands on integration as the binding decision that mints the numbers.
@@ -121,7 +121,7 @@ Create one or more pending replacement cards in that folder. Remove `.done` from
 folder and every ancestor through the depth-1 capability or foundation. In every pending
 or claimed non-`.stale.` card in the whole tree, replace a `Depends` member exactly equal
 to a stale number with its approved replacement-number group. Include a claimed card in
-the change set, then release it first; in multi,
+the change set, then release it first;
 reassigning another owner's claim first needs the authorization in the canonical rules.
 Reset a changed pending card's `Approval` to `pending`, then reapprove it in the new
 execution proposal. Do not rewrite a `.done.` card's historical dependency. If its result
@@ -165,11 +165,11 @@ any depth:
   02.3.3-modal.md             ← if this is big too, promote again to 02.3.3-modal/
 ```
 
-Promotion procedure (multi: declare the minting first — child numbers are minted
+Promotion procedure (declare the minting first — child numbers are minted
 numbers, per the execution proposal section):
 1. If the card's progress log is non-empty, commit the card as a checkpoint before
-   transforming it (`NN.N wip:` — this commit creates the git guarantee for the log; in
-   multi, integrate the checkpoint before the marker under the `card:` source rule above)
+   transforming it (`NN.N wip:` — this commit creates the git guarantee for the log;
+   integrate the checkpoint before the marker under the `card:` source rule above)
 2. Choose the child numbers. Use the full object ID output by Git for the current commit that
    contains the pre-transformation card and its path as the `card:` source, write the
    layer-opening marker, and land the begin commit first
@@ -184,14 +184,14 @@ numbers, per the execution proposal section):
    this promotion and preserve every other member's order. If `Read first` contains the
    exact path of the parent card that will disappear, replace it with the child-card path
    or paths that received that content. Include and release a claimed affected card before
-   editing it; in multi, stop promotion without the canonical authorization to reassign
+   editing it; stop promotion without the canonical authorization to reassign
    another owner's claim. Reset an affected pending card's Approval to `pending` and
    reapprove it in step 10. Do not edit `.done.` or `.stale.` cards or other text
 7. If a Provisional row in arch.md has a `Settled by` value exactly equal to the parent
    number, select the one child that will settle that row and replace the value with its
    number. If no child settles it, repair the child decomposition before the promotion
    commit
-8. If the card wore a claim suffix (`.wip.`, multi: `.wip-<my id>.`), remove the suffix
+8. If the card wore a claim suffix (`.wip-<my id>.`), remove the suffix
    and name in the execution proposal one continuation child that owns the current
    implementation. Every child is born pending
 9. If there was a progress log, first land cross-task decisions through the
@@ -203,7 +203,7 @@ numbers, per the execution proposal section):
    approval field
 11. Immediately land the folder transformation, children, replacements from steps 6–7,
      approvals, and layer-opening-marker deletion in one planning commit (`NN.N promote`.
-     multi: a binding decision — lands on integration). Then claim the continuation child
+     a binding decision, so it lands on integration). Then claim the continuation child
      through the normal work procedure
 
 - The decomposition axis inside a capability defaults to **feature units** (what a user
@@ -281,7 +281,9 @@ remains unresolved. After interruption, its decoded value is the current request
 
 1. **Map the request's scope to a location.** Shared foundations, cross-capability
    contracts, and the verify channel go to `01-foundation`; everything else goes to the
-   matching product.md capability folder. If neither location is determined, ask the
+   matching product.md capability folder. For this mapping step only, read the fixed first
+   four lines of each candidate capability document and nothing else — `Boundary: owns …;
+   does not own …` is the mapping oracle. If neither location is determined, ask the
    user instead of guessing. If that capability is retired in product.md or its tree
    representation has `.stale`, create no card; route to product so the user first decides
    whether to reactivate it or define a new capability
@@ -304,6 +306,12 @@ remains unresolved. After interruption, its decoded value is the current request
    foundation** — it holds only while every active child is done. Forgetting this rename
    makes the tree lie
 6. Product-layer failures use the same rule. Never create a task card at the tree root
+
+**Card recall.** When step 1 finds an existing pending card of this request's scope sitting
+in the wrong folder, the planning commit that corrects the mapping deletes it and creates
+the replacement in the right place — but only while that card was never claimed and no task
+commit subject has named its number. Once a task commit carried that number, leave the card
+where it is and record the correction as one journal line instead.
 
 ## Task Card Format
 

@@ -13,8 +13,8 @@
 정합성 이상이다. 대체값을 추측하지 않는다.
 
 승인은 카드 값이 `YYYY-MM-DDTHH:MM:SSZ; 병렬: <번호+번호|없음>`이고 다음 디스크 조건까지
-충족할 때만 유효하다. 같은 저장소 상대 경로의 카드가 솔로 HEAD 또는 다중의 fetch한 통합
-브랜치에 있어야 한다. 그 authority를 `<authority>`라 할 때 `git diff --quiet -- <카드 경로>`와
+충족할 때만 유효하다. 같은 저장소 상대 경로의 카드가 규칙 정본이 정의한 통합 tip에 있어야
+한다. 그 authority를 `<authority>`라 할 때 `git diff --quiet -- <카드 경로>`와
 `git diff --cached --quiet <authority> -- <카드 경로>`가 모두 성공해야 한다. 이 비교는 Git의
 정규화된 내용으로 index·working tree·authority가 같은지를 판정한다. 병렬 묶음은 각 카드가
 같은 정본 카드 번호 순서의 묶음을 가지며 그 값이 함께 점유될 카드 전부를 포함할 때만 상호 일치한다.

@@ -19,6 +19,10 @@ missing or need repair, do not run steps 1–5 or modify arch.md or
 code-style.md. Keep the confirmed documents unchanged and run only `Capability documents`
 below.
 
+If resume routed here to complete one missing arch.md field — `Brownfield`, or `integration`
+and `merge` — do not run steps 1–5 either. Ask only that one question, add only that field
+or those two lines, land the canonical Layer 0 commit, and change nothing else.
+
 Purpose: translate the service plan into a development plan, producing
 `devflow/project/arch.md`.
 
@@ -100,8 +104,8 @@ frontend: none | needed
 verify_channel:
   work server: <run command + port>     # verification always happens here
   means: <browser-control tool | .http | CLI command | screen/accessibility tool>
-integration: <branch>                   # multi only — solo omits these two lines. Where minting, closure, and binding decisions land
-merge: merge-commit | rebase            # multi only. Squash forbidden — it erodes NN.N history
+integration: <branch>                   # where minting, closure, and binding decisions land. The current branch when one person works alone
+merge: merge-commit | rebase            # Squash forbidden — it erodes NN.N history
 ```
 
 `Brownfield` records whether implementation code existed before devflow entered this
@@ -109,6 +113,9 @@ repository. arch writes `no` for a new project; adopt writes `yes` when deriving
 existing code. This value selects how the first tree is created; it is not implementation
 progress. When an existing arch.md lacks only the `Brownfield` field, ask that one
 question, add only the field, and change nothing else.
+
+The default for `integration` is the current branch, and in a folder that is not a Git
+work tree it is `none`. The canonical rules govern what each value then means.
 
 `Existing records` is only a locator index for handoff and specification files that
 adopt checked against code. Each line contains a product.md capability name or `shared`,

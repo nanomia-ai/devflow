@@ -225,7 +225,7 @@ test("remote evidence wait has one durable format and an execution consumer", ()
   const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
   assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ evidence-wait: card-json: <JSON string containing the full task-card path>; checkpoint: <NN\.N wip: evidence-wait commit hash>; check-json: <JSON string containing the exact remote-result command or URL>/);
   assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ evidence-finalizing:/);
-  assert.match(principles, /checkpoint's exact message is `NN\.N wip: evidence-wait` in solo and\s+`<claim id> NN\.N wip: evidence-wait` in multi/);
+  assert.match(principles, /checkpoint's exact message is `<id> NN\.N wip: evidence-wait`/);
   assert.match(principles, /remote evidence check: check-json: .*; verdict: unrun \| pass \| fail \| pending \| inaccessible \| no-verdict; detail-json:/);
   assert.match(work, /A committed `evidence-finalizing` line in HEAD means the final task commit is done/);
   assert.match(work, /canonical exact evidence-wait\s+checkpoint message/);
@@ -393,8 +393,8 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.match(baseline, /work parses the leading number of the depth-1 ancestor directly below `devflow\/tree\/`/);
   assert.match(baseline, /Do not copy\s+baseline or ADR paths into cards/);
   assert.match(baseline, /remains in a card's\s+`Read first` is legacy wiring[\s\S]*select and shape-gate only through the number rule/);
-  assert.match(baseline, /With all\s+three present, resume selects foundation when the request semantically identifies it/);
-  assert.match(baseline, /With zero matches it reports only foundation plus non-retired number\/name\s+candidates and asks; with multiple matches it reports only matched candidates and asks/);
+  assert.match(baseline, /With all\s+three present, resume resolves the target by the canonical rules' canonical recognition/);
+  assert.match(baseline, /With an empty resolution set it reports only foundation plus non-retired number\/name\s+candidates and asks; with two or more it reports only the resolved candidates and asks/);
   assert.match(baseline, /registered consumers: <number \(status\), \.\.\. \| none>/);
 
   assert.match(arch, /`arch — capabilities`[\s\S]*run's last\s+commit/);
@@ -416,7 +416,7 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.match(resume, /If any of product\.md, arch\.md, or glossary\.md is absent or arch\.md lacks `Brownfield`[\s\S]*domain knowledge not initialized[\s\S]*open no capability body/);
   assert.match(resume, /no same-numbered file exists for the selection, including foundation/);
   assert.match(resume, /Zero or multiple boundaries follow the canon's\s+recovery procedure[\s\S]*verified-only shape anomaly/);
-  assert.match(resume, /With zero matches, present only foundation plus\s+non-retired number\/name candidates and ask; with multiple matches, present only matched\s+candidates and ask\. Open no body before the answer/);
+  assert.match(resume, /With an empty resolution set, present only foundation plus\s+non-retired number\/name candidates and ask; with two or more, present only the resolved\s+candidates and ask\. Open no body before the answer/);
   assert.match(resume, /only when the user explicitly requests the full expected set/);
   assert.doesNotMatch(active, /capability_baseline/);
 });
@@ -479,7 +479,7 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(baseline, /Do not use this exception for the last admissible body item in a section[\s\S]*replace the section body with `None\.`/);
   assert.match(baseline, /person making a direct deletion commits that deletion alone before the next devflow\s+skill runs/);
   assert.match(baseline, /Preserve an\s+`external` Trap's HEAD row byte-for-byte unless a person authorizes deletion/);
-  assert.match(baseline, /complete capability name or standalone number token, comparing file numbers as\s+integers/);
+  assert.match(baseline, /the selected unit's number names the same-numbered capability document/);
   assert.match(baseline, /Before opening a body, exactly one same-numbered file[\s\S]*read only valid files, skip anomalous\s+numbers, and continue/);
   assert.match(resume, /Before opening a body, require exactly one same-numbered\s+file with valid fixed boundary, sections, and metadata shape/);
   assert.match(resume, /When a Binding ADR path is\s+absent, report the exact path, make the design zone a hypothesis, and search for no\s+substitute/);
@@ -578,9 +578,9 @@ test("verification routing has a reconstructible prepared state and no duplicate
   assert.match(resume, /Any verify\.md in HEAD contains a valid `routing prepared` object/);
 });
 
-test("multi routing reads integration state before local claimed work", () => {
+test("routing reads integration state before local claimed work", () => {
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
-  assert.match(principles, /shared state for next-stage routing and the integrity check comes from the tip of\s+arch\.md's integration branch/);
+  assert.match(principles, /Shared state for next-stage routing and the integrity check comes from the integration\s+tip, not the current branch/);
   assert.match(principles, /include the integration\s+tip in the current branch before local claimed work/);
   assert.match(principles, /runs even while a card is claimed/);
 });
@@ -595,11 +595,11 @@ test("normal task completion has one final commit and a restartable boundary", (
   assert.match(principles, /that commit includes the claimed card and its progress log/);
   assert.match(principles, /before writing any status rename, HANDOFF, journal, verify\.md, or feedback\s+document change/);
   assert.match(work, /make no second final task commit/);
-  assert.match(work, /rename rides the next wip checkpoint or final\s+task commit that contains the card/);
+  assert.match(work, /The rename commit to `\.wip-<my id>\.` is the claim/);
   assert.ok(
-    work.indexOf("Multi integration gate") > work.indexOf("Final task commit")
-      && work.indexOf("Multi integration gate") < work.indexOf("Land upper-document feedback"),
-    "multi integration must precede every boundary working-tree mutation",
+    work.indexOf("Integration gate") > work.indexOf("Final task commit")
+      && work.indexOf("Integration gate") < work.indexOf("Land upper-document feedback"),
+    "integration must precede every boundary working-tree mutation",
   );
   assert.match(resume, /canonical final task subject/);
 });
@@ -741,4 +741,199 @@ test("stale and retired cards cannot leave orphan remote-evidence state", () => 
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
   assert.match(principles, /Delete in\s+the same binding-decision commit every `evidence-wait` or `evidence-finalizing` line/);
   assert.match(principles, /Delete\s+in the retirement commit every evidence record/);
+});
+
+test("devflow has exactly one mode", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const arch = fs.readFileSync(path.join(root, "skills", "arch", "SKILL.md"), "utf8");
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const branchers = [
+    principles,
+    fs.readFileSync(path.join(root, "skills", "principles", "state-predicates.md"), "utf8"),
+    fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8"),
+    work,
+    fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8"),
+    fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8"),
+    resume,
+    arch,
+  ];
+  for (const text of branchers) {
+    assert.doesNotMatch(text, /solo/i, "no solo branch survives");
+    assert.doesNotMatch(text, /multi(?![a-z])/i, "no multi branch survives");
+  }
+  assert.match(principles, /devflow has one mode/);
+  assert.match(principles, /Resolve your id before writing to the tree, journal, or a core document/);
+  assert.match(principles, /\*\*the integration tip is HEAD\*\*/);
+  assert.match(principles, /Upgrading from a version without rooms/);
+  assert.match(principles, /6\. Is there a bare `\.wip\.` or a root `devflow\/HANDOFF\.md`/);
+  assert.match(work, /finish the canonical room\s+transition before anything below/);
+  assert.match(resume, /A bare `\.wip\.` card or a root `devflow\/HANDOFF\.md` exists \| work/);
+  assert.match(resume, /arch\.md lacks the `integration` or `merge` line \| arch/);
+  assert.match(arch, /The default for `integration` is the current branch/);
+});
+
+test("claims are keyed to the depth-1 unit", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  assert.match(principles, /One claim per id per depth-1 unit/);
+  assert.match(principles, /A candidate's \*\*depth-1 unit\*\* is the first path component below `devflow\/tree\/`/);
+  assert.match(principles, /1\. Inside one depth-1 unit, are there 2 or more `\.wip\.` cards with the same id/);
+  assert.match(work, /Group my\s+remaining claims by depth-1 unit/);
+  assert.match(work, /two or more inside one unit are an integrity anomaly/);
+  assert.match(resume, /every claim of mine \u2014 path and status for all, and in full only the one this\s+invocation continues/);
+  assert.match(resume, /report every remaining uncommitted path\s+without attributing it to a card/);
+});
+
+test("candidate selection has one canonical order", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
+  assert.match(principles, /\*\*Canonical candidate order\*\* is a selection order among candidates/);
+  assert.match(principles, /\*\*Canonical recognition\*\* resolves the current conversation's text to a set of units/);
+  assert.match(principles, /complete product\.md capability name, a standalone number token compared with unit numbers\s+as integers/);
+  assert.match(principles, /never changes which row matches and\s+never makes an unready card ready/);
+  // the recognition machine is defined once and cited elsewhere
+  const deploy = [principles, baseline, resume, work, split].join("\n");
+  assert.ok(count(deploy, /complete product\.md capability name|complete capability name/g) <= 3,
+    "canonical recognition must not be restated in more than one place");
+  assert.match(resume, /Resolve the target by the canonical\n   rules' canonical recognition/);
+  assert.match(work, /in canonical\s+candidate order over my remaining claims/);
+  assert.match(resume, /selected by\n<your request \| the last handoff \| canonical order>/);
+  assert.match(resume, /The current conversation carries a change request from the user that no journal line, verify entry, or claimed card preserves yet \| split \u2014 maintenance routing, which records the request before it reads any code \|/);
+  assert.ok(
+    resume.indexOf("| The current conversation carries a change request") <
+      resume.indexOf("| A card of mine is claimed | work |"),
+    "a fresh change request is recorded before a claim resumes, like the persisted form above it",
+  );
+  assert.ok(
+    resume.indexOf("| journal contains an exact `maintenance routing pending` line |") <
+      resume.indexOf("| The current conversation carries a change request"),
+    "the persisted request still outranks the conversation one",
+  );
+  for (const consumer of [work, split, resume]) {
+    assert.doesNotMatch(consumer, /the next pending card that is ready/);
+  }
+});
+
+test("every devflow commit and review diff carries only its own paths", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  assert.match(principles, /\*\*Every devflow commit carries only its own paths\.\*\*/);
+  assert.match(principles, /never sweeps in another flow's uncommitted change/);
+  assert.match(work, /the diff limited to this card's paths/);
+});
+
+test("room files have merge rules and HANDOFF paths survive a claim", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  assert.match(principles, /HANDOFF merge conflicts keep `Open decisions` as the union of both sides/);
+  assert.match(principles, /`Next single step` from the side whose `# HANDOFF \u00b7 <timestamp>` header is newer/);
+  assert.match(principles, /5\. Does a path referenced by HANDOFF fail to match exactly one existing path when every\s+component's status suffix is removed/);
+});
+
+test("each card leaves one carry line and the next card reads only those", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const reviewer = fs.readFileSync(path.join(root, "skills", "work", "reviewer.md"), "utf8");
+  const verifier = fs.readFileSync(path.join(root, "skills", "verify", "verifier.md"), "utf8");
+  assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ carry: <a fact that could make the next card in this depth-1 unit wrong \| none>/);
+  assert.match(principles, /The line rides the final task commit, so the canonical claim→done move\n  stays byte-identical/);
+  assert.match(work, /number is not in the capability document's `Covered cards`[\s\S]{0,200}last `carry:` line/);
+  assert.match(work, /Read only that output and open\n  no card body/);
+  assert.match(work, /carry-\n  line query output/);
+  for (const role of [reviewer, verifier]) assert.doesNotMatch(role, /carry:/);
+  assert.ok(
+    work.indexOf("Carry line — append the canonical `carry:` line") > work.indexOf("Upper-document feedback judgment"),
+    "the carry line is written after the landing check",
+  );
+  assert.ok(
+    work.indexOf("Carry line — append the canonical `carry:` line") < work.indexOf("Final task commit — the canonical"),
+    "the carry line rides the final task commit",
+  );
+});
+
+test("an observation about another capability has a keyed line and a harvester", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ capability note: capability: <NN>; note-json: <JSON string containing the whole observation>/);
+  assert.match(principles, /`capability closing:`, `capability note:`/);
+  assert.match(principles, /An observation confirmed in code about a capability other than the one being worked on \| one canonical `capability note` line/);
+  assert.match(verify, /Delete in\n   the same sweep every `capability note` line whose capability number is this closing\n   capability's/);
+  assert.match(verify, /retain them all when that refresh was a baseline no-op/);
+  assert.match(verify, /only this marker and those capability notes removed/);
+});
+
+test("HANDOFF carries only a pointer and open decisions", () => {
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
+  assert.match(work, /^## Next single step\s+<!-- one tree path \| none -->$/m);
+  assert.match(work, /^## Open decisions \(needs a human\)$/m);
+  assert.doesNotMatch(work, /^## Just learned/m);
+  assert.doesNotMatch(work, /^## Traps$/m);
+  assert.doesNotMatch(work, /If all four are empty, an empty file is fine/);
+  assert.doesNotMatch(readme, /An empty HANDOFF is normal/);
+  assert.match(work, /`Next single step` is mandatory and holds one tree path/);
+  assert.match(work, /The first time this room's HANDOFF still carries a `## Just learned` or `## Traps` section,\s+land that content before overwriting/);
+  assert.match(work, /Do not backfill carry lines\nonto older `\.done\.` cards/);
+});
+
+test("concurrent verification is not weakened", () => {
+  const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  assert.match(verify, /if any path does not start with `devflow\/`,\nrecord unverified and do not execute/);
+  assert.match(verify, /uncommitted paths outside devflow/);
+  assert.match(verify, /Run an audit only at a boundary with no staged, unstaged, or untracked path outside\ndevflow/);
+});
+
+test("a reopened capability cannot report verified statements as fresh", () => {
+  const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  assert.match(baseline, /They are hypotheses too while any non-`\.stale\.`\s+card below that folder lacks a `\.done` status/);
+  assert.match(work, /when any non-`\.stale\.` card below that folder\nlacks a `\.done` status/);
+});
+
+test("an external trap survives without a source URL", () => {
+  const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
+  assert.match(baseline, /its cause cell holds the exact\n  source URL, or, when the behavior is undocumented, the number of the card that observed it\n  together with the reproduction condition/);
+});
+
+test("hypothesis reconfirmation reaches binding ADRs and consumed paths without widening scope", () => {
+  const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  assert.match(baseline, /or at an already-open exact path named by\nthat zone's valid Binding ADRs/);
+  assert.match(baseline, /which for\nreconfirmation alone also holds `Consumed paths`/);
+  assert.match(baseline, /neither\naddition widens the Standards gate or the Audit scope/);
+  assert.match(baseline, /Consumed paths do\n  not expand the capability code scope, Standards gate, or Audit scope/);
+  assert.match(work, /which for reconfirmation alone also holds `Consumed paths`/);
+});
+
+test("foundation is verified through its consumers", () => {
+  const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
+  assert.match(baseline, /Shared code the foundation\n  owns lies inside the capability code scope of every capability that uses it/);
+  assert.match(baseline, /verified through those consumers and that knowledge lands in their verified zones/);
+});
+
+test("the resume report names its reason and the alternatives", () => {
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  assert.match(resume, /The selection reason comes straight out of the canonical candidate order/);
+  assert.match(resume, /Also open:\n<every other unit holding a candidate under the same matched row \| none>/);
+  assert.match(resume, /When the session unit\nholds no candidate, say so in that clause/);
+});
+
+test("a mis-mapped card has a recall route and split maps from the boundary line", () => {
+  const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
+  assert.match(split, /read the fixed first\n   four lines of each candidate capability document and nothing else/);
+  assert.match(split, /`Boundary: owns …;\n   does not own …` is the mapping oracle/);
+  assert.match(split, /\*\*Card recall\.\*\*/);
+  assert.match(split, /only while that card was never claimed and no task\s+commit subject has named its number/);
+  assert.match(split, /When step 1 finds an existing pending card of this request's scope sitting\s+in the wrong folder/);
+});
+
+test("switching inside one capability parks instead of handing off", () => {
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  assert.match(work, /^## Switching Inside One Capability — park, then release$/m);
+  assert.match(work, /Moving to another depth-1 unit needs no procedure/);
+  assert.match(work, /parking is a release, not a handoff/);
 });

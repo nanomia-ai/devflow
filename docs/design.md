@@ -33,8 +33,7 @@ Core philosophy — every modification must keep to it:
 ```
 Layer 0 (once, or inherited): product → arch → [design] · existing code: adopt back-derives     Layer 1 (loop): split → work ⇄ verify
 Shared: resume, principles (canonical rules)
-Created in the target project: devflow/{project/, tree/, HANDOFF.md, journal.md}
-                               (multi mode: plus users/<id>/ personal rooms)
+Created in the target project: devflow/{project/, tree/, journal.md, users/<id>/ rooms}
 Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/install.*)
 ```
 
@@ -87,6 +86,9 @@ Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/in
 | Capability documents physically separate a design zone born with Layer 0 from a verified zone refreshed at closure, and are always on (v0.11.0) | The owner's operating intent is that a new MVP, a brownfield, and a mid-project join all obtain domain boundaries and concepts before the first card and reach them by number without card wiring. arch, or adopt in a brownfield, replaces the design zone; verify replaces the verified zone. They own disjoint byte ranges separated by the fixed `## Verified state` boundary. This decomposes rather than overturns v0.10.0's one-writer grounds: the two writing moments are serial, no byte is shared, design declares trust through `Design head`, and verification through `Scope head` and `Covered cards`. One seven-field machine block would overlap the two owners again, so the two design-metadata fields sit before the boundary and the five verification-metadata fields after it. The switch is removed because the adopted shape is not a 1,100–1,700-line relay-note second handoff layer: it is capped near 185 lines per capability, forbids chronology, and costs O(1) reads per card; even a small project gets the same lifecycle from a six-section design zone. Design freshness uses only the actual sources product.md, arch.md, and glossary.md. Including code-style.md or design.md would make every capability hypothetical with no failure path that changes its design zone — an over-harness. The exact v0.10 predecessor is separated from damage reset: design is re-derived from current Layer 0 and verified bodies plus compatible metadata migrate mechanically, but its old `Scope head` did not include consumed paths and therefore does not carry forward; verified statements remain hypotheses until the next capability closure |
 | Domain reachability is owned by the depth-1 number rule and resume's domain-entry branch, not by card fields (v0.11.0) | If split copies a baseline and ADRs into every card, the path lives in two places and requires a research-card exception. work uses the claimed card's depth-1 number to read one document and only the exact ADRs named by that document. A baseline path left in a v0.10 card's `Read first` is treated only as legacy wiring and deferred to that number rule. resume normally reads only file names and a shape projection, but when the user asks to explain a capability it opens one document by number or name and answers with both freshness states. It opens the entire expected set only when the user explicitly requests that full set. Foundation is reached by the same `01` number rule. Relationships live on the consuming side as exact paths in `Consumed paths`; provider closure, retirement, and split project only bounded metadata plus the Consumed-contract path/number columns and report consumers with their actual current freshness. That column projection detects an unchanged path reassigned to another capability without opening other prose. With no observed failure, this does not automatically expand into execution, card creation, or cross-capability regression |
 | Capability-document recovery is judged in HEAD, and an interrupted design write finishes by regeneration rather than byte comparison (v0.11.1) | An independent literal execution opened four paths. Requiring the prefix test to "equal the current writer's final re-derivation from HEAD" is false on every session change, because a design zone is prose the model compressed rather than a mechanical transform — so an ordinary interruption became an integrity anomaly with no repair route. Deleting that condition changes no outcome: the next sentence already orders a whole regeneration from HEAD. Defining absence over both the working tree and HEAD let one torn write of a new file block creation forever, so absence is defined in HEAD alone and a creation replaces working-tree bytes that have no HEAD counterpart to preserve. For the same reason, writer eligibility and begin recovery judge the boundary count in HEAD, and the working-tree count is reported to the user only. A user-confirmed boundary reset leaves no disk trace, so a recovering session would have to guess; it is therefore not recovered as a prefix and the next run confirms it again. The v0.10 migration gate demanded that two heads the migration discards parse, so one field broken by a bad merge left total-loss reset as the only exit — the gate now covers only the three fields the migration actually carries. And an unqualified restore route let a post-rename restore of the old path create two same-numbered files that no ordinary routing row reports, so a restore lands only at the current expected path. One trade is recorded rather than hidden: a recovering session now finishes a regeneration the user never saw, where the deleted condition used to turn that case into a reported anomaly. The batch it regenerates was already confirmed in the dead session, and the alternative was an exit no session could reach. Because writer eligibility, begin recovery, and resume's routing all read the same HEAD values, the boundary count is measured in exactly one place; the working-tree count stays in the report a person reads |
+| One mode — rooms are always on, and working alone folds the integration branch into the branch you are already on (v0.12.0) | The solo/multi fork never modeled **work that flows concurrently**. It assumed one person means one flow, so two terminals were an integrity anomaly. The fork cost 59 lines across 8 files, and a solo session read all of them only to be told to ignore them — same reading cost, one extra decision. Unified, the whole cost to a lone user is **one commit per card** (the claim), and that commit is exactly what makes worktrees and concurrent terminals work. When `integration` names the current branch the integration tip is HEAD and every fetch, push, and integrate order collapses into an ordinary commit; a purely local integration branch needs no network command either. This overturns v0.9.23's "solo claims the group together, multi distributes it": that split's recorded ground was "one entry rule closes it", and with no modes the same approval simply permits both consumptions — the split was an artifact of the fork. v0.9.21's approval-freshness ground stands unchanged; only its authority expression collapsed to the integration tip. Outside a Git work tree the reduction is stated explicitly rather than left undefined |
+| Claims move to the depth-1 unit axis, and one canonical candidate order settles every selection (v0.12.0) | The tree and the capability documents were already a domain axis, but claims stayed tied to the person axis. Keying `.wip.` to (id × depth-1 unit) expresses concurrency with zero new identifiers, and integrity item 1's two exceptions — reciprocal parallel approval and evidence-wait — were always exceptions inside one capability, so the scope now fits them exactly. Above that, several places asked "which one next" and answered differently; the canonical candidate order defines it once as the card the user named, then the session unit, then the carried unit, then the rest. It never changes which routing row matches and never makes an unready card ready. The recognition machine that lived only in domain entry was promoted to canon, and resume and the baseline predicates now cite it. A conversation change request routes above the claimed-card row, not below it as the plan proposed — the persisted `maintenance routing pending` form already outranks a claim, and once claims are normal in several units at once, placing the conversation form below would record it almost never. One person's two terminals share one id, so disk cannot tell them apart — that limit is stated in the README rather than hidden, and the approval on resume's report is the device that actually separates them |
+| Knowledge that used to die in HANDOFF now lands on two keyed lines (v0.12.0) | A maintenance card has no dependencies, so the knowledge chain broke there, and HANDOFF's `Just learned` and `Traps` were overwritten at the next boundary — reliably lost. Inside one capability the carrier is the card's `carry:` line: only the residue with nowhere else to land, one to three lines per card, and a reader takes only the lines written since that capability last passed verification, so the set is bounded. About another capability it is journal's `capability note`, which that capability's next closure harvests and deletes in the same sweep, giving it a defined lifetime. Reading whole progress logs was rejected as unachievable — hundreds of lines per card, and before a first closure every card in the capability qualifies. The carry line rides the final task commit so the canonical claim→done move stays byte-identical, and neither reviewer nor verifier receives the set — their ignorance is the asset. HANDOFF keeps only the next single step and open decisions, and that pointer becomes mandatory |
 
 ## Borrowings and their boundary
 
@@ -205,6 +207,44 @@ Other:
   judgment word; a literal-minded AI risks a read explosion, reading an entire fattened
   folder. **No unbounded reading rules, ever.** (For the bounded, confirmed wording, see
   the observation items below.)
+Rejected in the v0.12.0 usage-flow redesign:
+
+- **A recorded focus field** — one `## Focus` line in HANDOFF storing "today it is this
+  capability" durably. Its recorded ground, "that fact survives nowhere", is false: the
+  declaration lands within one step as the claim rename, and past the boundary
+  `Next single step` carries it. The one remaining hole is "declared, then the session ended
+  with zero disk change", which costs one sentence — while closing it costs three writers
+  (resume writes no file), a staleness judgment, and recovery rules. Unobserved friction, so
+  it falls to "the harness grows only on a defect actually met".
+- **A per-terminal state folder (`flows/`)** — terminals die silently. With no closing point
+  the folder lives forever and needs a cleanup rule. The capability axis never disappears, so
+  it never needs closing in the first place.
+- **A second identifier level under the person** (`users/<person>/flows/<flow>/`) — every
+  rule written "per id" splits into "per person × per flow", doubling exactly the most
+  delicate area, recovery and integrity. Mode unification solves the same problem while
+  shrinking the canon.
+- **A session- or date-scoped work bundle file** — all of them need a closing point, and a
+  closing point always leaks when a session dies silently. The card already plays that role
+  as one completion signal, one commit.
+- **A new per-capability working-note layer** — the relay note already exists as four layers:
+  code, unharvested cards, the capability document, Layer 0. This would be a third home, and
+  it borders the relay-note second handoff layer v0.11.0 rejected.
+- **Reading unharvested cards' whole progress logs, or only the last N** — the first is
+  unachievable (hundreds of lines per card), and in the second N is both a judgment word and
+  an arbitrary number. The `Covered cards` complement is a mechanical boundary already being
+  computed.
+- **Narrowing verify's "uncommitted outside devflow" gate to the capability** — it produces a
+  false pass while somebody is mid-edit in shared code. That trades a safety device for
+  convenience. Under concurrent work, editing runs in parallel while verification and builds
+  serialize — not a new constraint, just an existing safety device becoming visible.
+- **devflow creating or managing worktrees** — the recorded rejection ("core edits are common,
+  so coordination cost beats parallel gain") is not overturned. This design does not create
+  worktrees; it is merely compatible with worktrees the user already made.
+- **A capability-document freshness line in resume's report** — planned, then not adopted. No
+  wrong action is prevented by it. Approval only picks a stage; work consumes the knowledge,
+  work reports the same line, and a hypothesis must be reconfirmed before use. Adding it
+  would also have required amending "ordinary resume never reads a body". The reason clause
+  and the alternatives list were adopted, because those do change which unit a user picks.
 
 ## Field observation items — watch during coming cycles, without adding rules
 
@@ -293,6 +333,24 @@ Other:
   creates the missing code-style.md. The cost is confirming one defaulted question batch a
   second time, so no routing row was added. Review it if the re-interview is observed as a
   real burden.
+- **Retiring a capability strands a cross-capability `Depends`** (found by the v0.12.0
+  usage-flow walk, not fixed there). A card outside the retired folder whose `Depends` names
+  a card inside it is either an integrity item-4 anomaly or permanently not-ready, and
+  retirement is explicitly forbidden from creating a `re-split pending` marker, so nothing
+  repairs it. Pre-existing and unrelated to the usage-flow axis; fixing it needs its own
+  decision about whether retirement rewrites dependents or the user reactivates.
+- **Two terminals block each other's closure through journal** — one terminal's uncommitted
+  `maintenance routing pending` line makes the other's capability closure report an
+  unexplainable integrity anomaly. Safe (nothing is lost, the stop is the strict-prefix
+  safety device working), but the user sees a stop they cannot read. Watch whether it is met.
+- **A plain user correction to a confirmed product.md statement has no lightweight row.** The
+  discovery→update table gates identity and success-criterion changes on a *measurement*
+  disproving them; a user simply changing their mind costs a full product re-run. Watch
+  whether that friction is met before adding a row.
+- **Domain entry needs the capability name verbatim.** "the payment domain" does not contain
+  `payments`, so recognition resolves nothing and resume asks. Safe by construction, but the
+  most natural phrasing costs a round-trip. Loosening it would introduce fuzzy matching, so
+  the round-trip is preferred until the friction is actually reported.
 
 ## On hold — candidates for coming versions
 
@@ -322,11 +380,13 @@ gate forces this document to be read).
   foundation card, or (B) return to design after foundation work. This changes the Layer 0
   and task-tree boundary, so the current order is not forcibly rearranged before the owner chooses.
 - **The size of the canonical rules** — the canonical rules grew from 217 lines (v0.9.9) to
-  564 lines (v0.11.0), and all 8 skills plus every delegated implementer read the whole document.
-  Counting the predicate companions, resume and verify read 1,078 lines each session and arch
-  and adopt read 995.
-  For a solo T-low card, the journal formats, the 15 integrity items, the routing write order,
-  the remote-evidence state machine, the verification-state commits, and the multi rules never
+  643 lines (v0.12.0), and all 8 skills plus every delegated implementer read the whole document.
+  Counting the predicate companions, resume and verify read about 1,170 lines each session and arch
+  and adopt about 1,090.
+  Removing the mode fork gave 30 lines back and the usage-flow redesign spent more than that,
+  so this stays the largest open cost. For a T-low card, the journal formats, the 15 integrity
+  items, the routing write order, the remote-evidence state machine, and the verification-state
+  commits never
   fire once. The proportional answer is not deletion but **splitting the read scope per
   consumer** (what an implementer needs versus what a router or a recoverer needs), and it
   changes no on-disk data format, so it can be done safely at any time. Giving work, reviewer,

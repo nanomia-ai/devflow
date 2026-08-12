@@ -87,8 +87,9 @@ Trust: design reflects confirmed Layer 0; verified state reflects the last passi
   when the precondition and outcome stay the same.
 - An Invariant must have a counterexample observable through a completion signal or an exact
   authority path. A Trap requires all four cells: symptom, reproduction condition, cause,
-  and alternative. Mark an external-system trap `external` and put its exact source URL in
-  the cause cell.
+  and alternative. Mark an external-system trap `external`; its cause cell holds the exact
+  source URL, or, when the behavior is undocumented, the number of the card that observed it
+  together with the reproduction condition.
 - An `external` row is non-binding evidence. work does not open its URL automatically and it
   cannot overturn a binding decision; only a person authorizes its deletion. Elsewhere a person may delete
   only a complete body row, item, or diagram node; additions remain with the writer skills.
@@ -158,7 +159,8 @@ A consumer makes only three comparisons.
    is empty, the output differs or is empty, or either the path sets or provider mapping
    differ or are ambiguous, they are hypotheses.
 3. When the current non-`.stale.` `.done.` card-number set differs from `Covered cards`,
-   the verified statements are hypotheses. With no capability folder, the current set is
+   the verified statements are hypotheses. They are hypotheses too while any non-`.stale.`
+   card below that folder lacks a `.done` status. With no capability folder, the current set is
    empty.
 
 `Verified at: none` makes the verified statements hypotheses. Binding ADRs are outside
@@ -171,8 +173,11 @@ exist. Do not add a chronology section.
 
 A hypothesis is the trust state of baseline prose, separate from the verification result
 `unverified`. Before use, reconfirm a design hypothesis at the exact current authority
-section in product.md, arch.md, or glossary.md; reconfirm a verified hypothesis in current
-code or cards inside the existing read set and code-search boundary. Expand neither. A
+section in product.md, arch.md, or glossary.md, or at an already-open exact path named by
+that zone's valid Binding ADRs; reconfirm a verified hypothesis in current
+code or cards inside the existing read set and code-search boundary, which for
+reconfirmation alone also holds `Consumed paths`. Expand neither further, and neither
+addition widens the Standards gate or the Audit scope. A
 baseline is not canonical. Current code wins a code conflict; a binding-decision conflict
 follows the canonical Document Hierarchy.
 
@@ -191,7 +196,7 @@ follows the canonical Document Hierarchy.
   commit containing capability documents only, `arch — capabilities` or
   `adopt — capabilities`, is the last commit of that run. When no bytes change, ask no
   confirmation question and make no commit. This applies to ordinary design refreshes, not
-  the mechanical ADR-supersession exception below. In multi mode it is a binding decision
+  the mechanical ADR-supersession exception below. It is a binding decision
   on the integration branch.
 - An uncommitted diff from a post-confirmation interrupted write is a capability-design
   commit prefix only when it touches current and final expected capability-document paths
@@ -274,7 +279,9 @@ verified zone's sole writer.
 - The foundation records only shared contracts and boundaries named by arch.md. Do not copy
   coding style, verify-channel details, or universal rules.
 - Foundation has no capability-layer verification closure, so its initial verified scaffold
-  remains unchanged. Invent no verification event for foundation.
+  remains unchanged. Invent no verification event for foundation. Shared code the foundation
+  owns lies inside the capability code scope of every capability that uses it, so it is
+  verified through those consumers and that knowledge lands in their verified zones.
 - The verified-zone standard refresh set is the HEAD verified zone; product.md, arch.md,
   code-style.md, glossary.md, journal.md, and design.md when present; this closure's
   capability code scope and consumed paths; and current non-`.stale.` `.done.` cards outside
@@ -285,8 +292,8 @@ verified zone's sole writer.
   not open its URL automatically. Delete any other Trap only when its reproduction condition
   has vanished from current code. Replace the Verify section every time with only the
   commands and scenarios actually run at this closure.
-- In multi mode, design writing, verified refresh, and both head calculations happen on the
-  fetched integration branch.
+- Design writing, verified refresh, and both head calculations happen on the
+  integration branch.
 
 ## Automatic entry and role inputs
 
@@ -324,11 +331,10 @@ verified zone's sole writer.
 - For domain entry, when any of product.md, arch.md, or glossary.md is absent or arch.md lacks
   the `Brownfield` field, resume reports only each exact missing path or field and `domain knowledge not initialized` and opens no capability
   body. It returns to normal resume routing only when the user asks to initialize it. With all
-  three present, resume selects foundation when the request semantically identifies it or
-  contains a standalone `01` token. Otherwise it selects product.md rows when the request
-  contains a complete capability name or standalone number token, comparing file numbers as
-  integers. With zero matches it reports only foundation plus non-retired number/name
-  candidates and asks; with multiple matches it reports only matched candidates and asks.
+  three present, resume resolves the target by the canonical rules' canonical recognition,
+  and the selected unit's number names the same-numbered capability document.
+  With an empty resolution set it reports only foundation plus non-retired number/name
+  candidates and asks; with two or more it reports only the resolved candidates and asks.
   It opens no body before that answer. When one number is selected but no same-numbered file
   exists, including foundation, it reports only the expected path and the arch or adopt repair route and invents
   no body. Before opening a body, exactly one same-numbered file and its fixed boundary,
@@ -437,7 +443,9 @@ verified zone's sole writer.
 
 These limits do not change the predicates and add no separate checks.
 
-- A shallow clone or multi-mode rebase can produce a conservative false hypothesis.
+- A shallow clone or an integration rebase can produce a conservative false hypothesis.
+- Foundation's `Covered cards` stays empty, so its carry set grows with the unit instead of
+  resetting at a closure. Foundation is small by construction.
 - A very long union of Scope paths and Consumed paths can hit the command-line length limit.
 - Neither head command sees an uncommitted working tree.
 - A relation through a registry or dynamic dispatch can retain false freshness under

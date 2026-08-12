@@ -24,34 +24,59 @@ conflicts with it, this document wins.
    This is the only duplication allowed — it costs one paragraph and
    buys "never getting lost."
 
-## Modes and Identity
+## Identity and Rooms
 
-devflow runs in one of two modes. The test is a single file:
+devflow has one mode. Whether one person or several share the repository, every session
+works out of its own room.
 
-- If any `devflow/users/*/owner.md` exists — **multi mode**: several people run their own
-  sessions in one repository.
-- If none exists — **solo mode**: ignore every rule in this document marked "multi:".
-  Solo behavior is identical to the version before those rules existed.
-
-multi: resolve your id before writing to the tree, journal, or shared documents — match
-your git identity (name or email) against `devflow/users/*/owner.md`. No match → ask the
-user once and create your room. A session that cannot resolve an identity (CI, bots)
-only reads.
+Resolve your id before writing to the tree, journal, or a core document
+(`devflow/project/*`) — read `git config user.name` and `git config user.email` and match
+each non-empty value against the `git:` line of each `devflow/users/*/owner.md`. An empty
+value matches nothing, and a value that matches a room's `git:` line while the other
+value conflicts with that same line is not a match. Exactly one match is your room. With no room on
+disk, propose an id derived from that identity, or ask for one when both values are empty,
+and create the room through the joining transition below. With rooms on disk and no match,
+show every existing id and ask whether this is a new person or a changed identity: a new
+person joins through that same transition, while a changed identity replaces the `git:`
+line of the room the user names and creates no room. Whichever skill first writes to the
+tree, journal, or a core document does this. A session that cannot resolve an identity, or
+cannot put the question to a user (CI, bots), only reads.
 ids are lowercase `[a-z0-9]{2,8}`. Names devflow uses (project, tree, users, decisions)
 are forbidden; ids are never reused.
 
-Room = `devflow/users/<id>/` = owner.md (identity declaration) + HANDOFF.md + digest.md
-(the digest marker). Write only in your own room. Rooms are readable by the whole team —
-write with that premise.
+Room = `devflow/users/<id>/` = owner.md + HANDOFF.md + digest.md. owner.md is two lines,
+`id: <id>` and `git: <git user.name>, <git user.email>`. digest.md is one line holding the
+digest marker, a commit hash or `none`. Write only in your own room. Rooms are readable by
+the whole team — write with that premise.
 
-multi: **only `.wip-<my id>.` is my work.** The precondition, full-read, and continuation
+The first skill that must commit in a folder that is not a Git work tree proposes
+`git init`; if the user declines, it proceeds and warns once. Outside a work tree there is
+neither identity nor commit, so what Git decides does not run — Approval effectiveness
+rests on the card value alone, the integration tip is the current checkout, and claim
+commits, id prefixes, and the digest marker all go inert. A room and an id are still files:
+the user names the id and the room is created. Exactly one room is mine there, and two or
+more is an integrity anomaly.
+
+**Only `.wip-<my id>.` is my work.** The precondition, full-read, and continuation
 rules apply to my claim only. Another's claimed card is read-only reference — never write
 a card you have not claimed.
 Reassigning a stalled claim = release, then re-claim. Only on the user's explicit
 instruction, with 1 journal line (the sanctioned exception to claim inviolability).
 
-multi: shared state for next-stage routing and the integrity check comes from the tip of
-arch.md's integration branch, not the current branch: `devflow/project/`, `devflow/tree/`,
+**The integration branch.** arch.md's `integration` names the branch where minting,
+closure, and binding decisions land. When it names the current branch, is `none`, or
+arch.md is absent, or it carries no `integration` line, **the integration tip is HEAD**, and every
+devflow rule that fetches, integrates, pushes, or compares against integration reads the
+current branch and runs no network command. When it names another branch, read that
+branch's tip, and fetch or push only when that branch tracks a remote — a purely local
+integration branch needs no network command. Git refuses to update a branch another
+worktree has checked out, so when integration is checked out elsewhere and tracks no
+remote, a binding decision cannot land on it from here: report that exact blocker, write
+nothing partial, and let the decision land from the worktree holding integration. In every
+ancestor test here, a commit is its own ancestor.
+
+Shared state for next-stage routing and the integrity check comes from the integration
+tip, not the current branch: `devflow/project/`, `devflow/tree/`,
 `devflow/journal.md`, and resume's bounded verify projection. Fetch integration and read this shared state
 before routing. When the integration tip is not an ancestor of the current branch and, at
 that tip, journal or any verify.md contains an active marker, an active request or
@@ -61,7 +86,7 @@ changes first. This is state synchronization
 and runs even while a card is claimed. Digest diff reading and marker advancement remain
 clean-boundary-only.
 
-all modes: apply the following gate (the **open-Git-operation gate**) only when
+Apply the following gate (the **open-Git-operation gate**) only when
 `git rev-parse --is-inside-work-tree` returns `true`. Otherwise skip the gate and do not initialize Git. Immediately on entry before normal
 routing, execution, or any path change, and immediately after an integration rebase or merge
 command, product, arch, design, adopt, split, work, verify, and resume check whether `git status` reports an open rebase or merge.
@@ -74,20 +99,22 @@ a semantic choice. Allow only those confirmed conflict-resolution paths and comm
 makes while continuing the existing operation; write no separate devflow state. After the
 open operation disappears, read `git status` again and restart the integrity check at item 1.
 
-Mode transitions — each is a single-commit procedure:
+Room transitions — joining and departure are each one commit; the upgrade splits three ways:
 
-- Joining: create your room (owner.md) + marker = current HEAD. Past understanding comes
+- Joining: create the room — owner.md, an empty HANDOFF.md, and digest.md holding the marker
+  = current HEAD — and land only those three paths as `<id> room — join`. It is a binding
+  decision. In a repository with no commit yet, the marker is `none` and the first digest
+  starts at the repository's first commit. Past understanding comes
   from the shared documents, not from commit archaeology.
-- Solo→multi: create the room + move `devflow/HANDOFF.md` into it + `.wip.` →
-  `.wip-<id>.` + marker = HEAD. Solo traces seen in multi mode (a bare `.wip.`,
-  `devflow/HANDOFF.md`) mean the transition is incomplete — report, confirm the owner
-  with the user, and finish it. Never guess.
+- Upgrading from a version without rooms: arch adds `integration` and `merge` to arch.md, the identity resolution above creates
+  the room, and work renames its own bare `.wip.` to `.wip-<id>.` and moves
+  `devflow/HANDOFF.md` into the room. A bare `.wip.` or a root `devflow/HANDOFF.md` means
+  the upgrade is incomplete — report, confirm the owner with the user, and finish it.
+  Never guess.
 - Departure: the user declares it. Any remaining member — promote the departed room's
   open decisions into journal (attributed), release their claims, delete the room,
   1 journal line. This is the sanctioned exception to both "write only in your own room"
   and claim inviolability.
-- Multi→solo (last member): HANDOFF back to devflow/, delete users/, suffixes back to
-  `.wip.`, remove arch's multi-only config lines (integration, merge).
 
 ## Document Hierarchy (the contract)
 
@@ -111,6 +138,33 @@ the UTF-8 bytes of their repository-relative `/` path strings. **Canonical card-
 as an integer, put no suffix before a suffix at the same integer, and compare lowercase-letter
 suffixes by ASCII bytes. When all shared components are equal, the number with fewer
 components comes first; break any remaining tie by the full number's UTF-8 bytes.
+
+**Canonical candidate order** is a selection order among candidates, not a comparison order
+for paths or card numbers.
+
+A candidate's **depth-1 unit** is the first path component below `devflow/tree/`, or the
+number on an unopened capability's waiting file.
+
+The **session unit** is the depth-1 unit the user named in the current conversation. The
+**carried unit** is the depth-1 unit whose number leads the path in `## Next single step`
+of my room's HANDOFF, when such a unit exists.
+
+**Canonical recognition** resolves the current conversation's text to a set of units. A
+complete product.md capability name, a standalone number token compared with unit numbers
+as integers, and text identifying foundation or a standalone `01` each resolve to that
+depth-1 unit. A standalone task-card number resolving to exactly one card resolves to that card and
+its unit. A resolution set with exactly one member selects it. For candidate ordering, a
+larger set selects the member the conversation mentioned last; every other consumer takes
+a larger set as selecting nothing.
+
+Order: the card the user named; then candidates in the session unit; then candidates in the
+carried unit; then the rest. Within a depth-1 unit and among the rest, canonical
+card-number order.
+
+Where a matched routing row can be satisfied by more than one unit and the row names no
+selection order, take candidates in this order. It never changes which row matches and
+never makes an unready card ready. Freshness governs trust in HANDOFF's statements; the carried unit is only an
+ordering key and is used even when HANDOFF is stale.
 
 - `core:<path>#<heading>` — the exact section in that core document
 - `card:<path>@<hash>` — the exact task card at that commit
@@ -141,6 +195,7 @@ YYYY-MM-DDTHH:MM:SSZ product verification requested
 YYYY-MM-DDTHH:MM:SSZ product verification running: trigger: requested | automatic; product: <Product revision>; verification: <Verification revision>; code: <Code revision>
 YYYY-MM-DDTHH:MM:SSZ product verification result: trigger: requested | automatic; product: <Product revision>; verification: <Verification revision>; code: <Code revision>; verdict: pass | fail | unverified
 YYYY-MM-DDTHH:MM:SSZ capability closing: folder: <devflow/tree/capability folder path with status suffixes removed>; head: <git rev-parse HEAD>; product: <Product revision>; verification: <Verification revision>; capability: <Capability revision>
+YYYY-MM-DDTHH:MM:SSZ capability note: capability: <NN>; note-json: <JSON string containing the whole observation>
 YYYY-MM-DDTHH:MM:SSZ audit requested: <capability number|product>
 YYYY-MM-DDTHH:MM:SSZ retrospective requested: <capability number|product>
 YYYY-MM-DDTHH:MM:SSZ evidence-wait: card-json: <JSON string containing the full task-card path>; checkpoint: <NN.N wip: evidence-wait commit hash>; check-json: <JSON string containing the exact remote-result command or URL>
@@ -204,6 +259,7 @@ What you discovered → where to update:
 | A decision recorded in an ADR is reversed or no longer applies | write the successor ADR and add a dated update note to the superseded one naming that successor path. In the same binding decision, arch replaces the old path in every baseline design zone whose Binding ADRs lists it, and replaces it on pending or claimed cards that name it directly in `Read first` |
 | A new term becomes necessary | one line in glossary.md |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
+| An observation confirmed in code about a capability other than the one being worked on | one canonical `capability note` line in journal.md carrying that capability's number. Do not edit the other capability's document directly — its next closure harvests the line |
 | A cross-task decision | one line in journal.md |
 
 For a product re-run, use the canonical `product re-run pending` line above. Serialize
@@ -253,17 +309,19 @@ Run at the gates that open the tree (start of split and resume).
 **Report anomalies — do not fix them.** Auto-correction that misjudges accelerates
 corruption. Correct only after user approval.
 
-1. Are there 2 or more `.wip.` cards where an additional card is explained by neither
-   reciprocal parallel approval in the cards themselves nor evidence-wait in journal
-   (multi: judged per id)?
+1. Inside one depth-1 unit, are there 2 or more `.wip.` cards with the same id where an
+   additional card is explained by neither reciprocal parallel approval in the cards
+   themselves nor evidence-wait in journal?
 2. Are any numbers duplicated?
 3. Is there a task card inside a `.done` folder that is neither `.done.` nor `.stale.`?
 4. Does each task card's `Depends` parse under the state predicates' canonical or legacy format, with
    exactly one card existing for every dependency number?
-5. Do the paths referenced by HANDOFF exist?
-6. multi: is there a bare `.wip.` or a root `devflow/HANDOFF.md` (ownerless claim, or an incomplete transition)?
-7. multi: do two or more owner.md files claim the same git identity?
-8. multi: for each currently claimed card, from the current claim commit that created its
+5. Does a path referenced by HANDOFF fail to match exactly one existing path when every
+   component's status suffix is removed from both sides of the comparison?
+6. Is there a bare `.wip.` or a root `devflow/HANDOFF.md` (an ownerless claim, or an incomplete upgrade)?
+7. Do two or more owner.md files claim the same git identity?
+8. A bare `.wip.` has no claimant, so item 6 covers it and this item skips it. For every
+   other currently claimed card, from the current claim commit that created its
    suffix through the integration tip, does a commit changing a same-number status path for
    that card have an author different from the claimant's owner.md git identity? Exempt a
    canonical commit that releases that claim during a user-authorized reassignment,
@@ -278,8 +336,9 @@ corruption. Correct only after user approval.
 12. Does a journal line whose timestamp is followed by `layer opening:`,
     `re-split pending:`, `maintenance routing pending:`, `product re-run pending:`,
     `product verification requested`, `product verification running:`,
-    `product verification result:`, `capability closing:`, `audit requested:`,
-    `retrospective requested:`, `evidence-wait:`, or `evidence-finalizing:` differ from
+    `product verification result:`, `capability closing:`, `capability note:`,
+    `audit requested:`, `retrospective requested:`, `evidence-wait:`, or
+    `evidence-finalizing:` differ from
     the canonical format above; does any `-json` value fail to parse as a JSON string; or
     does a decoded layer-opening `source-json` fail to match one of the locator forms
     above or resolve to exactly one source?
@@ -365,12 +424,12 @@ decisions. These records do not directly change card or folder status. A task ca
 
 - No suffix = pending / `.wip.` = in progress / `.done.` = complete / `.stale.` =
   invalidated by an upper-level decision change
-- multi: a claim is written `.wip-<id>.` — a bare `.wip.` is an ownerless claim = an
+- A claim is written `.wip-<id>.` — a bare `.wip.` is an ownerless claim = an
   integrity anomaly. Release strips the whole suffix back to pending (the progress log
   stays in the card). `.done.` and `.stale.` stay unattributed — completion's ownership
   is git's memory
-- Only one `.wip.` at a time (multi: one per id. Exceptions: reciprocal parallel approval
-  in the cards themselves, or evidence-wait recorded in journal)
+- One claim per id per depth-1 unit (Exceptions inside one unit: reciprocal parallel
+  approval in the cards themselves, or evidence-wait recorded in journal)
 - `.done.` **only after the completion signal passes, the review that applies to the card
   passes, and the commit lands.** In this system, "verification" is reserved for verify's
   capability and product layers
@@ -402,16 +461,19 @@ decisions. These records do not directly change card or folder status. A task ca
 
 ## Commit Discipline
 
+- **Every devflow commit carries only its own paths.** A commit stages the exact paths its
+  own rule names and nothing else — it never sweeps in another flow's uncommitted change
+  from the same working tree.
 - **Layer 0 commit**: product, arch, design, and adopt land each core document in one
   commit immediately after the user confirms it — message `<skill> — <document filename>`
   (adopt lands all adoption documents together as `adopt — layer 0`). A document created
   alongside another (glossary.md with product.md) rides the same commit. A single-field
-  completion of an existing document uses the same message form. In multi this commit is a
+  completion of an existing document uses the same message form. This commit is a
   binding decision.
 - **Capability-design commit**: after every confirmed Layer 0 commit has landed, arch, or
   adopt in a brownfield, writes the design zones for the expected capability documents as
   its final output. Land only those capability documents as `arch — capabilities` or
-  `adopt — capabilities`; if no capability bytes change, do not commit. In multi this is a
+  `adopt — capabilities`; if no capability bytes change, do not commit. This is a
   binding decision.
 - **Planning commit**: split bundles newly created or revised pending cards,
   user-confirmed card-dependency format corrections, tree structure, card Approval and
@@ -419,7 +481,7 @@ decisions. These records do not directly change card or folder status. A task ca
   failure or adopted-finding routing, and deletion of a layer-opening marker in one
   commit. It needs no completion signal because it is not an
   implementation result. Message: `split — <opened layer>`. A promotion's `NN.N promote`
-  is the dedicated message for the same commit class. In multi, it lands on the
+  is the dedicated message for the same commit class. It lands on the
   integration branch as a binding decision.
 - **Routing write order**: once the exact result of a Failure-history or adopted-finding
   route is determined and required user approval is complete, replace `routing: pending`
@@ -459,9 +521,21 @@ decisions. These records do not directly change card or folder status. A task ca
   verify.md's prepared object to the
   completed state named by `result`, and land all of it in the one specified commit. Never
   select a new route or create the output twice.
+- **Carry line.** After the upper-document feedback judgment and immediately before the
+  final task commit, work appends exactly this one line to the claimed card's progress log.
+
+  ```text
+  YYYY-MM-DDTHH:MM:SSZ carry: <a fact that could make the next card in this depth-1 unit wrong | none>
+  ```
+
+  It holds only the residue with nowhere else to land — a trap local to this unit, an
+  approach this card disproved, a measurement no document records. Anything the
+  discovery→update table, journal, a capability document, or the code already received is
+  not written here. The line rides the final task commit, so the canonical claim→done move
+  stays byte-identical.
 - **1 task = 1 commit.** Commit only after the completion signal passes (see the
   exception below when only remote evidence remains). The message is exactly the card H1
-  with only `# ` removed, such as `02.2 signup API`; multi prefixes `<claim id> `.
+  with only `# ` removed, such as `02.2 signup API`.
   The card stays claimed after the final task commit until boundary cleanup. When the
   last commit that changed it has this exact subject, the final task commit is complete:
   that commit includes the claimed card and its progress log at that point. work does not
@@ -481,15 +555,14 @@ decisions. These records do not directly change card or folder status. A task ca
   YYYY-MM-DDTHH:MM:SSZ remote evidence check: check-json: <JSON string containing the exact remote-result command or URL>; verdict: unrun | pass | fail | pending | inaccessible | no-verdict; detail-json: <JSON string containing result detail>
   ```
 
-  In multi, before writing journal or any other boundary change, integrate the current
+  Before writing journal or any other boundary change, integrate the current
   branch through that checkpoint by arch.md's `merge` method. If rebase changes the hash,
   use the changed hash. Put that hash in the canonical `evidence-wait` line, land the line in a
   `boundary — evidence-wait <number>` commit, and push both commits. The card stays
   `.wip.`. If interruption occurs after the checkpoint but before the record commit,
   work finds that exact checkpoint and finishes only the line, record commit, and push.
   Parse `card-json` and `check-json` as JSON; do not split them on delimiter text.
-  The checkpoint's exact message is `NN.N wip: evidence-wait` in solo and
-  `<claim id> NN.N wip: evidence-wait` in multi.
+  The checkpoint's exact message is `<id> NN.N wip: evidence-wait`.
 
   Immediately before the checkpoint, use `unrun` and an empty string for `detail-json`.
   To process the evidence, run the command or open the URL and append a new line in the
@@ -506,7 +579,7 @@ decisions. These records do not directly change card or folder status. A task ca
 - **Boundary commit**: bundle status renames, HANDOFF, journal, verify.md, and documents
   fixed by upper-document feedback (see work) into one commit. Message: `boundary — <what closed>`.
   HANDOFF never gets a dedicated commit — it only rides here.
-  multi: if a task boundary records a final task commit or checkpoint not yet on
+  If a task boundary records a final task commit or checkpoint not yet on
   integration, first integrate the current branch through that commit with arch.md's
   `merge` method before writing any status rename, HANDOFF, journal, verify.md, or feedback
   document change to the working tree. Documents already landed on integration as binding
@@ -525,7 +598,7 @@ decisions. These records do not directly change card or folder status. A task ca
   closure-gate failure, as `boundary — capability verification result <capability number>`.
   Land an Audit/Retrospective event's pending, result, and decision states respectively as
   `boundary — verify event <Audit|Retrospective> <source id> <pending|result|decision>`.
-  In multi every verification-state commit, including `boundary — verify source ids`, is
+  Every verification-state commit, including `boundary — verify source ids`, is
   shared state, so land it on the integration branch. A working-tree state that one of these
   commits, or the `boundary — begin <capability number>` commit, specifies before that commit
   lands is a **canonical verification-state transition**; a consumer finishes its specified
@@ -539,21 +612,26 @@ decisions. These records do not directly change card or folder status. A task ca
   `devflow/project/capabilities/` diff is an integrity anomaly.
 - **git belongs to the main session.** Subagents implement and write the progress log —
   they never commit, rename, or push.
-- multi: prefix commit messages with your id — `<id> 02.2 signup API`,
-  `<id> 02.2 wip: ...`, `<id> boundary — ...`. Solo formats are unchanged.
-- multi: a **binding decision** — one that affects shared documents, tree structure or
-  numbers (folders, minting), a card someone else claims, or the initial
-  `.wip-<my id>.` claim rename. Other status renames of my claim already visible on
+- Prefix commit messages with your id — `<id> 02.2 signup API`,
+  `<id> 02.2 wip: ...`, `<id> boundary — ...`. Every message form in this document names
+  only the part after the id; prepend `<id> ` to all of them, and read every recorded
+  subject the same way.
+- A **binding decision** — one that affects shared documents, tree structure or
+  numbers (folders, minting), a card someone else claims, the initial
+  `.wip-<my id>.` claim rename, or a release that returns my claimed card to pending. Other status renames of my claim already visible on
   integration are not binding decisions. Land a commit containing only the files that constitute that decision on
   the integration branch (arch config) now. For a planning commit, the whole bundle
   enumerated above constitutes that decision. No unrelated change rides along. Everything else
   rides your own branch. Do not start implementation until the initial claim commit has
   landed on integration and the current branch contains that integration tip.
-- multi: if pulling integration shows someone else's claim already landed on the same
+- If pulling integration shows someone else's claim already landed on the same
   number, you lost — copy your progress log into the surviving card and step back.
-- multi: duplicate numbers from concurrent minting — the later-merged side moves to the
+- Duplicate numbers from concurrent minting — the later-merged side moves to the
   mid-insertion form (`03.2` → `03.2b`). Allowed only before `.done.`; 1 journal line.
-- multi: journal merge conflicts resolve as a union — keep both sides, date-ordered.
+- HANDOFF merge conflicts keep `Open decisions` as the union of both sides and take
+  `Next single step` from the side whose `# HANDOFF · <timestamp>` header is newer. A
+  digest marker keeps the descendant hash (resume's marker rule).
+- Journal merge conflicts resolve as a union — keep both sides, date-ordered.
   Squash merges are forbidden (they erode every rule built on `NN.N` history) — the
   policy is declared in arch's config.
 - To undo, use a revert commit — never erase history.

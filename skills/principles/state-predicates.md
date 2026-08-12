@@ -15,8 +15,8 @@ exactly one tree card is an integrity anomaly. Never infer the replacement.
 
 Approval is effective only when the card value is
 `YYYY-MM-DDTHH:MM:SSZ; parallel: <number+number|none>` and the following disk condition
-also holds. The card exists at the same repository-relative path in solo HEAD or the
-fetched multi integration branch. Calling that authority `<authority>`, both `git diff
+also holds. The card exists at the same repository-relative path in the integration tip
+the canonical rules define. Calling that authority `<authority>`, both `git diff
 --quiet -- <card path>` and `git diff --cached --quiet <authority> -- <card path>` succeed.
 These comparisons judge the index, working tree, and authority through Git-normalized
 content. A parallel group is reciprocal

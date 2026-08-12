@@ -232,7 +232,7 @@ section below).
     procedure while preserving the source id and timestamp. A card's layer-opening source is
    `verify:<verify.md path>#Failure history@<source id>`. Multiple failures from one
    verdict each retain their own routing.
-   multi: fix cards are born unclaimed (pending) and follow the normal proposal and claim
+   Fix cards are born unclaimed (pending) and follow the normal proposal and claim
    path
 7. **Capability layer passes → capability-closing begin commit.** Write the passing result
    to verify.md and create the canonical capability-closing marker. Its `head` is HEAD
@@ -296,7 +296,9 @@ section below).
    finish its interrupted closure. Classify every journal line. Do not delete a marker,
    request, evidence-wait, or evidence-finalizing line whose exact format the canonical
    rules define during this sweep; only
-   the current capability-closing marker is deleted when closure below finishes. Retain a
+   the current capability-closing marker is deleted when closure below finishes. Delete in
+   the same sweep every `capability note` line whose capability number is this closing
+   capability's, but retain them all when that refresh was a baseline no-op. Retain a
    cross-task decision with no target. A cross-task decision that now has an exact core-
    document target is a valid late decision: retain the marker, report its source line and
    target, and return without writing or executing to the canonical target-owning skill
@@ -304,7 +306,7 @@ section below).
    revisions. A line in neither class is an integrity anomaly; report it and neither write
    nor commit. Before the first write, calculate from current HEAD and the
    marker the final bytes of verify.md with its one-line sweep result and journal.md with
-   only this marker removed. Apply them in this order: verify.md below the still-open
+   only this marker and those capability notes removed. Apply them in this order: verify.md below the still-open
    capability folder; journal.md; then the capability-folder rename that adds `.done`.
    The whole working-tree diff must equal exactly one prefix of that order. For a prefix,
    apply only the remaining suffix and land the folder rename, verify.md, and journal in one
@@ -333,11 +335,11 @@ main session running verify — the verifier reads neither implementation nor de
 documents. A remote-evidence pointer in the bundle is verifier input for inspecting an
 execution result; it is not a devflow document.
 
-multi: execution and verdicts for both verification layers, and capability closure, happen
+Execution and verdicts for both verification layers, and capability closure, happen
 **only on the integration branch, after a fetch**. A feature or stale branch can point the
 verification revisions and "folder all done" at different states. A signal that cannot run
-on the executor's platform is handled by remote-evidence substitution (Regression — mode-
-neutral) or delegated to the owning member — record the split in verify.md. The journal
+on the executor's platform is handled by remote-evidence substitution (Regression) or
+delegated to the owning member — record the split in verify.md. The journal
 sweep is done by the member performing the closure.
 
 ## Bias Removal
@@ -431,7 +433,7 @@ specified above before product re-run or any other stage, event, route, or repor
 The audit is findings, not verification — it does not gate a verdict or status transition.
 
 Run an audit only at a boundary with no staged, unstaged, or untracked path outside
-devflow. In multi, run it only on the fetched integration branch. Test this before selecting
+devflow. Run it only on the fetched integration branch. Test this before selecting
 a new event. When it fails, skip an automatic candidate, retain a user-request journal
 line, and do not brief the role. For an already-pending event, retain pending, report
 the exact blocking path or branch state and reason, and continue the caller's remaining state.

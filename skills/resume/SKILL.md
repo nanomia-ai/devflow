@@ -22,13 +22,11 @@ state, run this section before normal routing.
    report only each exact missing path or field and `domain knowledge not initialized`; open no capability body. When the user asks
    to initialize it, leave this section and use normal resume routing. With all three present,
    read product.md's identity paragraph and capability list, plus the file names and shape
-   projection under `devflow/project/capabilities/`. Select `01-foundation.md` when the
-   request semantically identifies foundation or contains a standalone `01` token. Otherwise
-   select product.md rows when it contains a complete capability name or standalone number
-   token, comparing file numbers as integers. With zero matches, present only foundation plus
-   non-retired number/name candidates and ask; with multiple matches, present only matched
-   candidates and ask. Open no body before the answer. With exactly one match, select its
-   number. When no same-numbered file exists for the selection, including foundation,
+   projection under `devflow/project/capabilities/`. Resolve the target by the canonical
+   rules' canonical recognition; the selected unit's number names the same-numbered
+   capability document. With an empty resolution set, present only foundation plus
+   non-retired number/name candidates and ask; with two or more, present only the resolved
+   candidates and ask. Open no body before the answer. When no same-numbered file exists for the selection, including foundation,
    report only the expected path and the repair route — adopt with `Brownfield: yes`, arch
    with `no` — and invent no explanation. Open foundation and every non-retired capability
    file only when the user explicitly requests the full expected set. A general domain
@@ -63,8 +61,10 @@ approval, and let work automatically read the same numbered document.
    integration fields; and the file names directly under `devflow/project/capabilities/`
    plus the canonical baseline predicates' shape projection
    (mechanical query results only — never the body)
-2. devflow/tree/ full listing                      ← how far things got (.done. / .wip. / pending)
-3. my claimed card in full. For others' claims, path and claimant only. From every
+2. devflow/tree/ full listing at the integration tip ← how far things got (.done./.wip./pending)
+3. every claim of mine — path and status for all, and in full only the one this
+   invocation continues, which is the first of them in canonical candidate order. For
+   others' claims, path and claimant only. From every
    pending card, read only `Depends`, `Approval`, and `Review`
 4. **Bounded verify projection** — Run a mechanical query that does not put every verify.md
    into model context. For each file, it emits only the four revisions and `Verdict`; the
@@ -77,17 +77,18 @@ approval, and let work automatically read the same numbered document.
    source-id entry selected by that output. Until the state table selects the exact file and
    state and calls verify, do not read `Scenario`, `Executed`, `Regression`, `Standards`,
    `Provisional`, or `Journal sweep`
-5. devflow/HANDOFF.md (multi: my room's HANDOFF.md) ← traps, learnings, open decisions
+5. my room's HANDOFF.md                            ← the next step and open decisions
 6. devflow/journal.md in full (if present — the sweep discipline keeps it short)
                                                    ← cross-task decisions
-7. Full git status. If I have a claimed card, compare uncommitted changes against its
-   progress log's last entry. For every pending card, check the same path exists in the
-   authority and run the state predicates' two Git diffs; in multi, use the fetched
-   integration branch as authority
+7. Full git status. Compare uncommitted changes against the progress log's last entry of
+   only the claim this invocation continues, and report every remaining uncommitted path
+   without attributing it to a card. For every pending card, check the same path exists in
+   the authority and run the state predicates' two Git diffs, using the integration tip as
+   authority
 ```
 
 **Check HANDOFF's freshness before trusting it.** Compare its date against the newest
-task commit (`NN.N` message form, wip included; multi: commits bearing my id prefix or
+task commit (`NN.N` message form, wip included — commits bearing my id prefix or
 touching my claimed-card paths). Handoff is written only at boundaries,
 so a session that died mid-task leaves the previous boundary's file behind — one that
 points at a step already taken. If any task commit is newer than the HANDOFF date,
@@ -103,8 +104,18 @@ Report what you read in **one paragraph**:
 ```
 "<service> is complete through <capability>, with <task> in progress.
 The progress log reaches <last point>; capability documents are
-<non-retired filenames|none>. The next step is <one step>. Proceed?"
+<non-retired filenames|none>. The next step is <one step>, selected by
+<your request | the last handoff | canonical order>. Also open:
+<every other unit holding a candidate under the same matched row | none>; uncommitted and
+unattributed: <those paths | none>. Proceed?"
 ```
+
+The selection reason comes straight out of the canonical candidate order — `your request`
+when the step came from a card the user named or from the session unit, `the last handoff`
+when it came from the carried unit, and `canonical order` otherwise. When the session unit
+holds no candidate, say so in that clause. When the matched row is work, the step reported
+is the one work's own selection would take — canonical candidate order over my claims and
+every ready pending card — so the report and the stage cannot name different cards.
 
 Exclude retired capability documents from the list. When the next stage names a capability or
 foundation, include that numbered document's exact path. Append any shape-projection anomaly
@@ -134,10 +145,13 @@ matching row:
 | journal contains an exact `re-split pending` line | split — finish the replacement-card plan for the earliest marker |
 | journal contains an exact `maintenance routing pending` line | split — plan the earliest line's request through maintenance routing |
 | arch.md lacks the Brownfield field | ask once, "Did implementation code exist before devflow entered?"; yes makes adopt add only the field, no makes arch add only the field |
+| arch.md lacks the `integration` or `merge` line | arch — propose the current branch as the default, confirm it, and add only those two lines |
+| A bare `.wip.` card or a root `devflow/HANDOFF.md` exists | work — confirm the owner with the user, then finish the room-upgrade rename and HANDOFF move in one commit |
 | `devflow/project/glossary.md` is missing | with `Brownfield: yes`, adopt reverse-derives only glossary.md; with `no`, product creates only glossary.md without changing the confirmed product.md |
 | A task card has a `Depends` member that the state predicates cannot parse, or a dependency number does not point to exactly one card | split — replace it with the user-confirmed canonical dependency value and finish the planning commit |
 | My claimed card lacks `Approval` or `Review`, has `Approval: pending`, or has noncanonical `Depends` | split — checkpoint any current diff and progress log, release the card, normalize legacy dependencies, finish execution-proposal approval and the planning commit, then reclaim it |
 | My claimed card has a `Depends` target that is not `.done.` | split — release the original card and finish the prerequisite |
+| The current conversation carries a change request from the user that no journal line, verify entry, or claimed card preserves yet | split — maintenance routing, which records the request before it reads any code |
 | A card of mine is claimed | work |
 | An expected file has the canonical baseline predicates' exact `legacy v0.10` shape | with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone |
 | An expected file under the canonical baseline predicates is missing from HEAD, or an expected HEAD file with exactly one fixed boundary has a design section, design metadata, or current Design head that differs from the contract | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |
@@ -157,7 +171,7 @@ matching row:
 | A waiting capability file exists | split — open one layer of that capability |
 | No earlier executable row matches, and at least one pending Audit, user-request Audit with a target record, or due automatic Audit fails only the Audit execution boundary | verify — run no event and write no state; list those candidates in event-priority order and report each exact blocking path or branch state and reason |
 | Pending task cards remain, but every effectively approved card has at least one `Depends` target that is not `.done.` | report the blocking card numbers and claimants; modify no code until a dependency closes |
-| In multi, no earlier row matches and the only unfinished work consists of others' claims | report the claimants and cards; wait until a claim is released or closes |
+| No earlier row matches and the only unfinished work consists of others' claims | report the claimants and cards; wait until a claim is released or closes |
 
 The `awaiting user decision` findings row does not block a pass, `.done`, or other work.
 Record a decision when the user makes it now. If the user defers or asks to continue
@@ -196,7 +210,7 @@ For the non-capability-folder boundary row above, after approval modify no code:
 folders from deepest to shallowest, make one boundary commit, then rescan the table from
 the top.
 
-## Digest — catching up on others' work in multi mode
+## Digest — catching up on work outside my sessions
 
 Digest happens only at a clean boundary — **if I have a claimed card, resuming it comes
 first.** Digest runs after that card closes, or right before a new claim.
@@ -205,8 +219,6 @@ first.** Digest runs after that card closes, or right before a new claim.
 1. Pull the integration branch (arch config)
 2. From commits after my room's digest.md marker, pick the digest targets:
    everything not authored by me + anything authored by me without my `<my id>` prefix
-   (= work outside my sessions. Prefixed commits — task, wip, claim, promote, boundary —
-   are already mine)
 3. For each target commit, read its subject and changed paths. Read the diff only when it
    touches a shared document, the capability folder of the next claim candidate, or a
    `Read first` path on that candidate card. A contradiction with a shared document lands
@@ -227,7 +239,7 @@ the re-anchor procedure.
 ## Exceptions
 
 - No claim of mine: derive the next stage from the table above.
-  multi: include a one-line summary of others' claims (who holds what) in the report.
+  Include a one-line summary of others' claims (who holds what) in the report.
 - HANDOFF missing or empty: normal. Resume from the tree alone.
 - No tree at all: read the Layer 0 file list and all of journal when it exists, first run
   every applicable canonical integrity check, derive the next stage in this order, report

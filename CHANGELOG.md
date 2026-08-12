@@ -6,6 +6,125 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.12.0 — 2026-08-12 — one mode, claims on the capability axis, knowledge that outlives a handoff
+
+devflow modeled the person and never modeled the work that flows concurrently. One person
+with five terminals on five domains hit an integrity anomaly on the second terminal, and
+what a maintenance card learned reached nobody. This release moves three properties off the
+person axis and onto the capability axis, and removes the mode fork that made the move
+impossible. Plan: `docs/plan-usage-flow_ko.md`. Decisions and rejection lineage:
+`docs/design.md`.
+
+**One mode.** The solo/multi fork is gone from every deploy artifact. Rooms
+(`devflow/users/<id>/`) always exist, claims are always `.wip-<id>.`, commit messages are
+always id-prefixed, and `arch.md` always carries `integration` and `merge`. The cost to a
+lone user is one commit per card — the claim — and that commit is exactly what lets two
+terminals or two worktrees see each other's work in progress. When `integration` names the
+current branch (or arch.md is absent, or the line is missing) the integration tip is HEAD,
+and every fetch, push, integrate, and compare order collapses into an ordinary commit; a
+purely local integration branch needs no network command. Identity resolution now states
+the empty-value, changed-identity, non-interactive, and non-Git cases it used to leave
+open, and `owner.md`'s two-line format and `digest.md`'s one-line marker are written down
+for the first time. The `Solo→multi` and `Multi→solo` transitions are replaced by one
+upgrade split three ways by existing ownership — arch adds the two fields, identity
+resolution creates the room, work renames the bare `.wip.` and moves the root HANDOFF —
+with resume rows and integrity item 6 as its detector and route.
+
+**Claims on the depth-1 unit.** One claim per id per depth-1 unit; claims in different
+units are ordinary concurrent work. Integrity item 1 is scoped the same way, and its two
+exceptions (reciprocal parallel approval, evidence-wait) were always exceptions inside one
+capability, so the scope now fits them. work groups its claims by unit, continues the
+first in canonical candidate order, and never claims a second card in a unit it already
+holds. resume reports every claim but reads only the one it continues in full, and
+attributes uncommitted changes only to that card.
+
+**One canonical candidate order.** Several places asked "which one next" and could answer
+differently. The canon defines it once: the card the user named, then the session unit,
+then the carried unit (from HANDOFF's `Next single step`), then the rest; canonical
+card-number order within each. It never changes which routing row matches, never makes an
+unready card ready, and never grants a claim. The recognition machine that lived only in
+resume's domain entry was promoted to canon, and resume and the baseline predicates now
+cite it. resume's report names the reason it chose and lists the other open units, so
+"picked arbitrarily" is structurally unavailable. A change request the user makes in
+conversation gets its own routing row, placed above the claimed-card row rather than below
+it as planned: the persisted form of the same request already outranks a claim one row
+higher, and with claims now normal in several units at once, "below" would have meant the
+request was recorded almost never.
+
+**Knowledge that outlives a handoff.** A card writes one `carry:` line into its own
+progress log before its final commit — only the residue with nowhere else to land, and the
+line rides that commit so the canonical claim→done move stays byte-identical. The next card
+in the same capability reads, through a mechanical query that opens no card body, only the
+carry lines of `.done.` cards outside the capability document's `Covered cards`; closure
+harvests them and empties the set. An observation about a different capability becomes a
+journal `capability note` keyed to that number, harvested and deleted at that capability's
+next closure — unless the baseline refresh was a no-op, in which case the notes are
+retained. Neither reviewer nor verifier receives the set; their ignorance is the asset.
+HANDOFF drops `Just learned` and `Traps`, `Next single step` becomes mandatory, and the
+first boundary after an upgrade lands the old sections before overwriting.
+
+**Bounded repairs.** A reopened capability can no longer report verified statements as
+fresh (any non-`.stale.` card without `.done` below the folder makes them hypotheses). An
+external trap survives without a source URL by naming the observing card and its
+reproduction condition. Foundation's `None.` verified zone is stated as the design — shared
+code is verified through the consumers whose code scope contains it. Hypothesis
+reconfirmation reaches already-open Binding ADR paths and, for reconfirmation only,
+`Consumed paths`, without widening the Standards gate or Audit scope. Every devflow commit
+carries only its own paths and the review diff is bounded the same way. HANDOFF merges keep
+`Open decisions` as a union and take `Next single step` from the newer header. Integrity
+item 5 compares HANDOFF paths with status suffixes removed, so a claim no longer trips a
+false alarm. split reads the fixed first four lines of candidate capability documents to
+map a maintenance request, and a never-claimed, never-committed card in the wrong folder
+has a recall route that retires its number.
+
+**Not adopted, recorded in the lineage:** a durable focus field, per-terminal `flows/`
+folders, a second identifier level under the person, session or date bundle files, a new
+per-capability note layer, reading whole progress logs or the last N, narrowing verify's
+uncommitted-outside-devflow gate, devflow managing worktrees, and a freshness line in
+resume's report. The worktree rejection is not overturned: devflow still does not create
+worktrees, it is merely compatible with ones the user already made. Concurrent editing runs
+in parallel while verification and builds serialize — an existing safety device becoming
+visible, not a new constraint.
+
+Verification: four independent fresh-context passes with differentiated lenses — a
+literal-execution walk of four scenarios (new project, upgrade, non-Git, two terminals), an
+adversarial refutation of the mode removal, a subtraction audit hunting sentences with no
+failure path, and a usage-flow walk of 17 journeys against 5 conditions with the dialogue
+written out for every cell that was not clean. They returned 17, 17, 22, and 16 findings.
+Every finding with a reproducible failure path was repaired and the repairs re-audited;
+four were recorded as observation items in `docs/design.md` instead, because they are
+pre-existing and off this axis. Notable repairs: the non-Git path was dead (an identity was
+required to write, and the two Approval Git comparisons could never succeed); the
+cross-unit concurrency the design exists for was unreachable because work still refused to
+open work while holding any claim; resume and work answered "which card next" differently
+on the same disk, so resume now reports the card work's own selection takes; canonical
+recognition erased the session unit as soon as a second capability was mentioned, so a
+larger resolution set now takes the last mention for ordering; the HANDOFF migration was
+gated on a room upgrade and therefore never fired for a project that already had rooms, so
+it is gated on the file's own sections instead; two sessions sharing one id could drop an
+`Open decision` between them, so HANDOFF is re-read from disk before it is overwritten; a
+git name matching one room while the email conflicted counted as a match; arch's "add one
+field" routes fell through to its full ordered interview; the joining transition had no
+commit message and no marker value in a zero-commit repository; and the group claim met the
+claim commit with an undefined message. Test pins: 49 repository invariants, including one mode, unit-keyed claims, one
+canonical order, the carry line's position and its exclusion from the review roles, the
+capability note's producer and harvester, HANDOFF's two sections, and that verify's
+uncommitted-outside-devflow gate was not weakened.
+
+Files: `skills/principles/SKILL.md` (+78) · `skills/work/SKILL.md` (+48) ·
+`skills/resume/SKILL.md` (+12) · `skills/arch/SKILL.md` (+7) · `skills/split/SKILL.md`
+(+8) · `skills/principles/baseline-predicates.md` (+8) · `skills/verify/SKILL.md` (+2) ·
+`skills/principles/state-predicates.md` · every `_ko` pair · `README.md` · `README_ko.md` ·
+`docs/design.md` · `docs/design_ko.md` · `scripts/repository-invariants.test.js` · both
+plugin manifests. Deploy artifacts net **+163 lines** against a planned +60. The
+subtraction pass took 22 lines back out — duplicated glosses, consequence sentences, and a
+whole arch paragraph that restated the canon three ways — and the remainder is repair the
+verification passes demanded. It is flagged rather than absorbed:
+`docs/design.md`'s canonical-rules-size entry now reads 643 lines and names this as the
+largest open cost, and the owner's call on whether to spend a follow-up release splitting
+the canon per consumer is recorded there rather than made here. README tone counts: English `—` 92→92, `**` 53→55; Korean `—` 62→66,
+`**` 46→49; bureaucratic noun compounds 0→0 both.
+
 ## 0.11.1 — 2026-08-12 — capability-document recovery keys on HEAD
 
 An independent literal execution of the interruption and damage paths, run against the
