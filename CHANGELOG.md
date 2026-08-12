@@ -128,16 +128,16 @@ canonical order, the carry line's position and its exclusion from the review rol
 capability note's producer and harvester, HANDOFF's two sections, and that verify's
 uncommitted-outside-devflow gate was not weakened.
 
-Files: `skills/principles/SKILL.md` (+78) · `skills/work/SKILL.md` (+48) ·
-`skills/resume/SKILL.md` (+12) · `skills/arch/SKILL.md` (+7) · `skills/split/SKILL.md`
-(+8) · `skills/principles/baseline-predicates.md` (+8) · `skills/verify/SKILL.md` (+2) ·
+Files: `skills/principles/SKILL.md` (+83) · `skills/work/SKILL.md` (+48) ·
+`skills/resume/SKILL.md` (+16) · `skills/arch/SKILL.md` (+7) · `skills/split/SKILL.md`
+(+15) · `skills/principles/baseline-predicates.md` (+8) · `skills/verify/SKILL.md` (+2) ·
 `skills/principles/state-predicates.md` · every `_ko` pair · `README.md` · `README_ko.md` ·
 `docs/design.md` · `docs/design_ko.md` · `scripts/repository-invariants.test.js` · both
-plugin manifests. Deploy artifacts net **+163 lines** against a planned +60. The
+plugin manifests. Deploy artifacts net **+179 lines** against a planned +60. The
 subtraction pass took 22 lines back out — duplicated glosses, consequence sentences, and a
 whole arch paragraph that restated the canon three ways — and the remainder is repair the
 verification passes demanded. It is flagged rather than absorbed:
-`docs/design.md`'s canonical-rules-size entry now reads 643 lines and names this as the
+`docs/design.md`'s canonical-rules-size entry now reads 648 lines and names this as the
 largest open cost, and the owner's call on whether to spend a follow-up release splitting
 the canon per consumer is recorded there rather than made here. README tone counts: English `—` 92→92, `**` 53→55; Korean `—` 62→66,
 `**` 46→49; bureaucratic noun compounds 0→0 both.

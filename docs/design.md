@@ -383,7 +383,7 @@ gate forces this document to be read).
   foundation card, or (B) return to design after foundation work. This changes the Layer 0
   and task-tree boundary, so the current order is not forcibly rearranged before the owner chooses.
 - **The size of the canonical rules** — the canonical rules grew from 217 lines (v0.9.9) to
-  643 lines (v0.12.0), and all 8 skills plus every delegated implementer read the whole document.
+  648 lines (v0.12.0), and all 8 skills plus every delegated implementer read the whole document.
   Counting the predicate companions, resume and verify read about 1,170 lines each session and arch
   and adopt about 1,090.
   Removing the mode fork gave 30 lines back and the usage-flow redesign spent more than that,
