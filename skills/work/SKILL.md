@@ -19,8 +19,8 @@ attribute to me by stripping the whole suffix back to pending — its progress l
 the card. Independently of that answer, move a root `devflow/HANDOFF.md` into my room. Land
 whichever of these applies in one `<id> boundary — room upgrade` commit.
 
-1. In a folder that is not a Git work tree, follow the canonical `git init` proposal and
-   its `no recovery possible` warning before anything below commits.
+1. Apply the canonical Git requirement — a work tree and a git identity — before anything
+   below.
 2. Before choosing an ordinary claim, finish remote-evidence transitions for my claimed
    cards in the order below. Within each state, use timestamp order and then journal line
    order.

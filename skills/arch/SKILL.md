@@ -73,8 +73,8 @@ This skill does not finish until it is decided.
 | CLI / daemon | Run command + expected output (+ health check, log location) | Create it as the first task |
 | Library | Test runner | Create it as the first task |
 
-Git check: if not a repository, propose `git init`. All recovery and undo in this system
-depends on git.
+Git check: if not a repository, propose `git init` and stop when the user declines. All
+recovery and undo in this system depends on git.
 
 ## Output — devflow/project/arch.md
 
@@ -114,8 +114,8 @@ existing code. This value selects how the first tree is created; it is not imple
 progress. When an existing arch.md lacks only the `Brownfield` field, ask that one
 question, add only the field, and change nothing else.
 
-The default for `integration` is the current branch, and in a folder that is not a Git
-work tree it is `none`. The canonical rules govern what each value then means.
+The default for `integration` is the current branch. The canonical rules govern what that
+value then means.
 
 `Existing records` is only a locator index for handoff and specification files that
 adopt checked against code. Each line contains a product.md capability name or `shared`,

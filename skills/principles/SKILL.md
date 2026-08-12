@@ -49,13 +49,11 @@ Room = `devflow/users/<id>/` = owner.md + HANDOFF.md + digest.md. owner.md is tw
 digest marker, a commit hash or `none`. Write only in your own room. Rooms are readable by
 the whole team — write with that premise.
 
-The first skill that must commit in a folder that is not a Git work tree proposes
-`git init`; if the user declines, it proceeds and warns once. Outside a work tree there is
-neither identity nor commit, so what Git decides does not run — Approval effectiveness
-rests on the card value alone, the integration tip is the current checkout, and claim
-commits, id prefixes, and the digest marker all go inert. A room and an id are still files:
-the user names the id and the room is created. Exactly one room is mine there, and two or
-more is an integrity anomaly.
+devflow runs only in a Git work tree — claims, approval freshness, integration, and every
+undo live in Git. The first skill to run in a folder that is not one proposes `git init`
+and stops when the user declines. With `user.name` or `user.email` unset, propose the exact
+`git config` line and stop until it is confirmed; Git itself refuses to commit without
+them.
 
 **Only `.wip-<my id>.` is my work.** The precondition, full-read, and continuation
 rules apply to my claim only. Another's claimed card is read-only reference — never write
@@ -64,16 +62,23 @@ Reassigning a stalled claim = release, then re-claim. Only on the user's explici
 instruction, with 1 journal line (the sanctioned exception to claim inviolability).
 
 **The integration branch.** arch.md's `integration` names the branch where minting,
-closure, and binding decisions land. When it names the current branch, is `none`, or
+closure, and binding decisions land. When it names the current branch, or
 arch.md is absent, or it carries no `integration` line, **the integration tip is HEAD**, and every
 devflow rule that fetches, integrates, pushes, or compares against integration reads the
 current branch and runs no network command. When it names another branch, read that
 branch's tip, and fetch or push only when that branch tracks a remote — a purely local
-integration branch needs no network command. Git refuses to update a branch another
-worktree has checked out, so when integration is checked out elsewhere and tracks no
-remote, a binding decision cannot land on it from here: report that exact blocker, write
-nothing partial, and let the decision land from the worktree holding integration. In every
-ancestor test here, a commit is its own ancestor.
+integration branch needs no network command. In every ancestor test here, a commit is its
+own ancestor.
+
+**Worktrees are flows.** Every worktree of this repository shares one `.git`, so a commit
+made in one is visible from another with no fetch and no remote. `git worktree list
+--porcelain` is the list of flows alive right now: it survives a terminal dying, and
+`git worktree prune` drops a worktree whose folder is gone. Read shared tree state as the
+union of the integration tip and each listed worktree's HEAD — a card carrying a claim at
+any of them is claimed — so a claim made in one worktree is seen in the others. Git refuses
+to update a branch another worktree has checked out, so when integration is checked out
+elsewhere, a binding decision cannot land on it from here: report that exact blocker, write
+nothing partial, and let it land from the worktree holding integration.
 
 Shared state for next-stage routing and the integrity check comes from the integration
 tip, not the current branch: `devflow/project/`, `devflow/tree/`,

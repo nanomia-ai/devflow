@@ -500,12 +500,17 @@ routing (an active marker there gets pulled into the current branch
 first). The first two happen at boundaries; the third runs even while a card is claimed.
 
 Working alone, all of this costs **one commit per card** — the claim. That one commit is
-what lets two terminals, or two worktrees, see each other's work in progress. Two
-qualifications on worktrees: one of them has to sit on the integration branch, because Git
-will not let a second worktree update a branch the first has checked out; and two sessions
-of one person share one id, so disk cannot tell them apart — either may finish the other's
-boundary, and the approval on resume's report is what keeps them from picking up the same
-card.
+what lets two terminals, or two worktrees, see each other's work in progress.
+
+**Worktrees are the clean way to run two flows at once.** Every worktree of one repository
+shares a single history store, so a claim made in one folder is visible from the other with
+no remote and no fetch, and each folder has its own uncommitted files — the half-finished
+edit in one cannot break the other's tests. devflow reads `git worktree list` and treats
+each entry as a live flow. Two limits are worth knowing. Git will not let one worktree
+write to a branch another has checked out, so binding decisions land from the worktree
+holding the integration branch. And two sessions of one person share one id, so disk cannot
+tell them apart; when several capabilities are open and you have not said which one you
+want, resume asks instead of guessing.
 
 Every room transition is a single-commit procedure:
 

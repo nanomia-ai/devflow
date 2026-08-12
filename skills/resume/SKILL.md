@@ -61,7 +61,8 @@ approval, and let work automatically read the same numbered document.
    integration fields; and the file names directly under `devflow/project/capabilities/`
    plus the canonical baseline predicates' shape projection
    (mechanical query results only — never the body)
-2. devflow/tree/ full listing at the integration tip ← how far things got (.done./.wip./pending)
+2. devflow/tree/ full listing over the canonical shared tree state (the integration tip
+   unioned with each worktree HEAD)     ← how far things got (.done./.wip./pending)
 3. every claim of mine — path and status for all, and in full only the one this
    invocation continues, which is the first of them in canonical candidate order. For
    others' claims, path and claimant only. From every
@@ -116,6 +117,9 @@ when it came from the carried unit, and `canonical order` otherwise. When the se
 holds no candidate, say so in that clause. When the matched row is work, the step reported
 is the one work's own selection would take — canonical candidate order over my claims and
 every ready pending card — so the report and the stage cannot name different cards.
+When the conversation named no depth-1 unit and two or more units hold a candidate under
+the matched row, ask which unit to continue instead of proposing one. With a single unit
+holding candidates there is nothing to ask; propose it.
 
 Exclude retired capability documents from the list. When the next stage names a capability or
 foundation, include that numbered document's exact path. Append any shape-projection anomaly
@@ -143,7 +147,6 @@ matching row:
 | journal contains an exact `product re-run pending` line | product |
 | A valid capability-closing marker exists in HEAD | verify — finish the interrupted capability closure |
 | journal contains an exact `re-split pending` line | split — finish the replacement-card plan for the earliest marker |
-| journal contains an exact `maintenance routing pending` line | split — plan the earliest line's request through maintenance routing |
 | arch.md lacks the Brownfield field | ask once, "Did implementation code exist before devflow entered?"; yes makes adopt add only the field, no makes arch add only the field |
 | arch.md lacks the `integration` or `merge` line | arch — propose the current branch as the default, confirm it, and add only those two lines |
 | A bare `.wip.` card or a root `devflow/HANDOFF.md` exists | work — confirm the owner with the user, then finish the room-upgrade rename and HANDOFF move in one commit |
@@ -151,8 +154,9 @@ matching row:
 | A task card has a `Depends` member that the state predicates cannot parse, or a dependency number does not point to exactly one card | split — replace it with the user-confirmed canonical dependency value and finish the planning commit |
 | My claimed card lacks `Approval` or `Review`, has `Approval: pending`, or has noncanonical `Depends` | split — checkpoint any current diff and progress log, release the card, normalize legacy dependencies, finish execution-proposal approval and the planning commit, then reclaim it |
 | My claimed card has a `Depends` target that is not `.done.` | split — release the original card and finish the prerequisite |
-| The current conversation carries a change request from the user that no journal line, verify entry, or claimed card preserves yet | split — maintenance routing, which records the request before it reads any code |
+| The current conversation carries a change request from the user that no journal line, verify entry, or claimed card preserves yet | split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table |
 | A card of mine is claimed | work |
+| journal contains an exact `maintenance routing pending` line | split — plan the earliest line's request through maintenance routing |
 | An expected file has the canonical baseline predicates' exact `legacy v0.10` shape | with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone |
 | An expected file under the canonical baseline predicates is missing from HEAD, or an expected HEAD file with exactly one fixed boundary has a design section, design metadata, or current Design head that differs from the contract | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |
 | An expected HEAD file has zero or more than one `## Verified state` boundary | resume — instead of the whole original, report its path, the HEAD boundary count that selected this route, the working-tree boundary count and line count, the HEAD blob object ID for that exact path or `none`, and the expected boundary, then offer only two choices: (1) after confirming that a user-identified Git revision and path has one boundary, the user restores those bytes to the damaged file's current expected path and commits only that file; (2) state the discarded verified prose and HEAD blob ID, obtain confirmation, and route `Brownfield: yes` to adopt or `no` to arch for a whole reset from current Layer 0 plus an empty verified scaffold under the ordinary design-batch confirmation. Search no history for a known-good revision; resume writes no file, and deferral changes no file |

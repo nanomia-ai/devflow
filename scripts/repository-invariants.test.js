@@ -803,16 +803,16 @@ test("candidate selection has one canonical order", () => {
   assert.match(resume, /Resolve the target by the canonical\n   rules' canonical recognition/);
   assert.match(work, /in canonical\s+candidate order over my remaining claims/);
   assert.match(resume, /selected by\n<your request \| the last handoff \| canonical order>/);
-  assert.match(resume, /The current conversation carries a change request from the user that no journal line, verify entry, or claimed card preserves yet \| split \u2014 maintenance routing, which records the request before it reads any code \|/);
+  assert.match(resume, /The current conversation carries a change request from the user that no journal line, verify entry, or claimed card preserves yet \| split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table \|/);
   assert.ok(
     resume.indexOf("| The current conversation carries a change request") <
       resume.indexOf("| A card of mine is claimed | work |"),
     "a fresh change request is recorded before a claim resumes, like the persisted form above it",
   );
   assert.ok(
-    resume.indexOf("| journal contains an exact `maintenance routing pending` line |") <
-      resume.indexOf("| The current conversation carries a change request"),
-    "the persisted request still outranks the conversation one",
+    resume.indexOf("| A card of mine is claimed | work |") <
+      resume.indexOf("| journal contains an exact `maintenance routing pending` line |"),
+    "planning a maintenance request yields to an open claim; only recording it does not",
   );
   for (const consumer of [work, split, resume]) {
     assert.doesNotMatch(consumer, /the next pending card that is ready/);
@@ -936,4 +936,65 @@ test("switching inside one capability parks instead of handing off", () => {
   assert.match(work, /^## Switching Inside One Capability — park, then release$/m);
   assert.match(work, /Moving to another depth-1 unit needs no procedure/);
   assert.match(work, /parking is a release, not a handoff/);
+});
+
+test("devflow requires a Git work tree and has no degraded mode", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const arch = fs.readFileSync(path.join(root, "skills", "arch", "SKILL.md"), "utf8");
+  assert.match(principles, /devflow runs only in a Git work tree/);
+  assert.match(principles, /proposes `git init`\s+and stops when the user declines/);
+  assert.match(principles, /With `user\.name` or `user\.email` unset, propose the exact\s+`git config` line and stop until it is confirmed/);
+  assert.match(work, /Apply the canonical Git requirement/);
+  assert.match(arch, /propose `git init` and stop when the user declines/);
+  // the degraded non-Git mode is gone
+  for (const text of [principles, work, arch]) {
+    assert.doesNotMatch(text, /no recovery possible/);
+    assert.doesNotMatch(text, /integration: none/);
+  }
+});
+
+test("worktrees are the flow registry", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
+  assert.match(principles, /\*\*Worktrees are flows\.\*\*/);
+  assert.match(principles, /`git worktree list\s+--porcelain` is the list of flows alive right now/);
+  assert.match(principles, /union of the integration tip and each listed worktree's HEAD — a card carrying a claim at\s+any of them is claimed/);
+  assert.match(principles, /Git refuses\s+to update a branch another worktree has checked out/);
+  assert.match(resume, /canonical shared tree state \(the integration tip\s+unioned with each worktree HEAD\)/);
+  assert.match(readme, /Worktrees are the clean way to run two flows at once/);
+  // the earlier wrong claim that a remote is required must not come back
+  assert.doesNotMatch(readme, /tracks no\s*remote/);
+});
+
+test("a change request is recorded at once but planned only after the claim closes", () => {
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
+  assert.match(resume, /record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table/);
+  assert.match(split, /When this session holds a\nclaimed card, land that line alone as a binding decision and return to the card/);
+  assert.ok(
+    resume.indexOf("| The current conversation carries a change request") <
+      resume.indexOf("| A card of mine is claimed | work |"),
+    "recording a fresh request outranks the claim",
+  );
+  assert.ok(
+    resume.indexOf("| A card of mine is claimed | work |") <
+      resume.indexOf("| journal contains an exact `maintenance routing pending` line |"),
+    "planning it yields to the claim",
+  );
+});
+
+test("a completion signal is scoped so one flow cannot fail another's card", () => {
+  const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  assert.match(split, /Scope a completion signal to the paths this capability owns whenever the means allows it/);
+  assert.match(split, /One working tree runs one build/);
+  assert.match(work, /land them as that card's `NN\.N wip:` checkpoint first/);
+});
+
+test("resume asks which unit instead of guessing when several are open", () => {
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  assert.match(resume, /When the conversation named no depth-1 unit and two or more units hold a candidate under\s+the matched row, ask which unit to continue instead of proposing one/);
+  assert.match(resume, /With a single unit\s+holding candidates there is nothing to ask; propose it/);
 });

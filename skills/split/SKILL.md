@@ -260,7 +260,9 @@ Review:            not-applicable
 When a request like "fix the filter on this page" arrives:
 
 Before reading code, append a new user request as the canonical `maintenance routing
-pending` line. Serialize the whole request as one JSON string. Do not append it again when
+pending` line. Serialize the whole request as one JSON string. When this session holds a
+claimed card, land that line alone as a binding decision and return to the card — the
+request waits and is planned after the card closes. Do not append it again when
 an unresolved line decodes to identical request text. When one or more unresolved lines
 exist, use the earliest timestamp as the request, breaking a tie by journal line order.
 Create no such line when a verify.md `routing: pending` or `awaiting user decision` entry
@@ -345,6 +347,11 @@ When split starts with a pending card whose
 `Approval` is not `pending` but is ineffective under the state predicates, report the
 exact reason and reset it to `pending`. Present the whole current card in a new execution
 proposal, then land the new approval value and card change together in the planning commit.
+
+Scope a completion signal to the paths this capability owns whenever the means allows it
+— `pnpm test src/payment`, not `pnpm test`. One working tree runs one build, so a
+repository-wide signal fails on another flow's unfinished code and the failure ladder then
+blames this card.
 
 **Never write the implementation method.** Destination, completion signal, and Forbidden
 are the entire harness. Only T-low cards additionally get ordering hints (see the harness

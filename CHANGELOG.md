@@ -77,6 +77,23 @@ false alarm. split reads the fixed first four lines of candidate capability docu
 map a maintenance request, and a never-claimed, never-committed card in the wrong folder
 has a recall route that retires its number.
 
+**Owner decisions folded in after the first pass.** Git is now a requirement rather than a
+soft preference: the first skill in a folder that is not a work tree proposes `git init`
+and stops when declined, and an unset `user.name` or `user.email` gets the exact
+`git config` line and a stop. That deleted the degraded no-Git mode entirely — one fewer
+mode and six fewer canon lines. Worktrees became the flow registry: measurement showed the
+earlier claim that they need a remote was wrong — worktrees of one repository share a
+single object store, so a claim in one folder is visible in another with no fetch and no
+remote, and the only real constraint is that Git will not write to a branch another
+worktree has checked out. `git worktree list --porcelain` survives a terminal dying and
+self-prunes, which is the durable per-flow identity X2 wanted and could not build, so
+shared tree state is read as the integration tip unioned with each worktree HEAD. A change
+request made while a card is claimed is now recorded at once as its journal line and
+planned only after that card closes, so it neither evaporates nor interrupts. A completion
+signal is scoped to the capability's own paths, which is what lets two flows share one
+working tree. And when the conversation named no unit and two or more hold candidates,
+resume asks instead of proposing.
+
 **Not adopted, recorded in the lineage:** a durable focus field, per-terminal `flows/`
 folders, a second identifier level under the person, session or date bundle files, a new
 per-capability note layer, reading whole progress logs or the last N, narrowing verify's
