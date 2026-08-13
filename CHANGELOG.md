@@ -6,6 +6,28 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.14.1 — 2026-08-13 — the repair re-audit: seven precision forks converge, and the loop closes by its recorded stop condition
+
+A bounded independent pass over only the seventeen 0.14.0 repairs (fixes are changes too)
+returned ten clean and seven findings — every one a two-reading fork or a subtraction, no
+new rule conflict and no loss path. All seven converge in this release: a roomless
+session's tweak waits out a blockade and reports (room creation is a binding decision);
+"attributed" requires a token exactly equal to an existing room's id, never a substring;
+resume's skip clause no longer references the not-yet-known matched row, and the worktree
+question moves to report time on a work row; whether a card "preserves" a request is
+judged by canonical recognition instead of an undecidable reading; a tweak commit's
+subject-and-paths shortcut ends at the shared-document judgment and still yields a diff
+read when it touches a candidate's paths; verify's event preemption binds to a claim the
+session still holds, so a closed card cannot starve the first-closure retrospective; and
+the duplicated "may be claimed immediately" sentence is deleted. The loop then stops by
+the stop condition recorded in advance — findings fell from rule-conflict class to
+reading-precision class, and every fix narrows interpretation rather than adding
+surface — so no third text pass is opened; the next verification instrument is field use.
+The lineage, loop record, and honest size measurement (the fixed session read grew
+1,543 → 1,636 lines, over the plan's budget, with the recorded reduction path being
+D11 then the interruption machinery) live in `docs/v0.14.0-execution-report_ko.md`, the
+process-grade handoff this round leaves behind.
+
 ## 0.14.0 — 2026-08-13 — free parallel claims, the tweak lane, blockade appends with 3-way journal merges
 
 Implements `docs/v0.14.0-plan_ko.md` in full. Three structural changes, each refuting a

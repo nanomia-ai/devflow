@@ -382,8 +382,8 @@ request. For ties, use canonical path order for verify.md, then Audit before
 Retrospective within one file, then source id ascending within one section. Among user
 requests, use the earliest timestamp first.
 
-When this session was carrying a claimed task card, select no event; return to work
-through the boundary cleanup of the card it was carrying. Select an Audit candidate only when it also satisfies The Audit's
+When this session still holds a claimed card it was carrying, select no event; return to
+work through that card's boundary cleanup — a card already closed does not count. Select an Audit candidate only when it also satisfies The Audit's
 execution boundary below. For an ineligible automatic candidate, create no pending entry.
 For a user-request Audit, retain its journal line, report the exact blocking path or branch
 state and reason, and continue the caller's remaining state; resume does not select that

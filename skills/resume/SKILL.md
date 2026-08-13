@@ -76,9 +76,9 @@ to the normal procedure
    uses the canonical closed-folder projection   ← how far things got (.done./.wip./pending)
 3. every claim of mine — path and status for all, and in full only the one this
    invocation continues, which is the first of them in canonical candidate order. When
-   the user's naming or the matched row continues work that is not a claim, this
+   the user named work that is not a claim, this
    invocation continues no claim — skip the full read and that claim's uncommitted
-   comparison and worktree question. With
+   comparison. With
    two or more claims of mine and a conversation naming neither a card nor a depth-1
    unit, do not guess and continue the first — another terminal may be carrying that
    card right now. Show the claim paths and ask which one to continue. For
@@ -88,7 +88,9 @@ to the normal procedure
    continues, neither an
    uncommitted change nor a commit outside integration whose subject contains a token
    exactly equal to that card's number, do not guess which folder is running it — show that listing's paths and branches
-   and ask whether to continue here or open it in that folder
+   and ask whether to continue here or open it in that folder. Ask this only at report
+   time, when the matched row is work and this invocation continues that claim — a row
+   going elsewhere leaves nothing to ask
 4. **Bounded verify projection** — Run a mechanical query that does not put every verify.md
    into model context. For each file, it emits only the four revisions and `Verdict`; the
    maximum source id per section;
@@ -190,7 +192,7 @@ locally during a blockade stay visible:
 | A task card has a `Depends` member that the state predicates cannot parse, or a dependency number does not point to exactly one card | split — replace it with the user-confirmed canonical dependency value and finish the planning commit |
 | My claimed card lacks `Approval` or `Review`, has `Approval: pending`, or has noncanonical `Depends` | split — checkpoint any current diff and progress log, release the card, normalize legacy dependencies, finish execution-proposal approval and the planning commit, then reclaim it |
 | My claimed card has a `Depends` target that is not `.done.` | split — release the original card and finish the prerequisite |
-| The current conversation carries a change request from the user that no journal line, verify entry, or card — pending or claimed — preserves yet | split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table |
+| The current conversation carries a change request from the user that no journal line or verify entry preserves yet and that canonical recognition does not resolve to an existing card — pending or claimed | split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table |
 | A card of mine is claimed | work |
 | An expected file has the canonical baseline predicates' exact `legacy v0.10` shape | with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone |
 | An expected file under the canonical baseline predicates is missing from HEAD, or an expected HEAD file with exactly one fixed boundary has a design section, design metadata, or current Design head that differs from the contract | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |
@@ -265,7 +267,9 @@ claim. An in-progress claim is never interrupted to digest.
 3. For each target commit, read its subject and changed paths. Read the diff only when it
    touches a shared document, the capability folder of the next claim candidate, or a
    `Read first` path on that candidate card. A commit whose subject has the canonical tweak form (`tweak ` after the id prefix)
-   touches no `devflow/` path by its own form, so subject and paths finish its classification. A
+   touches no `devflow/` path by its own form, so the shared-document judgment ends at
+   subject and paths — when it touches the candidate's capability folder or a `Read first`
+   path, read its diff like any other commit. A
    contradiction with a shared document lands
    through the discovery→update table. Fixing a shared document is a binding decision
    (the canonical rules' commit discipline)

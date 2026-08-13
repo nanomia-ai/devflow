@@ -549,7 +549,7 @@ test("requested verification and events do not preempt this session's claimed ca
   const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   assert.match(verify, /never preempts a task card claimed by this\s+session/);
-  assert.match(verify, /When this session was carrying a claimed task card, select no event/);
+  assert.match(verify, /When this session still holds a claimed card it was carrying, select no event/);
   assert.ok(
     resume.indexOf("| A card of mine is claimed | work |") <
       resume.indexOf("| journal contains an exact `product verification requested` line |"),
@@ -808,7 +808,7 @@ test("candidate selection has one canonical order", () => {
   assert.match(resume, /Resolve the target by the canonical\n   rules' canonical recognition/);
   assert.match(work, /in canonical\s+candidate order over my remaining claims/);
   assert.match(resume, /selected by\n<your request \| the last handoff \| canonical order>/);
-  assert.match(resume, /The current conversation carries a change request from the user that no journal line, verify entry, or card — pending or claimed — preserves yet \| split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table \|/);
+  assert.match(resume, /The current conversation carries a change request from the user that no journal line or verify entry preserves yet and that canonical recognition does not resolve to an existing card — pending or claimed \| split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table \|/);
   assert.ok(
     resume.indexOf("| The current conversation carries a change request") <
       resume.indexOf("| A card of mine is claimed | work |"),

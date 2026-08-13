@@ -178,7 +178,8 @@ Whenever a canonical procedure says to write or append a journal line, create
 The formats below are the sole canon for reserved journal records. Other skills fill in
 their values; they do not redefine the formats. Outside the reserved formats, journal
 admits only cross-task decisions and open items a person must decide, and such a line
-must start with the canonical timestamp and carry the id of an existing room — those two
+must start with the canonical timestamp and carry one token exactly equal to an existing
+room's id (a substring is not a match) — those two
 checks are what "attributed" means. `source-json` contains the whole of one
 locator below as a JSON string. Paths are repository-relative, hashes are unabbreviated full
 commit object IDs output by Git, and headings are verbatim document headings. A verify `source id` is a
@@ -509,8 +510,7 @@ decisions. These records do not directly change card or folder status. A task ca
   integrity anomaly. Release strips the whole suffix back to pending (the progress log
   stays in the card). `.done.` and `.stale.` stay unattributed — completion's ownership
   is git's memory
-- A person may hold several claims — a ready card may be claimed immediately, whatever
-  its unit. One card is carried by one session at a time: disk cannot tell terminals apart,
+- A person may hold several claims. One card is carried by one session at a time: disk cannot tell terminals apart,
   so never directing two terminals at one card is the user's part (README guideline)
 - `.done.` **only after the completion signal passes, the review that applies to the card
   passes, and the commit lands.** In this system, "verification" is reserved for verify's
@@ -560,7 +560,8 @@ tests when they have them, otherwise lint or build — and land a single
 `<id> tweak <unit number>: <what>` commit. Resolve `<id>` by the Identity and Rooms
 rules — with no room, the joining transition creates one, and that room commit is the
 sanctioned exception to this lane's no-devflow-path rule (it is the product of identity,
-not of the request). The unit
+not of the request). Creating a room is a binding decision, so it cannot land during a
+blockade — a roomless session does not tweak then; it reports the exact cause. The unit
 number is the depth-1 unit canonical recognition resolves, or `01` when none resolves.
 Several tweak items in one request bundle into one commit per depth-1 unit. Beyond that,
 no `devflow/` path
