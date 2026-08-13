@@ -69,7 +69,11 @@ installs — returning 18 and 9 findings, with both independently finding the sa
 cross-reference. All adopted findings were repaired, so the detail lives in the repaired text
 rather than here; a write-side coordinate sweep then closed four more gaps. Content
 preservation was proved mechanically: 218 units per language against a byte-verified backup,
-zero lost, one declared correction. All 91 Node tests pass, up from 87. README counts:
+zero lost, one declared correction. A follow-up consistency scan found the same drift once
+more in this file's own repair — item 1 still named two lenses in prose, one of them under a
+term the guideline does not use — and removed the names; section-number references, document
+map coverage, and decision-body uniqueness came back clean. All 91 Node tests pass, up from
+87. README counts:
 `—` 98→99 and 73→74, `**` unchanged.
 
 Files: `docs/design{,_ko}.md`, `docs/design-decisions{,_ko}.md`, `docs/design-backlog{,_ko}.md`,

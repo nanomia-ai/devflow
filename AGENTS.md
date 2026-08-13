@@ -134,15 +134,13 @@ lenses exist, when to stop, how to report — is defined once in
 procedure around it:
 
 1. **Design → independent refutation → apply → post-audit → re-audit of the fixes.**
-   Wording and design changes are confirmed by attacking them with independent passes: a
-   dedicated refuter, and a literal-execution simulator that walks the text as a naive
-   AI would. How to run one: start a fresh session or subagent that carries **no
-   implementation context**, give it only the changed files, and instruct it to refute
-   the change or walk it literally — the briefing template in guideline §8 is what you
-   hand it. Differentiate the lens across passes; the lenses are enumerated in guideline
-   §3-3 and nowhere else, because an identical lens re-walks the paths it already walked.
-   Always state that **zero findings is a valid result**: an agent told to find defects
-   will otherwise
+   Wording and design changes are confirmed by attacking them with independent passes.
+   How to run one: start a fresh session or subagent that carries **no implementation
+   context**, give it only the changed files, and hand it the briefing template in
+   guideline §8, which names the lens it is to run. Differentiate the lens across passes;
+   the lenses are enumerated in guideline §3-3 and nowhere else, because an identical lens
+   re-walks the paths it already walked. Always state that **zero findings is a valid
+   result**: an agent told to find defects will otherwise
    manufacture them. This pattern found real defects every round it ran —
    internal per-round finding counts converged 13→13→12→13→2 over successive campaigns
    (not every round is itemized in the CHANGELOG), so skipping it is not a shortcut, it
