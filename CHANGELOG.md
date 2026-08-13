@@ -6,6 +6,31 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-13 — independent implementation audit of the v0.14.0 plan and the current 0.14.1 source (no version change)
+
+Added a report-only audit that treats the v0.14.0 plan as requirements, the execution
+report as implementer claims, and the current 0.14.1 English skill text as authority. The
+audit confirms the principal architecture and both platform installations, then separates
+two possible silent-loss paths, seven stop-or-wrong-action paths, one trace-precision gap,
+one out-of-scope maintenance-canon drift cluster, and the already-recorded design tensions
+from their repair options. Three claims were measured in temporary Git repositories: an
+integration ancestor can still have one local-only descendant commit; a path-scoped commit
+of a shared file carries both sessions' hunks; and a tweak committed on detached HEAD is
+left on no named branch after checkout. The report also records a request-shape x branch-
+state x dirty-path x routing-state coordinate sweep, self-challenges for every adopted
+finding, bounded repair choices, and the fixtures a repair round would need. An owner-
+requested anti-misreading pass expands the compressed verdicts, execution-report claim
+adjudications, coordinate-sweep notation, and repair-feasibility labels with their causal
+mechanism, predicted operating result, and scope boundary; it does not change any finding,
+severity, or recommendation. No plan, execution report, audit guideline, deploy artifact,
+test, or manifest changed.
+
+Verification: all 87 Node tests pass; Korean/English structure and deploy-language checks
+pass inside that suite; both live plugin lists report enabled devflow 0.14.1; twelve core
+files are byte-identical across the repository, Codex cache, and Claude cache; the three
+input-document SHA-256 values remain recorded in the report. Files:
+`docs/rounds/v0.14.0/audit_ko.md`; `CHANGELOG.md`.
+
 ## docs — 2026-08-13 — guideline anti-rigidity pass, cold-start context for the report, and dated corrections on four stale design rows (no version change)
 
 Three owner-raised checks, each answered in the documents themselves. (1) The audit
