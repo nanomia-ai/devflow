@@ -90,8 +90,17 @@ Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/in
 | Claims move to the depth-1 unit axis, and one canonical candidate order settles every selection (v0.12.0) | The tree and the capability documents were already a domain axis, but claims stayed tied to the person axis. Keying `.wip.` to (id × depth-1 unit) expresses concurrency with zero new identifiers, and integrity item 1's two exceptions — reciprocal parallel approval and evidence-wait — were always exceptions inside one capability, so the scope now fits them exactly. Above that, several places asked "which one next" and answered differently; the canonical candidate order defines it once as the card the user named, then the session unit, then the carried unit, then the rest. It never changes which routing row matches and never makes an unready card ready. The recognition machine that lived only in domain entry was promoted to canon, and resume and the baseline predicates now cite it. A conversation change request routes above the claimed-card row, not below it as the plan proposed — the persisted `maintenance routing pending` form already outranks a claim, and once claims are normal in several units at once, placing the conversation form below would record it almost never. One person's two terminals share one id, so disk cannot tell them apart — that limit is stated in the README rather than hidden, and the approval on resume's report is the device that actually separates them |
 | Knowledge that used to die in HANDOFF now lands on two keyed lines (v0.12.0) | A maintenance card has no dependencies, so the knowledge chain broke there, and HANDOFF's `Just learned` and `Traps` were overwritten at the next boundary — reliably lost. Inside one capability the carrier is the card's `carry:` line: only the residue with nowhere else to land, one to three lines per card, and a reader takes only the lines written since that capability last passed verification, so the set is bounded. About another capability it is journal's `capability note`, which that capability's next closure harvests and deletes in the same sweep, giving it a defined lifetime. Reading whole progress logs was rejected as unachievable — hundreds of lines per card, and before a first closure every card in the capability qualifies. The carry line rides the final task commit so the canonical claim→done move stays byte-identical, and neither reviewer nor verifier receives the set — their ignorance is the asset. HANDOFF keeps only the next single step and open decisions, and that pointer becomes mandatory |
 
-| Git is a requirement, and worktrees are the flow registry (v0.12.0) | Two soft edges hardened after measurement. The no-Git degradation had to define what Approval, the integration tip, claims, prefixes, and the digest marker mean when none of them can run — six canon lines describing a devflow that is not devflow. Requiring Git costs one sentence and deletes all six; a repository without Git has no recovery, no claim, and no undo, which is not a weaker devflow but a different object under the same name. On worktrees, the recorded fear of needing a remote was measured and refuted: worktrees of one repository share one object store, so `git push . HEAD:<branch>` lands locally with no remote at all, a commit in one folder is visible from another with no fetch, and the only real constraint is that Git refuses to write to a branch another worktree has checked out. That makes `git worktree list --porcelain` exactly the durable per-flow identity the rejected `flows/` folder (X2) wanted: it survives a terminal dying, and `git worktree prune` cleans a folder that is gone, so it needs no closing point. Shared tree state is therefore the integration tip unioned with each worktree HEAD. devflow still creates and manages no worktree — it reads the one Git already keeps |
+| Git is a requirement, and worktrees are the flow registry (v0.12.0) | Two soft edges hardened after measurement. The no-Git degradation had to define what Approval, the integration tip, claims, prefixes, and the digest marker mean when none of them can run — six canon lines describing a devflow that is not devflow. Requiring Git costs one sentence and deletes all six; a repository without Git has no recovery, no claim, and no undo, which is not a weaker devflow but a different object under the same name. On worktrees, the recorded fear of needing a remote was measured and refuted: worktrees of one repository share one object store, so `git push . HEAD:<branch>` lands locally with no remote at all, a commit in one folder is visible from another with no fetch, and the only real constraint is that Git refuses to write to a branch another worktree has checked out. `git worktree list --porcelain` therefore enumerates the folders a repository has open, and `git worktree prune` cleans one that is gone. **Corrected in v0.13.0**: this row originally called that listing the durable per-flow identity the rejected `flows/` folder (X2) wanted, and derived shared tree state as the integration tip unioned with each worktree HEAD. A folder list is not a flow's identity — a folder can hold no flow, or a flow that died — and the union is overturned by the row below. devflow still creates and manages no worktree — it reads the one Git already keeps |
 | A change request is recorded immediately and planned later; a completion signal is scoped to its capability (v0.12.0) | Two halves of the same problem: what happens to work already in flight. Placing the maintenance row below the claim meant the request was never recorded once claims became normal in several units; placing the whole routing above it meant a passing remark interrupted the card. Splitting the row settles both — recording outranks the claim, planning yields to it. The build is the other half. Switching capabilities was supposed to need no procedure, but a half-finished edit in one unit fails the next unit's completion signal, and the failure ladder then treats a sound card as defective and calls the human after three strikes. Two devices close it: the switch checkpoints what is already changed, and split scopes each signal to the paths its capability owns. The second is what makes two terminals in one working tree survivable at all; the plan had left it as a recommendation |
+| Shared truth is one integration branch; another worktree's HEAD is evidence, not authority (v0.13.0) | v0.12.0 read shared tree state as the union of the integration tip and every worktree HEAD, and that rule breaks in both directions. A worktree that lags revives a card someone already finished, back into a claim. Excluding the laggard instead erases a live sibling's claim and hides work that is finished but not yet integrated, so the same card gets implemented twice. Both failures come from judging card state by branch-level freshness. The initial claim is already a binding decision that lands on integration, so reading integration alone shows every claim; reading another HEAD adds nothing and imports stale state. Its code and progress log are still that flow's evidence and arrive when it integrates - they are simply not used to judge shared state |
+| A shared transition is published against a remembered integration id (v0.13.0) | Even with integration checked out nowhere, two flows pushing at the same point make one of them lose, and that is concurrency control working rather than a failure. Without separating them, ordinary contention is misread as "integration unusable" and sends the session down the blocked path, scattering claims for no reason. The first measurement suggested the id itself could discriminate — an ordinary race leaves it changed, a worktree holding the branch refuses with it unchanged. The live concurrency run refuted that: a flow that reads integration *after* a sibling has already published remembers an id that then does not change, yet its rejection is an ordinary non-fast-forward. The mechanical test is therefore whether the integration tip is an ancestor of the branch being published — not an ancestor means ordinary contention, an ancestor with a refusal means a structural blocker — and both live cases classify correctly under it. Error text is never the discriminator, because it varies by locale and Git version. Three retries bound it, and sustained contention is reported rather than fed into the failure ladder. When integration truly cannot be written, only code edits and progress-log checkpoints of an already-claimed card continue: with no coordination point, no global answer exists for who minted what, while code and a progress log merge safely (measured on separate cards and on a done-rename against a log append). This is also what lets an orchestrator hold integration - it must then create the cards and claims there before starting a worker |
+| Several sessions in one working folder are normal, and their safety is five measured lines rather than a lock (v0.13.0) | The owner's daily practice is several terminals over different sections of one capability, so forbidding it removes the point of the tool. Measurement found only three collision points and all three close without a lock: a commit that names its own paths carries one file even while another session has staged others; four sessions appending to journal at once lose no line; and HANDOFF stops being contended once open decisions live in journal, because what remains is recomputed from the tree. On shared source files one folder is actually safer than two - a partial edit lands on top of what the other already wrote, while splitting into worktrees defers the same conflict to a human merge. Only a whole-file rewrite overwrites quietly, so one line forbids it. Nothing here blocks; every line is a way of not breaking |
+| One request that spans several capabilities keeps one source and one marker per parent (v0.13.0) | Mapping was written in the singular ("go to the matching capability folder"), with no definition for a request that determines three locations. A literal reader picks one and the rest vanish silently, journal line included, so nothing can recover them - the loss the owner guards against most. A client's fix list handled in one session is ordinary practice. Sharing one exact source locator across the parents' markers gives the bundle an identity with no new batch id, so resume recovers them together; one execution proposal and one approval keep a twenty-item list from needing several; and an ambiguous or retired unit asks before the begin commit instead of planning half and losing the rest |
+| Items that do not change the precondition-to-outcome transition ride one card (v0.13.0) | devflow had promotion for work that turns out too big and no exit for work that is too small, so a button colour paid record - map - card - proposal - approval - claim - fixed reads - implement - signal - review - commit - boundary. That reproduced exactly the heaviness the owner set out to escape. The test needed no new invention: the baseline predicates already exclude a button name, wording, or layout change when the precondition and outcome stay the same, so the same line now separates work too. Bundling is not omission - "too small to record" is never created, because one unrecorded path becomes the default path and turns into the steady loss of what should have been an asset |
+| Reading is bounded to open work: a depth-1 folder carrying `.done` is read by name (v0.13.0) | Twenty capabilities of thirty cards means six hundred filenames read every session, most of them `.done.` cards inside folders already closed, whose knowledge is folded into the capability document. Projecting names and statuses instead makes session cost proportional to open work rather than project history, which is the durability the owner asked for. Preserving only integrity items 3 and 11 is not enough: duplicate numbers, an active card's `Depends` resolving to exactly one `.done.` card, locator resolution, the `Covered cards` comparison, and next-number derivation all read closed history, and all of them are satisfied by names and statuses. Only item 4's field parse is narrowed, and a re-closure strips the folder's `.done` first, which returns those cards to it |
+| The flat Codex prompt channel is removed; the plugin cache carries the companions (v0.13.0) | Probed live (2026-08-13): Codex installs a plugin into `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/`, the whole repository, and the model reads its skill from that absolute path - so `../principles/SKILL.md` resolves there exactly as it does in Claude. The recorded reason for embedding ("the Codex prompt folder is flat, relative references are unreliable") was true of `~/.codex/prompts/` and does not reach the plugin. The eight prompts held 50-120 KB each, embedding the whole rulebook, and two installers each carried their own embedding logic, so every rule change had to be applied twice. Removing generation alone would leave earlier files callable, so cleanup deletes the exact eight names for one release, keyed to the generated marker, and a file a user wrote under one of those names survives |
+| A finished card's number is never renumbered (v0.13.0) | The draft had a duplicate number move a completed card to the mid-insertion form and update dependents. But a completed number also lives in commit subjects, external CI, issues, and people's links, which fixing files and dependencies never reaches; if two completed cards are already known outside under one number, which reference means which card is generally unrecoverable. And since numbers are minted only on integration, a duplicate can now only arise while a card is pending and unclaimed, where renumbering is cheap. Beyond that stage it is reported as an integrity anomaly instead |
+| Open decisions live in journal, so HANDOFF holds only what the tree recomputes (v0.13.0) | v0.7.0 rejected moving open decisions into journal as "one concept, two homes"; that reason is refuted by removing the section from HANDOFF entirely, which leaves exactly one home. The failure it now closes is concrete: HANDOFF is overwritten whole, one person's two sessions share one room, and both overwriting means one side's decisions are gone with no trace. journal is append-only and already accepted attributed open decisions on the departure path. What remains in HANDOFF is `Next single step`, which canonical candidate order recomputes, so a lost overwrite costs an ordering preference and no data |
 
 ## Borrowings and their boundary
 
@@ -249,6 +258,54 @@ Rejected in the v0.12.0 usage-flow redesign:
   would also have required amending "ordinary resume never reads a body". The reason clause
   and the alternatives list were adopted, because those do change which unit a user picks.
 
+Rejected in the v0.13.0 concurrency redesign:
+
+- **`merge=union` on journal** — measured and refuted. With one side consuming a request
+  and deleting its line while the other appends nearby, union revives the consumed request;
+  with one side replacing an `evidence-wait` record by `evidence-finalizing` while the other
+  appends, both records survive, which violates integrity item 13 with no handling rule.
+  A union that resurrects deleted state is worse than a conflict a person resolves.
+- **devflow creating or managing worktrees** — measured and refuted as a safety device.
+  Two worktrees editing the same region of one shared file conflict at merge time, while two
+  sessions in one folder do not, because the second edit lands on top of the first. Splitting
+  the folder buys build isolation, not safety; the v0.9.x rejection of managed worktrees
+  therefore still stands and needed no overturning.
+- **An atomic lock helper for shared files** — made unnecessary by measurement. A commit
+  naming its own paths and an append-only journal already give what a lock was wanted for.
+- **A helper script for compare-and-set publishing** — its necessity was never argued.
+  `git push . HEAD:<branch>` is fast-forward-only and `git update-ref <ref> <new> <old>` is
+  explicit compare-and-set, so no helper is required. Measurement also found `update-ref`
+  succeeds against a branch another worktree has checked out, silently desynchronizing that
+  worktree, while the push refuses — so the plain push is the safer primitive, not the
+  weaker one. Adding a script would change what devflow is: pure prompt text.
+- **A `legacy signal migration` marker state machine** — 25 to 40 canon lines for a residual
+  risk already bounded by work's existing rule that an uncommitted change in another unit's
+  claim is checkpointed first.
+- **A six-field disposition state machine for `capability note` at retirement** — 30 to 50
+  canon lines where one gate before the retirement commit closes it, mirroring the adjacent
+  clause that deletes evidence records at retirement.
+- **Ancestor-aware blob projection of other worktrees** — superseded by reading one
+  integration branch. Once no other HEAD is authority, a filter that adds only their claims
+  has nothing left to add.
+- **Per-worktree git identity** — technically possible (`extensions.worktreeConfig` plus
+  `git config --worktree`), and rejected on what follows: it rewrites commit authorship, so
+  integrity item 8's authorship check stops meaning what it says; it leaves a room per
+  folder that nothing closes; and it splits one person into several ids that the shared
+  documents then have to reconcile. The question "can it be done" was answered before the
+  question "what does it cost", which is the mistake this round set out to stop making.
+- **Splitting the capability knowledge baseline predicates into a read contract and a write
+  contract** — attempted, then folded on its own condition. The clause×consumer matrix is
+  not clean: identity and expected set, the document contract, metadata and freshness,
+  writers and replacement boundaries, the v0.10 migration, and accepted limits are all read
+  directly by arch, adopt, verify, and resume alike, which is most of the file. resume, the
+  supposed reader, needs the writer-eligibility rules for boundary recovery and the begin
+  commit; verify, a writer, needs the domain-entry role inputs. Every consumer would read
+  both files, which is the recorded condition for folding. Deferred rather than dropped.
+- **Splitting the canonical rules per consumer** — deferred, not rejected. Its failure mode
+  is bad: a rule work needs, filed under a verify-only heading, disappears with no error.
+  Mixing it into a release that also repairs ten defects would make it impossible to tell
+  which change broke what.
+
 ## Field observation items — watch during coming cycles, without adding rules
 
 - **Reaching prior records when maintenance reopens a capability** (verified 2026-08-08 ·
@@ -383,14 +440,30 @@ gate forces this document to be read).
   foundation card, or (B) return to design after foundation work. This changes the Layer 0
   and task-tree boundary, so the current order is not forcibly rearranged before the owner chooses.
 - **The size of the canonical rules** — the canonical rules grew from 217 lines (v0.9.9) to
-  648 lines (v0.12.0), and all 8 skills plus every delegated implementer read the whole document.
-  Counting the predicate companions, resume and verify read about 1,170 lines each session and arch
-  and adopt about 1,090.
-  Removing the mode fork gave 30 lines back and the usage-flow redesign spent more than that,
-  so this stays the largest open cost. For a T-low card, the journal formats, the 15 integrity
+  705 lines (v0.13.0), and all 8 skills plus every delegated implementer read the whole document.
+  Counting the predicate companions, resume reads about 1,543 lines each session and arch
+  about 1,400.
+  Removing the mode fork gave 30 lines back and the usage-flow and concurrency redesigns spent
+  more than that, so this stays the largest open cost. For a T-low card, the journal formats,
+  the 15 integrity
   items, the routing write order, the remote-evidence state machine, and the verification-state
   commits never
   fire once. The proportional answer is not deletion but **splitting the read scope per
   consumer** (what an implementer needs versus what a router or a recoverer needs), and it
   changes no on-disk data format, so it can be done safely at any time. Giving work, reviewer,
   and retrospector bounded projections in v0.11.0 is the first application of that split.
+  v0.13.0 attempted the same split on the baseline predicates and folded it — see the
+  rejection lineage for the matrix that decided it.
+- **Proportionality of the interrupted-recovery machinery** — about 150 of the canonical
+  rules' lines answer "what if the session dies mid-transition": markers, begin commits,
+  prefix comparison, byte-identity judgments, the `routing prepared` specification, and the
+  evidence-wait state machine, plus 15 to 20 of resume's 49 routing rows. Those transitions
+  take seconds; a session dies during a long implementation, not between a rename and a
+  commit. And devflow's own philosophy is to report an anomaly and fix it only after
+  approval, while these lines try to finish the transition automatically. Detecting the
+  half-done state and asking would keep detection and drop the completion, at roughly a
+  third of the size. Three reasons it was not done in v0.13.0: it is a different axis from
+  concurrency, and mixing them hides which change broke what; the recorded rejection reason
+  from v0.9.21 was "the problem was ambiguity, not interruption", and that has to be refuted
+  first; and nobody has measured whether those 150 lines actually cost session quality. The
+  first real cycles are what answer that.

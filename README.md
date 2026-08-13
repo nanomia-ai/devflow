@@ -128,8 +128,8 @@ devflow/
       02.3-webhook.md               a waiting card
       verify.md                     capability verification record (left by verify)
     03-reporting.md               one-heading waiting file for an unopened capability
-  journal.md                   ← one-line cross-task decisions + the fixed-format state lines the canonical rules define (only the decisions are swept)
-  users/<id>/                  ← your room — owner.md (identity) · digest.md (marker) · HANDOFF.md (the next single step and open decisions, overwritten each time)
+  journal.md                   ← one-line cross-task decisions and open items a person must decide + the fixed-format state lines the canonical rules define (only the decisions are swept)
+  users/<id>/                  ← your room — owner.md (identity) · digest.md (marker) · HANDOFF.md (the next single step, overwritten each time)
 ```
 
 A new project's first tree contains only capability waiting files. The next layer creates
@@ -442,9 +442,9 @@ only from the entry list.
 - **What was not executed is not passed — it is unverified.**
 - **1 task = 1 commit.** Only after the completion signal and review pass. Rollback = one revert.
 - **Measured answers flow back into documents (upper-document feedback).** Guesses live in the Provisional table and are replaced once measured.
-- **Handoff carries a pointer and open decisions.** The tree answers where, the progress
-  log answers how, and what a card learned rides its carry line. HANDOFF keeps the next
-  single step and the decisions that need a person.
+- **Handoff carries one pointer.** The tree answers where, the progress
+  log answers how, and what a card learned rides its carry line. An open item that needs a
+  person stays as one journal line.
 
 The full "why" (decision table · rejection lineage) is in [docs/design.md](docs/design.md).
 **To overturn a decision, refute its recorded reason first.**
@@ -457,7 +457,7 @@ repository, every session works out of its own room. No flag to set, no mode to 
 ```
 devflow/
   project/  tree/  journal.md   ← shared truth — one service, one set of documents
-  users/<id>/                   ← personal room — owner.md (identity) · HANDOFF.md (my handoff) · digest.md (marker)
+  users/<id>/                   ← personal room — owner.md (identity) · HANDOFF.md (the next step) · digest.md (marker)
 ```
 
 The split axis is not people but the **scope of truth**. Documents with a single truth are
@@ -502,15 +502,26 @@ first). The first two happen at boundaries; the third runs even while a card is 
 Working alone, all of this costs **one commit per card** — the claim. That one commit is
 what lets two terminals, or two worktrees, see each other's work in progress.
 
-**Worktrees are the clean way to run two flows at once.** Every worktree of one repository
-shares a single history store, so a claim made in one folder is visible from the other with
-no remote and no fetch, and each folder has its own uncommitted files — the half-finished
-edit in one cannot break the other's tests. devflow reads `git worktree list` and treats
-each entry as a live flow. Two limits are worth knowing. Git will not let one worktree
-write to a branch another has checked out, so binding decisions land from the worktree
-holding the integration branch. And two sessions of one person share one id, so disk cannot
-tell them apart; when several capabilities are open and you have not said which one you
-want, resume asks instead of guessing.
+**Two terminals in one folder are safe.** Each session claims its own card and runs.
+Three measurements back that. A commit that names its own paths does not pick up a file
+another session staged first. Four sessions appending to the journal at once lose no line.
+Two people editing different parts of one source file both survive, and the same spot fails
+loudly instead of overwriting quietly. So there is one rule. While another flow is alive,
+edit the part that changes rather than rewriting a file whole.
+
+**Worktrees buy build isolation, not safety.** Split the folder and each side gets its own
+uncommitted files, so half-written code on one cannot break the other's tests. On shared
+files one folder is actually better. Splitting does not remove a conflict; it defers it to
+whoever merges. Every worktree of one repository shares a single history store, so a claim
+made in one folder is visible from the other with no remote and no fetch.
+
+Three limits are worth knowing. Git will not let one worktree write to a branch another has
+checked out, so it pays to leave the integration branch checked out nowhere. Then any
+folder can land a binding decision. **If your team protects main and takes only pull
+requests, point integration at an unprotected branch and raise the PR from there** —
+claiming a card has to land at once, and it cannot wait for a review. And two sessions of
+one person share one id, so disk cannot tell them apart; when several capabilities are open
+and you have not said which one you want, resume asks instead of guessing.
 
 Every room transition is a single-commit procedure:
 
@@ -518,7 +529,7 @@ Every room transition is a single-commit procedure:
 |---|---|
 | Teammate joins | make a room (owner.md) + marker = current HEAD. Done |
 | Upgrading from a pre-0.12 project | arch adds `integration` and `merge` → identity resolution makes your room → work renames `.wip.` to `.wip-<id>.` and moves HANDOFF into the room |
-| Teammate leaves | (after the user declares it) anyone remaining: promote open decisions to journal (attributed) → release their claims → delete the room |
+| Teammate leaves | (after the user declares it) anyone remaining: move any legacy `Open decisions` section left in that room into journal (attributed) → release their claims → delete the room |
 
 Half-finished upgrades (a bare `.wip.` or a root HANDOFF still sitting there) are
 among the things the integrity check above catches, and resume sends them back to work.
@@ -570,15 +581,19 @@ asks once whether to trust it.
 hooks = true
 ```
 
-Skills are invoked by the model on its own. If you also want **explicit slash commands**
-like `/devflow-work`, clone the repository and run `codex/install.ps1` (Windows) or
-`codex/install.sh` (macOS/Linux) — that script writes the 8 commands into
-`~/.codex/prompts/`. It removes the global hook registration left by pre-0.9.20 installs
-(and pre-0.9.0 `nano-devflow` ones) only after the native plugin install is confirmed. If
-installation fails, it leaves the
-existing hook untouched and tells you to invoke `/devflow-resume` explicitly. It embeds
-the canonical rules and companion documents in each prompt, since the prompt
-folder is flat and cross-file references are unreliable there.
+Skills are invoked by the model on its own. Before 0.13.0 a second channel wrote eight
+`/devflow-*` slash commands into `~/.codex/prompts/`; it is gone. Every prompt had to
+embed the whole rulebook, and one rule change meant matching the embedding logic in two
+installers. The plugin now delivers the skills together with their companion files, so a
+`../principles/SKILL.md` reference resolves exactly as it does in Claude.
+`codex/install.ps1` (Windows) and `codex/install.sh` (macOS/Linux) register this folder as
+a marketplace for local development and delete only the prompts devflow generated, keyed to
+their marker — a file you wrote under the same name stays.
+
+The hook is handed over in two steps, because trusting a hook is your decision and not the
+installer's. The install leaves the pre-0.9.20 global registration running and prints the
+one command that removes it, for after you have opened `/hooks` and seen the plugin entry
+yourself.
 
 After installing, `codex plugin list` should show `devflow@nanomia`. If it does not, the
 usual cause is **another marketplace in your Codex config whose folder is gone** — a
@@ -591,6 +606,20 @@ you can see which home the run used.
 > Why there is only one hook: the covenant of writing the progress log to disk at every
 > step makes PreCompact protection unnecessary, and a Stop hook fires every turn — noise.
 > SessionStart alone covers it.
+
+## What this does not cover
+
+A tool that knows its edges earns trust. These are the places devflow does not protect.
+
+| Situation | Why |
+|---|---|
+| Two sessions rewriting one file whole | Partial edits are safe against each other, and only a whole rewrite overwrites quietly. One rule stops it; nothing stops you from breaking that rule |
+| Minting numbers or claims in two clones with no shared write point | Unable to see each other, both flows legitimately claim the same card. You need a shared ref, a coordinator, or an assignment made in advance |
+| Knowing which paths a card will write | `Read first` is an input set. New files and mid-implementation discoveries are future information |
+| Trusting a hook without you | That removes the trust boundary; it is not automation |
+| Completion signals of two flows sharing one database, port, or dev server | File isolation is not runtime isolation. split keeps work that touches a shared dev server sequential |
+| Global consistency of state created outside integration | With no coordination point there is no global answer |
+| Cost advantage on a small project | One card per session runs about 2.6× ordinary development. More cards per session and a bigger codebase turn that around |
 
 ## Other agents (Cursor, Copilot, opencode, …)
 

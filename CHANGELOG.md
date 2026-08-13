@@ -6,6 +6,191 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-13 — second verification round: four independent passes, a use-case matrix, and two report corrections (no version change)
+
+Ran the independent refutation AGENTS.md requires and the first round could not provide:
+four clean-context passes with distinct lenses (literal usage walk over six scenarios ·
+refuter over the changed canon · record-loss channel audit · subtraction audit), every
+finding adjudicated against the actual text. Result: 18 confirmed defects with prepared
+repairs (all local sentence fixes — among them a dead end in work's precondition 3 when the
+user names a card in a unit I already claim, verify's two-class journal classifier
+rejecting the content classes the canon now allows, and an undefined Design-head gate for
+absent candidate documents), 13 judgment calls with recommendations (the one data-loss
+path: blocked-integration sessions have no disk parking for new requests and observations),
+8 watch items, 4 rejected finding groups with reasons. **No skill text was changed — repairs
+await owner approval.** Added `docs/v0.13.0-usecase-matrix_ko.md` (human request, arrangement, and team
+forms × AI entry points — widened on owner direction to worktree and team variables, which
+surfaced three new gaps: a skill entered from a subfolder can create a nested devflow root,
+checkpoints strand on branches nobody reads when a worktree is deleted or a teammate is
+away, and nothing records the devflow version a repository assumes, so mixed-version teams
+judge shared state differently; plus the earlier reachability gap where provider-document
+traps do not reach the first cross-capability consumer) and
+`docs/v0.13.0-verification-round2_ko.md` (rewritten as a prose risk review after a
+self-check for over-interpretation that retracted one repair, corrected another, and
+softened five — repairs stay unapplied by owner decision). Corrected two defects in the execution report directly, as document-fact fixes:
+it never said the release is uncommitted (a next session would have pushed a history
+missing 0.13.0), and the Codex companion-resolution claim is downgraded from measured to
+strong inference. Files: `docs/v0.13.0-usecase-matrix_ko.md`,
+`docs/v0.13.0-verification-round2_ko.md`, `docs/v0.13.0-execution-report_ko.md`,
+`CHANGELOG.md`.
+
+## v0.13.0 — 2026-08-13 — one integration branch, several hands, and reading bounded to open work
+
+**Concurrency became a model instead of a hint.** v0.12.0 read shared tree state as the
+union of the integration tip and every worktree HEAD, and that rule fails in both
+directions: a lagging worktree revives a finished card back into a claim, and excluding the
+laggard erases a live sibling's claim so the same card gets implemented twice. The
+canonical rules now carry three consecutive paragraphs in `## Identity and Rooms` where the
+scattered `Worktrees are flows` paragraph stood. Shared truth is the integration branch
+alone — card status, tree numbers, verify source ids, journal, capability documents, and
+binding decisions — and another worktree's HEAD is evidence not yet integrated. A shared
+transition is published against a remembered integration commit id, and a rejection is
+classified by one mechanical test: integration not an ancestor of the branch being
+published is ordinary contention and retries up to three times, integration an ancestor
+with a refusal is a structural blocker and is reported with its exact cause. Error text is
+never used, because it varies by locale and Git version. When integration truly cannot be
+written, only code edits and progress-log checkpoints of an already-claimed card continue.
+And several sessions in one working folder are normal, protected by five lines that were
+measured rather than assumed. `resume`'s `(the integration tip unioned with each worktree
+HEAD)` is gone with it, so the two contradictory authorities no longer coexist.
+
+**Measured before written.** Every claim above was run in throwaway Git repositories first:
+`git push . HEAD:<branch>` lands locally with no remote; a worktree holding the branch
+refuses the push with the branch id unchanged; a commit naming its own paths carries one
+file while another session has others staged; four sessions appending to one journal lose
+no line; `git update-ref` *succeeds* against a branch another worktree holds, which is why
+the plain push is the safer publish primitive and no compare-and-set helper is added. Those
+runs are now fixtures in `scripts/git-state-transitions.test.js` instead of prose.
+
+**And a live concurrency run refuted the plan's own rule.** The plan classified a rejected
+publish by whether the remembered integration id had changed. Driving two worktrees for
+real produced the case that test cannot see: a flow that reads integration *after* a
+sibling has already published remembers an id that then never changes, yet its rejection is
+an ordinary non-fast-forward. Classifying it as a structural blocker would have sent a
+routine race down the blocked path. The mechanical test is therefore the ancestor relation
+— not an ancestor means contention, an ancestor with a refusal means a structural blocker —
+and both live cases fall correctly under it. The measurement is pinned as a fixture.
+
+**Knowledge stopped leaking at three seams.** A capability closure used to delete every
+`capability note` for that capability from the *current* journal, so an observation another
+flow appended after the begin commit was deleted unread; the sweep now removes only lines
+byte-identical to the multiset collected from the journal blob at the marker's `head`.
+Retiring a capability used to strand its observations forever, because their only consumer
+is that capability's next closure; product now enumerates them before the retirement is
+confirmed and puts the user's chosen discard or re-target in the same commit. And an
+observation about a shared contract or the foundation had no row in the discovery→update
+table, though it is the observation most often found while working elsewhere; one row now
+sends it to an ADR, to arch.md's `Risks`, or to one journal line.
+
+**Seven reproduced defects closed.** resume reported one card while work would take another,
+because work's remote-evidence transitions run before card selection — an evidence row now
+sits above both work rows and the report quotes work's own selection. Maintenance mapping
+could run against a stale capability boundary; split now projects `Design head` before
+mapping and resume routes the design refresh above the maintenance row. A corrupted
+`Covered cards` left the carry-line complement undefined; work and the baseline predicates
+now make the same decision — treat every completed card as unharvested rather than guess
+the empty set. Parking a card re-claimed it immediately through canonical candidate order;
+the switch now claims the card the user named or asks. Card recall deleted the original and
+let the next minting reuse its number; it now leaves a `.stale.` tombstone and moves
+dependents. A room upgrade broke evidence records' card paths; the rename and the
+`card-json` replacement now ride one commit. And a duplicate number no longer renumbers a
+finished card, whose number also lives in commit subjects and outside links.
+
+**Reading is bounded to open work.** Inside a depth-1 folder carrying `.done`, the integrity
+check and resume read path names and status suffixes only — that folder's knowledge is
+already folded into its capability document. All fifteen integrity items were mapped against
+that projection: only item 4's field parse narrows, and a re-closure strips the folder's
+`.done` first, which returns those cards to it. Approval freshness moved from two Git
+commands per card to two for the whole tree, but only after a fixture proved the two
+methods judge identically across deletion, rename, staged-versus-worktree, nested, Unicode,
+and punctuated paths — `-z` and `--no-renames` are what make that hold.
+
+**One Codex channel.** The eight generated `~/.codex/prompts/devflow-*.md` slash prompts are
+gone. Probing a live Codex install showed it caches a plugin as the whole repository under
+`~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/` and the model reads its skill
+from that absolute path, so `../principles/SKILL.md` resolves exactly as it does in Claude
+— the recorded reason for embedding applied to the flat prompts folder, not to the plugin.
+Each prompt embedded the whole rulebook at 50–120 KB and both installers carried their own
+embedding logic, so every rule change had to be applied twice. Generation is removed and a
+new marker-keyed cleanup deletes the exact eight names for one release, leaving a file a
+user wrote under one of those names alone. `scripts/extract-adopt-reference.js` existed only
+for that channel and is deleted with it. Hook trust is now two-stage: the install leaves the
+pre-0.9.20 global registration running and prints the command that removes it, for after you
+have opened `/hooks` and seen the plugin entry yourself.
+
+**The SessionStart hook finds its checkout.** It read `process.cwd()` directly, so a session
+started in any subfolder exited silently. It now takes `cwd` from the hook payload and asks
+`git rev-parse --show-toplevel`, with four fixtures covering repository root, one level
+down, several levels down, and a checkout with no devflow.
+
+**Open decisions moved out of HANDOFF into journal.** v0.7.0 rejected that move as "one
+concept, two homes"; removing the section from HANDOFF entirely leaves exactly one home and
+refutes the reason. HANDOFF is overwritten whole and one person's two sessions share one
+room, so both writing meant one side's decisions vanished; what remains is `Next single
+step`, which canonical candidate order recomputes.
+
+**Folded on its own condition**: splitting the baseline predicates into a read contract and
+a write contract. The clause×consumer matrix is not clean — most of the file is read
+directly by arch, adopt, verify, and resume alike, resume needs writer-eligibility rules for
+recovery, and verify needs the domain-entry role inputs — so every consumer would read both
+files. Splitting the canonical rules per consumer stays deferred for the same-round reason.
+
+README tone counts (v0.12.0 → v0.13.0): README.md `—` 92→92, raw `**` markers 113→115,
+`-tion/-ure` nouns 6→9; README_ko.md `—` 65→67, raw `**` markers 101→103, `-tion/-ure`
+nouns 0→0. The three added English nouns are `build isolation` and `File isolation is not
+runtime isolation`, both noun-against-noun contrasts rather than verbs in disguise.
+
+Files: `skills/principles/SKILL_ko.md`·`SKILL.md`;
+`skills/principles/state-predicates_ko.md`·`state-predicates.md`;
+`skills/principles/baseline-predicates_ko.md`·`baseline-predicates.md`;
+`skills/split/SKILL_ko.md`·`SKILL.md`; `skills/work/SKILL_ko.md`·`SKILL.md`;
+`skills/verify/SKILL_ko.md`·`SKILL.md`; `skills/resume/SKILL_ko.md`·`SKILL.md`;
+`skills/arch/SKILL_ko.md`·`SKILL.md`; `skills/product/SKILL_ko.md`·`SKILL.md`;
+`README_ko.md`·`README.md`; `codex/AGENTS-devflow_ko.md`·`AGENTS-devflow.md`;
+`codex/install.ps1`; `codex/install.sh`; `scripts/session-start.js`;
+`scripts/session-start.test.js`; `scripts/remove-generated-codex-prompts.js`;
+`scripts/remove-generated-codex-prompts.test.js`; `scripts/git-state-transitions.test.js`;
+`scripts/repository-invariants.test.js`; deleted `scripts/extract-adopt-reference.js` and
+`scripts/extract-adopt-reference.test.js`; `docs/design_ko.md`·`design.md`;
+`docs/v0.12.0-usage-flow-report_ko.md`; `docs/v0.13.0-execution-report_ko.md`;
+`.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `CHANGELOG.md`.
+
+## docs — 2026-08-13 — feasibility resolutions added to the v0.13.0 plan audit (no version change)
+
+Expanded `docs/v0.13.0-plan-validation-report_ko.md` without changing the plan. Every
+finding now separates reproduced facts from proposed repairs and design judgment. The new
+resolution chapter records measured local and remote Git ref compare-and-swap behavior;
+recommends an integration-only coordination plane, claim-generation fencing, isolated card
+workspaces, and a finite deterministic transition helper; distinguishes the minimal
+one-writer profile from optional same-root managed-worktree routing; and defines recovery
+for multi-domain request sources, journal races, foundation knowledge, orchestrators,
+clones, and takeover. Added corresponding flow simulations, absolute limits, and acceptance
+fixtures. No deployed skill, predicate, role contract, installer, manifest, hook, or version
+changed. Files: `docs/v0.13.0-plan-validation-report_ko.md`, `CHANGELOG.md`.
+
+## docs — 2026-08-13 — independent validation of the v0.13.0 implementation plan (no version change)
+
+Added `docs/v0.13.0-plan-validation-report_ko.md`, a report-only design audit of the
+unimplemented v0.13.0 plan. It separates same-working-tree terminals, worktrees sharing a
+Git common directory, and independent clones; records reproducible failures in the proposed
+claim projection and journal union merge; distinguishes normal ref races from structural
+integration failures; and gives technical feasibility limits, bounded repair alternatives,
+security and platform constraints, an implementation order, and executable acceptance
+fixtures. The plan itself and all deployed skills, predicates, role contracts, installers,
+manifests, and hooks were left unchanged. Files:
+`docs/v0.13.0-plan-validation-report_ko.md`, `CHANGELOG.md`.
+
+## docs — 2026-08-12 — independent validation of the v0.12.0 usage-flow implementation (no version change)
+
+Added `docs/v0.12.0-usage-flow-validation-report_ko.md`, a report-only audit that treats
+the v0.12.0 execution report as the current decision record and the deployed skills as
+literal runtime truth. It records the flows that work, reproducible state-transition and
+platform-delivery defects, coordinate sweeps, technical solvability (including the limits
+that require isolation, serialization, or explicit hook trust), repair order, and executable
+acceptance fixtures for the next design session. No deployed skill, predicate, role
+contract, installer, manifest, hook, or version changed. Files:
+`docs/v0.12.0-usage-flow-validation-report_ko.md`, `CHANGELOG.md`.
+
 ## 0.12.0 — 2026-08-12 — one mode, claims on the capability axis, knowledge that outlives a handoff
 
 devflow modeled the person and never modeled the work that flows concurrently. One person
