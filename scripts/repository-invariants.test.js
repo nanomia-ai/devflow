@@ -22,9 +22,11 @@ const pairRelatives = [
   "codex/AGENTS-devflow_ko.md",
   "README_ko.md",
   "docs/design_ko.md",
-  "docs/capability-knowledge-proposal_ko.md",
-  "docs/v0.11.0-domain-knowledge-redesign-report_ko.md",
-  "docs/v0.9.21-redesign-report_ko.md",
+  "docs/design-decisions_ko.md",
+  "docs/design-backlog_ko.md",
+  "docs/rounds/v0.10.0/proposal_ko.md",
+  "docs/rounds/v0.11.0/report_ko.md",
+  "docs/rounds/v0.9.21/report_ko.md",
 ];
 
 function count(text, pattern) {
@@ -35,6 +37,9 @@ function shape(text) {
   return {
     headings: count(text, /^#{1,6}\s+/gm),
     numberedItems: count(text, /^\s*\d+\.\s+/gm),
+    // Unordered items count too: documents that are mostly bullets (the backlog) could
+    // otherwise lose an item in one language and still pass this check.
+    bulletItems: count(text, /^\s*[-*]\s+/gm),
     tableRows: count(text, /^\s*\|.*\|\s*$/gm),
     diagrams: count(text, /^```mermaid\s*$/gm),
   };
@@ -70,9 +75,11 @@ test("English deploy artifacts contain no Korean except README's language switch
     "README.md",
     "CHANGELOG.md",
     "docs/design.md",
-    "docs/capability-knowledge-proposal.md",
-    "docs/v0.11.0-domain-knowledge-redesign-report.md",
-    "docs/v0.9.21-redesign-report.md",
+    "docs/design-decisions.md",
+    "docs/design-backlog.md",
+    "docs/rounds/v0.10.0/proposal.md",
+    "docs/rounds/v0.11.0/report.md",
+    "docs/rounds/v0.9.21/report.md",
     "codex/AGENTS-devflow.md",
     "codex/install.ps1",
     "codex/install.sh",
@@ -94,6 +101,91 @@ test("English deploy artifacts contain no Korean except README's language switch
       .filter((line) => /[\uAC00-\uD7A3]/.test(line));
     const expected = relative === "README.md" ? 1 : 0;
     assert.equal(matches.length, expected, `${relative}: lines containing Korean`);
+  }
+});
+
+test("the decision index and the decision bodies hold the same identifiers", () => {
+  for (const [indexFile, bodyFile] of [
+    ["docs/design.md", "docs/design-decisions.md"],
+    ["docs/design_ko.md", "docs/design-decisions_ko.md"],
+  ]) {
+    const index = fs.readFileSync(path.join(root, indexFile), "utf8");
+    const body = fs.readFileSync(path.join(root, bodyFile), "utf8");
+    const indexed = [...index.matchAll(/^\|\s*(DD-\d+)\s*\|/gm)].map((m) => m[1]);
+    const bodied = [...body.matchAll(/^###\s+(DD-\d+)\s+·/gm)].map((m) => m[1]);
+    assert.ok(indexed.length > 0, `${indexFile}: no indexed decisions`);
+    assert.deepEqual(new Set(indexed).size, indexed.length, `${indexFile}: duplicate index rows`);
+    assert.deepEqual(new Set(bodied).size, bodied.length, `${bodyFile}: duplicate decision bodies`);
+    assert.deepEqual([...indexed].sort(), [...bodied].sort(),
+      `${indexFile} and ${bodyFile} disagree on which decisions exist`);
+  }
+});
+
+test("decision and rejection identifiers are dense, unreused, and carry a known state", () => {
+  const body = fs.readFileSync(path.join(root, "docs/design-decisions.md"), "utf8");
+  for (const [prefix, pattern] of [
+    ["DD", /^###\s+(DD-\d+)\s+·/gm],
+    ["DR", /\*\*\[(DR-\d+)\s+·/g],
+  ]) {
+    const ids = [...body.matchAll(pattern)].map((m) => m[1]);
+    const numbers = ids.map((x) => Number(x.slice(3))).sort((a, b) => a - b);
+    assert.deepEqual(new Set(numbers).size, numbers.length, `${prefix}: an identifier is reused`);
+    assert.deepEqual(numbers, numbers.map((_, i) => i + 1), `${prefix}: identifiers are not dense from 1`);
+  }
+  const states = [...body.matchAll(/\|\s*State:\s*(.+)$/gm)].map((m) => m[1].trim());
+  assert.ok(states.length > 0, "no decision states found");
+  for (const state of states) {
+    assert.ok(
+      state === "active"
+        || /^replaced by DD-\d+ \(v\d+\.\d+\.\d+\)$/.test(state)
+        || /^active, partly corrected by DD-\d+ \(v\d+\.\d+\.\d+\)$/.test(state),
+      `unknown decision state: ${state}`,
+    );
+  }
+});
+
+test("every docs path a document names resolves to a file that exists", () => {
+  const files = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name === ".git" || entry.name === "node_modules") continue;
+      const p = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(p);
+      else if (entry.name.endsWith(".md")) files.push(p);
+    }
+  };
+  walk(root);
+  const dangling = [];
+  for (const file of files) {
+    const relative = path.relative(root, file).replace(/\\/g, "/");
+    // CHANGELOG entries name the paths as they stood in that release; they are history.
+    if (relative === "CHANGELOG.md") continue;
+    const text = fs.readFileSync(file, "utf8");
+    for (const match of text.matchAll(/\bdocs\/[A-Za-z0-9._/-]+\.md\b/g)) {
+      const target = match[0];
+      // Round records quote platform documentation (docs/hooks.md) and user-project
+      // examples (docs/specs/...) that live outside this repository. Only paths in this
+      // repository's own docs namespace are checked.
+      const ours = target.startsWith("docs/rounds/")
+        || /^docs\/(design|audit-guideline|usecase-matrix|capability-knowledge|v0\.)/.test(target);
+      if (!ours) continue;
+      if (!fs.existsSync(path.join(root, target))) dangling.push(`${relative} -> ${target}`);
+    }
+  }
+  assert.deepEqual(dangling, [], "documents name docs paths that do not exist");
+});
+
+test("the maintenance gate names the canon files and both standing instruments", () => {
+  const agents = fs.readFileSync(path.join(root, "AGENTS.md"), "utf8");
+  for (const required of [
+    "docs/design.md",
+    "docs/design-decisions.md",
+    "docs/design-backlog.md",
+    "docs/audit-guideline_ko.md",
+    "docs/usecase-matrix_ko.md",
+    "docs/rounds/",
+  ]) {
+    assert.ok(agents.includes(required), `AGENTS.md never names ${required}`);
   }
 });
 
@@ -344,7 +436,7 @@ test("a capability pass cannot close with old gates and its closure is prefix-re
 });
 
 test("capability knowledge has one executable canon and bounded consumers", () => {
-  const proposal = fs.readFileSync(path.join(root, "docs", "capability-knowledge-proposal.md"), "utf8");
+  const proposal = fs.readFileSync(path.join(root, "docs", "rounds", "v0.10.0", "proposal.md"), "utf8");
   const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
   const arch = fs.readFileSync(path.join(root, "skills", "arch", "SKILL.md"), "utf8");
   const adopt = fs.readFileSync(path.join(root, "skills", "adopt", "SKILL.md"), "utf8");

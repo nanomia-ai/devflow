@@ -2,8 +2,8 @@
 
 작성: 2026-08-12  
 검증 대상: `4559f31` (`main`, 로컬 미push)  
-현재 구현 리포트: `docs/v0.12.0-usage-flow-report_ko.md`  
-기획·역사 기준선: `docs/plan-usage-flow_ko.md`  
+현재 구현 리포트: `docs/rounds/v0.12.0/report_ko.md`  
+기획·역사 기준선: `docs/rounds/v0.12.0/plan_ko.md`  
 상태: **보고 전용. 스킬·정본·설치기 수정 없음**
 
 ---
@@ -12,11 +12,11 @@
 
 이 검증은 기획서를 다시 구현하라는 검토가 아니다. 문서의 권위는 다음 순서로 두었다.
 
-1. `docs/v0.12.0-usage-flow-report_ko.md` — 현재 구현에서 최종적으로 채택한 결정과 그 실행
+1. `docs/rounds/v0.12.0/report_ko.md` — 현재 구현에서 최종적으로 채택한 결정과 그 실행
    리포트
 2. `skills/**`와 동반 정본·역할 계약 — AI가 실제로 문자 실행하는 현재 동작
 3. `docs/design.md` — 그 동작을 선택한 이유와 기각 계보
-4. `docs/plan-usage-flow_ko.md` — 구현 전 문제 정의와 비교 기준선
+4. `docs/rounds/v0.12.0/plan_ko.md` — 구현 전 문제 정의와 비교 기준선
 
 따라서 기획과 현재 리포트가 다르면 **현재 리포트의 결정이 이긴다.** 이 검증에서 결함으로 센
 것은 “기획과 달라졌다”가 아니라 다음 네 종류뿐이다.
@@ -169,8 +169,8 @@ devflow는 라이브러리 코드가 아니라 **AI 세션이 그대로 읽고 �
 ### 3.1 읽은 범위
 
 - `AGENTS.md`, `docs/design.md`
-- `docs/plan-usage-flow_ko.md` 722줄
-- `docs/v0.12.0-usage-flow-report_ko.md` 865줄
+- `docs/rounds/v0.12.0/plan_ko.md` 722줄
+- `docs/rounds/v0.12.0/report_ko.md` 865줄
 - 영문 배포 스킬 9개
 - 상태·검증·능력 지식 기준선 판정 정본 3개
 - 역할 계약 4개
@@ -363,7 +363,7 @@ Codex의 보조 명시 호출 채널이 현재 플랫폼 계약을 완전히 따
 ### R-02 · 현재 리포트의 워크트리 대표 예제가 정본상 실행 불가다
 
 **등급: 높음**  
-**근거:** `docs/v0.12.0-usage-flow-report_ko.md:657-670`,
+**근거:** `docs/rounds/v0.12.0/report_ko.md:657-670`,
 `skills/principles/SKILL.md:79-81,624-631`, `skills/work/SKILL.md:101-107`
 
 현재 리포트 §7.2는 다음 구조를 보여 준다.
@@ -823,7 +823,7 @@ worktree를 devflow가 만들거나 관리하지 않는다는 현재 결정을 �
 ### D-01 · 현재 리포트의 CHANGELOG 면제 선언이 저장소 규율과 충돌한다
 
 **등급: 낮음**  
-**근거:** `AGENTS.md:14-16`, `docs/v0.12.0-usage-flow-report_ko.md:24-25`
+**근거:** `AGENTS.md:14-16`, `docs/rounds/v0.12.0/report_ko.md:24-25`
 
 AGENTS.md는 **모든 수정 뒤** CHANGELOG 최상단에 날짜·무엇·왜·파일을 쓰며, 없으면 미완이라고
 규정한다. 현재 리포트는 “배포 산출물이 아니므로 CHANGELOG 항목도 없다”고 반대로 선언한다.

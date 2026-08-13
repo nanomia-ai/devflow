@@ -167,7 +167,7 @@ tree·카드·users가 소유해야 한다.
 요약한 카드 번호를 Covered cards에 기록한다. 연대기, 담당자, 진행률, 다음 작업은 넣지 않는다.
 work는 모든 변화 카드를 자동 통독하지 않고 기존 읽기 집합을 유지한다. verify는 최종 폐쇄에서 기본
 갱신 집합을 한 번 읽고, 저장 Covered 비교가 바뀐 때에만 Covered history 확장을 더해 압축한다. 상세
-계약과 시뮬레이션은 `docs/capability-knowledge-proposal.md`에 있다.
+계약과 시뮬레이션은 `docs/rounds/v0.10.0/proposal.md`에 있다.
 
 기준선 갱신은 새 절을 아래에 덧붙이는 방식이 아니라 각 절의 현재 근거를 교체하고 근거가 사라진
 문장을 삭제하는 방식이다. 검증된 계약이나 함정이 없으면 `None.`을 써 추측 생성을 막는다. work는

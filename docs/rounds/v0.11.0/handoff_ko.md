@@ -205,7 +205,7 @@ devflow는 구조적으로는 이미 분리돼 있다. `HANDOFF.md`는 휘발성
 
 ## 5. 막혀 있던 가능성 — 평가되지 않은 설계 공간
 
-`docs/capability-knowledge-proposal.md` §3의 선택지는 넷이었다.
+`docs/rounds/v0.10.0/proposal.md` §3의 선택지는 넷이었다.
 
 | | 구조 | 판정 |
 |---|---|---|

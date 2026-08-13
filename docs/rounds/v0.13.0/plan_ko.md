@@ -10,11 +10,11 @@
 
 ```
 읽을 필요 없음 (역사)
-  docs/v0.13.0-plan_ko.md                          이 기획의 초안(r1)
-  docs/v0.13.0-plan-validation-report_ko.md         r1에 대한 GPT 독립 검증
-  docs/v0.12.0-usage-flow-report_ko.md              0.12.0 실행 리포트
-  docs/v0.12.0-usage-flow-validation-report_ko.md   0.12.0 GPT 검증
-  docs/plan-usage-flow_ko.md · handoff-usage-flow_ko.md
+  docs/rounds/v0.13.0/plan-r1_ko.md                          이 기획의 초안(r1)
+  docs/rounds/v0.13.0/plan-audit_ko.md         r1에 대한 GPT 독립 검증
+  docs/rounds/v0.12.0/report_ko.md              0.12.0 실행 리포트
+  docs/rounds/v0.12.0/audit_ko.md   0.12.0 GPT 검증
+  docs/rounds/v0.12.0/plan_ko.md · handoff-usage-flow_ko.md
 
 읽어야 함 (정본)
   ★ 이 문서                        기획·맥락·결정·계약 전부

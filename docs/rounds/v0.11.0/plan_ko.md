@@ -1,7 +1,7 @@
 # 기획 — 능력 문서 재설계 (도메인 지식층)
 
 작성: 2026-08-11 · 개정 2판(외부 검토 반영) · 기준 버전: v0.10.2
-· 입력: `docs/handoff-domain-knowledge_ko.md` · 상태: **소유자 승인 대기**
+· 입력: `docs/rounds/v0.11.0/handoff_ko.md` · 상태: **소유자 승인 대기**
 (승인 전에는 `skills/` 한 글자도 고치지 않는다)
 
 ---
@@ -85,7 +85,7 @@
 | **G10** | **D2와 D3은 독립이 아니다** | product는 arch보다 **먼저** 돈다. `capability_baseline`은 arch 필드다 | 중간 |
 | **G11** | **reviewer가 능력 문서를 받지 못한다** | 카드의 완료 신호는 통과하면서 도메인 불변식을 어기는 구현이 리뷰를 통과한다(`work:131-137`) | 중간 |
 | **G12** | **retrospector 입력 누락은 이미 기록된 공백이다** | `design.md:256-258`: "감리의 맹목과 달리 **기록된 사유가 없다**" | 낮음 |
-| **G13** | **계약이 두 곳에 독립 서술돼 있다** | `docs/capability-knowledge-proposal.md` §4~§7이 정본의 계약을 **다른 문장으로 다시 쓴다.** 정합 검사 테스트가 **없다.** 대신 `repository-invariants.test.js:348-410`이 제안서 문구 ~60개를 문자로 고정한다 — **정본을 고쳐도 안 깨지고, 제안서를 고치면 다 깨진다** | 높음 |
+| **G13** | **계약이 두 곳에 독립 서술돼 있다** | `docs/rounds/v0.10.0/proposal.md` §4~§7이 정본의 계약을 **다른 문장으로 다시 쓴다.** 정합 검사 테스트가 **없다.** 대신 `repository-invariants.test.js:348-410`이 제안서 문구 ~60개를 문자로 고정한다 — **정본을 고쳐도 안 깨지고, 제안서를 고치면 다 깨진다** | 높음 |
 | **G14** | **설치기·테스트 결합이 쓰기 주체 추가를 무료로 만들지 않는다** | `repository-invariants.test.js:144-156`이 `baselineConsumers`를 **`["resume","verify"]`로 못박고**, split·work에는 그 파일명이 **나오면 안 된다**고 단언한다. 설치기는 `skills/principles/`를 일반 루프에서 제외하고 손으로 적은 변수 3쌍으로만 임베드한다 — 빠뜨리면 **Codex에서만 조용히 동작하지 않는다** | 높음 |
 
 ### 2.3 GPT 원안(`27afcc2`) 전수 대조 — 조용한 회귀
@@ -492,7 +492,7 @@ verify가 설계 구역을 보존하면 **그 치유자가 사라진다.** 따�
 | `codex/install.ps1` · `install.sh` | 필수 | `baseline-predicates`를 **arch·adopt에도 임베드**(손으로 적은 변수/case 블록 확장) · 프롬프트 재생성 |
 | `scripts/repository-invariants.test.js` | 필수 | `baselineConsumers` → `["adopt","arch","resume","verify"]` · split·work 금지 단언 재검토 · **제안서 핀 ~60개를 companion으로 이전**(D25) · 절 수·필드 수 불변량 |
 | `scripts/session-start.js` **(경로 정정)** + `scripts/session-start.test.js` | 선택 | 경로 포인터 1줄(D4 3번). 1판이 `hooks/scripts/...`로 잘못 적었다 |
-| `docs/capability-knowledge-proposal.md`(+`_ko`) | 필수 | **§4~§7 삭제**, 근거·선택지·기각 계보만 유지(D25) |
+| `docs/rounds/v0.10.0/proposal.md`(+`_ko`) | 필수 | **§4~§7 삭제**, 근거·선택지·기각 계보만 유지(D25) |
 | `docs/design.md`(+`_ko`) | 필수 | 결정 행 + 기각 계보(F·G·H·I·J·K, 스위치 2중 반박, 한 작성자 반박) + 관찰 항목 갱신(골조·retrospector 해소, 공유 코드 회귀는 **유지**) |
 | `README.md`(+`_ko`) | 필수 | 「Entering a domain」 절(33줄) 재작성 · 소유권 표 행 180 · 스킬 표 228 · 분할 신호 342-344. **어투 규칙 적용 + 전후 카운트 기록** |
 | `AGENTS.md` | 필수 | 임베드 규칙 문장(46·48) · 짝 목록 · 용어표(구역 이름) |

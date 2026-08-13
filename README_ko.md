@@ -409,8 +409,9 @@ resume은 이름이나 번호로 한 파일을 고르고, 이름이 빠졌거나
 - **핸드오프는 다음 걸음 하나만 담는다.** 위치는 트리가, 과정은 진행 로그가, 카드가 배운 것은
   그 카드의 승계 줄이 답한다. 사람이 결정할 열린 항목은 journal 한 줄로 남는다.
 
-왜 이렇게 설계했는지의 전문(결정 표·기각 계보)은 [docs/design_ko.md](docs/design_ko.md)에
-있다. **결정을 뒤집으려면 기록된 이유부터 반박한다.**
+왜 이렇게 설계했는지는 [docs/design_ko.md](docs/design_ko.md)가 요약하고
+[docs/design-decisions_ko.md](docs/design-decisions_ko.md)가 전문과 기각 계보를 싣는다.
+**결정을 뒤집으려면 기록된 이유부터 반박한다.**
 
 ## 방과 점유, 그리고 통합 브랜치
 
@@ -590,7 +591,8 @@ skills/ 안(principles 스킬)에 둔 것도 이 때문이다. 스킬 폴더만 
 
 ## 더 읽기
 
-- [docs/design_ko.md](docs/design_ko.md) — 설계 철학 · 주요 결정과 이유 · 기각 계보
+- [docs/design_ko.md](docs/design_ko.md) — 설계 철학 · 불변식 · 결정 색인
+- [docs/design-decisions_ko.md](docs/design-decisions_ko.md) — 결정 전문과 기각 계보
 - [CHANGELOG.md](CHANGELOG.md) — 버전별 변경 이력
 - [AGENTS.md](AGENTS.md) — 이 저장소를 수정하려는 사람·AI를 위한 유지보수 게이트
   (이중 언어 워크플로: 한글 `*_ko.md`가 설계 원본, 영문이 배포 실물)

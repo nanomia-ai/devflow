@@ -1,7 +1,7 @@
 # v0.13.0 기획 독립 유효성 검증 리포트
 
 작성: 2026-08-13  
-검증 대상: `docs/v0.13.0-plan_ko.md`  
+검증 대상: `docs/rounds/v0.13.0/plan-r1_ko.md`  
 현재 구현 기준: `4559f31` · v0.12.0  
 상태: **보고 전용. 검증 대상 플랜·스킬·정본·설치기 수정 없음**
 
@@ -9,7 +9,7 @@
 
 ## 0. 이 문서의 위치와 판정 기준
 
-`docs/v0.13.0-plan_ko.md`는 현재 구현을 설명하는 리포트가 아니다. v0.12.0 구현과 그 독립
+`docs/rounds/v0.13.0/plan-r1_ko.md`는 현재 구현을 설명하는 리포트가 아니다. v0.12.0 구현과 그 독립
 검증 뒤에 다시 세운 **차기 구현 플랜**이다. 따라서 이 검증은 플랜의 문장을 현재 동작으로
 간주하지 않았다.
 
@@ -17,8 +17,8 @@
 
 1. `docs/design.md` — 이미 채택하거나 기각한 결정의 이유
 2. 현재 v0.12.0 스킬·판정 정본·역할 계약 — 플랜이 바꾸려는 실제 출발점
-3. `docs/v0.13.0-plan_ko.md` — 이번 검증의 설계 대상
-4. `docs/v0.12.0-usage-flow-validation-report_ko.md` — 앞선 결함과 재현 기준선
+3. `docs/rounds/v0.13.0/plan-r1_ko.md` — 이번 검증의 설계 대상
+4. `docs/rounds/v0.12.0/audit_ko.md` — 앞선 결함과 재현 기준선
 
 플랜과 현재 구현이 다른 것은 결함이 아니다. 다음 중 하나가 재현될 때만 결함으로 판정했다.
 
@@ -168,7 +168,7 @@ checkpoint → release → replan 패턴을 재사용하고, 결정할 수 없�
 
 ### 3.1 읽고 대조한 범위
 
-- `docs/v0.13.0-plan_ko.md` 전체
+- `docs/rounds/v0.13.0/plan-r1_ko.md` 전체
 - `docs/design.md`의 결정표·기각 계보·현장 관찰 항목
 - `skills/principles/SKILL_ko.md`
 - `state-predicates_ko.md`, `baseline-predicates_ko.md`

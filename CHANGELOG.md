@@ -6,6 +6,107 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-13 — the design canon splits three ways, and the two standing instruments get wired into the automatic path (no version change)
+
+The design document had outgrown its container. Sixty-four decisions sat in a two-column
+table whose cells had grown to 1,062 characters, five of them carrying a later correction
+buried mid-paragraph while their titles still stated the superseded rule; the maintenance
+gate demanded all 41,000 tokens of it before a typo fix. Worse, the two documents built to
+stop the owner re-explaining the same things to every agent — `docs/audit-guideline_ko.md`
+and `docs/usecase-matrix_ko.md` — were named by nothing in the automatic path: zero
+mentions in `AGENTS.md`, the README, the hook, or the design document. They fired only when
+the owner pasted them in by hand, which is the work they were written to remove.
+
+**The canon is three files now.** `docs/design.md` keeps identity, philosophy, the
+structure diagram, a new document map, a new invariants section, and an index of all 64
+decisions — this is the layer every change reads. `docs/design-decisions.md` holds the
+decisions in full and the rejection lineage, regrouped from chronological order into seven
+subjects, because a change to the claim model had to find 13 rows scattered across six
+versions and v0.14.0 had already had to correct four of them in place. Decisions and
+rejections stayed in one file: the gate treats them as one, so splitting them would have
+made every consumer open both. `docs/design-backlog.md` holds observations and on-hold
+candidates, which only release planning reads — the pre-flight checklist already asked for
+"decisions/rejections" alone, so the files now match a rule that already existed.
+
+Every decision took a stable identifier (`DD-01`–`DD-64`, assigned in the original document
+order so the mapping is auditable) and a state: `active`, `replaced by DD-nn (vX.Y.Z)`, or
+`active, partly corrected by DD-nn (vX.Y.Z)`. Rejections took `DR-01`–`DR-46`. The canon
+had been citing plan-document identifiers it never defined (`X2`, `K3`, `D14`) while the
+use-case matrix pointed at a `D7` the canon did not carry.
+
+**Round records moved into `docs/rounds/<version>/`** with role filenames — `handoff_ko.md`,
+`plan_ko.md`, `report_ko.md`, `audit_ko.md` — so "the previous round's report" resolves to a
+path. Twenty files moved, 86 cross-references were rewritten, and `CHANGELOG.md` was left
+alone: its sentences were true of their moment, and an old path resolves inside that
+version's folder. The move applies this project's own third philosophy — state lives in the
+file tree, not in prose — to its own repository, where a document's standing had been
+declared in a line of prose inside it.
+
+**`AGENTS.md` gained a wiring table.** No trigger asks whether a change is big; each keys on
+a path, an output, a file operation, or a decision named in a list already read in full.
+Touching `skills/**` opens the matrix; being about to report a verification result opens the
+guideline's adoption criteria and stop condition; being about to run an independent pass
+opens its briefing template, which a session now hands to a subagent itself. The guideline
+gained a two-branch distinction the wiring needs: a self-review applies §2, §5 and §6, while
+an independent audit gets the whole document, because its contamination control cannot hold
+in a session that already knows the intent.
+
+**The verification protocol shrank.** Its defect-class list, lens enumeration and sweep
+definition are gone, and a sentence saying why they are gone stands in their place: the
+restatement had drifted to six classes against the guideline's ten, and the four it was
+missing included silent-loss paths, the class the guideline ranks highest. What stayed is
+the severity ladder — the only English copy of it — and this repository's own rhythm.
+
+**Round protocol and promotion are new.** A plan states four things: why (what was
+observed), what exactly, what it is meant to achieve, and the result expected once it lands
+— the last being the sentence an implementer checks its own reading against. A review states
+four per finding: what, why it comes out that way (the causal mechanism, not the danger),
+the result predicted, and the scope boundary. That rule generalizes an anti-misreading pass
+the owner requested on the v0.14.0 audit report, where it worked. The promotion table fixes
+what rises out of a round into the canon, and its audit row is the one that never existed:
+3,314 lines of independent validation had no path in, and a v0.13.0 verification round had
+recorded that the observations it produced never landed. Promotion is now a closing
+condition of the round that produced the finding, because the next-round rescue reaches back
+exactly one round.
+
+Verification: an independent refuter pass and an independent literal-execution walk ran in
+separate contexts under the guideline's own §8 template, the first use of the wiring this
+change installed. They returned 18 and 9 findings; both independently found the same
+mis-aimed cross-reference. Adopted and repaired in this entry's change: two dead `(item 6)`
+references, item 1 restating lenses that item 5 forbids restating (and already drifted, the
+missing one being the record-loss lens), the guideline carrying two different lens sets, a
+state format in `design.md` that its own test rejects, a README table cited under a name it
+does not have, an ambiguous "its §6", an external-contributor exemption pointing at a section
+that holds no verification requirement, a stop condition a report-only pass cannot evaluate,
+no ordering rule for "previous round" (string order puts `v0.9.21` after `v0.14.0`), a
+promotion row with no landing site, a hardcoded count in a list designed to grow, missing
+status vocabulary in the terminology table, and a parity check blind to bullet items — one
+language could lose a bullet and still pass, which matters most for the backlog that is
+almost all bullets. Content preservation was proved mechanically rather than by re-reading:
+218 units per language extracted from a byte-verified backup, 0 lost, 1 declared correction
+(the canon-size measurement contradicted itself within one paragraph, 1,636 against 1,543).
+All 91 Node tests pass, up from 87: four new ones check that the index and the bodies agree
+on which decisions exist, that identifiers are dense and unreused with a known state, that
+every docs path a document names resolves, and that the gate still names the canon files and
+both instruments. README counts: `—` 98→99 and 73→74, `**` unchanged — the added dashes
+separate a link from its description in a list.
+
+A separate sweep then walked the write side, because the wiring table is a read map and
+says nothing about which document a decision updates once it is made. Eighteen kinds of
+outcome were crossed against the ten documents that could need updating, and four cells
+came back empty: a re-proposal had no way to find the right rejection lineage (rejections
+are deliberately not indexed, and nothing said where to look), an on-hold candidate had no
+rule for what happens when it is taken up or dropped, a newly coined canonical term had no
+rule sending it to the terminology table, and a document the set did not have before had no
+rule putting it on the document map — that last one this change had itself removed, over-
+subtracting a promotion row that was wrong only for round folders. All four are closed.
+
+Files: `docs/design.md`, `docs/design_ko.md`, `docs/design-decisions.md`,
+`docs/design-decisions_ko.md`, `docs/design-backlog.md`, `docs/design-backlog_ko.md`,
+`docs/audit-guideline_ko.md`, `docs/usecase-matrix_ko.md`, `docs/rounds/**` (20 moved),
+`AGENTS.md`, `README.md`, `README_ko.md`, `scripts/repository-invariants.test.js`,
+`CHANGELOG.md`.
+
 ## docs — 2026-08-13 — independent implementation audit of the v0.14.0 plan and the current 0.14.1 source (no version change)
 
 Added a report-only audit that treats the v0.14.0 plan as requirements, the execution

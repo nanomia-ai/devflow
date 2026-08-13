@@ -458,7 +458,9 @@ only from the entry list.
   log answers how, and what a card learned rides its carry line. An open item that needs a
   person stays as one journal line.
 
-The full "why" (decision table · rejection lineage) is in [docs/design.md](docs/design.md).
+Why it is built this way is summarized in [docs/design.md](docs/design.md); the decisions
+in full and the rejection lineage are in
+[docs/design-decisions.md](docs/design-decisions.md).
 **To overturn a decision, refute its recorded reason first.**
 
 ## Rooms, claims, and the integration branch
@@ -656,7 +658,8 @@ skill) — even installers that copy only the skills folder carry the canon alon
 
 ## Further reading
 
-- [docs/design.md](docs/design.md) — design philosophy · key decisions and reasons · rejection lineage
+- [docs/design.md](docs/design.md) — design philosophy · invariants · decision index
+- [docs/design-decisions.md](docs/design-decisions.md) — the decisions in full and the rejection lineage
 - [CHANGELOG.md](CHANGELOG.md) — per-version change history
 - [AGENTS.md](AGENTS.md) — the maintenance gate for people and AI modifying this
   repository (dual-language workflow: Korean `*_ko.md` files are the design originals,

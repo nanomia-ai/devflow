@@ -1,8 +1,8 @@
 # v0.13.0 기획 — 동시 작업 축의 완결과 실측 전환
 
 작성: 2026-08-13 · 기준 커밋: `4559f31` (main, 미push)
-· 선행 문서: `docs/v0.12.0-usage-flow-report_ko.md`(실행 리포트) ·
-`docs/v0.12.0-usage-flow-validation-report_ko.md`(GPT 독립 검증)
+· 선행 문서: `docs/rounds/v0.12.0/report_ko.md`(실행 리포트) ·
+`docs/rounds/v0.12.0/audit_ko.md`(GPT 독립 검증)
 
 ---
 

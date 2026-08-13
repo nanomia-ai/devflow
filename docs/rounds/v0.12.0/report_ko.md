@@ -1,7 +1,7 @@
 # v0.12.0 실행 리포트 — 사용 동선 재설계
 
 작성: 2026-08-12 · 대상 커밋: `841455e` → `234d19e` → `4f053df` (main, 미push)
-· 기획 원본: `docs/plan-usage-flow_ko.md` · 문제 제기 원본: `docs/handoff-usage-flow_ko.md`
+· 기획 원본: `docs/rounds/v0.12.0/plan_ko.md` · 문제 제기 원본: `docs/rounds/v0.12.0/handoff_ko.md`
 
 ---
 
@@ -46,7 +46,7 @@ AGENTS.md의 "기각 사유를 먼저 반증하라"와 같은 규율이다.
 | 4 | 만질 스킬의 `_ko`와 영문 쌍 | 필요분 | 반드시 쌍으로 |
 
 **읽지 말 것** (토큰만 태운다): `CHANGELOG.md` 전체(1,611줄 — 해당 버전 항목만),
-`docs/plan-usage-flow_ko.md`·`docs/handoff-*.md`(역사, 이 문서가 이긴다),
+`docs/rounds/v0.12.0/plan_ko.md`·`docs/handoff-*.md`(역사, 이 문서가 이긴다),
 `docs/v0.9.21-*`·`docs/v0.11.0-*` 리포트(그 릴리스를 다시 볼 때만).
 
 ### 0.5.2 devflow가 무엇인가 — 한 문단

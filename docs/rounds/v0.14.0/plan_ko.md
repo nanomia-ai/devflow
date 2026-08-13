@@ -20,10 +20,10 @@
   만질 스킬의 _ko와 영문 쌍               반드시 쌍으로
 
 읽을 필요 없음 (역사 — 이 문서가 결론을 담고 있다)
-  docs/v0.13.0-plan-r2_ko.md              0.13.0의 기획 (실행 완료)
-  docs/v0.13.0-execution-report_ko.md     0.13.0 실행 리포트
-  docs/v0.13.0-verification-round2_ko.md  독립 검증 라운드 2 (이 기획의 입력)
-  docs/v0.13.0-usecase-matrix_ko.md       → docs/usecase-matrix_ko.md 로 승격되어 삭제됨
+  docs/rounds/v0.13.0/plan_ko.md              0.13.0의 기획 (실행 완료)
+  docs/rounds/v0.13.0/report_ko.md     0.13.0 실행 리포트
+  docs/rounds/v0.13.0/audit_ko.md  독립 검증 라운드 2 (이 기획의 입력)
+  docs/usecase-matrix_ko.md       → docs/usecase-matrix_ko.md 로 승격되어 삭제됨
 ```
 
 **배포 산출물이 아니므로 영문 쌍은 없다. CHANGELOG 항목은 남긴다.**

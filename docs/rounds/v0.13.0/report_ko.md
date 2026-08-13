@@ -1,6 +1,6 @@
 # v0.13.0 실행 리포트 — 무엇을 만들었고, 무엇을 판단했고, 무엇이 남았나
 
-작성: 2026-08-13 · 기준: `docs/v0.13.0-plan-r2_ko.md` 전량 실행 · 결과 버전 `0.13.0`
+작성: 2026-08-13 · 기준: `docs/rounds/v0.13.0/plan_ko.md` 전량 실행 · 결과 버전 `0.13.0`
 
 ---
 
@@ -17,8 +17,8 @@ AGENTS.md의 "기각 사유를 먼저 반증하라"와 같은 규율이다.
   docs/design.md             0.13.0 결정 9행 + 기각 9건이 정본으로 들어갔다
 
 읽을 필요 없음 (역사)
-  docs/v0.13.0-plan-r2_ko.md            이 실행의 입력. 결정 계보는 design.md가 이제 정본
-  docs/v0.13.0-plan_ko.md · *-validation-report_ko.md
+  docs/rounds/v0.13.0/plan_ko.md            이 실행의 입력. 결정 계보는 design.md가 이제 정본
+  docs/rounds/v0.13.0/plan-r1_ko.md · *-validation-report_ko.md
 ```
 
 **배포 산출물이 아니므로 영문 쌍은 없다. CHANGELOG 항목은 남겼다.**
@@ -374,7 +374,7 @@ state-predicates.md       30 →  33줄   (+3)
 
 기록
   docs/design{_ko}.md                      결정 9행 + 기각 9건 + 보류 2건 + v0.12.0 계보 정정
-  docs/v0.12.0-usage-flow-report_ko.md     §7.2 예제 재작성 · §12 판정 축소 · CHANGELOG 면제 제거
+  docs/rounds/v0.12.0/report_ko.md     §7.2 예제 재작성 · §12 판정 축소 · CHANGELOG 면제 제거
   CHANGELOG.md · .claude-plugin · .codex-plugin   0.13.0
 ```
 

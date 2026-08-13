@@ -185,7 +185,7 @@ the numbers it already summarizes in Covered cards. It excludes chronology, assi
 progress, and next work. work does not automatically reread every change card; it keeps its
 existing read set. At final closure, verify reads the standard refresh set once and adds the
 Covered-history extension only when the stored-Covered comparison changed. The full contract
-and simulations are in `docs/capability-knowledge-proposal.md`.
+and simulations are in `docs/rounds/v0.10.0/proposal.md`.
 
 A refresh replaces each section from current evidence and deletes unsupported statements;
 it never appends a newer account below the old one. When no contract or trap has been

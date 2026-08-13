@@ -7,13 +7,44 @@ it looks.
 
 The gate, in order:
 
-1. Read `docs/design.md` — the decisions table and the rejection lineage. To overturn a
-   decision, refute its recorded reason first. To re-propose a rejected idea, refute its
-   recorded rejection reason first. Proposals that skip this do not pass review.
-2. Read this file to the end.
+1. Read `docs/design.md` — identity, the invariants, and the decision index. Read the
+   index in full, then state that this change moves none of its rows. If even one moves,
+   open that subject's section in `docs/design-decisions.md`. To overturn a decision,
+   refute its recorded reason first. To re-propose a rejected idea, refute its recorded
+   rejection reason first. Proposals that skip this do not pass review.
+2. Read this file to the end, and open whatever the wiring table below sends you to.
 3. After any modification, add an entry at the **top** of `CHANGELOG.md` (newest first:
    date / what / why / which files). **A change without a changelog entry is an
    unfinished change.**
+
+## What opens what — the wiring
+
+Two standing instruments hold knowledge this repository would otherwise re-explain to
+every agent: `docs/audit-guideline_ko.md` (how to verify) and `docs/usecase-matrix_ko.md`
+(which shapes of use exist). A session changing this repository opens them **itself** — the
+owner does not brief them in. No trigger below asks "is this a big change": that is a
+judgment word and the answer drifts. Each one keys on a path, an output, a file
+operation, or a decision named in an enumerated list you have already read in full — the
+last of those is still a judgment, but a bounded one made against 64 written claims
+rather than against a sense of size.
+
+| When this is true | Open this |
+|---|---|
+| always | `docs/design.md` — identity, invariants, decision index |
+| the index moves a row | that subject's section in `docs/design-decisions.md` |
+| the change touches `skills/**` | `docs/usecase-matrix_ko.md` §1–§2 axis tables, then any §3 section for the cells it lands in. A cell with no §3 section is either carried at 정합 by the list at the head of §3 or has never been judged — if it is neither, that is the new-row case below |
+| you are about to report a verification result, zero findings included | `docs/audit-guideline_ko.md` §2 adoption criteria, §5 stop condition, §6 report format |
+| you are about to run an independent pass in a separate context | `docs/audit-guideline_ko.md` §8 briefing template — hand it over verbatim |
+| the change creates, deletes, or moves a file **that is not this round's own report** | `docs/design-backlog.md`, and run the coordinate sweep guideline §3-4 defines |
+| you are about to bump the version | `docs/audit-guideline_ko.md` in full, and re-judge the matrix cells by **the matrix's own §6** |
+| you are opening a round folder under `docs/rounds/` | the previous round's `report_ko.md`, plus the findings in its `audit_ko.md` that never landed |
+| an adopted finding fits no row of guideline §2 | propose a new row there |
+| the change introduces a new entry point or request shape | propose a new row in matrix §1–§2 |
+
+Both instruments are Korean-only; their readers are the owner and audit sessions. External
+contributors are not held to any row that opens one of those two files — the PR
+requirement at the end of the round protocol below ("demonstrate the equivalent in your
+PR description") stands in their place.
 
 ## The dual-language workflow
 
@@ -33,9 +64,11 @@ Pairs:               skills/<name>/SKILL_ko.md ↔ SKILL.md
                      codex/AGENTS-devflow_ko.md ↔ AGENTS-devflow.md
                      README_ko.md ↔ README.md
                      docs/design_ko.md ↔ docs/design.md
-                     docs/capability-knowledge-proposal_ko.md ↔ docs/capability-knowledge-proposal.md
-                     docs/v0.11.0-domain-knowledge-redesign-report_ko.md ↔ docs/v0.11.0-domain-knowledge-redesign-report.md
-                     docs/v0.9.21-redesign-report_ko.md ↔ docs/v0.9.21-redesign-report.md
+                     docs/design-decisions_ko.md ↔ docs/design-decisions.md
+                     docs/design-backlog_ko.md ↔ docs/design-backlog.md
+                     docs/rounds/v0.10.0/proposal_ko.md ↔ docs/rounds/v0.10.0/proposal.md
+                     docs/rounds/v0.11.0/report_ko.md ↔ docs/rounds/v0.11.0/report.md
+                     docs/rounds/v0.9.21/report_ko.md ↔ docs/rounds/v0.9.21/report.md
 English-only (no pair): AGENTS.md (this file), CHANGELOG.md,
                      CLAUDE.md (a one-line import pointer to this file — never expand it)
 ```
@@ -69,29 +102,41 @@ exception to _ko-first.
 Deploy artifacts must contain no Korean: every non-`_ko` `skills/**/*.md` (entry skills,
 predicate companions, and role contracts),
 `codex/AGENTS-devflow.md`, `codex/install.ps1`, `codex/install.sh`, `scripts/*.js`,
-`.claude-plugin/*.json`, `docs/design.md`, `docs/capability-knowledge-proposal.md`,
-`docs/v0.11.0-domain-knowledge-redesign-report.md`, `docs/v0.9.21-redesign-report.md`,
+`.claude-plugin/*.json`, `.codex-plugin/plugin.json`, `hooks/hooks.json`, `CLAUDE.md`,
+`docs/design.md`, `docs/design-decisions.md`,
+`docs/design-backlog.md`, `docs/rounds/v0.10.0/proposal.md`,
+`docs/rounds/v0.11.0/report.md`, `docs/rounds/v0.9.21/report.md`,
 `CHANGELOG.md`, and `README.md`.
-Check: count `[가-힣]` matches per file with ripgrep run directly (`rg -c`) or a Perl
-Unicode scan — proxied grep rewrites have produced false positives on this repository.
-The result must be **0 for every file except `README.md`, which returns exactly 1** —
-its single language-switcher link `[한국어]`, which is intentional and must stay. This file (AGENTS.md) is exempt from the check: its
-terminology table IS the Korean↔English reference data.
+The two standing instruments (`docs/audit-guideline_ko.md`, `docs/usecase-matrix_ko.md`)
+and the round records under `docs/rounds/` that carry no `_ko` pair are **Korean-only by
+decision**: their readers are the owner and audit sessions, so a translation would double
+the maintenance for no reader. They are not deploy artifacts and the check does not cover
+them.
+Check: `node --test "scripts/*.test.js"` owns this — one test counts lines containing
+`[가-힣]` in every deploy artifact and requires **0 everywhere except `README.md`, which
+must return exactly 1**: its language-switcher link `[한국어]`, which is intentional and
+must stay. This file (AGENTS.md) is exempt: its terminology table IS the Korean↔English
+reference data. To see *which* lines when the test goes red, run ripgrep directly (`rg -c`)
+or a Perl/Python Unicode scan — proxied grep rewrites have produced false positives here.
 
 ## The verification protocol
 
-Skill text is executed by literal-minded AI, so the standard verification method is
-simulation against a literal reader, run adversarially:
+Skill text is executed by literal-minded AI, so verification is simulation against a
+literal reader, run adversarially. **The method itself — which findings count, which
+lenses exist, when to stop, how to report — is defined once in
+`docs/audit-guideline_ko.md` and nowhere else.** What follows is only this repository's
+procedure around it:
 
 1. **Design → independent refutation → apply → post-audit → re-audit of the fixes.**
    Wording and design changes are confirmed by attacking them with independent passes: a
    dedicated refuter, and a literal-execution simulator that walks the text as a naive
    AI would. How to run one: start a fresh session or subagent that carries **no
    implementation context**, give it only the changed files, and instruct it to refute
-   the change or walk it literally. Differentiate the lenses across passes (refuter ·
-   literal-execution simulator · capable-reader flow walk · over-harness auditor) —
-   identical lenses re-walk the same paths (item 6) — and always state that **zero
-   findings is a valid result**: an agent told to find defects will otherwise
+   the change or walk it literally — the briefing template in guideline §8 is what you
+   hand it. Differentiate the lens across passes; the lenses are enumerated in guideline
+   §3-3 and nowhere else, because an identical lens re-walks the paths it already walked.
+   Always state that **zero findings is a valid result**: an agent told to find defects
+   will otherwise
    manufacture them. This pattern found real defects every round it ran —
    internal per-round finding counts converged 13→13→12→13→2 over successive campaigns
    (not every round is itemized in the CHANGELOG), so skipping it is not a shortcut, it
@@ -99,35 +144,89 @@ simulation against a literal reader, run adversarially:
 2. **Proportionality.** Typo or formatting fix — a literal re-read of the touched
    section suffices. Wording or rule changes — at least one independent refutation pass.
    Structural or multi-file changes — the full protocol including the re-audit and the
-   coordinate sweep (item 6).
+   coordinate sweep that guideline §3-4 defines.
 3. **Report first; apply after approval.** The owner works in a "report only" → review →
    "proceed" rhythm. Clear-cut defects (literal rule conflicts, violations of a rule the
    text itself declares) may be fixed directly — but always list them separately from
    judgment calls, which require approval.
 4. **Your fixes are changes too.** After applying, run a re-audit pass over the
    modifications themselves.
-5. Watch for the classic defect classes: ambiguous judgment words ("related", "relevant",
-   "as needed"), one concept with two names, two concepts with one name, and unbounded
-   reading rules — all four have shipped real defects before; the rejection lineage in
-   `docs/design.md` records them. Watch the reverse class too: a sentence whose deletion
-   breaks nothing (method prescription, duplication of the canonical rules). Demand a
-   concrete failure path for every sentence a change adds — adversarial review only ever
-   pushes toward more text, so harness without a failure path is a defect as well.
-   Also watch for a sanctioned exception declared outside the canon: exceptions to a
-   canonical rule are declared inside `skills/principles/` itself (subordinate documents
-   may reference it) — a subordinate-only declaration loses to the canon on conflict
-   and goes dead.
-6. **Walks find paths; coordinate sweeps find coverage.** Narrative simulations only
-   find defects on the paths they walk — convergence across rounds proves the walked
-   paths are clean, not that the space is exhausted (the research-card gaps of v0.9.3
-   survived every earlier campaign this way). After structural changes, run a
-   coordinate sweep: enumerate the axes of what changed (e.g. card kinds × gates) and
-   judge every cell — defined / not-applicable / self-evident / gap. Fresh-angle
-   reviews, including external ones, are how unwalked paths get found: adjudicate their
-   claims against the actual text, never accept or dismiss them wholesale.
-7. **Read finding counts honestly.** Text written this round yields double-digit
-   findings on its first adversarial pass — that is the pattern working, not the system
-   regressing. Only findings against previously-verified text count as escaped defects.
+5. **Severity first; method by reference.** Rank findings by what breaks: silent data
+   loss ≫ structure splitting ≫ wrong action ≫ a stop with no exit ≫ cost. A noisy
+   failure ranks one step below a quiet one. Which findings count as findings, which
+   lenses to run, how a walk differs from a coordinate sweep, and when to stop are
+   defined in `docs/audit-guideline_ko.md`. **Do not restate them here.** The restatement
+   drifted once already: this file listed six defect classes while the guideline listed
+   ten, and the four it was missing included silent-loss paths — the class the guideline
+   ranks highest.
+6. **A pass reports under the guideline's criteria.** Before reporting a result — zero
+   findings included — the pass has read guideline §2 (what counts), §5 (when to stop)
+   and §6 (report format). Its report states which of §5's clauses it evaluated and what
+   each came out as; a report-only pass produces no repairs, so it says so for the clause
+   that judges them rather than leaving that clause silent.
+
+One exception stays here because it governs where rules may live rather than how to hunt
+them: a sanctioned exception to a canonical rule is declared inside `skills/principles/`
+itself (subordinate documents may reference it). A subordinate-only declaration loses to
+the canon on conflict and goes dead.
+
+## The round protocol
+
+A change large enough to take its own version is a round, and a round leaves its records in
+`docs/rounds/<version>/`. Filenames are roles: `handoff_ko.md` (optional — what a session
+must know before it can design), `plan_ko.md`, `report_ko.md`, `audit_ko.md`. A round that
+produced two plans keeps the superseded one as `plan-r1_ko.md`; an audit of a plan rather
+than of an implementation is `plan-audit_ko.md`. Folders created before 2026-08-13 predate
+this convention and may hold fewer roles or an older name — `v0.10.0/proposal_ko.md` is one.
+
+**Which folder is the previous round.** Not the last line of a directory listing: string
+order puts `v0.9.21` after `v0.14.0`. Compare version numbers segment by segment as
+integers and take the highest below the one being opened. A version that shipped without
+its own folder — a repair release that landed inside the preceding round's records, as
+0.14.1 did inside `v0.14.0/` — is not a round for this purpose; its records are in the
+folder that carries them.
+
+**A plan says four things.** Prose that specifies only the change lets a literal reader
+implement the letter and miss the point. These four are what stop that:
+
+1. **Why** — what was observed that made this round necessary: the measurement, the field
+   report, the owner decision. Not "it would be better".
+2. **What, exactly** — the change at the level of files and sentences.
+3. **What it is meant to achieve** — the failure path it closes, or the property it buys.
+4. **The result expected** — what must be observable once it lands for this to have
+   worked. This is the sentence an implementer checks its own interpretation against.
+
+**A review or a report says four things per finding**, and this applies to every review
+document, not only to audits: what (quoted from the source, with the location as precisely
+as it can be confirmed), **why it comes out that way**
+(the causal mechanism, which is not the same as why it is dangerous), **the result
+predicted** (a concrete scene), and the scope boundary (the condition intersection it
+needs, and where it does not reach). The finding format itself is fixed in
+`docs/audit-guideline_ko.md` §6; these four are what that format is for.
+
+**Promotion — what rises out of a round into the canon.** A round decides its own content.
+It does not decide what the canon keeps. This table does:
+
+| Round artifact | What rises | Where it lands |
+|---|---|---|
+| plan | overturns with their refutation, new decisions, rejections held | `docs/design-decisions.md` |
+| report | judgments made outside the plan, rules a measurement overturned, "do not touch" items | `docs/design-decisions.md`; invariants in `docs/design.md` |
+| audit | impossibility verdicts, design tensions, findings adopted but not repaired | `docs/design-backlog.md`; invariants in `docs/design.md` |
+| any | a shape of use that did not exist before | a row in `docs/usecase-matrix_ko.md` |
+| any | a defect class that fits no row of guideline §2 | a row in `docs/audit-guideline_ko.md` §2 |
+| any | a canonical term the terminology table does not carry | a row in that table, in the same change that coins it |
+| any | a document this set did not have before | a row in the document map in `docs/design.md` |
+
+The audit row is the one that was missing. Until 2026-08-13 the two largest documents in
+this repository — 3,314 lines of independent validation — had no path into the canon at
+all, and a verification round had to record that the lineage and observations it produced
+never landed.
+
+**A round does not close until its own promotion is done.** The wiring table sends the
+next round to the previous round's unlanded audit findings, but that rescue reaches back
+exactly one round: miss twice and a finding sits on disk that no rule ever opens again.
+So promotion is a closing condition of the round that produced the finding, not a debt the
+next one inherits. Its checklist item is below.
 
 External contributors: demonstrate the equivalent in your PR description — what you tried
 to break, and what a literal reader does at each step you touched.
@@ -185,18 +284,30 @@ borrowing text into this repository still needs prior permission.
 
 ## Pre-flight checklist
 
-- [ ] `docs/design.md` decisions/rejections read; nothing overturned without refuting its reason
+- [ ] `node --test "scripts/*.test.js"` passes — this is what runs the Korean check, the
+      ko↔en structure parity check, and the four document-wiring checks
+- [ ] `docs/design.md` decision index read in full; nothing overturned without refuting its
+      reason; every moved row's subject section opened in `docs/design-decisions.md`
+- [ ] `skills/**` touched? Matrix cells re-judged, and any new shape of use added as a row
 - [ ] `_ko` edited first (or back-sync noted for an English-first external PR)
-- [ ] Terminology table applied; structure parity ko↔en checked (headings / lists / tables / figures)
-- [ ] Korean check passed: 0 matches in every deploy artifact, exactly 1 in README.md (the switcher link)
-- [ ] Verification run at the proportional level; findings listed (defects vs judgment calls separated)
-- [ ] README touched? Tone rules applied and the before/after counts recorded (Writing the README)
+- [ ] Terminology table applied; structure parity ko↔en checked (headings / lists / tables
+      / figures). An English-first external PR reaches parity only after the maintainer
+      back-syncs, so this item is the maintainer's, not the contributor's
+- [ ] This round's audit findings promoted per the table above, or listed with the reason
+      each was not — a round does not close on an unlanded finding
+- [ ] Verification run at the proportional level, reported under guideline §2 criteria with
+      the §5 stop condition stated; findings listed (defects vs judgment calls separated)
+- [ ] README prose touched? Tone rules applied and the before/after counts recorded
+      (Writing the README). A typo or a link path is not prose — record that instead of counting
 - [ ] Codex install rerun locally — plugin snapshot + prompts (or the PR states it was not)
 - [ ] Install channels still target each platform's **current** native mechanism
       (skills · plugins · hooks) — re-verify against platform docs when platforms update
 - [ ] CHANGELOG entry added at the top (+ version bump if a deploy artifact changed)
 
 ## Terminology table (fixed — no alternative translations)
+
+Fixed means no alternative translation is allowed for a term that is here, not that the
+table stops growing: a change that coins a canonical term adds its row in the same change.
 
 | Korean | English | | Korean | English |
 |---|---|---|---|---|
@@ -243,6 +354,8 @@ borrowing text into this repository still needs prior permission.
 | 구조적 막힘 | structural blocker | | 지속 경합 | sustained contention |
 | 묶기 | bundling | | 고아 점유 | orphan claim |
 | 은퇴 관측 게이트 | retirement observation gate | | 봉쇄 | blockade |
+| 유효 | active | | 대체됨 → DD-nn | replaced by DD-nn |
+| 유효 · 일부 정정 → DD-nn | active, partly corrected by DD-nn | | 최초 설계 | origin |
 
 Note: a hypothesis is the trust state of a capability knowledge baseline — a separate
 concept from the `unverified` verdict, which is a verification result.
