@@ -106,6 +106,56 @@ test("a commit names its own paths whatever else the working tree has staged", (
   assert.match(git("status", "--porcelain"), /^A\s+theirs\.md$/m, "the other flow keeps its staged file");
 });
 
+// resume's `not yet on integration`: the ordinary working branch is AHEAD of integration,
+// so the tip IS an ancestor while unintegrated commits exist — only the commit set of
+// `integration..HEAD` reports truthfully (v0.14.0 audit 4.6).
+test("a branch ahead of integration is an ancestor case that still holds unintegrated paths", (t) => {
+  const { git, gitTry, write } = makeRepo(t);
+  git("branch", "integration");
+  git("checkout", "-qb", "flow");
+  write("devflow/tree/02-x/02.1-card.md", "# 02.1 card\n");
+  git("add", "-A");
+  git("commit", "-qm", "a boundary — request recorded");
+  assert.equal(
+    gitTry("merge-base", "--is-ancestor", "integration", "HEAD").status, 0,
+    "integration tip is an ancestor of the working branch — the shape the old guard misread as none",
+  );
+  assert.equal(git("rev-list", "--count", "integration..HEAD"), "1");
+  const changed = git("diff", "--name-only", "integration..HEAD").split("\n").filter(Boolean);
+  assert.ok(changed.includes("devflow/tree/02-x/02.1-card.md"), "the card path shows in the commit set");
+});
+
+// The physical limit the tweak lane's target-path check stands on: a pathspec commit
+// records the file's final content, so it carries another session's changes left in the
+// same file (v0.14.0 audit 4.3).
+test("a pathspec commit carries another session's changes left in the same file", (t) => {
+  const { git, write } = makeRepo(t);
+  write("shared.txt", "top\nbottom\n");
+  git("add", "-A");
+  git("commit", "-qm", "base shared");
+  write("shared.txt", "top A-edited\nbottom\n"); // session A's half-done change, uncommitted
+  write("shared.txt", "top A-edited\nbottom B-edited\n"); // session B edits the other part
+  git("commit", "-qm", "b tweak 02: bottom", "--", "shared.txt");
+  const blob = git("show", "HEAD:shared.txt");
+  assert.match(blob, /top A-edited/, "A's uncommitted change rode B's commit");
+  assert.match(blob, /bottom B-edited/);
+  assert.equal(git("status", "--porcelain"), "", "nothing left behind — the ride-along is silent");
+});
+
+// The tweak lane's named-branch check: a commit on a detached HEAD is contained by no
+// branch and survives only in the reflog (v0.14.0 audit 4.2).
+test("a commit on a detached HEAD lands in no branch", (t) => {
+  const { git, gitTry, write } = makeRepo(t);
+  git("checkout", "-q", "--detach");
+  assert.notEqual(gitTry("symbolic-ref", "-q", "HEAD").status, 0, "the lane's check: no symbolic ref");
+  write("stray.txt", "stray\n");
+  git("add", "-A");
+  git("commit", "-qm", "a tweak 01: stray");
+  const hash = git("rev-parse", "HEAD");
+  git("checkout", "-q", "main");
+  assert.equal(git("branch", "--contains", hash), "", "no branch contains the tweak commit");
+});
+
 // The canonical state predicates' approval-freshness judgment, computed once per tree.
 test("the tree-wide approval judgment matches the per-card judgment on hostile paths", (t) => {
   const { root, git, gitBytes, gitTry, write } = makeRepo(t);

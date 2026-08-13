@@ -56,14 +56,24 @@ approval, and let work automatically read the same numbered document.
 
 ## Tweak Entry
 
-When the current conversation's request — every item of it, when it carries several —
+When every item of the current conversation's request that asks for a repository change
 passes the canonical rules' three tweak questions,
 do not run the procedure below (state restoration) — this lane consumes no prior record
 and changes no shared state, so there is nothing for restoration to protect. Apply only
-the canonical open-Git-operation gate, follow the canonical tweak lane, and end. A request
-with any item that fails the three questions, or whose verdict flips mid-change, returns
+the canonical open-Git-operation gate, follow the canonical tweak lane, and end — when
+that lane's machine checks judge it cannot proceed, return as they direct. When items
+requesting no change (a question, a status check) ride along, do not end there — handle
+the passing items as tweaks, then run the procedure below to answer them: a status answer
+comes only from restored state. A conversation
+with no change-requesting item is not this section's subject — a status question belongs
+to the normal procedure, a domain question to the domain-entry section. Items
+that fail the three questions, or whose verdict flips mid-change, return
 to the normal procedure
-(the request-recording row receives it).
+(the request-recording row receives them, and the recorded line holds only those items).
+The passing items are handled in this conversation through the canonical tweak lane — the
+recording commit first, the tweak commits after. Those edits' approval is the tweak lane's
+declaration (the conversational request is the approval); report-then-approval applies
+only to planning the recorded items.
 
 ## Procedure — when the tree exists, in exactly this order
 
@@ -75,18 +85,26 @@ to the normal procedure
 2. the devflow/tree/ listing at the integration tip; a depth-1 folder carrying `.done`
    uses the canonical closed-folder projection   ← how far things got (.done./.wip./pending)
 3. every claim of mine — path and status for all, and in full only the one this
-   invocation continues, which is the first of them in canonical candidate order. When
+   invocation continues. That one is settled at once when the user named it; otherwise
+   the matched row's selection settles it at report time — an evidence row names its card
+   itself, and when work's selection takes a ready pending card instead, this invocation
+   continues no claim. Until it is settled, skip the full read and the uncommitted
+   comparison; once settled, run both for that one. When
    the user named work that is not a claim, this
-   invocation continues no claim — skip the full read and that claim's uncommitted
-   comparison. With
+   invocation continues no claim — the same skip applies. With
    two or more claims of mine and a conversation naming neither a card nor a depth-1
    unit, do not guess and continue the first — another terminal may be carrying that
-   card right now. Show the claim paths and ask which one to continue. For
+   card right now. Only
+   when the matched row is work and that row does not itself name the card, show the
+   claim paths, ask which one to continue, then fully read the chosen claim, run its
+   deferred uncommitted comparison, and report —
+   a row going elsewhere leaves nothing to ask. For
    others' claims, path and claimant only. From every
    pending card, read only `Depends`, `Approval`, and `Review`. When `git worktree list`
    reports two or more worktrees and this folder holds, for the claim this invocation
    continues, neither an
-   uncommitted change nor a commit outside integration whose subject contains a token
+   uncommitted change to that claimed card's file nor a commit outside integration whose
+   subject contains a token
    exactly equal to that card's number, do not guess which folder is running it — show that listing's paths and branches
    and ask whether to continue here or open it in that folder. Ask this only at report
    time, when the matched row is work and this invocation continues that claim — a row
@@ -136,10 +154,13 @@ The progress log reaches <last point>; capability documents are
 unattributed: <those paths | none>; not yet on integration: <N paths | none>. Proceed?"
 ```
 
-`not yet on integration` is `none` when the integration tip is an ancestor of the current
-branch; otherwise it is the count of task-card paths under `devflow/tree/` changed by
-commits integration does not contain, plus a `devflow/journal.md` change — journal lines
-appended during a blockade show in this count too. In a session the canonical rules judged
+`not yet on integration` is the count of task-card paths under `devflow/tree/` changed by
+the commits `integration..HEAD` contains — the current branch's commits the integration
+tip lacks — plus a `devflow/journal.md` change, and it is `none` only when that commit set
+is empty — journal lines
+appended during a blockade show in this count too. The integration tip being an ancestor
+of the current branch is no ground for `none`: a branch with local commits piled up is
+exactly that shape. In a session the canonical rules judged
 unable to
 publish to integration, that count keeps growing — that is the signal of working scattered.
 
@@ -161,7 +182,9 @@ foundation, include that numbered document's exact path. Append any shape-projec
 as one line naming the path and zone.
 
 Once approved, continue into the stage named in the report. Never modify code before
-approval.
+approval. The request-recording row's one commit is the exception that precedes the
+report — recording is immediate (the table scan lands that line and rescans), and what
+approval guards is planning and code, not preservation.
 
 Derive that next stage by scanning this table from top to bottom and taking the first
 matching row. The table's journal and verify rows judge from the reads the procedure
@@ -192,7 +215,7 @@ locally during a blockade stay visible:
 | A task card has a `Depends` member that the state predicates cannot parse, or a dependency number does not point to exactly one card | split — replace it with the user-confirmed canonical dependency value and finish the planning commit |
 | My claimed card lacks `Approval` or `Review`, has `Approval: pending`, or has noncanonical `Depends` | split — checkpoint any current diff and progress log, release the card, normalize legacy dependencies, finish execution-proposal approval and the planning commit, then reclaim it |
 | My claimed card has a `Depends` target that is not `.done.` | split — release the original card and finish the prerequisite |
-| The current conversation carries a change request from the user that no journal line or verify entry preserves yet and that canonical recognition does not resolve to an existing card — pending or claimed | split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table |
+| The current conversation carries a change request from the user that no journal line or verify entry preserves yet, that canonical recognition does not resolve to an existing card — pending or claimed — and that is not an item the tweak lane already handled in this conversation (its commit is that item's preservation) | split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table |
 | A card of mine is claimed | work |
 | An expected file has the canonical baseline predicates' exact `legacy v0.10` shape | with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone |
 | An expected file under the canonical baseline predicates is missing from HEAD, or an expected HEAD file with exactly one fixed boundary has a design section, design metadata, or current Design head that differs from the contract | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |

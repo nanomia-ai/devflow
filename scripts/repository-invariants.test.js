@@ -879,8 +879,19 @@ test("claims are freely parallel and terminal identity stays with the user", () 
   assert.doesNotMatch(work, /Never claim a pending card in a depth-1 unit where I already hold a claim/);
   assert.doesNotMatch(work, /reciprocal parallel/);
   assert.match(resume, /every claim of mine \u2014 path and status for all, and in full only the one this\s+invocation continues/);
-  assert.match(resume, /Show the claim paths and ask which one to continue/);
+  assert.match(resume, /the matched row's selection settles it at report time/);
+  assert.match(resume, /Only\s+when the matched row is work and that row does not itself name the card, show the\s+claim paths, ask which one to continue/);
+  assert.match(resume, /run its\s+deferred uncommitted comparison/);
+  assert.match(resume, /uncommitted change to that claimed card's file/);
   assert.match(resume, /report every remaining uncommitted path\s+without attributing it to a card/);
+});
+
+test("the unintegrated count judges the commit set, not bare ancestry", () => {
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  assert.match(resume, /the commits `integration\.\.HEAD` contains/);
+  assert.match(resume, /it is `none` only when that commit set\s+is empty/);
+  assert.match(resume, /The integration tip being an ancestor\s+of the current branch is no ground for `none`/);
+  assert.doesNotMatch(resume, /is `none` when the integration tip is an ancestor of the current\s+branch/);
 });
 
 test("candidate selection has one canonical order", () => {
@@ -900,7 +911,7 @@ test("candidate selection has one canonical order", () => {
   assert.match(resume, /Resolve the target by the canonical\n   rules' canonical recognition/);
   assert.match(work, /in canonical\s+candidate order over my remaining claims/);
   assert.match(resume, /selected by\n<your request \| the last handoff \| canonical order>/);
-  assert.match(resume, /The current conversation carries a change request from the user that no journal line or verify entry preserves yet and that canonical recognition does not resolve to an existing card — pending or claimed \| split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table \|/);
+  assert.match(resume, /The current conversation carries a change request from the user that no journal line or verify entry preserves yet, that canonical recognition does not resolve to an existing card — pending or claimed — and that is not an item the tweak lane already handled in this conversation \(its commit is that item's preservation\) \| split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table \|/);
   assert.ok(
     resume.indexOf("| The current conversation carries a change request") <
       resume.indexOf("| A card of mine is claimed | work |"),
@@ -1077,7 +1088,7 @@ test("one integration branch is the only shared authority", () => {
   assert.match(principles, /When the integration tip is not an ancestor of the branch\s+you tried to publish, this is ordinary contention[\s\S]{0,80}three\s+times at most/);
   assert.match(principles, /When the tip is an ancestor and the publish is still refused, it is a\s+structural blocker/);
   assert.match(principles, /never by error text, which\s+varies by locale and Git version/);
-  assert.match(principles, /these continue: code edits, progress-log checkpoints, and the final task commit/);
+  assert.match(principles, /these continue: code edits, progress-log checkpoints, tweak commits \(the lane's commit is\s+not a binding decision\), and the final task commit/);
   assert.match(principles, /journal appends that mint no number and make no claim/);
   assert.match(principles, /consuming \(deleting\) a canonical journal line/);
   assert.match(principles, /a layer-opening marker \(it mints numbers\)/);
@@ -1152,12 +1163,30 @@ test("the tweak lane lives in the canon and every consumer only cites it", () =>
   assert.match(principles, /`<id> tweak <unit number>: <what>`/);
   assert.match(principles, /no `devflow\/` path\s+is touched/);
   assert.match(principles, /stop, report, and switch to the ordinary path/);
+  // the landing checks and same-file yield live in the canon
+  assert.match(principles, /apply only to an item that requests a\s+change to the repository's artifacts/);
+  assert.match(principles, /written into no journal line/);
+  assert.match(principles, /`git symbolic-ref -q HEAD`/);
+  assert.match(principles, /When any verify\.md in the working tree contains `routing prepared`/);
+  assert.match(principles, /When the readable integration tip is not an ancestor of HEAD/);
+  assert.match(principles, /the existing glossary\.md too: term decisions live only\s+there/);
+  assert.match(principles, /applied to that item's own\s+text/);
+  assert.match(principles, /do not guess their owner/);
+  assert.match(principles, /back my edits out, reapply them after the other flow\s+has\s+committed/);
+  assert.match(principles, /take them over or discard them by\s+the user's decision/);
+  assert.match(principles, /with no `devflow\/` at the\s+repository root, do not tweak/);
   // consumers cite the lane instead of restating the gate
   assert.match(resume, /^## Tweak Entry$/m);
   assert.match(resume, /passes the canonical rules' three tweak questions/);
   assert.match(resume, /Apply only\s+the canonical open-Git-operation gate/);
-  assert.match(work, /one separate `tweak` commit through that lane/);
-  assert.match(split, /passes the canonical rules' three tweak questions\s+goes through the tweak lane/);
+  assert.match(resume, /the recorded line holds only those items/);
+  assert.match(work, /separate `tweak` commits through that lane — one per depth-1 unit/);
+  assert.match(work, /through the tweak lane's target-path check/);
+  assert.doesNotMatch(work, /so it never mixes with card work/);
+  // split never sends a recorded item back out to the lane
+  assert.match(split, /A recorded request line holds no item that passed the tweak\s+gate/);
+  assert.doesNotMatch(split, /goes through the tweak lane, not a card/);
+  assert.match(split, /minus any items that passed the canonical\s+tweak gate/);
   assert.match(resume, /A commit whose subject has the canonical tweak form/);
   for (const consumer of [resume, work, split]) {
     assert.doesNotMatch(

@@ -110,7 +110,8 @@ product-layer verification for the existing service only on an explicit user req
 A change like one button label or one border colour makes no card and no record. The
 session checks three things and, when all three are clear, just fixes it. Does the
 behaviour a user sees change? Is a design decision involved? Does it leave a trap the next
-person could fall into? It reads only the architecture and design documents if they exist,
+person could fall into? It reads the product, architecture, design, and code-style
+documents when they exist — and the glossary when the change touches wording or a name —
 makes the edit, runs one check, and lands a single `tweak` commit. The diff is already the
 complete record, so nothing gets written twice. The moment any of the three answers turns
 up, it is the ordinary path from there — record, card, approval. You can also just fix it
@@ -523,7 +524,10 @@ claimed.
 Three measurements back that. A commit that names its own paths does not pick up a file
 another session staged first. Four sessions appending to the journal at once lose no line.
 Two people editing different parts of one source file both survive, and the same spot fails
-loudly instead of overwriting quietly. Three guidelines are yours to keep. Never point two
+loudly instead of overwriting quietly. One thing is worth knowing. A commit records a
+file's final content. When two sessions have edited one file and one commits first, the
+other's share rides along. So the tweak lane looks at its target files before editing and
+steps back when someone's half-done change is sitting there. Three guidelines are yours to keep. Never point two
 terminals at the same card — disk cannot tell terminals apart. While another flow is
 alive, never have a file rewritten whole. And don't assign overlapping cards for the same
 hours — an overlap never overwrites quietly, but there is no reason to sit through the
@@ -645,6 +649,7 @@ A tool that knows its edges earns trust. These are the places devflow does not p
 | Trusting a hook without you | That removes the trust boundary; it is not automation |
 | Completion signals of two flows sharing one database, port, or dev server | File isolation is not runtime isolation. split keeps work that touches a shared dev server sequential |
 | Global consistency of state created outside integration | With no coordination point there is no global answer |
+| Commit attribution when two sessions edit one file at once | A commit records the file's final content, not who made each change. The tweak lane's pre-edit check catches the common case; the short gap between check and commit only closes with a lock |
 | An administrator rewriting the integration branch with a force-push | devflow itself only undoes with revert, but it cannot stop hands outside the repository. An erased claim shows the card as pending again |
 | Judgment quality when routing and planning run on a small model | Cards carry a tier system, but the session model is the user's choice. The odds of misreading the canon follow the model |
 | Cost advantage on a small project | One card per session runs about 2.6× ordinary development. More cards per session and a bigger codebase turn that around |

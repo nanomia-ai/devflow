@@ -273,8 +273,12 @@ hypothesis|missing>, verification <fresh|hypothesis|missing>, <M> card changes s
 baseline, the Verified-at value is `missing`.
 
 When the user, mid-card, asks for something that qualifies under the canonical rules'
-tweak lane, make one separate `tweak` commit through that lane and return to the card —
-the commit carries only its own paths, so it never mixes with card work.
+tweak lane, make separate `tweak` commits through that lane — one per depth-1 unit, as
+its rule directs — and return to the card —
+the commit carries only its own paths, and changes the card work made to the same file
+land first as that card's wip checkpoint through the tweak lane's target-path check. A
+Git commit records a path's final content, so without that check the same file's card
+changes ride the tweak commit.
 
 ## When You Must Leave the Card — stop and go up
 

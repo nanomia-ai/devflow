@@ -264,7 +264,12 @@ Review:            not-applicable
 When a request like "fix the filter on this page" arrives:
 
 Before reading code, append a new user request as the canonical `maintenance routing
-pending` line. Serialize the whole request as one JSON string. The recording commit
+pending` line. Serialize the whole request — minus any items that passed the canonical
+tweak gate — as one JSON string: a passing item is written into no journal line, and the
+tweak lane handles it in the conversation that carries it (canonical rules). When nothing
+remains after that subtraction, append no line — say those items are the lane's and stop.
+The
+recording commit
 carrying only that line has the message `<id> boundary — request recorded`. When this
 session holds a
 claimed card, land that commit alone as a binding decision and return to the card — the
@@ -384,8 +389,12 @@ When the Destination cannot be written in one or two sentences, invent nothing p
 ask the user what must become true, and create no card before the answer. A thin
 Destination leaves the next session unable to tell what this card is for.
 
-**Bundling small items.** An item that passes the canonical rules' three tweak questions
-goes through the tweak lane, not a card — its diff is its record. Several small items that
+**Bundling small items.** A recorded request line holds no item that passed the tweak
+gate — a passing item was handled by the tweak lane in its own conversation at recording
+time and is written into no journal line (canonical rules). So do not send an item back
+out to the tweak lane from here: the request line is consumed whole by the planning
+commit, and an item sent out to the lane sits in no record on interruption. Several small
+items that
 fail the gate (they change a transition, yet are each too small for a card of their own)
 go into one card.
 Bundling requires all four: ① they came from the same original request; ② they sit in the
