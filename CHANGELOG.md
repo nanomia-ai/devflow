@@ -6,6 +6,24 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-13 — guideline anti-rigidity pass, cold-start context for the report, and dated corrections on four stale design rows (no version change)
+
+Three owner-raised checks, each answered in the documents themselves. (1) The audit
+guideline gained a "how to read this document" preamble: every rule is a variation of one
+question, only two rules bear load (the acceptance bar and the class-keyed stop
+condition), the rest is technique an auditor may override with a stated reason —
+plus a context-first reading order (report and design philosophy before the hunted text),
+per-lens expected outputs, and a softened citation requirement. (2) The 0.14.0 execution
+report now works for a zero-context auditor: a minimal cold-start section (what devflow
+is, the three text layers, six terms, canon precedence), the audit guideline added to its
+reading list, the eight untouchables inlined with their reasons instead of pointing into
+a document marked don't-read. (3) A staleness sweep of docs/design.md found four decision
+rows still asserting what v0.14.0 overturned — the v0.9.23 group claim, the v0.12.0
+unit-axis claim key, the v0.13.0 blockade freeze, and the v0.13.0 no-skip-recording
+guard — each now carries a dated correction note pointing at its superseding row
+(lineage preserved, nothing deleted), and the on-hold size entry carries the measured
+current figures.
+
 ## docs — 2026-08-13 — the audit guideline: sixteen releases of verification practice become a standing instrument (no version change)
 
 Wrote `docs/audit-guideline_ko.md` for external auditors (owner-run GPT sessions and any
