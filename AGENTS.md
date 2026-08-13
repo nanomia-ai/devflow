@@ -81,12 +81,14 @@ English-only (no pair): AGENTS.md (this file), CHANGELOG.md,
 
 The role contracts (`reviewer.md` · `verifier.md` · `auditor.md` · `retrospector.md`) are companion files beside their
 skills — briefing documents delivered verbatim to a clean context on every platform,
-not registered agents. The Codex installers embed each role contract into its skill's
-generated prompt. `state-predicates.md`, `verification-predicates.md`, and
-`baseline-predicates.md` are canonical companions, not role contracts. The installers embed
-task-card predicates into split, work, verify, and resume, and verification predicates into
-verify and resume only. The installers embed baseline predicates into arch, adopt, verify,
-and resume. work and the role contracts carry only their bounded baseline projections.
+not registered agents. On Codex the plugin cache carries the whole repository, so each
+skill reads its role contract and predicate companions by relative path exactly as Claude
+does — nothing is embedded at install time (the generated-prompt channel was removed in
+0.13.0; DD-57). `state-predicates.md`, `verification-predicates.md`, and
+`baseline-predicates.md` are canonical companions, not role contracts. split, work,
+verify, and resume read the task-card predicates; verify and resume the verification
+predicates; arch, adopt, verify,
+and resume the baseline predicates. work and the role contracts carry only their bounded baseline projections.
 
 Modification procedure (order is fixed):
 
@@ -97,7 +99,8 @@ Modification procedure (order is fixed):
    count, and meaning-bearing figures (counts, percentages, version numbers — not
    numerals a language happens to spell out as words) must match 1:1 between Korean and
    English.
-4. Regenerate the Codex prompts (see Releasing below) + add the CHANGELOG entry.
+4. Rerun the Codex installer to refresh the plugin snapshot (see Releasing below) + add
+   the CHANGELOG entry.
 
 Exception for external contributors: PRs may edit the English deploy files directly; a
 maintainer back-syncs the `_ko` originals before the next release. This is the authorized
@@ -272,10 +275,11 @@ borrowing text into this repository still needs prior permission.
 - **Users install from GitHub; this repository installs from disk.** README documents the
   remote two-line install on both platforms (`marketplace add nanomia-ai/devflow` +
   `plugin add`). Maintainers testing local edits use `codex/install.ps1` / `install.sh`,
-  which register **this folder** as the marketplace and also write the `~/.codex/prompts/`
-  slash prompts. After any skill edit, rerun the installer on your machine if you use
+  which register **this folder** as the marketplace and refresh the plugin snapshot.
+  Generated `~/.codex/prompts/` slash prompts are gone since 0.13.0 (DD-57) — the
+  installer only removes ones an older devflow wrote. After any skill edit, rerun the
+  installer on your machine if you use
   Codex — reviewers cannot see the result in a PR, so state in the PR whether you ran it.
-  The installers also purge prompts under the pre-0.9.0 name `nano-devflow-*`.
 - The SessionStart hook ships **inside the plugin** on both platforms: Claude
   auto-discovers `hooks/hooks.json`; Codex needs it declared, which
   `.codex-plugin/plugin.json` does (`"hooks": "./hooks/hooks.json"`). Keep that manifest's
@@ -303,7 +307,7 @@ borrowing text into this repository still needs prior permission.
       the §5 stop condition stated; findings listed (defects vs judgment calls separated)
 - [ ] README prose touched? Tone rules applied and the before/after counts recorded
       (Writing the README). A typo or a link path is not prose — record that instead of counting
-- [ ] Codex install rerun locally — plugin snapshot + prompts (or the PR states it was not)
+- [ ] Codex install rerun locally — plugin snapshot (or the PR states it was not)
 - [ ] Install channels still target each platform's **current** native mechanism
       (skills · plugins · hooks) — re-verify against platform docs when platforms update
 - [ ] CHANGELOG entry added at the top (+ version bump if a deploy artifact changed)

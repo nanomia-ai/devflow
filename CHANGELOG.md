@@ -12,6 +12,59 @@ unchanged. It was moved rather than summarized: those releases predate `docs/rou
 their entries are the only narrative record of that era, and they predate the promotion
 table, so experience that never reached the canon may still be sitting in them.
 
+## 0.14.2 — 2026-08-13 — the GPT audit's findings land: mixed requests record only what fails the gate, and the tweak lane checks its landing first
+
+An independent GPT audit of the 0.14.1 implementation (`docs/rounds/v0.14.0/audit_ko.md`)
+reported eleven findings, three of them reproduced as real Git fixtures. Every one held up
+against the deployed originals — zero were rejected — and all are closed here, with three
+owner decisions taken over previews: a mixed request records only its gate-failing items
+(DD-65), same-file contention gets a pre-edit check with the tweak side yielding (DD-66),
+and the tweak lane's judgment reads the glossary when an item could touch a name or term.
+
+**Mixed requests (audit 4.1).** The card planning commit consumes the whole request line,
+so a tweak item mixed into it was consumed with neither a card nor a record — a silent
+loss on interruption. Now a passing item is written into no journal line: the recorded
+line holds only gate-failing items, and the lane handles passing items in the conversation
+that carries them (recording commit first). split no longer sends items back out to the
+lane. The residual window — death after recording, before the tweak commits — is the same
+grade DD-61 already accepted for pure tweak requests.
+
+**The lane's landing checks (audit 4.2–4.5, DD-66).** Before editing, the lane now
+confirms by machine: a named branch (a detached-HEAD commit lands in no branch — Git
+fixture), no `routing prepared` in any working-tree verify.md (one HEAD advance turns that
+recovery into an integrity anomaly), the readable integration tip an ancestor of HEAD
+(stale documents produce wrong "no"s), and target paths free of changes this session did
+not make (`git commit --only` carries a sibling's half-done hunks — Git fixture). At
+commit time the diff is compared against the bundled items' changes; on foreign content
+the tweak side backs out and reapplies after, so no mutual wait can form. The check-to-
+commit race stays honestly in README's not-covered table. DD-61's "bypassing the nets
+breaks nothing" is partly corrected by DD-66.
+
+**resume repairs.** `not yet on integration` now counts the `integration..HEAD` commit
+set — the old ancestor guard reported `none` on exactly the ordinary ahead-of-integration
+branch (audit 4.6, an escaped 0.13.0 defect, now a fixture and a new guideline defect
+class, the wrong predicate). The which-claim question moved to report time beside the
+worktree question (audit 4.7); status questions no longer enter the lane (4.8); the unit
+number reads the item's own text (5.1); the worktree question's uncommitted half now
+tests the claimed card's file, which free parallelism had silently suppressed.
+
+**Docs drift (audit 5.2).** AGENTS.md and the design pair stopped instructing the removed
+Codex prompt channel; DD-04 is replaced by DD-57, DD-18 partly corrected by it.
+
+Verified by two clean-context passes (refuter; literal walker over seven scenarios) — 16
+deduplicated findings, 15 adopted and repaired, 0 silent-loss class — then a bounded
+re-audit of the repairs: 5 findings, all closed convergently, loop closed under the
+guideline's §5 stop condition. Tests 87 → 95 (three Git fixtures added), all passing;
+ko↔en parity and the Korean check hold. README tone counts unchanged by its two edits
+(ko em-dash 74→74, en 99→99; bold pairs unchanged). Adjudication detail:
+`docs/rounds/v0.14.0/report-0.14.2_ko.md`.
+
+Files: `skills/{principles,resume,split,work}/SKILL{,_ko}.md`, `README{,_ko}.md`,
+`AGENTS.md`, `docs/design{,_ko}.md`, `docs/design-decisions{,_ko}.md`,
+`docs/design-backlog{,_ko}.md`, `docs/usecase-matrix_ko.md`, `docs/audit-guideline_ko.md`,
+`docs/rounds/v0.14.0/report-0.14.2_ko.md`, `scripts/*.test.js`, both `plugin.json`s
+(0.14.2).
+
 ## docs — 2026-08-13 — the changelog gets a length norm and an archive, both without losing a line (no version change)
 
 Measurement inverted the assumption that the old entries were the heavy ones: the oldest

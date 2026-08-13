@@ -100,7 +100,10 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   shows during card work. Accurate, but attention may dull.
 - **Stranded flows** — claims land on integration but checkpoints ride their own branch, so
   deleting a worktree or a teammate going away strands that progress on a branch nobody
-  reads, and the next session quietly re-implements from the claim point. Git preserves the
+  reads, and the next session quietly re-implements from the claim point. Journal appends
+  left as local commits during a blockade share the same root — re-entry on the same
+  branch reads them in step 6, but entry through another branch or worktree does not
+  discover them automatically (v0.14.0 audit 6.1). Git preserves the
   bytes, so this is visibility, not loss. Reserve option: a bounded query in resume listing
   unintegrated local branches holding commits with my id prefix — not added before field
   observation.

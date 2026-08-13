@@ -36,7 +36,7 @@ Core philosophy — every modification must keep to it:
 Layer 0 (once, or inherited): product → arch → [design] · existing code: adopt back-derives     Layer 1 (loop): split → work ⇄ verify
 Shared: resume, principles (canonical rules)
 Created in the target project: devflow/{project/, tree/, journal.md, users/<id>/ rooms}
-Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/install.*)
+Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugin — registered by codex/install.*)
 ```
 
 ## Document map — what lives where, and when it is read
@@ -95,12 +95,12 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-01 | Output folder named `devflow/` (not docs/) | Identity, packaging, platforms | origin | active |
 | DD-02 | Name is devflow — Claude uses the `devflow:` namespace, Codex uses the `devflow-` filename prefix | Identity, packaging, platforms | origin | active |
 | DD-03 | Canonical rules live inside skills/principles/ | Identity, packaging, platforms | origin | active |
-| DD-04 | Codex prompts embed the canon (no file reference) | Identity, packaging, platforms | origin | active |
+| DD-04 | Codex prompts embed the canon (no file reference) | Identity, packaging, platforms | origin | replaced by DD-57 (v0.13.0) |
 | DD-05 | One hook only: SessionStart | Identity, packaging, platforms | origin | active |
 | DD-12 | Cross-references between skills use slash-less stage names | Identity, packaging, platforms | origin | active |
 | DD-13 | install.ps1 requires UTF-8 **BOM** | Identity, packaging, platforms | origin | active |
 | DD-16 | Design in Korean, deploy in English (dual language) | Identity, packaging, platforms | origin | active |
-| DD-18 | The Codex install leads with the native plugin channel (marketplace add + plugin add); generated slash prompts stay as the explicit channel; the hook stays separately registered in ~/.codex/hooks.json | Identity, packaging, platforms | v0.9.9 | active |
+| DD-18 | The Codex install leads with the native plugin channel (marketplace add + plugin add); generated slash prompts stay as the explicit channel; the hook stays separately registered in ~/.codex/hooks.json | Identity, packaging, platforms | v0.9.9 | active, partly corrected by DD-57 (v0.13.0) |
 | DD-29 | Platform adapters only connect to the shared skill; they do not duplicate its procedure | Identity, packaging, platforms | v0.9.21 | active |
 | DD-32 | Codex hooks ride along with the plugin — `.codex-plugin/plugin.json` declares `hooks`, and installing is two remote lines | Identity, packaging, platforms | v0.9.20 | active |
 | DD-57 | The flat Codex prompt channel is removed; the plugin cache carries the companions | Identity, packaging, platforms | v0.13.0 | active |
@@ -124,7 +124,8 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-54 | One request that spans several capabilities keeps one source and one marker per parent | The task tree and its cards | v0.13.0 | active |
 | DD-55 | Items that do not change the precondition-to-outcome transition ride one card | The task tree and its cards | v0.13.0 | active, partly corrected by DD-61 (v0.14.0) |
 | DD-58 | A finished card's number is never renumbered | The task tree and its cards | v0.13.0 | active |
-| DD-61 | A tweak's commit is its record | The task tree and its cards | v0.14.0 | active |
+| DD-61 | A tweak's commit is its record | The task tree and its cards | v0.14.0 | active, partly corrected by DD-66 (v0.14.2) |
+| DD-65 | A mixed request records only its gate-failing items — a passing item enters no journal line | The task tree and its cards | v0.14.2 | active |
 | DD-07 | devflow does not create or manage a Git-worktree workflow | Concurrency, claims, integration | origin | active |
 | DD-14 | The multi-mode split axis is the **scope of truth**, not people | Concurrency, claims, integration | origin | active |
 | DD-15 | HANDOFF is committed to git but never in a dedicated commit — it rides the boundary commit only | Concurrency, claims, integration | origin | active |
@@ -139,6 +140,7 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-60 | Claims are freely parallel, and a checkpoint carries only the changes this session made | Concurrency, claims, integration | v0.14.0 | active |
 | DD-62 | During a blockade, journal appends that mint nothing, claim nothing, and consume nothing are written immediately | Concurrency, claims, integration | v0.14.0 | active |
 | DD-63 | Journal merge conflicts resolve 3-way, not as a union | Concurrency, claims, integration | v0.14.0 | active |
+| DD-66 | The tweak lane confirms its landing by machine first, and in same-file contention the tweak side yields | Concurrency, claims, integration | v0.14.2 | active |
 | DD-28 | Durable knowledge is connected through bounded consumers of existing records, not through a new document layer | The knowledge layer and capability documents | v0.9.21 | active |
 | DD-33 | The knowledge-reachability set — standing of outside records · conversation decisions land immediately · a user-confirmation gate on product's four core sections · a disproof row (replace the statement, or re-run product) · a means row · a pre-HANDOFF landing check · a survival path for research answers that are tools · verify's disproof arbitration | The knowledge layer and capability documents | v0.9.18 | active |
 | DD-42 | The capability knowledge baseline — the domain blueprint a verification closure produces | The knowledge layer and capability documents | v0.10.0 | active |
