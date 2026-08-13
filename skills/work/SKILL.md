@@ -16,8 +16,14 @@ When this project is coming up from a version without rooms, finish the canonica
 transition before anything below. For each bare `.wip.` card, ask the user whether it is
 mine: rename a confirmed one to `.wip-<my id>.`, and release one the user does not
 attribute to me by stripping the whole suffix back to pending — its progress log stays in
-the card. Independently of that answer, move a root `devflow/HANDOFF.md` into my room. Land
-whichever of these applies in one `<id> boundary — room upgrade` commit.
+the card. In that same commit, replace with the new path the `card-json` of every journal
+`evidence-wait` or `evidence-finalizing` line naming the exact path that rename changed,
+preserving its timestamp, checkpoint, and `check-json` byte for byte. Never auto-release an
+evidence claim whose owner is unconfirmed — the evidence cannot be preserved, so report the
+exact blocker and stop. Independently of that answer, move a root `devflow/HANDOFF.md` into
+my room. Land whichever of these applies in one `<id> boundary — room upgrade` commit. When
+one side is applied and the other is not, judge by that commit subject and finish only the
+remainder and the commit.
 
 1. Apply the canonical Git requirement — a work tree and a git identity — before anything
    below.
@@ -132,7 +138,10 @@ Read the card fully (including Coordinates and Identity — know what this is a 
   number is not in the capability document's `Covered cards`, emitting each card's number and
   the last `carry:` line of its progress log and nothing else. Read only that output and open
   no card body. With no capability document, or one whose shape gate blocked its body, the
-  complement is every such card, and a card with no `carry:` line contributes nothing
+  complement is every such card. When the body was read but `Covered cards` is absent or
+  does not parse as a JSON array, the complement is likewise every current non-`.stale.`
+  `.done.` card — never guess the empty set. Delivering a line twice is harmless; losing
+  knowledge is unrecoverable. A card with no `carry:` line contributes nothing
   ↓
 When the current card, its direct-dependency cards, or arch's Code structure or shared
 contracts name one or more exact code paths, search only those paths for the responsibility
@@ -293,15 +302,24 @@ document comes before creating a card.
 ## Switching Inside One Capability — park, then release
 
 Moving to another depth-1 unit needs no procedure: claim a card there. One is needed only
-for switching inside a unit.
+for switching inside a unit. A card that a journal `evidence-wait` or `evidence-finalizing`
+line names is not parked — releasing it would leave that record pointing at an unclaimed
+card, which integrity item 13 reports. Finish its remote-evidence transition first.
 
 ```
 ① Land the current diff and progress log as an `NN.N wip: <reason for stopping>`
    checkpoint. With nothing changed, make no commit
 ② Remove the claim suffix, returning the card to pending
-③ Route by canonical candidate order. Integrate the checkpoint first, then land the release
-   as the canonical binding decision it is
+③ Claim, in this same invocation, the replacement card the user named in it, when that
+   card is ready under the state predicates. With no card named, or a named card that is
+   not ready, claim no automatic candidate: say which condition fails and ask what to do. Integrate the checkpoint first,
+   then land the release as the canonical binding decision it is
 ```
+
+The card just parked keeps its approval and dependencies, so canonical candidate order puts
+it first again — an automatic candidate at ③ would make the switch cancel its own purpose.
+Invent no state that preserves "later" across sessions: this switch's destination holds
+only inside this invocation.
 
 This does not collide with the ban on mid-task handoff: parking is a release, not a handoff.
 
@@ -378,23 +396,22 @@ context only:
 ```markdown
 # HANDOFF · <YYYY-MM-DDTHH:MM:SSZ>
 ## Next single step          <!-- one tree path | none -->
-## Open decisions (needs a human)
 ```
 
 `Next single step` is mandatory and holds one tree path — the one the canonical candidate
 order would take next. Write `none` only when the tree has no pending and no claimed card
-at all. Anything else this session learned lands durably
-instead — the card's carry line inside this unit, a journal `capability note` about
-another capability.
-Re-read this file from disk immediately before overwriting it: carry forward the
-`Open decisions` it holds now, not the copy read earlier in this session.
-Unresolved items from the previous HANDOFF's Open decisions must be carried forward.
-Once resolved, record the decision in journal or the owning document, then drop it.
+at all. Add no other section to this file, so that when two sessions of one room overwrite
+each other, the only thing lost is a value that is recomputed. Anything else this session
+learned lands durably instead — the card's carry line inside this unit, a journal
+`capability note` about another capability, an attributed journal line for an open item a
+person must decide.
 
-The first time this room's HANDOFF still carries a `## Just learned` or `## Traps` section,
+The first time this room's HANDOFF still carries a `## Just learned`, `## Traps`, or
+`## Open decisions` section,
 land that content before overwriting: through the discovery→update table where a row takes it, as a
-`capability note` where it belongs to another capability, and in this card's carry line
-where it belongs to this one. Overwrite only after that landing. Do not backfill carry lines
+`capability note` where it belongs to another capability, in this card's carry line
+where it belongs to this one, and as an attributed journal line where a person must decide
+it. Overwrite only after that landing. Do not backfill carry lines
 onto older `.done.` cards.
 
 HANDOFF and journal are main-session-only.

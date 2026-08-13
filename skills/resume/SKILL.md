@@ -61,12 +61,16 @@ approval, and let work automatically read the same numbered document.
    integration fields; and the file names directly under `devflow/project/capabilities/`
    plus the canonical baseline predicates' shape projection
    (mechanical query results only — never the body)
-2. devflow/tree/ full listing over the canonical shared tree state (the integration tip
-   unioned with each worktree HEAD)     ← how far things got (.done./.wip./pending)
+2. the devflow/tree/ listing at the integration tip; a depth-1 folder carrying `.done`
+   uses the canonical closed-folder projection   ← how far things got (.done./.wip./pending)
 3. every claim of mine — path and status for all, and in full only the one this
    invocation continues, which is the first of them in canonical candidate order. For
    others' claims, path and claimant only. From every
-   pending card, read only `Depends`, `Approval`, and `Review`
+   pending card, read only `Depends`, `Approval`, and `Review`. When `git worktree list`
+   reports two or more worktrees and this folder holds, for that card, neither an
+   uncommitted change nor a commit outside integration whose subject carries that card's
+   number, do not guess which folder is running it — show that listing's paths and branches
+   and ask whether to continue here or open it in that folder
 4. **Bounded verify projection** — Run a mechanical query that does not put every verify.md
    into model context. For each file, it emits only the four revisions and `Verdict`; the
    maximum source id per section;
@@ -78,14 +82,14 @@ approval, and let work automatically read the same numbered document.
    source-id entry selected by that output. Until the state table selects the exact file and
    state and calls verify, do not read `Scenario`, `Executed`, `Regression`, `Standards`,
    `Provisional`, or `Journal sweep`
-5. my room's HANDOFF.md                            ← the next step and open decisions
+5. my room's HANDOFF.md                            ← the next step
 6. devflow/journal.md in full (if present — the sweep discipline keeps it short)
                                                    ← cross-task decisions
 7. Full git status. Compare uncommitted changes against the progress log's last entry of
    only the claim this invocation continues, and report every remaining uncommitted path
    without attributing it to a card. For every pending card, check the same path exists in
-   the authority and run the state predicates' two Git diffs, using the integration tip as
-   authority
+   the authority; run the state predicates' two tree-wide Git diffs once and judge every
+   pending card from them, using the integration tip as authority
 ```
 
 **Check HANDOFF's freshness before trusting it.** Compare its date against the newest
@@ -96,7 +100,8 @@ points at a step already taken. If any task commit is newer than the HANDOFF dat
 report it as stale and let the tree and my claimed card decide. A header outside
 `# HANDOFF · YYYY-MM-DDTHH:MM:SSZ` also counts as stale. **When HANDOFF conflicts with the
 tree, the tree wins.**
-Even from a stale HANDOFF, include its Open decisions in the report.
+Include in the report the open journal items a person must decide, and the content of a
+legacy `Open decisions` section still sitting in HANDOFF.
 
 ## Report, Then Approval
 
@@ -108,15 +113,23 @@ The progress log reaches <last point>; capability documents are
 <non-retired filenames|none>. The next step is <one step>, selected by
 <your request | the last handoff | canonical order>. Also open:
 <every other unit holding a candidate under the same matched row | none>; uncommitted and
-unattributed: <those paths | none>. Proceed?"
+unattributed: <those paths | none>; not yet on integration: <N cards | none>. Proceed?"
 ```
+
+`not yet on integration` is `none` when the integration tip is an ancestor of the current
+branch; otherwise it is the count of task-card paths under `devflow/tree/` changed by
+commits integration does not contain. In a session the canonical rules judged unable to
+publish to integration, that count keeps growing — that is the signal of working scattered.
 
 The selection reason comes straight out of the canonical candidate order — `your request`
 when the step came from a card the user named or from the session unit, `the last handoff`
 when it came from the carried unit, and `canonical order` otherwise. When the session unit
 holds no candidate, say so in that clause. When the matched row is work, the step reported
-is the one work's own selection would take — canonical candidate order over my claims and
-every ready pending card — so the report and the stage cannot name different cards.
+is the one work's own selection would take — work's precondition 2 takes a remote-evidence
+transition first, and only with none left does canonical candidate order over my claims and
+every ready pending card choose — so the report and the stage cannot name different cards.
+When a remote-evidence transition was chosen, report that card path and the next action its
+branch specifies.
 When the conversation named no depth-1 unit and two or more units hold a candidate under
 the matched row, ask which unit to continue instead of proposing one. With a single unit
 holding candidates there is nothing to ask; propose it.
@@ -137,9 +150,10 @@ matching row:
 | Any verify.md in HEAD contains a valid `routing prepared` object | verify — compare and apply its payload, then finish the completed state and specified route commit without committing the prepared object again |
 | One or both of journal and verify.md differ from HEAD in the working tree, and the full working-tree diff is a canonical verification-state transition, product-result write prefix, uncommitted route with its output, or prepared-route prefix | verify — without repeating execution, first finish the missing output and that state or routing commit |
 | Any verify.md has a legacy Failure history, Audit, or Retrospective entry without a source id | verify — first finish the canonical source-id migration commit |
-| A valid layer-opening marker exists in the working tree or HEAD | split — finish the earliest marker's interrupted planning commit from its durable source and minted numbers |
+| A valid layer-opening marker exists in the working tree or HEAD | split — take the earliest marker together with every marker carrying the same `source-json` as one bundle, and finish the interrupted planning commit from its durable source and minted numbers |
 | journal contains a `product verification running` line | verify — rerun the recorded flight |
 | journal contains a `product verification result` line | verify — finish the stored result's failure routing, events, and report |
+| An `evidence-wait` or `evidence-finalizing` journal line names a card of mine | work — take that remote-evidence transition first; report the exact card path work's precondition 2 selects and the next action of that branch |
 | The canonical claim→done move is uncommitted, or the last commit changing one of my claimed cards that no evidence record names has the canonical final task subject | work — make no second final task commit; finish only upper-document feedback and the boundary |
 | An Audit or Retrospective section has a `routing · source id:` state | verify — land pending-finding routing one at a time in finding-number order |
 | An Audit or Retrospective section contains findings `awaiting user decision` | verify — present the recorded findings verbatim and record the decision |
@@ -156,9 +170,9 @@ matching row:
 | My claimed card has a `Depends` target that is not `.done.` | split — release the original card and finish the prerequisite |
 | The current conversation carries a change request from the user that no journal line, verify entry, or claimed card preserves yet | split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table |
 | A card of mine is claimed | work |
-| journal contains an exact `maintenance routing pending` line | split — plan the earliest line's request through maintenance routing |
 | An expected file has the canonical baseline predicates' exact `legacy v0.10` shape | with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone |
 | An expected file under the canonical baseline predicates is missing from HEAD, or an expected HEAD file with exactly one fixed boundary has a design section, design metadata, or current Design head that differs from the contract | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |
+| journal contains an exact `maintenance routing pending` line | split — plan the earliest line's request through maintenance routing |
 | An expected HEAD file has zero or more than one `## Verified state` boundary | resume — instead of the whole original, report its path, the HEAD boundary count that selected this route, the working-tree boundary count and line count, the HEAD blob object ID for that exact path or `none`, and the expected boundary, then offer only two choices: (1) after confirming that a user-identified Git revision and path has one boundary, the user restores those bytes to the damaged file's current expected path and commits only that file; (2) state the discarded verified prose and HEAD blob ID, obtain confirmation, and route `Brownfield: yes` to adopt or `no` to arch for a whole reset from current Layer 0 plus an empty verified scaffold under the ordinary design-batch confirmation. Search no history for a known-good revision; resume writes no file, and deferral changes no file |
 | journal contains an exact `product verification requested` line | verify — product layer |
 | A Retrospective section has a `pending · source id:` state, or an Audit `pending · source id:` state passes the Audit execution boundary | verify — run and record one runnable pending event |
@@ -190,7 +204,10 @@ session's table scans. Judge them again next session because the execution bound
 Report a file whose verified-zone sections or verification metadata alone have malformed
 shape, but open no separate stage. The next capability closure's verify run replaces that
 zone in full and heals it. If the user defers baseline repair, skip only the three baseline
-rows above during the rest of this session's table scans; do not block the execution axis.
+rows (exact `legacy v0.10`; a missing expected file or a design-shape mismatch; zero or
+more than one boundary) during the rest of this session's table scans; do not block the
+execution axis. split's maintenance-mapping gate does not open on that deferral — a card
+mapped from a stale boundary lands in the wrong capability.
 
 When no earlier row matches and `Brownfield: yes`, report the tracked post-adoption work
 complete and wait for a new request. Run the product layer only when the user explicitly

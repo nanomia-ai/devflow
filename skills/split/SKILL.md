@@ -94,7 +94,9 @@ tree diff. When rebase changes the hash, put the changed full commit object ID o
 The begin commit then lands on integration as the binding decision that mints the numbers.
 
 When a valid layer-opening marker exists in the working tree or HEAD, open no new layer.
-Process the earliest timestamp first, breaking a tie by journal line order. Decode `source-json` by
+Process the earliest timestamp first, breaking a tie by journal line order, and take with it
+every marker carrying the same `source-json` — that bundle gets one execution proposal and
+one planning commit, never one per parent. Decode `source-json` by
 the canonical format and open that source, combining it with the upper documents read at
 this skill's start. For a maintenance or re-split source, also recheck only the current
 code and existing records enumerated by step 2 below. A missing or non-unique source is an
@@ -272,23 +274,34 @@ Before using a line, decode `request-json` as a JSON string. If it does not have
 canonical format or cannot be decoded, report an integrity anomaly. Do not read code,
 create a card or folder, or delete the line before canonical item-12 recovery finishes.
 
-Delete the request line and layer-opening marker in the same planning commit that lands
-the cards, approvals, and required folder rename. If the user cancels while the line is
+Delete the request line and every layer-opening marker of that request in the same planning
+commit that lands the cards, approvals, and required folder rename. A request spanning
+several units still gets one execution proposal and one approval — approving unit by unit
+would need several approvals for one twenty-item fix list.
+If the user cancels while the line is
 uncommitted, delete it together with any uncommitted marker and draft cards minted for it.
-If the line is already committed and its layer-opening marker
-exists in HEAD or the working tree, land one binding-decision commit that deletes both the
-marker and the line and discards any uncommitted draft cards minted for it; with no marker,
-land deletion of the line alone as a binding-decision commit. Keep it while a mapping question or execution-proposal approval
+If the line is already committed and its layer-opening markers
+exist in HEAD or the working tree, land one binding-decision commit that deletes every one
+of those markers and the line and discards any uncommitted draft cards minted for them;
+with no marker, land deletion of the line alone as a binding-decision commit. Keep it while a mapping question or execution-proposal approval
 remains unresolved. After interruption, its decoded value is the current request.
 
-1. **Map the request's scope to a location.** Shared foundations, cross-capability
-   contracts, and the verify channel go to `01-foundation`; everything else goes to the
-   matching product.md capability folder. For this mapping step only, read the fixed first
-   four lines of each candidate capability document and nothing else — `Boundary: owns …;
-   does not own …` is the mapping oracle. If neither location is determined, ask the
-   user instead of guessing. If that capability is retired in product.md or its tree
-   representation has `.stale`, create no card; route to product so the user first decides
-   whether to reactivate it or define a new capability
+1. **Map the request's scope to a location.** Before mapping, read only the `Design head`
+   metadata line of each candidate capability document and run the single-line command
+   `git log -1 --format=%H -- devflow/project/product.md devflow/project/arch.md devflow/project/glossary.md`.
+   When any stored value differs from that output, do not map: route `Brownfield: yes` to
+   adopt and `no` to arch to refresh the affected design zones first.
+   A card mapped from a stale boundary lands in the wrong capability. Shared foundations,
+   cross-capability contracts, and the verify channel go to `01-foundation`; everything
+   else goes to the matching product.md capability folder. For this mapping step only, read
+   the fixed first four lines of each candidate capability document and nothing else —
+   `Boundary: owns …; does not own …` is the mapping oracle. **When one request spans
+   several locations, map all of them** — never pick one and drop the rest. When any part
+   determines no location, or a mapped capability is retired in product.md or has `.stale`
+   as its tree representation, ask the user before the begin commit and leave the original
+   request line in place. Route a retired unit to product so the user first decides whether
+   to reactivate it or define a new capability, and create no card for any unit before that
+   answer
 2. Trace the request through the current code. Limit candidate handoff and specification
    files to exact paths named by the user, exact paths directly linked once by a file on
    that flow, and paths under the mapped capability and `shared` in arch.md's
@@ -297,23 +310,30 @@ remains unresolved. After interruption, its decoded value is the current request
    another path or list a whole folder
 3. Choose the cards and continuing numbers (01.7, 02.8…). When the maintenance line
    exists, use its whole line as a `journal:` source; when verify.md preserves the request,
-   use the exact failure or finding `verify:` locator above. Write the layer-opening marker and first land it
-   together with any uncommitted maintenance line in the begin commit. This also applies
-   when adding cards to an existing folder
-4. Add the cards to the mapped folder. If the folder is absent and a root waiting
-   capability file has the same number and name, replace that file with the folder and
-   create the cards. If neither exists, create the folder and cards together. Create no
+   use the exact failure or finding `verify:` locator above. When the mapping spans several
+   parents, write one marker per parent, all carrying the same `source-json`. First land
+   every marker together with any uncommitted maintenance line in one begin commit. This
+   also applies when adding cards to an existing folder
+4. Add each unit's cards to its mapped folder. If a mapped folder is absent and a root
+   waiting capability file has the same number and name, replace that file with the folder
+   and create the cards. If neither exists, create the folder and cards together. Create no
    other foundation or capability representation
-5. **Remove `.done` from that folder and every ancestor through the depth-1 capability or
-   foundation** — it holds only while every active child is done. Forgetting this rename
+5. **Remove `.done` from every mapped folder and every ancestor through the depth-1
+   capability or foundation** — it holds only while every active child is done. Forgetting this rename
    makes the tree lie
 6. Product-layer failures use the same rule. Never create a task card at the tree root
 
 **Card recall.** When step 1 finds an existing pending card of this request's scope sitting
-in the wrong folder, the planning commit that corrects the mapping deletes it and creates
-the replacement in the right place — but only while that card was never claimed and no task
-commit subject has named its number. Once a task commit carried that number, leave the card
-where it is and record the correction as one journal line instead.
+in the wrong folder, the planning commit that corrects the mapping leaves the original as a
+`.stale.` tombstone at the same path and number and creates the replacement under a new
+number in the right folder — but only while that card was never claimed and no task
+commit subject has named its number. The tombstone keeps that number in the tree, so the
+next minting does not reuse it. When another pending or claimed card's `Depends` holds a
+member exactly equal to that number, replace it with the replacement card's number in the
+same planning commit, releasing a claimed card first. This tombstone is not an
+upper-document change, so it creates no `re-split pending` marker, and no implementation
+history is invented in its progress log. Once a task commit carried that number, leave the
+card where it is and record the correction as one journal line instead.
 
 ## Task Card Format
 
@@ -347,6 +367,25 @@ When split starts with a pending card whose
 `Approval` is not `pending` but is ineffective under the state predicates, report the
 exact reason and reset it to `pending`. Present the whole current card in a new execution
 proposal, then land the new approval value and card change together in the planning commit.
+
+**When the user changes the Destination of a card in progress**, use the existing path:
+work checkpoints and releases the card, split rewrites its Destination, Why, Forbidden, and
+Completion signal, gets the execution proposal approved again and lands it in the planning
+commit, and the card is then claimed again. No upper document changed, so this creates
+neither `.stale.` nor a `re-split pending` marker.
+
+When the Destination cannot be written in one or two sentences, invent nothing plausible —
+ask the user what must become true, and create no card before the answer. A thin
+Destination leaves the next session unable to tell what this card is for.
+
+**Bundling small items.** Items that do not change the precondition-to-outcome transition a
+user sees — a button name, wording, layout, or sort order, exactly what the canonical
+baseline predicates' `Current behavior` exclusion already separates — go into one card.
+Bundling requires all four: ① they came from the same original request; ② they sit in the
+same depth-1 unit; ③ one Destination states every one of their outcomes; ④ one revert may
+undo them together. List the bundled items one by one in the execution proposal and get
+approval. An item that does change the transition is not bundled and gets its own card.
+**Never create a path that skips recording** — this bundles, it does not omit.
 
 Scope a completion signal to the paths this capability owns whenever the means allows it
 — `pnpm test src/payment`, not `pnpm test`. One working tree runs one build, so a

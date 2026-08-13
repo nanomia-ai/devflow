@@ -114,8 +114,14 @@ existing code. This value selects how the first tree is created; it is not imple
 progress. When an existing arch.md lacks only the `Brownfield` field, ask that one
 question, add only the field, and change nothing else.
 
-The default for `integration` is the current branch. The canonical rules govern what that
-value then means.
+The default proposal for `integration` forks on how many worktrees `git worktree list`
+reports. With one, it is the current branch and there is no extra question. With two or
+more, propose **a branch no worktree has checked out** — Git refuses to update a branch
+another worktree has checked out, so when one folder holds integration, every claim,
+minting, and closure has to be done in that folder and running several worktrees loses its
+point. When no such branch exists, show the exact command that creates one
+(`git branch <name> <current integration>`) and let the user run it — devflow creates
+neither a branch nor a worktree. The canonical rules govern what that value then means.
 
 `Existing records` is only a locator index for handoff and specification files that
 adopt checked against code. Each line contains a product.md capability name or `shared`,

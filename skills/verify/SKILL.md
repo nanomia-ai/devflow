@@ -240,7 +240,9 @@ section below).
    `capability` are the run's three revisions. Before creating the marker, refresh the
    closing capability's verified zone under the canonical baseline predicates. Read the
    standard refresh set from HEAD once and replace from exactly one `## Verified state`
-   heading through EOF. Do not change the design zone, `Capability number`, or
+   heading through EOF. This capability's `capability note` input is the multiset of its
+   numbered lines collected from the journal blob at the marker's `head` — that blob is HEAD
+   when the marker is first created, and an existing marker's `head` in prefix recovery. Do not change the design zone, `Capability number`, or
    `Design head` bytes. Write exact paths where this run's Standards gate stopped at another
    capability boundary as `Consumed paths`, the capability code scope as `Scope paths`, and
    calculate `Scope head` from the union of those two sets. When the union is empty, run no
@@ -296,9 +298,13 @@ section below).
    finish its interrupted closure. Classify every journal line. Do not delete a marker,
    request, evidence-wait, or evidence-finalizing line whose exact format the canonical
    rules define during this sweep; only
-   the current capability-closing marker is deleted when closure below finishes. Delete in
-   the same sweep every `capability note` line whose capability number is this closing
-   capability's, but retain them all when that refresh was a baseline no-op. Retain a
+   the current capability-closing marker is deleted when closure below finishes. Of the
+   `capability note` lines, delete in the same sweep only those byte-identical to the
+   multiset step 7 collected — a line held twice there is deleted twice. A line appended
+   after the begin commit and another capability's line stay, and all of them are retained
+   when that refresh was a baseline no-op. When a line of that multiset is absent from the
+   current journal or was replaced with different bytes, do not guess and continue: read
+   integration again and judge the transition anew. Retain a
    cross-task decision with no target. A cross-task decision that now has an exact core-
    document target is a valid late decision: retain the marker, report its source line and
    target, and return without writing or executing to the canonical target-owning skill
@@ -306,7 +312,7 @@ section below).
    revisions. A line in neither class is an integrity anomaly; report it and neither write
    nor commit. Before the first write, calculate from current HEAD and the
    marker the final bytes of verify.md with its one-line sweep result and journal.md with
-   only this marker and those capability notes removed. Apply them in this order: verify.md below the still-open
+   only this marker and those collected capability notes removed. Apply them in this order: verify.md below the still-open
    capability folder; journal.md; then the capability-folder rename that adds `.done`.
    The whole working-tree diff must equal exactly one prefix of that order. For a prefix,
    apply only the remaining suffix and land the folder rename, verify.md, and journal in one

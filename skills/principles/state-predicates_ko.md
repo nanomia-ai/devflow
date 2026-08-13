@@ -14,8 +14,11 @@
 
 승인은 카드 값이 `YYYY-MM-DDTHH:MM:SSZ; 병렬: <번호+번호|없음>`이고 다음 디스크 조건까지
 충족할 때만 유효하다. 같은 저장소 상대 경로의 카드가 규칙 정본이 정의한 통합 tip에 있어야
-한다. 그 authority를 `<authority>`라 할 때 `git diff --quiet -- <카드 경로>`와
-`git diff --cached --quiet <authority> -- <카드 경로>`가 모두 성공해야 한다. 이 비교는 Git의
+한다. 그 authority를 `<authority>`라 할 때, 트리 전체에 대해 한 번씩만 계산하는 두 목록 —
+`git diff --name-only -z --no-renames -- devflow/tree`와
+`git diff --cached --name-only -z --no-renames <authority> -- devflow/tree` — 어디에도 그
+경로가 없어야 한다. 출력은 NUL로 나누고 줄바꿈으로 쪼개지 않으며, `--no-renames`를 빼지
+않는다 — 그래야 옮겨진 카드가 옛 경로와 새 경로 양쪽에 나타난다. 이 비교는 Git의
 정규화된 내용으로 index·working tree·authority가 같은지를 판정한다. 병렬 묶음은 각 카드가
 같은 정본 카드 번호 순서의 묶음을 가지며 그 값이 함께 점유될 카드 전부를 포함할 때만 상호 일치한다.
 별도 journal `증거 대기`가 가리키는 카드는 이 병렬 비교에서 제외한다.

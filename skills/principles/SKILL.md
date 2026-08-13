@@ -70,20 +70,50 @@ branch's tip, and fetch or push only when that branch tracks a remote — a pure
 integration branch needs no network command. In every ancestor test here, a commit is its
 own ancestor.
 
-**Worktrees are flows.** Every worktree of this repository shares one `.git`, so a commit
-made in one is visible from another with no fetch and no remote. `git worktree list
---porcelain` is the list of flows alive right now: it survives a terminal dying, and
-`git worktree prune` drops a worktree whose folder is gone. Read shared tree state as the
-union of the integration tip and each listed worktree's HEAD — a card carrying a claim at
-any of them is claimed — so a claim made in one worktree is seen in the others. Git refuses
-to update a branch another worktree has checked out, so when integration is checked out
-elsewhere, a binding decision cannot land on it from here: report that exact blocker, write
-nothing partial, and let it land from the worktree holding integration.
+**Shared truth is the integration branch.** Card status, tree numbers, verify source ids,
+`devflow/journal.md`, capability documents, and binding decisions are judged at the
+integration tip. Your own working tree and HEAD hold a transition still in progress, and the
+rules below name exactly when to read them. Every worktree of this repository shares one
+`.git`, so a commit made in one is visible from another with no fetch and no remote — but
+another worktree's HEAD is evidence not yet integrated, never authority: that flow's code
+and progress log arrive when it integrates, and no shared-state judgment reads it.
+`git worktree list --porcelain` lists this repository's worktrees, and `git worktree prune`
+drops one whose folder is gone.
 
-Shared state for next-stage routing and the integrity check comes from the integration
-tip, not the current branch: `devflow/project/`, `devflow/tree/`,
-`devflow/journal.md`, and resume's bounded verify projection. Fetch integration and read this shared state
-before routing. When the integration tip is not an ancestor of the current branch and, at
+**Publishing a shared transition.** Before publishing, remember the integration tip's
+unabbreviated full commit object ID output by Git. When publishing is rejected, read
+integration again; a changed id means the state you judged from is stale, so judge again
+from the latest. Classify the rejection by one mechanical test, never by error text, which
+varies by locale and Git version. When the integration tip is not an ancestor of the branch
+you tried to publish, this is ordinary contention: integrate that tip and retry — three
+times at most. When the tip is an ancestor and the publish is still refused, it is a
+structural blocker: report the exact cause. After three tries that still find the tip ahead,
+report sustained contention; it is not a failure-ladder count. When someone else took the same number first,
+do not retry — follow the lost-claim rule below. When you cannot publish to integration at
+all — another worktree holds it, or permission, protection, or the network blocks it —
+continue only the code edits and progress-log checkpoints of a card whose initial claim has
+already landed on integration. A new claim, a new tree number, a new verify source id, a
+card's `.done.` rename and its boundary commit, creating or consuming a canonical journal
+line, and any Layer 0 or capability-document change wait until integration opens. Report the
+exact cause and how to open it the first time it blocks; after that, name in one line each
+transition now waiting. The cause is not repeated, and nothing waits unnamed — resume's
+report carries the standing count.
+
+**Several hands in one working folder.** Several sessions may carry different cards at the
+same time. Change `devflow/journal.md` by appending — reading it and rewriting it whole
+drops the lines another session appended meanwhile. Keep in HANDOFF only values the tree
+recomputes: an open decision that needs a person lands as one attributed journal line, and
+when it resolves, that line becomes the decision or goes through the discovery→update table
+and is then deleted. While another flow is alive, edit the part that changes instead of
+rewriting a file whole — whole rewriting is the only edit that silently overwrites another
+flow's change. When a completion signal or build fails while this working tree holds
+uncommitted paths outside my card's own, report those exact paths before counting the
+failure ladder. A worktree is not a safety device; it is the
+choice for isolating a build completely.
+
+Before routing, fetch integration and read this shared state at that tip: `devflow/project/`,
+`devflow/tree/`, `devflow/journal.md`, and resume's bounded verify projection.
+When the integration tip is not an ancestor of the current branch and, at
 that tip, journal or any verify.md contains an active marker, an active request or
 product-verification line, or an event `pending` or `routing` state, include the integration
 tip in the current branch before local claimed work. Checkpoint unrelated uncommitted
@@ -113,13 +143,16 @@ Room transitions — joining and departure are each one commit; the upgrade spli
   from the shared documents, not from commit archaeology.
 - Upgrading from a version without rooms: arch adds `integration` and `merge` to arch.md, the identity resolution above creates
   the room, and work renames its own bare `.wip.` to `.wip-<id>.` and moves
-  `devflow/HANDOFF.md` into the room. A bare `.wip.` or a root `devflow/HANDOFF.md` means
+  `devflow/HANDOFF.md` into the room. In that same commit, replace with the new path the
+  `card-json` of every `evidence-wait` or `evidence-finalizing` line naming the exact path
+  that rename changed, preserving its timestamp, checkpoint, and `check-json` byte for
+  byte. A bare `.wip.` or a root `devflow/HANDOFF.md` means
   the upgrade is incomplete — report, confirm the owner with the user, and finish it.
   Never guess.
-- Departure: the user declares it. Any remaining member — promote the departed room's
-  open decisions into journal (attributed), release their claims, delete the room,
-  1 journal line. This is the sanctioned exception to both "write only in your own room"
-  and claim inviolability.
+- Departure: the user declares it. Any remaining member — move any legacy `Open decisions`
+  section left in the departed room's HANDOFF into attributed journal lines, release their
+  claims, delete the room, 1 journal line. This is the sanctioned exception to both "write
+  only in your own room" and claim inviolability.
 
 ## Document Hierarchy (the contract)
 
@@ -208,7 +241,11 @@ YYYY-MM-DDTHH:MM:SSZ evidence-finalizing: card-json: <JSON string containing the
 ```
 
 Before creating a layer's first child or folder, land its layer-opening record together
-with any uncommitted source record in a `split — begin <parent>` commit. Land a capability-
+with any uncommitted source record in a `split — begin <parent>` commit. When one source
+spans several depth-1 units, write one layer-opening marker per affected parent, all
+carrying the same `source-json` value and landing in one begin commit — that locator is the
+bundle's identity, so no separate bundle identifier is created. `<parent>` is then those
+parent paths joined with `+` in canonical path order. Land a capability-
 closing record together with the passing verify.md record and, when the canonical baseline
 predicates' verified-zone refresh succeeds, the closing capability's baseline file, in a
 `boundary — begin <capability number>` commit before the folder rename or any other journal
@@ -233,7 +270,14 @@ canonical card-number order and joined with `+`. First land the upper-document e
 markers in one binding-decision commit. Capability retirement follows product's `.stale`
 folder and `.stale.md` rules and creates neither replacement work nor this marker. Delete
 in the retirement commit every evidence record that names a card inside the retired open
-folder. split deletes the marker when the replacement cards' planning commit lands.
+folder. Before confirming a retirement, enumerate under a bound every `capability note`
+line carrying that capability's number — that observation's only consumer is that
+capability's next closure, and a retired capability has none, so the line would stay
+forever. Zero lines retire as they are. With one or more, put the user's chosen discard, or
+reassignment to foundation or an exact non-retired capability number, in the same
+retirement commit; when the user defers, the retirement defers too. product editing those
+lines is the sanctioned exception to journal ownership, and automatic discard is forbidden.
+split deletes the marker when the replacement cards' planning commit lands.
 
 `Needs replacement work` has one test. It is needed when the changed upper-document
 statement cannot be true together with the card's Destination, Forbidden, Completion
@@ -265,7 +309,8 @@ What you discovered → where to update:
 | A new term becomes necessary | one line in glossary.md |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | An observation confirmed in code about a capability other than the one being worked on | one canonical `capability note` line in journal.md carrying that capability's number. Do not edit the other capability's document directly — its next closure harvests the line |
-| A cross-task decision | one line in journal.md |
+| Something confirmed in code about a shared contract or the foundation | an ADR when it produced a decision hard to reverse (arch's three conditions); arch.md's `Risks` when it is something that breaks first; otherwise one line in journal.md. Never write it into the foundation's verified zone — what was not verified is not a verified state |
+| A cross-task decision, or an open item a person must decide | one attributed line in journal.md. When an open item resolves, that line becomes the decision or lands through another row of this table, and is then deleted |
 
 For a product re-run, use the canonical `product re-run pending` line above. Serialize
 the whole disproved statement as one JSON string so newlines and quotes remain recoverable.
@@ -313,6 +358,16 @@ the end.
 Run at the gates that open the tree (start of split and resume).
 **Report anomalies — do not fix them.** Auto-correction that misjudges accelerates
 corruption. Correct only after user approval.
+
+**Closed-folder projection.** Inside a depth-1 folder carrying `.done`, a machine query
+reads only path names and status suffixes and opens no body — that folder's knowledge is
+already folded into its capability document. Item 4 therefore judges only task cards
+outside such a folder (a re-closure strips the folder's `.done` first, which returns those
+cards to it). Items 1, 8, 9, and 13 concern claimed or pending cards, which item 3 already
+reports there from the projection alone, so they add nothing. Every other item is judged from the projected names and
+statuses, and one body inside is opened only when an item reports an anomaly at that exact
+path. The same name set serves next-number derivation, the ban on number reuse, locator
+resolution, and the `Covered cards` comparison.
 
 1. Inside one depth-1 unit, are there 2 or more `.wip.` cards with the same id where an
    additional card is explained by neither reciprocal parallel approval in the cards
@@ -420,8 +475,8 @@ counts — those belong to work's stuck-escape.
 **A filename's status suffix is the source of truth for task state; the claimed card's
 progress log is the only record of progress inside that task.** Never put task progress
 in product, arch, design, code-style, or glossary. journal may contain only cross-task
-decisions and lines whose exact formats the canonical rules define; it
-never records task progress or approval. verify.md may record
+decisions, open items a person must decide, and lines whose exact formats the canonical
+rules define; it never records task progress or approval. verify.md may record
 verdicts, failure routing, Audit and Retrospective event states, findings, and user
 decisions. These records do not directly change card or folder status. A task card's
 `.done.` evidence is its completion signal and applicable review; a capability folder's
@@ -466,9 +521,9 @@ decisions. These records do not directly change card or folder status. A task ca
 
 ## Commit Discipline
 
-- **Every devflow commit carries only its own paths.** A commit stages the exact paths its
-  own rule names and nothing else — it never sweeps in another flow's uncommitted change
-  from the same working tree.
+- **Every devflow commit carries only its own paths.** Whatever else this working tree has
+  staged, a commit contains exactly the paths its own rule names — a file another flow in
+  the same folder staged earlier never rides along.
 - **Layer 0 commit**: product, arch, design, and adopt land each core document in one
   commit immediately after the user confirms it — message `<skill> — <document filename>`
   (adopt lands all adoption documents together as `adopt — layer 0`). A document created
@@ -483,8 +538,8 @@ decisions. These records do not directly change card or folder status. A task ca
 - **Planning commit**: split bundles newly created or revised pending cards,
   user-confirmed card-dependency format corrections, tree structure, card Approval and
   Review, arch.md `Settled by` replacements, verify.md
-  failure or adopted-finding routing, and deletion of a layer-opening marker in one
-  commit. It needs no completion signal because it is not an
+  failure or adopted-finding routing, and deletion of every layer-opening marker it settles
+  in one commit. It needs no completion signal because it is not an
   implementation result. Message: `split — <opened layer>`. A promotion's `NN.N promote`
   is the dedicated message for the same commit class. It lands on the
   integration branch as a binding decision.
@@ -631,10 +686,13 @@ decisions. These records do not directly change card or folder status. A task ca
   landed on integration and the current branch contains that integration tip.
 - If pulling integration shows someone else's claim already landed on the same
   number, you lost — copy your progress log into the surviving card and step back.
-- Duplicate numbers from concurrent minting — the later-merged side moves to the
-  mid-insertion form (`03.2` → `03.2b`). Allowed only before `.done.`; 1 journal line.
-- HANDOFF merge conflicts keep `Open decisions` as the union of both sides and take
-  `Next single step` from the side whose `# HANDOFF · <timestamp>` header is newer. A
+- Numbers are minted only on integration, so duplicates arise only while a card is pending
+  and unclaimed. At that stage the later-merged side moves to the mid-insertion form
+  (`03.2` → `03.2b`) with 1 journal line. Never renumber a card already claimed or
+  finished; report it as an integrity anomaly — that number also lives in commit subjects,
+  outside issues, and people's links, which fixing files and dependencies does not reach.
+  A verify source id follows the same principle.
+- HANDOFF merge conflicts take the side whose `# HANDOFF · <timestamp>` header is newer. A
   digest marker keeps the descendant hash (resume's marker rule).
 - Journal merge conflicts resolve as a union — keep both sides, date-ordered.
   Squash merges are forbidden (they erode every rule built on `NN.N` history) — the

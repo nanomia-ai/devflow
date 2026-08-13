@@ -16,8 +16,11 @@ exactly one tree card is an integrity anomaly. Never infer the replacement.
 Approval is effective only when the card value is
 `YYYY-MM-DDTHH:MM:SSZ; parallel: <number+number|none>` and the following disk condition
 also holds. The card exists at the same repository-relative path in the integration tip
-the canonical rules define. Calling that authority `<authority>`, both `git diff
---quiet -- <card path>` and `git diff --cached --quiet <authority> -- <card path>` succeed.
+the canonical rules define. Calling that authority `<authority>`, that path appears in
+neither of two lists computed once for the whole tree: `git diff --name-only -z
+--no-renames -- devflow/tree` and `git diff --cached --name-only -z --no-renames
+<authority> -- devflow/tree`. Split that output on NUL, never on newlines, and never drop
+`--no-renames` — it is what makes a moved card appear under both its old and its new path.
 These comparisons judge the index, working tree, and authority through Git-normalized
 content. A parallel group is reciprocal
 only when every card has the same group in canonical card-number order and that value contains every

@@ -161,7 +161,9 @@ A consumer makes only three comparisons.
 3. When the current non-`.stale.` `.done.` card-number set differs from `Covered cards`,
    the verified statements are hypotheses. They are hypotheses too while any non-`.stale.`
    card below that folder lacks a `.done` status. With no capability folder, the current set is
-   empty.
+   empty. When `Covered cards` is absent or does not parse as a JSON array, the verified
+   statements are hypotheses and the complement consumers use is every current
+   non-`.stale.` `.done.` card — never the empty set.
 
 `Verified at: none` makes the verified statements hypotheses. Binding ADRs are outside
 both statement groups; a consumer checks each exact path when reading it. Metadata is the
