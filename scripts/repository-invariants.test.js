@@ -158,8 +158,8 @@ test("every docs path a document names resolves to a file that exists", () => {
   const dangling = [];
   for (const file of files) {
     const relative = path.relative(root, file).replace(/\\/g, "/");
-    // CHANGELOG entries name the paths as they stood in that release; they are history.
-    if (relative === "CHANGELOG.md") continue;
+    // Changelog entries name the paths as they stood in that release; they are history.
+    if (relative === "CHANGELOG.md" || relative === "docs/changelog-archive.md") continue;
     const text = fs.readFileSync(file, "utf8");
     for (const match of text.matchAll(/\bdocs\/[A-Za-z0-9._/-]+\.md\b/g)) {
       const target = match[0];

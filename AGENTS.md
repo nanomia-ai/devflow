@@ -15,7 +15,13 @@ The gate, in order:
 2. Read this file to the end, and open whatever the wiring table below sends you to.
 3. After any modification, add an entry at the **top** of `CHANGELOG.md` (newest first:
    date / what / why / which files). **A change without a changelog entry is an
-   unfinished change.**
+   unfinished change.** An entry says what changed and why, and stops there: a release
+   entry runs to about 60 lines, a docs entry to about 25. Process knowledge that does not
+   fit — verification records, finding adjudications, measurements — belongs in the round's
+   `report_ko.md`, not here. A change that ran independent audit passes opens a round folder
+   even when it takes no version, so that detail has somewhere to go; entries reached 136
+   lines because it did not. Entries from before 0.10.0 live in
+   `docs/changelog-archive.md`, moved there unchanged.
 
 ## What opens what — the wiring
 

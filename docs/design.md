@@ -51,7 +51,8 @@ Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/in
 | `docs/usecase-matrix_ko.md` | standing instrument — the enumerated shapes of use | when changing `skills/**` |
 | `docs/rounds/<version>/` | round record — handoff, plan, report, audit | the previous one only, when opening a round |
 | `README.md` | for people — what this is and how to use it | users read it |
-| `CHANGELOG.md` | history — what changed in which version | when tracing when something changed |
+| `CHANGELOG.md` | history — what changed in which version, 0.10.0 onward | when tracing when something changed |
+| `docs/changelog-archive.md` | history — entries before 0.10.0, moved unchanged | when tracing something older than 0.10.0 |
 | `skills/principles/SKILL.md` | canonical rules — what the runtime executes | every session devflow runs in |
 
 The two standing instruments are opened by the session changing this repository **itself**,

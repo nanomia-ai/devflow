@@ -48,7 +48,8 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 코드는 adopt�
 | `docs/usecase-matrix_ko.md` | 상시 수단 — 사용 형태 전수 | `skills/**`를 바꿀 때 |
 | `docs/rounds/<버전>/` | 라운드 기록 — handoff · plan · report · audit | 새 라운드를 열 때 직전 것만 |
 | `README.md` | 사람용 — 무엇을 어떻게 쓰는가 | 사용자가 읽는다 |
-| `CHANGELOG.md` | 이력 — 버전별 변경 | 무엇이 언제 바뀌었는지 찾을 때 |
+| `CHANGELOG.md` | 이력 — 버전별 변경, 0.10.0 이후 | 무엇이 언제 바뀌었는지 찾을 때 |
+| `docs/changelog-archive.md` | 이력 — 0.10.0 이전 항목, 그대로 옮김 | 0.10.0보다 오래된 것을 찾을 때 |
 | `skills/principles/SKILL.md` | 규칙 정본 — 런타임이 실행하는 것 | devflow가 도는 모든 세션 |
 
 두 상시 수단은 이 저장소를 고치는 세션이 **스스로** 여는 것이지 소유자가 브리핑하는 것이
