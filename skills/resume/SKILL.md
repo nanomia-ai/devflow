@@ -54,6 +54,17 @@ This answer changes no file or state and asks no normal-resume approval question
 user then requests implementation, return to the normal procedure, report state, obtain
 approval, and let work automatically read the same numbered document.
 
+## Tweak Entry
+
+When the current conversation's request — every item of it, when it carries several —
+passes the canonical rules' three tweak questions,
+do not run the procedure below (state restoration) — this lane consumes no prior record
+and changes no shared state, so there is nothing for restoration to protect. Apply only
+the canonical open-Git-operation gate, follow the canonical tweak lane, and end. A request
+with any item that fails the three questions, or whose verdict flips mid-change, returns
+to the normal procedure
+(the request-recording row receives it).
+
 ## Procedure — when the tree exists, in exactly this order
 
 ```
@@ -64,12 +75,19 @@ approval, and let work automatically read the same numbered document.
 2. the devflow/tree/ listing at the integration tip; a depth-1 folder carrying `.done`
    uses the canonical closed-folder projection   ← how far things got (.done./.wip./pending)
 3. every claim of mine — path and status for all, and in full only the one this
-   invocation continues, which is the first of them in canonical candidate order. For
+   invocation continues, which is the first of them in canonical candidate order. When
+   the user's naming or the matched row continues work that is not a claim, this
+   invocation continues no claim — skip the full read and that claim's uncommitted
+   comparison and worktree question. With
+   two or more claims of mine and a conversation naming neither a card nor a depth-1
+   unit, do not guess and continue the first — another terminal may be carrying that
+   card right now. Show the claim paths and ask which one to continue. For
    others' claims, path and claimant only. From every
    pending card, read only `Depends`, `Approval`, and `Review`. When `git worktree list`
-   reports two or more worktrees and this folder holds, for that card, neither an
-   uncommitted change nor a commit outside integration whose subject carries that card's
-   number, do not guess which folder is running it — show that listing's paths and branches
+   reports two or more worktrees and this folder holds, for the claim this invocation
+   continues, neither an
+   uncommitted change nor a commit outside integration whose subject contains a token
+   exactly equal to that card's number, do not guess which folder is running it — show that listing's paths and branches
    and ask whether to continue here or open it in that folder
 4. **Bounded verify projection** — Run a mechanical query that does not put every verify.md
    into model context. For each file, it emits only the four revisions and `Verdict`; the
@@ -113,12 +131,14 @@ The progress log reaches <last point>; capability documents are
 <non-retired filenames|none>. The next step is <one step>, selected by
 <your request | the last handoff | canonical order>. Also open:
 <every other unit holding a candidate under the same matched row | none>; uncommitted and
-unattributed: <those paths | none>; not yet on integration: <N cards | none>. Proceed?"
+unattributed: <those paths | none>; not yet on integration: <N paths | none>. Proceed?"
 ```
 
 `not yet on integration` is `none` when the integration tip is an ancestor of the current
 branch; otherwise it is the count of task-card paths under `devflow/tree/` changed by
-commits integration does not contain. In a session the canonical rules judged unable to
+commits integration does not contain, plus a `devflow/journal.md` change — journal lines
+appended during a blockade show in this count too. In a session the canonical rules judged
+unable to
 publish to integration, that count keeps growing — that is the signal of working scattered.
 
 The selection reason comes straight out of the canonical candidate order — `your request`
@@ -142,7 +162,9 @@ Once approved, continue into the stage named in the report. Never modify code be
 approval.
 
 Derive that next stage by scanning this table from top to bottom and taking the first
-matching row:
+matching row. The table's journal and verify rows judge from the reads the procedure
+already made (step 6's journal, step 4's projection) — which is how lines appended
+locally during a blockade stay visible:
 
 | Disk state | Next stage |
 |---|---|
@@ -162,13 +184,13 @@ matching row:
 | A valid capability-closing marker exists in HEAD | verify — finish the interrupted capability closure |
 | journal contains an exact `re-split pending` line | split — finish the replacement-card plan for the earliest marker |
 | arch.md lacks the Brownfield field | ask once, "Did implementation code exist before devflow entered?"; yes makes adopt add only the field, no makes arch add only the field |
-| arch.md lacks the `integration` or `merge` line | arch — propose the current branch as the default, confirm it, and add only those two lines |
+| arch.md lacks the `integration` or `merge` line | arch — propose under arch's integration default rule (branching on worktree count), confirm it, and add only those two lines |
 | A bare `.wip.` card or a root `devflow/HANDOFF.md` exists | work — confirm the owner with the user, then finish the room-upgrade rename and HANDOFF move in one commit |
 | `devflow/project/glossary.md` is missing | with `Brownfield: yes`, adopt reverse-derives only glossary.md; with `no`, product creates only glossary.md without changing the confirmed product.md |
 | A task card has a `Depends` member that the state predicates cannot parse, or a dependency number does not point to exactly one card | split — replace it with the user-confirmed canonical dependency value and finish the planning commit |
 | My claimed card lacks `Approval` or `Review`, has `Approval: pending`, or has noncanonical `Depends` | split — checkpoint any current diff and progress log, release the card, normalize legacy dependencies, finish execution-proposal approval and the planning commit, then reclaim it |
 | My claimed card has a `Depends` target that is not `.done.` | split — release the original card and finish the prerequisite |
-| The current conversation carries a change request from the user that no journal line, verify entry, or claimed card preserves yet | split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table |
+| The current conversation carries a change request from the user that no journal line, verify entry, or card — pending or claimed — preserves yet | split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table |
 | A card of mine is claimed | work |
 | An expected file has the canonical baseline predicates' exact `legacy v0.10` shape | with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone |
 | An expected file under the canonical baseline predicates is missing from HEAD, or an expected HEAD file with exactly one fixed boundary has a design section, design metadata, or current Design head that differs from the contract | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |
@@ -233,8 +255,8 @@ the top.
 
 ## Digest — catching up on work outside my sessions
 
-Digest happens only at a clean boundary — **if I have a claimed card, resuming it comes
-first.** Digest runs after that card closes, or right before a new claim.
+Digest happens only at a clean boundary — after a card closes, or right before a new
+claim. An in-progress claim is never interrupted to digest.
 
 ```
 1. Pull the integration branch (arch config)
@@ -242,14 +264,17 @@ first.** Digest runs after that card closes, or right before a new claim.
    everything not authored by me + anything authored by me without my `<my id>` prefix
 3. For each target commit, read its subject and changed paths. Read the diff only when it
    touches a shared document, the capability folder of the next claim candidate, or a
-   `Read first` path on that candidate card. A contradiction with a shared document lands
+   `Read first` path on that candidate card. A commit whose subject has the canonical tweak form (`tweak ` after the id prefix)
+   touches no `devflow/` path by its own form, so subject and paths finish its classification. A
+   contradiction with a shared document lands
    through the discovery→update table. Fixing a shared document is a binding decision
    (the canonical rules' commit discipline)
 4. With a backlog over 30 commits, open no individual diff. Read a `git log --stat` rollup
    by path and capability. If that still cannot select the step-3 diff targets, ask the
    user to confirm the commit for the digest marker and record the exact skipped commit
    range in journal
-5. Advance the marker; it rides the boundary commit
+5. Advance the marker; it rides the next boundary commit — for a just-before-claim
+   digest, it rides that claim commit (work's claim-commit rule)
 ```
 
 If the marker is unresolvable (force-push, etc.), report it and re-anchor with user

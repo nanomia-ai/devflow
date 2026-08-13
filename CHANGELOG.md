@@ -6,6 +6,73 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## 0.14.0 — 2026-08-13 — free parallel claims, the tweak lane, blockade appends with 3-way journal merges
+
+Implements `docs/v0.14.0-plan_ko.md` in full. Three structural changes, each refuting a
+recorded decision in `docs/design.md` before overturning it:
+
+**Free parallel claims.** The one-claim-per-id-per-unit rule assumed one terminal per
+person; the owner runs six on one capability daily, and the rule's only legal path (a
+one-step group claim) meant the parking detour would sweep a sibling session's uncommitted
+work into a checkpoint and release its card. Any terminal now claims a ready card
+immediately — work names existing same-unit claims in one informational line (the
+Approval `parallel:` value stays as the plan's recorded judgment and feeds that line);
+every checkpoint-style rule is rescoped to "changes this session made"; the group-claim
+procedure, reciprocity predicate, and claim-count machinery are removed; integrity item 1
+is repurposed to orphan-claim detection (an id matching no room) with its number
+preserved; resume asks which claim to continue when several are open and none is named.
+README carries the three user guidelines (never two terminals on one card, never
+whole-file rewrites, don't assign overlapping cards together).
+
+**The tweak lane.** A change whose diff is its complete record — no user-visible
+precondition-to-outcome transition, no design decision or conflict, no trap — runs with
+no card, journal line, or review: declare, read Layer 0 only, cheapest check once, one
+`<id> tweak NN:` commit, no `devflow/` path. A fresh session holding only a tweak request
+skips state restoration entirely. Mid-change flips stop and switch to the ordinary path;
+discoveries still land through the discovery→update table. digest classifies `tweak`
+commits from subject and paths alone.
+
+**Blockade appends and 3-way merges.** Journal lines that mint nothing and claim nothing
+(maintenance requests, capability notes, attributed open items, product re-run pending)
+are appended and locally committed even while integration is unwritable — closing the one
+silent-loss path the second verification round found — and the final task commit is named
+on the continue side, honoring "nothing waits unnamed". The union merge rule is replaced
+with base-aware 3-way resolution because measurements 15–16 proved union semantics
+resurrect consumed lines; resume's standing count now includes journal changes.
+
+Also lands every confirmed defect from the second verification round: verify's journal
+classifier gains the attributed-open-item class and the shared-contract row's third
+branch writes exactly that (giving the line a consumer); resume's integration row cites
+arch's worktree-count default instead of contradicting it; claim contention and minting
+contention route to their own rules; split's Design-head gate treats an absent, legacy,
+or damaged candidate document as differing; the retirement observation gate gets its name
+and bound in the canon with product citing it; plus the cleanup tier (repository-root
+resolution sentence, closed-folder item-13 exception, W4 antecedent and exact-token
+match, widened `.stale.` definition, publish=landing binding, marker-bundle request-line
+deletion, ten terminology-table entries). Tests grow to 87, including real-Git fixtures
+for the 3-way journal merge and three path-scoped same-unit claims. Both plugin
+manifests move to 0.14.0 together. README tone counts (per the writing rules): em-dashes
+92→98 (en) and 67→73 (ko) across three added sections, bold 57 and 51 unchanged.
+
+Verified before release by two independent clean-context passes — a refuter over the
+seven changed deploy files and a literal-execution walker over four owner scenarios (six
+terminals on one capability, a tweak session, a blockade with a new request and a session
+death, a journal merge conflict) — every finding adjudicated against the text.
+Seventeen repairs followed, all sentence-local: the Parallelism section rescoped to
+subagent delegation (the sharpest leftover of the old permission model); the blockade
+lists naming the evidence-wait→finalizing swap, audit/retro request lines, and the
+binding-decision "now" precedence; tweak judged per item, its `<id>` resolved through
+the Identity rules (room creation sanctioned), its skip declared inside the canon, its
+gate judged from what the lane reads, and its leftover edits taken over with user
+confirmation instead of stranding; the attributed line given its two mechanical checks
+(canonical timestamp + existing room id); the request-record commit given a message form;
+resume's "claim this invocation continues" defined for the no-claim case, its routing
+rows anchored to the procedure's own reads, and pending cards added to the
+request-preserving list; the digest gate reworded for several claims and its marker given
+a commit vehicle before a claim; the 3-way base defined for rebase and ties. The
+use-case matrix's pending cells were all re-judged against the implemented text — zero
+gaps remain; the walker's journal-merge scenario ran clean on the first pass.
+
 ## docs — 2026-08-13 — v0.14.0 plan: free parallel claims, a tweak lane, blockade appends with 3-way journal merges (no version change yet)
 
 Wrote `docs/v0.14.0-plan_ko.md` after the owner decided on every open question from the

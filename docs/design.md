@@ -101,6 +101,11 @@ Distribution: Claude plugin (.claude-plugin) + generated Codex prompts (codex/in
 | The flat Codex prompt channel is removed; the plugin cache carries the companions (v0.13.0) | Probed live (2026-08-13): Codex installs a plugin into `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/`, the whole repository, and the model reads its skill from that absolute path - so `../principles/SKILL.md` resolves there exactly as it does in Claude. The recorded reason for embedding ("the Codex prompt folder is flat, relative references are unreliable") was true of `~/.codex/prompts/` and does not reach the plugin. The eight prompts held 50-120 KB each, embedding the whole rulebook, and two installers each carried their own embedding logic, so every rule change had to be applied twice. Removing generation alone would leave earlier files callable, so cleanup deletes the exact eight names for one release, keyed to the generated marker, and a file a user wrote under one of those names survives |
 | A finished card's number is never renumbered (v0.13.0) | The draft had a duplicate number move a completed card to the mid-insertion form and update dependents. But a completed number also lives in commit subjects, external CI, issues, and people's links, which fixing files and dependencies never reaches; if two completed cards are already known outside under one number, which reference means which card is generally unrecoverable. And since numbers are minted only on integration, a duplicate can now only arise while a card is pending and unclaimed, where renumbering is cheap. Beyond that stage it is reported as an integrity anomaly instead |
 | Open decisions live in journal, so HANDOFF holds only what the tree recomputes (v0.13.0) | v0.7.0 rejected moving open decisions into journal as "one concept, two homes"; that reason is refuted by removing the section from HANDOFF entirely, which leaves exactly one home. The failure it now closes is concrete: HANDOFF is overwritten whole, one person's two sessions share one room, and both overwriting means one side's decisions are gone with no trace. journal is append-only and already accepted attributed open decisions on the departure path. What remains in HANDOFF is `Next single step`, which canonical candidate order recomputes, so a lost overwrite costs an ordering preference and no data |
+| Claims are freely parallel, and a checkpoint carries only the changes this session made (v0.14.0) | The recorded ground for "one claim per id per depth-1 unit" (containing half-done sprawl, keeping claim state simple) rested on a one-terminal-per-person assumption. The owner's actual practice is six or more terminals splitting one capability's sections, and its only legal path was a one-step group claim — miss that door and the parking detour commits a sibling session's half-written diff at an arbitrary moment and releases its card. Measurement had already shown free parallelism safe (own-path commits, append-only journal, coexisting partial edits). So any terminal claims a ready card immediately, and existing claims of mine in the same unit are named in one informational line — sprawl visibility moves to resume's claim listing and its which-claim question when several claims meet an unaddressed resume. The `parallel:` field stays, being part of the Approval value format, but is decoupled from claim legality and feeds the informational line — v0.9.23's one-step group claim and the reciprocity predicate lose their reason to exist and are removed (zero card-format migration). Every checkpoint-style rule is rescoped to "the changes this session made to that card": uncommitted changes cannot be attributed to a session, so the unlimited reading of "checkpoint another unit's uncommitted claim first" could not coexist with several sessions (it still holds for the session that made the changes, so the bounding argument in the legacy-signal-migration rejection stands). Integrity item 1's condition becomes meaningless, so the item is redefined — a claimed card whose id matches no room (an orphan claim) — preserving the item number. Two terminals carrying the same card cannot be machine-prevented (terminals have no identity — the same measurement that rejected per-worktree identities), so the README guideline owns it |
+| A tweak's commit is its record (v0.14.0) | The recorded reason in the v0.13.0 row's "'too small to record' is never created" — one unrecorded path becomes the default path — is refuted thus: a commit IS a record. This lane does not skip recording; it changes the recording layer, and the owner corrected the direction personally (a button label or a border colour is fully recorded by its diff and almost never revisited). Only when all three gate questions are "no" and none is uncertain — does it change a precondition-to-outcome transition the user sees; does it produce a design decision or conflict with one (design tokens, ADRs); does it leave a trap the next worker must know — the change runs without a card, journal line, or review: read the existing Layer 0 documents, edit, run the cheapest check that touches the changed files once, and land one `tweak` commit. No `devflow/` path is touched. Knowledge-bearing changes are routed to the document layer by the gate, and the discovery→update table applies regardless of change size. A fresh session holding only a tweak request skips state restoration — the lane consumes no prior record and changes no shared state, so bypassing the nets breaks nothing, and it is the first landing of the owner's requirement that inferring from code alone is sometimes exactly right. When the verdict flips mid-change, stop and switch to the ordinary path. The one remaining risk is misclassification — a field observation item |
+| During a blockade, journal appends that mint nothing, claim nothing, and consume nothing are written immediately (v0.14.0) | v0.13.0's publishing paragraph made even journal line creation wait for integration to open, and the real result of that freeze was the loss this system guards against most: a session dying while blocked takes the user's spoken request with it, existing nowhere but the dead conversation (the independent review's only top-grade risk). The original ground — no coordination point, no global answer — does not reach appends: an append needs no global answer, and that decision's own measurements showed appends merge safely. The allowance is an exact enumeration: maintenance requests, capability notes, attributed open items and decisions, product re-run pending. Layer opening (it mints numbers), evidence records (they need a push), verification-state lines, and every consumption (deletion) still wait. The final task commit is named on the continue side — it belongs to the session's own branch, yet sat in neither list, violating the same paragraph's own declaration that nothing waits unnamed |
+| Journal merge conflicts resolve 3-way, not as a union (v0.14.0) | The recorded reason for "union — keep both sides, date-ordered" was record preservation, but measurements 15–16 already rejected the same semantics in `merge=union`: a line one side consumed and deleted is revived by the other side's nearby append, so a request that was already planned comes back and the same fix is planned twice under a new number. That is not preservation but a ghost replay. The replacement: against the merge base's journal blob, a line present in the base and absent on one side was consumed — never restore it; a line absent from the base is an addition — keep both sides' additions in time order. Additions are all preserved, so 3-way honors the original reason better than union did. Blockade appends raise merge frequency, which makes the two decisions one body |
+| The third branch of a shared-contract observation is an attributed open item (v0.14.0) | v0.13.0's K3 row ("otherwise one line in journal.md") created a line with no class and no consumer — it fits none of the canon's three allowed classes (canonical formats, cross-task decisions, attributed open items), and the foundation has no closure rite to harvest it. That is the root of the seam defect where verify's classifier rejects the line as an integrity anomaly, and a hand clearing the blockage by deleting the line converts a stop into a loss. An observation that is neither an ADR nor a Risks entry is written as an attributed open item — where it should land (or whether to discard it) is a person's decision — and the existing open-item semantics (resolve through another table row, then delete) supply the consumer, so no new class and no indefinite residence appear. verify's classifier carries exactly the canon's allowed classes: widening the write side realigns the read side in the same words |
 
 ## Borrowings and their boundary
 
@@ -306,6 +311,19 @@ Rejected in the v0.13.0 concurrency redesign:
   Mixing it into a release that also repairs ten defects would make it impossible to tell
   which change broke what.
 
+Rejected during v0.13.0 planning (r1), entered into the lineage in the 0.14.0 round:
+
+- **Foundation closure folding observations into the verified zone** — six values would
+  have needed defining (when, by whom, which point-in-time input, which section, how to
+  mark unverified content, which card list) and the entry-point auto-detection was not
+  mechanical: an undecided state at implementation-impossible level. The foundation's
+  verified zone stays `None.` — it receives no scenario rite, so having no verified state
+  is the honest record.
+- **A source-preserving view on the consuming capability's side for shared parts** — a
+  description from the consumer's viewpoint, not of the shared part itself. Shared-part
+  knowledge already lives in three homes with reach paths: ADRs, arch.md's Risks, and the
+  foundation cards' carry lines.
+
 ## Field observation items — watch during coming cycles, without adding rules
 
 - **Reaching prior records when maintenance reopens a capability** (verified 2026-08-08 ·
@@ -411,6 +429,35 @@ Rejected in the v0.13.0 concurrency redesign:
   `payments`, so recognition resolves nothing and resume asks. Safe by construction, but the
   most natural phrasing costs a round-trip. Loosening it would introduce fuzzy matching, so
   the round-trip is preferred until the friction is actually reported.
+- **Carry-line content quality** (named first-priority by the v0.13.0 review) — "a fact that
+  could make the next card wrong" borders on a judgment call, and `none` is the safe
+  default, so the lines may drift toward never being written. The failure is silent: every
+  line reads `none` while the next card falls into the same trap again. Watch the real
+  distribution of carry lines in field use.
+- **Tweak-gate misclassification rate** (v0.14.0) — a transition-changing edit that slips
+  through the tweak lane changes code with no record. digest and the Scope-head freshness
+  downgrade are the after-the-fact signals. Revisit the gate wording if misclassification
+  is observed.
+- **Noise of the standing publish-wait line** — in worktree flows a constant "N items"
+  shows during card work. Accurate, but attention may dull.
+- **Stranded flows** — claims land on integration but checkpoints ride their own branch, so
+  deleting a worktree or a teammate going away strands that progress on a branch nobody
+  reads, and the next session quietly re-implements from the claim point. Git preserves the
+  bytes, so this is visibility, not loss. Reserve option: a bounded query in resume listing
+  unintegrated local branches holding commits with my id prefix — not added before field
+  observation.
+- **Plugin version skew** — a repository has no way to record the devflow version it
+  assumes, so a 0.12 session and a 0.13 session can judge shared state under different
+  definitions in one repository. The README team paragraph is the documentary defense; the
+  structural limit itself is watched here.
+- **Trap reach at first cross-capability consumption** — when an 02 card first consumes an
+  03 contract it reads 03's code but has no path to a trap that lives only in 03's
+  document. The capability-side version of the problem the shared-parts decision solved for
+  the foundation. No real defect observed yet, so this is an entry only.
+- **The re-verification tail of bundled cards** — when a bundled card becomes a
+  capability's last active card, a re-closure proposing a full regression run follows. The
+  proposal needs approval, so the real cost is noise, and the tweak lane shrinks the bundle
+  population; watch.
 
 ## On hold — candidates for coming versions
 

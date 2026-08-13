@@ -22,10 +22,9 @@ neither of two lists computed once for the whole tree: `git diff --name-only -z
 <authority> -- devflow/tree`. Split that output on NUL, never on newlines, and never drop
 `--no-renames` — it is what makes a moved card appear under both its old and its new path.
 These comparisons judge the index, working tree, and authority through Git-normalized
-content. A parallel group is reciprocal
-only when every card has the same group in canonical card-number order and that value contains every
-card claimed together. Exclude a card named by a separate journal `evidence-wait` record
-from this parallel comparison.
+content. The `parallel:` value records the card numbers the plan judged safe to run
+together — it neither permits nor blocks a claim; work reads it as information when
+naming same-unit claims.
 
 A pending task card is ready only when Approval is effective and one of two conditions
 holds: `Depends` is `none`; or every parsed dependency number has exactly one `.done.` task card. It is not ready

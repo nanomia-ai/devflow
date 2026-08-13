@@ -72,10 +72,8 @@ remainder and the commit.
    under the canonical commit discipline; make no second final task commit and finish only
    upper-document feedback and the boundary.
 
-   Exclude a remaining valid `evidence-wait` card from the claim count below. Group my
-   remaining claims by depth-1 unit. Claims in different units are ordinary concurrent work;
-   two or more inside one unit are an integrity anomaly unless those cards carry reciprocal
-   parallel Approval. Others' claims do not count —
+   Any number of claims of mine, in any units, is ordinary concurrent work — several
+   sessions each carry their own card. Others' claims do not count —
    they are read-only reference (the canonical rules' "Identity and Rooms").
    If the claimed card lacks `Approval` or `Review`, has `Approval: pending`, or has
    noncanonical `Depends`, make no new implementation change. First land any current diff
@@ -93,21 +91,21 @@ remainder and the commit.
    card path and the user approved it, that card. Otherwise the first entry in canonical
    candidate order over my remaining claims plus every pending card that is ready under the
    state predicates. Continue a claim of mine; claim a ready pending card as below. Never
-   claim a pending card in a depth-1 unit where I already hold a claim, and never claim a
-   card that is not ready. When the user named a card and this selection does not take it,
-   say which card it took and why before claiming anything. When a claim of mine in another
-   unit holds uncommitted changes, land them as that card's `NN.N wip:` checkpoint first —
-   one working tree runs one build. Return to split to normalize a
+   claim a card that is not ready. When the user named a card and this selection does not
+   take it, say which card it took and why before claiming anything. When claiming a
+   pending card in a unit where I already hold claims, name those claims in one line, and
+   when the claimed card's Approval `parallel:` value does not carry them, add that fact
+   in one line — information, not a question, so proceed without waiting for an answer.
+   When this session left uncommitted changes on another card of mine, land them as that
+   card's `NN.N wip:` checkpoint first — uncommitted changes this session did not make
+   belong to another flow, so leave them untouched. The one exception is what the user
+   confirms as this card's leftover (edits a tweak flip left behind, for instance) — once
+   confirmed, take them over and treat them as changes this session made. Return to split to normalize a
    noncanonical `Depends`; report and stop on an integrity anomaly.
-   When the next card's effective `Approval` names a reciprocal parallel group and
-   every card of that group is ready, either claim the whole group in one step — renaming
-   every card of the group to `.wip-<my id>.` together — or claim one card of it. The same
-   approval permits both. Otherwise claim exactly one card.
    Before claiming, pull the integration branch and finish the digest (resume's
    digest procedure). The rename commit to `.wip-<my id>.` is the claim (message:
-   `<id> 02.4 claim`). A group claim renames every card of the group in that one commit, and
-   its message joins their numbers with `+` in canonical card-number order
-   (`<id> 02.4+02.5 claim`). Land this initial claim on integration as the canonical binding
+   `<id> 02.4 claim` — a digest.md marker a just-before-claim digest advanced rides this
+   commit). Land this initial claim on integration as the canonical binding
    decision and include that tip in the current branch before implementation. If a
    competing claim rejects the integration update, fetch again and follow the canonical
    rules' lost-claim rule (copy my progress log into the surviving card and step back).
@@ -274,6 +272,10 @@ post-baseline change list. Report one line: `baseline <Verified at>, design <fre
 hypothesis|missing>, verification <fresh|hypothesis|missing>, <M> card changes since`; with no
 baseline, the Verified-at value is `missing`.
 
+When the user, mid-card, asks for something that qualifies under the canonical rules'
+tweak lane, make one separate `tweak` commit through that lane and return to the card —
+the commit carries only its own paths, so it never mixes with card work.
+
 ## When You Must Leave the Card — stop and go up
 
 If you need to modify something outside the card's scope (shared contracts, core,
@@ -299,16 +301,20 @@ If the conflict is with an **upper document** (product, arch, code-style) rather
 code, follow the document-hierarchy procedure in the canonical rules — fixing the
 document comes before creating a card.
 
-## Switching Inside One Capability — park, then release
+## Letting Go of a Card — parking only on explicit request
 
-Moving to another depth-1 unit needs no procedure: claim a card there. One is needed only
-for switching inside a unit. A card that a journal `evidence-wait` or `evidence-finalizing`
+Moving to another card needs no procedure: claim it (precondition 3). Parking — a release —
+happens only when the user explicitly asks to let this card go. A card that a journal
+`evidence-wait` or `evidence-finalizing`
 line names is not parked — releasing it would leave that record pointing at an unclaimed
-card, which integrity item 13 reports. Finish its remote-evidence transition first.
+card, which integrity item 13 reports. Finish its remote-evidence transition first. While
+its verdict stays `pending`, answer a park request with that reason and leave the card
+claimed — any other card can simply be claimed instead.
 
 ```
-① Land the current diff and progress log as an `NN.N wip: <reason for stopping>`
-   checkpoint. With nothing changed, make no commit
+① Land the changes this session made for that card, and its progress log, as an
+   `NN.N wip: <reason for stopping>` checkpoint. Uncommitted changes this session did
+   not make belong to another flow and do not ride. With nothing changed, make no commit
 ② Remove the claim suffix, returning the card to pending
 ③ Claim, in this same invocation, the replacement card the user named in it, when that
    card is ready under the state predicates. With no card named, or a named card that is
@@ -360,9 +366,12 @@ A delegated implementer stops and reports blocked — both exits belong to the m
   itself. The main session takes only the 5 lines.
 - On failure, the canonical rules' failure ladder. Never re-dispatch the same prompt.
 
-## Parallelism
+## Parallel Delegation — several subagents inside one session
 
-Only when approved in split's execution proposal. Same conditions as split:
+This section covers only one session dispatching several subagents at once — sessions in
+the same folder each carrying their own card are the canon's "Several hands in one
+working folder" and need no approval. Parallel delegation runs only when approved in
+split's execution proposal. Same conditions as split:
 only tasks that don't overlap in files AND don't touch a shared dev server. Frontend
 work sharing a dev server is sequential.
 

@@ -30,7 +30,7 @@ devflow has one mode. Whether one person or several share the repository, every 
 works out of its own room.
 
 Resolve your id before writing to the tree, journal, or a core document
-(`devflow/project/*`) — read `git config user.name` and `git config user.email` and match
+(`devflow/project/*`), and before landing a tweak commit — read `git config user.name` and `git config user.email` and match
 each non-empty value against the `git:` line of each `devflow/users/*/owner.md`. An empty
 value matches nothing, and a value that matches a room's `git:` line while the other
 value conflicts with that same line is not a match. Exactly one match is your room. With no room on
@@ -53,7 +53,9 @@ devflow runs only in a Git work tree — claims, approval freshness, integration
 undo live in Git. The first skill to run in a folder that is not one proposes `git init`
 and stops when the user declines. With `user.name` or `user.email` unset, propose the exact
 `git config` line and stop until it is confirmed; Git itself refuses to commit without
-them.
+them. Every devflow path is relative to the repository root — resolve the root at entry
+with `git rev-parse --show-toplevel`. A cwd inside a subfolder never grows a second
+devflow there.
 
 **Only `.wip-<my id>.` is my work.** The precondition, full-read, and continuation
 rules apply to my claim only. Another's claimed card is read-only reference — never write
@@ -80,7 +82,9 @@ and progress log arrive when it integrates, and no shared-state judgment reads i
 `git worktree list --porcelain` lists this repository's worktrees, and `git worktree prune`
 drops one whose folder is gone.
 
-**Publishing a shared transition.** Before publishing, remember the integration tip's
+**Publishing a shared transition.** Publishing is the act of landing a transition on
+integration, and landing is its result — the two words name one motion. Before
+publishing, remember the integration tip's
 unabbreviated full commit object ID output by Git. When publishing is rejected, read
 integration again; a changed id means the state you judged from is stale, so judge again
 from the latest. Classify the rejection by one mechanical test, never by error text, which
@@ -88,13 +92,24 @@ varies by locale and Git version. When the integration tip is not an ancestor of
 you tried to publish, this is ordinary contention: integrate that tip and retry — three
 times at most. When the tip is an ancestor and the publish is still refused, it is a
 structural blocker: report the exact cause. After three tries that still find the tip ahead,
-report sustained contention; it is not a failure-ladder count. When someone else took the same number first,
-do not retry — follow the lost-claim rule below. When you cannot publish to integration at
+report sustained contention; it is not a failure-ladder count. When someone else landed a
+claim on the same card first, do not retry — follow the lost-claim rule below. When the
+same number was minted for two different cards, that is not claim contention — the minting
+rule's mid-insertion (`03.2b`) below handles it. When you cannot publish to integration at
 all — another worktree holds it, or permission, protection, or the network blocks it —
-continue only the code edits and progress-log checkpoints of a card whose initial claim has
-already landed on integration. A new claim, a new tree number, a new verify source id, a
-card's `.done.` rename and its boundary commit, creating or consuming a canonical journal
-line, and any Layer 0 or capability-document change wait until integration opens. Report the
+these continue: code edits, progress-log checkpoints, and the final task commit (it
+belongs to the session's own branch) of a card whose initial claim has already landed on
+integration, plus journal appends that mint no number and make no claim — `maintenance
+routing pending`, `capability note`, attributed open-item and decision lines, `product
+re-run pending` — and their local commits. These wait until integration opens: a new
+claim, a new tree number, a new verify source id, a card's `.done.` rename and its
+boundary commit, a layer-opening marker (it mints numbers), new evidence records (their
+record commit needs a push), `audit requested` and `retrospective requested` lines,
+verification-state lines, consuming (deleting) a canonical journal line, and any
+Layer 0 or capability-document change. One exception: when an already-published
+`evidence-wait` line passes during the blockade, the final task commit's replacement of
+that line with `evidence-finalizing` is not a consumption but a state swap inside that
+commit, and it continues on the session's own branch. Report the
 exact cause and how to open it the first time it blocks; after that, name in one line each
 transition now waiting. The cause is not repeated, and nothing waits unnamed — resume's
 report carries the standing count.
@@ -102,9 +117,8 @@ report carries the standing count.
 **Several hands in one working folder.** Several sessions may carry different cards at the
 same time. Change `devflow/journal.md` by appending — reading it and rewriting it whole
 drops the lines another session appended meanwhile. Keep in HANDOFF only values the tree
-recomputes: an open decision that needs a person lands as one attributed journal line, and
-when it resolves, that line becomes the decision or goes through the discovery→update table
-and is then deleted. While another flow is alive, edit the part that changes instead of
+recomputes: an open decision that needs a person lands as one attributed journal line —
+its resolution follows the discovery→update table's open-item row. While another flow is alive, edit the part that changes instead of
 rewriting a file whole — whole rewriting is the only edit that silently overwrites another
 flow's change. When a completion signal or build fails while this working tree holds
 uncommitted paths outside my card's own, report those exact paths before counting the
@@ -162,7 +176,10 @@ Whenever a canonical procedure says to write or append a journal line, create
 ### Exact journal formats
 
 The formats below are the sole canon for reserved journal records. Other skills fill in
-their values; they do not redefine the formats. `source-json` contains the whole of one
+their values; they do not redefine the formats. Outside the reserved formats, journal
+admits only cross-task decisions and open items a person must decide, and such a line
+must start with the canonical timestamp and carry the id of an existing room — those two
+checks are what "attributed" means. `source-json` contains the whole of one
 locator below as a JSON string. Paths are repository-relative, hashes are unabbreviated full
 commit object IDs output by Git, and headings are verbatim document headings. A verify `source id` is a
 positive integer within that verify.md section; each new entry takes the previous maximum
@@ -270,7 +287,8 @@ canonical card-number order and joined with `+`. First land the upper-document e
 markers in one binding-decision commit. Capability retirement follows product's `.stale`
 folder and `.stale.md` rules and creates neither replacement work nor this marker. Delete
 in the retirement commit every evidence record that names a card inside the retired open
-folder. Before confirming a retirement, enumerate under a bound every `capability note`
+folder. Before confirming a retirement, run the **retirement observation gate**: within
+the current journal already read in full, enumerate every `capability note`
 line carrying that capability's number — that observation's only consumer is that
 capability's next closure, and a retired capability has none, so the line would stay
 forever. Zero lines retire as they are. With one or more, put the user's chosen discard, or
@@ -309,7 +327,7 @@ What you discovered → where to update:
 | A new term becomes necessary | one line in glossary.md |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | An observation confirmed in code about a capability other than the one being worked on | one canonical `capability note` line in journal.md carrying that capability's number. Do not edit the other capability's document directly — its next closure harvests the line |
-| Something confirmed in code about a shared contract or the foundation | an ADR when it produced a decision hard to reverse (arch's three conditions); arch.md's `Risks` when it is something that breaks first; otherwise one line in journal.md. Never write it into the foundation's verified zone — what was not verified is not a verified state |
+| Something confirmed in code about a shared contract or the foundation | an ADR when it produced a decision hard to reverse (arch's three conditions); arch.md's `Risks` when it is something that breaks first; otherwise one attributed open-item line in journal.md — where it lands (or whether it is discarded) is a person's decision, and the open-item row below (resolve through another row, then delete) is that line's consumer. Never write it into the foundation's verified zone — what was not verified is not a verified state |
 | A cross-task decision, or an open item a person must decide | one attributed line in journal.md. When an open item resolves, that line becomes the decision or lands through another row of this table, and is then deleted |
 
 For a product re-run, use the canonical `product re-run pending` line above. Serialize
@@ -364,14 +382,16 @@ reads only path names and status suffixes and opens no body — that folder's kn
 already folded into its capability document. Item 4 therefore judges only task cards
 outside such a folder (a re-closure strips the folder's `.done` first, which returns those
 cards to it). Items 1, 8, 9, and 13 concern claimed or pending cards, which item 3 already
-reports there from the projection alone, so they add nothing. Every other item is judged from the projected names and
+reports there from the projection alone, so they add nothing. One exception: when an
+evidence line names a path inside a closed folder, item 13 judges by that line — a
+journal-side judgment that still opens no folder body. Every other item is judged from the projected names and
 statuses, and one body inside is opened only when an item reports an anomaly at that exact
 path. The same name set serves next-number derivation, the ban on number reuse, locator
 resolution, and the `Covered cards` comparison.
 
-1. Inside one depth-1 unit, are there 2 or more `.wip.` cards with the same id where an
-   additional card is explained by neither reciprocal parallel approval in the cards
-   themselves nor evidence-wait in journal?
+1. Does a claimed card carry an `<id>` that matches no `devflow/users/*/owner.md` room
+   (an orphan claim — the residue of a departed member or a typo; a bare `.wip.` belongs
+   to item 6 and is not counted here)?
 2. Are any numbers duplicated?
 3. Is there a task card inside a `.done` folder that is neither `.done.` nor `.stale.`?
 4. Does each task card's `Depends` parse under the state predicates' canonical or legacy format, with
@@ -483,13 +503,15 @@ decisions. These records do not directly change card or folder status. A task ca
 `.done` evidence is verify's capability-layer pass verdict.
 
 - No suffix = pending / `.wip.` = in progress / `.done.` = complete / `.stale.` =
-  invalidated by an upper-level decision change
+  invalidated by an upper-level decision change, or a tombstone a canonical procedure
+  left behind (recall)
 - A claim is written `.wip-<id>.` — a bare `.wip.` is an ownerless claim = an
   integrity anomaly. Release strips the whole suffix back to pending (the progress log
   stays in the card). `.done.` and `.stale.` stay unattributed — completion's ownership
   is git's memory
-- One claim per id per depth-1 unit (Exceptions inside one unit: reciprocal parallel
-  approval in the cards themselves, or evidence-wait recorded in journal)
+- A person may hold several claims — a ready card may be claimed immediately, whatever
+  its unit. One card is carried by one session at a time: disk cannot tell terminals apart,
+  so never directing two terminals at one card is the user's part (README guideline)
 - `.done.` **only after the completion signal passes, the review that applies to the card
   passes, and the commit lands.** In this system, "verification" is reserved for verify's
   capability and product layers
@@ -518,6 +540,40 @@ decisions. These records do not directly change card or folder status. A task ca
   discovery→update row above. Mid-insertions use the `02.2b` form
 - Record files that are not cards (`verify.md`, etc.) carry no status suffix and are
   excluded from status judgment
+
+## The Tweak Lane
+
+The unit of judgment is the item — a request carrying several items judges each against
+the three questions separately. An item is a tweak only when all three answer "no" — any
+uncertainty means it
+is not one: ① does it change a precondition-to-outcome transition the user sees; ② does it
+produce a design decision, or conflict with an existing decision, design token, or ADR;
+③ does it leave a trap the next worker must know about.
+The three questions are judged from the request itself and the documents this lane
+reads — do not search beyond them to manufacture uncertainty; when no transition change,
+conflict, or trap shows there, the answer is "no".
+A tweak's diff is its complete record. So it runs with no card, no journal line, and no
+review: declare "handling as a tweak — <item>" in one line (the conversational request is
+the approval), read the existing product.md, arch.md, design.md, and code-style.md, make
+the change, run the one narrowest executable check that covers the changed files — their
+tests when they have them, otherwise lint or build — and land a single
+`<id> tweak <unit number>: <what>` commit. Resolve `<id>` by the Identity and Rooms
+rules — with no room, the joining transition creates one, and that room commit is the
+sanctioned exception to this lane's no-devflow-path rule (it is the product of identity,
+not of the request). The unit
+number is the depth-1 unit canonical recognition resolves, or `01` when none resolves.
+Several tweak items in one request bundle into one commit per depth-1 unit. Beyond that,
+no `devflow/` path
+is touched — the moment one would be needed, the item is not a tweak. This lane is not
+routing — the pre-routing integration read and state restoration do not apply here. When
+any of the
+three questions flips to "yes" mid-change, stop, report, and switch to the ordinary path
+(starting with the request's journal record) — the edits made so far stay in the working
+tree, and the session that claims that request's card takes them over with the user's
+confirmation (resume's report of uncommitted paths is what surfaces them). A discovery
+during tweak work follows
+the discovery→update table regardless of change size. The commit is not a binding
+decision — a blockade does not block this lane.
 
 ## Commit Discipline
 
@@ -604,7 +660,9 @@ decisions. These records do not directly change card or folder status. A task ca
   tree, exactly one `.done.` card in the same parent has the same number and name, and the
   two files are byte-identical. Whether git reports a rename or a deletion plus untracked
   file is not part of the judgment. An uncommitted move is an unfinished boundary.
-- Mid-checkpoint commits for long tasks are allowed as `02.2 wip: <what>`.
+- Mid-checkpoint commits for long tasks are allowed as `02.2 wip: <what>`. The "current
+  diff" any checkpoint-style commit carries always means the changes this session made
+  for that card — the first bullet's own-paths rule, scoped to sessions.
 - When only remote evidence (CI, etc.) remains in the completion signal: get the review
   first, then commit the code and progress log as an `NN.N wip: evidence-wait`
   checkpoint. Immediately before that commit, append the exact line below to the progress
@@ -680,7 +738,8 @@ decisions. These records do not directly change card or folder status. A task ca
   numbers (folders, minting), a card someone else claims, the initial
   `.wip-<my id>.` claim rename, or a release that returns my claimed card to pending. Other status renames of my claim already visible on
   integration are not binding decisions. Land a commit containing only the files that constitute that decision on
-  the integration branch (arch config) now. For a planning commit, the whole bundle
+  the integration branch (arch config) now — when integration cannot be written, the
+  publishing paragraph's blockade rules outrank this "now". For a planning commit, the whole bundle
   enumerated above constitutes that decision. No unrelated change rides along. Everything else
   rides your own branch. Do not start implementation until the initial claim commit has
   landed on integration and the current branch contains that integration tip.
@@ -694,7 +753,12 @@ decisions. These records do not directly change card or folder status. A task ca
   A verify source id follows the same principle.
 - HANDOFF merge conflicts take the side whose `# HANDOFF · <timestamp>` header is newer. A
   digest marker keeps the descendant hash (resume's marker rule).
-- Journal merge conflicts resolve as a union — keep both sides, date-ordered.
+- Journal merge conflicts resolve 3-way. Compare the conflicted region against the
+  conflict's common-ancestor journal blob — the `git merge-base` commit for a merge, the
+  replayed commit's parent for a rebase: a line present in the base and absent on
+  one side was consumed — never restore it. A line absent from the base is an addition —
+  keep both sides' additions in timestamp order, mine first on a tie. A union resolution revives already-consumed
+  requests, and the same fix gets planned twice under a new number.
   Squash merges are forbidden (they erode every rule built on `NN.N` history) — the
   policy is declared in arch's config.
 - To undo, use a revert commit — never erase history.

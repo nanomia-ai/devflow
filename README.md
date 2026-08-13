@@ -105,6 +105,18 @@ usable without gaining global read cost or canonical standing.
 When tracked post-adoption work finishes, devflow closes that work and waits. It opens
 product-layer verification for the existing service only on an explicit user request.
 
+### The smallest changes — the commit is the record
+
+A change like one button label or one border colour makes no card and no record. The
+session checks three things and, when all three are clear, just fixes it. Does the
+behaviour a user sees change? Is a design decision involved? Does it leave a trap the next
+person could fall into? It reads only the architecture and design documents if they exist,
+makes the edit, runs one check, and lands a single `tweak` commit. The diff is already the
+complete record, so nothing gets written twice. The moment any of the three answers turns
+up, it is the ordinary path from there — record, card, approval. You can also just fix it
+yourself without devflow at all; the next session's digest reads that commit and catches
+up.
+
 ## What accumulates in your project
 
 Using devflow creates a single `devflow/` folder in the target project, and documents
@@ -502,12 +514,18 @@ first). The first two happen at boundaries; the third runs even while a card is 
 Working alone, all of this costs **one commit per card** — the claim. That one commit is
 what lets two terminals, or two worktrees, see each other's work in progress.
 
-**Two terminals in one folder are safe.** Each session claims its own card and runs.
+**Any number of terminals in one folder is safe.** Each session claims its own card and
+runs. Cards inside one capability work the same way — a second terminal claims with no
+procedure and no question, just a one-line note of which cards of yours are already
+claimed.
 Three measurements back that. A commit that names its own paths does not pick up a file
 another session staged first. Four sessions appending to the journal at once lose no line.
 Two people editing different parts of one source file both survive, and the same spot fails
-loudly instead of overwriting quietly. So there is one rule. While another flow is alive,
-edit the part that changes rather than rewriting a file whole.
+loudly instead of overwriting quietly. Three guidelines are yours to keep. Never point two
+terminals at the same card — disk cannot tell terminals apart. While another flow is
+alive, never have a file rewritten whole. And don't assign overlapping cards for the same
+hours — an overlap never overwrites quietly, but there is no reason to sit through the
+loud failures either.
 
 **Worktrees buy build isolation, not safety.** Split the folder and each side gets its own
 uncommitted files, so half-written code on one cannot break the other's tests. On shared
@@ -520,8 +538,14 @@ checked out, so it pays to leave the integration branch checked out nowhere. The
 folder can land a binding decision. **If your team protects main and takes only pull
 requests, point integration at an unprotected branch and raise the PR from there** —
 claiming a card has to land at once, and it cannot wait for a review. And two sessions of
-one person share one id, so disk cannot tell them apart; when several capabilities are open
-and you have not said which one you want, resume asks instead of guessing.
+one person share one id, so disk cannot tell them apart; when you hold several claims and
+have not said which card you mean, resume asks instead of guessing.
+
+If you work as a team, keep plugin versions matched. 0.12 and 0.13 in particular define
+shared state differently, so a mixed team has half its members judging by the old rule. An
+outside orchestrator can also drive workers on top of devflow — one ordering is all it
+takes. Create the cards and claims on the integration branch before starting a worker, and
+let the worker write only code and the progress log.
 
 Every room transition is a single-commit procedure:
 
@@ -619,6 +643,8 @@ A tool that knows its edges earns trust. These are the places devflow does not p
 | Trusting a hook without you | That removes the trust boundary; it is not automation |
 | Completion signals of two flows sharing one database, port, or dev server | File isolation is not runtime isolation. split keeps work that touches a shared dev server sequential |
 | Global consistency of state created outside integration | With no coordination point there is no global answer |
+| An administrator rewriting the integration branch with a force-push | devflow itself only undoes with revert, but it cannot stop hands outside the repository. An erased claim shows the card as pending again |
+| Judgment quality when routing and planning run on a small model | Cards carry a tier system, but the session model is the user's choice. The odds of misreading the canon follow the model |
 | Cost advantage on a small project | One card per session runs about 2.6× ordinary development. More cards per session and a bigger codebase turn that around |
 
 ## Other agents (Cursor, Copilot, opencode, …)

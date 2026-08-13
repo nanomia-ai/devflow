@@ -192,3 +192,82 @@ for (let i = 0; i < 5; i += 1) fs.appendFileSync(process.argv[2], process.argv[3
   assert.equal(lines.length, 20);
   assert.equal(new Set(lines).size, 20, "no line may be truncated or merged into another");
 });
+
+// The canonical rules' journal merge: 3-way against the merge base — a line the base held
+// that one side deleted was consumed and never comes back; lines absent from the base are
+// additions and both survive. Union semantics revived consumed requests (measurements 15-16).
+test("a 3-way journal merge drops the consumed line and keeps both additions", (t) => {
+  const { root, git, gitTry, write } = makeRepo(t);
+  write(
+    "devflow/journal.md",
+    "2026-01-01T00:00:00Z maintenance routing pending: request-json: \"fix rounding\"\n",
+  );
+  git("add", "-A");
+  git("commit", "-qm", "a boundary — request recorded");
+  const base = git("rev-parse", "HEAD");
+  // side A consumes the request (its planning commit deletes the line)
+  write("devflow/journal.md", "");
+  git("add", "-A");
+  git("commit", "-qm", "a split — plan consumes the request");
+  // side B, forked before the consumption, appends an adjacent observation
+  git("checkout", "-q", "-b", "flow-b", base);
+  write(
+    "devflow/journal.md",
+    "2026-01-01T00:00:00Z maintenance routing pending: request-json: \"fix rounding\"\n" +
+      "2026-01-02T00:00:00Z capability note: capability: 03; note-json: \"list sort is server-side\"\n",
+  );
+  git("add", "-A");
+  git("commit", "-qm", "b boundary — note appended");
+  const merge = gitTry("merge", "--no-edit", "main");
+  // a delete-vs-adjacent-append IS a conflict (measurement 13); the canon resolves it 3-way
+  const baseLines = git("show", `${base}:devflow/journal.md`).split("\n").filter(Boolean);
+  if (merge.status !== 0) {
+    const ours = git("show", ":2:devflow/journal.md").split("\n").filter(Boolean);
+    const theirs = git("show", ":3:devflow/journal.md").split("\n").filter(Boolean);
+    const resolved = [
+      ...baseLines.filter((l) => ours.includes(l) && theirs.includes(l)),
+      ...ours.filter((l) => !baseLines.includes(l)),
+      ...theirs.filter((l) => !baseLines.includes(l)),
+    ];
+    fs.writeFileSync(
+      path.join(root, "devflow/journal.md"),
+      resolved.length ? resolved.join("\n") + "\n" : "",
+    );
+    git("add", "-A", "--", "devflow/journal.md");
+    git("commit", "-qm", "b boundary — journal merge resolved 3-way");
+  }
+  const merged = fs.readFileSync(path.join(root, "devflow/journal.md"), "utf8");
+  const mergedLines = merged.split("\n").filter(Boolean);
+  // the consumed request (present in base, deleted on one side) must not revive
+  for (const line of baseLines) {
+    assert.ok(!mergedLines.includes(line), `consumed line revived: ${line}`);
+  }
+  // the addition (absent from base) must survive
+  assert.ok(
+    mergedLines.some((line) => line.includes("capability note: capability: 03")),
+    "the appended observation must survive the merge",
+  );
+});
+
+// Free parallel claims: three sessions in one folder each rename their own card and commit
+// only its path — no claim mixes into another's commit, whatever else is staged.
+test("three same-unit claims land as three clean path-scoped commits", (t) => {
+  const { root, git, write } = makeRepo(t);
+  for (const n of ["1", "2", "3"]) {
+    write(`devflow/tree/04-listing/04.${n}-part.md`, `# 04.${n} part\n`);
+  }
+  git("add", "-A");
+  git("commit", "-qm", "a split — 04 layer");
+  for (const n of ["1", "2", "3"]) {
+    const from = `devflow/tree/04-listing/04.${n}-part.md`;
+    const to = `devflow/tree/04-listing/04.${n}-part.wip-a.md`;
+    fs.renameSync(path.join(root, from), path.join(root, to));
+    git("add", "-A", "--", from, to);
+    git("commit", "-qm", `a 04.${n} claim`, "--", from, to);
+    const shown = git("show", "--no-renames", "--name-only", "--format=", "HEAD")
+      .split("\n")
+      .filter(Boolean);
+    assert.ok(shown.length >= 1 && shown.length <= 2, `unexpected path count for 04.${n}`);
+    for (const p of shown) assert.ok(p.includes(`04.${n}-part`), `foreign path in claim: ${p}`);
+  }
+});

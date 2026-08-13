@@ -549,7 +549,7 @@ test("requested verification and events do not preempt this session's claimed ca
   const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   assert.match(verify, /never preempts a task card claimed by this\s+session/);
-  assert.match(verify, /When this session has a claimed task card, select no event/);
+  assert.match(verify, /When this session was carrying a claimed task card, select no event/);
   assert.ok(
     resume.indexOf("| A card of mine is claimed | work |") <
       resume.indexOf("| journal contains an exact `product verification requested` line |"),
@@ -772,16 +772,22 @@ test("devflow has exactly one mode", () => {
   assert.match(arch, /devflow creates\nneither a branch nor a worktree/);
 });
 
-test("claims are keyed to the depth-1 unit", () => {
+test("claims are freely parallel and terminal identity stays with the user", () => {
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
   const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
-  assert.match(principles, /One claim per id per depth-1 unit/);
+  assert.match(principles, /A person may hold several claims/);
+  assert.match(principles, /One card is carried by one session at a time/);
   assert.match(principles, /A candidate's \*\*depth-1 unit\*\* is the first path component below `devflow\/tree\/`/);
-  assert.match(principles, /1\. Inside one depth-1 unit, are there 2 or more `\.wip\.` cards with the same id/);
-  assert.match(work, /Group my\s+remaining claims by depth-1 unit/);
-  assert.match(work, /two or more inside one unit are an integrity anomaly/);
+  assert.match(principles, /1\. Does a claimed card carry an `<id>` that matches no `devflow\/users\/\*\/owner\.md` room/);
+  assert.doesNotMatch(principles, /One claim per id per depth-1 unit/);
+  assert.match(work, /Any number of claims of mine, in any units, is ordinary concurrent work/);
+  assert.match(work, /name those claims in one line/);
+  assert.match(work, /information, not a question/);
+  assert.doesNotMatch(work, /Never claim a pending card in a depth-1 unit where I already hold a claim/);
+  assert.doesNotMatch(work, /reciprocal parallel/);
   assert.match(resume, /every claim of mine \u2014 path and status for all, and in full only the one this\s+invocation continues/);
+  assert.match(resume, /Show the claim paths and ask which one to continue/);
   assert.match(resume, /report every remaining uncommitted path\s+without attributing it to a card/);
 });
 
@@ -802,7 +808,7 @@ test("candidate selection has one canonical order", () => {
   assert.match(resume, /Resolve the target by the canonical\n   rules' canonical recognition/);
   assert.match(work, /in canonical\s+candidate order over my remaining claims/);
   assert.match(resume, /selected by\n<your request \| the last handoff \| canonical order>/);
-  assert.match(resume, /The current conversation carries a change request from the user that no journal line, verify entry, or claimed card preserves yet \| split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table \|/);
+  assert.match(resume, /The current conversation carries a change request from the user that no journal line, verify entry, or card — pending or claimed — preserves yet \| split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table \|/);
   assert.ok(
     resume.indexOf("| The current conversation carries a change request") <
       resume.indexOf("| A card of mine is claimed | work |"),
@@ -936,10 +942,13 @@ test("a mis-mapped card has a recall route and split maps from the boundary line
   assert.match(split, /When step 1 finds an existing pending card of this request's scope sitting\s+in the wrong folder/);
 });
 
-test("switching inside one capability parks instead of handing off", () => {
+test("parking happens only on explicit request and carries only this session's changes", () => {
   const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
-  assert.match(work, /^## Switching Inside One Capability — park, then release$/m);
-  assert.match(work, /Moving to another depth-1 unit needs no procedure/);
+  assert.match(work, /^## Letting Go of a Card — parking only on explicit request$/m);
+  assert.match(work, /Moving to another card needs no procedure: claim it/);
+  assert.match(work, /Land the changes this session made for that card/);
+  assert.match(work, /Uncommitted changes this session did\s+not make belong to another flow and do not ride/);
+  assert.match(work, /claim no automatic candidate/);
   assert.match(work, /parking is a release, not a handoff/);
 });
 
@@ -976,7 +985,10 @@ test("one integration branch is the only shared authority", () => {
   assert.match(principles, /When the integration tip is not an ancestor of the branch\s+you tried to publish, this is ordinary contention[\s\S]{0,80}three\s+times at most/);
   assert.match(principles, /When the tip is an ancestor and the publish is still refused, it is a\s+structural blocker/);
   assert.match(principles, /never by error text, which\s+varies by locale and Git version/);
-  assert.match(principles, /continue only the code edits and progress-log checkpoints of a card whose initial claim has\s+already landed on integration/);
+  assert.match(principles, /these continue: code edits, progress-log checkpoints, and the final task commit/);
+  assert.match(principles, /journal appends that mint no number and make no claim/);
+  assert.match(principles, /consuming \(deleting\) a canonical journal line/);
+  assert.match(principles, /a layer-opening marker \(it mints numbers\)/);
   // paragraph 3 — several hands in one working folder
   assert.match(principles, /\*\*Several hands in one working folder\.\*\*/);
   assert.match(principles, /Several sessions may carry different cards at the\s+same time/);
@@ -998,7 +1010,7 @@ test("one integration branch is the only shared authority", () => {
     assert.doesNotMatch(text, /unioned with each worktree HEAD/);
   }
   assert.match(resume, /the devflow\/tree\/ listing at the integration tip/);
-  assert.match(readme, /Two terminals in one folder are safe/);
+  assert.match(readme, /Any number of terminals in one folder is safe/);
   // the earlier wrong claim that a remote is required must not come back
   assert.doesNotMatch(readme, /tracks no\s*remote/);
 });
@@ -1007,7 +1019,8 @@ test("a change request is recorded at once but planned only after the claim clos
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
   assert.match(resume, /record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table/);
-  assert.match(split, /When this session holds a\nclaimed card, land that line alone as a binding decision and return to the card/);
+  assert.match(split, /land that commit alone as a binding decision and return to the card/);
+  assert.match(split, /`<id> boundary — request recorded`/);
   assert.ok(
     resume.indexOf("| The current conversation carries a change request") <
       resume.indexOf("| A card of mine is claimed | work |"),
@@ -1025,11 +1038,49 @@ test("a completion signal is scoped so one flow cannot fail another's card", () 
   const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
   assert.match(split, /Scope a completion signal to the paths this capability owns whenever the means allows it/);
   assert.match(split, /One working tree runs one build/);
-  assert.match(work, /land them as that card's `NN\.N wip:` checkpoint first/);
+  assert.match(work, /When this session left uncommitted changes on another card of mine, land them as that\s+card's `NN\.N wip:` checkpoint first/);
+  assert.match(work, /uncommitted changes this session did not make\s+belong to another flow/);
 });
 
 test("resume asks which unit instead of guessing when several are open", () => {
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   assert.match(resume, /When the conversation named no depth-1 unit and two or more units hold a candidate under\s+the matched row, ask which unit to continue instead of proposing one/);
   assert.match(resume, /With a single unit\s+holding candidates there is nothing to ask; propose it/);
+});
+
+test("the tweak lane lives in the canon and every consumer only cites it", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
+  // the gate, procedure, and commit form are defined once
+  assert.match(principles, /^## The Tweak Lane$/m);
+  assert.match(principles, /judges each against\s+the three questions separately/);
+  assert.match(principles, /any\s+uncertainty means it\s+is not one/);
+  assert.match(principles, /`<id> tweak <unit number>: <what>`/);
+  assert.match(principles, /no `devflow\/` path\s+is touched/);
+  assert.match(principles, /stop, report, and switch to the ordinary path/);
+  // consumers cite the lane instead of restating the gate
+  assert.match(resume, /^## Tweak Entry$/m);
+  assert.match(resume, /passes the canonical rules' three tweak questions/);
+  assert.match(resume, /Apply only\s+the canonical open-Git-operation gate/);
+  assert.match(work, /one separate `tweak` commit through that lane/);
+  assert.match(split, /passes the canonical rules' three tweak questions\s+goes through the tweak lane/);
+  assert.match(resume, /A commit whose subject has the canonical tweak form/);
+  for (const consumer of [resume, work, split]) {
+    assert.doesNotMatch(
+      consumer,
+      /does it change a precondition-to-outcome transition the user sees/,
+      "the three questions are stated only in the canon",
+    );
+  }
+});
+
+test("journal merges resolve 3-way and blockade appends are exactly enumerated", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  assert.match(principles, /Journal merge conflicts resolve 3-way/);
+  assert.match(principles, /was consumed — never restore it/);
+  assert.doesNotMatch(principles, /Journal merge conflicts resolve as a union/);
+  assert.match(principles, /`maintenance\s+routing pending`, `capability note`, attributed open-item and decision lines, `product\s+re-run pending`/);
+  assert.match(principles, /nothing waits unnamed/);
 });

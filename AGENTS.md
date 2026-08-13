@@ -238,6 +238,11 @@ borrowing text into this repository still needs prior permission.
 | 라우팅 준비 | routing prepared | | 능력 지식 기준선 | capability knowledge baseline |
 | 가설 | hypothesis | | 설계 구역 | design zone |
 | 검증 구역 | verified zone | | 능력 문서 | capability document |
+| 경량 변경 | tweak | | 게시 | publish |
+| 묘비 | tombstone | | 닫힌 폴더 투영 | closed-folder projection |
+| 구조적 막힘 | structural blocker | | 지속 경합 | sustained contention |
+| 묶기 | bundling | | 고아 점유 | orphan claim |
+| 은퇴 관측 게이트 | retirement observation gate | | 봉쇄 | blockade |
 
 Note: a hypothesis is the trust state of a capability knowledge baseline — a separate
 concept from the `unverified` verdict, which is a verification result.

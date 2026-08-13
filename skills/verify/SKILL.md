@@ -72,8 +72,10 @@ the first line in file order that the discovery→update table maps to an exact 
 target, report that source line and target, and return without writing or executing to the
 canonical target-owning skill. That skill applies the table and lands the core-
 document update with deletion of its source line in the same binding-decision commit; then
-restart state routing from the beginning. Retain a cross-task decision with no target. A
-line in neither class is an integrity anomaly; report it and do not verify.
+restart state routing from the beginning. Retain a cross-task decision with no target, and
+retain an attributed open-item line a person must decide — the canon allows that content,
+and its resolution belongs to a person. A line in none of these classes is an integrity
+anomaly; report it and do not verify.
 
 Start the capability layer only when the target depth-1 capability folder has at least
 one direct child that is not `.stale.`, and every such child has a `.done` status. An
@@ -309,7 +311,8 @@ section below).
    document target is a valid late decision: retain the marker, report its source line and
    target, and return without writing or executing to the canonical target-owning skill
    document. After that skill lands its binding decision, repeat step 7 with the changed
-   revisions. A line in neither class is an integrity anomaly; report it and neither write
+   revisions. Retain an attributed open-item line a person must decide. A line in none of
+   these classes is an integrity anomaly; report it and neither write
    nor commit. Before the first write, calculate from current HEAD and the
    marker the final bytes of verify.md with its one-line sweep result and journal.md with
    only this marker and those collected capability notes removed. Apply them in this order: verify.md below the still-open
@@ -379,8 +382,8 @@ request. For ties, use canonical path order for verify.md, then Audit before
 Retrospective within one file, then source id ascending within one section. Among user
 requests, use the earliest timestamp first.
 
-When this session has a claimed task card, select no event; return to work through that
-card's boundary cleanup. Select an Audit candidate only when it also satisfies The Audit's
+When this session was carrying a claimed task card, select no event; return to work
+through the boundary cleanup of the card it was carrying. Select an Audit candidate only when it also satisfies The Audit's
 execution boundary below. For an ineligible automatic candidate, create no pending entry.
 For a user-request Audit, retain its journal line, report the exact blocking path or branch
 state and reason, and continue the caller's remaining state; resume does not select that

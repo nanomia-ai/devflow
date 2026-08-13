@@ -92,12 +92,9 @@ When a brownfield has no tree representation for it, create none. Leave the base
 in place; the next capability-design refresh reports registered consumers from the retired
 file's stored Scope paths.
 
-**Before** asking the user to confirm the retirement, run the canonical rules' retirement
-observation gate — enumerate under a bound every `capability note` line carrying that
-number. Zero lines proceed as they are. With one or more, show each line verbatim and ask
-whether to discard it or re-target it to foundation or an exact non-retired capability
-number. Put the chosen replacement or deletion in the retirement commit; when the user
-defers, the retirement defers too. Never discard automatically.
+**Before** asking the user to confirm the retirement, run the canonical rules'
+**retirement observation gate** — its enumeration, its question, and its same-commit
+landing live in the canon and are not restated here.
 
 ## Gates
 

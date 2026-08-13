@@ -96,7 +96,9 @@ The begin commit then lands on integration as the binding decision that mints th
 When a valid layer-opening marker exists in the working tree or HEAD, open no new layer.
 Process the earliest timestamp first, breaking a tie by journal line order, and take with it
 every marker carrying the same `source-json` — that bundle gets one execution proposal and
-one planning commit, never one per parent. Decode `source-json` by
+one planning commit, never one per parent. That planning commit deletes every marker of
+the bundle and, when the journal request line its `source-json` names still remains,
+that line too. Decode `source-json` by
 the canonical format and open that source, combining it with the upper documents read at
 this skill's start. For a maintenance or re-split source, also recheck only the current
 code and existing records enumerated by step 2 below. A missing or non-unique source is an
@@ -262,8 +264,10 @@ Review:            not-applicable
 When a request like "fix the filter on this page" arrives:
 
 Before reading code, append a new user request as the canonical `maintenance routing
-pending` line. Serialize the whole request as one JSON string. When this session holds a
-claimed card, land that line alone as a binding decision and return to the card — the
+pending` line. Serialize the whole request as one JSON string. The recording commit
+carrying only that line has the message `<id> boundary — request recorded`. When this
+session holds a
+claimed card, land that commit alone as a binding decision and return to the card — the
 request waits and is planned after the card closes. Do not append it again when
 an unresolved line decodes to identical request text. When one or more unresolved lines
 exist, use the earliest timestamp as the request, breaking a tie by journal line order.
@@ -289,7 +293,9 @@ remains unresolved. After interruption, its decoded value is the current request
 1. **Map the request's scope to a location.** Before mapping, read only the `Design head`
    metadata line of each candidate capability document and run the single-line command
    `git log -1 --format=%H -- devflow/project/product.md devflow/project/arch.md devflow/project/glossary.md`.
-   When any stored value differs from that output, do not map: route `Brownfield: yes` to
+   A candidate with no document, with the canon's exact `legacy v0.10` shape, or without
+   exactly one fixed boundary has no stored value — judge it the same as differing. When
+   any stored value differs from that output, do not map: route `Brownfield: yes` to
    adopt and `no` to arch to refresh the affected design zones first.
    A card mapped from a stale boundary lands in the wrong capability. Shared foundations,
    cross-capability contracts, and the verify channel go to `01-foundation`; everything
@@ -378,14 +384,16 @@ When the Destination cannot be written in one or two sentences, invent nothing p
 ask the user what must become true, and create no card before the answer. A thin
 Destination leaves the next session unable to tell what this card is for.
 
-**Bundling small items.** Items that do not change the precondition-to-outcome transition a
-user sees — a button name, wording, layout, or sort order, exactly what the canonical
-baseline predicates' `Current behavior` exclusion already separates — go into one card.
+**Bundling small items.** An item that passes the canonical rules' three tweak questions
+goes through the tweak lane, not a card — its diff is its record. Several small items that
+fail the gate (they change a transition, yet are each too small for a card of their own)
+go into one card.
 Bundling requires all four: ① they came from the same original request; ② they sit in the
 same depth-1 unit; ③ one Destination states every one of their outcomes; ④ one revert may
 undo them together. List the bundled items one by one in the execution proposal and get
-approval. An item that does change the transition is not bundled and gets its own card.
-**Never create a path that skips recording** — this bundles, it does not omit.
+approval.
+**Never create a path that skips recording** — a tweak's record is its commit; a card's
+record is its documents.
 
 Scope a completion signal to the paths this capability owns whenever the means allows it
 — `pnpm test src/payment`, not `pnpm test`. One working tree runs one build, so a
@@ -422,8 +430,9 @@ approved to run together, in canonical card-number order and joined with `+`; re
 every card in the group. Use `none` when the card is not parallel. Changing a group
 updates every pending card in the old or new group in one planning commit. Do not change
 a claimed card's approval; release it first if it must join the new group. Do not rewrite
-the historical approval value of a `.done` or `.stale` card. Only the state predicates
-judge whether parallel Approval is effective.
+the historical approval value of a `.done` or `.stale` card. The `parallel:` value is the
+plan's recorded judgment — it neither permits nor blocks a claim (the state predicates),
+and work reads it as information when naming same-unit claims.
 
 An implementation card's default `Review` is `required`. The main session cannot waive
 it; change it to `waived` only when the user explicitly waives that card. A research card
