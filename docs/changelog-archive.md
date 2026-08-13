@@ -1,39 +1,16 @@
 # Changelog archive — v0 through v0.9.23
 
-Entries from before 0.10.0, moved out of `CHANGELOG.md` on 2026-08-13 and otherwise
-unchanged. Nothing here was summarized or rewritten.
+Shipped changes from before 0.10.0, moved out of `CHANGELOG.md` on 2026-08-13. Nothing here
+was summarized or rewritten. On 2026-08-14 the eleven document-only entries were deleted,
+since a changelog records what shipped and those had shipped nothing.
 
-Why they were moved and not condensed: these releases predate `docs/rounds/`, so for that
-era these entries are the only narrative record, and they predate the promotion table in
-`AGENTS.md`, so experience that never made it into the canon may still be sitting here.
-Condensing them would delete the one thing they hold that nothing else does.
+Why the release entries were moved and not condensed: these releases predate `docs/rounds/`,
+so for that era these entries are the only narrative record, and they predate the promotion
+table in `AGENTS.md`, so experience that never made it into the canon may still be sitting
+here. Condensing them would delete the one thing they hold that nothing else does.
 
 Paths named in these entries are the paths of their moment. Round documents moved into
 `docs/rounds/<version>/` on 2026-08-13; an old path resolves inside that version's folder.
-
-## docs — 2026-08-11 — the capability-knowledge contract becomes v2.2
-
-The GPT candidate contract was revised by an independent verification and research
-campaign: sixteen refutation findings, three research passes (AI consumption and token
-economy; human operations and irreversibility; external practice with sources), a
-synthesis, two Fable adversarial passes (15 findings), and a re-audit of the fixes (13
-findings), all adjudicated. The evidence and option analysis of sections 1–3 stand; the
-contract of sections 4–7 is superseded. What changed: identity is the capability number
-(the stable-key scheme is deleted); freshness is a six-field machine block and two git
-commands (the three digests, their NUL pipes, and the comparison digests are deleted);
-lifecycle is an arch.md `capability_baseline` switch and the baseline riding the begin
-commit (enrollment files and the marker payload array are deleted); the document contract
-is a blueprint-first 12-section design with caps, and four durability rules (shape
-tolerance, the knowledge layer never blocks the execution axis, byte stability,
-delete-only human edits) govern the long horizon. Three owner choices reduce to one — the
-per-project switch default. The invariants test re-pins every surviving invariant against
-the revised wording, drops only assertions whose mechanism was deleted or whose rule the
-revision inverted, and adds pins for the absent-switch default, the size cap, and the
-coverage-is-not-task-state rule. Runtime wiring is the next release.
-
-Files: `docs/capability-knowledge-proposal.md`; `docs/capability-knowledge-proposal_ko.md`;
-`scripts/repository-invariants.test.js`; `CHANGELOG.md`.
-
 
 ## 0.9.23 — 2026-08-11 — two inherited gaps close: parallel-group entry and Record self-description
 
@@ -70,7 +47,6 @@ re-targeted in that document's own change.
 Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `skills/work/SKILL.md`;
 `skills/work/SKILL_ko.md`; `skills/verify/SKILL.md`; `skills/verify/SKILL_ko.md`;
 `docs/design.md`; `docs/design_ko.md`; `CHANGELOG.md`.
-
 
 ## 0.9.22 — 2026-08-11 — the seams between v0.9.21's flows close
 
@@ -134,43 +110,6 @@ principles, product, arch, design, adopt, split, work, verify, and resume;
 `scripts/remove-legacy-codex-hook.js`; `scripts/remove-legacy-codex-hook.test.js`;
 `scripts/repository-invariants.test.js`; `CHANGELOG.md`.
 
-
-## docs — 2026-08-11 — capability knowledge is planned and validated without runtime adoption
-
-JGNote, Nanomia ADE, and RDSF Data Server are treated as failure-path clues rather than
-proof of the new runtime. The validated candidate keeps execution in tree, task cards, and
-users while combining the last successfully refreshed passing capability baseline with
-current cards outside Covered cards. It creates no unverified seed. work keeps its bounded
-read set; verify reads one standard refresh set at final closure and adds Covered history only
-when the stored comparison changed. Shared dependency paths are deduplicated, retained
-historical-stale dependencies are hash-only inputs, binding ADRs enter future cards, and
-external references remain nonbinding. A refresh replaces current sections instead of
-appending chronology. A long-open capability leaves the baseline as a hypothesis when current
-done numbers differ from Covered cards. Component baselines remain excluded until devflow has
-an independent component-verification boundary.
-
-The exact template separates stored-Covered comparison from final replacement coverage and
-fixes identity, section, byte, and digest rules across Claude, Codex, Windows, and POSIX. Its
-candidate begin transaction preserves final baseline bytes, validates empty and nonempty
-prefixes and descendant state, and deletes enrollment only with the same successful create.
-`Depends: none` is an explicit valid empty set. The recommended product-row owner has one exact
-terminal stable-key field, and every enrollment policy uses the same durable pending file.
-The candidate integrity check rejects malformed, orphaned, duplicate, or simultaneous
-baseline/enrollment files without guessing repairs. Three owner choices remain: enrollment
-policy, stable-key owner, and retirement preservation. No skill executes this proposal. The
-old-to-new report records evidence, simulations, prompt cost, limitations, and the requested
-independent-Claude review procedure.
-
-Verification: the proposal-focused invariant joins the v0.9.21 checks for 50/50 Node tests;
-Korean/English structure and meaning-bearing figures match; deploy-language checks pass; and
-the earlier independent literal, over-harness, and parity attacks plus the grouped post-fix
-re-audit report zero remaining clear defects. Files:
-`docs/capability-knowledge-proposal.md`; `docs/capability-knowledge-proposal_ko.md`;
-`docs/v0.9.21-redesign-report.md`; `docs/v0.9.21-redesign-report_ko.md`;
-`scripts/repository-invariants.test.js`; `AGENTS.md`; `docs/design.md`; `docs/design_ko.md`;
-`CHANGELOG.md`.
-
-
 ## 0.9.21 — 2026-08-11 — disk-state contracts survive brownfields, interruption, and multiple checkouts
 
 The v0.9.20 philosophy remains: product direction, a tree opened one layer at a time,
@@ -233,38 +172,6 @@ all Korean/English `skills/*/SKILL` pairs; `skills/principles/state-predicates.m
 `skills/principles/verification-predicates.md` with their Korean pairs; all Korean/English reviewer, verifier, auditor, and retrospector role-contract
 pairs; `CHANGELOG.md`.
 
-
-## docs — 2026-08-11 — the README tone rules become part of the maintenance gate (no version change)
-
-The tone pass below fixed one document; without a written rule the next session would
-drift back, since an AI writing prose reproduces the same tells by default. AGENTS.md gains
-a "Writing the README" section stating why the README cannot buy precision with stiffness,
-the four tells to check by counting (noun compounds where a verb belongs, em-dashes used
-as breath, bold on every key word, uniform sentence length), the Korean translation-ese
-list to keep absent, and the two rules that bound the edit itself — subtract rather than
-insert, and keep it local or the meaning has drifted. The pre-flight checklist gains a line
-so a README change cannot pass review without the counts. The external taxonomy behind the
-list is cited, not vendored; borrowing text still needs prior permission. Files: AGENTS.md.
-
-
-## docs — 2026-08-11 — README_ko reads like a person wrote it (no version change)
-
-The owner flagged the Korean README as machine-toned, pointing at the phrase built from
-"product" + "closure" — each word correct on its own, the compound something no Korean
-speaker would say. Measured against a published taxonomy of Korean AI-writing tells, the
-document was clean of translation-ese (zero hits on the decisive patterns) but heavy on
-three: em-dashes (77), bold spans (41), and bureaucratic noun compounds (5 uses of the
-"closure" word). Following that taxonomy's own rule — subtract tells, never insert new
-ones, and keep the edit local — closure vocabulary became plain verbs ("when a capability
-is closed", "when MVP is reached"), mid-sentence dashes became full stops where they were
-decoration (77 → 49; the ones separating a heading or a defined term stay), and emphasis
-was thinned to the claims that carry the section. The audit and retrospective paragraphs
-were re-sentenced for rhythm rather than trimmed. English mirrors the same fix where the
-oddity was shared, most visibly "capability · product closure" → "closing a capability ·
-reaching MVP". No facts, numbers, or terms changed; structure parity ko↔en holds
-(headings 15/15, table rows 39/39, bullets 17/17, fences 24/24). Files: README{_ko,}.md.
-
-
 ## 0.9.20 — 2026-08-11 — Codex installs in two remote lines; the handoff rhythm gets its own section
 
 Probing why devflow's Codex install was heavier than comparable skill repositories found
@@ -292,7 +199,6 @@ in conversation land in their documents first and only the volatile remainder go
 HANDOFF, at a task boundary and never mid-task. Files: .codex-plugin/plugin.json (new),
 README{_ko,}.md, AGENTS.md, docs/design{_ko,}.md, .claude-plugin/plugin.json.
 
-
 ## 0.9.19 — 2026-08-11 — the Codex installer confirms what it claims; README install and diagrams reworked
 
 The installer reported "plugin installed" from an exit code while registration had in
@@ -319,20 +225,6 @@ parity ko↔en verified (headings 14/14, table rows 39/39, bullets 17/17, fences
 five diagrams line-for-line); README.md's Korean count stays exactly 1 (the language
 switcher). Files: codex/install.ps1, codex/install.sh, README{_ko,}.md,
 .claude-plugin/plugin.json.
-
-
-## docs — 2026-08-11 — README: quick start up front, leaner closure prose (no version change)
-
-README only, both languages. A Quick start section right after the premise (install
-commands + which skill to run first), fixing the first-time-reader path that reached
-install at the 87% mark of the document. The premise now says the next session reads a
-small, fixed set of files. The audit paragraph drops its duplicated philosophy tail
-(already stated in The approach), the retrospective paragraph is re-sentenced for
-natural reading, and the HANDOFF enumerations gain the missing "next single step"
-(matching work's format). Structure parity ko↔en verified (headings 16/16, table rows
-39/39, bullets 17/17, fences 26/26); README.md's Korean count stays exactly 1 (the
-language switcher). Files: README_ko.md, README.md.
-
 
 ## 0.9.18 — 2026-08-11 — knowledge reachability: what lands on disk must land on a skill's read path
 
@@ -370,7 +262,6 @@ pointer). Files: skills/principles/SKILL{_ko,}.md, skills/work/SKILL{_ko,}.md,
 skills/split/SKILL{_ko,}.md, skills/verify/SKILL{_ko,}.md, docs/design{_ko,}.md,
 .claude-plugin/plugin.json.
 
-
 ## 0.9.17 — 2026-08-10 — the retrospective also fires at each capability's first closure
 
 Owner direction (2026-08-10) overturned v0.9.16's capability-level exclusion, with
@@ -388,7 +279,6 @@ The capability-layer verify.md Retrospective field, previously dead, is now live
 The mid-point observation item is struck as implemented. README: retrospective
 paragraph and boundary diagram updated. Files: skills/verify/SKILL{_ko,}.md,
 README{_ko,}.md, docs/design{_ko,}.md, .claude-plugin/plugin.json.
-
 
 ## 0.9.16 — 2026-08-10 — the retrospective: a fourth role asks whether the design had better options
 
@@ -422,7 +312,6 @@ project. Adoption condition assessed for the owner: purely additive — no canon
 change, no existing mechanism modified, non-blocking, deletion-safe. Files:
 skills/verify/SKILL{_ko,}.md, skills/verify/retrospector{_ko,}.md (new),
 README{_ko,}.md, docs/design{_ko,}.md, AGENTS.md, .claude-plugin/plugin.json.
-
 
 ## 0.9.15 — 2026-08-10 — the audit: event-triggered deep inspection (third role, findings not verdicts)
 
@@ -475,7 +364,6 @@ are untouched). Files: skills/verify/SKILL{_ko,}.md,
 skills/verify/auditor{_ko,}.md (new), skills/split/SKILL.md, skills/work/SKILL.md,
 README{_ko,}.md, docs/design{_ko,}.md, AGENTS.md, .claude-plugin/plugin.json.
 
-
 ## 0.9.14 — 2026-08-10 — arch derived questions inherit the candidate format (anti-anchoring)
 
 An owner-requested evaluation round on the deferred candidates located the flow's
@@ -505,7 +393,6 @@ deploy skills, no re-run narrowing rule for a full pass at re-closure) — so a
 grafted holistic pass would risk exactly the endless-polish loop the owner fears.
 Recorded as two design-doc observation items for a future design round. Files:
 skills/arch/SKILL{_ko,}.md, docs/design{_ko,}.md, .claude-plugin/plugin.json.
-
 
 ## 0.9.13 — 2026-08-10 — stuck-escape: in-card fixation gets an exit (research-grounded)
 
@@ -555,7 +442,6 @@ Korean scan, installers rerun. Files:
 skills/principles/SKILL{_ko,}.md, skills/work/SKILL{_ko,}.md, docs/design{_ko,}.md,
 AGENTS.md, .claude-plugin/plugin.json.
 
-
 ## 0.9.12 — 2026-08-10 — Layer 0 draft clause; unminted settling cards; two canon copies deleted; contradiction re-route attempted and reverted
 
 Owner adjudication of the four deferred judgment calls, with a canon-grade refutation
@@ -598,7 +484,6 @@ rerun. Files: skills/principles/SKILL{_ko,}.md, skills/arch/SKILL{_ko,}.md,
 skills/split/SKILL{_ko,}.md, skills/verify/SKILL{_ko,}.md, skills/work/SKILL{_ko,}.md,
 AGENTS.md, docs/design{_ko,}.md, .claude-plugin/plugin.json.
 
-
 ## 0.9.11 — 2026-08-10 — whole-corpus audit: verifier blindness sealed, a term un-collided, hook detector fixes
 
 An owner-prompted trust check ran two fresh lenses over the whole corpus
@@ -631,7 +516,6 @@ plugin in place and failing the subsequent add — both installers now remove
 skills/verify/verifier{_ko,}.md, skills/principles/SKILL{_ko,}.md,
 skills/resume/SKILL{_ko,}.md, scripts/session-start.js, codex/install.{ps1,sh},
 .claude-plugin/plugin.json.
-
 
 ## 0.9.10 — 2026-08-10 — brownfield entry becomes its own skill: adopt (split out of arch)
 
@@ -681,7 +565,6 @@ skills/{arch,split,resume}/SKILL{_ko,}.md, README{_ko,}.md, docs/design{_ko,}.md
 codex/AGENTS-devflow{_ko,}.md, codex/install.{ps1,sh}, AGENTS.md,
 .claude-plugin/plugin.json, .claude-plugin/marketplace.json.
 
-
 ## 0.9.9 — 2026-08-09 — Codex install leads with the native plugin channel (installers · marketplace)
 
 The owner asked whether either platform was being installed through a legacy channel.
@@ -704,7 +587,6 @@ platforms update. Also repaired in passing, with the owner informed: a dangling
 `codex plugin` command and was removed. Files: codex/install.{ps1,sh},
 .claude-plugin/marketplace.json, README{_ko,}.md, AGENTS.md, docs/design{_ko,}.md,
 .claude-plugin/plugin.json.
-
 
 ## 0.9.8 — 2026-08-09 — brownfield product.md reaches field parity (arch) + README first-step and loop-mechanics visuals
 
@@ -730,31 +612,6 @@ fact-check on the README walkthrough (1 finding — "the why" under-stated the A
 gaps — fixed). Files: skills/arch/SKILL{_ko,}.md, README{_ko,}.md,
 .claude-plugin/plugin.json. Codex prompts regenerated.
 
-
-## 2026-08-09 — docs only: README opens with the approach (no version change)
-
-The README jumped from the memory hook straight into structure — a first-time reader
-got mechanics before stance. A new section, "The approach — rich direction, minimal
-harness," now opens the body: what devflow makes explicit (Destination · Forbidden ·
-completion signal · Coordinates/Identity) versus what it leaves to the model, the
-harness-dial baseline note, and the balance the system aims at (structure without
-weight; the same failure never repeated the same way; the harness grows only on a
-defect actually met). An independent fact-check pass compared every sentence against
-the rule files — 5 findings folded in before landing: the T-low harness-dial
-qualifier added under the table, "implementation history" restored (the reviewer does
-read the code — it never sees the process), and the regression claim rescoped to the
-skill's own wording ("regression reruns it from then on"). Files: README_ko.md,
-README.md.
-
-
-## 2026-08-09 — docs only: install path fixed to the published repository (no version change)
-
-First publication to GitHub (nanomia-ai/devflow). The README's marketplace-add line
-said `nanomia/devflow` — a placeholder from before the org existed; both READMEs now
-point at `nanomia-ai/devflow`. The marketplace name (`devflow@nanomia`) is unchanged —
-it comes from marketplace.json, not the repo path. Files: README_ko.md, README.md.
-
-
 ## 0.9.7 — 2026-08-09 — rename gate aligned with the canon's qualifier (work)
 
 Found by the whole-flow coordinate sweep that closed the 0.9.4–0.9.6 campaign (card
@@ -766,7 +623,6 @@ verbatim: "the review that applies to the card." Every end-to-end walk of the ca
 (E1–E6: full lifecycle, verify-fail → fix card → re-closure, delegation, evidence-wait,
 research card, fix-on-fix) passed with no other finding. Files:
 skills/work/SKILL{_ko,}.md, .claude-plugin/plugin.json. Codex prompts regenerated.
-
 
 ## 0.9.6 — 2026-08-09 — role contracts unified: one file, every platform, no registration (work · verify · installers)
 
@@ -799,7 +655,6 @@ skills/verify/{SKILL,SKILL_ko,verifier,verifier_ko}.md, codex/install.{ps1,sh},
 README{_ko,}.md, AGENTS.md, docs/design{_ko,}.md, .claude-plugin/plugin.json.
 Codex prompts regenerated and the generated output inspected.
 
-
 ## 0.9.5 — 2026-08-09 — role terms made platform-neutral (work · verify · README)
 
 An owner report caught the README claiming the two agents are "Claude only — not part
@@ -821,18 +676,6 @@ explicit in the verifier terms, the English README aligned to "execute" (it had 
 "runs"), and the reply-layout delta (the agents' fixed return shapes) adjudicated as
 packaging, since the verdict triad and evidence-recording obligations already ship
 platform-neutrally in the skill.
-
-
-## 2026-08-09 — docs only: README gains the work ⇄ verify loop section (no version change)
-
-Between work and verify the README named the two agents but never showed the loop
-geometry. A new subsection under "The 8 skills" draws the inner loop (implement →
-signal → review → commit, with the fix path re-running the signal) and the outer loop
-(scenario + regression → verdict, with fail birthing a reproduction-signal fix card),
-then states the three ways the loop improves and the outcome it drives (a defect met
-once cannot escape again; the harness grows only on real defects). Files: README_ko.md,
-README.md.
-
 
 ## 0.9.4 — 2026-08-09 — loop closure: signal freshness + fix-card reproduction signals (work · verify)
 
@@ -870,22 +713,6 @@ in docs/design.md. Files: skills/work/SKILL{_ko,}.md, skills/verify/SKILL{_ko,}.
 docs/design{_ko,}.md, .claude-plugin/plugin.json, CHANGELOG.md. Codex prompts
 regenerated locally.
 
-
-## 2026-08-09 — docs only: maintenance protocol hardened (no version change)
-
-AGENTS.md verification protocol: two items amended, two added, distilled from the 0.9.x
-campaigns — lens differentiation + "zero findings is valid" for verification agents
-(item 1); sanctioned-exceptions-outside-the-canon added to the watched defect classes
-(item 5); walks-vs-coordinate-sweeps geometry — narrative simulations prove walked
-paths only, structural changes get a coordinate sweep, external reviews are adjudicated
-against the text (new item 6); honest reading of finding counts — first-pass findings
-on new text are the pattern working (new item 7). The Korean-check definition now names
-the tool directly (ripgrep run directly or a Perl scan — proxied grep rewrites
-false-positive here); Releasing gains the CLI reinstall command. The additions were
-themselves refuted before landing (11 findings applied across AGENTS.md and the new
-kickoff prompt).
-
-
 ## 0.9.3 — 2026-08-08 — research-card path closed (verify · split · work · principles)
 
 Three gaps on the research-card axis, reported by an external session's review and
@@ -915,7 +742,6 @@ find defects on paths they take, which is also why these survived earlier conver
   among them: the exception must live in the canon; "complete with two fields"
   over-exempted Depends/Tier; "question card" coined a second name; "no code to review"
   was a false ground).
-
 
 ## 0.9.2 — 2026-08-08 — balance audit: philosophy-axis review + flow simulation
 
@@ -948,7 +774,6 @@ failure path if deleted; flow fit rated 9/10, "no decorative rituals". Changes:
   absolute sentence, and split's own general condition ("don't touch the dev server",
   singular) made the relaxed sentence unreachable — both aligned to "a shared dev
   server"; resume's new "mid-card" unified to the existing "mid-task"
-
 
 ## 0.9.1 — 2026-08-08 — promotion of in-progress cards defined (split · principles)
 
@@ -986,7 +811,6 @@ checkpoint first and the suffix rule as an independent condition.
 - resume: the prefixed-commit enumeration gains promote / work: the solo "rename rides
   the next boundary commit" rule notes that riding a wip checkpoint commit is fine
 
-
 ## 0.9.0 — 2026-08-08 — rename to devflow + documentation restructure for publication
 
 - **Renamed nano-devflow → devflow** (plugin name, Codex command prefix `devflow-*`,
@@ -1013,7 +837,6 @@ checkpoint first and the suffix rule as an independent condition.
   README visitor); ~30 findings applied before release, then the fixes were re-audited
   (6 further findings, also applied).
 
-
 ## 0.8.3 / 0.8.1 — 2026-08-08 — audit follow-ups (logged post-hoc)
 
 v0.8.1: two post-hoc audit fixes — removed resume's hard-coded "5 items" for the
@@ -1026,15 +849,6 @@ as anomalies, a noise defect), and labeled the reassignment rule as "the authori
 exception to claim inviolability".
 (This entry was logged post-hoc — the log was missed at commit time and recovered during
 a session-handoff evaluation.)
-
-
-## 2026-08-08 — docs only: observation item detailed (no version change)
-
-Verified the gap where carry-forward reading does not fire on maintenance reopening —
-improvement possible (reuses Depends targeting, no side effects confirmed). Recorded the
-confirmed wording alongside the rejected form (unbounded skimming → read explosion) in
-the observation items. Application deferred until real-use friction. No skill text changed.
-
 
 ## 0.8.2 — 2026-08-08 — two full simulations reflected (session dynamics + full lifecycle)
 
@@ -1059,7 +873,6 @@ maintenance, L1–L6). Zero structural rework; 12 local wording fixes:
   overwrites confirmed / proportionality clause for reopen-then-reclose (scenarios may
   shrink; regression stays full)
 - arch: integration/merge lines marked solo-skip / reviewer: progress-log exclusion codified
-
 
 ## 0.8.0 — 2026-08-08 — multi mode (multi-user design split by scope of truth)
 
@@ -1102,15 +915,6 @@ with a single truth (project·tree·journal) are shared; only person-owned state
   Rejection lineage: A·C absorbed into D; B′ preserved as "teams that must leave no
   devflow traces in the repository" only
 
-
-## 2026-08-07 — docs only: on-hold list expanded (no version change)
-
-Recorded homework from post-0.7.0 structural verification (1-year time-axis stress /
-multi-user) into the on-hold list. Team mode fixed at 4 directions, verify.md overwrite
-codification planned, migration deferred to the card pattern, 4 new field observation
-items. No skill text changed.
-
-
 ## 0.7.0 — 2026-08-07 — session handoff · document feedback · git ownership (rewrite)
 
 The 8/6 v0.7.0 commit (9e67612) was largely correct in content but violated the
@@ -1149,7 +953,6 @@ one mid-session death, credit/ack document contradiction).
 - Decision: HANDOFF is committed to git but never in a dedicated commit — rides the
   boundary commit only (based on the 8/6 reverted dedicated-HANDOFF-commit case)
 
-
 ## 0.6.0 — 2026-08-05 — native Codex SessionStart hook
 
 - Research (2 subagents, Sonnet) confirmed: Codex CLI v0.124.0+ has a hook system nearly
@@ -1166,7 +969,6 @@ one mid-session death, credit/ack document contradiction).
   could be installed there instead of prompts. Per-skill `agents/openai.yaml` sidecar can
   provide Codex UI metadata (mattpocock pattern)
 
-
 ## 0.5.0 — 2026-08-05 — English deployment
 
 - **English conversion**: deploy artifacts (8 skills · 2 agents · AGENTS block · hook
@@ -1177,7 +979,6 @@ one mid-session death, credit/ack document contradiction).
   in deploy files; Codex regeneration passing
 - git repo initialized. v0.4.0 (Korean edition) is the first commit — the pre-translation
   original is preserved in history
-
 
 ## 0.4.0 — 2026-08-05 — reviewer agent
 
@@ -1190,7 +991,6 @@ one mid-session death, credit/ack document contradiction).
 - split execution proposal gains a "skip review" option (review is the default); verify
   layer table updated
 
-
 ## 0.3.1 — 2026-08-05
 
 - 2 lines defending against document contamination/fossilization (principles, document
@@ -1198,7 +998,6 @@ one mid-session death, credit/ack document contradiction).
   is the default ("a document that only grows is a dead document")
 - Terminology alignment: split "strong card" → "complete card" (one concept, one word);
   work's parallel-condition wording unified with split's
-
 
 ## 0.3.0 — 2026-08-05
 
@@ -1217,7 +1016,6 @@ one mid-session death, credit/ack document contradiction).
 - hook: devflow/ paths, duplicate-number and multi-wip warnings
 - DEVLOG.md introduced
 
-
 ## 0.2.0 — 2026-08-05
 
 - Prefix introduced: plugin nano-devflow, Codex commands nano-devflow-*
@@ -1226,7 +1024,6 @@ one mid-session death, credit/ack document contradiction).
   gains the brownfield back-derivation procedure
 - Cross-tool defect fixes: skill cross-references as stage names, install.ps1 BOM,
   verifier tool restriction lifted
-
 
 ## 0.1.0 — 2026-08-05
 

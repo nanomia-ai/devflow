@@ -49,10 +49,10 @@ Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugi
 | `AGENTS.md` | procedure — gate, translation, release, round protocol, promotion | automatically, at session start |
 | `docs/audit-guideline_ko.md` | standing instrument — the canon of verification method | when reporting a verification result |
 | `docs/usecase-matrix_ko.md` | standing instrument — the enumerated shapes of use | when changing `skills/**` |
-| `docs/rounds/<version>/` | round record — handoff, plan, report, audit | the previous one only, when opening a round |
+| `docs/rounds/<version>/` | round record — request, handoff, plan, report, audit | the previous one only, when opening a round |
 | `README.md` | for people — what this is and how to use it | users read it |
-| `CHANGELOG.md` | history — what changed in which version, 0.10.0 onward | when tracing when something changed |
-| `docs/changelog-archive.md` | history — entries before 0.10.0, moved unchanged | when tracing something older than 0.10.0 |
+| `CHANGELOG.md` | history — what shipped in which version, 0.10.0 onward. Deploy changes only | when tracing when a shipped behavior changed |
+| `docs/changelog-archive.md` | history — shipped changes before 0.10.0 | when tracing something older than 0.10.0 |
 | `skills/principles/SKILL.md` | canonical rules — what the runtime executes | every session devflow runs in |
 
 The two standing instruments are opened by the session changing this repository **itself**,

@@ -1,16 +1,19 @@
 # Changelog
 
-All notable changes to devflow, newest first. Format: each entry records **what changed
-and why** in prose — not Keep a Changelog categories. The version label follows
+What shipped in devflow, newest first. Format: each entry records **what changed and why**
+in prose — not Keep a Changelog categories. The version label follows
 `.claude-plugin/plugin.json`, which is the canonical version. Entries up to v0.8.3 were
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
-Entries for 0.10.0 and later are here. Everything before that — the v0 to v0.9.23 era,
-49 entries — moved to [docs/changelog-archive.md](docs/changelog-archive.md) on 2026-08-13,
-unchanged. It was moved rather than summarized: those releases predate `docs/rounds/`, so
-their entries are the only narrative record of that era, and they predate the promotion
-table, so experience that never reached the canon may still be sitting in them.
+**An entry means a deploy artifact changed** — something under `skills/`, `codex/`,
+`hooks/`, `scripts/`, or a plugin manifest. Planning, review, audit and document work
+leaves no entry here: the document is its own record and `docs/rounds/<version>/` holds
+the round it belongs to. Entries written before that rule existed were removed on
+2026-08-14.
+
+Entries for 0.10.0 and later are here; older ones are in
+[docs/changelog-archive.md](docs/changelog-archive.md).
 
 ## 0.14.2 — 2026-08-13 — the GPT audit's findings land: mixed requests record only what fails the gate, and the tweak lane checks its landing first
 
@@ -65,134 +68,6 @@ Files: `skills/{principles,resume,split,work}/SKILL{,_ko}.md`, `README{,_ko}.md`
 `docs/rounds/v0.14.0/report-0.14.2_ko.md`, `scripts/*.test.js`, both `plugin.json`s
 (0.14.2).
 
-## docs — 2026-08-13 — the changelog gets a length norm and an archive, both without losing a line (no version change)
-
-Measurement inverted the assumption that the old entries were the heavy ones: the oldest
-fifteen run to a median of 13 lines while the newest nineteen run to 28 with a tail at 136,
-and the previous entry in this file had reached 103. The cause was structural — a docs-only
-change takes no version, so it opens no round folder, so its verification record had nowhere
-to go but here. The gate now states a norm (about 60 lines for a release entry, 25 for a
-docs one) and says where the overflow belongs: the round's `report_ko.md`, with a round
-folder opened even for an unversioned change once it has run independent audit passes.
-
-Entries before 0.10.0 — 46 of them, 1,235 lines — moved to `docs/changelog-archive.md`
-unchanged. They were moved rather than condensed, and the reason is specific rather than
-sentimental: those releases predate `docs/rounds/`, so for that era these entries are the
-only narrative record, and they predate the promotion table, so experience that never
-reached the canon may still be sitting in them. Condensing would delete the one thing they
-hold that nothing else does. Preservation was checked mechanically against the committed
-blob: 63 of 64 entries byte-identical, the 64th being the previous entry, trimmed here from
-103 lines to 43 on purpose. `CHANGELOG.md` is 2,066 lines down to 852.
-
-Files: `CHANGELOG.md`, `docs/changelog-archive.md`, `AGENTS.md`, `docs/design.md`,
-`docs/design_ko.md`, `scripts/repository-invariants.test.js`.
-
-## docs — 2026-08-13 — the design canon splits three ways, and the two standing instruments get wired into the automatic path (no version change)
-
-The design document had outgrown its container: 64 decisions in a two-column table whose
-cells reached 1,062 characters, five carrying a correction buried mid-paragraph while their
-titles still stated the superseded rule, and a gate demanding all 41,000 tokens of it before
-a typo fix. Worse, the two documents built to stop the owner re-explaining the same things
-to every agent — `docs/audit-guideline_ko.md` and `docs/usecase-matrix_ko.md` — were named
-by nothing in the automatic path. They fired only when pasted in by hand, which is the work
-they were written to remove.
-
-The canon is three files now. `design.md` keeps identity, philosophy, a document map, an
-invariants section and an index of all 64 decisions; it is the layer every change reads.
-`design-decisions.md` holds the decisions in full and the rejection lineage, regrouped from
-chronological order into seven subjects — a change to the claim model had to find 13 rows
-across six versions, and v0.14.0 had already corrected four of them in place. Decisions and
-rejections stayed together because the gate treats them as one. `design-backlog.md` holds
-observations and on-hold candidates, which only release planning reads. Every decision took
-a stable identifier and a state; the canon had been citing plan identifiers it never defined.
-
-Round records moved into `docs/rounds/<version>/` with role filenames, 20 files with 86
-cross-references rewritten, applying this project's own third philosophy — state lives in the
-file tree — to its own repository. `AGENTS.md` gained a wiring table whose triggers key on
-paths, outputs and file operations rather than on how big a change feels; a round protocol
-fixing what a plan and a review must each state; and a promotion table whose audit row never
-existed before, so that 3,314 lines of independent validation finally have a path into the
-canon. Its verification protocol shrank to a pointer, because the restatement had drifted to
-six defect classes against the guideline's ten and the four it was missing included
-silent-loss paths.
-
-Verification: an independent refuter pass and a literal-execution walk ran in separate
-contexts under the guideline's own §8 template — the first use of the wiring this change
-installs — returning 18 and 9 findings, with both independently finding the same mis-aimed
-cross-reference. All adopted findings were repaired, so the detail lives in the repaired text
-rather than here; a write-side coordinate sweep then closed four more gaps. Content
-preservation was proved mechanically: 218 units per language against a byte-verified backup,
-zero lost, one declared correction. A follow-up consistency scan found the same drift once
-more in this file's own repair — item 1 still named two lenses in prose, one of them under a
-term the guideline does not use — and removed the names; section-number references, document
-map coverage, and decision-body uniqueness came back clean. All 91 Node tests pass, up from
-87. README counts:
-`—` 98→99 and 73→74, `**` unchanged.
-
-Files: `docs/design{,_ko}.md`, `docs/design-decisions{,_ko}.md`, `docs/design-backlog{,_ko}.md`,
-`docs/audit-guideline_ko.md`, `docs/usecase-matrix_ko.md`, `docs/rounds/**` (20 moved),
-`AGENTS.md`, `README{,_ko}.md`, `scripts/repository-invariants.test.js`, `CHANGELOG.md`.
-
-## docs — 2026-08-13 — independent implementation audit of the v0.14.0 plan and the current 0.14.1 source (no version change)
-
-Added a report-only audit that treats the v0.14.0 plan as requirements, the execution
-report as implementer claims, and the current 0.14.1 English skill text as authority. The
-audit confirms the principal architecture and both platform installations, then separates
-two possible silent-loss paths, seven stop-or-wrong-action paths, one trace-precision gap,
-one out-of-scope maintenance-canon drift cluster, and the already-recorded design tensions
-from their repair options. Three claims were measured in temporary Git repositories: an
-integration ancestor can still have one local-only descendant commit; a path-scoped commit
-of a shared file carries both sessions' hunks; and a tweak committed on detached HEAD is
-left on no named branch after checkout. The report also records a request-shape x branch-
-state x dirty-path x routing-state coordinate sweep, self-challenges for every adopted
-finding, bounded repair choices, and the fixtures a repair round would need. An owner-
-requested anti-misreading pass expands the compressed verdicts, execution-report claim
-adjudications, coordinate-sweep notation, and repair-feasibility labels with their causal
-mechanism, predicted operating result, and scope boundary; it does not change any finding,
-severity, or recommendation. No plan, execution report, audit guideline, deploy artifact,
-test, or manifest changed.
-
-Verification: all 87 Node tests pass; Korean/English structure and deploy-language checks
-pass inside that suite; both live plugin lists report enabled devflow 0.14.1; twelve core
-files are byte-identical across the repository, Codex cache, and Claude cache; the three
-input-document SHA-256 values remain recorded in the report. Files:
-`docs/rounds/v0.14.0/audit_ko.md`; `CHANGELOG.md`.
-
-
-## docs — 2026-08-13 — guideline anti-rigidity pass, cold-start context for the report, and dated corrections on four stale design rows (no version change)
-
-Three owner-raised checks, each answered in the documents themselves. (1) The audit
-guideline gained a "how to read this document" preamble: every rule is a variation of one
-question, only two rules bear load (the acceptance bar and the class-keyed stop
-condition), the rest is technique an auditor may override with a stated reason —
-plus a context-first reading order (report and design philosophy before the hunted text),
-per-lens expected outputs, and a softened citation requirement. (2) The 0.14.0 execution
-report now works for a zero-context auditor: a minimal cold-start section (what devflow
-is, the three text layers, six terms, canon precedence), the audit guideline added to its
-reading list, the eight untouchables inlined with their reasons instead of pointing into
-a document marked don't-read. (3) A staleness sweep of docs/design.md found four decision
-rows still asserting what v0.14.0 overturned — the v0.9.23 group claim, the v0.12.0
-unit-axis claim key, the v0.13.0 blockade freeze, and the v0.13.0 no-skip-recording
-guard — each now carries a dated correction note pointing at its superseding row
-(lineage preserved, nothing deleted), and the on-hold size entry carries the measured
-current figures.
-
-
-## docs — 2026-08-13 — the audit guideline: sixteen releases of verification practice become a standing instrument (no version change)
-
-Wrote `docs/audit-guideline_ko.md` for external auditors (owner-run GPT sessions and any
-clean-context reviewer): the finding classes that have actually shipped defects (each with
-its originating incident), the acceptance bar (exact quote + concrete failure path, zero
-findings valid), the lens separation and walk-vs-sweep distinction, the use-case matrix as
-the coverage instrument, contamination control for briefings, the loop-termination rule
-that keys on finding class rather than count (with personal circuit breakers), the
-report format with severity tiers, an exception table, and a briefing template for the
-owner. Also added the explicit size verdict to the 0.14.0 execution report: the current
-corpus is the best of this moment, not the endpoint — three recorded reduction paths
-remain (D11 consumer split, the interruption machinery, a post-field subtraction audit),
-each deferred for a recorded reason rather than by neglect.
-
-
 ## 0.14.1 — 2026-08-13 — the repair re-audit: seven precision forks converge, and the loop closes by its recorded stop condition
 
 A bounded independent pass over only the seventeen 0.14.0 repairs (fixes are changes too)
@@ -214,7 +89,6 @@ The lineage, loop record, and honest size measurement (the fixed session read gr
 1,543 → 1,636 lines, over the plan's budget, with the recorded reduction path being
 D11 then the interruption machinery) live in `docs/v0.14.0-execution-report_ko.md`, the
 process-grade handoff this round leaves behind.
-
 
 ## 0.14.0 — 2026-08-13 — free parallel claims, the tweak lane, blockade appends with 3-way journal merges
 
@@ -282,70 +156,6 @@ request-preserving list; the digest gate reworded for several claims and its mar
 a commit vehicle before a claim; the 3-way base defined for rebase and ties. The
 use-case matrix's pending cells were all re-judged against the implemented text — zero
 gaps remain; the walker's journal-merge scenario ran clean on the first pass.
-
-
-## docs — 2026-08-13 — v0.14.0 plan: free parallel claims, a tweak lane, blockade appends with 3-way journal merges (no version change yet)
-
-Wrote `docs/v0.14.0-plan_ko.md` after the owner decided on every open question from the
-second verification round. The plan's three structural moves, each with its overturn
-refutation recorded for `docs/design.md`: (1) **free parallel claims** — the
-one-claim-per-id-per-unit rule assumed one terminal per person; the owner runs six on one
-capability daily, and the rule's only escape (parking) sweeps a sibling session's
-uncommitted work into a checkpoint. Claims become unconditional with a one-line info
-notice; every checkpoint-style rule is rescoped to "changes this session made"; integrity
-item 1 is repurposed to orphan-claim detection (number preserved). (2) **a tweak lane** —
-changes whose diff is already the complete record (no user-visible transition change, no
-design decision or conflict, no trap) skip cards, journal, and state restoration entirely:
-declare, read Layer 0 only, cheapest check once, one `<id> tweak NN:` commit. Refutes
-D7's no-skip-recording guard: a commit IS a record; knowledge-bearing changes still route
-through the discovery table. (3) **blockade appends + 3-way journal merges** — journal
-lines that mint nothing and claim nothing may be appended and locally committed while
-integration is blocked (closes the round's only silent-loss path), and the
-union merge rule is replaced with base-aware 3-way resolution because measurements 15–16
-proved union semantics resurrect consumed lines. The plan also folds in all confirmed
-round-2 defects (classifier classes, resume-arch integration mismatch, minting-contention
-routing, absent-document Design-head gate, and the cleanup tier) and records two
-contradictions the pre-plan full sweep found between the decisions themselves
-(precondition 3's cross-unit checkpoint sweep; the K3 plain journal line having no class
-and no consumer). No skill text changed yet — the plan is the contract for the 0.14.0
-round, which starts by committing 0.13.0 as its baseline.
-
-Promoted the use-case matrix to a standing verification instrument at
-`docs/usecase-matrix_ko.md` (third edition: three new human forms - same card in two
-terminals, unnamed resume with several claims, a tweak reclassified mid-change - one
-new AI entry point for tweak sessions, and every cell the 0.14.0 plan will close
-marked as pending re-judgment); the versioned copy is deleted, and release
-verification now re-judges every pending cell against the implemented text.
-
-
-## docs — 2026-08-13 — second verification round: four independent passes, a use-case matrix, and two report corrections (no version change)
-
-Ran the independent refutation AGENTS.md requires and the first round could not provide:
-four clean-context passes with distinct lenses (literal usage walk over six scenarios ·
-refuter over the changed canon · record-loss channel audit · subtraction audit), every
-finding adjudicated against the actual text. Result: 18 confirmed defects with prepared
-repairs (all local sentence fixes — among them a dead end in work's precondition 3 when the
-user names a card in a unit I already claim, verify's two-class journal classifier
-rejecting the content classes the canon now allows, and an undefined Design-head gate for
-absent candidate documents), 13 judgment calls with recommendations (the one data-loss
-path: blocked-integration sessions have no disk parking for new requests and observations),
-8 watch items, 4 rejected finding groups with reasons. **No skill text was changed — repairs
-await owner approval.** Added `docs/v0.13.0-usecase-matrix_ko.md` (human request, arrangement, and team
-forms × AI entry points — widened on owner direction to worktree and team variables, which
-surfaced three new gaps: a skill entered from a subfolder can create a nested devflow root,
-checkpoints strand on branches nobody reads when a worktree is deleted or a teammate is
-away, and nothing records the devflow version a repository assumes, so mixed-version teams
-judge shared state differently; plus the earlier reachability gap where provider-document
-traps do not reach the first cross-capability consumer) and
-`docs/v0.13.0-verification-round2_ko.md` (rewritten as a prose risk review after a
-self-check for over-interpretation that retracted one repair, corrected another, and
-softened five — repairs stay unapplied by owner decision). Corrected two defects in the execution report directly, as document-fact fixes:
-it never said the release is uncommitted (a next session would have pushed a history
-missing 0.13.0), and the Codex companion-resolution claim is downgraded from measured to
-strong inference. Files: `docs/v0.13.0-usecase-matrix_ko.md`,
-`docs/v0.13.0-verification-round2_ko.md`, `docs/v0.13.0-execution-report_ko.md`,
-`CHANGELOG.md`.
-
 
 ## v0.13.0 — 2026-08-13 — one integration branch, several hands, and reading bounded to open work
 
@@ -467,46 +277,6 @@ Files: `skills/principles/SKILL_ko.md`·`SKILL.md`;
 `scripts/extract-adopt-reference.test.js`; `docs/design_ko.md`·`design.md`;
 `docs/v0.12.0-usage-flow-report_ko.md`; `docs/v0.13.0-execution-report_ko.md`;
 `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `CHANGELOG.md`.
-
-
-## docs — 2026-08-13 — feasibility resolutions added to the v0.13.0 plan audit (no version change)
-
-Expanded `docs/v0.13.0-plan-validation-report_ko.md` without changing the plan. Every
-finding now separates reproduced facts from proposed repairs and design judgment. The new
-resolution chapter records measured local and remote Git ref compare-and-swap behavior;
-recommends an integration-only coordination plane, claim-generation fencing, isolated card
-workspaces, and a finite deterministic transition helper; distinguishes the minimal
-one-writer profile from optional same-root managed-worktree routing; and defines recovery
-for multi-domain request sources, journal races, foundation knowledge, orchestrators,
-clones, and takeover. Added corresponding flow simulations, absolute limits, and acceptance
-fixtures. No deployed skill, predicate, role contract, installer, manifest, hook, or version
-changed. Files: `docs/v0.13.0-plan-validation-report_ko.md`, `CHANGELOG.md`.
-
-
-## docs — 2026-08-13 — independent validation of the v0.13.0 implementation plan (no version change)
-
-Added `docs/v0.13.0-plan-validation-report_ko.md`, a report-only design audit of the
-unimplemented v0.13.0 plan. It separates same-working-tree terminals, worktrees sharing a
-Git common directory, and independent clones; records reproducible failures in the proposed
-claim projection and journal union merge; distinguishes normal ref races from structural
-integration failures; and gives technical feasibility limits, bounded repair alternatives,
-security and platform constraints, an implementation order, and executable acceptance
-fixtures. The plan itself and all deployed skills, predicates, role contracts, installers,
-manifests, and hooks were left unchanged. Files:
-`docs/v0.13.0-plan-validation-report_ko.md`, `CHANGELOG.md`.
-
-
-## docs — 2026-08-12 — independent validation of the v0.12.0 usage-flow implementation (no version change)
-
-Added `docs/v0.12.0-usage-flow-validation-report_ko.md`, a report-only audit that treats
-the v0.12.0 execution report as the current decision record and the deployed skills as
-literal runtime truth. It records the flows that work, reproducible state-transition and
-platform-delivery defects, coordinate sweeps, technical solvability (including the limits
-that require isolation, serialization, or explicit hook trust), repair order, and executable
-acceptance fixtures for the next design session. No deployed skill, predicate, role
-contract, installer, manifest, hook, or version changed. Files:
-`docs/v0.12.0-usage-flow-validation-report_ko.md`, `CHANGELOG.md`.
-
 
 ## 0.12.0 — 2026-08-12 — one mode, claims on the capability axis, knowledge that outlives a handoff
 
@@ -644,7 +414,6 @@ largest open cost, and the owner's call on whether to spend a follow-up release 
 the canon per consumer is recorded there rather than made here. README tone counts: English `—` 92→92, `**` 53→55; Korean `—` 62→66,
 `**` 46→49; bureaucratic noun compounds 0→0 both.
 
-
 ## 0.11.1 — 2026-08-12 — capability-document recovery keys on HEAD
 
 An independent literal execution of the interruption and damage paths, run against the
@@ -723,7 +492,6 @@ Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `AGENTS.md`; `
 `skills/verify/retrospector.md`; `skills/verify/retrospector_ko.md`; `skills/work/SKILL.md`;
 `skills/work/SKILL_ko.md`; `CHANGELOG.md`.
 
-
 ## 0.11.0 — 2026-08-11 — capability knowledge becomes the automatic domain-entry layer
 
 The approved domain-knowledge handoff and its second-edition implementation plan now run as
@@ -792,7 +560,6 @@ Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `AGENTS.md`; `
 `skills/verify/retrospector_ko.md`; `skills/work/SKILL.md`; `skills/work/SKILL_ko.md`;
 `skills/work/reviewer.md`; `skills/work/reviewer_ko.md`; `CHANGELOG.md`.
 
-
 ## 0.10.2 — 2026-08-11 — year-two events get a landing, and the README catches up to the runtime
 
 A completeness audit asked a different question than the defect hunts had: given what this
@@ -853,7 +620,6 @@ Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `README.md`;
 `skills/principles/baseline-predicates_ko.md`; `skills/resume/SKILL.md`;
 `skills/resume/SKILL_ko.md`; `CHANGELOG.md`.
 
-
 ## 0.10.1 — 2026-08-11 — the README explains the baseline to humans; the installers say which Codex home they target
 
 0.10.0 shipped the capability knowledge baseline as machine contract and wiring, with
@@ -878,7 +644,6 @@ installers write to changed.
 
 Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `README.md`;
 `README_ko.md`; `codex/install.ps1`; `codex/install.sh`; `CHANGELOG.md`.
-
 
 ## 0.10.0 — 2026-08-11 — the capability knowledge baseline runs: verified closures write domain blueprints
 
@@ -928,4 +693,3 @@ pairs for principles, product, arch, adopt, split, work, verify, and resume;
 `codex/install.ps1`; `codex/install.sh`; `docs/design.md`; `docs/design_ko.md`;
 `docs/capability-knowledge-proposal.md`; `docs/capability-knowledge-proposal_ko.md`;
 `scripts/repository-invariants.test.js`; `CHANGELOG.md`.
-

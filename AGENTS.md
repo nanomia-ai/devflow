@@ -13,15 +13,20 @@ The gate, in order:
    refute its recorded reason first. To re-propose a rejected idea, refute its recorded
    rejection reason first. Proposals that skip this do not pass review.
 2. Read this file to the end, and open whatever the wiring table below sends you to.
-3. After any modification, add an entry at the **top** of `CHANGELOG.md` (newest first:
-   date / what / why / which files). **A change without a changelog entry is an
-   unfinished change.** An entry says what changed and why, and stops there: a release
-   entry runs to about 60 lines, a docs entry to about 25. Process knowledge that does not
-   fit — verification records, finding adjudications, measurements — belongs in the round's
-   `report_ko.md`, not here. A change that ran independent audit passes opens a round folder
-   even when it takes no version, so that detail has somewhere to go; entries reached 136
-   lines because it did not. Entries from before 0.10.0 live in
-   `docs/changelog-archive.md`, moved there unchanged.
+3. **If the change altered a deploy artifact** — anything under `skills/`, `codex/`,
+   `hooks/`, `scripts/`, or the plugin manifests — add an entry at the **top** of
+   `CHANGELOG.md` (newest first: date / what / why / which files). **A deploy change
+   without a changelog entry is an unfinished change.**
+
+   **Work that only touches documents gets no changelog entry.** A plan, a request, a
+   review, an audit, a design-document or README edit: the document is its own record, git
+   holds its date, and `docs/rounds/<version>/` holds the round it belongs to. A changelog
+   is what shipped, and planning has not shipped anything. Twenty-five such entries were
+   written before this rule existed and were deleted on 2026-08-14.
+
+   An entry says what changed and why and stops there, about 60 lines. Process knowledge —
+   verification records, finding adjudications, measurements — belongs in the round's
+   `report_ko.md`. Entries from before 0.10.0 live in `docs/changelog-archive.md`.
 
 ## What opens what — the wiring
 
@@ -44,6 +49,7 @@ rather than against a sense of size.
 | the change creates, deletes, or moves a file **that is not this round's own report** | `docs/design-backlog.md`, and run the coordinate sweep guideline §3-4 defines |
 | you are about to bump the version | `docs/audit-guideline_ko.md` in full, and re-judge the matrix cells by **the matrix's own §6** |
 | you are opening a round folder under `docs/rounds/` | the previous round's `report_ko.md`, plus the findings in its `audit_ko.md` that never landed |
+| you are about to create or edit a round's `plan_ko.md` | that same round's `request_ko.md`, then `handoff_ko.md`, when each exists |
 | an adopted finding fits no row of guideline §2 | propose a new row there |
 | the change introduces a new entry point or request shape | propose a new row in matrix §1–§2 |
 
@@ -100,7 +106,8 @@ Modification procedure (order is fixed):
    numerals a language happens to spell out as words) must match 1:1 between Korean and
    English.
 4. Rerun the Codex installer to refresh the plugin snapshot (see Releasing below) + add
-   the CHANGELOG entry.
+   the CHANGELOG entry. This step is for deploy artifacts; the `_ko`-first order applies to
+   paired documents either way, but a document-only change ends at step 3.
 
 Exception for external contributors: PRs may edit the English deploy files directly; a
 maintainer back-syncs the `_ko` originals before the next release. This is the authorized
@@ -180,11 +187,21 @@ the canon on conflict and goes dead.
 ## The round protocol
 
 A change large enough to take its own version is a round, and a round leaves its records in
-`docs/rounds/<version>/`. Filenames are roles: `handoff_ko.md` (optional — what a session
-must know before it can design), `plan_ko.md`, `report_ko.md`, `audit_ko.md`. A round that
-produced two plans keeps the superseded one as `plan-r1_ko.md`; an audit of a plan rather
-than of an implementation is `plan-audit_ko.md`. Folders created before 2026-08-13 predate
-this convention and may hold fewer roles or an older name — `v0.10.0/proposal_ko.md` is one.
+`docs/rounds/<version>/`. Filenames are roles, in the order they are written:
+`request_ko.md` (optional — what the owner asked for, in the owner's terms, before anyone
+planned it), `handoff_ko.md` (optional — what a session must know before it can design),
+`plan_ko.md`, `report_ko.md`, `audit_ko.md`. A round that produced two plans keeps the
+superseded one as `plan-r1_ko.md`; an audit of a plan rather than of an implementation is
+`plan-audit_ko.md`. Folders created before 2026-08-13 predate this convention and may hold
+fewer roles or an older name — `v0.10.0/proposal_ko.md` is one; rounds before 2026-08-14
+have no request file, and their ask is recorded inside the plan.
+
+A request is not a handoff — the request is the owner's and says what is wanted, the handoff
+is one session's and says what the next must know to design — and they are named apart only
+so they do not collapse into one concept under two names. Most rounds have neither. A
+request exists when the owner happens to work that way; otherwise the ask is recorded in the
+plan, as every round so far has done. Nothing rises out of a request into the canon: it is
+an input, and the plan's row in the promotion table already carries whatever survives it.
 
 **Which folder is the previous round.** Not the last line of a directory listing: string
 order puts `v0.9.21` after `v0.14.0`. Compare version numbers segment by segment as
@@ -271,7 +288,7 @@ borrowing text into this repository still needs prior permission.
 
 - The canonical version is `.claude-plugin/plugin.json`. Bump it whenever any deploy
   artifact changes behavior (skills, agents, hook, installers); docs-only changes need no
-  bump. Version bump and CHANGELOG entry travel in the same change.
+  bump and no changelog entry. Version bump and CHANGELOG entry travel in the same change.
 - **Users install from GitHub; this repository installs from disk.** README documents the
   remote two-line install on both platforms (`marketplace add nanomia-ai/devflow` +
   `plugin add`). Maintainers testing local edits use `codex/install.ps1` / `install.sh`,
@@ -310,7 +327,8 @@ borrowing text into this repository still needs prior permission.
 - [ ] Codex install rerun locally — plugin snapshot (or the PR states it was not)
 - [ ] Install channels still target each platform's **current** native mechanism
       (skills · plugins · hooks) — re-verify against platform docs when platforms update
-- [ ] CHANGELOG entry added at the top (+ version bump if a deploy artifact changed)
+- [ ] Deploy artifact changed? CHANGELOG entry added at the top + version bump. Documents
+      only? Neither — the document is its own record
 
 ## Terminology table (fixed — no alternative translations)
 
