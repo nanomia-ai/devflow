@@ -4,10 +4,36 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const { spawnSync } = require("node:child_process");
 
-const cwd = process.cwd();
-const projectDir = path.join(cwd, "devflow", "project");
-const treeDir = path.join(cwd, "devflow", "tree");
+// The session may start in any subfolder of the checkout, so the folder the hook happens
+// to run in is a starting point, never the answer.
+function sessionDirectory() {
+  if (process.stdin.isTTY) return process.cwd();
+  let raw;
+  try {
+    raw = fs.readFileSync(0, "utf8");
+  } catch {
+    return process.cwd();
+  }
+  try {
+    const payload = JSON.parse(raw);
+    if (payload && typeof payload.cwd === "string" && payload.cwd) return payload.cwd;
+  } catch {
+    // an unparseable payload leaves the process directory as the only known start point
+  }
+  return process.cwd();
+}
+
+function checkoutRoot(directory) {
+  const run = spawnSync("git", ["rev-parse", "--show-toplevel"], { cwd: directory, encoding: "utf8" });
+  if (run.status !== 0 || !run.stdout) return directory;
+  return run.stdout.trim() || directory;
+}
+
+const root = checkoutRoot(sessionDirectory());
+const projectDir = path.join(root, "devflow", "project");
+const treeDir = path.join(root, "devflow", "tree");
 const projectStateExists = ["product.md", "arch.md", "code-style.md", "design.md", "glossary.md"]
   .some((name) => fs.existsSync(path.join(projectDir, name)));
 

@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 # devflow → Codex CLI installer (macOS/Linux)
-# Two channels: 1) native plugin (marketplace add + plugin add) — skills with
-# frontmatter become model-invocable, same as Claude; 2) ~/.codex/prompts/devflow-<name>.md
-# slash prompts — the explicit channel (canonical rules and companion documents embedded);
-# the native plugin also delivers SessionStart.
+# One channel: the native plugin (marketplace add + plugin add). Skills keep their
+# frontmatter and their companion files, so Codex resolves `../principles/SKILL.md` the
+# same way Claude does, and the plugin also delivers SessionStart. Generated slash prompts
+# are gone; this run removes the ones devflow wrote.
 set -e
 
 DEVFLOW_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -13,109 +13,9 @@ DEVFLOW_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CODEX_HOME_RESOLVED="${CODEX_HOME:-$HOME/.codex}"
 echo "Codex home: $CODEX_HOME_RESOLVED"
 if [ -n "${CODEX_HOME:-}" ]; then
-  echo "NOTE: CODEX_HOME is set - the codex CLI installs the plugin into that home; generated prompts go to ~/.codex/prompts."
+  echo "NOTE: CODEX_HOME is set - the codex CLI installs the plugin into that home."
 fi
 
-PROMPTS_DIR="$HOME/.codex/prompts"
-mkdir -p "$PROMPTS_DIR"
-
-# Purge prompts from the pre-0.9.0 name (nano-devflow)
-rm -f "$PROMPTS_DIR"/nano-devflow-*.md
-
-strip_fm() { awk 'BEGIN{fm=0} /^---$/{if(fm<2){fm++; next}} fm!=1{print}' "$1"; }
-
-PRINCIPLES="$(strip_fm "$DEVFLOW_ROOT/skills/principles/SKILL.md")"
-STATE_PREDICATES="$(strip_fm "$DEVFLOW_ROOT/skills/principles/state-predicates.md")"
-VERIFICATION_PREDICATES="$(strip_fm "$DEVFLOW_ROOT/skills/principles/verification-predicates.md")"
-BASELINE_PREDICATES="$(strip_fm "$DEVFLOW_ROOT/skills/principles/baseline-predicates.md")"
-
-for dir in "$DEVFLOW_ROOT"/skills/*/; do
-  name="$(basename "$dir")"
-  [ "$name" = "principles" ] && continue
-  body="$(strip_fm "$dir/SKILL.md" | sed \
-    -e 's|`\.\./principles/SKILL\.md`|the Canonical Rules section below|g' \
-    -e 's|`\.\./principles/state-predicates\.md`|the Canonical State Predicates section below|g' \
-    -e 's|`\.\./principles/verification-predicates\.md`|the Canonical Verification Predicates section below|g' \
-    -e 's|`\.\./principles/baseline-predicates\.md`|the Canonical Capability Knowledge Baseline Predicates section below|g')"
-  # Repoint companion-document references (role contracts etc.)
-  for comp in "$dir"*.md; do
-    cbase="$(basename "$comp")"
-    [ "$cbase" = "SKILL.md" ] && continue
-    case "$cbase" in *_ko.md) continue ;; esac
-    body="$(printf '%s\n' "$body" | sed "s|\`$cbase\` beside this skill|the $cbase section below|g")"
-  done
-  {
-    echo "<!-- devflow (generated $(date +%Y-%m-%d)) -->"
-    echo ""
-    printf '%s\n' "$body"
-  } > "$PROMPTS_DIR/devflow-$name.md"
-  # Embed the companion documents as sections
-  for comp in "$dir"*.md; do
-    cbase="$(basename "$comp")"
-    [ "$cbase" = "SKILL.md" ] && continue
-    case "$cbase" in *_ko.md) continue ;; esac
-    {
-      echo ""
-      echo "---"
-      echo ""
-      echo "# $cbase"
-      echo ""
-      strip_fm "$comp"
-    } >> "$PROMPTS_DIR/devflow-$name.md"
-  done
-  # adopt needs bounded producer references in the flat prompt, never the active stage procedures.
-  if [ "$name" = "adopt" ]; then
-    for ref in product arch; do
-      {
-        echo ""
-        echo "---"
-        echo ""
-        echo "# $ref reference (bounded output contract)"
-        echo ""
-        node "$DEVFLOW_ROOT/scripts/extract-adopt-reference.js" "$DEVFLOW_ROOT/skills/$ref/SKILL.md" "$ref"
-      } >> "$PROMPTS_DIR/devflow-$name.md"
-    done
-  fi
-  case "$name" in
-    resume|split|verify|work)
-      {
-        echo ""
-        echo "---"
-        echo ""
-        printf '%s\n' "$STATE_PREDICATES"
-      } >> "$PROMPTS_DIR/devflow-$name.md"
-      ;;
-  esac
-  case "$name" in
-    resume|verify)
-      {
-        echo ""
-        echo "---"
-        echo ""
-        printf '%s\n' "$VERIFICATION_PREDICATES"
-      } >> "$PROMPTS_DIR/devflow-$name.md"
-      ;;
-  esac
-  case "$name" in
-    adopt|arch|resume|verify)
-      {
-        echo ""
-        echo "---"
-        echo ""
-        printf '%s\n' "$BASELINE_PREDICATES"
-      } >> "$PROMPTS_DIR/devflow-$name.md"
-      ;;
-  esac
-  {
-    echo ""
-    echo "---"
-    echo ""
-    printf '%s\n' "$PRINCIPLES"
-  } >> "$PROMPTS_DIR/devflow-$name.md"
-  echo "installed: /devflow-$name"
-done
-
-echo ""
 # Native plugin channel — registers the repo as a marketplace and installs the plugin,
 # so the skills (frontmatter intact) are model-invocable inside Codex.
 plugin_installed=0
@@ -136,7 +36,7 @@ if command -v codex >/dev/null 2>&1; then
   if [ "$plugin_installed" -eq 1 ]; then
     echo "plugin installed: devflow@nanomia (native Codex skills - model-invocable)"
   else
-    echo "NOTE: native plugin registration did not take - the slash prompts above still work."
+    echo "NOTE: native plugin registration did not take."
     broken=$(printf '%s\n%s' "$add_out" "$list_out" | grep -E "does not contain a supported manifest|failed to load" || true)
     if [ -n "$broken" ]; then
       echo "  Cause: another marketplace in your Codex config points at a folder that no longer exists,"
@@ -146,21 +46,30 @@ if command -v codex >/dev/null 2>&1; then
     fi
   fi
 else
-  echo "NOTE: codex CLI not on PATH - skipped native plugin registration (slash prompts still work)."
+  echo "NOTE: codex CLI not on PATH - skipped native plugin registration."
 fi
 
 echo ""
 if [ "$plugin_installed" -eq 1 ]; then
-  node "$DEVFLOW_ROOT/scripts/remove-legacy-codex-hook.js"
+  node "$DEVFLOW_ROOT/scripts/remove-generated-codex-prompts.js"
 else
-  echo "Native plugin unavailable; any legacy global devflow hook was left unchanged."
+  echo "Native plugin unavailable; generated slash prompts were left unchanged."
 fi
 
 echo ""
-echo "Done. /devflow-product ... /devflow-resume are now available in Codex."
 if [ "$plugin_installed" -eq 1 ]; then
+  echo "Done. Codex invokes the devflow skills itself - type a trigger such as 'resume devflow state'."
   echo "The native plugin delivers SessionStart. Enable [features] hooks = true in Codex config."
+  echo ""
+  echo "Next, and only you can do it: open /hooks in a Codex session and confirm the devflow"
+  echo "SessionStart entry runs this exact command:"
+  echo "    node \"<plugin root>/scripts/session-start.js\""
+  echo "Once you have seen it there, remove the pre-0.9.20 global registration:"
+  echo "    node \"$DEVFLOW_ROOT/scripts/remove-legacy-codex-hook.js\""
+  echo "Until you run that, the old global hook stays in place, so session start keeps working"
+  echo "even if the plugin hook is never trusted."
+  echo ""
   echo "Only when hooks are disabled or unsupported, add codex/AGENTS-devflow.md to the project's AGENTS.md."
 else
-  echo "If no legacy hook runs, invoke /devflow-resume explicitly; automatic resume requires a model-invocable resume skill."
+  echo "Done - with no plugin, ask the model to run the devflow resume skill explicitly."
 fi
