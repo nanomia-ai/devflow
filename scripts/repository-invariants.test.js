@@ -126,50 +126,45 @@ test("both installers confirm one exact native plugin before removing the predec
   }
 });
 
-test("both Codex installers embed each predicate companion only for its consumers", () => {
-  const ps1 = fs.readFileSync(path.join(root, "codex", "install.ps1"), "utf8");
-  const sh = fs.readFileSync(path.join(root, "codex", "install.sh"), "utf8");
+test("each predicate companion is referenced only by its consumers", () => {
   const verificationPredicates = fs.readFileSync(path.join(root, "skills", "principles", "verification-predicates.md"), "utf8");
   const baselinePredicates = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
-  const consumers = skillDirs
-    .filter((dir) => fs.readFileSync(path.join(dir, "SKILL.md"), "utf8")
-      .includes("`../principles/state-predicates.md`"))
+  const consumersOf = (companion) => skillDirs
+    .filter((dir) => fs.readFileSync(path.join(dir, "SKILL.md"), "utf8").includes("`../principles/" + companion + "`"))
     .map((dir) => path.basename(dir))
     .sort();
-  assert.deepEqual(consumers, ["resume", "split", "verify", "work"]);
-  const verificationConsumers = skillDirs
-    .filter((dir) => fs.readFileSync(path.join(dir, "SKILL.md"), "utf8")
-      .includes("`../principles/verification-predicates.md`"))
-    .map((dir) => path.basename(dir))
-    .sort();
-  assert.deepEqual(verificationConsumers, ["resume", "verify"]);
-  const baselineConsumers = skillDirs
-    .filter((dir) => fs.readFileSync(path.join(dir, "SKILL.md"), "utf8")
-      .includes("`../principles/baseline-predicates.md`"))
-    .map((dir) => path.basename(dir))
-    .sort();
-  assert.deepEqual(baselineConsumers, ["adopt", "arch", "resume", "verify"]);
+  assert.deepEqual(consumersOf("state-predicates.md"), ["resume", "split", "verify", "work"]);
+  assert.deepEqual(consumersOf("verification-predicates.md"), ["resume", "verify"]);
+  assert.deepEqual(consumersOf("baseline-predicates.md"), ["adopt", "arch", "resume", "verify"]);
   for (const name of ["split", "work"]) {
     assert.doesNotMatch(
       fs.readFileSync(path.join(root, "skills", name, "SKILL.md"), "utf8"),
       /baseline-predicates\.md/,
-      `${name} must not pull the baseline companion into its generated prompt`,
+      `${name} must not read the baseline companion directly`,
     );
   }
-  assert.match(ps1, /\$usesStatePredicates = \$body\.Contains\('\`\.\.\/principles\/state-predicates\.md\`'\)/);
-  assert.match(ps1, /if \(\$usesStatePredicates\) \{\s+\$companions \+= @\("", "---", "", \$statePredicates\.TrimEnd\(\)\)/);
-  assert.match(sh, /resume\|split\|verify\|work\)/);
-  assert.match(sh, /printf '%s\\n' "\$STATE_PREDICATES"/);
-  assert.match(ps1, /\$usesVerificationPredicates = \$body\.Contains\('\`\.\.\/principles\/verification-predicates\.md\`'\)/);
-  assert.match(ps1, /if \(\$usesVerificationPredicates\) \{\s+\$companions \+= @\("", "---", "", \$verificationPredicates\.TrimEnd\(\)\)/);
-  assert.match(sh, /resume\|verify\)/);
-  assert.match(sh, /printf '%s\\n' "\$VERIFICATION_PREDICATES"/);
-  assert.match(ps1, /\$usesBaselinePredicates = \$body\.Contains\('\`\.\.\/principles\/baseline-predicates\.md\`'\)/);
-  assert.match(ps1, /if \(\$usesBaselinePredicates\) \{\s+\$companions \+= @\("", "---", "", \$baselinePredicates\.TrimEnd\(\)\)/);
-  assert.match(sh, /adopt\|arch\|resume\|verify\)/);
-  assert.match(sh, /printf '%s\\n' "\$BASELINE_PREDICATES"/);
+  // A companion is delivered beside its skill on every platform, so it never points upward.
   assert.doesNotMatch(verificationPredicates, /`state-predicates\.md`|`\.\.\//);
   assert.doesNotMatch(baselinePredicates, /`state-predicates\.md`|`\.\.\//);
+});
+
+test("the Codex installer has one channel and cleans its own generated prompts", () => {
+  const ps1 = fs.readFileSync(path.join(root, "codex", "install.ps1"), "utf8");
+  const sh = fs.readFileSync(path.join(root, "codex", "install.sh"), "utf8");
+  const cleanup = fs.readFileSync(path.join(root, "scripts", "remove-generated-codex-prompts.js"), "utf8");
+  for (const [name, text] of [["install.ps1", ps1], ["install.sh", sh]]) {
+    assert.match(text, /remove-generated-codex-prompts\.js/, name);
+    // no second channel: nothing writes into the flat prompts folder any more
+    assert.doesNotMatch(text, /prompts[\/]devflow-|installed: \/devflow-/, name);
+    assert.doesNotMatch(text, /PRINCIPLES|\$principles/, name);
+    // the legacy global hook survives until the user has confirmed the plugin hook
+    assert.doesNotMatch(text, /node .{0,60}remove-legacy-codex-hook\.js"?\)?\s*$/m, name);
+    assert.match(text, /open \/hooks in a Codex session and confirm/, name);
+    assert.match(text, /remove-legacy-codex-hook\.js/, name);
+  }
+  const { GENERATED_NAMES } = require("./remove-generated-codex-prompts.js");
+  assert.equal(GENERATED_NAMES.length, skillDirs.length - 1, "one generated name per non-principles skill");
+  assert.match(cleanup, /a file a user wrote under the same name is left alone/);
 });
 
 test("task-local execution state stays on the card, not in journal or an assignment field", () => {
@@ -461,7 +456,8 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(principles, /user-identified Git revision to its current expected path/);
   assert.match(verify, /a standard-refresh-set input cannot\s+be parsed/);
   assert.match(verify, /recalculate this closure's capability code\s+scope and consumed paths from current topology/);
-  assert.match(resume, /skip only the three baseline\s+rows above/);
+  assert.match(resume, /skip only the three baseline\s+rows \(exact `legacy v0\.10`; a missing expected file or a design-shape mismatch; zero or\s+more than one boundary\)/);
+  assert.match(resume, /split's maintenance-mapping gate does not open on that deferral/);
   assert.match(adopt, /When Layer 0 is complete and\s+only capability documents are missing or need repair/);
   assert.match(baseline, /present them as one batch; change no\s+capability-document path before the user confirms that batch/);
   assert.match(arch, /Before changing disk, present all design zones that would change as one batch and obtain\s+user confirmation/);
@@ -580,7 +576,7 @@ test("verification routing has a reconstructible prepared state and no duplicate
 
 test("routing reads integration state before local claimed work", () => {
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
-  assert.match(principles, /Shared state for next-stage routing and the integrity check comes from the integration\s+tip, not the current branch/);
+  assert.match(principles, /Before routing, fetch integration and read this shared state at that tip/);
   assert.match(principles, /include the integration\s+tip in the current branch before local claimed work/);
   assert.match(principles, /runs even while a card is claimed/);
 });
@@ -624,8 +620,9 @@ test("dependency syntax is canonical while legacy cards have an explicit migrati
   const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
   assert.match(split, /^Depends:\s+none \| 02\.1, 03\.2$/m);
   assert.match(state, /Only a card\s+missing either `Approval` or `Review` is a legacy card/);
-  assert.match(state, /`git diff\s+--quiet -- <card path>`/);
-  assert.match(state, /`git diff --cached --quiet <authority> -- <card path>`/);
+  assert.match(state, /git diff --name-only -z\s+--no-renames -- devflow\/tree/);
+  assert.match(state, /git diff --cached --name-only -z --no-renames\s+<authority> -- devflow\/tree/);
+  assert.match(state, /Split that output on NUL, never on newlines, and never drop\s+`--no-renames`/);
   assert.match(principles, /state predicates' canonical or legacy format/);
   assert.match(resume, /state predicates cannot parse/);
   assert.match(resume, /`Approval` is not `pending` and is not effective under the state predicates/);
@@ -770,7 +767,9 @@ test("devflow has exactly one mode", () => {
   assert.match(work, /finish the canonical room\s+transition before anything below/);
   assert.match(resume, /A bare `\.wip\.` card or a root `devflow\/HANDOFF\.md` exists \| work/);
   assert.match(resume, /arch\.md lacks the `integration` or `merge` line \| arch/);
-  assert.match(arch, /The default for `integration` is the current branch/);
+  assert.match(arch, /The default proposal for `integration` forks on how many worktrees `git worktree list`\s+reports/);
+  assert.match(arch, /With one, it is the current branch and there is no extra question/);
+  assert.match(arch, /devflow creates\nneither a branch nor a worktree/);
 });
 
 test("claims are keyed to the depth-1 unit", () => {
@@ -823,14 +822,15 @@ test("every devflow commit and review diff carries only its own paths", () => {
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
   const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
   assert.match(principles, /\*\*Every devflow commit carries only its own paths\.\*\*/);
-  assert.match(principles, /never sweeps in another flow's uncommitted change/);
+  assert.match(principles, /Whatever else this working tree has\s+staged, a commit contains exactly the paths its own rule names/);
+  assert.match(principles, /a file another flow in\s+the same folder staged earlier never rides along/);
   assert.match(work, /the diff limited to this card's paths/);
 });
 
 test("room files have merge rules and HANDOFF paths survive a claim", () => {
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
-  assert.match(principles, /HANDOFF merge conflicts keep `Open decisions` as the union of both sides/);
-  assert.match(principles, /`Next single step` from the side whose `# HANDOFF \u00b7 <timestamp>` header is newer/);
+  assert.match(principles, /HANDOFF merge conflicts take the side whose `# HANDOFF \u00b7 <timestamp>` header is newer/);
+  assert.doesNotMatch(principles, /keep `Open decisions` as the union/);
   assert.match(principles, /5\. Does a path referenced by HANDOFF fail to match exactly one existing path when every\s+component's status suffix is removed/);
 });
 
@@ -861,22 +861,25 @@ test("an observation about another capability has a keyed line and a harvester",
   assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ capability note: capability: <NN>; note-json: <JSON string containing the whole observation>/);
   assert.match(principles, /`capability closing:`, `capability note:`/);
   assert.match(principles, /An observation confirmed in code about a capability other than the one being worked on \| one canonical `capability note` line/);
-  assert.match(verify, /Delete in\n   the same sweep every `capability note` line whose capability number is this closing\n   capability's/);
-  assert.match(verify, /retain them all when that refresh was a baseline no-op/);
-  assert.match(verify, /only this marker and those capability notes removed/);
+  assert.match(verify, /delete in the same sweep only those byte-identical to the\n   multiset step 7 collected/);
+  assert.match(verify, /A line appended\n   after the begin commit and another capability's line stay/);
+  assert.match(verify, /retained\n   when that refresh was a baseline no-op/);
+  assert.match(verify, /only this marker and those collected capability notes removed/);
+  assert.match(verify, /multiset of its\n   numbered lines collected from the journal blob at the marker's `head`/);
 });
 
-test("HANDOFF carries only a pointer and open decisions", () => {
+test("HANDOFF carries only a recomputable pointer", () => {
   const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
   const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
   assert.match(work, /^## Next single step\s+<!-- one tree path \| none -->$/m);
-  assert.match(work, /^## Open decisions \(needs a human\)$/m);
+  assert.doesNotMatch(work, /^## Open decisions/m);
+  assert.match(work, /Add no other section to this file/);
   assert.doesNotMatch(work, /^## Just learned/m);
   assert.doesNotMatch(work, /^## Traps$/m);
   assert.doesNotMatch(work, /If all four are empty, an empty file is fine/);
   assert.doesNotMatch(readme, /An empty HANDOFF is normal/);
   assert.match(work, /`Next single step` is mandatory and holds one tree path/);
-  assert.match(work, /The first time this room's HANDOFF still carries a `## Just learned` or `## Traps` section,\s+land that content before overwriting/);
+  assert.match(work, /The first time this room's HANDOFF still carries a `## Just learned`, `## Traps`, or\n`## Open decisions` section,\s+land that content before overwriting/);
   assert.match(work, /Do not backfill carry lines\nonto older `\.done\.` cards/);
 });
 
@@ -924,8 +927,10 @@ test("the resume report names its reason and the alternatives", () => {
 
 test("a mis-mapped card has a recall route and split maps from the boundary line", () => {
   const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
-  assert.match(split, /read the fixed first\n   four lines of each candidate capability document and nothing else/);
-  assert.match(split, /`Boundary: owns …;\n   does not own …` is the mapping oracle/);
+  assert.match(split, /read\n   the fixed first four lines of each candidate capability document and nothing else/);
+  assert.match(split, /`Boundary: owns …; does not own …` is the mapping oracle/);
+  assert.match(split, /leaves the original as a\n`\.stale\.` tombstone at the same path and number/);
+  assert.match(split, /The tombstone keeps that number in the tree, so the\nnext minting does not reuse it/);
   assert.match(split, /\*\*Card recall\.\*\*/);
   assert.match(split, /only while that card was never claimed and no task\s+commit subject has named its number/);
   assert.match(split, /When step 1 finds an existing pending card of this request's scope sitting\s+in the wrong folder/);
@@ -954,16 +959,46 @@ test("devflow requires a Git work tree and has no degraded mode", () => {
   }
 });
 
-test("worktrees are the flow registry", () => {
+test("one integration branch is the only shared authority", () => {
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
-  assert.match(principles, /\*\*Worktrees are flows\.\*\*/);
-  assert.match(principles, /`git worktree list\s+--porcelain` is the list of flows alive right now/);
-  assert.match(principles, /union of the integration tip and each listed worktree's HEAD — a card carrying a claim at\s+any of them is claimed/);
-  assert.match(principles, /Git refuses\s+to update a branch another worktree has checked out/);
-  assert.match(resume, /canonical shared tree state \(the integration tip\s+unioned with each worktree HEAD\)/);
-  assert.match(readme, /Worktrees are the clean way to run two flows at once/);
+  const skillTexts = skillDirs.flatMap((dir) => fs.readdirSync(dir)
+    .filter((name) => name.endsWith(".md") && !name.endsWith("_ko.md"))
+    .map((name) => fs.readFileSync(path.join(dir, name), "utf8")));
+
+  // paragraph 1 — where shared truth lives
+  assert.match(principles, /\*\*Shared truth is the integration branch\.\*\*/);
+  assert.match(principles, /another\s+worktree's HEAD is evidence not yet integrated, never authority/);
+  assert.match(principles, /`git worktree list --porcelain` lists this repository's worktrees/);
+  // paragraph 2 — how a shared transition is published
+  assert.match(principles, /\*\*Publishing a shared transition\.\*\*/);
+  assert.match(principles, /When the integration tip is not an ancestor of the branch\s+you tried to publish, this is ordinary contention[\s\S]{0,80}three\s+times at most/);
+  assert.match(principles, /When the tip is an ancestor and the publish is still refused, it is a\s+structural blocker/);
+  assert.match(principles, /never by error text, which\s+varies by locale and Git version/);
+  assert.match(principles, /continue only the code edits and progress-log checkpoints of a card whose initial claim has\s+already landed on integration/);
+  // paragraph 3 — several hands in one working folder
+  assert.match(principles, /\*\*Several hands in one working folder\.\*\*/);
+  assert.match(principles, /Several sessions may carry different cards at the\s+same time/);
+  assert.match(principles, /Change `devflow\/journal\.md` by appending/);
+  assert.match(principles, /edit the part that changes instead of\s+rewriting a file whole/);
+  assert.match(principles, /report those exact paths before counting the\s+failure ladder/);
+  assert.match(principles, /A worktree is not a safety device/);
+  // the three paragraphs sit together, in order
+  assert.ok(
+    principles.indexOf("**Shared truth is the integration branch.**")
+      < principles.indexOf("**Publishing a shared transition.**")
+      && principles.indexOf("**Publishing a shared transition.**")
+        < principles.indexOf("**Several hands in one working folder.**"),
+    "the three concurrency paragraphs stay in one place, in order",
+  );
+  // the union authority is gone from every deployed skill file
+  for (const text of skillTexts) {
+    assert.doesNotMatch(text, /union of the integration tip/);
+    assert.doesNotMatch(text, /unioned with each worktree HEAD/);
+  }
+  assert.match(resume, /the devflow\/tree\/ listing at the integration tip/);
+  assert.match(readme, /Two terminals in one folder are safe/);
   // the earlier wrong claim that a remote is required must not come back
   assert.doesNotMatch(readme, /tracks no\s*remote/);
 });
