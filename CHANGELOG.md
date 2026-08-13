@@ -6,6 +6,20 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-13 — the audit guideline: sixteen releases of verification practice become a standing instrument (no version change)
+
+Wrote `docs/audit-guideline_ko.md` for external auditors (owner-run GPT sessions and any
+clean-context reviewer): the finding classes that have actually shipped defects (each with
+its originating incident), the acceptance bar (exact quote + concrete failure path, zero
+findings valid), the lens separation and walk-vs-sweep distinction, the use-case matrix as
+the coverage instrument, contamination control for briefings, the loop-termination rule
+that keys on finding class rather than count (with personal circuit breakers), the
+report format with severity tiers, an exception table, and a briefing template for the
+owner. Also added the explicit size verdict to the 0.14.0 execution report: the current
+corpus is the best of this moment, not the endpoint — three recorded reduction paths
+remain (D11 consumer split, the interruption machinery, a post-field subtraction audit),
+each deferred for a recorded reason rather than by neglect.
+
 ## 0.14.1 — 2026-08-13 — the repair re-audit: seven precision forks converge, and the loop closes by its recorded stop condition
 
 A bounded independent pass over only the seventeen 0.14.0 repairs (fixes are changes too)
