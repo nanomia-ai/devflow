@@ -6,6 +6,39 @@ and why** in prose — not Keep a Changelog categories. The version label follow
 migrated from `DEVLOG.md` (retired at v0.9.0); the Korean originals are preserved in git
 history.
 
+## docs — 2026-08-13 — v0.14.0 plan: free parallel claims, a tweak lane, blockade appends with 3-way journal merges (no version change yet)
+
+Wrote `docs/v0.14.0-plan_ko.md` after the owner decided on every open question from the
+second verification round. The plan's three structural moves, each with its overturn
+refutation recorded for `docs/design.md`: (1) **free parallel claims** — the
+one-claim-per-id-per-unit rule assumed one terminal per person; the owner runs six on one
+capability daily, and the rule's only escape (parking) sweeps a sibling session's
+uncommitted work into a checkpoint. Claims become unconditional with a one-line info
+notice; every checkpoint-style rule is rescoped to "changes this session made"; integrity
+item 1 is repurposed to orphan-claim detection (number preserved). (2) **a tweak lane** —
+changes whose diff is already the complete record (no user-visible transition change, no
+design decision or conflict, no trap) skip cards, journal, and state restoration entirely:
+declare, read Layer 0 only, cheapest check once, one `<id> tweak NN:` commit. Refutes
+D7's no-skip-recording guard: a commit IS a record; knowledge-bearing changes still route
+through the discovery table. (3) **blockade appends + 3-way journal merges** — journal
+lines that mint nothing and claim nothing may be appended and locally committed while
+integration is blocked (closes the round's only silent-loss path), and the
+union merge rule is replaced with base-aware 3-way resolution because measurements 15–16
+proved union semantics resurrect consumed lines. The plan also folds in all confirmed
+round-2 defects (classifier classes, resume-arch integration mismatch, minting-contention
+routing, absent-document Design-head gate, and the cleanup tier) and records two
+contradictions the pre-plan full sweep found between the decisions themselves
+(precondition 3's cross-unit checkpoint sweep; the K3 plain journal line having no class
+and no consumer). No skill text changed yet — the plan is the contract for the 0.14.0
+round, which starts by committing 0.13.0 as its baseline.
+
+Promoted the use-case matrix to a standing verification instrument at
+`docs/usecase-matrix_ko.md` (third edition: three new human forms - same card in two
+terminals, unnamed resume with several claims, a tweak reclassified mid-change - one
+new AI entry point for tweak sessions, and every cell the 0.14.0 plan will close
+marked as pending re-judgment); the versioned copy is deleted, and release
+verification now re-judges every pending cell against the implemented text.
+
 ## docs — 2026-08-13 — second verification round: four independent passes, a use-case matrix, and two report corrections (no version change)
 
 Ran the independent refutation AGENTS.md requires and the first round could not provide:
