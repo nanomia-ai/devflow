@@ -54,7 +54,7 @@ Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugi
 | `CHANGELOG.md` | history — what shipped in which version, 0.10.0 onward. Deploy changes only | when tracing when a shipped behavior changed |
 | `docs/changelog-archive.md` | history — shipped changes before 0.10.0 | when tracing something older than 0.10.0 |
 | `skills/principles/SKILL.md` | canonical rules — what the runtime executes | every session devflow runs in |
-| `skills/principles/planning-evidence.md` | companion canon — planning evidence discipline | on entry for product, arch, and adopt; boundedly when split judges maintenance planning depth |
+| `skills/principles/planning-evidence.md` | canonical companion — planning evidence discipline | on entry for product, arch, and adopt; boundedly when split judges maintenance planning depth |
 
 The two standing instruments are opened by the session changing this repository **itself**,
 not briefed in by the owner. What makes a session open them is fixed by the wiring table in

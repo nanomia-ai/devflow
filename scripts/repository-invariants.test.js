@@ -15,6 +15,7 @@ const pairRelatives = [
   "skills/principles/state-predicates_ko.md",
   "skills/principles/verification-predicates_ko.md",
   "skills/principles/baseline-predicates_ko.md",
+  "skills/principles/planning-evidence_ko.md",
   "skills/work/reviewer_ko.md",
   "skills/verify/verifier_ko.md",
   "skills/verify/auditor_ko.md",
@@ -49,6 +50,123 @@ function machineFigures(text) {
   const versions = [...text.matchAll(/\bv?\d+\.\d+(?:\.\d+)?\b/gi)].map((match) => match[0]);
   const percentages = [...text.matchAll(/[+-]?\d+(?:\.\d+)?%/g)].map((match) => match[0]);
   return { versions, percentages };
+}
+
+const CARD_NUMBER_SOURCE = String.raw`[0-9]+[a-z]*(?:\.[0-9]+[a-z]*)+`;
+const ROUTING_FIX_CARDS = new RegExp(
+  `^routing: fix cards (${CARD_NUMBER_SOURCE}(?:\\+${CARD_NUMBER_SOURCE})*)$`,
+);
+const FAILURE_HISTORY_TEMPLATES = [
+  "- source id: <id>; timestamp: <ts>; <failure: … | unverified: …>; routing: pending",
+  "- source id: <id>; timestamp: <ts>; <failure: … | unverified: …>; signal card: <number>; routing: pending",
+  "- source id: <id>; timestamp: <ts>; <failure: … | unverified: …>; signal card: <number>; repair lineage: <root>; recurrence observation: <positive integer>; routing: pending",
+];
+const FAILURE_HISTORY_ENTRY = new RegExp(
+  `^- source id: ([^;]+); timestamp: ([^;]+); (failure|unverified): ([^;]+);`
+    + `(?: signal card: (${CARD_NUMBER_SOURCE});)?`
+    + "(?: repair lineage: ([^;]+); recurrence observation: ([1-9][0-9]*);)?"
+    + ` routing: (pending|fix cards ${CARD_NUMBER_SOURCE}(?:\\+${CARD_NUMBER_SOURCE})*|documents .+|product re-run .+)$`,
+);
+
+function parseFailureHistoryFixture(line, targetKey) {
+  const match = FAILURE_HISTORY_ENTRY.exec(line);
+  if (!match) return null;
+  const [, sourceId, timestamp, kind, message, signalCard, repairLineage, recurrence, routing] = match;
+  if (repairLineage && !signalCard) return null;
+  const routeMatch = ROUTING_FIX_CARDS.exec(`routing: ${routing}`);
+  return {
+    sourceId,
+    timestamp,
+    kind,
+    message,
+    signalCard: signalCard || null,
+    root: repairLineage || `${targetKey}@${sourceId}`,
+    recurrence: recurrence ? Number(recurrence) : 0,
+    routing,
+    routeCards: routeMatch ? routeMatch[1].split("+") : [],
+  };
+}
+
+function cardNumberParts(value) {
+  const parts = value.split(".").map((component) => /^([0-9]+)([a-z]*)$/.exec(component));
+  assert.ok(parts.length >= 2 && parts.every(Boolean), `invalid fixture card number: ${value}`);
+  return parts.map((match) => ({ integer: Number(match[1]), suffix: match[2] }));
+}
+
+function compareCardNumbers(left, right) {
+  const leftParts = cardNumberParts(left);
+  const rightParts = cardNumberParts(right);
+  for (let index = 0; index < Math.min(leftParts.length, rightParts.length); index += 1) {
+    if (leftParts[index].integer !== rightParts[index].integer) {
+      return leftParts[index].integer - rightParts[index].integer;
+    }
+    if (leftParts[index].suffix !== rightParts[index].suffix) {
+      if (!leftParts[index].suffix) return -1;
+      if (!rightParts[index].suffix) return 1;
+      return Buffer.compare(Buffer.from(leftParts[index].suffix), Buffer.from(rightParts[index].suffix));
+    }
+  }
+  if (leftParts.length !== rightParts.length) return leftParts.length - rightParts.length;
+  return Buffer.compare(Buffer.from(left), Buffer.from(right));
+}
+
+function sortedCardNumbers(values) {
+  return [...new Set(values)].sort(compareCardNumbers);
+}
+
+function projectRepairLineageFixture(files, labels) {
+  const entries = files.flatMap(({ targetKey, text }) => text.split(/\r?\n/)
+    .filter((line) => line.startsWith("- source id:"))
+    .map((line) => {
+      const parsed = parseFailureHistoryFixture(line, targetKey);
+      assert.ok(parsed, `unparseable fixture entry: ${line}`);
+      return parsed;
+    }));
+  const routeIndex = new Map();
+  for (const entry of entries) {
+    for (const card of entry.routeCards) {
+      const roots = routeIndex.get(card) || new Set();
+      roots.add(entry.root);
+      routeIndex.set(card, roots);
+    }
+  }
+  const candidates = labels.map((label) => ({
+    label,
+    roots: [...(routeIndex.get(label) || [])].sort(),
+  }));
+  const ambiguous = candidates.filter((candidate) => candidate.roots.length >= 2);
+  if (ambiguous.length > 0) return { blocked: true, ambiguous, items: [] };
+
+  const items = candidates.map(({ label, roots }) => {
+    if (roots.length === 0) {
+      return {
+        label,
+        root: null,
+        recurrenceObservation: null,
+        previousRouteCards: [],
+        inheritedCards: [label],
+        humanGate: false,
+      };
+    }
+    const rootValue = roots[0];
+    const rootEntries = entries.filter((entry) => entry.root === rootValue);
+    const maximum = Math.max(...rootEntries.map((entry) => entry.recurrence));
+    const completedRepairEntries = rootEntries.filter((entry) => entry.routeCards.length > 0);
+    const previousRound = Math.max(...completedRepairEntries.map((entry) => entry.recurrence));
+    const previousRouteCards = sortedCardNumbers(completedRepairEntries
+      .filter((entry) => entry.recurrence === previousRound)
+      .flatMap((entry) => entry.routeCards));
+    const recurrenceObservation = maximum + 1;
+    return {
+      label,
+      root: rootValue,
+      recurrenceObservation,
+      previousRouteCards,
+      inheritedCards: sortedCardNumbers([label, ...previousRouteCards]),
+      humanGate: recurrenceObservation >= 2,
+    };
+  });
+  return { blocked: false, ambiguous: [], items };
 }
 
 test("every Korean design original has an English deploy pair with the same structure", () => {
@@ -218,7 +336,7 @@ test("both installers confirm one exact native plugin before removing the predec
   }
 });
 
-test("each predicate companion is referenced only by its consumers", () => {
+test("each canonical companion is referenced only by its consumers", () => {
   const verificationPredicates = fs.readFileSync(path.join(root, "skills", "principles", "verification-predicates.md"), "utf8");
   const baselinePredicates = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
   const consumersOf = (companion) => skillDirs
@@ -228,6 +346,14 @@ test("each predicate companion is referenced only by its consumers", () => {
   assert.deepEqual(consumersOf("state-predicates.md"), ["resume", "split", "verify", "work"]);
   assert.deepEqual(consumersOf("verification-predicates.md"), ["resume", "verify"]);
   assert.deepEqual(consumersOf("baseline-predicates.md"), ["adopt", "arch", "resume", "verify"]);
+  assert.deepEqual(consumersOf("planning-evidence.md"), ["adopt", "arch", "product", "split"]);
+  for (const name of ["work", "verify", "resume", "design"]) {
+    assert.doesNotMatch(
+      fs.readFileSync(path.join(root, "skills", name, "SKILL.md"), "utf8"),
+      /planning-evidence\.md/,
+      `${name} must not read the planning-evidence companion`,
+    );
+  }
   for (const name of ["split", "work"]) {
     assert.doesNotMatch(
       fs.readFileSync(path.join(root, "skills", name, "SKILL.md"), "utf8"),
@@ -649,9 +775,10 @@ test("requested verification and events do not preempt this session's claimed ca
   );
 });
 
-test("verification routing has a reconstructible prepared state and no duplicate output", () => {
+test("verification routing has reconstructible prepared state and repair lineage fixtures", () => {
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
   const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   assert.match(principles, /Routing write order/);
   assert.match(principles, /replace `routing: pending`\s+with `routing prepared: <JSON object>` before output/);
@@ -664,6 +791,93 @@ test("verification routing has a reconstructible prepared state and no duplicate
   assert.match(verify, /canonical prepared-route prefix/);
   assert.match(verify, /canonical\s+integrity item 14/);
   assert.match(resume, /Any verify\.md in HEAD contains a valid `routing prepared` object/);
+
+  for (const template of FAILURE_HISTORY_TEMPLATES) assert.ok(verify.includes(template), template);
+  const historySamples = [
+    "- source id: n0; timestamp: 2026-08-14T00:00:00Z; failure: first; routing: pending",
+    "- source id: n1; timestamp: 2026-08-14T00:01:00Z; unverified: absent; signal card: 02.1; routing: pending",
+    "- source id: n2; timestamp: 2026-08-14T00:02:00Z; failure: again; signal card: 02.2; repair lineage: 02@n0; recurrence observation: 1; routing: pending",
+  ];
+  assert.deepEqual(historySamples.map((line) => parseFailureHistoryFixture(line, "02")?.signalCard), [null, "02.1", "02.2"]);
+  assert.equal(parseFailureHistoryFixture(
+    "- source id: bad; timestamp: 2026-08-14T00:03:00Z; signal card: 02.1; failure: wrong order; routing: pending",
+    "02",
+  ), null);
+  assert.equal(parseFailureHistoryFixture(
+    "- source id: bad; timestamp: 2026-08-14T00:03:00Z; failure: missing signal; repair lineage: 02@n0; recurrence observation: 1; routing: pending",
+    "02",
+  ), null);
+
+  const normalizedRoutingCanon = [principles, verify, split].join("\n").replace(/\s+/g, " ");
+  assert.equal(count(normalizedRoutingCanon, /routing: fix cards\b/g), 4);
+  assert.doesNotMatch(normalizedRoutingCanon, /routing: fix card\b/);
+  assert.deepEqual(ROUTING_FIX_CARDS.exec("routing: fix cards 02.1+02.2")?.[1].split("+"), ["02.1", "02.2"]);
+  assert.equal(ROUTING_FIX_CARDS.exec("routing: fix card 02.1"), null);
+
+  const fixtureFile = (targetKey, lines) => ({ targetKey, text: lines.join("\n") });
+  const rootless = projectRepairLineageFixture([], ["02.9"]);
+  assert.equal(rootless.blocked, false);
+  assert.deepEqual(rootless.items[0], {
+    label: "02.9",
+    root: null,
+    recurrenceObservation: null,
+    previousRouteCards: [],
+    inheritedCards: ["02.9"],
+    humanGate: false,
+  });
+
+  const firstRepair = fixtureFile("02", [
+    "- source id: a0; timestamp: 2026-08-14T01:00:00Z; failure: first; signal card: 02.1; routing: fix cards 02.1+02.2+02.10",
+  ]);
+  const recurrenceOne = projectRepairLineageFixture([firstRepair], ["02.2"]);
+  assert.equal(recurrenceOne.items[0].root, "02@a0");
+  assert.equal(recurrenceOne.items[0].recurrenceObservation, 1);
+  assert.deepEqual(recurrenceOne.items[0].previousRouteCards, ["02.1", "02.2", "02.10"]);
+  assert.deepEqual(recurrenceOne.items[0].inheritedCards, ["02.1", "02.2", "02.10"]);
+  assert.equal(recurrenceOne.items[0].humanGate, false);
+
+  const secondRepair = fixtureFile("02", [
+    "- source id: a0; timestamp: 2026-08-14T01:00:00Z; failure: first; signal card: 02.1; routing: fix cards 02.3",
+    "- source id: a1; timestamp: 2026-08-14T01:01:00Z; failure: again; signal card: 02.3; repair lineage: 02@a0; recurrence observation: 1; routing: fix cards 02.4",
+  ]);
+  const recurrenceTwo = projectRepairLineageFixture([secondRepair], ["02.4"]);
+  assert.equal(recurrenceTwo.items[0].recurrenceObservation, 2);
+  assert.deepEqual(recurrenceTwo.items[0].previousRouteCards, ["02.4"]);
+  assert.equal(recurrenceTwo.items[0].humanGate, true);
+
+  const otherRoot = fixtureFile("03", [
+    "- source id: b0; timestamp: 2026-08-14T01:02:00Z; failure: other; signal card: 03.1; routing: fix cards 03.2",
+  ]);
+  const differentRoots = projectRepairLineageFixture([secondRepair, otherRoot], ["02.3", "03.2"]);
+  assert.deepEqual(differentRoots.items.map((item) => item.root), ["02@a0", "03@b0"]);
+  const rootedAndRootless = projectRepairLineageFixture([secondRepair], ["02.3", "04.1"]);
+  assert.deepEqual(rootedAndRootless.items.map((item) => item.root), ["02@a0", null]);
+
+  const sameRoot = projectRepairLineageFixture([firstRepair], ["02.1", "02.10"]);
+  assert.deepEqual(sameRoot.items.map((item) => item.recurrenceObservation), [1, 1]);
+  assert.deepEqual(sameRoot.items.map((item) => item.root), ["02@a0", "02@a0"]);
+
+  const duplicateRoot = fixtureFile("03", [
+    "- source id: b0; timestamp: 2026-08-14T01:03:00Z; failure: duplicate; signal card: 03.1; routing: fix cards 02.3",
+  ]);
+  const ambiguous = projectRepairLineageFixture([secondRepair, duplicateRoot], ["02.3", "04.1"]);
+  assert.equal(ambiguous.blocked, true);
+  assert.equal(ambiguous.ambiguous[0].label, "02.3");
+  assert.deepEqual(ambiguous.ambiguous[0].roots, ["02@a0", "03@b0"]);
+  assert.deepEqual(ambiguous.items, []);
+
+  const nonCardRound = fixtureFile("02", [
+    "- source id: a0; timestamp: 2026-08-14T01:00:00Z; failure: first; signal card: 02.1; routing: fix cards 02.3",
+    "- source id: a1; timestamp: 2026-08-14T01:01:00Z; failure: again; signal card: 02.3; repair lineage: 02@a0; recurrence observation: 1; routing: documents [\"devflow/project/arch.md\"]",
+  ]);
+  const afterNonCard = projectRepairLineageFixture([nonCardRound], ["02.3"]);
+  assert.equal(afterNonCard.items[0].recurrenceObservation, 2);
+  assert.deepEqual(afterNonCard.items[0].previousRouteCards, ["02.3"]);
+  assert.equal(afterNonCard.items[0].humanGate, true);
+  assert.deepEqual(
+    sortedCardNumbers(["02.10", "02.2b", "02.2", "02.1", "02.2"]),
+    ["02.1", "02.2", "02.2b", "02.10"],
+  );
 });
 
 test("routing reads integration state before local claimed work", () => {

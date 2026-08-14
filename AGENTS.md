@@ -69,6 +69,7 @@ Pairs:               skills/<name>/SKILL_ko.md ↔ SKILL.md
                      skills/principles/state-predicates_ko.md ↔ state-predicates.md
                      skills/principles/verification-predicates_ko.md ↔ verification-predicates.md
                      skills/principles/baseline-predicates_ko.md ↔ baseline-predicates.md
+                     skills/principles/planning-evidence_ko.md ↔ planning-evidence.md
                      skills/work/reviewer_ko.md ↔ reviewer.md (role contract)
                      skills/verify/verifier_ko.md ↔ verifier.md (role contract)
                      skills/verify/auditor_ko.md ↔ auditor.md (role contract)
@@ -413,6 +414,11 @@ table stops growing: a change that coins a canonical term adds its row in the sa
 | 은퇴 관측 게이트 | retirement observation gate | | 봉쇄 | blockade |
 | 유효 | active | | 대체됨 → DD-nn | replaced by DD-nn |
 | 유효 · 일부 정정 → DD-nn | active, partly corrected by DD-nn | | 최초 설계 | origin |
+| 기획 증거 규율 | planning evidence discipline | | | |
+| 수리 계보 | repair lineage | | | |
+| 재관측 | recurrence observation | | | |
+| 구속 전 재검토 | pre-commitment review | | | |
+| 신호 카드 | signal card | | | |
 
 Note: a hypothesis is the trust state of a capability knowledge baseline — a separate
 concept from the `unverified` verdict, which is a verification result.
