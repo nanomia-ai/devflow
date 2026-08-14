@@ -61,18 +61,28 @@ const FAILURE_HISTORY_TEMPLATES = [
   "- source id: <id>; timestamp: <ts>; <failure: … | unverified: …>; signal card: <number>; routing: pending",
   "- source id: <id>; timestamp: <ts>; <failure: … | unverified: …>; signal card: <number>; repair lineage: <root>; recurrence observation: <positive integer>; routing: pending",
 ];
-const FAILURE_HISTORY_ENTRY = new RegExp(
-  `^- source id: ([^;]+); timestamp: ([^;]+); (failure|unverified): ([^;]+);`
-    + `(?: signal card: (${CARD_NUMBER_SOURCE});)?`
-    + "(?: repair lineage: ([^;]+); recurrence observation: ([1-9][0-9]*);)?"
-    + ` routing: (pending|fix cards ${CARD_NUMBER_SOURCE}(?:\\+${CARD_NUMBER_SOURCE})*|documents .+|product re-run .+)$`,
-);
+const ROUTING_VALUE_SOURCE = `(?:pending|fix cards ${CARD_NUMBER_SOURCE}(?:\\+${CARD_NUMBER_SOURCE})*|documents .+|product re-run .+)`;
+const FAILURE_HISTORY_ENTRY_FORMS = [
+  new RegExp(
+    `^- source id: (?<sourceId>[^;]+); timestamp: (?<timestamp>[^;]+); (?<kind>failure|unverified): (?<message>.+);`
+      + ` signal card: (?<signalCard>${CARD_NUMBER_SOURCE}); repair lineage: (?<repairLineage>[^;]+);`
+      + ` recurrence observation: (?<recurrence>[1-9][0-9]*); routing: (?<routing>${ROUTING_VALUE_SOURCE})$`,
+  ),
+  new RegExp(
+    `^- source id: (?<sourceId>[^;]+); timestamp: (?<timestamp>[^;]+); (?<kind>failure|unverified): (?<message>.+);`
+      + ` signal card: (?<signalCard>${CARD_NUMBER_SOURCE}); routing: (?<routing>${ROUTING_VALUE_SOURCE})$`,
+  ),
+  new RegExp(
+    `^- source id: (?<sourceId>[^;]+); timestamp: (?<timestamp>[^;]+); (?<kind>failure|unverified): (?<message>.+);`
+      + ` routing: (?<routing>${ROUTING_VALUE_SOURCE})$`,
+  ),
+];
 
 function parseFailureHistoryFixture(line, targetKey) {
-  const match = FAILURE_HISTORY_ENTRY.exec(line);
+  const match = FAILURE_HISTORY_ENTRY_FORMS.map((form) => form.exec(line)).find(Boolean);
   if (!match) return null;
-  const [, sourceId, timestamp, kind, message, signalCard, repairLineage, recurrence, routing] = match;
-  if (repairLineage && !signalCard) return null;
+  const { sourceId, timestamp, kind, message, signalCard, repairLineage, recurrence, routing } = match.groups;
+  if (/; (?:signal card|repair lineage|recurrence observation):/.test(message)) return null;
   const routeMatch = ROUTING_FIX_CARDS.exec(`routing: ${routing}`);
   return {
     sourceId,
@@ -799,6 +809,12 @@ test("verification routing has reconstructible prepared state and repair lineage
     "- source id: n2; timestamp: 2026-08-14T00:02:00Z; failure: again; signal card: 02.2; repair lineage: 02@n0; recurrence observation: 1; routing: pending",
   ];
   assert.deepEqual(historySamples.map((line) => parseFailureHistoryFixture(line, "02")?.signalCard), [null, "02.1", "02.2"]);
+  const semicolonBody = parseFailureHistoryFixture(
+    "- source id: n3; timestamp: 2026-08-14T00:03:00Z; failure: POST /save; then GET /list; signal card: 02.1; routing: pending",
+    "02",
+  );
+  assert.equal(semicolonBody?.message, "POST /save; then GET /list");
+  assert.equal(semicolonBody?.signalCard, "02.1");
   assert.equal(parseFailureHistoryFixture(
     "- source id: bad; timestamp: 2026-08-14T00:03:00Z; signal card: 02.1; failure: wrong order; routing: pending",
     "02",

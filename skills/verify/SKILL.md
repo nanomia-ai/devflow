@@ -177,7 +177,7 @@ section below).
 4. The verifier verdict is exactly one of three: pass · fail · unverified. A regression non-pass returns with its signal card label.
    Immediately after it returns, write the verdict, current Product revision, Verification revision, Code revision, the capability layer's Capability revision, execution evidence, and `New entries` (this run's new Failure-history entry count, or 0) to verify.md.
    For a capability-layer pass, write or replace `Standards: pending for current pass` and `Provisional: pending for current pass` in that same write.
-   Give each fail or unverified reproduction, criterion, or reason one new source id. Use the Record section's first form without a label, its second for a label with 0 candidate roots, and its third plus that root's `max recurrence + 1` for exactly 1 candidate root.
+   Give each fail or unverified reproduction, criterion, or reason one new source id, replace only its line breaks with one space before recording, and parse the fixed trailing field prefixes `; signal card:`, `; repair lineage:`, `; recurrence observation:`, and `; routing:` from right to left so semicolons inside the body remain data. Use the Record section's first form without a label, its second for a label with 0 candidate roots, and its third plus that root's `max recurrence + 1` for exactly 1 candidate root.
    When several items return to the same root in one run, freeze its maximum once before writing and give them the same recurrence observation, but keep each item's own source id and `routing: pending`; record different roots and rootless new items independently.
    Preserve all three fields with the entry, and count only new entries in `New entries`. Two or more candidate roots or an unparseable format blocks the whole execution before the verifier.
    At the product layer, write the complete tree-root verify.md first, then immediately
@@ -217,9 +217,9 @@ section below).
    no automatic card, execution, or additional source id; keep the entry pending and report
    its root, signal card, past routes, and current result to the human. Continue only when
    the human explicitly names one currently allowed route; a later non-pass returns to the
-   same human gate. Send every other failure or unverified entry through split's maintenance
-   routing and determine the fix card and number for the same folder (e.g.,
-   02.3b-fix-...). Its
+   same human gate. If that selected entry is not at recurrence observation 2 or higher, send
+   only that failure or unverified entry through split's maintenance routing and determine
+   the fix card and number for the same folder (e.g., 02.3b-fix-...). Its
    completion signal is the exact failure reproduction or executable check that proves an
    unverified reason is gone. The escaped defect or evidence gap becomes a regression signal.
    Product-layer failure or unverified entry → never create a card at the tree root. Send
@@ -378,9 +378,9 @@ previous route cards: <JSON array of completed fix-card numbers routed in the pr
 ```
 
 `max recurrence` is the same root's maximum regardless of route kind. At 0 use the root's first-entry route; after that use every route in the largest completed repair round at or below that maximum, while document replacement and product re-run keep the count but are skipped as rounds. Deduplicate card numbers, sort them in canonical card-number order, and impose no arbitrary cap. If a root, recurrence observation, or route cannot be parsed, do not aggregate partially. Output neither failure bodies nor entries untouched by current labels; with no label, make no projection.
-A capability-layer first entry is in the label capability file, a product-layer first entry is at the tree root, and entries for the current target or a one-hop `Depends` capability are in the first or third path respectively, so no normal route lies outside these three paths. Immediately before writing results, if the integration tip differs from `base`, restart shared-state synchronization and revision judgment, then project and perform any needed execution from the new tip.
+A capability-layer first entry is in the signal-card-owning capability's verify.md, a product-layer first entry is in the tree-root verify.md, and entries for the current target or a one-hop `Depends` capability are in the first or third path respectively, so no normal route lies outside these three paths. Immediately before writing results, if the integration tip differs from `base`, restart shared-state synchronization and revision judgment, then project and perform any needed execution from the new tip.
 If any label has two or more candidate roots or an existing field that produced a candidate cannot be parsed, run neither the verifier nor any subset of labels and write no verify.md result. Report `repair lineage cannot be determined` with the exact label, candidate roots, and source entry; after human reconciliation, restart the whole verify run. If interruption comes after the verifier returns but before the write, there is no new record, so rerun the whole verify.
-If interruption comes after the result commit but before routing, do not call the verifier again; run the same query from the current pending source's stored signal card, root, and recurrence observation. Exclude the still-`routing: pending` current entry from the previous round. For a pre-0.15.0 pending entry without a signal card, perform its existing route with inheritance 0; after that card completes, the next non-pass for the current label restores the root from the past route and writes the new fields.
+If interruption comes after the result commit but before routing, do not call the verifier again. When the current pending source is in the second form and stores only a signal card, restore its root as `<that file's verification target key>@<entry source id>`, its recurrence observation as 0, and its inheritance as only that signal card; when it is in the third form, run the same query from its stored signal card, root, and recurrence observation. Exclude the still-`routing: pending` current entry from the previous round. For a pre-0.15.0 pending entry without a signal card, perform its existing route with inheritance 0; after that card completes, the next non-pass for the current label restores the root from the past route and writes the new fields.
 
 ## Bias Removal
 

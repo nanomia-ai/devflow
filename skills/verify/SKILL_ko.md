@@ -149,7 +149,7 @@ Product revision·Verification revision·Code revision을 쓰고, verifier를 �
 4. verifier 판정은 셋 중 하나로만: 통과 · 실패 · 미검증. 회귀 non-pass는 신호 카드 label과 함께 반환한다.
    반환 직후 verify.md에 판정·현재 Product revision·Verification revision·Code revision·능력층의 Capability revision·실행 근거와 `New entries`(이번 실행의 새 실패 이력 항목 수, 없으면 0)를 쓴다.
    능력층 통과이면 같은 쓰기에서 `Standards: pending for current pass`와 `Provisional: pending for current pass` 두 필드를 쓰거나 교체한다.
-   실패·미검증의 재현·판정·이유마다 새 출처 id 하나를 부여한다. label이 없으면 기록 절의 첫째 형식, 후보 root가 0개인 label은 둘째, 정확히 1개인 label은 셋째 형식과 그 root의 `max recurrence + 1`을 쓴다.
+   실패·미검증의 재현·판정·이유마다 새 출처 id 하나를 부여하고, 기록하기 전에 본문의 줄바꿈만 공백 하나로 바꾸며, 본문 안의 세미콜론은 데이터로 둔 채 줄 끝의 고정 필드 접두인 `; 신호 카드:`·`; 수리 계보:`·`; 재관측:`·`; 라우팅:`을 오른쪽부터 판독한다. label이 없으면 기록 절의 첫째 형식, 후보 root가 0개인 label은 둘째, 정확히 1개인 label은 셋째 형식과 그 root의 `max recurrence + 1`을 쓴다.
    같은 root의 항목 여럿은 쓰기 전에 최댓값을 한 번 고정해 같은 재관측 수를 쓰되 각자 출처 id와 `라우팅: 대기`를 갖고, 서로 다른 root와 root 없는 새 항목은 독립 기록한다.
    세 필드는 항목과 함께 영구 보존하고 `New entries`는 새 항목 수만 센다. 후보 root 2개 이상이나 형식 불명은 verifier 전에 전체 실행을 막는다.
    제품층이면 완성된 트리 루트 verify.md를 먼저 쓰고, 바로 이어 실행 마커의 발동과 세 revision을
@@ -181,8 +181,8 @@ Product revision·Verification revision·Code revision을 쓰고, verifier를 �
    `경계 정리 — 능력 검증 결과 <능력 번호>`로 먼저 착지시킨다. 그 뒤 `재관측: 2` 이상이면
    자동 카드·실행·새 출처 id를 만들지 않고 대기를 유지한 채 root·신호 카드·과거 route·현재
    결과를 사람에게 보고한다. 사람이 현재 허용된 route를 명시한 경우에만 계속하며, 이후
-   non-pass도 같은 사람 관문으로 돌아온다. 그 밖의 실패 또는 미검증 항목은 split의 유지보수
-   라우팅에 넘겨 같은 폴더에 만들
+   non-pass도 같은 사람 관문으로 돌아온다. 선택한 그 항목이 `재관측: 2` 이상이 아니면 그 실패
+   또는 미검증 항목 하나만 split의 유지보수 라우팅에 넘겨 같은 폴더에 만들
    수정 카드(예: 02.3b-fix-...)와 번호를 정한다. 완료 신호는 실패 재현 절차 또는 미검증 이유가
    해소됐음을 실행해 증명하는 정확한 점검이다 — 빠져나간 결함이나 증거 공백이 이후 회귀 신호가 된다.
    제품층 실패 또는 미검증 → 트리 루트에 카드를 만들지 않는다. 각 항목을 split의 유지보수
@@ -309,9 +309,9 @@ previous route cards: <직전 수리 라운드의 완료된 수정 route 카드 
 ```
 
 `max recurrence`는 route 종류와 관계없는 같은 root의 최댓값이다. 0이면 root 최초 항목의 route, 그 뒤에는 그 최댓값 이하에서 가장 큰 완료 수리 라운드의 모든 route를 쓰며 문서 교체·product 재실행은 수만 유지하고 라운드에서 건너뛴다. 카드 번호 중복을 제거해 정본 카드 번호 순서로 정렬하고 임의 상한을 두지 않는다. root·재관측·route 중 하나라도 해석되지 않으면 부분 집계하지 않는다. 실패 본문과 현재 label에 닿지 않는 항목은 출력하지 않고, label이 없으면 투영도 없다.
-능력층 최초 항목은 label 능력 파일, 제품층 최초 항목은 트리 루트, 현재 대상과 1홉 의존 능력의 항목은 각각 첫째·셋째 경로에 있으므로 이 세 경로 밖의 정상 route는 없다. 결과 쓰기 직전 integration tip이 `base`와 다르면 공유 상태·revision 판정부터 새 tip에서 투영과 필요한 실행을 다시 한다.
+능력층 최초 항목은 신호 카드를 소유한 능력의 verify.md, 제품층 최초 항목은 트리 루트 verify.md에 있고, 현재 대상과 1홉 의존 능력의 항목은 각각 첫째·셋째 경로에 있으므로 이 세 경로 밖의 정상 route는 없다. 결과 쓰기 직전 integration tip이 `base`와 다르면 공유 상태·revision 판정부터 새 tip에서 투영과 필요한 실행을 다시 한다.
 어느 label의 후보 root가 2개 이상이거나 후보를 만든 기존 필드가 해석되지 않으면 verifier 실행·verify.md 쓰기·일부 label 실행을 모두 하지 않는다. 정확한 label·후보 root·원문 항목을 `수리 계보 판정 불가`로 보고하고 사람의 정합화 뒤 verify 전체를 다시 시작한다. verifier 반환 뒤 쓰기 전에 중단되면 새 기록이 없으므로 verify 전체를 재실행한다.
-결과 commit 뒤 route 전에 중단되면 verifier를 다시 부르지 않고 현재 pending source의 저장된 신호 카드·root·재관측으로 같은 질의를 다시 한다. 아직 `라우팅: 대기`인 현재 항목은 직전 라운드에서 제외한다. 0.15.0 전 대기 항목에 신호 카드가 없으면 기존 route를 상속 0으로 수행하고, 그 카드 완료 뒤 현재 label의 다음 non-pass부터 과거 route 값으로 root를 복원해 새 필드를 쓴다.
+결과 commit 뒤 route 전에 중단되면 verifier를 다시 부르지 않는다. 현재 pending source가 둘째 형식이라 신호 카드만 저장됐으면 그 항목의 root를 `<그 파일의 검증 대상 key>@<entry 출처 id>`, 재관측을 0, 상속을 그 신호 카드 하나로 복원하고, 셋째 형식이면 저장된 신호 카드·root·재관측으로 같은 질의를 다시 한다. 아직 `라우팅: 대기`인 현재 항목은 직전 라운드에서 제외한다. 0.15.0 전 대기 항목에 신호 카드가 없으면 기존 route를 상속 0으로 수행하고, 그 카드 완료 뒤 현재 label의 다음 non-pass부터 과거 route 값으로 root를 복원해 새 필드를 쓴다.
 
 ## 편향 제거
 
