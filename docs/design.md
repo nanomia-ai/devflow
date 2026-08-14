@@ -115,6 +115,7 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-30 | Verification failures, repairable unverified results, and Audit and Retrospective events survive verify.md overwrites and session interruption | Verification and roles | v0.9.21 | active |
 | DD-36 | Capability pass gates are explicit state between verdict and closure, and closure does not change verification revision inputs | Verification and roles | v0.9.21 | active |
 | DD-41 | A Record states its own entry count — New entries | Verification and roles | v0.9.23 | active |
+| DD-68 | Signal cards connect a completed repair's later non-pass to the same root, inherit the previous repair evidence, and return to the human at recurrence observation 2 or higher | Verification and roles | v0.15.0 | active |
 | DD-06 | No model names in files (tiers T-high/T-mid/T-low only) | The task tree and its cards | origin | active |
 | DD-09 | 1 task = 1 commit (only after verification passes) | The task tree and its cards | origin | active |
 | DD-11 | Integrity check reports only, never auto-corrects | The task tree and its cards | origin | active |

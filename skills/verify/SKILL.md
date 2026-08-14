@@ -151,9 +151,10 @@ section below).
    - Capability: the main session builds exactly three parts from product.md's capability
      description and the Destinations of every `.done.` task card below that folder — a
      primary scenario, one hostile input scaled to the Trust-boundary posture,
-     and a regression list. The list contains those cards' completion signals plus the
-     signals of cards they directly name in `Depends`, one hop only. Replace a remote-only
-     signal with its latest remote-evidence pointer. For a research-card signal, the main
+     and a regression list. For every runnable completion signal on those `.done.` cards
+     and cards they directly name in `Depends`, one hop only, put `(signal card: <card
+     number>, signal: <completion signal>)` in the list. For an unrunnable remote-only
+     signal, preserve its label and replace it with its latest remote-evidence pointer. For a research-card signal, the main
      session checks that the card's progress log contains both the answer and evidence
      required by its completion signal, records that result in verify.md's Regression
      field, and removes the signal from the verifier's regression list. If the answer or
@@ -166,23 +167,19 @@ section below).
      `source id: <new id>; timestamp: <timestamp>; unverified: dependency cannot be
      resolved; routing: pending` to Failure
      history; send it through step 6; and neither brief the verifier nor guess the regression list.
-3. At the capability layer, the verifier actually executes the primary scenario, hostile
-   input, and whole runnable regression list through the channel. At the product layer,
+3. At the capability layer, only when the repair-lineage projection below is determinate,
+   the verifier actually executes the primary scenario, hostile input, and whole `(signal
+   card label, completion signal to execute)` regression list through the channel. At the product layer,
    the verifier actually executes every product.md success criterion through the channel.
    Means are browser-control tool clicks and input, HTTP calls, or CLI runs. For a remote-
    evidence pointer, open it and inspect the current execution result. A pointer that
    cannot be opened or contains no execution result is unverified
-4. The verifier verdict is exactly one of three: pass · fail · unverified. Immediately
-   after it returns, write the verdict, current Product revision, Verification revision,
-   Code revision, the capability layer's Capability revision, and execution evidence to
-   verify.md. In the same write, set `New entries` to the count of Failure-history entries
-   this run has added (0 when none). For a capability-layer pass, write or replace the two fields in that same
-   write with `Standards: pending for current pass` and `Provisional: pending for current
-   pass`. For fail or unverified, give each reproduction, criterion, or unverified
-   reason one canonical new source id. Add
-   `source id: <id>; timestamp: <timestamp>; failure: <reproduction or criterion>;
-   routing: pending` or `source id: <id>; timestamp: <timestamp>; unverified: <reason>;
-   routing: pending` to Failure history.
+4. The verifier verdict is exactly one of three: pass · fail · unverified. A regression non-pass returns with its signal card label.
+   Immediately after it returns, write the verdict, current Product revision, Verification revision, Code revision, the capability layer's Capability revision, execution evidence, and `New entries` (this run's new Failure-history entry count, or 0) to verify.md.
+   For a capability-layer pass, write or replace `Standards: pending for current pass` and `Provisional: pending for current pass` in that same write.
+   Give each fail or unverified reproduction, criterion, or reason one new source id. Use the Record section's first form without a label, its second for a label with 0 candidate roots, and its third plus that root's `max recurrence + 1` for exactly 1 candidate root.
+   When several items return to the same root in one run, freeze its maximum once before writing and give them the same recurrence observation, but keep each item's own source id and `routing: pending`; record different roots and rootless new items independently.
+   Preserve all three fields with the entry, and count only new entries in `New entries`. Two or more candidate roots or an unparseable format blocks the whole execution before the verifier.
    At the product layer, write the complete tree-root verify.md first, then immediately
    replace the running marker with a result marker that preserves its trigger and three
    revisions. First land both in `boundary — product verification result`. The opening
@@ -216,8 +213,12 @@ section below).
 6. The lowest-source-id Failure history entry with `routing: pending` → at the capability
    layer, before selecting the entry, first land this run's complete verify.md and all its
    new pending entries as `boundary — capability verification result <capability number>`
-   when they are not yet committed. Then send that failure or unverified entry through split's
-   maintenance routing and determine the fix card and number for the same folder (e.g.,
+   when they are not yet committed. Then, for `recurrence observation: 2` or higher, create
+   no automatic card, execution, or additional source id; keep the entry pending and report
+   its root, signal card, past routes, and current result to the human. Continue only when
+   the human explicitly names one currently allowed route; a later non-pass returns to the
+   same human gate. Send every other failure or unverified entry through split's maintenance
+   routing and determine the fix card and number for the same folder (e.g.,
    02.3b-fix-...). Its
    completion signal is the exact failure reproduction or executable check that proves an
    unverified reason is gone. The escaped defect or evidence gap becomes a regression signal.
@@ -231,7 +232,9 @@ section below).
     the selected canonical discovery→update row are known and required user approval is
     complete, put one final routing result allowed by the canonical rules and every output's
     final content in that canon's `routing prepared` object, then land it by the canonical
-    procedure while preserving the source id and timestamp. A card's layer-opening source is
+    procedure. For a label-bearing entry, combine the current signal card with every
+    completed route-card number from the previous repair round supplied by the projection,
+    and pass that set plus the current non-pass evidence to split. Preserve the source id and timestamp. A card's layer-opening source is
    `verify:<verify.md path>#Failure history@<source id>`. Multiple failures from one
    verdict each retain their own routing.
    Fix cards are born unclaimed (pending) and follow the normal proposal and claim
@@ -350,6 +353,34 @@ verification revisions and "folder all done" at different states. A signal that 
 on the executor's platform is handled by remote-evidence substitution (Regression) or
 delegated to the owning member — record the split in verify.md. The journal
 sweep is done by the member performing the closure.
+
+## Pre-verifier Repair Lineage Projection
+
+The `signal card` is the `.done.` task-card number that owns the current regression completion signal; to the verifier it is only the current item's label, not past meaning.
+The `repair lineage root` is `<product | fixed capability number>@<source id of that lineage's first failure>`.
+`Recurrence observation n` is the verify-run count on which the current signal fails to pass again after a completed repair boundary; an intervening pass creates no new count and does not erase the past maximum.
+The `previous repair round` is the largest round below the current recurrence observation among entries of the same root with completed `routing: fix card`, counting the root's first entry as 0; it includes every completed fix-card route from that round.
+When the regression list has at least one label, immediately before the verifier the main session mechanically queries the current label set over this exact scope.
+
+```text
+verify.md for the current verification target key
+tree-root verify.md
+verify.md files for the capabilities owning signal cards in the current regression bundle
+```
+
+Do not give file bodies to the model. For every completed `routing: fix card` number, set the entry root to its existing `repair lineage`, or otherwise to `<that file's verification target key>@<entry source id>`, and add the deduplicated root set to `route_index[card number]`. Give the model only this format.
+
+```text
+base: <full unabbreviated commit object ID of the integration tip used for the projection>
+label: <current number>; candidate roots: <JSON array of roots>
+root: <unique root found for the current label>; max recurrence: <integer 0 or higher>;
+previous route cards: <JSON array of completed fix-card numbers routed in the previous repair round>
+```
+
+`max recurrence` is the same root's maximum regardless of route kind. At 0 use the root's first-entry route; after that use every route in the largest completed repair round at or below that maximum, while document replacement and product re-run keep the count but are skipped as rounds. Deduplicate card numbers, sort them in canonical card-number order, and impose no arbitrary cap. If a root, recurrence observation, or route cannot be parsed, do not aggregate partially. Output neither failure bodies nor entries untouched by current labels; with no label, make no projection.
+A capability-layer first entry is in the label capability file, a product-layer first entry is at the tree root, and entries for the current target or a one-hop `Depends` capability are in the first or third path respectively, so no normal route lies outside these three paths. Immediately before writing results, if the integration tip differs from `base`, restart shared-state synchronization and revision judgment, then project and perform any needed execution from the new tip.
+If any label has two or more candidate roots or an existing field that produced a candidate cannot be parsed, run neither the verifier nor any subset of labels and write no verify.md result. Report `repair lineage cannot be determined` with the exact label, candidate roots, and source entry; after human reconciliation, restart the whole verify run. If interruption comes after the verifier returns but before the write, there is no new record, so rerun the whole verify.
+If interruption comes after the result commit but before routing, do not call the verifier again; run the same query from the current pending source's stored signal card, root, and recurrence observation. Exclude the still-`routing: pending` current entry from the previous round. For a pre-0.15.0 pending entry without a signal card, perform its existing route with inheritance 0; after that card completes, the next non-pass for the current label restores the root from the past route and writes the new fields.
 
 ## Bias Removal
 
@@ -509,7 +540,9 @@ Executed:  <channel + what was actually run>
 Verdict:   pass | fail | unverified
 New entries: <count of this run's Failure history entries>
 Failure history:
-- source id: <id>; timestamp: <timestamp>; <failure: reproduction or criterion | unverified: evidence, Standards, or Provisional repair>; routing: <pending | canonical final routing value>
+- source id: <id>; timestamp: <ts>; <failure: … | unverified: …>; routing: pending
+- source id: <id>; timestamp: <ts>; <failure: … | unverified: …>; signal card: <number>; routing: pending
+- source id: <id>; timestamp: <ts>; <failure: … | unverified: …>; signal card: <number>; repair lineage: <root>; recurrence observation: <positive integer>; routing: pending
 Regression: <completion signals rerun, substituted, or confirmed + results>
 Standards: <code-style violations found or none. Violations become fix cards>
 Provisional: <arch rows confirmed replaced, or none>

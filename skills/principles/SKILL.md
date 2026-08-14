@@ -326,7 +326,7 @@ What you discovered → where to update:
 | A verification means is newly created or changed | the means line of arch.md's verify_channel |
 | A file in arch.md's `Existing records` moved or no longer matches current code | replace or delete that exact path (+ `Read first` in pending or claimed cards carrying it) |
 | A decision recorded in an ADR is reversed or no longer applies | write the successor ADR and add a dated update note to the superseded one naming that successor path. In the same binding decision, arch replaces the old path in every baseline design zone whose Binding ADRs lists it, and replaces it on pending or claimed cards that name it directly in `Read first` |
-| A new term becomes necessary | one line in glossary.md |
+| A new term becomes necessary | one line in glossary.md — the current skill walking this table lands it immediately |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | An observation confirmed in code about a capability other than the one being worked on | one canonical `capability note` line in journal.md carrying that capability's number. Do not edit the other capability's document directly — its next closure harvests the line |
 | Something confirmed in code about a shared contract or the foundation | an ADR when it produced a decision hard to reverse (arch's three conditions); arch.md's `Risks` when it is something that breaks first; otherwise one attributed open-item line in journal.md — where it lands (or whether it is discarded) is a person's decision, and the open-item row below (resolve through another row, then delete) is that line's consumer. Never write it into the foundation's verified zone — what was not verified is not a verified state |
@@ -358,6 +358,7 @@ owns the design zone under `devflow/project/capabilities/`; verify owns the veri
 after creation. The canonical baseline predicates govern the initial empty verified
 scaffold, mechanical path replacement when an ADR is superseded, the exact byte boundary,
 the exact mechanical v0.10 migration, and the human-deletion exception.
+Fixed target ownership means ownership of rerunning the whole document; the current skill walking this table performs a one-line update named by the table.
 
 A document still being produced by a running product, arch, design, or adopt session is
 a draft until the user confirms it — reconcile a draft's contradictions by editing the
@@ -492,6 +493,10 @@ The harness dial — inversely proportional to tier:
 
 Repeated fix attempts under the same hypothesis during implementation are not ladder
 counts — those belong to work's stuck-escape.
+The failure ladder counts only prompt reinforcement, tier escalation, and a human call within one work run.
+A completed card that crosses the verify boundary and later returns non-pass is counted by verify's `repair lineage` and `recurrence observation`.
+A new root and recurrence observation 1 follow the normal fix route; recurrence observation 2 or higher returns to the human without an automatic card.
+Do not combine the two counts or create a fourth attempt in the failure ladder.
 
 ## Status Notation
 

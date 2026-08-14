@@ -148,6 +148,14 @@ Subject: Verification and roles | Introduced: v0.9.23 | State: active
 
 Right after a verdict and before the commit, disk alone could not judge whether a dead session's partial Record was complete — the total of required entries lived only in that dead session's context. The self-describing field mechanizes the completeness judgment. A value that does not match is judged a partial write and recovers through the approved rerun path that repeats from step 2. A committed Record with no such field is complete as committed — tolerating an absent field is the same class as verification-predicates' pre-v0.9.21 record
 
+### DD-68 · Signal cards connect a completed repair's later non-pass to the same root, inherit the previous repair evidence, and return to the human at recurrence observation 2 or higher (v0.15.0)
+
+Subject: Verification and roles | Introduced: v0.15.0 | State: active
+
+Preserve the current regression label executed by the verifier in Failure history as the `signal card`, and reverse-index completed fix-card numbers to roots keyed by the existing verify key and source id. Before the verifier, mechanically project only three verify.md paths — the current target, tree root, and label capability — and judge each label's candidate roots as 0, 1, or 2+. Record each item in one run independently, sharing one recurrence observation number only among items with the same root. If one label has two or more candidates or a stored field cannot be parsed, do not choose by meaning; stop both execution and result recording. Create no UUID, symptom-similarity match, or typed evidence graph, so DR-08 remains closed.
+
+A new fix card reads only the union of the current signal card and every route card left by the same root's previous completed repair round, in canonical card-number order. split puts each card's exact path after the final route operations into the existing `Read first`, writes the current non-pass and the previous repair's failure to make the signal pass in `Why`, and writes `Forbidden` only with direct evidence that repeating the same approach unchanged would produce the same result. It requires no separate cause document or work method, keeping DR-09 closed. A new root and recurrence observation 1 use the current fix route; recurrence observation 2 or higher goes to a human gate without an automatic card, and a later non-pass returns to the same gate. Do not backfill legacy entries; closure knowledge remains owned by the existing capability knowledge baseline full refresh, which already harvests the current card and direct `Read first`.
+
 ### Rejected under this subject
 
 - **[DR-04 · v0.7.0]** **Relocating the verify-channel document** — the arch pointer suffices.
