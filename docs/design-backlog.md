@@ -119,6 +119,36 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   capability's last active card, a re-closure proposing a full regression run follows. The
   proposal needs approval, so the real cost is noise, and the tweak lane shrinks the bundle
   population; watch.
+- **Cross-capability repair-lineage route stored in an asymmetric location** (v0.15.0 audit
+  C1) — when B's card names A's fix card in `Depends`, that signal's recurrence route lands
+  in B's verify.md, but a later A run's projection (current target, tree root, label-owning
+  capability) never opens B, so the same root's `max recurrence` can be restored one round
+  low. The original failure, root, and route stay on disk (DD-30) and automatic
+  implementation stops at execution-proposal approval, so the risk is a delayed lineage
+  gate, not loss. Post-hoc signature: the first case where a verify.md whose verification
+  target key is B holds `repair lineage: <A>@<id>` with a capability number different from
+  B and a completed `routing: fix cards …` — entries whose root prefix is `product` do not
+  count, because the label-owning path already covers them. When this signature appears
+  even once in real verify records, or a user reports approving repeated fix cards for the
+  same signal with no past route visible in the proposal, reopen signal-owner backlinks
+  (with persistence, atomicity, and recovery contracts) and a cross-capability
+  verify-origin `Depends` restriction as one set of design options. Before that, add no
+  full verify scan, shadow state, or extra output rule.
+- **Double labels from an original card and its fix card sharing one completion signal**
+  (v0.15.0 audit C2) — when a fix card carries the original card's completion signal
+  verbatim, one regression bundle holds two `(signal card, signal)` pairs, and the same
+  non-pass can split into an existing root and a new root, duplicating fix cards and
+  approval round-trips. Both entries and both routes are preserved, and execution-proposal
+  approval caps duplicate implementation. Post-hoc signature: the first case where two
+  `.done.` cards with different signal cards have byte-identical `Completion signal`
+  fields and the same Record's Failure history holds one entry in the second form (no
+  root) and one in the third form (with root) — in the latest run the `regression` field
+  lists both labels together. When this signature is confirmed in a real Record or card,
+  or separate approval round-trips for one identical signal are reported as duplicate
+  cost, re-examine the original request proposal (bundling same-command labels) against
+  plan3 P3-D2's recorded reason for item independence (the refuted mixed blocking that
+  stopped unrelated failures), and first prove with fixtures that exact-signal dedupe does
+  not revive that blocking. Before that, add no dedupe, alias, or wrapper rule.
 
 ## Observations already settled — lineage
 
