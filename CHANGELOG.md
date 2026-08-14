@@ -15,6 +15,36 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.16.0 — 2026-08-15 — an outside dispatcher is a declared role, and devflow itself does not change
+
+devflow already treated several sessions in one working folder as normal (DD-53), and its
+execution proposal already emits what a dispatcher needs — order in `Depends`, concurrency
+in `Approval`'s `parallel:`, tier in `Tier`. What was missing was the other side: nothing
+said what the dispatcher owes. Of the obligations an outside orchestrator carries, devflow
+already detects three (resume asks instead of guessing an ambiguous card, a wrong commit
+surfaces as an integrity anomaly, a hand edit invalidates `Approval` freshness), but three
+sit outside the trust boundary and no mechanism can reach them: answering a human gate on
+the user's behalf, rewriting a file whole, and letting knowledge travel only through the
+dispatcher's own messages. So this release adds a contract, not a mechanism.
+`skills/principles/coordinator.md` is a fifth role contract — the first with no skill that
+dispatches it — and it names no tool, platform, or messaging system, so any orchestrator
+can read it. Nine obligations: name the card and folder and mint the layer's cards onto
+integration first, one implementation worker per card, workers make their own devflow
+commits while the coordinator makes none and never holds the integration branch checked
+out, the coordinator edits nothing, gates go to the human (batched, never answered),
+partial edits only, messages route while disk carries knowledge, state is read from the
+tree, schedules follow what the cards already say, and every worker inherits the owner's
+id. **No existing skill changed** — the eight stages, the canonical rules, the three
+predicate canons, planning-evidence, and the four role contracts are byte-identical, and a
+test now enforces that no skill references the new contract, so the runtime cost is one
+conditional line at session start. Discovery walks from the hook (which computes the
+contract's absolute path), with the Codex fallback document, README, and the design
+document map covering the readers the hook cannot reach. DD-70 records the decision; DD-52's
+conditional pre-claim is corrected by it, and the decision-state format now accepts
+successive corrections. Also fixes a real hook defect found while verifying Codex support:
+SessionStart had no `timeout`, so a stuck hook could hold a session for the 600-second
+default. It is now 5.
+
 ## 0.15.2 — 2026-08-15 — design decides, split builds: the design stage owns direction, not artifacts
 
 The design stage's contract was deliberately loose because design work is genuinely
