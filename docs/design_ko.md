@@ -47,6 +47,7 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 코드는 adopt�
 | `docs/audit-guideline_ko.md` | 상시 수단 — 검증 방법의 정본 | 검증 결과를 보고하려 할 때 |
 | `docs/usecase-matrix_ko.md` | 상시 수단 — 사용 형태 전수 | `skills/**`를 바꿀 때 |
 | `docs/rounds/<버전>/` | 라운드 기록 — request · handoff · plan · report · audit | 새 라운드를 열 때 직전 것만 |
+| `docs/blueprints/` | 스냅샷 — 버전 단위 설계도 보관(대상 프로젝트 파일 시스템 등). 기존 스냅샷은 수정하지 않는다 | 구조를 대조하거나 되돌릴 기준이 필요할 때 |
 | `README.md` | 사람용 — 무엇을 어떻게 쓰는가 | 사용자가 읽는다 |
 | `CHANGELOG.md` | 이력 — 버전별로 출시된 것, 0.10.0 이후. 배포 변경만 | 출시된 동작이 언제 바뀌었는지 찾을 때 |
 | `docs/changelog-archive.md` | 이력 — 0.10.0 이전의 출시 변경 | 0.10.0보다 오래된 것을 찾을 때 |

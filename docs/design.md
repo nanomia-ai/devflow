@@ -50,6 +50,7 @@ Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugi
 | `docs/audit-guideline_ko.md` | standing instrument — the canon of verification method | when reporting a verification result |
 | `docs/usecase-matrix_ko.md` | standing instrument — the enumerated shapes of use | when changing `skills/**` |
 | `docs/rounds/<version>/` | round record — request, handoff, plan, report, audit | the previous one only, when opening a round |
+| `docs/blueprints/` | snapshot — versioned blueprints kept per release (the target-project file system, among others). An existing snapshot is never edited | when a baseline is needed to compare a structure against, or roll it back to |
 | `README.md` | for people — what this is and how to use it | users read it |
 | `CHANGELOG.md` | history — what shipped in which version, 0.10.0 onward. Deploy changes only | when tracing when a shipped behavior changed |
 | `docs/changelog-archive.md` | history — shipped changes before 0.10.0 | when tracing something older than 0.10.0 |
