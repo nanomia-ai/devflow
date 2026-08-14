@@ -475,7 +475,7 @@ Subject: The knowledge layer and capability documents | Introduced: v0.14.0 | St
 
 v0.13.0's K3 row ("otherwise one line in journal.md") created a line with no class and no consumer — it fits none of the canon's three allowed classes (canonical formats, cross-task decisions, attributed open items), and the foundation has no closure rite to harvest it. That is the root of the seam defect where verify's classifier rejects the line as an integrity anomaly, and a hand clearing the blockage by deleting the line converts a stop into a loss. An observation that is neither an ADR nor a Risks entry is written as an attributed open item — where it should land (or whether to discard it) is a person's decision — and the existing open-item semantics (resolve through another table row, then delete) supply the consumer, so no new class and no indefinite residence appear. verify's classifier carries exactly the canon's allowed classes: widening the write side realigns the read side in the same words
 
-### DD-67 · Planning evidence discipline settles facts before questions, while the main session owns structural understanding and binding decisions (v0.15.0)
+### DD-67 · Planning evidence discipline settles facts from four authorities before questions and isolates answer-only research, while the main session owns structural understanding and binding decisions (v0.15.0)
 
 Subject: The knowledge layer and capability documents | Introduced: v0.15.0 | State: active
 
