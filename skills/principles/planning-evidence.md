@@ -72,4 +72,4 @@ When they do not, keep the current option. Do not apply pre-commitment review ag
 | product | Before asking the user the current question frontier | After applying an answer, before creating the next frontier or final confirmation | Does not select the stack or DB |
 | arch | Before presenting a candidate to the user | After confirming candidate-survival facts, before binding a hard-to-reverse choice | Does not change product's Problem, Capabilities, Boundary, or Success criteria |
 | adopt | Before previewing the current implementation and pinned-version external contracts | After separating observation, interpretation, and future decision, before confirmation | Does not delegate representative-flow structural understanding or promote a current fact into future intent |
-| split | When reading sources for the maintenance grade | After the four card fields first become unique, before landing the card | Does not compare a Layer 0 change; routes it back as 2a |
+| split | When reading sources for the maintenance planning depth grade | After the four card fields first become unique, before landing the card | Does not compare a Layer 0 change; routes it back as 2a |

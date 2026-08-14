@@ -13,7 +13,7 @@ all of `devflow/project/design.md`, `devflow/project/code-style.md`,
 of earlier cards live in journal, and HANDOFF is overwritten and will not carry them.
 
 Read the planning evidence discipline (`../principles/planning-evidence.md`) boundedly only
-when judging maintenance planning depth below. First read `Four Kinds of Unknown`,
+when judging the maintenance planning depth grade below. First read `Four Kinds of Unknown`,
 `Blocking Facts and Follow-up Facts`, `Source Ownership`, `Stop Conditions`, `Criteria for
 Options Actually Presented`, and `Pre-commitment Review`; read `Persistence` and `Isolated
 Research` additionally only when fact confirmation is required.

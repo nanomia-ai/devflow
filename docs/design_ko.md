@@ -51,7 +51,7 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 코드는 adopt�
 | `CHANGELOG.md` | 이력 — 버전별로 출시된 것, 0.10.0 이후. 배포 변경만 | 출시된 동작이 언제 바뀌었는지 찾을 때 |
 | `docs/changelog-archive.md` | 이력 — 0.10.0 이전의 출시 변경 | 0.10.0보다 오래된 것을 찾을 때 |
 | `skills/principles/SKILL.md` | 규칙 정본 — 런타임이 실행하는 것 | devflow가 도는 모든 세션 |
-| `skills/principles/planning-evidence.md` | 동반 정본 — 기획 증거 규율 | product·arch·adopt는 진입 시, split은 유지보수 기획 깊이 판정 시 유계하게 |
+| `skills/principles/planning-evidence.md` | 동반 정본 — 기획 증거 규율 | product·arch·adopt는 진입 시, split은 유지보수 기획 깊이 등급 판정 시 유계하게 |
 
 두 상시 수단은 이 저장소를 고치는 세션이 **스스로** 여는 것이지 소유자가 브리핑하는 것이
 아니다. 무엇이 그것을 열게 하는지는 `AGENTS.md`의 배선표가 정한다.

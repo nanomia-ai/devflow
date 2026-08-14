@@ -418,7 +418,7 @@ table stops growing: a change that coins a canonical term adds its row in the sa
 | 수리 계보 | repair lineage | | | |
 | 재관측 | recurrence observation | | | |
 | 구속 전 재검토 | pre-commitment review | | | |
-| 신호 카드 | signal card | | | |
+| 신호 카드 | signal card | | 기획 깊이 등급 | planning depth grade |
 
 Note: a hypothesis is the trust state of a capability knowledge baseline — a separate
 concept from the `unverified` verdict, which is a verification result.

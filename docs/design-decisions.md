@@ -504,8 +504,8 @@ or decide; it returns only a stop condition and evidence coordinates. The main s
 raw-source understanding such as representative flows, code structure, document structure,
 and domain context. After receiving a research result, it confirms only key coordinates,
 then owns impact judgment and the binding decision. product, arch, and adopt read the
-canonical companion on entry; split reads only the sections needed when judging maintenance
-planning depth. work, verify, resume, and role contexts are not consumers and incur no fixed
+canonical companion on entry; split reads only the sections needed when judging the maintenance
+planning depth grade. work, verify, resume, and role contexts are not consumers and incur no fixed
 cost.
 
 ### Rejected under this subject
