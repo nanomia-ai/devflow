@@ -15,6 +15,31 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.15.2 — 2026-08-15 — design decides, split builds: the design stage owns direction, not artifacts
+
+The design stage's contract was deliberately loose because design work is genuinely
+plural — a Figma handoff imported as a design system, a component library themed over,
+components built one by one, or any mix — and the owner has now fixed the shape that
+keeps that plurality. design settles **six Layer 0 decisions** (approach, design source,
+token strategy, component strategy, decomposition axis, review surface — where "not
+used" is a valid value and the named options are examples, never a closed list), lands
+only `design.md` through the existing Layer 0 commit, and stops. The real artifacts —
+token files, components, previews — are built by cards that split opens, so the old
+completion signal (a running /preview page) that could never execute in a blank
+repository is gone (DD-69). design stays optional and deferrable: build the foundation
+first and put design on top later, or skip it. The six decisions are Layer 0 fields even
+while design.md does not exist, so a direction-changing request in a design-skipped
+project routes through 2a to a late first design run — recorded first in journal, planned
+after, on the existing maintenance path with no new state. Construction results flow
+back: a confirmed fact replaces exactly one line via the discovery→update table's new
+design row, and only a change of direction re-runs design; after confirmation split
+applies `.stale.` and the re-split marker to affected cards, completing the pattern the
+product row already had. Cross-verified in both languages (three adopted findings across
+the loop, including restoring grade 2b in the no-design note); terminology gains six
+design rows, and the two long-standing design observations in the backlog are settled by
+DD-69. Also lands the Design-head-only bulk-confirmation observation (P4) as a watched
+item rather than a rule.
+
 ## 0.15.1 — 2026-08-15 — a fresh full-repo evaluation and an artifact-lifecycle sweep close seven cross-skill gaps
 
 After 0.15.0 shipped, an independent full-repo evaluation (8.5/10, zero silent-loss

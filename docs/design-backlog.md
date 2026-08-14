@@ -57,9 +57,12 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 - A change to shared code (the foundation, shared contracts) does not rerun the regressions
   of the capabilities that use it. The baseline may detect this as a hypothesis, but it fires
   no verification. Re-examine if shared changes become frequent.
-- design.md has no row in the discovery→update table (only the upper-violation path exists).
-  It is not an input to Verification revision either, so a design.md change does not make a
-  verdict stale.
+- **Repeated bulk confirmation when only the Design head line changed** (added as a v0.15.2
+  observation) — watch for N repetitions where a bulk diff across all capability documents
+  changes only the `Design head` line after a Layer 0 touch. If the user reports confirmation
+  fatigue from that repetition, reopen the option to land an `arch|adopt — capabilities`
+  commit without a confirmation question when that line is the only diff in every file.
+  Until then, keep the current confirmation gate.
 - verify.md preserves its Failure history, Audit, and Retrospective sections forever and so
   grows without bound. resume is protected by its bounded projection, but the retrospector
   reads every verify.md in full at the product layer.
@@ -178,6 +181,13 @@ The items below were carried out and left the watch list. Re-proposals consult t
 - ~~The retrospective does not take capability knowledge baselines as input~~ — implemented
   in v0.11.0: a capability event gets that capability's one document; a product event gets
   foundation and every non-retired capability document, all with freshness projections.
+- ~~design.md has no row in the discovery→update table~~ — DD-69 in v0.15.2 implemented a
+  row that replaces one exact line for build-result facts and sends direction changes through
+  the record-first design re-run.
+- ~~When design creates its real artifacts in a blank frontend repository~~ — DD-69 in v0.15.2 adopted
+  design as the owner of only six Layer 0 decisions and the build scope, while split cards own
+  the real token, component, and preview artifacts. design remains optional before or after the
+  foundation, and late entry uses the record-first path.
 
 ## On hold — candidates for coming versions
 
@@ -201,11 +211,6 @@ after going public is retracted, its own reason having refuted it (2026-08-13).
   The choices are (A) write to the canonical path only after confirmation, or (B) put a
   confirmation marker in each document and define migration for older markerless files.
   Their recovery and migration costs differ, so neither is forced before the owner chooses.
-- **When design creates its real artifacts in a blank frontend repository** — the current
-  token file and preview can be required before a foundation card provides an execution
-  base. The choices are (A) make design produce the plan only and put real artifacts in a
-  foundation card, or (B) return to design after foundation work. This changes the Layer 0
-  and task-tree boundary, so the current order is not forcibly rearranged before the owner chooses.
 - **The size of the canonical rules** — the canonical rules grew from 217 lines (v0.9.9)
   through 705 (v0.13.0) to 770 lines (v0.14.1), and all 8 skills plus every delegated implementer read the whole document.
   Counting the predicate companions, resume reads about 1,636 lines each session (measured

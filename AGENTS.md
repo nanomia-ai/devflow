@@ -419,6 +419,10 @@ table stops growing: a change that coins a canonical term adds its row in the sa
 | 재관측 | recurrence observation | | | |
 | 구속 전 재검토 | pre-commitment review | | | |
 | 신호 카드 | signal card | | 기획 깊이 등급 | planning depth grade |
+| 접근 방식 | approach | | 디자인 원천 | design source |
+| 토큰 전략 | token strategy | | 컴포넌트 전략 | component strategy |
+| 분해 축 | decomposition axis | | 검토 표면 | review surface |
+| 구축 범위 | build scope | | 처분 | disposition |
 
 Note: a hypothesis is the trust state of a capability knowledge baseline — a separate
 concept from the `unverified` verdict, which is a verification result.

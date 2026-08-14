@@ -149,9 +149,13 @@ If arch.md's Provisional table has rows whose settling card is 'unminted', creat
 settling cards for the rows this layer resolves and replace 'unminted' with their
 numbers (the discovery→update table).
 
-If `devflow/project/design.md` exists, the decomposition axis follows the build strategy:
-A mock-first → by screen / B vertical slice → by feature cut front-to-back /
-C contract-first → contract card first, then frontend/backend cards in parallel beneath it.
+If `devflow/project/design.md` exists, apply its free-form `Decomposition axis` sentence to
+card boundaries. If a legacy document has no such field but has exactly one of
+`Build strategy: A`, `Build strategy: B`, or `Build strategy: C`, read A as screen units,
+B as feature units cut front-to-back, and C as contract first followed by parallel
+frontend and backend work. These are possible examples, not closed values for a new document.
+If one `Destination` still cannot be settled from the source after applying the axis, do not
+guess; ask the user only for that Destination through the maintenance mapping question below.
 
 ## Size Judgment
 
@@ -217,8 +221,8 @@ numbers, per the execution proposal section):
      through the normal work procedure
 
 - The decomposition axis inside a capability defaults to **feature units** (what a user
-  perceives as one action). Technical-axis splits (frontend/backend) only under build
-  strategy C (contract-first)
+  perceives as one action). Split on a technical axis such as frontend/backend only when
+  the decomposition axis read above states that boundary
 - Scenario verification (verify's capability layer) opens **only at depth-1 capability
   folders**, regardless of depth. Intermediate folders just receive `.done` when they
   have at least one direct child that is not `.stale.` and every such child is `.done.` —
@@ -317,10 +321,14 @@ sentence. Names or sizes such as page, list, or modal are not grade conditions.
 | 2a | An actual option or answer changes a Layer 0 field or requires a decision meeting all three ADR conditions | Create no card; return to the owning stage. Takes precedence over 2b |
 | 2b | Layer 0 stays unchanged, but after one batch a card field still has two or more valid sentences | Continue the next dependent frontier in the same maintenance conversation |
 
-Layer 0 fields are product's identity, Capabilities, Boundary, and Success criteria, plus
-arch's Components, Stack, Code structure, Data, and verify channel. A 2b answer must land
-in one of the four card fields; when it lands in none, route it to 2a. Create no capability
-design zone, new planning file, or new state.
+Layer 0 fields are product's Identity, Capabilities, Boundary, and Success criteria;
+arch's Components, Stack, Code structure, Data, and verify channel; and design's Approach,
+Design source, Token strategy, Component strategy, Decomposition axis, and Review surface.
+The latter six are Layer 0 fields even when design.md is absent — when the request newly
+sets or changes one of them, route it to design through 2a; when it changes none, judge the
+conditions for grades 0, 1, and 2b in this table again. A 2b answer must land in one of the
+four card fields; when it lands in none, route it to 2a. Create no capability design zone,
+new planning file, or new state.
 
 In 2b, create the next frontier only when the preceding answer reduced the number of valid
 sentences for one of the four fields or opened a new actual dependency. When the unresolved

@@ -128,6 +128,7 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-58 | A finished card's number is never renumbered | The task tree and its cards | v0.13.0 | active |
 | DD-61 | A tweak's commit is its record | The task tree and its cards | v0.14.0 | active, partly corrected by DD-66 (v0.14.2) |
 | DD-65 | A mixed request records only its gate-failing items — a passing item enters no journal line | The task tree and its cards | v0.14.2 | active |
+| DD-69 | design confirms six Layer 0 decisions, split cards own the build, and only result facts enter design.md as upper-document feedback | The task tree and its cards | v0.15.2 | active |
 | DD-07 | devflow does not create or manage a Git-worktree workflow | Concurrency, claims, integration | origin | active |
 | DD-14 | The multi-mode split axis is the **scope of truth**, not people | Concurrency, claims, integration | origin | active |
 | DD-15 | HANDOFF is committed to git but never in a dedicated commit — it rides the boundary commit only | Concurrency, claims, integration | origin | active |
