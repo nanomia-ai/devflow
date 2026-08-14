@@ -266,7 +266,7 @@ test("decision and rejection identifiers are dense, unreused, and carry a known 
     assert.ok(
       state === "active"
         || /^replaced by DD-\d+ \(v\d+\.\d+\.\d+\)$/.test(state)
-        || /^active, partly corrected by DD-\d+ \(v\d+\.\d+\.\d+\)$/.test(state),
+        || /^active, partly corrected by DD-\d+ \(v\d+\.\d+\.\d+\)(?:, DD-\d+ \(v\d+\.\d+\.\d+\))*$/.test(state),
       `unknown decision state: ${state}`,
     );
   }
