@@ -54,6 +54,7 @@ Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugi
 | `CHANGELOG.md` | history — what shipped in which version, 0.10.0 onward. Deploy changes only | when tracing when a shipped behavior changed |
 | `docs/changelog-archive.md` | history — shipped changes before 0.10.0 | when tracing something older than 0.10.0 |
 | `skills/principles/SKILL.md` | canonical rules — what the runtime executes | every session devflow runs in |
+| `skills/principles/planning-evidence.md` | companion canon — planning evidence discipline | on entry for product, arch, and adopt; boundedly when split judges maintenance planning depth |
 
 The two standing instruments are opened by the session changing this repository **itself**,
 not briefed in by the owner. What makes a session open them is fixed by the wiring table in
@@ -151,6 +152,7 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-56 | Reading is bounded to open work: a depth-1 folder carrying `.done` is read by name | The knowledge layer and capability documents | v0.13.0 | active |
 | DD-59 | Open decisions live in journal, so HANDOFF holds only what the tree recomputes | The knowledge layer and capability documents | v0.13.0 | active |
 | DD-64 | The third branch of a shared-contract observation is an attributed open item | The knowledge layer and capability documents | v0.14.0 | active |
+| DD-67 | Planning evidence discipline settles facts from four authorities before questions and isolates answer-only research, while the main session owns structural understanding and binding decisions | The knowledge layer and capability documents | v0.15.0 | active |
 | DD-10 | No retroactive tree records (brownfield) | Brownfield and entry | origin | active |
 | DD-20 | Brownfield entry is its own skill, adopt — split out of arch | Brownfield and entry | v0.9.10 | active |
 | DD-26 | Brownfield and layer transitions have explicit disk states, preserving their meaning across interruption | Brownfield and entry | v0.9.21 | active |
@@ -164,10 +166,15 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 Borrowed from Matt Pocock's (mattpocock) skills repository: the research card (a distillation
 of prototype+wayfinder), the 3 ADR conditions (domain-modeling), the dual verification axes
 (code-review), and part of the value declarations in code-style's Values section
-(codebase-design·tdd with the procedures removed — taste only).
+(codebase-design·tdd with the procedures removed — taste only), grilling's decision frontier
+and fact/decision separation, boundary scenarios, and primary-source discipline. Isolating
+answer-only internal and external evidence search borrows research's separation of reading,
+but is bounded by grouping questions in the same search scope under one researcher and
+keeping raw-source structural understanding with the main session.
 
 **Deliberately not borrowed**: enforced vocabulary, the Red-Green procedure, the 12-smell
-list, the 3-agent parallel design.
+list, unbounded grilling, a research-file layer, indirect skill dependencies, and 3-agent
+parallel design.
 
 User rule: any further borrowing into this repository requires prior permission.
 

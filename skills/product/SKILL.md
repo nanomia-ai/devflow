@@ -5,8 +5,9 @@ description: Service-planning interview. Defines the problem, capability composi
 
 # product — Service Planning
 
-First read the canonical rules (`../principles/SKILL.md`). If present, read all of
-`devflow/journal.md`, `devflow/project/product.md`, and `devflow/project/glossary.md`.
+First read all of the canonical rules (`../principles/SKILL.md`) and the planning evidence
+discipline (`../principles/planning-evidence.md`). If present, read all of `devflow/journal.md`,
+`devflow/project/product.md`, and `devflow/project/glossary.md`.
 Read the existing `devflow/project/arch.md` only when choosing the next stage after a
 re-run.
 
@@ -34,14 +35,37 @@ with one line — "that belongs to arch" — and return.
 | Success criteria | What counts as success — stated verifiably, always |
 | Screens & access points | Where do users reach the service |
 
+## Question Frontier and Fact Confirmation
+
+Before asking the user, use the planning evidence discipline to divide the current
+frontier's unknowns into four kinds. First settle current repository facts, external
+contract facts, and execution facts through the discipline's source and direct/isolated
+research branches. Do not turn a fact into a question when its result affects no option.
+For a blocking fact that is `conflicted` or `unavailable`, report the conflict or absence
+and the decision that would change, then stop that dependent frontier.
+
+When the user explicitly requests research, research only the requested scope regardless
+of its impact on the current decision. If it is not a blocking fact, answer with the result
+and continue the original frontier. Run automatic research only when one possible result
+of a fact not yet `settled` would remove or add a current candidate, or change a recommended
+default, Layer 0 field, or verifiability. product's automatic fact confirmation does not
+decide the stack or DB. Both choices belong to arch.
+
+- In one frontier, batch questions that do not change one another's necessity, options,
+  or recommended defaults — usually 3–5, and no more than 5.
+- When one option changes a later question, ask that one dependent question first.
+- After free-form user input, recompute remaining dependencies and recommended defaults
+  from the actual answer.
+- Before creating the next frontier after applying an answer, and before final confirmation,
+  run the planning evidence discipline's pre-commitment review. With no candidate, produce
+  no additional output or question.
+
 **Capability composition is the heart.** The capability names chosen here become the
 module names in the architecture and the folder names in the task tree — the same words,
 followed to the very end.
 
 ## Interview Rules
 
-- **Always ask questions in batches.** No single-question round-trips. One batch = one
-  axis (audience & value / boundary / unresolved), 3–5 questions.
 - **Attach my default (recommendation) to every question.** State explicitly:
   "unanswered items proceed with the default."
 - Scale rounds actively to scope:
@@ -50,6 +74,17 @@ followed to the very end.
   - 8+ capabilities → stop, say "this is not one project," and propose a split
 - For every capability, always ask exactly one question: **"If this capability is removed
   from the MVP, can every success criterion still pass?"** If yes → MVP-exclusion candidate.
+- When the target round budget is exhausted and the interview continues, summarize the
+  confirmed content and remaining questions once in the conversation. This summary creates
+  no file, state, or commit.
+
+## Meaning Density
+
+Create no new repeated format; combine existing homes. `Problem` owns the current state to
+change, `Approach` owns the choice, its reason, and discarded approaches, and `Success
+criteria` owns the desired observable result. A capability line contains its number, name,
+user outcome, and why that outcome is needed for success exactly once. Do not duplicate the
+same Why across identity, Boundary, and cards.
 
 ## Output — devflow/project/product.md
 
@@ -62,7 +97,7 @@ When it succeeds, <what> becomes possible.
 
 ## Problem
 ## Approach            <!-- include 1 line per discarded approach -->
-## Capabilities        <!-- ① ② ③ number + name + one-line description. These names go all the way -->
+## Capabilities        <!-- ① ② ③ number + name + user outcome + why that outcome is needed for success -->
 ## Boundary            <!-- MVP scope / will-not-build (explicit) -->
 ## Success criteria    <!-- 3–7 verifiable acceptance criteria -->
 ## Screens & access points   <!-- list of screens or interfaces -->

@@ -5,9 +5,10 @@ description: Development planning. Takes product.md and decides components, stac
 
 # arch — Development Planning
 
-First read the canonical rules (`../principles/SKILL.md`), the canonical capability
-knowledge baseline predicates (`../principles/baseline-predicates.md`), and all of
-`devflow/project/product.md`. If present, read all of `devflow/project/arch.md`,
+First read the canonical rules (`../principles/SKILL.md`), the planning evidence discipline
+(`../principles/planning-evidence.md`), the canonical capability knowledge baseline
+predicates (`../principles/baseline-predicates.md`), and all of `devflow/project/product.md`.
+If present, read all of `devflow/project/arch.md`,
 `devflow/project/code-style.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each `.md` file directly under
 `devflow/project/decisions/`.
 If `product.md` is missing: with no code either, direct the user to the product stage
@@ -39,9 +40,37 @@ one-line reason.
 Correct?
 ```
 
+After deriving the components and before presenting stack candidates, use the planning
+evidence discipline to confirm candidate-survival facts. Among current repository
+constraints, supported platforms, pinned versions, licenses, and deployment environments,
+settle only facts whose possible result would remove a candidate or change a recommended
+default or verifiability. The main session confirms one exact coordinate; answer-only
+multi-path or multi-source comparison uses the discipline's isolated-research branch.
+The main session owns raw-source understanding needed for a structural choice.
+
+Separate the following two before confirmation.
+
+- A fact is `blocking` when leaving it unsettled makes a candidate's availability or
+  completion verification undecidable. Do not present that candidate as an option or bind
+  the choice before it is `settled`.
+- A value is `Provisional` when a safe default permits progress and its later result would
+  change only optimization. It must carry the table's source, safe default, and `settling
+  card`; never push a blocking fact into Provisional.
+- When equally authoritative sources conflict or allowed means cannot confirm the fact,
+  report through the planning evidence discipline's `conflicted` or `unavailable` boundary
+  and stop the dependent choice.
+
 ### 2. Stack questions — in one batch
-2–3 candidates per component + my recommendation + a one-line reason. No comparison
-tables. State defaults.
+For each component whose survival facts are confirmed, give 2–3 candidates + my
+recommendation + a one-line reason. Do not use a comparison table for a stack question;
+state the default. That prohibition applies only to this question format and does not bar
+the conditional design comparison below.
+
+Only when a choice is hard to reverse, its boundary is non-obvious, and current evidence
+explains a real trade-off, compare one counter-design with the current design. When those
+conditions do not hold, create no candidate, question, or output. If current evidence
+cannot distinguish the two, ask with success criteria and user priorities; a differently
+worded version of the same design is not a candidate.
 ### 3. Derived questions — decisions that only exist once the stack is chosen
 Find the decisions that fork because of the chosen stack and ask them as one batch —
 per decision, same format as step 2.
@@ -65,6 +94,12 @@ conditions. Select one for the scale.
 ### 5. Verify-channel decision — a pass-gate
 This skill does not finish until it is decided.
 
+Do not judge a channel decided from its name or an installation sentence. Confirm that the
+commands or tools below can actually run in the current environment. Use an allowed safe
+execution; when writing, cost, or authority is required, request exact permission or route
+to Provisional according to whether the planning evidence discipline classifies it as
+blocking. Do not bind an unconfirmed blocking channel in arch.md.
+
 | Type | Channel | If missing |
 |---|---|---|
 | Has a frontend | **A browser-control tool that can inspect rendered output and interact with it is required** (one provided by the active platform) | Guide connection of an available tool, then stop. UI verification you cannot see is guesswork |
@@ -75,6 +110,11 @@ This skill does not finish until it is decided.
 
 Git check: if not a repository, propose `git init` and stop when the user declines. All
 recovery and undo in this system depends on git.
+
+Immediately before binding a hard-to-reverse choice such as stack, code structure, data,
+or verify channel, run the planning evidence discipline's pre-commitment review once. Do
+not compare a candidate that changes product's Problem, Capabilities, Boundary, or Success
+criteria; route it back to product. Do not review again a batch the user reselected.
 
 ## Output — devflow/project/arch.md
 

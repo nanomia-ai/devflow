@@ -475,6 +475,31 @@ Subject: The knowledge layer and capability documents | Introduced: v0.14.0 | St
 
 v0.13.0's K3 row ("otherwise one line in journal.md") created a line with no class and no consumer — it fits none of the canon's three allowed classes (canonical formats, cross-task decisions, attributed open items), and the foundation has no closure rite to harvest it. That is the root of the seam defect where verify's classifier rejects the line as an integrity anomaly, and a hand clearing the blockage by deleting the line converts a stop into a loss. An observation that is neither an ADR nor a Risks entry is written as an attributed open item — where it should land (or whether to discard it) is a person's decision — and the existing open-item semantics (resolve through another table row, then delete) supply the consumer, so no new class and no indefinite residence appear. verify's classifier carries exactly the canon's allowed classes: widening the write side realigns the read side in the same words
 
+### DD-67 · Planning evidence discipline settles facts before questions, while the main session owns structural understanding and binding decisions (v0.15.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.15.0 | State: active
+
+product, arch, adopt, and split treated current repository facts, external contract facts,
+execution facts, and owner decisions as the same unknown. That created paths where the user
+was asked for a fact the environment could answer or current documentation was used to prove
+a pinned older version. Separate the four authorities and first confirm facts within the
+permitted scope before asking questions. Explicit research follows the requested scope;
+automatic research is bounded to cases where a possible result would change a current
+candidate, recommended default, Layer 0 field, or verifiability. Leave the conclusion,
+impact, and exact source in an existing owning statement, but create no raw research
+document.
+
+When answer-only internal or external evidence search requires following a new path or
+source, comparison, or repetition, isolate questions in the same search scope under one
+read-only researcher. The researcher does not execute, prototype, write files, re-delegate,
+or decide; it returns only a stop condition and evidence coordinates. The main session owns
+raw-source understanding such as representative flows, code structure, document structure,
+and domain context. After receiving a research result, it confirms only key coordinates,
+then owns impact judgment and the binding decision. product, arch, and adopt read the
+companion canon on entry; split reads only the sections needed when judging maintenance
+planning depth. work, verify, resume, and role contexts are not consumers and incur no fixed
+cost.
+
 ### Rejected under this subject
 
 - **[DR-01 · v0.7.0]** **Mid-task handoff document** — hands over a half-truth.

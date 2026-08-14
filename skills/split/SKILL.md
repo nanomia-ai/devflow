@@ -12,6 +12,12 @@ all of `devflow/project/design.md`, `devflow/project/code-style.md`,
 `devflow/project/glossary.md`, and **`devflow/journal.md`** — the durable discoveries
 of earlier cards live in journal, and HANDOFF is overwritten and will not carry them.
 
+Read the planning evidence discipline (`../principles/planning-evidence.md`) boundedly only
+when judging maintenance planning depth below. First read `Four Kinds of Unknown`,
+`Blocking Facts and Follow-up Facts`, `Source Ownership`, `Stop Conditions`, `Criteria for
+Options Actually Presented`, and `Pre-commitment Review`; read `Persistence` and `Isolated
+Research` additionally only when fact confirmation is required.
+
 Purpose: open the task tree **one layer at a time**, and get the execution proposal approved.
 
 ## Preconditions
@@ -294,6 +300,36 @@ exist in HEAD or the working tree, land one binding-decision commit that deletes
 of those markers and the line and discards any uncommitted draft cards minted for them;
 with no marker, land deletion of the line alone as a binding-decision commit. Keep it while a mapping question or execution-proposal approval
 remains unresolved. After interruption, its decoded value is the current request.
+
+### Planning Depth Grades
+In steps 1–2 below, compare the maintenance request with current code and exact existing
+sources. Before writing a card, judge from this table whether each of its four fields —
+`Destination`, `Why`, `Forbidden`, and `Completion signal` — has exactly one unique
+sentence. Names or sizes such as page, list, or modal are not grade conditions.
+
+| Grade | Mechanical condition | Next action |
+|---|---|---|
+| 0 | Each of the four fields is one unique sentence in an exact existing source | Write the card without a question |
+| 1 | Actual answers from one question batch make the four fields unique | Write the card after one batch carrying a recommendation |
+| 2a | An actual option or answer changes a Layer 0 field or requires a decision meeting all three ADR conditions | Create no card; return to the owning stage. Takes precedence over 2b |
+| 2b | Layer 0 stays unchanged, but after one batch a card field still has two or more valid sentences | Continue the next dependent frontier in the same maintenance conversation |
+
+Layer 0 fields are product's identity, Capabilities, Boundary, and Success criteria, plus
+arch's Components, Stack, Code structure, Data, and verify channel. A 2b answer must land
+in one of the four card fields; when it lands in none, route it to 2a. Create no capability
+design zone, new planning file, or new state.
+
+In 2b, create the next frontier only when the preceding answer reduced the number of valid
+sentences for one of the four fields or opened a new actual dependency. When the unresolved
+set is unchanged, do not repeat a reworded question. Show the remaining field and one
+recommendation and wait for the user's decision; route an execution fact to the existing
+research card and a Layer 0 fact to 2a. Keep this comparison only in the conversation and
+do not store it as state.
+
+When a new term is confirmed, immediately land it through the one-line `glossary.md` route
+in the canonical discovery→update table. After the four card fields first become unique and
+before writing the card bytes, run the planning evidence discipline's pre-commitment review
+once. Do not compare a candidate that changes Layer 0; route it to 2a.
 
 1. **Map the request's scope to a location.** Before mapping, read only the `Design head`
    metadata line of each candidate capability document and run the single-line command

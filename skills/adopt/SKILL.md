@@ -5,8 +5,9 @@ description: Existing-project adoption. In a repository that already has code, t
 
 # adopt — Existing-Project Adoption
 
-First read the canonical rules (`../principles/SKILL.md`) and the canonical capability
-knowledge baseline predicates (`../principles/baseline-predicates.md`). If present, read all of
+First read the canonical rules (`../principles/SKILL.md`), the planning evidence discipline
+(`../principles/planning-evidence.md`), and the canonical capability knowledge baseline
+predicates (`../principles/baseline-predicates.md`). If present, read all of
 `devflow/project/product.md`, `devflow/project/arch.md`, `devflow/project/code-style.md`,
 `devflow/project/design.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each
 `.md` file directly under `devflow/project/decisions/`.
@@ -42,9 +43,47 @@ and Data, and code-style.md's Project choices. Ask one confirmation batch only f
 whose meaning those three documents do not fix, create only glossary.md, and modify no
 other document.
 
-Order of evidence: **code is truer than documents outside devflow.** The repository's existing
-documents (README, docs, planning notes) are treated as claims, adopted only after
-checking them against the code. Commit history is supporting evidence. Only when current
+## Evidence Authority and Confirmation Batch
+
+The three authorities do not substitute for one another.
+
+- Current implementation is answered by code and current execution results. Code is truer
+  than documents outside devflow; treat existing README, docs, and planning documents as
+  claims and adopt them only after checking them against code.
+- External contracts and possibilities are answered by official documentation,
+  specifications, source, and primary APIs for the version the repository pins. First find
+  the version in a manifest, lockfile, or config, then fix that version and lookup time.
+- Future direction, the trade-off between preservation and improvement, and user experience
+  are decided by the owner. Do not promote current behavior or current external
+  documentation into that decision.
+
+Mark an external fact whose version cannot be confirmed as `version unconfirmed`. Do not
+use current documentation to prove the currently pinned version's contract or close a
+version-unconfirmed fact as a safe default. For a blocking fact, stop at the planning
+evidence discipline's `unavailable` boundary; for a follow-up fact, leave only the owning
+stage and the impact that would change.
+
+While comparing candidates, maintain the following internal evidence table only in the
+conversation. Do not store it in a file, journal, or capability document.
+
+| Candidate | Observation | Source/version | Interpretation | Remaining owner decision |
+|---|---|---|---|---|
+
+The main session confirms one exact coordinate or one capped query. For answer-only comparison across
+multiple paths or external sources, use the planning evidence discipline's isolated-research branch, but
+the main session directly follows and understands representative-flow code, document structure, and domain
+context. A researcher returns only bounded sub-facts such as locations, usages, and pinned versions.
+
+In a confirmation batch, separate `Observation` (code and the pinned-version contract),
+`Interpretation` (what those facts mean for the current boundary), and `Decision preview`
+(the future direction for the owner to confirm). Do not turn a current fact into future intent
+or present an interpretation as an observation.
+
+Only when preserving current behavior and following the target direction produce actually different
+outcomes, compare one alternative through the planning evidence discipline's pre-commitment review
+before confirmation. With no substantive candidate, create no additional output, question, or research.
+
+Commit history is supporting evidence. Only when current
 code and a document conflict, read the newest commit that touched the exact conflicting
 path and the immediately preceding such commit. Do not scan repository-wide history.
 The initial existing-document read set is the repository-root README files, files whose
@@ -68,11 +107,12 @@ normalized string to contain the other. A test with either normalized string emp
    confirmation-question batch.
 2. From code, existing documents, and commit history, reverse-derive `product.md` **in
    the product skill's output format**. What code can answer (the identity paragraph,
-   the capability list with one-line descriptions, Boundary's MVP scope — what is
-   already built is the answer, screens & access points, interface) is filled by
-   derivation; what code cannot answer (Boundary's "will-not-build" · success criteria ·
-   whatever the derived identity paragraph missed of Problem and Approach) is asked of
-   the owner. No full interview — the single batch of confirmation questions serves both
+   the capability list through number, name, and user outcome, Boundary's MVP scope — what
+   is already built is the answer, screens & access points, interface) is filled by
+   derivation; what code cannot answer (Boundary's "will-not-build" · success criteria
+   and why each capability's user outcome is needed for them · whatever the derived
+   identity paragraph missed of Problem and Approach) is asked of the owner. No full
+   interview — the single batch of confirmation questions serves both
    correcting anything mis-derived and filling those fields. Success criteria are the
    exception: the owner must answer, and each must be verifiable as written. Ask again when
    one is not; step 3 does not begin until this condition passes. Only the other unanswered items are left in
