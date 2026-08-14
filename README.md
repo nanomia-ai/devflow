@@ -549,9 +549,9 @@ have not said which card you mean, resume asks instead of guessing.
 
 If you work as a team, keep plugin versions matched. 0.12 and 0.13 in particular define
 shared state differently, so a mixed team has half its members judging by the old rule. An
-outside orchestrator can also drive workers on top of devflow — one ordering is all it
-takes. Create the cards and claims on the integration branch before starting a worker, and
-let the worker write only code and the progress log.
+outside orchestrator can also drive workers on top of devflow, but it must read
+`skills/principles/coordinator.md` before the first dispatch; that one role contract owns
+every obligation, including card minting, claims, gates, and integration.
 
 Every room transition is a single-commit procedure:
 

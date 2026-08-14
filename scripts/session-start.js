@@ -34,6 +34,7 @@ function checkoutRoot(directory) {
 const root = checkoutRoot(sessionDirectory());
 const projectDir = path.join(root, "devflow", "project");
 const treeDir = path.join(root, "devflow", "tree");
+const coordinatorContract = path.join(__dirname, "..", "skills", "principles", "coordinator.md");
 const projectStateExists = ["product.md", "arch.md", "code-style.md", "design.md", "glossary.md"]
   .some((name) => fs.existsSync(path.join(projectDir, name)));
 
@@ -42,6 +43,7 @@ if (!fs.existsSync(treeDir) && !projectStateExists) process.exit(0);
 const additionalContext = [
   "[devflow] Durable project state exists in this checkout.",
   "Run the devflow resume skill before any other devflow stage.",
+  `If you dispatch another agent to perform a devflow stage in this checkout, read the coordinator role contract at ${coordinatorContract} before the first dispatch.`,
 ].join("\n");
 
 process.stdout.write(JSON.stringify({

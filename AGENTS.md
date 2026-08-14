@@ -70,6 +70,7 @@ Pairs:               skills/<name>/SKILL_ko.md ↔ SKILL.md
                      skills/principles/verification-predicates_ko.md ↔ verification-predicates.md
                      skills/principles/baseline-predicates_ko.md ↔ baseline-predicates.md
                      skills/principles/planning-evidence_ko.md ↔ planning-evidence.md
+                     skills/principles/coordinator_ko.md ↔ coordinator.md (role contract)
                      skills/work/reviewer_ko.md ↔ reviewer.md (role contract)
                      skills/verify/verifier_ko.md ↔ verifier.md (role contract)
                      skills/verify/auditor_ko.md ↔ auditor.md (role contract)

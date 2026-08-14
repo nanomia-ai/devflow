@@ -46,7 +46,8 @@ test("Layer 0 or tree state activates resume without choosing a stage", (t) => {
   for (const root of roots) {
     const context = runHook(root);
     assert.match(context, /Run the devflow resume skill/);
-    assert.equal(context.split("\n").length, 2);
+    assert.match(context, /coordinator role contract at .*coordinator\.md/);
+    assert.equal(context.split("\n").length, 3);
     assert.doesNotMatch(context, /next (?:stage|card) is/i);
   }
 });

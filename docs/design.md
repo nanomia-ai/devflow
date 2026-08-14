@@ -56,6 +56,7 @@ Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugi
 | `docs/changelog-archive.md` | history — shipped changes before 0.10.0 | when tracing something older than 0.10.0 |
 | `skills/principles/SKILL.md` | canonical rules — what the runtime executes | every session devflow runs in |
 | `skills/principles/planning-evidence.md` | canonical companion — planning evidence discipline | on entry for product, arch, and adopt; boundedly when split judges the maintenance planning depth grade |
+| `skills/principles/coordinator.md` | role contract — duties of the `coordinator` that dispatches other executors above devflow | before the first dispatch |
 
 The two standing instruments are opened by the session changing this repository **itself**,
 not briefed in by the owner. What makes a session open them is fixed by the wiring table in
@@ -139,12 +140,13 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-47 | Claims move to the depth-1 unit axis, and one canonical candidate order settles every selection | Concurrency, claims, integration | v0.12.0 | active, partly corrected by DD-60 (v0.14.0) |
 | DD-49 | Git is a requirement, and worktrees are the flow registry | Concurrency, claims, integration | v0.12.0 | active, partly corrected by DD-51 (v0.13.0) |
 | DD-51 | Shared truth is one integration branch; another worktree's HEAD is evidence, not authority | Concurrency, claims, integration | v0.13.0 | active |
-| DD-52 | A shared transition is published against a remembered integration id | Concurrency, claims, integration | v0.13.0 | active, partly corrected by DD-62 (v0.14.0) |
+| DD-52 | A shared transition is published against a remembered integration id | Concurrency, claims, integration | v0.13.0 | active, partly corrected by DD-62 (v0.14.0), DD-70 (v0.16.0) |
 | DD-53 | Several sessions in one working folder are normal, and their safety is five measured lines rather than a lock | Concurrency, claims, integration | v0.13.0 | active |
 | DD-60 | Claims are freely parallel, and a checkpoint carries only the changes this session made | Concurrency, claims, integration | v0.14.0 | active |
 | DD-62 | During a blockade, journal appends that mint nothing, claim nothing, and consume nothing are written immediately | Concurrency, claims, integration | v0.14.0 | active |
 | DD-63 | Journal merge conflicts resolve 3-way, not as a union | Concurrency, claims, integration | v0.14.0 | active |
 | DD-66 | The tweak lane confirms its landing by machine first, and in same-file contention the tweak side yields | Concurrency, claims, integration | v0.14.2 | active |
+| DD-70 | `coordinator` is a declared role, not a devflow stage; one role contract owns its duties, and devflow behavior and state do not branch on whether orchestration is in use | Concurrency, claims, integration | v0.16.0 | active |
 | DD-28 | Durable knowledge is connected through bounded consumers of existing records, not through a new document layer | The knowledge layer and capability documents | v0.9.21 | active |
 | DD-33 | The knowledge-reachability set — standing of outside records · conversation decisions land immediately · a user-confirmation gate on product's four core sections · a disproof row (replace the statement, or re-run product) · a means row · a pre-HANDOFF landing check · a survival path for research answers that are tools · verify's disproof arbitration | The knowledge layer and capability documents | v0.9.18 | active |
 | DD-42 | The capability knowledge baseline — the domain blueprint a verification closure produces | The knowledge layer and capability documents | v0.10.0 | active |
@@ -188,7 +190,8 @@ User rule: any further borrowing into this repository requires prior permission.
 - **An overturned decision is not deleted.** Its body stays; only the state changes. There
   are three states and the format is fixed (a test enforces it): `active` ·
   `replaced by DD-nn (vX.Y.Z)` · and, when only part of a decision has retreated,
-  `active, partly corrected by DD-nn (vX.Y.Z)`. What replaced it is what the next
+  `active, partly corrected by DD-nn (vX.Y.Z)`; when another correction follows, append
+  `, DD-nn (vX.Y.Z)` in introduction order under the same state. What replaced it is what the next
   re-proposal has to refute.
 - **The index and the body must hold the same set of IDs.** A mismatch turns a test red.
 - **What rises here out of a round record** is fixed by the "Promotion" table in `AGENTS.md`.

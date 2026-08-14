@@ -9,6 +9,9 @@ This project is managed with devflow. At session start, if a model-invocable res
 is available, invoke it and follow it exactly. Do not modify code until resume reports the
 state and the user approves.
 
+Before dispatching another agent to perform a devflow stage in this project, read and
+follow devflow's `coordinator` role contract.
+
 If no model-invocable resume skill is available, do not modify code. Ask the user to
 install or enable the devflow plugin. Never assume that the model can invoke a slash
 command itself.

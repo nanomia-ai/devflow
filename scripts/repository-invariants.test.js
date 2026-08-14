@@ -16,6 +16,7 @@ const pairRelatives = [
   "skills/principles/verification-predicates_ko.md",
   "skills/principles/baseline-predicates_ko.md",
   "skills/principles/planning-evidence_ko.md",
+  "skills/principles/coordinator_ko.md",
   "skills/work/reviewer_ko.md",
   "skills/verify/verifier_ko.md",
   "skills/verify/auditor_ko.md",
@@ -315,14 +316,34 @@ test("the maintenance gate names the canon files and both standing instruments",
   ]) {
     assert.ok(agents.includes(required), `AGENTS.md never names ${required}`);
   }
+  const sessionStart = fs.readFileSync(path.join(root, "scripts", "session-start.js"), "utf8");
+  const codexFallback = fs.readFileSync(path.join(root, "codex", "AGENTS-devflow.md"), "utf8");
+  assert.match(sessionStart, /path\.join\(__dirname, "\.\.", "skills", "principles", "coordinator\.md"\)/);
+  assert.match(sessionStart, /dispatch another agent to perform a devflow stage/);
+  assert.match(sessionStart, /coordinator role contract at \$\{coordinatorContract\}/);
+  assert.match(codexFallback, /dispatching another agent to perform a devflow stage/);
+  assert.match(codexFallback, /`coordinator` role contract/);
+  for (const dir of skillDirs) {
+    for (const name of fs.readdirSync(dir).filter((entry) => entry.endsWith(".md"))) {
+      const file = path.join(dir, name);
+      if (file === path.join(root, "skills", "principles", "coordinator.md")) continue;
+      assert.doesNotMatch(
+        fs.readFileSync(file, "utf8"),
+        /coordinator\.md/,
+        `${path.relative(root, file)} must not reference the coordinator contract`,
+      );
+    }
+  }
 });
 
 test("release manifests match and the Codex manifest carries the shared hook", () => {
   const claude = JSON.parse(fs.readFileSync(path.join(root, ".claude-plugin", "plugin.json"), "utf8"));
   const codex = JSON.parse(fs.readFileSync(path.join(root, ".codex-plugin", "plugin.json"), "utf8"));
+  const hooks = JSON.parse(fs.readFileSync(path.join(root, "hooks", "hooks.json"), "utf8"));
   assert.equal(codex.version, claude.version);
   assert.equal(codex.skills, "./skills/");
   assert.equal(codex.hooks, "./hooks/hooks.json");
+  assert.equal(hooks.hooks.SessionStart[0].hooks[0].timeout, 5);
 });
 
 test("the Windows installer keeps its UTF-8 BOM", () => {
