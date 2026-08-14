@@ -305,7 +305,7 @@ Product revision·Verification revision·Code revision을 쓰고, verifier를 �
 base: <투영에 사용한 integration tip의 축약하지 않은 전체 commit object ID>
 label: <현재 번호>; candidate roots: <root의 JSON 배열>
 root: <현재 label에서 찾은 유일한 root>; max recurrence: <0 이상의 정수>;
-previous route cards: <§6.1 직전 수리 라운드의 완료된 수정 route 카드 번호 JSON 배열>
+previous route cards: <직전 수리 라운드의 완료된 수정 route 카드 번호 JSON 배열>
 ```
 
 `max recurrence`는 route 종류와 관계없는 같은 root의 최댓값이다. 0이면 root 최초 항목의 route, 그 뒤에는 그 최댓값 이하에서 가장 큰 완료 수리 라운드의 모든 route를 쓰며 문서 교체·product 재실행은 수만 유지하고 라운드에서 건너뛴다. 카드 번호 중복을 제거해 정본 카드 번호 순서로 정렬하고 임의 상한을 두지 않는다. root·재관측·route 중 하나라도 해석되지 않으면 부분 집계하지 않는다. 실패 본문과 현재 label에 닿지 않는 항목은 출력하지 않고, label이 없으면 투영도 없다.
