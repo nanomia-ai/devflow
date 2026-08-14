@@ -371,7 +371,7 @@ once. Do not compare a candidate that changes Layer 0; route it to 2a.
    makes the tree lie
 6. Product-layer failures use the same rule. Never create a task card at the tree root
 
-**verify-origin fix-card inheritance.** When a Failure-history source has a `signal card`, use the stored-value set verify passed — `{the current entry's signal card} ∪ {every card recorded under routing: fix card by the same root's previous repair round}` — plus the current non-pass evidence.
+**verify-origin fix-card inheritance.** When a Failure-history source has a `signal card`, use the stored-value set verify passed — `{the current entry's signal card} ∪ {every card recorded under routing: fix cards by the same root's previous repair round}` — plus the current non-pass evidence.
 A new root receives only the signal card; recurrence observation 1 receives every route from the root's first entry; after a person approves another repair, receive only the most recently approved and completed repair round.
 Remove duplicate numbers, sort them in canonical card-number order, and impose no arbitrary cap or recursive lineage read.
 In the final tree after route operations, resolve exactly one card path for each number and put it in the new card's `Read first`; if a final path is absent or not unique, do not guess, write `routing prepared`, or create the route.

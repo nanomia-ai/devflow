@@ -359,7 +359,7 @@ sweep is done by the member performing the closure.
 The `signal card` is the `.done.` task-card number that owns the current regression completion signal; to the verifier it is only the current item's label, not past meaning.
 The `repair lineage root` is `<product | fixed capability number>@<source id of that lineage's first failure>`.
 `Recurrence observation n` is the verify-run count on which the current signal fails to pass again after a completed repair boundary; an intervening pass creates no new count and does not erase the past maximum.
-The `previous repair round` is the largest round below the current recurrence observation among entries of the same root with completed `routing: fix card`, counting the root's first entry as 0; it includes every completed fix-card route from that round.
+The `previous repair round` is the largest round below the current recurrence observation among entries of the same root with completed `routing: fix cards`, counting the root's first entry as 0; it includes every completed fix-card route from that round.
 When the regression list has at least one label, immediately before the verifier the main session mechanically queries the current label set over this exact scope.
 
 ```text
@@ -368,7 +368,7 @@ tree-root verify.md
 verify.md files for the capabilities owning signal cards in the current regression bundle
 ```
 
-Do not give file bodies to the model. For every completed `routing: fix card` number, set the entry root to its existing `repair lineage`, or otherwise to `<that file's verification target key>@<entry source id>`, and add the deduplicated root set to `route_index[card number]`. Give the model only this format.
+Do not give file bodies to the model. For every completed `routing: fix cards` number, set the entry root to its existing `repair lineage`, or otherwise to `<that file's verification target key>@<entry source id>`, and add the deduplicated root set to `route_index[card number]`. Give the model only this format.
 
 ```text
 base: <full unabbreviated commit object ID of the integration tip used for the projection>
