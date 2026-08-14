@@ -321,10 +321,11 @@ design zone, new planning file, or new state.
 
 In 2b, create the next frontier only when the preceding answer reduced the number of valid
 sentences for one of the four fields or opened a new actual dependency. When the unresolved
-set is unchanged, do not repeat a reworded question. Show the remaining field and one
-recommendation and wait for the user's decision; route an execution fact to the existing
-research card and a Layer 0 fact to 2a. Keep this comparison only in the conversation and
-do not store it as state.
+set is unchanged, do not repeat a reworded question.
+Take exactly one exit: show the remaining field and one recommendation and wait for the
+user's decision; route an execution fact to the existing research card; or route a Layer 0
+fact to 2a.
+Keep this comparison only in the conversation and do not store it as state.
 
 When a new term is confirmed, immediately land it through the one-line `glossary.md` route
 in the canonical discovery→update table. After the four card fields first become unique and
