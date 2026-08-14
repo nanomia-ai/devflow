@@ -15,6 +15,27 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.15.1 — 2026-08-15 — a fresh full-repo evaluation and an artifact-lifecycle sweep close seven cross-skill gaps
+
+After 0.15.0 shipped, an independent full-repo evaluation (8.5/10, zero silent-loss
+findings) and an artifact-lifecycle sweep — who creates, commits, owns, and recovers every
+named artifact — found gaps of a kind five prior campaigns had not walked: contracts that
+fall **between** two skills. Seven convergent repairs land, each cross-verified before
+application. resume's state table now excludes a research-waiting implementation card from
+the re-approval row, so a ready research card is reachable (the no-exit routing window).
+split's maintenance mapping gate names its predicates operationally (`## Verified state`
+heading and bounded structural queries), the same pattern work already used, instead of
+holding predicates it never reads the definitions of. principles pins the draft contract
+for interrupted Layer 0 sessions: before confirmation nothing lands on a core-document
+path, and an interrupted uncommitted diff is rederived from HEAD — never treated as
+partial truth. A research card's final commit now carries its throwaway prototype's
+deletion, closing "only the decision survives" mechanically. arch's desktop/TUI channel
+row creates its operating-procedure document as a first task when it is missing, matching
+its sibling rows. A dead sentence pointing at the Codex slash-prompt channel removed in
+0.13.0 leaves adopt, and README's bundle enumeration now counts planning-evidence among
+the companions. Two items stay open as owner decisions: greenfield design-artifact
+ownership, and Design-head-only batch confirmation.
+
 ## 0.15.0 — 2026-08-15 — planning settles facts before asking, and verification recognizes a failure it has repaired before
 
 Two axes land together, implemented from `docs/rounds/v0.15.0/plan3_ko.md`.

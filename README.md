@@ -577,7 +577,7 @@ git: "Jaemin Park", jmp@example.com
 
 Both platforms **register** this repository by its GitHub address and install the plugin —
 two lines each, and you get the same thing either way: 9 skills, 4 role contracts,
-3 predicate companions, and the SessionStart hook.
+3 predicate companions, one planning-evidence companion, and the SessionStart hook.
 
 ### Claude Code
 

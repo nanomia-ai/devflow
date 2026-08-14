@@ -21,7 +21,7 @@ The output-format reference is bounded. From `../product/SKILL.md`, read from
 `Output — devflow/project/product.md` up to but not including `Gates`. From
 `../arch/SKILL.md`, read `Verify-channel decision` and from `Output — devflow/project/arch.md` up to but not
 including `Capability documents — final output after Layer 0`. Do not read or execute interview or procedure text outside those
-ranges. In the Codex slash prompt, the installer embeds only those same ranges below.
+ranges.
 
 When it applies:
 

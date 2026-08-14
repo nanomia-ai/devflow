@@ -515,7 +515,7 @@ git: "Jaemin Park", jmp@example.com
 
 두 플랫폼 모두 이 저장소를 GitHub 주소로 등록하고 플러그인을 설치한다. 각각 두 줄이면
 끝나고, 설치되는 내용도 같다. 스킬 9개, 역할 계약 4개, 판정 정본 동반 문서 3개,
-그리고 SessionStart 훅이다.
+기획 증거 규율 동반 정본 1개, 그리고 SessionStart 훅이다.
 
 ### Claude Code
 

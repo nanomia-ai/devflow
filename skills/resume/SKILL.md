@@ -231,7 +231,7 @@ locally during a blockade stay visible:
 | `Brownfield: no` and the tree root has neither `01-foundation/` nor `01-foundation.done/` | split — create `01-foundation/` and at least one direct task card in the same layer |
 | A pending task card lacks `Approval` or `Review`, or its `Depends` is not canonical | split — normalize legacy `Depends` under the state predicates, ask the user about any unparseable member, add missing fields as `pending` and `required` except a research card's Review is `not-applicable`, then present the execution proposal |
 | A pending task card's `Approval` is not `pending` and is not effective under the state predicates | split — report the exact invalidity, reset `Approval` to `pending`, reapprove the execution proposal, and finish the planning commit |
-| A pending task card's `Approval` is `pending` | split — present the execution proposal and get approval |
+| A pending task card's `Approval` is `pending`. Exclude it from this row when it is an implementation card with both `Coordinates` and `Identity` and its `Depends` includes a research card that is not `.done.` and has neither field | split — present the execution proposal and get approval |
 | A pending task card is ready under the state predicates | work |
 | A waiting capability file exists | split — open one layer of that capability |
 | No earlier executable row matches, and at least one pending Audit, user-request Audit with a target record, or due automatic Audit fails only the Audit execution boundary | verify — run no event and write no state; list those candidates in event-priority order and report each exact blocking path or branch state and reason |

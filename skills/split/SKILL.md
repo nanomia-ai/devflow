@@ -248,7 +248,10 @@ Review:            not-applicable
   code gets a diff, work changes Review to `required`.
 - Any means is fine: document research, real calls, a **throwaway prototype**.
   A prototype must be marked disposable by name and location and never mixed into the
-  real code — only the decision survives.
+  real code. After recording the answer and evidence in the progress log and before judging
+  the completion signal, work deletes the prototype at that exact location. If the
+  prototype's repository path already entered a checkpoint, that deletion rides the next
+  checkpoint or the final task commit — only the decision remains when the card is `.done.`.
 - When the answer is not only a fact but also a procedure or tool that will run again —
   "does it support partial refunds" answers with a fact; "the comparison procedure
   against the reference data" answers with a tool — the throwaway-prototype rule does
@@ -332,11 +335,13 @@ in the canonical discovery→update table. After the four card fields first beco
 before writing the card bytes, run the planning evidence discipline's pre-commitment review
 once. Do not compare a candidate that changes Layer 0; route it to 2a.
 
-1. **Map the request's scope to a location.** Before mapping, read only the `Design head`
-   metadata line of each candidate capability document and run the single-line command
+1. **Map the request's scope to a location.** Before mapping, read the `Design head`
+   metadata line of each candidate capability document, count only exact `## Verified state`
+   H2 headings with a bounded mechanical query without opening the body, and run the
+   single-line command
    `git log -1 --format=%H -- devflow/project/product.md devflow/project/arch.md devflow/project/glossary.md`.
-   A candidate with no document, with the canon's exact `legacy v0.10` shape, or without
-   exactly one fixed boundary has no stored value — judge it the same as differing. When
+   A candidate with no document or without exactly one such heading has no stored value —
+   judge it the same as differing. When
    any stored value differs from that output, do not map: route `Brownfield: yes` to
    adopt and `no` to arch to refresh the affected design zones first.
    A card mapped from a stale boundary lands in the wrong capability. Shared foundations,

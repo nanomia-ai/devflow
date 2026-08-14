@@ -103,7 +103,7 @@ blocking. Do not bind an unconfirmed blocking channel in arch.md.
 | Type | Channel | If missing |
 |---|---|---|
 | Has a frontend | **A browser-control tool that can inspect rendered output and interact with it is required** (one provided by the active platform) | Guide connection of an available tool, then stop. UI verification you cannot see is guesswork |
-| Non-web with a screen (desktop app · TUI) | A tool that reads the screen/accessibility tree or real output + an operating-procedure document (process safety included) | Guide installation, then stop. Same reason |
+| Non-web with a screen (desktop app · TUI) | A tool that reads the screen/accessibility tree or real output + an operating-procedure document (process safety included) | Guide installation of an available tool, then stop until it can actually run — same reason. If the operating-procedure document is missing, create it as the first task |
 | Web backend | Real HTTP calls (`.http` file / curl scripts) | Create it as the first task |
 | CLI / daemon | Run command + expected output (+ health check, log location) | Create it as the first task |
 | Library | Test runner | Create it as the first task |

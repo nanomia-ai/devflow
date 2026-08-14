@@ -363,7 +363,12 @@ Fixed target ownership means ownership of rerunning the whole document; the curr
 A document still being produced by a running product, arch, design, or adopt session is
 a draft until the user confirms it — reconcile a draft's contradictions by editing the
 draft on the spot, not through the procedures above, and when an already-inherited upper
-document must change, put that edit into the same confirmation batch.
+document must change, put that edit into the same confirmation batch. Derive and present
+the whole confirmation batch in memory; before confirmation, change no core-document path.
+When an interruption leaves an uncommitted diff on a core-document path, do not use partial
+bytes as input or guess whether confirmation occurred: resume does not route to the next
+stage, and the owning skill either rederives the whole batch from HEAD and current inputs,
+obtains confirmation, and finishes the Layer 0 commit, or lets the user discard that diff.
 
 Records outside devflow — the memory and task lists an execution environment injects
 into a session, documents in the repository that are not devflow's — are claims, not
