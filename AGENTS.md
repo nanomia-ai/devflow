@@ -48,8 +48,8 @@ rather than against a sense of size.
 | you are about to run an independent pass in a separate context | `docs/audit-guideline_ko.md` §8 briefing template — hand it over verbatim |
 | the change creates, deletes, or moves a file **that is not this round's own report** | `docs/design-backlog.md`, and run the coordinate sweep guideline §3-4 defines |
 | you are about to bump the version | `docs/audit-guideline_ko.md` in full, and re-judge the matrix cells by **the matrix's own §6** |
-| you are opening a round folder under `docs/rounds/` | the previous round's `report_ko.md`, plus the findings in its `audit_ko.md` that never landed |
-| you are about to create or edit a round's `plan_ko.md` | that same round's `request_ko.md`, then `handoff_ko.md`, when each exists |
+| you are opening a round folder under `docs/rounds/` | the previous round's `report_ko.md`, when it exists, plus the findings in whichever of `audit_ko.md` or `plan-audit_ko.md` it has that never landed |
+| you are about to write or revise a round's `plan_ko.md` | read — never edit — that round's `request_ko.md` and `handoff_ko.md`, when each exists |
 | an adopted finding fits no row of guideline §2 | propose a new row there |
 | the change introduces a new entry point or request shape | propose a new row in matrix §1–§2 |
 
@@ -96,7 +96,9 @@ verify, and resume read the task-card predicates; verify and resume the verifica
 predicates; arch, adopt, verify,
 and resume the baseline predicates. work and the role contracts carry only their bounded baseline projections.
 
-Modification procedure (order is fixed):
+Modification procedure (order is fixed) — this governs the paired documents listed above. A
+Korean-only document with no pair — most round records — is written and left as is; there is
+no English file to translate and no parity to check:
 
 1. Edit the `_ko` file first → owner review.
 2. Apply the translation to the English file. **No meaning drift** — the terminology
@@ -186,15 +188,37 @@ the canon on conflict and goes dead.
 
 ## The round protocol
 
+Read this to recognize the vocabulary, not to run a process. Create exactly the document
+the owner asked for, and no other — a request for a plan does not also produce a handoff, a
+report, or an audit. An unwritten role is not missing work; a round with one document is a
+complete round.
+
 A change large enough to take its own version is a round, and a round leaves its records in
-`docs/rounds/<version>/`. Filenames are roles, in the order they are written:
-`request_ko.md` (optional — what the owner asked for, in the owner's terms, before anyone
-planned it), `handoff_ko.md` (optional — what a session must know before it can design),
-`plan_ko.md`, `report_ko.md`, `audit_ko.md`. A round that produced two plans keeps the
-superseded one as `plan-r1_ko.md`; an audit of a plan rather than of an implementation is
-`plan-audit_ko.md`. Folders created before 2026-08-13 predate this convention and may hold
-fewer roles or an older name — `v0.10.0/proposal_ko.md` is one; rounds before 2026-08-14
-have no request file, and their ask is recorded inside the plan.
+`docs/rounds/<version>/`. Filenames are roles: `request_ko.md` (optional — what the owner
+asked for, in the owner's terms, before anyone planned it), `handoff_ko.md` (optional — what
+a session must know before it can design), `plan_ko.md`, `report_ko.md`, `audit_ko.md`. An
+audit of the plan itself, rather than of what got implemented, is a distinct role —
+`plan-audit_ko.md` — not a variant name. Folders created before 2026-08-13 predate this
+convention and may hold fewer roles or an older name —
+`v0.10.0/proposal_ko.md` is one; rounds before 2026-08-14 have no request file, and their
+ask is recorded inside the plan.
+
+**A round document is edited only when the owner asks to revise that specific document.**
+Once written, a request, handoff, plan, report, or audit is a record of that moment — the
+same way an overturned decision is not deleted from `design-decisions.md`, it stays and is
+superseded. A session writing a plan does not edit the request it read; a report does not
+rewrite the plan it implements; an audit does not alter what it audits. Something wrong in a
+document you did not write is reported back to the owner in conversation, not fixed — a new
+document exists only if the owner then asks for the correction in writing, and even then it
+sits beside the original, never over it.
+
+A second document under the same role does not overwrite the first. A revision that
+supersedes renames the superseded file with an `-r1` suffix and the new one takes the plain
+name — the `plan_ko.md` / `plan-r1_ko.md` pair already sets this pattern. One that stands
+alongside instead — a follow-up request, a second audit — takes a `2` suffix before `_ko`;
+`request2_ko.md` is already on disk this way. None of these suffixed names is "a document
+this set did not have before" in the promotion table further down — they are the same role,
+occurring twice, and add no row to the document map.
 
 A request is not a handoff — the request is the owner's and says what is wanted, the handoff
 is one session's and says what the next must know to design — and they are named apart only
@@ -228,8 +252,11 @@ predicted** (a concrete scene), and the scope boundary (the condition intersecti
 needs, and where it does not reach). The finding format itself is fixed in
 `docs/audit-guideline_ko.md` §6; these four are what that format is for.
 
-**Promotion — what rises out of a round into the canon.** A round decides its own content.
-It does not decide what the canon keeps. This table does:
+**Promotion — what rises out of a round into the canon.** A round decides its own content —
+most rounds are the one document the owner asked for, and stop there. This table says where
+something lands **if** it exists; it is not a checklist of documents every round must
+produce, and it does not run ahead of approval — a plan's decisions land here once the owner
+has approved the round, not while the plan is still a draft under review:
 
 | Round artifact | What rises | Where it lands |
 |---|---|---|
@@ -246,11 +273,12 @@ this repository — 3,314 lines of independent validation — had no path into t
 all, and a verification round had to record that the lineage and observations it produced
 never landed.
 
-**A round does not close until its own promotion is done.** The wiring table sends the
-next round to the previous round's unlanded audit findings, but that rescue reaches back
-exactly one round: miss twice and a finding sits on disk that no rule ever opens again.
-So promotion is a closing condition of the round that produced the finding, not a debt the
-next one inherits. Its checklist item is below.
+**An audit's findings do not wait past one round.** The wiring table sends the next round to
+the previous round's unlanded audit findings, but that rescue reaches back exactly one
+round: miss twice and a finding sits on disk that no rule ever opens again. So a round that
+ran an audit promotes its adopted findings before that round is done — this binds audits
+specifically, not every round, and a round with no audit has nothing here to close. Its
+checklist item is below.
 
 External contributors: demonstrate the equivalent in your PR description — what you tried
 to break, and what a literal reader does at each step you touched.
@@ -315,16 +343,19 @@ borrowing text into this repository still needs prior permission.
       reason; every moved row's subject section opened in `docs/design-decisions.md`
 - [ ] `skills/**` touched? Matrix cells re-judged, and any new shape of use added as a row
 - [ ] `_ko` edited first (or back-sync noted for an English-first external PR)
-- [ ] Terminology table applied; structure parity ko↔en checked (headings / lists / tables
-      / figures). An English-first external PR reaches parity only after the maintainer
-      back-syncs, so this item is the maintainer's, not the contributor's
-- [ ] This round's audit findings promoted per the table above, or listed with the reason
-      each was not — a round does not close on an unlanded finding
+- [ ] Paired document touched (has a `_ko` pair per the table above)? Terminology table
+      applied; structure parity ko↔en checked (headings / lists / tables / figures). An
+      English-first external PR reaches parity only after the maintainer back-syncs, so this
+      item is the maintainer's, not the contributor's. A round record with no pair —
+      most round documents — needs neither
+- [ ] This round ran an audit? Its adopted findings promoted per the table above, or listed
+      with the reason each was not. No audit this round — nothing to check here
 - [ ] Verification run at the proportional level, reported under guideline §2 criteria with
       the §5 stop condition stated; findings listed (defects vs judgment calls separated)
 - [ ] README prose touched? Tone rules applied and the before/after counts recorded
       (Writing the README). A typo or a link path is not prose — record that instead of counting
-- [ ] Codex install rerun locally — plugin snapshot (or the PR states it was not)
+- [ ] Skill, hook, or installer file changed? Codex install rerun locally — plugin snapshot
+      (or the PR states it was not). Documents only — nothing to rerun
 - [ ] Install channels still target each platform's **current** native mechanism
       (skills · plugins · hooks) — re-verify against platform docs when platforms update
 - [ ] Deploy artifact changed? CHANGELOG entry added at the top + version bump. Documents
