@@ -15,6 +15,53 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.15.0 — 2026-08-15 — planning settles facts before asking, and verification recognizes a failure it has repaired before
+
+Two axes land together, implemented from `docs/rounds/v0.15.0/plan3_ko.md`.
+
+**Planning evidence discipline (DD-67).** A new canonical companion,
+`skills/principles/planning-evidence.md`, is read by exactly four consumers — product,
+arch, adopt, and split. Every unknown is classified by who owns its answer (current
+repository fact, external contract fact at a pinned version, execution fact, or owner
+decision), and only owner decisions become user questions; the rest the session settles
+itself, directly for known coordinates and through one read-only researcher for
+answer-only searches that follow new paths or compare sources. A fact whose absence makes
+the current choice undecidable is `blocking` and stops binding until settled, conflicted,
+or unavailable; anything safe under a default is follow-up and lands in the stage's
+existing home. Immediately before binding a decision batch, a pre-commitment review shows
+at most one substantive alternative — with no candidate, it produces no output at all.
+product batches independent questions (3–5), asks a dependent question alone first, and
+recomputes dependencies after free-form input; arch confirms candidate survival and verify
+channel executability before presenting options; adopt separates code, pinned-version
+contracts, and owner intent as three authorities; split judges sub-chunks by the
+planning depth grade (0/1/2a/2b) — card fields decide, not names or sizes — with a
+no-progress exit that never repeats a reworded question. A long product interview
+summarizes once in conversation and writes no file, state, or commit (D13-A).
+
+**Repair lineage (DD-68).** verify now attaches each runnable regression signal's owning
+card as a `signal card` label, and persists `signal card`, `repair lineage`, and
+`recurrence observation` with each failure entry. Before calling the verifier, a bounded
+projection over exactly three files (current target, tree root, label-owning capabilities)
+reindexes completed `routing: fix cards` numbers to their roots; two candidate roots for
+one label block the whole run as an integrity anomaly. A recurrence inherits the previous
+repair round's cards plus the current signal card into the new fix card's `Read first`,
+`Why` carries the evidence, and `Forbidden` is written only when the log directly proves
+an unchanged retry fails. At recurrence observation 2 or higher no automatic card is
+created — the lineage returns to a person. work, reviewer, resume, and the three predicate
+canons are byte-unchanged; the verifier stays clean, receiving labels but never history.
+
+**Why.** Planning interviews were forwarding facts to the user that the environment could
+answer, and repeated short lookups were polluting the main context; verification treated a
+re-broken repair as a brand-new failure, so nothing learned in the previous attempt
+reached the next one. Both axes were verified by cross-model loops (ten adopted findings,
+each a one-word-to-one-token defect with branch-inverting consequences) plus a four-lens
+independent audit; two narrow cross-capability windows are recorded as backlog
+observations with exact signatures rather than speculative rules, following the DD-44
+lineage. Files: `skills/principles/planning-evidence*`, `skills/product|arch|adopt|split`,
+`skills/verify/SKILL*` and `verifier*`, `skills/principles/SKILL*`,
+`scripts/repository-invariants.test.js`, both plugin manifests, AGENTS terminology, and
+the design canon (DD-67/DD-68, matrix H42–H45, backlog observations).
+
 ## 0.14.2 — 2026-08-13 — the GPT audit's findings land: mixed requests record only what fails the gate, and the tweak lane checks its landing first
 
 An independent GPT audit of the 0.14.1 implementation (`docs/rounds/v0.14.0/audit_ko.md`)
