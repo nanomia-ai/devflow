@@ -15,6 +15,20 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.16.1 — 2026-08-15 — a clean role is no longer told to run resume
+
+Both entry announcements — the SessionStart hook's injected line and the Codex fallback
+block — told every session to invoke resume first. A role contract holder must not: the
+verifier's first rule is to never open devflow documents, and resume opens them by
+definition. The conflict only bites when a role is briefed as a **fresh session** rather
+than a subagent, because devflow registers SessionStart and not SubagentStart — and a
+fresh session is exactly how an orchestrator briefs a clean role. Left alone, a verifier
+could read the state it is supposed to be blind to and return a verdict that looks normal:
+a silent break of the black-box guarantee. Both announcements now carry the exclusion, so a
+session handed reviewer, verifier, auditor, retrospector, or coordinator follows only that
+contract. No skill changed, the injection is still three lines, and `hooks/hooks.json` is
+untouched, so no Codex re-trust is needed.
+
 ## 0.16.0 — 2026-08-15 — an outside dispatcher is a declared role, and devflow itself does not change
 
 devflow already treated several sessions in one working folder as normal (DD-53), and its

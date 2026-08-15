@@ -6,8 +6,9 @@ unavailable (flag off, or older Codex). Not needed in Claude Code either. -->
 ## devflow
 
 This project is managed with devflow. At session start, if a model-invocable resume skill
-is available, invoke it and follow it exactly. Do not modify code until resume reports the
-state and the user approves.
+is available, invoke it and follow it exactly — unless you were handed a devflow role
+contract, in which case do not invoke resume and follow only that contract. Do not modify
+code until resume reports the state and the user approves.
 
 Before dispatching another agent to perform a devflow stage in this project, read and
 follow devflow's `coordinator` role contract.

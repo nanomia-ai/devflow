@@ -42,7 +42,7 @@ if (!fs.existsSync(treeDir) && !projectStateExists) process.exit(0);
 
 const additionalContext = [
   "[devflow] Durable project state exists in this checkout.",
-  "Run the devflow resume skill before any other devflow stage.",
+  "Run the devflow resume skill before any other devflow stage — unless you were handed a devflow role contract, in which case follow only that contract.",
   `If you dispatch another agent to perform a devflow stage in this checkout, read the coordinator role contract at ${coordinatorContract} before the first dispatch.`,
 ].join("\n");
 
