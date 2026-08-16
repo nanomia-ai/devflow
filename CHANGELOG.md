@@ -23,8 +23,21 @@ safe and resumable, and a half-confirmed document still has no cheap durable sta
 was the unguarded interval between those two boundaries. arch now states the expected document
 count before its biggest output, stops at the confirmed Layer 0 commit when context is short,
 says that the run is not complete, and tells a card-free next session to enter through resume.
-split independently stops the first tree opening when the capability-document directory has
-zero files, routing greenfield to arch and brownfield to adopt while preserving deferred runs.
+At the first tree opening split checks, for `01` and every non-retired capability number in
+product.md, whether a lowercase `.md` whose leading token before the first `-` is exactly that
+number sits directly below the capability-document directory, and stops when any is missing,
+matching the token rather than a prefix so that `100-*.md` cannot mask a missing `10`, sending
+the user back through
+resume, which routes by `Brownfield` to arch or adopt; a deferred run skips this gate with the
+rest. Each piece of the predicate closes a bypass measured in simulation — a lone `.gitkeep`,
+partial creation that work and verify would then carry to a document-free closure, a number-led
+file in a subfolder, and `.MD` under a case-insensitive filesystem. Existence is checked per
+number rather than by count because preserved retired documents and excess or duplicate files
+masked a missing number.
+
+product's `Approach` also gains which goal wins when two collide: `arch` and the planning-evidence
+pre-commitment review both require that value to break a tie, no section produced it, and synky's
+product.md cited a speed-and-cost principle defined nowhere.
 
 The same field run found that only two of ten ADR-qualified decisions had been recorded and none
 of eleven Stack reasons named an external-contract source. Before arch.md confirmation, arch now
@@ -50,7 +63,8 @@ suffix is not a cheap answer, and carries the seven new measured observations wi
 rules; the repeated Design-head item now includes synky's six-refresh measurement.
 
 Both plugin manifests are 0.17.0. Files changed: `skills/arch/SKILL{_ko}.md`,
-`skills/split/SKILL{_ko}.md`, `README{_ko}.md`, `docs/usecase-matrix_ko.md`,
+`skills/split/SKILL{_ko}.md`, `skills/product/SKILL{_ko}.md`, `README{_ko}.md`,
+`docs/usecase-matrix_ko.md`, `docs/audit-guideline_ko.md`,
 `docs/design{_ko}.md`, `docs/design-decisions{_ko}.md`, `docs/design-backlog{_ko}.md`,
 `docs/rounds/v0.17.0/report_ko.md`, `CHANGELOG.md`, and both plugin manifests.
 

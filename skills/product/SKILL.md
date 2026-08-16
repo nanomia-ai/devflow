@@ -29,7 +29,7 @@ with one line — "that belongs to arch" — and return.
 | Judgment | Question |
 |---|---|
 | Problem | Who suffers, because of what, and how badly |
-| Approach | Why this approach. Which approaches were discarded |
+| Approach | Why this approach. Which approaches were discarded. **Which goal wins when two collide** |
 | Capability composition | What chunks (capabilities) are needed to solve this problem |
 | Boundary | How far does the MVP go. What will **not** be built |
 | Success criteria | What counts as success — stated verifiably, always |
@@ -96,7 +96,7 @@ This service solves <problem> that <who> suffers because of <what>, by <approach
 When it succeeds, <what> becomes possible.
 
 ## Problem
-## Approach            <!-- include 1 line per discarded approach -->
+## Approach            <!-- include 1 line per discarded approach. 1-3 lines of priority when goals collide -->
 ## Capabilities        <!-- ① ② ③ number + name + user outcome + why that outcome is needed for success -->
 ## Boundary            <!-- MVP scope / will-not-build (explicit) -->
 ## Success criteria    <!-- 3–7 verifiable acceptance criteria -->
