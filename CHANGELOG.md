@@ -15,6 +15,30 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.16.2 — 2026-08-15 — maintenance starts with complete intent, not accumulated history
+
+Repository-maintenance sessions used to enter through a 30,716-byte `AGENTS.md`, then often
+read README, CHANGELOG, and several round records before they could tell why each skill
+exists. That repeated procedure and history in every context while still failing to prove
+that the affected skill sources had been read. The entry gate is now a bounded router:
+`docs/design.md` carries a compact intent index for every skill and companion, while
+`docs/maintenance-protocol.md` holds conditional procedure by section. Current state comes
+from manifests, Git, one changelog entry, and bounded sections of the latest numeric round;
+history and README are no longer onboarding substitutes.
+
+The boundary is enforced in `scripts/repository-invariants.test.js`: `AGENTS.md` and the
+always-read design have byte budgets, every protocol section must have a root route, every
+skill and companion must appear in the intent index, conditional dispatch may have only one
+owner, ko/en structure must remain paired, and English `AGENTS.md` must stay Korean-free.
+DD-71 records why a `CURRENT.md`, another skill map, or changes inside `skills/**` were
+rejected. DD-72 makes one `report_ko.md` the deterministic record when a versioned
+implementation names no document role. Script consumers and document lifecycles are now
+closed inventories, including bounded round-role names and explicit historical records.
+The source skill tree is unchanged. Files changed: `AGENTS.md`, both plugin manifests,
+`scripts/repository-invariants.test.js`, `docs/design{_ko}.md`,
+`docs/design-decisions{_ko}.md`, the new `docs/maintenance-protocol{_ko}.md` pair, and
+`docs/rounds/v0.16.2/report_ko.md`.
+
 ## 0.16.1 — 2026-08-15 — a clean role is no longer told to run resume
 
 Both entry announcements — the SessionStart hook's injected line and the Codex fallback

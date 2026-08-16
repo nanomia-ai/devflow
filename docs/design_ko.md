@@ -36,6 +36,31 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 코드는 adopt�
 배포: Claude 플러그인(.claude-plugin) + Codex 네이티브 플러그인(.codex-plugin — codex/install.*가 등록)
 ```
 
+### 스킬 의도 색인 — 전체 지형을 먼저, 규칙은 영향 범위에서 원문으로
+
+이 표는 빠른 구조 이해를 위한 지도이지 스킬 규칙의 대체물이 아니다. 변경 판단 전에는 대상
+스킬과 이 표가 가리키는 정본·동반 파일·직접 소비자를 실제 원문으로 읽는다.
+
+| 구성요소 | 존재 이유와 소유 범위 | 입력 → 다음 소비자 | 설계 계보 |
+|---|---|---|---|
+| `principles` | 모든 단계보다 우선하는 공통 규칙·상태 전이·커밋 규율의 정본 | 모든 entry skill과 역할 계약이 읽음 | DD-03 · DD-29 · DD-57 |
+| `product` | 문제·정체성·능력·경계·성공 판정을 소유자와 확정 | 요청 → arch·design 또는 adopt 경계 | 기원 · DD-33 · DD-67 |
+| `arch` | 컴포넌트·stack·코드 구조·data·verify channel과 능력 설계 구역을 확정 | product → split·work·verify | DD-42 · DD-43 · DD-69 |
+| `design` | 선택적 UI 접근 방식·원천·token/component 전략·분해 축·검토 표면을 확정 | product·arch → arch 능력 설계와 split | DD-69 |
+| `adopt` | 기존 코드의 대표 흐름을 추적해 Layer 0와 능력 설계 구역을 역산 | brownfield 코드 → split | DD-10 · DD-20 · DD-28 |
+| `split` | 한 층씩 task tree와 승인된 실행 제안을 만들어 구현 경계를 소유 | Layer 0·기록·현재 코드 → work | DD-25 · DD-50 · DD-67 |
+| `work` | 카드 하나의 코드·진행 로그·완료 신호·상위 문서 환류를 끝까지 운반 | 승인 카드·정본·baseline → verify 또는 다음 카드 | DD-09 · DD-48 · DD-56 |
+| `verify` | 실제 실행으로 능력·제품 verdict를 내리고 실패·감리·회고의 생존 경로를 소유 | 닫힌 코드·신호·baseline → split 수리 또는 폐쇄 | DD-21–DD-24 · DD-30 · DD-36 · DD-68 |
+| `resume` | 디스크 상태의 정합성을 검사하고 중단된 전이를 복구해 다음 단계로 라우팅 | Git·tree·journal·verify 투영 → 해당 entry skill | DD-11 · DD-25 · DD-26 · DD-44 |
+| predicate 동반 정본 | 여러 단계가 공유하는 상태·검증·baseline 판정을 한 곳에서 고정 | 명시된 소비자만 읽고 절차는 각 단계가 소유 | DD-28 · DD-42 · DD-56 |
+| 역할 계약 | reviewer·verifier·auditor·retrospector를 깨끗한 컨텍스트에 원문 브리핑 | entry skill의 사건 → 편향을 제한한 독립 판단 | DD-19 · DD-21–DD-23 |
+| `coordinator` 역할 계약 | devflow 위에서 worker를 배치·감독하되 새 단계나 상태를 만들지 않음 | orchestrator → 기존 entry skill | DD-70 |
+
+묶음 행이 가리키는 파일은 `state-predicates.md`, `verification-predicates.md`,
+`baseline-predicates.md`, `planning-evidence.md`, `reviewer.md`, `verifier.md`, `auditor.md`,
+`retrospector.md`, `coordinator.md`다. 각 파일의 실제 소비자와 역할 경계는 원문과 저장소 검사가
+판정한다.
+
 ## 문서 지도 — 무엇이 어디에 살고 언제 읽히나
 
 | 문서 | 지위 | 언제 읽히나 |
@@ -43,7 +68,8 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 코드는 adopt�
 | `docs/design_ko.md` (이 문서) | 정본 — 정체성 · 불변식 · 결정 색인 | 모든 변경에서 항상 |
 | `docs/design-decisions_ko.md` | 정본 — 결정 전문과 기각 계보 | 색인의 한 행이라도 움직일 때 |
 | `docs/design-backlog_ko.md` | 정본 — 관찰 항목과 보류 후보 | 릴리스를 기획할 때 |
-| `AGENTS.md` | 절차 — 게이트 · 번역 · 릴리스 · 라운드 규약 · 승격 | 세션 시작에 자동으로 |
+| `AGENTS.md` | 절차 — 최소 진입 게이트와 조건부 읽기 배선 | 세션 시작에 자동으로 |
+| `docs/maintenance-protocol_ko.md` | 절차 정본 — 번역 · 기록 착지 · 검증 · 라운드 · README · 릴리스 · 용어 | `AGENTS.md`가 지정한 절만 |
 | `docs/audit-guideline_ko.md` | 상시 수단 — 검증 방법의 정본 | 검증 결과를 보고하려 할 때 |
 | `docs/usecase-matrix_ko.md` | 상시 수단 — 사용 형태 전수 | `skills/**`를 바꿀 때 |
 | `docs/rounds/<버전>/` | 라운드 기록 — request · handoff · plan · report · audit | 새 라운드를 열 때 직전 것만 |
@@ -101,6 +127,8 @@ devflow가 **막아 주지 않는다고 선언한** 자리는 별개의 목록�
 | DD-29 | 플랫폼 어댑터는 공통 스킬로 연결만 하고 절차를 복제하지 않는다 | 정체성 · 배포 · 플랫폼 | v0.9.21 | 유효 |
 | DD-32 | Codex 훅은 플러그인이 배달한다 — `.codex-plugin/plugin.json`이 `hooks`를 선언, 설치는 원격 두 줄 | 정체성 · 배포 · 플랫폼 | v0.9.20 | 유효 |
 | DD-57 | Codex 평면 프롬프트 채널을 없애고 플러그인 캐시가 동반 문서를 나른다 | 정체성 · 배포 · 플랫폼 | v0.13.0 | 유효 |
+| DD-71 | 저장소 유지보수 진입은 design의 전체 의도를 먼저 읽고 AGENTS가 상세 절차를 조건부로 연결한다. 이력은 온보딩이 아니다 | 정체성 · 배포 · 플랫폼 | v0.16.2 | 유효 |
+| DD-72 | 역할을 따로 지정하지 않은 버전 구현은 report_ko.md 하나를 기본 라운드 기록으로 남긴다 | 정체성 · 배포 · 플랫폼 | v0.16.2 | 유효 |
 | DD-08 | TDD 절차 미채택 | 검증과 역할 | 최초 설계 | 유효 |
 | DD-17 | 검토·검증 역할의 조건은 스킬 본문이 싣는다 — agents/*.md는 Claude 포장 | 검증과 역할 | v0.9.5 | 유효 |
 | DD-19 | 역할 계약은 스킬 옆 동반 파일 하나(reviewer.md·verifier.md)이고, 모든 플랫폼이 깨끗한 컨텍스트에 원문 브리핑으로 수행한다 — Claude 에이전트 등록 없음 | 검증과 역할 | v0.9.6 | 유효 |
@@ -184,5 +212,5 @@ ADR 3조건(domain-modeling), 검증 이중축(code-review), code-style 지향 �
   `, DD-nn (vX.Y.Z)`를 도입 순서대로 이어 붙인다. 무엇이 그것을 대체했는지가 다음 재제안이
   반박해야 할 대상이다.
 - **색인과 본문의 ID 집합은 같아야 한다.** 어긋나면 테스트가 붉어진다.
-- **라운드 기록에서 무엇이 여기로 올라오는지**는 `AGENTS.md`의 「승격」 표가 정한다.
+- **라운드 기록에서 무엇이 여기로 올라오는지**는 `docs/maintenance-protocol_ko.md` §5의 승격 표가 정한다.
   이 문서군은 그 표가 지정한 것만 받는다.

@@ -39,6 +39,32 @@ Created in the target project: devflow/{project/, tree/, journal.md, users/<id>/
 Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugin — registered by codex/install.*)
 ```
 
+### Skill intent index — the whole map first, rules from source inside the impact boundary
+
+This table is a fast structural map, not a substitute for skill rules. Before judging a
+change, read the affected skill and the canonical companions and direct consumers this table
+points to from their actual sources.
+
+| Component | Why it exists and what it owns | Input → next consumer | Design lineage |
+|---|---|---|---|
+| `principles` | canon of common rules, state transitions, and commit discipline that outranks every stage | every entry skill and role contract reads it | DD-03 · DD-29 · DD-57 |
+| `product` | confirms the problem, identity, capabilities, boundary, and success criteria with the owner | request → arch and design, or the adopt boundary | origin · DD-33 · DD-67 |
+| `arch` | confirms components, stack, code structure, data, verify channel, and capability design zones | product → split, work, and verify | DD-42 · DD-43 · DD-69 |
+| `design` | optionally confirms UI approach, source, token/component strategies, decomposition axis, and review surface | product and arch → arch capability design and split | DD-69 |
+| `adopt` | traces representative existing-code flows to back-derive Layer 0 and capability design zones | brownfield code → split | DD-10 · DD-20 · DD-28 |
+| `split` | owns implementation boundaries by opening one task-tree layer and approving an execution proposal | Layer 0, records, and current code → work | DD-25 · DD-50 · DD-67 |
+| `work` | carries one card's code, progress log, completion signal, and upper-document feedback to completion | approved card, canon, and baseline → verify or the next card | DD-09 · DD-48 · DD-56 |
+| `verify` | executes capability and product verdicts and owns survival paths for failure, audit, and retrospective events | closed code, signals, and baseline → repair through split or closure | DD-21–DD-24 · DD-30 · DD-36 · DD-68 |
+| `resume` | checks disk integrity, recovers interrupted transitions, and routes the next stage | Git, tree, journal, and verify projection → the applicable entry skill | DD-11 · DD-25 · DD-26 · DD-44 |
+| predicate companions | fix shared state, verification, and baseline judgments in one place | only named consumers read them; each stage owns its procedure | DD-28 · DD-42 · DD-56 |
+| role contracts | brief reviewer, verifier, auditor, and retrospector verbatim into clean contexts | an entry-skill event → an independently constrained judgment | DD-19 · DD-21–DD-23 |
+| `coordinator` role contract | dispatches and supervises workers above devflow without creating a stage or state | orchestrator → existing entry skills | DD-70 |
+
+The grouped rows name `state-predicates.md`, `verification-predicates.md`,
+`baseline-predicates.md`, `planning-evidence.md`, `reviewer.md`, `verifier.md`, `auditor.md`,
+`retrospector.md`, and `coordinator.md`. Their actual consumers and role boundaries are
+judged from source and repository checks.
+
 ## Document map — what lives where, and when it is read
 
 | Document | Standing | When it is read |
@@ -46,7 +72,8 @@ Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugi
 | `docs/design.md` (this file) | canon — identity, invariants, decision index | always, on every change |
 | `docs/design-decisions.md` | canon — decisions in full and the rejection lineage | when any index row moves |
 | `docs/design-backlog.md` | canon — observations and on-hold candidates | when planning a release |
-| `AGENTS.md` | procedure — gate, translation, release, round protocol, promotion | automatically, at session start |
+| `AGENTS.md` | procedure — minimal entry gate and conditional read wiring | automatically, at session start |
+| `docs/maintenance-protocol.md` | procedure canon — translation, record landing, verification, rounds, README, release, terminology | only the sections named by `AGENTS.md` |
 | `docs/audit-guideline_ko.md` | standing instrument — the canon of verification method | when reporting a verification result |
 | `docs/usecase-matrix_ko.md` | standing instrument — the enumerated shapes of use | when changing `skills/**` |
 | `docs/rounds/<version>/` | round record — request, handoff, plan, report, audit | the previous one only, when opening a round |
@@ -107,6 +134,8 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-29 | Platform adapters only connect to the shared skill; they do not duplicate its procedure | Identity, packaging, platforms | v0.9.21 | active |
 | DD-32 | Codex hooks ride along with the plugin — `.codex-plugin/plugin.json` declares `hooks`, and installing is two remote lines | Identity, packaging, platforms | v0.9.20 | active |
 | DD-57 | The flat Codex prompt channel is removed; the plugin cache carries the companions | Identity, packaging, platforms | v0.13.0 | active |
+| DD-71 | Repository maintenance reads the whole design intent first, and AGENTS conditionally routes detailed procedure; history is not onboarding | Identity, packaging, platforms | v0.16.2 | active |
+| DD-72 | A versioned implementation with no named document role leaves one report_ko.md as its default round record | Identity, packaging, platforms | v0.16.2 | active |
 | DD-08 | TDD procedure not adopted | Verification and roles | origin | active |
 | DD-17 | The terms of the review and verification roles live in the skill text — agents/*.md is Claude packaging | Verification and roles | v0.9.5 | active |
 | DD-19 | Role contracts are one companion file beside each skill (reviewer.md · verifier.md); every platform runs them by briefing a clean context with the file verbatim — no Claude agent registration | Verification and roles | v0.9.6 | active |
@@ -194,5 +223,6 @@ User rule: any further borrowing into this repository requires prior permission.
   `, DD-nn (vX.Y.Z)` in introduction order under the same state. What replaced it is what the next
   re-proposal has to refute.
 - **The index and the body must hold the same set of IDs.** A mismatch turns a test red.
-- **What rises here out of a round record** is fixed by the "Promotion" table in `AGENTS.md`.
+- **What rises here out of a round record** is fixed by the promotion table in
+  `docs/maintenance-protocol.md` §5.
   This document set takes only what that table names.

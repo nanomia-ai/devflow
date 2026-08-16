@@ -26,6 +26,7 @@ const pairRelatives = [
   "docs/design_ko.md",
   "docs/design-decisions_ko.md",
   "docs/design-backlog_ko.md",
+  "docs/maintenance-protocol_ko.md",
   "docs/rounds/v0.10.0/proposal_ko.md",
   "docs/rounds/v0.11.0/report_ko.md",
   "docs/rounds/v0.9.21/report_ko.md",
@@ -201,11 +202,13 @@ test("every Korean design original has an English deploy pair with the same stru
 
 test("English deploy artifacts contain no Korean except README's language switcher", () => {
   const deployFiles = [
+    "AGENTS.md",
     "README.md",
     "CHANGELOG.md",
     "docs/design.md",
     "docs/design-decisions.md",
     "docs/design-backlog.md",
+    "docs/maintenance-protocol.md",
     "docs/rounds/v0.10.0/proposal.md",
     "docs/rounds/v0.11.0/report.md",
     "docs/rounds/v0.9.21/report.md",
@@ -296,7 +299,7 @@ test("every docs path a document names resolves to a file that exists", () => {
       // examples (docs/specs/...) that live outside this repository. Only paths in this
       // repository's own docs namespace are checked.
       const ours = target.startsWith("docs/rounds/")
-        || /^docs\/(design|audit-guideline|usecase-matrix|capability-knowledge|v0\.)/.test(target);
+        || /^docs\/(design|maintenance-protocol|audit-guideline|usecase-matrix|capability-knowledge|v0\.)/.test(target);
       if (!ours) continue;
       if (!fs.existsSync(path.join(root, target))) dangling.push(`${relative} -> ${target}`);
     }
@@ -310,6 +313,7 @@ test("the maintenance gate names the canon files and both standing instruments",
     "docs/design.md",
     "docs/design-decisions.md",
     "docs/design-backlog.md",
+    "docs/maintenance-protocol.md",
     "docs/audit-guideline_ko.md",
     "docs/usecase-matrix_ko.md",
     "docs/rounds/",
@@ -334,6 +338,174 @@ test("the maintenance gate names the canon files and both standing instruments",
       );
     }
   }
+});
+
+test("maintenance onboarding stays bounded and every conditional protocol section is wired", () => {
+  const agents = fs.readFileSync(path.join(root, "AGENTS.md"), "utf8");
+  const design = fs.readFileSync(path.join(root, "docs", "design.md"), "utf8");
+  const protocol = fs.readFileSync(path.join(root, "docs", "maintenance-protocol.md"), "utf8");
+  assert.ok(Buffer.byteLength(agents) <= 6 * 1024, "AGENTS.md exceeds the 6 KiB entry budget");
+  assert.ok(Buffer.byteLength(design) <= 24 * 1024, "docs/design.md exceeds the 24 KiB intent budget");
+  assert.ok(
+    Buffer.byteLength(agents) + Buffer.byteLength(design) <= 30 * 1024,
+    "always-read AGENTS.md + docs/design.md exceeds 30 KiB",
+  );
+  const sections = [...protocol.matchAll(/^##\s+(\d+)\./gm)].map((match) => match[1]);
+  assert.deepEqual(sections, ["1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+  for (const section of sections) {
+    assert.match(agents, new RegExp(`§${section}(?:\\D|$)`), `protocol §${section} has no root route`);
+  }
+  assert.doesNotMatch(protocol, /^\| Condition \| Read additionally \|$/m,
+    "conditional read dispatch is duplicated outside AGENTS.md");
+  assert.match(agents, /opening a folder under `docs\/rounds\/`[^\n]+not the bounded current-state read/i,
+    "the entry gate's bounded round read can recursively open older rounds");
+  assert.match(protocol, /large enough to take its own version is a round/i,
+    "versioned work can lose its round record");
+  assert.match(agents, /for a version bump, also §5/i,
+    "a version bump cannot reach its round-record rule");
+  assert.match(protocol, /versioned implementation without naming a round-document role[\s\S]+`report_ko\.md`/i,
+    "versioned implementation has no deterministic default round record");
+  assert.match(agents, /External\s+contributors are not required to open either one/i,
+    "external contributors lost the Korean-only standing-instrument exception");
+  assert.match(protocol, /equivalent PR evidence stands in place of opening the two/i,
+    "external PR evidence no longer substitutes for Korean-only standing instruments");
+  assert.doesNotMatch(agents, /read (?:all of |the whole )?docs\/maintenance-protocol\.md/i);
+  for (const forbidden of ["CURRENT.md", "another skill map", "whole CHANGELOG", "all rounds"] ) {
+    assert.ok(agents.includes(forbidden), `AGENTS.md does not forbid default onboarding through ${forbidden}`);
+  }
+});
+
+test("the always-read design intent index covers every skill and companion", () => {
+  const design = fs.readFileSync(path.join(root, "docs", "design.md"), "utf8");
+  const intentStart = design.indexOf("### Skill intent index");
+  const intentEnd = design.indexOf("## Document map", intentStart);
+  assert.ok(intentStart >= 0 && intentEnd > intentStart, "design.md has no bounded skill intent index");
+  const intent = design.slice(intentStart, intentEnd);
+  for (const dir of skillDirs) {
+    const name = path.basename(dir);
+    assert.ok(intent.includes(`\`${name}\``), `skill intent index omits ${name}`);
+  }
+  for (const companion of [
+    "state-predicates.md",
+    "verification-predicates.md",
+    "baseline-predicates.md",
+    "planning-evidence.md",
+    "coordinator.md",
+    "reviewer.md",
+    "verifier.md",
+    "auditor.md",
+    "retrospector.md",
+  ]) {
+    assert.ok(intent.includes(`\`${companion}\``), `skill intent index omits ${companion}`);
+  }
+  assert.match(intent, /not a substitute for skill rules/);
+  assert.match(intent, /read the affected skill/);
+});
+
+test("every maintenance script and document has a declared lifecycle", () => {
+  const scriptsDir = path.join(root, "scripts");
+  const scriptWiring = new Map([
+    ["remove-generated-codex-prompts.js", ["codex/install.ps1", "codex/install.sh"]],
+    ["remove-legacy-codex-hook.js", ["codex/install.ps1", "codex/install.sh"]],
+    ["session-start.js", ["hooks/hooks.json"]],
+    ["verify-codex-plugin-install.js", ["codex/install.ps1", "codex/install.sh"]],
+  ]);
+  const runtimeScripts = fs.readdirSync(scriptsDir)
+    .filter((name) => name.endsWith(".js") && !name.endsWith(".test.js"))
+    .sort();
+  assert.deepEqual(runtimeScripts, [...scriptWiring.keys()].sort(),
+    "scripts contains an undeclared runtime file or lost a declared one");
+  for (const [script, consumers] of scriptWiring) {
+    const testFile = script.replace(/\.js$/, ".test.js");
+    assert.ok(fs.existsSync(path.join(scriptsDir, testFile)), `${script} has no direct test`);
+    for (const consumer of consumers) {
+      const text = fs.readFileSync(path.join(root, consumer), "utf8");
+      assert.ok(text.includes(script), `${script} has no live consumer in ${consumer}`);
+    }
+  }
+  const standaloneTests = new Set([
+    "git-state-transitions.test.js",
+    "repository-invariants.test.js",
+  ]);
+  for (const testFile of fs.readdirSync(scriptsDir).filter((name) => name.endsWith(".test.js"))) {
+    const source = testFile.replace(/\.test\.js$/, ".js");
+    assert.ok(fs.existsSync(path.join(scriptsDir, source)) || standaloneTests.has(testFile),
+      `${testFile} is neither a direct runtime test nor a declared standalone suite`);
+  }
+
+  const topLevelDocs = fs.readdirSync(path.join(root, "docs"), { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => entry.name)
+    .sort();
+  assert.deepEqual(topLevelDocs, [
+    "audit-guideline_ko.md",
+    "changelog-archive.md",
+    "design-backlog.md",
+    "design-backlog_ko.md",
+    "design-decisions.md",
+    "design-decisions_ko.md",
+    "design.md",
+    "design_ko.md",
+    "maintenance-protocol.md",
+    "maintenance-protocol_ko.md",
+    "usecase-matrix_ko.md",
+  ], "docs contains a top-level artifact with no declared lifecycle");
+  const design = fs.readFileSync(path.join(root, "docs", "design.md"), "utf8");
+  for (const lifecycle of [
+    "docs/audit-guideline_ko.md",
+    "docs/usecase-matrix_ko.md",
+    "docs/changelog-archive.md",
+    "docs/rounds/<version>/",
+    "docs/blueprints/",
+  ]) {
+    assert.ok(design.includes(lifecycle), `design.md has no lifecycle for ${lifecycle}`);
+  }
+  const standardRoundRecord = /^(?:request|handoff|plan|report|audit|plan-audit)(?:[2-9]\d*|-r[1-9]\d*)?_ko\.md$/;
+  for (const accepted of ["request2_ko.md", "plan3_ko.md", "plan-r1_ko.md"]) {
+    assert.match(accepted, standardRoundRecord, `declared round-record form is rejected: ${accepted}`);
+  }
+  for (const rejected of ["request0_ko.md", "request1_ko.md", "request01_ko.md", "report-r0_ko.md"]) {
+    assert.doesNotMatch(rejected, standardRoundRecord,
+      `undeclared round-record form is accepted: ${rejected}`);
+  }
+  const historicalRoundRecords = new Map([
+    ["v0.9.21/report.md", "docs/rounds/v0.9.21/report_ko.md ↔ report.md"],
+    ["v0.10.0/proposal.md", "docs/rounds/v0.10.0/proposal_ko.md ↔ proposal.md"],
+    ["v0.10.0/proposal_ko.md", "docs/rounds/v0.10.0/proposal_ko.md ↔ proposal.md"],
+    ["v0.11.0/report.md", "docs/rounds/v0.11.0/report_ko.md ↔ report.md"],
+    ["v0.15.0/progress-review_ko.md", "v0.15.0/progress-review_ko.md"],
+  ]);
+  const protocol = fs.readFileSync(path.join(root, "docs", "maintenance-protocol.md"), "utf8");
+  for (const entry of fs.readdirSync(path.join(root, "docs", "rounds"), { withFileTypes: true })) {
+    assert.ok(entry.isDirectory() && /^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$/.test(entry.name),
+      `docs/rounds contains an undeclared entry: ${entry.name}`);
+    const files = fs.readdirSync(path.join(root, "docs", "rounds", entry.name));
+    assert.ok(files.length > 0, `${entry.name} is an empty round`);
+    for (const name of files) {
+      const relative = `${entry.name}/${name}`;
+      if (standardRoundRecord.test(name)) continue;
+      const repair = name.match(/^report-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)_ko\.md$/);
+      const round = entry.name.match(/^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/);
+      if (repair && round
+        && repair[1] === round[1]
+        && repair[2] === round[2]
+        && BigInt(repair[3]) > BigInt(round[3])) {
+        assert.ok(protocol.includes("report-<repair version>_ko.md"),
+          "repair-release report naming is not declared in the maintenance protocol");
+        continue;
+      }
+      assert.ok(historicalRoundRecords.has(relative),
+        `docs/rounds contains a record with no declared lifecycle: ${relative}`);
+      assert.ok(protocol.includes(historicalRoundRecords.get(relative)),
+        `historical round record is not declared in the maintenance protocol: ${relative}`);
+    }
+  }
+  assert.doesNotMatch("report-0.16.003_ko.md",
+    /^report-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)_ko\.md$/,
+    "repair-release report accepts a non-canonical semver");
+  const blueprints = fs.readdirSync(path.join(root, "docs", "blueprints"));
+  assert.ok(blueprints.length > 0 && blueprints.every((name) => name.endsWith(".md")),
+    "docs/blueprints is empty or contains a non-snapshot artifact");
 });
 
 test("release manifests match and the Codex manifest carries the shared hook", () => {

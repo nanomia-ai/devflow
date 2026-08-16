@@ -52,7 +52,7 @@ PowerShell 5.1 parses BOM-less files as ANSI → Korean script corruption (actua
 
 Subject: Identity, packaging, platforms | Introduced: origin | State: active
 
-Korean is the language the user can review; English is what AI understands best at the lowest token cost. Procedure and terminology table: AGENTS.md
+Korean is the language the user can review; English is what AI understands best at the lowest token cost. Procedure and terminology: `docs/maintenance-protocol.md` §2 and §9
 
 ### DD-18 · The Codex install leads with the native plugin channel (marketplace add + plugin add); generated slash prompts stay as the explicit channel; the hook stays separately registered in ~/.codex/hooks.json (v0.9.9)
 
@@ -77,6 +77,81 @@ Probed live (2026-08-11), refuting v0.9.9's recorded ground ("plugin-delivered h
 Subject: Identity, packaging, platforms | Introduced: v0.13.0 | State: active
 
 Probed live (2026-08-13): Codex installs a plugin into `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/`, the whole repository, and the model reads its skill from that absolute path - so `../principles/SKILL.md` resolves there exactly as it does in Claude. The recorded reason for embedding ("the Codex prompt folder is flat, relative references are unreliable") was true of `~/.codex/prompts/` and does not reach the plugin. The eight prompts held 50-120 KB each, embedding the whole rulebook, and two installers each carried their own embedding logic, so every rule change had to be applied twice. Removing generation alone would leave earlier files callable, so cleanup deletes the exact eight names for one release, keyed to the generated marker, and a file a user wrote under one of those names survives
+
+### DD-71 · Repository maintenance reads the whole design intent first and opens detailed procedure conditionally (v0.16.2)
+
+Subject: Identity, packaging, platforms | Introduced: v0.16.2 | State: active
+
+Observed problem: a new maintenance session first paid for the automatically entered
+30,716B `AGENTS.md` and the always-read 20,080B `design.md`, then walked README at 42,569B,
+CHANGELOG at 63,177B, and round records to learn the structure. The Claude baseline spent
+68,773 input-token cache creation and 180.3 seconds while still reporting that it had not
+opened most entry-skill bodies. The root AGENTS alone also sat near Codex's default 32KiB
+project-instruction limit, leaving room for lower instructions to be silently truncated.
+
+Desired behavior: a new session first understands the whole philosophy, structure,
+invariants, decisions, and why every skill exists, then opens every actual source inside the
+impact boundary of a concrete change. History and conditional operating procedure are read
+only when needed, and lower comprehension rejects the refactor regardless of token savings.
+
+Chosen boundary: `design.md` is the only whole-system intent map; `AGENTS.md` owns only an
+automatic entry gate and wiring capped at 6KiB. Detailed procedure lives by section in one
+`maintenance-protocol` pair, and every section must be reachable from root wiring. Whole
+README, whole CHANGELOG, multiple rounds, and blueprints are not onboarding. No manual
+`CURRENT.md`, separate maintenance map, or free-form note layer is created. A map alone can
+never authorize deleting, moving, or consolidating an affected skill before its source is
+read.
+
+Why the boundary is needed: `design.md` already owns origin, structure, the document map,
+invariants, and the decision index. A separate map creates the second knowledge layer and
+freshness race DD-28 forbids. Keeping every detailed procedure in AGENTS instead charges
+translation, round, README, and release rules to sessions that never use them. This boundary
+keeps one home for intent and one for procedure while making only the reading conditional.
+
+Rejected alternatives: shortening or splitting skill sources is outside this decision and
+belongs to a separately scoped session. An AI-written omnibus summary and `CURRENT.md` turn
+one missed update into a quiet wrong judgment; a maintenance map gives one concept two homes
+with design. Shrinking README or CHANGELOG into onboarding material contaminates human
+explanation and shipped history with current-canon duties.
+
+Affected coordinates: `AGENTS.md`, `docs/design{_ko}.md`,
+`docs/maintenance-protocol{_ko}.md`, and `scripts/repository-invariants.test.js`. Revisit
+when a clean Claude or Codex entry misses any critical invariant, component, consumer, or
+design reason; when input to the first safe plan exceeds 70% of the baseline; or when the
+always-read `AGENTS.md + design.md` exceeds 30KiB.
+
+### DD-72 · A versioned implementation with no named document role leaves one report_ko.md as its default record (v0.16.2)
+
+Subject: Identity, packaging, platforms | Introduced: v0.16.2 | State: active
+
+Observed problem: the old rule called a change large enough for its own version a round and
+required the round to leave records, while also allowing only the role the owner requested.
+An independent audit found both a literal conflict when a versioned implementation named no
+role and a missing read edge from the version-bump wiring to that rule.
+
+Desired behavior: a versioned implementation leaves its verification and limitations for
+the next session, while plan, request, audit, and every other role remain absent unless the
+owner requests them.
+
+Chosen boundary: only when a versioned implementation request names no round-document role,
+one `docs/rounds/<version>/report_ko.md` is the default record. Version-bump wiring opens the
+round protocol. This default does not create another role or authorize revising an existing
+record.
+
+Why the boundary is needed: report is the existing owner of shipped results, verification,
+unrepaired findings, and limitations. It joins version to evidence without a new concept.
+Making plan the default writes a plan after implementation; leaving no record makes the next
+session infer verification boundaries from CHANGELOG alone.
+
+Rejected alternatives: a complete document set for every version adds cost and false
+missing-work signals. A roleless free-form record bypasses the document map. Arbitrarily
+attaching the change to an older round blurs version lineage.
+
+Affected coordinates: `AGENTS.md`, `docs/maintenance-protocol{_ko}.md`,
+`docs/rounds/<version>/report_ko.md`, and `scripts/repository-invariants.test.js`. Revisit if
+an existing role smaller than report can preserve the same evidence without loss for an
+unnamed versioned implementation, or if a real repair release conflicts with the rule that
+keeps its record in the preceding round.
 
 ### Rejected under this subject
 
