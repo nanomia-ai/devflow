@@ -24,8 +24,6 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   bounded reading)
 - In the maintenance phase, when cards keep appending in a capability folder (02.7…02.40),
   does the intermediate grouping-folder rule actually get applied?
-- Are ADRs actually used for large scope pivots (e.g. shrinking ade's MVP ①②)? — the
-  device exists; it is a matter of usage judgment.
 - Document bloat over a multi-year horizon — the big cleanup is not a new rule but a
   re-run of product/arch (an authorized re-baseline).
 - A fix-card signal born from an intermittent failure (races, etc.) has weak
@@ -62,7 +60,36 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   changes only the `Design head` line after a Layer 0 touch. If the user reports confirmation
   fatigue from that repetition, reopen the option to land an `arch|adopt — capabilities`
   commit without a confirmation question when that line is the only diff in every file.
-  Until then, keep the current confirmation gate.
+  In synky, settling six Provisional rows made every capability's `Design head` stale six
+  times. Until then, keep the current confirmation gate.
+- **`verify_channel` mixes selection with current executability in one value** (v0.17.0) —
+  a repair must define the value grammar and consumer rules together, including parsing and
+  stopping at a planned state, so this round did not repair it. Reopen after one case where
+  verify is called incorrectly because a planned means was read as executable.
+- **An active claim can defer design-zone refresh indefinitely** (v0.17.0) — under resume's
+  first-match rule, the active-claim row precedes the capability-document row. Code correctness
+  remains intact; reopen after one owner entering the domain or one new joiner is actually
+  misled by stale capability-document content.
+- **Death midway through adopt loses the whole representative-flow trace** (v0.17.0) — adopt
+  forbids persisting the evidence table and has no progress marker. Re-measure intermediate
+  landing cost after an actual brownfield adoption has to rerun adopt.
+- **An upper-document change and design-zone re-derivation are not one transition** (v0.17.0) —
+  the discovery→update table directly wires re-derivation only for capability rename and split;
+  common stack, boundary, and data changes rely on the semantic-review rule. Reopen transition
+  wiring after a missed semantic review is found later.
+- **Two recovery paths change capability-document bytes without batch confirmation** (v0.17.0) —
+  regeneration after an interrupted confirmed write and mechanical path replacement when an ADR
+  is superseded. Revisit the confirmation boundary if either path produces an unexpected diff.
+- **The term `Layer 0` splits on whether it includes capability documents** (v0.17.0) — the
+  runtime contract separates them after Layer 0, while both READMEs,
+  `docs/blueprints/memory-fs-0.15.2_ko.md`, and `docs/rounds/v0.12.0/handoff_ko.md` read as
+  including them or do so explicitly. Only the READMEs now match the current contract; the
+  blueprint and historical record stay untouched as records of their time.
+- **No canonical route recovers an unrecorded ADR after arch.md has landed** (v0.17.0) — the
+  ADR rows in the discovery→update table cover a mismatched existing ADR, a settled Provisional
+  value, a reversed decision, and a code-confirmed fact. If an unrecorded ADR is still discovered
+  after DD-73's pre-confirmation review, use that first case to decide whether to add a separate
+  discovery→update row.
 - verify.md preserves its Failure history, Audit, and Retrospective sections forever and so
   grows without bound. resume is protected by its bounded projection, but the retrospector
   reads every verify.md in full at the product layer.
@@ -188,6 +215,9 @@ The items below were carried out and left the watch list. Re-proposals consult t
   design as the owner of only six Layer 0 decisions and the build scope, while split cards own
   the real token, component, and preview artifacts. design remains optional before or after the
   foundation, and late entry uses the record-first path.
+- ~~Are ADRs actually used for large scope pivots (e.g. shrinking ade's MVP ①②)? — the
+  device exists; it is a matter of usage judgment.~~ — DD-73 in v0.17.0 implemented a step before arch.md confirmation that enumerates
+  every decision passing the three ADR conditions and confirms whether each is recorded.
 
 ## On hold — candidates for coming versions
 
@@ -211,6 +241,11 @@ after going public is retracted, its own reason having refuted it (2026-08-13).
   The choices are (A) write to the canonical path only after confirmation, or (B) put a
   confirmation marker in each document and define migration for older markerless files.
   Their recovery and migration costs differ, so neither is forced before the owner chooses.
+  The v0.17.0 filename-suffix exploration was blocked simultaneously by the core-document
+  path prohibition at `principles:367-368`, bare `.wip.` being an integrity anomaly at
+  `:522-523`, and the ban on progress records in five documents at `:509-511`; it also fails
+  during an integration blockade. That proposal was a refinement of (A), not (B), so the
+  owner's choice between (A) and (B) remains open.
 - **The size of the canonical rules** — the canonical rules grew from 217 lines (v0.9.9)
   through 705 (v0.13.0) to 770 lines (v0.14.1), and all 8 skills plus every delegated implementer read the whole document.
   Counting the predicate companions, resume reads about 1,636 lines each session (measured

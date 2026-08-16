@@ -599,6 +599,16 @@ canonical companion on entry; split reads only the sections needed when judging 
 planning depth grade. work, verify, resume, and role contexts are not consumers and incur no fixed
 cost.
 
+### DD-73 · Capability documents are arch's final output and must exist before the first tree opening, while decision and external-contract grounds are preserved at confirmation (v0.17.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.17.0 | State: active
+
+The diagnosis separates three intervals. Commits and resume preserve the boundary between one confirmed Layer 0 document and the next. During confirmation of one document there is no cheap intermediate landing because the contract forbids changing a core-document path before approval. The defect is the third interval: a run could end after arch.md and code-style.md landed while producing none of arch's final output, the capability documents. DD-43 requires domain boundaries and concepts before the first card, but arch had no context boundary before its biggest single output and split did not stop a zero-document tree opening.
+
+Four boundaries close it. Inside the capability-document section, arch first states the expected document count; when the harness warns about context, it stops at the confirmed Layer 0 commit and says that this run is not arch's completion. With no card claimed, the next session enters through resume and runs only that section. At the first tree opening, split stops when no file exists under `devflow/project/capabilities/`, routes by `Brownfield` to arch or adopt, and skips this gate together with a deferred run. Immediately before confirmation of arch.md, arch enumerates every decision that passes the three ADR conditions and confirms whether each is recorded. When a Components or Stack reason rests on an external-contract fact, its exact source stays on the same line. That ADR-screening sentence sits inside the range adopt reads as its output-format reference, so a brownfield receives the same screening — that coordinate is the only ground for brownfield coverage, so moving it refutes this reason first. The value of this boundary is that after landing there is no canonical route back to an unrecorded ADR.
+
+This catches absence at the first tree entrance even when an active claim would preempt resume's capability-document row, while a brownfield keeps the same lifecycle under adopt. In the synky measurement, eight of ten ADR-qualified decisions were unrecorded and all eleven Stack lines carried zero external-contract sources. The zero-file gate deliberately does not catch partial creation of one through N-1 expected documents; existing resume and baseline predicates continue to own that case. Reopen this boundary if partial creation causes a wrong first tree opening or if an unrecorded ADR is still discovered after this review step.
+
 ### Rejected under this subject
 
 - **[DR-01 · v0.7.0]** **Mid-task handoff document** — hands over a half-truth.
@@ -677,6 +687,25 @@ cost.
   description from the consumer's viewpoint, not of the shared part itself. Shared-part
   knowledge already lives in three homes with reach paths: ADRs, arch.md's Risks, and the
   foundation cards' carry lines.
+- **[DR-47 · v0.17.0]** **Broadening Provisional into one definition that also admits blocking facts** —
+  Provisional holds follow-up facts with a safe default whose later result changes only optimization.
+  `arch:58` says "never push a blocking fact into Provisional", and the blocking/follow-up split in
+  `planning-evidence:16-19` stops facts that decide candidate viability or verification before the
+  decision. A re-proposal must refute that boundary first.
+- **[DR-48 · v0.17.0]** **Relaxing the correspondence between capability names and folder names** — this breaks
+  philosophy 4 and prompt principle 1, both "one concept, one word", together with verify's exact-path
+  mapping requirement at `verify:190-203`; arch.md `Code structure` is already the canonical mapping.
+  A re-proposal must refute all four grounds and supply a mechanical mapping that does not make verify
+  reinterpret meaning on every run.
+- **[DR-49 · v0.17.0]** **A `.wip.` filename suffix for Layer 0 drafts** — `principles:367-368` forbids changing
+  core-document paths before confirmation, `:522-523` treats bare `.wip.` as an integrity anomaly, and
+  `:509-511` forbids progress records in product, arch, design, code-style, and glossary. During an
+  integration blockade, Layer 0 changes themselves wait, so the proposal also fails in its primary
+  interruption scene. A re-proposal must first refute those four conflicts and price recovery.
+- **[DR-50 · v0.17.0]** **Using design as the authority channel for outside materials** — `design:12` ends design
+  when `frontend: none`, and `Design source` authority is limited to design scope. It is an unavailable
+  lower-layer channel for product and arch facts in server, CLI, and library projects. A re-proposal must
+  first refute both the entry gate and that ownership boundary.
 
 ## Brownfield and entry
 

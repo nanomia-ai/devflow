@@ -187,6 +187,7 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-59 | Open decisions live in journal, so HANDOFF holds only what the tree recomputes | The knowledge layer and capability documents | v0.13.0 | active |
 | DD-64 | The third branch of a shared-contract observation is an attributed open item | The knowledge layer and capability documents | v0.14.0 | active |
 | DD-67 | Planning evidence discipline settles facts from four authorities before questions and isolates answer-only research, while the main session owns structural understanding and binding decisions | The knowledge layer and capability documents | v0.15.0 | active |
+| DD-73 | Capability documents are arch's final output and must exist before the first tree opening, while decision and external-contract grounds are preserved at confirmation | The knowledge layer and capability documents | v0.17.0 | active |
 | DD-10 | No retroactive tree records (brownfield) | Brownfield and entry | origin | active |
 | DD-20 | Brownfield entry is its own skill, adopt — split out of arch | Brownfield and entry | v0.9.10 | active |
 | DD-26 | Brownfield and layer transitions have explicit disk states, preserving their meaning across interruption | Brownfield and entry | v0.9.21 | active |

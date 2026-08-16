@@ -15,6 +15,45 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.17.0 — 2026-08-16 — arch finishes only when capability knowledge can survive the session
+
+One real project landed arch.md and code-style.md, exhausted its planning context, and ended
+before arch's final output: all six capability documents. The individual Layer 0 commits were
+safe and resumable, and a half-confirmed document still has no cheap durable state; the defect
+was the unguarded interval between those two boundaries. arch now states the expected document
+count before its biggest output, stops at the confirmed Layer 0 commit when context is short,
+says that the run is not complete, and tells a card-free next session to enter through resume.
+split independently stops the first tree opening when the capability-document directory has
+zero files, routing greenfield to arch and brownfield to adopt while preserving deferred runs.
+
+The same field run found that only two of ten ADR-qualified decisions had been recorded and none
+of eleven Stack reasons named an external-contract source. Before arch.md confirmation, arch now
+enumerates every decision meeting the three ADR conditions and confirms whether each becomes an
+ADR; Components and Stack keep an exact source on the same reason line when an external contract
+fact supports the choice. This is review, not a new output field: a declined ADR remains declined,
+and a landed arch.md still has no retrospective recovery route for an omitted ADR.
+
+The human-facing explanation now says that HANDOFF.md is a cache for one recomputable value,
+digest.md is a one-hash bookmark rather than a summary, and a confirmed planning boundary is the
+place to end a full context and resume later. Its project tree also separates capability documents
+from Layer 0. README tone counts: README.md em dash 100→101, raw `**` 115→121; README_ko.md em dash
+73→73, raw `**` 103→109; bureaucratic noun compounds 0→0 in both. The standing use-case matrix
+adds H46 for context exhaustion at a Layer 0 boundary and A20 for a session that reads artifacts
+but reconstructs implementation judgment without running resume or a skill.
+
+DD-73 records the combined boundary. Four audited proposals remain rejected as DR-47 through
+DR-50: broadening Provisional to blocking facts, relaxing capability-name/folder-name identity,
+using a `.wip.` suffix for Layer 0 drafts, and making design the authority channel for outside
+product or architecture material. Each entry names the existing contract a re-proposal must
+refute. The backlog settles the prior ADR-usage observation under DD-73, records why the draft
+suffix is not a cheap answer, and carries the seven new measured observations without adding runtime
+rules; the repeated Design-head item now includes synky's six-refresh measurement.
+
+Both plugin manifests are 0.17.0. Files changed: `skills/arch/SKILL{_ko}.md`,
+`skills/split/SKILL{_ko}.md`, `README{_ko}.md`, `docs/usecase-matrix_ko.md`,
+`docs/design{_ko}.md`, `docs/design-decisions{_ko}.md`, `docs/design-backlog{_ko}.md`,
+`docs/rounds/v0.17.0/report_ko.md`, `CHANGELOG.md`, and both plugin manifests.
+
 ## 0.16.2 — 2026-08-15 — maintenance starts with complete intent, not accumulated history
 
 Repository-maintenance sessions used to enter through a 30,716-byte `AGENTS.md`, then often

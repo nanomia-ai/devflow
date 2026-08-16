@@ -24,7 +24,12 @@ Purpose: open the task tree **one layer at a time**, and get the execution propo
 
 1. **If product.md is missing, stop.** With no code, direct the user to product first;
    with existing code, to adopt (brownfield = the understanding stage). Never split a
-   project you don't know.
+   project you don't know. **At the first opening of the tree, stop when no number-led
+   `.md` file exists under `devflow/project/capabilities/`** — this applies to greenfield
+   and brownfield alike. Do not call the skill directly there; direct the user to re-enter
+   through `resume`, which by arch.md's `Brownfield` value routes `yes` to adopt and `no`
+   to arch's capability-document-only branch. A deferred run skips this gate along with
+   the rest.
 2. Scan `devflow/tree/` for current state.
 3. **Declare what you are opening, then proceed:** "Opening layer 3 under
    02-registration (currently done through 02.3.2)."

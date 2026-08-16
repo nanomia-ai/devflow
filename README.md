@@ -125,12 +125,12 @@ accumulate hierarchically inside it:
 
 ```
 devflow/
-  project/                     ← Layer 0 output — upper documents that rarely change
-    product.md                    what & why (capability list · success criteria)
-    arch.md                       how (stack · structure · Provisional values · verify channel)
-    design.md  code-style.md      (optional) design · code taste declarations
-    glossary.md  decisions/       glossary · ADRs
-    capabilities/                 number-keyed capability docs — design + verified zones
+  project/                     ← upper documents that rarely change
+    product.md                    Layer 0 · what & why (capability list · success criteria)
+    arch.md                       Layer 0 · how (stack · structure · Provisional values · verify channel)
+    design.md  code-style.md      Layer 0 · (optional) design · code taste declarations
+    glossary.md  decisions/       Layer 0 · glossary · ADRs
+    capabilities/                 after Layer 0 — number-keyed capability docs, design + verified zones
       01-foundation.md              foundation's shared boundary
       02-payment.md                 current domain entry for the payment capability
   tree/                        ← canonical progress state — the filename IS the state
@@ -230,6 +230,24 @@ The hook routes the next session to resume, which reads disk state and HANDOFF. 
 itself neither injects file content nor decides the next stage. HANDOFF holds two things
 now: the one next step, and the decisions that need a person. Everything else a session
 learns lands somewhere durable instead.
+
+The names mislead, so be plain about it. **HANDOFF.md is not a handover document.** It is a
+cache for one value the tree recomputes; with no card at all, `none` is the right answer and
+resume calls that normal. **digest.md is not a summary either.** It is one commit hash marking
+how far you have caught up on other people's commits. Neither holds prose for a person to read.
+
+### When context fills during planning
+
+product and arch do not have to finish in one session. Commit through the confirmed document
+and end the session. Each document lands in its own commit as it is confirmed, so breaking at
+that boundary loses nothing. The next session enters through resume, which names whatever
+remains.
+
+There is one place to watch. **arch is not finished when arch.md and code-style.md have
+landed.** The last step — writing the capability documents — is still ahead, and it is the
+largest of arch's outputs. arch states the remaining size before starting that step, and when
+context is short it does not start. Then, with no card claimed, a new session enters through
+resume and runs only that step.
 
 ### Where what a card learned goes
 

@@ -131,8 +131,8 @@ The `Code structure` value must use one of these choices.
 
 Brownfield: no
 
-## Components       <!-- ✔/✘ + 1-line reason -->
-## Stack            <!-- item: choice — 1-line reason -->
+## Components       <!-- ✔/✘ + 1-line reason. resting on an external contract fact, the exact source on the same line -->
+## Stack            <!-- item: choice — 1-line reason. resting on an external contract fact, the exact source on the same line -->
 ## Code structure   <!-- A/B/C + folder sketch. folder name = capability name -->
 ## Data             <!-- core entities only -->
 ## Existing records <!-- Brownfield only. each line: <capability name|shared>: <exact path>. omit if empty -->
@@ -235,6 +235,11 @@ method. Cap: 1 page.
 ## Non-goals                     <!-- this project's 2–3 YAGNI declarations -->
 ```
 
+Before taking confirmation on arch.md, enumerate the decisions in it that meet all three ADR
+conditions and confirm with the user, one by one, whether each becomes an ADR. A decision that
+passes but that the user chooses not to record stays as it is; the enumeration is not skipped.
+After it lands there is no route back to an unrecorded ADR.
+
 Immediately after the user confirms arch.md or code-style.md, land it in the canonical
 Layer 0 commit.
 
@@ -243,6 +248,12 @@ Layer 0 commit.
 When confirmed arch.md says `Brownfield: yes`, do not run this section. Route to adopt's
 capability-document-only branch; adopt owns the last commit of that run, and give the
 completion guidance below only after it finishes.
+
+This section is the biggest single output in the tree. Before starting it, state the size of
+the expected set as a document count. When the harness warns about context, do not start it —
+end this run at the confirmed Layer 0 commit, say that this run is not arch's completion, tell
+the user that with no card claimed the next session enters through resume and runs only this
+section, and give none of the completion guidance below.
 
 After confirmed product.md, arch.md, and glossary.md have all landed in HEAD, run the
 canonical baseline predicates' design-writer procedure. Calculate `Design head` from the
