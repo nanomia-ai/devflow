@@ -507,11 +507,17 @@ Brief a clean subagent/fresh session with `retrospector.md` beside this skill,
 **verbatim — never summarized**, and give it exactly one input set for the event:
 
 - Capability first closure or a capability-number user request: all of product.md and
-  arch.md · glossary.md when present · every `.md` directly under `devflow/project/decisions/` · that capability
+  arch.md · glossary.md when present · every legacy `ADR-NNN.md` directly under
+  `devflow/project/decisions/` · the bodies of the current decision records that capability
+  document's Binding ADRs list cites, plus the record tool's `select` candidate filename
+  list for `capability:<n>` (no other record bodies) · that capability
   folder's filenames and statuses · all of journal.md · that capability's verify.md · that
   capability's one capability document and its design and verification freshness projection.
 - First product-layer verdict or a `product`-target user request: all of product.md and
-  arch.md · glossary.md when present · every `.md` directly under `devflow/project/decisions/` · the whole tree's filenames and
+  arch.md · glossary.md when present · every legacy `ADR-NNN.md` directly under
+  `devflow/project/decisions/` · the bodies of the current decision records cited by the
+  Binding ADRs lists of foundation and every non-retired capability document, plus the
+  record tool's one-line `summary` (no other record bodies) · the whole tree's filenames and
   statuses · journal.md · every verify.md (including the tree root) · foundation and every
   non-retired capability document and each design and verification freshness projection.
 

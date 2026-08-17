@@ -16,7 +16,10 @@ tree, it derives the next stage from the Layer 0 documents and continues.
 ## Domain-Entry Questions
 
 When the user's request is to explain or enter a capability or domain rather than resume
-state, run this section before normal routing.
+state, run this section before normal routing. Project the selected capability's decision
+and evidence records with the record tool's `select` as `capability:<n>` current
+candidates only, opening at most 3. Here `<n>` is that capability's product.md
+capability-list number, not the unit's tree or baseline number.
 
 1. If any of product.md, arch.md, or glossary.md is absent or arch.md lacks `Brownfield`,
    report only each exact missing path or field and `domain knowledge not initialized`; open no capability body. When the user asks
@@ -316,7 +319,9 @@ the re-anchor procedure.
 - HANDOFF missing or empty: normal. Resume from the tree alone.
 - No tree at all: read the Layer 0 file list and all of journal when it exists, first run
   every applicable canonical integrity check, derive the next stage in this order, report
-  it in one paragraph, and get approval.
+  it in one paragraph, and get approval. When decision or evidence records exist, include
+  the record tool's one-line `summary` output in the report as printed — opening bodies
+  belongs to the routed owning skill.
   1. No `devflow/project/product.md`: ask, "Must this work preserve implementation behavior
      that already exists in the repository?" Yes goes to adopt; no goes to product.
   2. If journal has an exact `product re-run pending` line, run product.

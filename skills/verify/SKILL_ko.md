@@ -422,10 +422,14 @@ fetch한 통합 브랜치에서만 실행한다. 새 사건을 고르기 전에 
 금지)** 브리핑으로 주고, 사건에 맞는 아래 입력 중 하나만 준다:
 
 - 능력 첫 폐쇄 또는 능력 번호 대상 사용자 요청: product.md·arch.md 전체 · 존재하는 glossary.md ·
-  `devflow/project/decisions/` 바로 아래 `.md` 각각 · 그 능력 폴더의 파일명·상태 목록 · journal.md 전체 · 그 능력의
+  `devflow/project/decisions/` 바로 아래 legacy `ADR-NNN.md` 각각 · 그 능력 문서의 구속 ADR
+  목록이 인용하는 현재 결정 기록의 본문과, 기록 도구 `select`의 `capability:<n>` 현재 후보
+  파일명 목록(그 밖의 기록 본문은 주지 않는다) · 그 능력 폴더의 파일명·상태 목록 · journal.md 전체 · 그 능력의
   verify.md · 그 능력 문서 하나와 설계·검증 신선도 투영.
 - 제품층 첫 판정 또는 `product` 대상 사용자 요청: product.md·arch.md 전체 · 존재하는 glossary.md ·
-  `devflow/project/decisions/` 바로 아래 `.md` 각각 · 전체 트리의 파일명·상태 목록 · journal.md · 모든 verify.md(트리
+  `devflow/project/decisions/` 바로 아래 legacy `ADR-NNN.md` 각각 · 골조와 비은퇴 능력 문서들의
+  구속 ADR 목록이 인용하는 현재 결정 기록의 본문과, 기록 도구의 `summary` 한 줄(그 밖의 기록
+  본문은 주지 않는다) · 전체 트리의 파일명·상태 목록 · journal.md · 모든 verify.md(트리
   루트 포함) · 골조와 모든 비은퇴 능력 문서 및 각 설계·검증 신선도 투영.
 
 코드는 주지 않는다. 권장: T-중 + 높은 사고량.

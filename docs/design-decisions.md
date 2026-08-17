@@ -438,7 +438,7 @@ The recorded ground for "one claim per id per depth-1 unit" (containing half-don
 
 ### DD-62 · During a blockade, journal appends that mint nothing, claim nothing, and consume nothing are written immediately (v0.14.0)
 
-Subject: Concurrency, claims, integration | Introduced: v0.14.0 | State: active
+Subject: Concurrency, claims, integration | Introduced: v0.14.0 | State: active, partly corrected by DD-74 (v0.18.0)
 
 v0.13.0's publishing paragraph made even journal line creation wait for integration to open, and the real result of that freeze was the loss this system guards against most: a session dying while blocked takes the user's spoken request with it, existing nowhere but the dead conversation (the independent review's only top-grade risk). The original ground — no coordination point, no global answer — does not reach appends: an append needs no global answer, and that decision's own measurements showed appends merge safely. The allowance is an exact enumeration: maintenance requests, capability notes, attributed open items and decisions, product re-run pending. Layer opening (it mints numbers), evidence records (they need a push), verification-state lines, and every consumption (deletion) still wait. The final task commit is named on the continue side — it belongs to the session's own branch, yet sat in neither list, violating the same paragraph's own declaration that nothing waits unnamed
 
@@ -516,7 +516,7 @@ DD-53 made several sessions in one working folder safe, but an outside actor ass
 
 ### DD-28 · Durable knowledge is connected through bounded consumers of existing records, not through a new document layer (v0.9.21)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.9.21 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.9.21 | State: active, partly corrected by DD-74 (v0.18.0)
 
 glossary and journal were produced but arch, design, work, verify, and delegated implementers did not read them; conclusions completed after two dependent cards opened together also could not reach the next implementer. The repaired read set is completely enumerated by name: glossary and journal when present, plus only the cards directly named in `Depends`. For brownfields, adopt indexes only exact per-capability paths to existing handoff and specification files under arch.md `Existing records`. The index is neither a read instruction nor canon; work opens only a path that split rechecked against current code and placed in the card's `Read first`. "Related records" and whole-capability-folder reading remain forbidden. Layer 0 completeness includes glossary; when only it is missing, resume sends a brownfield to adopt and a greenfield to product without rewriting another confirmed document. This does not force a second domain-handoff layer in the style of jgnote; it closes reachability within the existing canon, tree, and short-record hierarchy. The retrospective likewise receives exactly one event-specific input set, so capability and whole-project scopes cannot merge. This index differs from the observation-cache registration field rejected in v0.9.18: `Existing records` substantively avoids all three rejection reasons — a rule consumes it (split rechecks each path and puts it in a card's `Read first`), it indexes brownfield existing records instead of restating the outside-records standing declaration, and its only home is arch.md (see that entry in the rejection lineage)
 
@@ -576,7 +576,7 @@ v0.13.0's K3 row ("otherwise one line in journal.md") created a line with no cla
 
 ### DD-67 · Planning evidence discipline settles facts from four authorities before questions and isolates answer-only research, while the main session owns structural understanding and binding decisions (v0.15.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.15.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.15.0 | State: active, partly corrected by DD-74 (v0.18.0)
 
 product, arch, adopt, and split treated current repository facts, external contract facts,
 execution facts, and owner decisions as the same unknown. That created paths where the user
@@ -608,6 +608,87 @@ The diagnosis separates three intervals. Commits and resume preserve the boundar
 Five boundaries close it. product's `Approach` now also owns which goal wins when two collide — two canonical consumers require that value (`arch:72`'s candidate tie-break and `planning-evidence:67`'s pre-commitment review) while no producer wrote it, and synky's `product.md:18` consequently cited a speed-and-cost principle defined nowhere as its ground for discarding an approach. Inside the capability-document section, arch first states the expected document count; when the harness warns about context, it stops at the confirmed Layer 0 commit and says that this run is not arch's completion. With no card claimed, the next session enters through resume and runs only that section. At the first tree opening, split checks for `01` and for each non-retired capability number in product.md whether a lowercase `.md` whose leading token before the first `-` is exactly that number exists directly below `devflow/project/capabilities/`, stops when any is missing, and directs the user back through `resume`. Each piece of the predicate closes a measured bypass: matching the token rather than a prefix because with `10` and `100` both expected a lone `100-*.md` masked the missing `10`; looking only at number-led files because one `.gitkeep` passed the gate; checking per-number existence rather than a count because partial creation passed and then work's `baseline missing` and verify's `baseline no-op` allow a closure with no knowledge document, and because under a count the preserved retired documents and any excess or duplicate file masked a missing number; `directly below` because a recursive reading was satisfied by a number-led file in a subfolder; and lowercase because a case-insensitive environment matched `.MD`. The expected numbers come from the product.md capability list split already reads, whose rows carry retirement marking, so its read set does not grow. The route goes through resume rather than a direct skill call because arch's capability-document-only branch opens only on resume routing, and that recovery holds when no card of the user's is claimed. A deferred run skips this gate together with the rest. Immediately before confirmation of arch.md, arch enumerates every decision that passes the three ADR conditions and confirms whether each is recorded. When a Components or Stack reason rests on an external-contract fact, its exact source stays on the same line. That ADR-screening sentence sits inside the range adopt reads as its output-format reference, so a brownfield receives the same screening — that coordinate is the only ground for brownfield coverage, so moving it refutes this reason first. The value of this boundary is that after landing there is no canonical route back to an unrecorded ADR.
 
 This catches absence at the first tree entrance even when an active claim would preempt resume's capability-document row, while a brownfield keeps the same lifecycle under adopt. In the synky measurement, eight of ten ADR-qualified decisions were unrecorded and all eleven Stack lines carried zero external-contract sources. The plan first set this gate at zero files and left partial creation to resume and the baseline predicates. Simulation refuted that reason: under a self-claim `resume:219` preempts the missing-expected row, and work and verify both continue, so a capability could close with no knowledge document. Per-number existence closes it; a count comparison did not, because preserved retired documents and any excess or duplicate file masked a missing number. Reopen this boundary if an unrecorded ADR is still discovered after this review step, or if requiring one document per non-retired product.md number proves wrong for a project whose capability list and document set legitimately differ.
+
+### DD-74 · The planning record layer — the record gate lands confirmed choices and reproducible observations immediately, the record tool judges the current set and bounded opening, and human deletion is a sanctioned exception (v0.18.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.18.0 | State: active
+
+Observed problem: after 6+ hours of real planning (synky), the only canon left was a
+115-line product.md and a 21-line glossary. A same-model session reading only that canon
+matched 0 of 6 stack decisions and planned 3–4 days re-verifying an item already proven by
+an on-disk spike, and a 1,048-line conversation narrative changed the decisions without
+reducing the re-verification — decisions transfer through records, and only reproducible
+evidence reduces re-verification. Three earlier mechanisms (planning JSON, a reserved
+journal line, incremental Layer 0 landing) all died on the same axis: who deletes what,
+when. A context-free third walk additionally self-reported that a literal session would
+improvise affects tokens, eye-filter projections, and invent Reproduce commands.
+
+Chosen boundary: decision records and evidence records under `devflow/project/decisions/`
+and `devflow/project/evidence/` with one fixed header line (v · kind · during, six
+values · affects literals · scope · mode · evidence · checked-at · review-after ·
+supersedes) and a 15-line body cap;
+the record gate's three literal questions plus a three-line echo and a `record — <filename>`
+binding commit; the record tool's five read-only subcommands as the only means of picking, reverse
+search, and deletion judgment, with sessions writing the files and passing `validate`; the
+current set as all valid files minus supersedes targets; opening capped at 3 with a
+pre-bind confirmation listing unopened current candidates; `mode: reported` as the honest
+grade for unapproved observations, separated from `mode: reproducible`; the current
+decision records a capability document's design statements actually cite entering its
+Binding ADRs list (arch and adopt are the only updaters); and human deletion as a
+sanctioned exception whose leftover citations are repaired through the discovery→update
+table instead of stopping as anomalies.
+
+Why the boundary is needed: immutable-plus-successor has no consumption, deletion, or
+merge lifecycle — the axis that killed all three predecessors. The tool exists because the
+third walk measured that prompt text alone would not be followed at the two load-bearing
+steps (current-set filtering and literal tokens), and honesty in the `mode: reported` grade is
+cheaper than fabrication that a missing reproduction path or the next session exposes. The tool is stateless and
+read-only — sessions write records, humans delete, and the tool only judges.
+
+Rejected alternatives and lineage refutations: DR-14 — this is not an unread registration
+field: the consumers are enumerated (six producers, design and work included; `select`
+projections in arch, adopt, resume, and verify's retrospective; card `Read first`; the
+Binding list), it is devflow-owned rather than an
+outside-cache prescription, and the homes of current value, reason, and observation stay
+split. DR-25 — no judgment word: exact affects literals, a tool-computed current set, a
+cap of 3, and pre-bind confirmation. DR-29 — not a session or date bundle: records are
+permanent decision units with no closing duty, and only tool-judged unreferenced leaves
+are ever deleted. DR-38 — its recorded reason was that a helper's necessity was never
+argued; the third walk argued it by measurement, the SessionStart hook already runs
+`scripts/` code through the same plugin-relative path, and the tool is stateless
+read-only — it never writes or deletes anything. The `principles` sentence "never create a new planning document" widens its own
+list rather than being overturned.
+
+Affected coordinates: the principles pair (planning-records section, discovery→update
+rows, ownership), the planning-evidence pair (record gate and projection), the product,
+arch, design, split, work, resume, adopt, and verify pairs, baseline-predicates row 5,
+`scripts/project-records.mjs`, and `scripts/repository-invariants.test.js`.
+Revisit when: a real 6-hour A/B observes capture-gate omission; bind stops exceed 10% of
+ordinary splits; a current-set projection reports over 200 lines; or the share of
+reported-mode evidence hollows out the re-verification savings.
+
+### DD-75 · Record succession — one successor changes the present, stale evidence cascades by reverse search, and conflicting or concurrent records are preserved then merged (v0.18.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.18.0 | State: active
+
+Immutability is a property of history, not of the present: every reversal costs one
+successor record naming its predecessors in supersedes. A user changing a confirmed
+statement with no disproving measurement is a first-class discovery→update row — the
+conversation is the confirmation and `owner decision` is a sufficient ground — which
+settles the standing backlog observation that such a change used to cost a full product
+re-run. When evidence goes stale (a successor exists or its `Invalidates-when` is true),
+`reverse-evidence` enumerates the current decision records citing it; each is reconfirmed
+or returned to its owning stage, and nothing is invalidated automatically (the integrity
+principle that devflow reports and never auto-corrects). Content-addressed filenames make
+same-path collisions impossible for differing content; two incompatible current records
+raise one user question and are both superseded by a single user-confirmed successor. During a blockade, adding a
+unique record file continues as a local commit on the session's own branch without shared
+authority — this partly corrects DD-62, whose "new evidence records need a push" clause
+named journal `evidence-wait` records; the two concepts now carry distinct names, and
+successor, deletion, and Layer 0 changes still wait.
+
+Affected coordinates: the same set as DD-74. Revisit when a merge or concurrency scene
+produces a loss or double-plan that these rules do not classify.
 
 ### Rejected under this subject
 

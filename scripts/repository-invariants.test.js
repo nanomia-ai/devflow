@@ -407,16 +407,17 @@ test("every maintenance script and document has a declared lifecycle", () => {
   const scriptWiring = new Map([
     ["remove-generated-codex-prompts.js", ["codex/install.ps1", "codex/install.sh"]],
     ["remove-legacy-codex-hook.js", ["codex/install.ps1", "codex/install.sh"]],
+    ["project-records.mjs", ["skills/principles/SKILL.md", "skills/principles/SKILL_ko.md"]],
     ["session-start.js", ["hooks/hooks.json"]],
     ["verify-codex-plugin-install.js", ["codex/install.ps1", "codex/install.sh"]],
   ]);
   const runtimeScripts = fs.readdirSync(scriptsDir)
-    .filter((name) => name.endsWith(".js") && !name.endsWith(".test.js"))
+    .filter((name) => (name.endsWith(".js") || name.endsWith(".mjs")) && !name.endsWith(".test.js"))
     .sort();
   assert.deepEqual(runtimeScripts, [...scriptWiring.keys()].sort(),
     "scripts contains an undeclared runtime file or lost a declared one");
   for (const [script, consumers] of scriptWiring) {
-    const testFile = script.replace(/\.js$/, ".test.js");
+    const testFile = script.replace(/\.m?js$/, ".test.js");
     assert.ok(fs.existsSync(path.join(scriptsDir, testFile)), `${script} has no direct test`);
     for (const consumer of consumers) {
       const text = fs.readFileSync(path.join(root, consumer), "utf8");
@@ -429,7 +430,8 @@ test("every maintenance script and document has a declared lifecycle", () => {
   ]);
   for (const testFile of fs.readdirSync(scriptsDir).filter((name) => name.endsWith(".test.js"))) {
     const source = testFile.replace(/\.test\.js$/, ".js");
-    assert.ok(fs.existsSync(path.join(scriptsDir, source)) || standaloneTests.has(testFile),
+    const sourceMjs = testFile.replace(/\.test\.js$/, ".mjs");
+    assert.ok(fs.existsSync(path.join(scriptsDir, source)) || fs.existsSync(path.join(scriptsDir, sourceMjs)) || standaloneTests.has(testFile),
       `${testFile} is neither a direct runtime test nor a declared standalone suite`);
   }
 
@@ -825,7 +827,7 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.match(reviewer, /design: hypothesis — <exact path#heading reconfirmed\[, \.\.\.\]>/);
   assert.match(verify, /replace from exactly one `## Verified state`\s+heading through EOF/);
   assert.match(verify, /union of the closing baseline's HEAD-before and refreshed-after Scope paths/);
-  assert.match(verify, /Capability first closure[\s\S]*all of product\.md and\s+arch\.md · glossary\.md when present · every `\.md` directly under `devflow\/project\/decisions\/`/);
+  assert.match(verify, /Capability first closure[\s\S]*every legacy `ADR-NNN\.md` directly under[\s\S]*Binding ADRs list cites/);
   assert.match(retrospector, /do not use a hypothetical verification\s+statement as strain evidence/);
   assert.match(retrospector, /supplied product\.md, arch\.md,\s+glossary\.md, or ADRs/);
   assert.match(resume, /^## Domain-Entry Questions$/m);
@@ -1252,7 +1254,7 @@ test("verification roles have stable targets and current-topology audit scope", 
 test("stale and retired cards cannot leave orphan remote-evidence state", () => {
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
   assert.match(principles, /Delete in\s+the same binding-decision commit every `evidence-wait` or `evidence-finalizing` line/);
-  assert.match(principles, /Delete\s+in the retirement commit every evidence record/);
+  assert.match(principles, /Delete\s+in the retirement commit every `evidence-wait` and `evidence-finalizing` journal line/);
 });
 
 test("devflow has exactly one mode", () => {
@@ -1627,4 +1629,55 @@ test("journal merges resolve 3-way and blockade appends are exactly enumerated",
   assert.doesNotMatch(principles, /Journal merge conflicts resolve as a union/);
   assert.match(principles, /`maintenance\s+routing pending`, `capability note`, attributed open-item and decision lines, `product\s+re-run pending`/);
   assert.match(principles, /nothing waits unnamed/);
+});
+
+test("planning records have one schema canon, literal affects, producers, and bounded consumers", () => {
+  const principlesEn = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const principlesKo = fs.readFileSync(path.join(root, "skills", "principles", "SKILL_ko.md"), "utf8");
+  for (const principles of [principlesEn, principlesKo]) {
+    assert.match(principles, /record: \{"v":1,"kind":"decision\|evidence"/);
+    assert.match(principles, /product:Identity\|Approach\|Capabilities\|Boundary\|Success-criteria/);
+    assert.match(principles, /arch:Components\|Stack\|Code-structure\|Data\|Verify-channel/);
+    assert.match(principles, /\$\{CLAUDE_PLUGIN_ROOT\}\/scripts\/project-records\.mjs/);
+    for (const cmd of ["`summary`", "`select`", "`reverse-evidence`", "`prune-check`", "`validate`"]) {
+      assert.ok(principles.includes(cmd), `principles omits record subcommand ${cmd}`);
+    }
+  }
+  assert.match(principlesEn, /with no disproving measurement/);
+  assert.match(principlesKo, new RegExp("\uCE21\uC815 \uBC18\uC99D \uC5C6\uC774 \uC2A4\uC2A4\uB85C \uBC14\uAFC8"));
+  for (const principles of [principlesEn, principlesKo]) {
+    assert.ok(principles.includes("mode: reproducible") && principles.includes("mode: reported"),
+      "the canon lost the evidence-mode split");
+    assert.ok(principles.includes("Invalidates-when"), "the canon lost the body grammar");
+  }
+  const peEn = fs.readFileSync(path.join(root, "skills", "principles", "planning-evidence.md"), "utf8");
+  const peKo = fs.readFileSync(path.join(root, "skills", "principles", "planning-evidence_ko.md"), "utf8");
+  for (const pe of [peEn, peKo]) {
+    assert.ok(pe.includes("`reverse-evidence`"), "planning evidence omits the stale-evidence cascade");
+    assert.ok(pe.includes("`select`"), "planning evidence omits the projection subcommand");
+  }
+  for (const [skill, token] of [
+    ["product", "during: product"],
+    ["design", "during: design"],
+    ["split", "canonical record gate"],
+    ["split", "during: split"],
+    ["work", "during: work"],
+  ]) {
+    assert.ok(
+      fs.readFileSync(path.join(root, "skills", skill, "SKILL.md"), "utf8").includes(token),
+      `${skill} lost its record-producer wiring (${token})`,
+    );
+  }
+  assert.ok(
+    fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8").includes("`summary`"),
+    "resume no-tree report lost the summary subcommand",
+  );
+  for (const skill of ["arch", "adopt", "resume", "verify"]) {
+    assert.ok(
+      fs.readFileSync(path.join(root, "skills", skill, "SKILL.md"), "utf8").includes("`select`"),
+      `${skill} lost its bounded record projection`,
+    );
+  }
+  const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
+  assert.match(baseline, /design statements actually cite — legacy ADRs and \*\*current\*\* decision records alike/);
 });

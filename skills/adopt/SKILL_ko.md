@@ -10,7 +10,9 @@ description: 기존 프로젝트 도입. 이미 코드가 있는 저장소에서
 (`../principles/baseline-predicates.md`)을 읽는다. 존재하면 `devflow/project/product.md`·
 `devflow/project/arch.md`·`devflow/project/code-style.md`·`devflow/project/design.md`·
 `devflow/project/glossary.md`, `devflow/journal.md`, 그리고
-`devflow/project/decisions/` 바로 아래의 `.md`를 각각 통독한다.
+`devflow/project/decisions/` 바로 아래의 legacy `ADR-NNN.md`를 각각 통독한다. 결정·증거
+기록은 통독하지 않는다 — 역산 중인 대상의 affects에 맞는 현재 후보만 기록 도구의 `select`로
+투영해 최대 3개까지 연다.
 
 목적: **브라운필드(이미 코드가 있는 프로젝트에 중간 참여)**에 Layer 0 문서
 (product.md·arch.md·code-style.md·glossary.md)를 역산으로 만들어 상속시킨다.

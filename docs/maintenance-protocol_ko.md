@@ -267,6 +267,8 @@ CHANGELOG 맨 위에 날짜·무엇·왜·파일을 적는다. 약 60줄 안에�
 | 토큰 전략 | token strategy | | 컴포넌트 전략 | component strategy |
 | 분해 축 | decomposition axis | | 검토 표면 | review surface |
 | 구축 범위 | build scope | | 처분 | disposition |
+| 결정 기록 | decision record | | 증거 기록 | evidence record |
+| 기록 게이트 | record gate | | 기록 도구 | record tool |
 
 가설은 능력 지식 기준선의 신뢰 상태이며 검증 결과인 `unverified`와 다른 개념이다. artifact의 정식
 명칭은 `capability document`, 짧은 이름은 `baseline`뿐이다. `capability file`과 `capability baseline`을

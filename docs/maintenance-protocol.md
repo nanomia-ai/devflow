@@ -295,6 +295,8 @@ new concepts; add a row in the same change that coins a canonical term.
 | token strategy | token strategy | | component strategy | component strategy |
 | decomposition axis | decomposition axis | | review surface | review surface |
 | build scope | build scope | | disposition | disposition |
+| decision record | decision record | | evidence record | evidence record |
+| record gate | record gate | | record tool | record tool |
 
 A hypothesis is the trust state of a capability knowledge baseline, not the verification
 result `unverified`. The artifact's full name is `capability document` and its only short

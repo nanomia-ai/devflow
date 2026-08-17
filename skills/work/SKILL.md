@@ -67,7 +67,8 @@ remainder and the commit.
      and card
 
    After remote-evidence transitions, if the canonical claim→done move is uncommitted, or
-   the last commit changing one of my claimed cards that no evidence record names has the
+   the last commit changing one of my claimed cards that no `evidence-wait` or
+   `evidence-finalizing` line names has the
    canonical final task subject, open no new work. The final task commit is already complete
    under the canonical commit discipline; make no second final task commit and finish only
    upper-document feedback and the boundary.
@@ -205,7 +206,12 @@ Land upper-document feedback — when the judgment recorded an update, fix that 
         left the document that posed the question unchanged is not done** — the stale
         upper document outranks your measurement, and the next implementer follows it.
         User confirmation for product.md edits follows the canonical rules' Document
-        Hierarchy section (identity paragraph · Capabilities · Boundary · success criteria)
+        Hierarchy section (identity paragraph · Capabilities · Boundary · success criteria).
+        A successor record written while walking the table's decision-record row carries
+        `during: work`. When an execution fact this card settled will be reused by later
+        cards, promote it to an evidence record in the canonical rules' planning-records
+        format — the progress log points only at that exact path and never duplicates the
+        observation
   ↓
 Rename the card to .done. — only once the canonical rules' status-notation conditions
         for `.done.` are all met

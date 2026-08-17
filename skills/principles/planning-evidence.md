@@ -34,6 +34,45 @@ Do not create raw research files. Leave only the conclusion, its impact on the c
 product puts follow-up facts in `Open questions`; arch uses a `Provisional` value with a safe default and a `settling card`.
 split uses an existing `research card` for an unknown that would force guessing the Destination or Completion signal; adopt sends a future decision to its owning stage.
 When no home fits, create no file or card and report the exact owning stage.
+A settlement caught by the record gate below is the exception — it lands as a decision or evidence record under the canonical rules.
+
+## The Record Gate and Projection
+
+The record gate, the three-line echo, and the record body grammar (`mode`, `Reproduce`,
+`Invalidates-when`) are defined once for all six producers in the canonical rules'
+planning-records section — this section does not restate them. It owns only the
+planning-side procedure around records.
+
+- **Projection and opening**: when picking records at planning re-entry, domain entry, or
+  candidate judgment, use only the record tool's `select` — never hand searches or eye
+  filtering to compute the current set. Open by affects intersection then newest date, and
+  **a session opens at most 3 record bodies for one bind judgment — however many `select`
+  calls it splits them across.** This cap is a hard ceiling guarding model input
+  independent of the record count, not a default that approval raises — approval only
+  picks which of at most 3 to open or whether to proceed with the newest 3, and no body
+  is opened outside `select`. **Immediately before binding a binding decision**, when matching current
+  candidates remain unopened, present their filename list, and bind only after the user
+  picks ones to open, narrows the scope, or explicitly approves proceeding. For every
+  evidence record `select` chose, open the body and check `Invalidates-when` —
+  `checked-at` is only descriptive metadata for the human reader (ordering comes from the
+  filename date), and evidence past its `review-after` is not cited
+  before reconfirmation.
+- **Stale-evidence cascade**: when an evidence record is judged stale — a successor was
+  made or its `Invalidates-when` is true — enumerate every **current** decision record
+  citing it with the record tool's `reverse-evidence`; for each, leave only a
+  reconfirmation report when the conclusion still stands on new evidence, and ask the user
+  through the owning stage when it wavers. Never invalidate a decision automatically.
+- **Execution-check (spike) approval, five elements**: obtain one approval for the
+  refutation question, artifact paths, command, stop condition, and maximum output size.
+  Artifacts live as ordinary repository files outside devflow, and the evidence record
+  cites their exact paths and blobs.
+- **Secrets and bulk**: never put a secret value in a reproduction command or observation —
+  point to secrets only by environment-variable name. For an observation carrying
+  personal data or customer confidences, keep only the coordinate of an
+  access-controlled source instead of the content — Git records are immutable and cannot
+  be erased later. Keep only the values a verdict
+  needs from machine results and never commit raw bulk output. A needed binary proof opens
+  an exception through one explicit user approval.
 
 ## Isolated Research
 
@@ -46,7 +85,7 @@ The researcher only reads and searches the repository and external primary sourc
 Its return contains only `settled`, `conflicted`, or `unavailable`; a conclusion per question; exact internal coordinates or external source, version, and lookup time; the applicability boundary; and remaining conflicts.
 Return no search transcript or raw output. The main session confirms only the key coordinates that could change the binding decision and does not repeat the full search scope.
 Facts settled only by execution are observed through an allowed safe execution by the main session or the existing verify channel.
-Prototype or code changes go through the existing research card and work; owner decisions and binding decisions are never assigned to the researcher.
+Prototype or code changes go through the existing research card and work when a tree exists. Before the tree, the main session performs them under the five-element spike approval, keeps the artifacts as ordinary repository files outside devflow, and the evidence record cites those paths; owner decisions and binding decisions are never assigned to the researcher.
 When isolated execution is unavailable, the main session researches the same scope directly. Do not bind a dependent decision before a blocking fact returns.
 
 ## Criteria for Options Actually Presented

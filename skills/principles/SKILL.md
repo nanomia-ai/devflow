@@ -102,10 +102,12 @@ not a binding decision), and the final task commit (it
 belongs to the session's own branch) of a card whose initial claim has already landed on
 integration, plus journal appends that mint no number and make no claim — `maintenance
 routing pending`, `capability note`, attributed open-item and decision lines, `product
-re-run pending` — and their local commits. These wait until integration opens: a new
+re-run pending` — and their local commits. Adding a unique decision or evidence record
+file continues the same way, as a local `record — <filename>` commit on the session's own
+branch. These wait until integration opens: a new
 claim, a new tree number, a new verify source id, a card's `.done.` rename and its
-boundary commit, a layer-opening marker (it mints numbers), new evidence records (their
-record commit needs a push), `audit requested` and `retrospective requested` lines,
+boundary commit, a layer-opening marker (it mints numbers), new `evidence-wait` and `evidence-finalizing`
+journal lines (their record commit needs a push), `audit requested` and `retrospective requested` lines,
 verification-state lines, consuming (deleting) a canonical journal line, and any
 Layer 0 or capability-document change. One exception: when an already-published
 `evidence-wait` line passes during the blockade, the final task commit's replacement of
@@ -288,8 +290,8 @@ upper layer.** If it must, that is an upper-layer decision:
 canonical card-number order and joined with `+`. First land the upper-document edit, `.stale.` renames, and
 markers in one binding-decision commit. Capability retirement follows product's `.stale`
 folder and `.stale.md` rules and creates neither replacement work nor this marker. Delete
-in the retirement commit every evidence record that names a card inside the retired open
-folder. Before confirming a retirement, run the **retirement observation gate**: within
+in the retirement commit every `evidence-wait` and `evidence-finalizing` journal line
+that names a card inside the retired open folder. Before confirming a retirement, run the **retirement observation gate**: within
 the current journal already read in full, enumerate every `capability note`
 line carrying that capability's number — that observation's only consumer is that
 capability's next closure, and a retired capability has none, so the line would stay
@@ -314,7 +316,7 @@ What you discovered → where to update:
 | Discovery | Update target |
 |---|---|
 | Feature, screen, or scope changed | product.md (+ mark affected cards that need replacement work `.stale.` + the `re-split pending` markers above) |
-| A capability's name changed | first update product.md's capability row + the same-numbered tree folder or waiting file (a waiting file's body line takes the new name too) + every arch.md `Existing records` line naming it in one binding decision (+ replace any path inside that folder named by HANDOFF). The following arch capability-design commit, or adopt in a brownfield, updates the same-numbered baseline path and design zone together. The baseline predicates own recovery between the two commits. Code paths and arch.md's Code structure keep naming what exists on disk, and that sketch entry still maps to this capability; moving code is a separate card. The number never changes and no card moves. Land the first commit only while no canonical journal marker or evidence record names that folder or a path inside it |
+| A capability's name changed | first update product.md's capability row + the same-numbered tree folder or waiting file (a waiting file's body line takes the new name too) + every arch.md `Existing records` line naming it in one binding decision (+ replace any path inside that folder named by HANDOFF). The following arch capability-design commit, or adopt in a brownfield, updates the same-numbered baseline path and design zone together. The baseline predicates own recovery between the two commits. Code paths and arch.md's Code structure keep naming what exists on disk, and that sketch entry still maps to this capability; moving code is a separate card. The number never changes and no card moves. Land the first commit only while no canonical journal marker or `evidence-wait`/`evidence-finalizing` line names that folder or a path inside it |
 | A capability turns out to be two | product.md — narrow the existing row and append the new capability — and arch.md's Code structure for the path split. The existing folder keeps its number, cards, and history; the new capability gets no folder or card now. No card is backfilled or moved. arch, or adopt in a brownfield, re-derives affected design zones and the new capability document and reports the canonical registered-consumer projection. When narrowing also changes the existing capability's name, use the rename row above too |
 | Stack, module boundary, or data shape doesn't fit | arch.md (+ consider an ADR) |
 | A value the upper document called provisional is now measured | that row of arch.md's Provisional table — **replace it, don't add beside it**. An ADR that assumed the old value gets a dated update note |
@@ -322,11 +324,12 @@ What you discovered → where to update:
 | A design build result confirms or disproves design.md's source, token, component, or review-surface reference | If it remains true with the approved direction, replace only the exact one-line path, name, or command. If the direction of the Approach, Design source authority, Token strategy, Component strategy, Decomposition axis, or Review surface changes, first record it in a canonical `maintenance routing pending` line and re-run design through split 2a. After confirmation, split applies `.stale.` and the `re-split pending` marker above to affected cards that need replacement work |
 | A success criterion turns out unrunnable as written | product.md (+ the cards that quote it) |
 | A measurement disproves the content of the confirmed identity paragraph or a success criterion (not unrunnable as written — running it as written gives a wrong signal) | After user confirmation — if the replacement statement is settled, replace just that statement; if what replaces it is a planning question again, re-run product with the line below (and arch if the change reaches it). In either case, affected cards that need replacement work receive `.stale.` and the `re-split pending` markers above. The next session may take up the re-run on the strength of its line |
+| The user changes a confirmed statement themselves, with no disproving measurement | That conversation IS the confirmation. If the replacement statement is settled, replace just that statement; if what replaces it is a planning question again, re-run product with the line above. Affected cards that need replacement work receive `.stale.` and the `re-split pending` markers above. When a related decision record exists, a successor record names the old one in supersedes, and `owner decision` is a sufficient one-line ground |
 | A `.done.` card's completion signal turns out unrunnable | fix that card's signal text too — regression must stay runnable |
 | A new coding-convention decision is needed | one line in code-style.md "Project choices" |
 | A verification means is newly created or changed | the means line of arch.md's verify_channel |
 | A file in arch.md's `Existing records` moved or no longer matches current code | replace or delete that exact path (+ `Read first` in pending or claimed cards carrying it) |
-| A decision recorded in an ADR is reversed or no longer applies | write the successor ADR and add a dated update note to the superseded one naming that successor path. In the same binding decision, arch replaces the old path in every baseline design zone whose Binding ADRs lists it, and replaces it on pending or claimed cards that name it directly in `Read first` |
+| A decision recorded in an ADR or a decision record is reversed or no longer applies | for an ADR, write the successor ADR and add a dated update note to the superseded one naming that successor path; for a decision record, create a successor record naming the old one in supersedes. In the same binding decision, arch replaces the old path in every baseline design zone whose binding list carries it, and replaces it on pending or claimed cards that name it directly in `Read first` |
 | A new term becomes necessary | one line in glossary.md — the current skill walking this table lands it immediately |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | An observation confirmed in code about a capability other than the one being worked on | one canonical `capability note` line in journal.md carrying that capability's number. Do not edit the other capability's document directly — its next closure harvests the line |
@@ -345,16 +348,109 @@ lands through this table, immediately. The confirmed product.md's identity parag
 Capabilities, Boundary, and success criteria are modified only after user confirmation,
 whichever path the change arrives by — the conversation in which the user confirmed that
 change IS the confirmation. Planning lives as edits to product.md, arch.md, design.md,
-and ADRs — never create a new planning document beyond them.
+and the planning records below (ADRs included) — never create a new planning document
+beyond them.
+
+### Planning records — decision records and evidence records
+
+**Records are the channel by which confirmed choices and measurements outlive the
+session's death and become the next session's machine selection.
+Immutability is a property of history, not of the present — the cost of changing the
+present is always one successor record.** The current chosen value is owned once by its
+owning document, the reason and discarded alternatives by a decision record, and the
+reproducible observation with its applicability boundary by an evidence record.
+
+- Paths: `devflow/project/decisions/D-YYYYMMDD-<slug>-<full-blob-oid>.md` ·
+  `devflow/project/evidence/E-YYYYMMDD-<slug>-<full-blob-oid>.md`. Existing `ADR-NNN.md`
+  files coexist unchanged as the legacy decision-record form and are never backfilled.
+- The first line is one fixed line, key order included:
+  `record: {"v":1,"kind":"decision|evidence","during":"product|arch|design|adopt|split|work","affects":[...],"scope":"project|foundation|capability","mode":"reported|reproducible|null","evidence":[...],"checked-at":"YYYY-MM-DD|null","review-after":"YYYY-MM-DD|null","supersedes":[...]}`
+  `mode`, `checked-at`, and `review-after` carry values only on evidence records and are
+  null on decision records — `mode` separates observations from an approved run or pinned
+  source (`reproducible`) from conversation or on-screen observations (`reported`), and
+  evidence past its `review-after` is not cited as a ground before reconfirmation.
+  `scope` is the second filter over coarse affects. `evidence` is the array of exact
+  evidence-record filenames a decision record cites, and `supersedes` is the array of
+  exact filenames of superseded records.
+- The only permitted `affects` literals are this list (only this ASCII, in ko and en alike):
+  `product:Identity|Approach|Capabilities|Boundary|Success-criteria`,
+  `arch:Components|Stack|Code-structure|Data|Verify-channel`,
+  `design:Approach|Design-source|Token-strategy|Component-strategy|Decomposition-axis|Review-surface`,
+  `capability:<n>`. `validate` rejects every other token — an improvised token slips past
+  the intersection filter silently, so the machine blocks it. `capability:<n>` is mandatory only on records made after
+  product.md's capability list fixes that number; before that, Layer 0 fields alone are legal.
+  `<n>` is the product.md capability-list number written without leading zeros (① is
+  `1`) — not the tree and baseline numbering that counts the foundation as `01` and the
+  first capability as `02`, and copying a tree number points at a different capability.
+  The mapping between the two systems is owned by the canonical baseline predicates'
+  numbering rule. **This section is the canon of this vocabulary** — it is not a copy of split's Layer 0
+  field enumeration, and that enumeration does not define this list.
+- The body cap is 15 lines excluding the header — this cap guards the opening cost that
+  multiplies by the record count. The current set is "all valid files minus
+  every supersedes target". Add a successor record instead of editing or deleting. Content differs, so
+  paths differ — same-path collisions cannot carry different content. When a session finds
+  two incompatible current records on the same affects, it never picks one itself: it asks
+  the user once, and one user-confirmed successor names both in supersedes.
+- **The record gate** (all six producers, immediately after applying one confirmed answer
+  batch and immediately before a document's final confirmation): ① did a confirmed answer
+  set or change a Layer 0 field's value; ② was a named candidate kept or discarded on
+  external, repository, or execution facts rather than owner taste; ③ was a blocking fact
+  settled by execution or a pinned-version source — when any is true, create one decision
+  record per bundle of interdependent decisions; when all are false, create none. This
+  gate keeps confirmed reasons from evaporating with the conversation while not
+  duplicating, as a separate record, a local choice a card or owning statement already
+  fully carries. An
+  evidence record is created only when no existing owning statement can carry the
+  reproduction coordinates and applicability boundary. Before recording, show the three
+  lines `record: <title> / affects / ground` — the conversation that just confirmed the
+  answer is the approval, and the record is not made when the user declines.
+- **Body grammar**: a decision record's body carries the decision statement, grounds,
+  discarded alternatives, and cited evidence filenames. An evidence record's body must
+  carry `Reproduce` and `Invalidates-when` sections — with `mode: reproducible`,
+  `Reproduce` must name at least one repository path that exists — a reproduction
+  command passes only when it contains such a path — and `validate` rejects a
+  `Reproduce` naming none; with `mode: reported`, write only the
+  observation source — reported evidence says of itself that it settles no execution fact
+  and reduces no re-verification. A well-formed false entry pointing at a real path is
+  beyond machine reach — the next session's failed reproduction exposes it.
+- A session writes record files directly, and each must pass the record tool's
+  `validate` before its commit. The filename's oid is judged by the tool — write the body
+  under a temporary name with a placeholder oid (40 zeros), run `validate`, and its
+  mismatch error prints the correct oid; rename to that name and pass `validate` again.
+  Never mint the name with a shell hash yourself — line-ending conversion settings make
+  it disagree with the tool's judgment.
+  Picking the current set and candidates, reverse search,
+  and deletion judgment run only through the `summary`, `select`, `reverse-evidence`,
+  `prune-check`, and `validate` subcommands of the record tool `project-records.mjs`.
+  Locate the tool as `scripts/project-records.mjs` under the plugin root two levels above
+  this loaded skill file — in a runtime that sets `${CLAUDE_PLUGIN_ROOT}`,
+  `${CLAUDE_PLUGIN_ROOT}/scripts/project-records.mjs` is a shortcut to the same place.
+  The tool is stateless and
+  read-only and never modifies the repository; it owns its judgment internals, and this
+  document does not restate them.
+- A record commit is a `record — <filename>` binding-decision commit carrying only that
+  record file. During a blockade, adding a unique record file continues as a local commit
+  on the session's own branch but is not shared authority before integration — this
+  continuation keeps confirmations from evaporating during a blockade. Successors,
+  deletions, and Layer 0 or capability-document changes wait until the blockade opens. A
+  journal `evidence-wait` record and an evidence-record file are different concepts.
+- **Human record deletion is a sanctioned exception.** A session deletes only a leaf
+  record that passes the `prune-check` judgment and user confirmation. A person deleting
+  directly is not blocked — a session that meets a leftover citation reports `record
+  deleted` rather than an integrity anomaly and repairs that citation through the
+  discovery→update table, and the absence of a file named by supersedes is likewise not
+  an anomaly. Git keeps the history of deleted records.
 
 Core documents (`devflow/project/*`) are modified **only through this procedure or by
 re-running the owning skill** — never edited in passing during a task. And modification
 means **replacement by default**: if you added a line, check whether you deleted the stale
 one. A document that only grows is a dead document.
 Target ownership is fixed: product owns product.md and glossary.md; arch owns arch.md,
-code-style.md, and decisions/; design owns design.md; adopt owns arch.md `Existing records`
+code-style.md, and the legacy ADRs; design owns design.md; adopt owns arch.md `Existing records`
 and may add only a missing `Brownfield` field to an existing arch.md;
-split owns the tree and task cards; verify owns verify.md. arch, or adopt in a brownfield,
+split owns the tree and task cards; verify owns verify.md. Decision and evidence records
+are written by product, arch, design, adopt, split, and work through the canonical record
+gate above and the discovery→update table. arch, or adopt in a brownfield,
 owns the design zone under `devflow/project/capabilities/`; verify owns the verified zone
 after creation. The canonical baseline predicates govern the initial empty verified
 scaffold, mechanical path replacement when an ADR is superseded, the exact byte boundary,

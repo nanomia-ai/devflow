@@ -352,6 +352,11 @@ When a new term is confirmed, immediately land it through the one-line `glossary
 in the canonical discovery→update table. After the four card fields first become unique and
 before writing the card bytes, run the planning evidence discipline's pre-commitment review
 once. Do not compare a candidate that changes Layer 0; route it to 2a.
+In grades 1 and 2b alike, run the canonical record gate at the same
+point — a settlement it catches lands as a `during: split` decision or evidence record, and
+put at most 3 exact paths of the current records that actually ground the card into the new
+card's `Read first`. A card-local choice fully carried by the card's `Why` and `Forbidden`
+makes no record.
 
 1. **Map the request's scope to a location.** Before mapping, read the `Design head`
    metadata line of each candidate capability document, count only exact `## Verified state`

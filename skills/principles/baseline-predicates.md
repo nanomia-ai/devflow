@@ -45,7 +45,7 @@ the boundary.
 | 2 | Concept model | design | table: concept / what the user gets / identifier / relation | 8 rows | code fields, types, signatures |
 | 3 | Invariants | design | numbered list of falsifiable statements | 8 items | rules equally true of other capabilities |
 | 4 | Non-goals | design | bullet: item — one-clause reason | 5 items | things merely not built yet |
-| 5 | Binding ADRs | design | exact paths under `devflow/project/decisions/` cited by current design statements | 5 lines | uncited ADRs |
+| 5 | Binding ADRs | design | exact paths under `devflow/project/decisions/` that this capability document's design statements actually cite — legacy ADRs and **current** decision records alike | 5 lines | uncited paths and superseded records |
 | 6 | Design metadata | design | the two `key: value` fields below | 2 fields | every other field |
 | — | `## Verified state` | boundary | fixed H2 heading | 1 line | — |
 | 7 | Main flow | verified | mermaid flowchart LR | 9 nodes | unimplemented paths |
@@ -165,6 +165,9 @@ A consumer makes only three comparisons.
    statements are hypotheses and the complement consumers use is every current
    non-`.stale.` `.done.` card — never the empty set.
 
+Only the design-zone writers — arch, and adopt in a brownfield — update the Binding ADRs
+list. A decision record another producer creates enters it at the next arch or adopt
+design-zone re-derivation, when a design statement actually cites it.
 `Verified at: none` makes the verified statements hypotheses. Binding ADRs are outside
 both statement groups; a consumer checks each exact path when reading it. Metadata is the
 comparison itself. The symmetric difference between the current completed-card set and

@@ -10,7 +10,9 @@ description: 개발 기획. product.md를 받아 구성요소·스택·코드 �
 (`../principles/baseline-predicates.md`)과 `devflow/project/product.md`를 통독한다. 존재하면
 `devflow/project/arch.md`·`devflow/project/code-style.md`·`devflow/project/glossary.md`,
 `devflow/journal.md`, 그리고
-`devflow/project/decisions/` 바로 아래의 `.md`를 각각 통독한다.
+`devflow/project/decisions/` 바로 아래의 legacy `ADR-NNN.md`를 각각 통독한다. 결정·증거
+기록은 통독하지 않는다 — 기록 도구의 `select`로 현재 프런티어의 affects에 맞는 현재 후보만
+투영하고, 게이트는 정본 기록 게이트를, 개봉·bind는 기획 증거 규율의 투영 절을 따른다.
 `product.md`가 없으면: 코드도 없으면 product 단계를, 기존 코드가 있으면
 adopt(기존 프로젝트 도입 — product.md까지 역산으로 함께 만든다)를 먼저 안내한다.
 
@@ -185,6 +187,9 @@ ADR(Architecture Decision Record — 결정 하나당 맥락·선택지·결정�
 (예: 인증을 세션 대신 JWT로 = 통과 / 라이브러리 A 대신 B = 탈락)
 ```
 
+세 조건에는 못 미치지만 기록 게이트에 걸린 결정은 정본 규칙의 결정 기록으로 남는다.
+ADR과 결정 기록의 근거가 증거 기록에 기대면 그 정확한 파일명을 본문에 인용한다.
+
 ## 산출 2 — devflow/project/code-style.md
 
 선택한 스택 때문에 생긴 이 프로젝트 고유의 결정들을 받아 적는 곳. **모든 항목은 "무엇을 우선하는가"로 쓴다 —
@@ -213,9 +218,11 @@ ADR(Architecture Decision Record — 결정 하나당 맥락·선택지·결정�
 ## 하지 않는 것                   <!-- 이 프로젝트의 YAGNI 선언 2~3개 -->
 ```
 
-arch.md 확인을 받기 전에, 이 문서가 내린 결정 중 ADR 세 조건을 모두 만족하는 것을 열거하고 각각
-ADR로 남길지 사용자와 확인한다. 통과했는데 남기지 않기로 한 결정은 그대로 두되 열거는 건너뛰지
-않는다. 착지한 뒤에는 미기록 ADR을 되찾는 경로가 없다.
+arch.md 확인을 받기 전에, 이 문서가 내린 결정 중 ADR 세 조건을 모두 만족하는 것과 기록
+게이트에 걸렸는데 기록되지 않은 것을 함께 열거하고 각각 남길지 사용자와 확인한다. 이 자리에서
+`during: product` 결정 기록도 수용하거나 승계 기록으로 정제한다 — product가 물려준 기술
+선택의 확정은 arch 소유다. 통과했는데 남기지 않기로 한 결정은 그대로 두되 열거는 건너뛰지
+않는다. 착지한 뒤에는 미기록 항목을 되찾는 경로가 없다.
 
 사용자가 arch.md 또는 code-style.md를 확인한 즉시 규칙 정본의 Layer 0 커밋으로 착지시킨다.
 

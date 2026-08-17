@@ -15,6 +15,34 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.18.0 — 2026-08-18 — planning decisions and evidence survive as records, and only reproducible evidence stops re-verification
+
+The first real project left 115 lines of canon after 6+ hours of planning: a fresh session
+matched 0 of 6 stack decisions and planned 3–4 days re-verifying a spike already proven on
+disk, and a 1,048-line conversation narrative did not reduce that re-verification. This
+release adds the planning record layer (DD-74·DD-75): confirmed choices land immediately as
+decision records and reproducible observations as evidence records under
+`devflow/project/{decisions,evidence}/` — immutable, superseded by successors, never
+consumed. The record gate (three literal questions) fires after each confirmed answer batch
+in product, arch, design, adopt, and split's maintenance planning, with a three-line echo before
+each `record — <filename>` commit; work promotes reusable execution facts and writes
+successors while walking the discovery→update table. A user changing a confirmed statement
+without a disproving measurement is now a first-class table row (the conversation is the
+confirmation). The stateless read-only record tool `scripts/project-records.mjs`
+(`summary`·`select`·`reverse-evidence`·`prune-check`·`validate`) owns current-set
+projection, bounded opening (≤3 with a pre-bind confirmation of unopened candidates),
+fixed-string reverse search from stale evidence to its dependent decisions, and safe-delete
+judgment; human deletion stays a sanctioned exception with a citation-repair path.
+Capability documents' Binding ADRs lists now also carry the current decision records their
+design statements actually cite — arch and adopt are the only updaters — so implementers
+reach new grounds through the same automatic channel as legacy ADRs, and verify's
+retrospective reads records through the same bounded projection instead of the folder
+whole. Unapproved observations are recorded honestly as `mode: reported` evidence,
+separated from reproducible runs.
+Files: `skills/{principles,product,arch,design,split,work,resume,adopt,verify}/SKILL{,_ko}.md`,
+`skills/principles/{planning-evidence,baseline-predicates}{,_ko}.md`,
+`scripts/project-records.mjs` + tests, both plugin manifests.
+
 ## 0.17.0 — 2026-08-16 — arch finishes only when capability knowledge can survive the session
 
 One real project landed arch.md and code-style.md, exhausted its planning context, and ended
