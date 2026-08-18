@@ -446,6 +446,17 @@ delete trailing prose and replace the field with the canonical value. Ask the us
 unparseable replacement; never infer it. Put the confirmed correction in a planning
 commit without changing other fields or status. Release a claimed card first.
 
+When the card's target capability has a knowledge capsule folder, read only the header
+projection, never a capsule body: locate `scripts/project-knowledge.mjs` from the plugin root
+by the canonical baseline predicates' rule and run
+`node <plugin root>/scripts/project-knowledge.mjs project --capability <capability number>`
+for that number. Call it once per capability and never without `--capability`. Put the
+exact path of each capsule whose `use-when` matches the card's destination and target on
+`Read first` — approving the execution proposal approves that selection, and opening the
+body and judging the opening budget belong to work. The legacy-wiring rule that keeps paths
+directly below `devflow/project/capabilities/` off `Read first` does not apply to capsule
+paths — a capsule is not reached by the depth-1 number rule.
+
 When split starts with a pending card whose
 `Approval` is not `pending` but is ineffective under the state predicates, report the
 exact reason and reset it to `pending`. Present the whole current card in a new execution

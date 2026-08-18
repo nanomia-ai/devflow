@@ -274,6 +274,14 @@ section below).
    created — the marker finishes the same begin commit first; the baseline predicates govern
    regenerating that baseline's verified zone before the commit.
 
+   When the closing capability has a knowledge capsule folder, run
+   `node <plugin root>/scripts/project-knowledge.mjs disputes --capability <capability number>`.
+   That command is the dispute-only projection; `project` yields only the C number in the same
+   place, so it is not used here. Carry what the projection gives — the C number, both
+   coordinates, and the source content each coordinate points at — into the closure report as
+   items for a person to decide. Open no capsule body: opening one to show the two arms is the
+   shortcut forbidden here. This changes no verdict, blocks no closure, and writes no capsule.
+
    When the baseline refresh is a no-op, run no consumer projection and report only the
    canonical `registered consumers: unknown — provider baseline no-op: <same reason>` line.
    Once a successful refresh's begin commit lands, read only the canon's bounded consumer

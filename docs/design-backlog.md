@@ -202,6 +202,30 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   stopped unrelated failures), and first prove with fixtures that exact-signal dedupe does
   not revive that blocking. Before that, add no dedupe, alias, or wrapper rule.
 
+- **The capsule opening budget of 240 lines / 24 KiB is provisional** (v0.18.1) — its
+  measured basis is a single trial processing (property), at 112–180 opened lines per card.
+  Watch the comprehension-question failure rate and the rate of budget overruns and explicit
+  approvals; if overrun approval becomes routine, retune the numbers.
+- **The escape rate of unmarked synthesis** (v0.18.1) — the provenance sampling check (three
+  unmarked sentences per capsule) is a sample, not a census. If a processed-text-only session
+  is observed citing an unmarked synthesized sentence as source fact, revisit the sample size
+  and the check's form.
+- **Disputes lingering unresolved** (v0.18.1) — a dispute reaches a person only in adopt's
+  confirmation batch and verify's closure report. If disputes are seen going uncollected in a
+  capability that stays open for a long time, revisit the collection points.
+- **The three-arm comprehension re-measurement** (v0.18.1) — the same 13-question three-arm
+  measurement has not yet been run against artifacts reprocessed under the confirmed marking
+  spec. Until it is, this spec's comprehension recovery is a hypothesis backed only by the
+  design evidence of the first measurement.
+
+- **A capability that overruns even the compact index** (v0.18.1) — the index projection
+  downgrades from full to compact at 24 KiB, and one capability's 100 capsules fit compact in
+  21 KB. Past that only zero entries and the filters to narrow by come back, and at that point
+  `--facet` and `--state` help only if those axes actually differ while `--path` needs the very
+  paths the index was to supply. It does not occur at measured scale (12 capsules per
+  capability), so no rule is added now. Open index paging (`--after`) or explicit approval when
+  one capability passes 100 capsules or a compact-index overrun is actually reported.
+
 ## Observations already settled — lineage
 
 The items below were carried out and left the watch list. Re-proposals consult this lineage first.

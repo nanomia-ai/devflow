@@ -1,0 +1,454 @@
+#!/usr/bin/env node
+"use strict";
+
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const os = require("node:os");
+const path = require("node:path");
+const { execFileSync, spawnSync } = require("node:child_process");
+const { test } = require("node:test");
+
+const tool = path.join(__dirname, "project-knowledge.mjs");
+const headerKeys = ["v", "capability", "facet", "topic", "use-when", "state", "synopsis"];
+
+function fixture(t) {
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "devflow-knowledge-")));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  return root;
+}
+
+function header(overrides = {}) {
+  return {
+    v: 1,
+    capability: 2,
+    facet: "registration",
+    topic: "location-trust",
+    "use-when": "\uC8FC\uC18C\uB098 \uC88C\uD45C \uCDE8\uB4DD\uC744 \uBC14\uAFC0 \uB54C",
+    state: "current",
+    synopsis: "\uC8FC\uC18C\uC640 \uC88C\uD45C\uC758 \uC2E0\uB8B0 \uC0AC\uB2E4\uB9AC",
+    ...overrides,
+  };
+}
+
+function body(extra = "") {
+  return [
+    "# \uC88C\uD45C \uC2E0\uB8B0",
+    "Intent: \uC8FC\uC18C\uAC00 \uBD88\uC644\uC804\uD574\uB3C4 \uB4F1\uB85D\uC744 \uB05D\uB0B8\uB2E4.",
+    "Desired outcome: \uC88C\uD45C \uCD9C\uCC98\uAC00 \uB4DC\uB7EC\uB09C\uB2E4.",
+    "",
+    extra,
+    "",
+    "## Grounded state",
+    "- \uD604\uC7AC \uB3D9\uC791\uC744 \uD655\uC778\uD588\uB2E4.",
+    "## Revisit when",
+    "- \uC88C\uD45C API\uAC00 \uBC14\uB014 \uB54C.",
+    "Source basis: [\"docs/source.md:1-2\"]",
+  ].join("\n").replace(/\n{3,}/g, "\n\n");
+}
+
+function writeSource(root, text = "source one\nsource two\nsource three\n") {
+  const target = path.join(root, "docs", "source.md");
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(target, text, "utf8");
+  return target;
+}
+
+function writeCapsule(root, value = header(), content = body(), number = "006", directory = "02-property") {
+  if (!fs.existsSync(path.join(root, "docs", "source.md"))) writeSource(root);
+  const base = path.join(root, "devflow", "project", "capabilities");
+  fs.mkdirSync(path.join(base, directory), { recursive: true });
+  fs.writeFileSync(path.join(base, `${directory}.md`), `# ${directory}\n`, "utf8");
+  const target = path.join(base, directory, `K-${number}-${value.topic}.md`);
+  fs.writeFileSync(target, `knowledge: ${JSON.stringify(value)}\n${content}\n`, "utf8");
+  return target;
+}
+
+function run(root, command, ...args) {
+  return spawnSync(process.execPath, [tool, command, ...args, "--root", root], {
+    cwd: root,
+    encoding: "utf8",
+  });
+}
+
+function assertOk(result) {
+  assert.equal(result.status, 0, result.stderr);
+}
+
+test("both plugin manifest surfaces resolve the shared knowledge tool", () => {
+  const root = path.join(__dirname, "..");
+  const claudePath = path.join(root, ".claude-plugin", "..", "scripts", "project-knowledge.mjs");
+  const codexPath = path.join(root, ".codex-plugin", "..", "scripts", "project-knowledge.mjs");
+  assert.equal(fs.realpathSync(claudePath), fs.realpathSync(codexPath));
+  assert.equal(fs.realpathSync(claudePath), fs.realpathSync(tool));
+});
+
+test("missing capsule folders are valid empty states", (t) => {
+  const root = fixture(t);
+  for (const command of ["project", "validate"]) {
+    const result = run(root, command);
+    assertOk(result);
+    assert.match(result.stdout, /(?:capsules|valid)=0/);
+  }
+});
+
+test("project emits header, costs, and marker counts without bodies and never writes", (t) => {
+  const root = fixture(t);
+  writeSource(root);
+  const target = writeCapsule(root, header(), body(
+    "\uC8FC\uC18C\uB97C \uBCF4\uC874\uD55C\uB2E4. (synthesis@docs/source.md:1-2: \uB450 \uADFC\uAC70\uB97C \uD569\uCCD0 \uBC29\uD5A5\uC744 \uC124\uBA85\uD55C\uB2E4.)\n"
+    + "\uC2E4\uD589\uC740 \uB2E4\uB974\uB2E4. (code@docs/source.md:2: \uD604\uC7AC \uB3D9\uC791\uB9CC \uD655\uC778\uD588\uB2E4.)\n"
+    + "\uC774\uC720\uB294 \uBE44\uC5B4 \uC788\uB2E4. (conjecture: \uB2E4\uC74C \uAC80\uC99D \uC804\uC5D0\uB294 \uC0AC\uC2E4\uB85C \uC4F0\uC9C0 \uC54A\uB294\uB2E4.)\n"
+    + "[dispute C-006@docs/source.md:1,docs/source.md:2: \uC6D0\uBB38 \uB450 \uC11C\uC220\uC774 \uCDA9\uB3CC\uD558\uBBC0\uB85C \uACE0\uB974\uC9C0 \uC54A\uB294\uB2E4.]",
+  ));
+  const before = fs.readFileSync(target);
+  const result = run(root, "project", "--capability", "2", "--facet", "registration");
+  assertOk(result);
+  assert.match(result.stdout, /project: capsules=1 bodies=0/);
+  assert.doesNotMatch(result.stdout, /^body:/m);
+  const projected = JSON.parse(/^projection: (.+)$/m.exec(result.stdout)[1]);
+  assert.equal(projected.path, "devflow/project/capabilities/02-property/K-006-location-trust.md");
+  assert.deepEqual(projected.markers, { synthesis: 1, code: 1, conjecture: 1, dispute: 1 });
+  assert.deepEqual(projected.disputes, ["C-006"]);
+  assert.deepEqual(fs.readFileSync(target), before);
+});
+
+test("validate rejects malformed JSON, key order, and path/header disagreement", (t) => {
+  const malformedRoot = fixture(t);
+  const malformedDir = path.join(malformedRoot, "devflow", "project", "capabilities", "02-property");
+  fs.mkdirSync(malformedDir, { recursive: true });
+  fs.writeFileSync(path.join(malformedRoot, "devflow", "project", "capabilities", "02-property.md"), "# P\n");
+  fs.writeFileSync(path.join(malformedDir, "K-006-location-trust.md"), "knowledge: {no}\n# X\n");
+  const malformed = run(malformedRoot, "validate");
+  assert.equal(malformed.status, 1);
+  assert.match(malformed.stderr, /first-line JSON is invalid/);
+
+  const orderRoot = fixture(t);
+  const reordered = { capability: 2, v: 1 };
+  for (const key of headerKeys.slice(2)) reordered[key] = header()[key];
+  writeCapsule(orderRoot, reordered);
+  const order = run(orderRoot, "validate");
+  assert.equal(order.status, 1);
+  assert.match(order.stderr, /header keys must be exactly/);
+
+  const mismatchRoot = fixture(t);
+  writeCapsule(mismatchRoot, header({ capability: 3 }));
+  const mismatch = run(mismatchRoot, "validate");
+  assert.equal(mismatch.status, 1);
+  assert.match(mismatch.stderr, /capability does not match/);
+});
+
+test("current capsule shape and sibling entrance are structural requirements", (t) => {
+  const shapeRoot = fixture(t);
+  writeCapsule(shapeRoot, header(), body().replace("## Revisit when", "## Later"));
+  const shape = run(shapeRoot, "validate");
+  assert.equal(shape.status, 1);
+  assert.match(shape.stderr, /requires Intent, Desired outcome, Grounded state, Revisit when, and Source basis/);
+
+  const entranceRoot = fixture(t);
+  const target = writeCapsule(entranceRoot);
+  fs.rmSync(path.join(path.dirname(path.dirname(target)), "02-property.md"));
+  const entrance = run(entranceRoot, "validate");
+  assert.equal(entrance.status, 1);
+  assert.match(entrance.stderr, /sibling capability entrance .* is missing/);
+});
+
+test("the 120-line authoring target warns but does not reject", (t) => {
+  const root = fixture(t);
+  const filler = Array.from({ length: 112 }, (_, index) => `\uC790\uC720 \uC0B0\uBB38 ${index}`).join("\n");
+  writeCapsule(root, header(), body(filler));
+  const result = run(root, "validate");
+  assertOk(result);
+  assert.match(result.stderr, /exceeds the 120-line soft target/);
+  assert.match(result.stdout, /warnings=1/);
+});
+
+test("insertion parsing ignores code examples and permits nested natural prose", (t) => {
+  const root = fixture(t);
+  writeSource(root);
+  writeCapsule(root, header(), body([
+    "\uC2E4\uC81C \uD45C\uC2DC\uB2E4. (synthesis@docs/source.md:1: \uB9E5\uB77D(\uC8FC\uC18C\uC640 \uC88C\uD45C)\uC744 \uD568\uAED8 \uC124\uBA85\uD55C\uB2E4.)",
+    "`(\uC694\uC57D@\uC5C6\uB294.md:1: \uC608\uC2DC)`\uB294 \uCF54\uB4DC\uB77C \uAC80\uC0AC\uD558\uC9C0 \uC54A\uB294\uB2E4.",
+    "```text",
+    "[dispute C-999@\uC5C6\uB294.md:1,\uC5C6\uB294.md:2: \uBB38\uBC95 \uC608\uC2DC]",
+    "```",
+  ].join("\n")));
+  const result = run(root, "validate");
+  assertOk(result);
+  assert.match(result.stdout, /markers=1 disputes=0/);
+});
+
+test("closed insertion vocabulary and source-confidence rules reject malformed markers", (t) => {
+  const cases = [
+    ["(\uC694\uC57D@docs/source.md:1: \uB2EB\uD78C \uC5B4\uD718 \uBC16\uC774\uB2E4.)", /unknown insertion head \uC694\uC57D/],
+    ["(\uCD94\uCE21: \uADFC\uAC70\uB294 \uC5C6\uB2E4.)", /unknown insertion head \uCD94\uCE21/],
+    ["(guess: no evidence.)", /unknown insertion head guess/],
+    ["(synthesis: \uC88C\uD45C\uAC00 \uC5C6\uB2E4.)", /malformed synthesis insertion/],
+    ["(conjecture@docs/source.md:1: \uCD94\uC815\uC740 \uC88C\uD45C\uB97C \uC778\uC6A9\uD558\uC9C0 \uC54A\uB294\uB2E4.)", /conjecture must not cite/],
+    ["[dispute C-006@docs/source.md:1: \uD55C \uD314\uBFD0\uC774\uB2E4.]", /expected 2 coordinate/],
+    ["[dispute C-006@docs/source.md:1,docs/source.md:1: \uAC19\uC740 \uC88C\uD45C\uB2E4.]", /arms must use different/],
+    ["(\uC885\uD569@docs/source.md:1: \uD55C\uAD6D\uC5B4 \uBA38\uB9AC\uB9D0\uC740 \uAE08\uC9C0.)", /unknown insertion head \uC885\uD569/],
+  ];
+  for (const [text, expected] of cases) {
+    const root = fixture(t);
+    writeSource(root);
+    writeCapsule(root, header(), body(text));
+    const result = run(root, "validate");
+    assert.equal(result.status, 1, text);
+    assert.match(result.stderr, expected);
+  }
+});
+
+test("dispute insertions may span lines without compressing both arms", (t) => {
+  const root = fixture(t);
+  writeSource(root);
+  writeCapsule(root, header(), body([
+    "[dispute C-006@docs/source.md:1,docs/source.md:2: \uCCAB \uBC88\uC9F8 \uC11C\uC220\uC740 \uC774\uB807\uB2E4.",
+    "\uB450 \uBC88\uC9F8 \uC11C\uC220\uC740 \uB2E4\uB974\uB2E4.",
+    "\uC18C\uC720\uC790 \uACB0\uC815 \uC804\uC5D0\uB294 \uD574\uC18C\uD558\uC9C0 \uC54A\uB294\uB2E4.]",
+  ].join("\n")));
+  const result = run(root, "validate");
+  assertOk(result);
+  assert.match(result.stdout, /markers=1 disputes=1/);
+});
+
+test("Source basis requires at least one real coordinate", (t) => {
+  const cases = [
+    ["Source basis: [\"docs/source.md:1-2\"]", null],
+    ["Source basis: []", /non-empty JSON coordinate array/],
+    ["Source basis: [\"docs/source.md\"]", /coordinate must be path:line-range/],
+    ["Source basis: [\"missing/source.md:1\"]", /coordinate path does not exist/],
+  ];
+  for (const [basis, expected] of cases) {
+    const root = fixture(t);
+    writeCapsule(root, header(), body().replace('Source basis: ["docs/source.md:1-2"]', basis));
+    const result = run(root, "validate");
+    if (expected === null) assertOk(result);
+    else {
+      assert.equal(result.status, 1, basis);
+      assert.match(result.stderr, expected);
+    }
+  }
+});
+
+test("coordinates must resolve to current or historical source lines", (t) => {
+  const currentRoot = fixture(t);
+  writeSource(currentRoot);
+  writeCapsule(currentRoot, header(), body("(code@docs/source.md:4: \uBC94\uC704\uB97C \uB118\uB294\uB2E4.)"));
+  const current = run(currentRoot, "validate");
+  assert.equal(current.status, 1);
+  assert.match(current.stderr, /exceeds 3 source lines/);
+
+  const historyRoot = fixture(t);
+  writeSource(historyRoot, "old one\nold two\n");
+  execFileSync("git", ["init", "-q"], { cwd: historyRoot });
+  execFileSync("git", ["config", "core.autocrlf", "false"], { cwd: historyRoot });
+  execFileSync("git", ["config", "user.name", "Fixture"], { cwd: historyRoot });
+  execFileSync("git", ["config", "user.email", "fixture@example.test"], { cwd: historyRoot });
+  execFileSync("git", ["add", "docs/source.md"], { cwd: historyRoot });
+  execFileSync("git", ["commit", "-q", "-m", "source"], { cwd: historyRoot });
+  const revision = execFileSync("git", ["rev-parse", "HEAD"], { cwd: historyRoot, encoding: "utf8" }).trim();
+  fs.writeFileSync(path.join(historyRoot, "docs", "source.md"), "new one\n", "utf8");
+  const historicalBody = body(`(synthesis@docs/source.md@${revision}:2: \uC5ED\uC0AC \uC88C\uD45C\uAC00 \uB0A8\uB294\uB2E4.)`)
+    .replace('Source basis: ["docs/source.md:1-2"]', `Source basis: ["docs/source.md@${revision}:1-2"]`);
+  writeCapsule(historyRoot, header(), historicalBody);
+  assertOk(run(historyRoot, "validate"));
+});
+
+test("duplicate capsule numbers and dispute ids are rejected", (t) => {
+  const numberRoot = fixture(t);
+  writeCapsule(numberRoot, header({ topic: "location-trust" }), body(), "006");
+  writeCapsule(numberRoot, header({ topic: "other-topic" }), body(), "006");
+  const duplicateNumber = run(numberRoot, "validate");
+  assert.equal(duplicateNumber.status, 1);
+  assert.match(duplicateNumber.stderr, /duplicate capsule number/);
+
+  const disputeRoot = fixture(t);
+  writeSource(disputeRoot);
+  const conflict = "[dispute C-006@docs/source.md:1,docs/source.md:2: \uB450 \uD314\uC744 \uBCF4\uC874\uD55C\uB2E4.]";
+  writeCapsule(disputeRoot, header(), body(conflict), "006");
+  writeCapsule(disputeRoot, header({ topic: "other-topic" }), body(conflict), "007");
+  const duplicateDispute = run(disputeRoot, "validate");
+  assert.equal(duplicateDispute.status, 1);
+  assert.match(duplicateDispute.stderr, /duplicate dispute id C-006/);
+});
+
+test("dispute ids are unique within a capability, not across capabilities", (t) => {
+  const root = fixture(t);
+  writeSource(root);
+  const conflict = "[dispute C-001@docs/source.md:1,docs/source.md:2: \uB450 \uD314\uC744 \uBCF4\uC874\uD55C\uB2E4.]";
+  writeCapsule(root, header(), body(conflict), "001", "02-property");
+  writeCapsule(root, header({ capability: 3 }), body(conflict), "001", "03-other");
+  assertOk(run(root, "validate"));
+
+  writeCapsule(root, header({ topic: "second-topic" }), body(conflict), "002", "02-property");
+  const duplicate = run(root, "validate");
+  assert.equal(duplicate.status, 1);
+  assert.match(duplicate.stderr, /duplicate dispute id C-001 in capability 2/);
+});
+
+test("select opens exact paths under both hard budgets", (t) => {
+  const root = fixture(t);
+  const target = writeCapsule(root);
+  const relative = path.relative(root, target).split(path.sep).join("/");
+  const result = run(root, "select", "--path", relative);
+  assertOk(result);
+  assert.match(result.stdout, /select: candidates=1 opened=1/);
+  assert.match(result.stdout, new RegExp(`^body: ${relative.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m"));
+  assert.match(result.stdout, /knowledge: \{"v":1/);
+});
+
+test("select validates only its exact path set", (t) => {
+  const root = fixture(t);
+  const target = writeCapsule(root);
+  writeCapsule(
+    root,
+    header({ topic: "broken-neighbor" }),
+    body().replace('Source basis: ["docs/source.md:1-2"]', 'Source basis: ["missing.md:1"]'),
+    "007",
+  );
+  const relative = path.relative(root, target).split(path.sep).join("/");
+  assertOk(run(root, "select", "--path", relative));
+  const global = run(root, "validate");
+  assert.equal(global.status, 1);
+  assert.match(global.stderr, /coordinate path does not exist/);
+});
+
+test("disputes projects ids, coordinates, and both source contents without capsule bodies", (t) => {
+  const root = fixture(t);
+  writeSource(root, "first arm\nsecond arm\n");
+  writeCapsule(root, header(), body(
+    "[dispute C-006@docs/source.md:1,docs/source.md:2: \uC11C\uB85C \uB2E4\uB978 \uB450 \uC11C\uC220\uC774\uB2E4.]",
+  ));
+  const result = run(root, "disputes", "--capability", "2");
+  assertOk(result);
+  assert.match(result.stdout, /disputes: capsules=1 items=1 bodies=0/);
+  assert.doesNotMatch(result.stdout, /^body:/m);
+  const projected = JSON.parse(/^dispute: (.+)$/m.exec(result.stdout)[1]);
+  assert.equal(projected.id, "C-006");
+  assert.deepEqual(projected.coordinates, ["docs/source.md:1", "docs/source.md:2"]);
+  assert.deepEqual(projected.arms, [
+    { coordinate: "docs/source.md:1", content: "first arm" },
+    { coordinate: "docs/source.md:2", content: "second arm" },
+  ]);
+  assert.match(projected.prose, /\uC11C\uB85C \uB2E4\uB978/);
+});
+
+test("a capability of 100 capsules stays selectable through the compact index", (t) => {
+  const root = fixture(t);
+  let first;
+  for (let index = 1; index <= 100; index += 1) {
+    const number = String(index).padStart(3, "0");
+    const target = writeCapsule(
+      root,
+      header({ topic: `topic-${number}`, synopsis: `projection budget fixture ${number}` }),
+      body(),
+      number,
+    );
+    first ??= path.relative(root, target).split(path.sep).join("/");
+  }
+  // Choosing a capsule needs its path and use-when; dropping the rest keeps 100 selectable.
+  const compact = run(root, "project", "--capability", "2");
+  assertOk(compact);
+  assert.match(compact.stdout, /capsules=100 bodies=0 form=compact index-bytes=\d+\/24576 emitted=100/);
+  assert.equal((compact.stdout.match(/^projection:/gm) || []).length, 100);
+  const entry = JSON.parse(compact.stdout.match(/^projection: (.+)$/m)[1]);
+  assert.deepEqual(Object.keys(entry), ["path", "facet", "topic", "use-when", "state"]);
+
+  const narrowed = run(root, "project", "--path", first);
+  assertOk(narrowed);
+  assert.match(narrowed.stdout, /capsules=1 .*form=full .*emitted=1/);
+  assert.equal((narrowed.stdout.match(/^projection:/gm) || []).length, 1);
+});
+
+test("an index too large even compacted emits zero entries and asks for a narrower filter", (t) => {
+  const root = fixture(t);
+  const wide = "the situation that opens this capsule ".repeat(8);
+  for (let index = 1; index <= 100; index += 1) {
+    const number = String(index).padStart(3, "0");
+    writeCapsule(root, header({ topic: `topic-${number}`, "use-when": `${wide} ${number}` }), body(), number);
+  }
+  const blocked = run(root, "project", "--capability", "2");
+  assert.equal(blocked.status, 3);
+  assert.match(blocked.stdout, /form=compact index-bytes=\d+\/24576 emitted=0/);
+  assert.doesNotMatch(blocked.stdout, /^projection:/m);
+  assert.match(blocked.stderr, /index budget exceeded/);
+});
+
+test("the dispute index carries both arms and never degrades to the compact form", (t) => {
+  const root = fixture(t);
+  writeSource(root, "first source arm\nsecond source arm\nthird line\n");
+  writeCapsule(root, header(), body(
+    "[dispute C-006@docs/source.md:1,docs/source.md:2: the two statements diverge.]",
+  ));
+  const result = run(root, "disputes", "--capability", "2");
+  assertOk(result);
+  assert.match(result.stdout, /items=1 bodies=0 form=full/);
+  const item = JSON.parse(result.stdout.match(/^dispute: (.+)$/m)[1]);
+  assert.equal(item.id, "C-006");
+  assert.deepEqual(item.coordinates, ["docs/source.md:1", "docs/source.md:2"]);
+  assert.deepEqual(item.arms.map((arm) => arm.content), ["first source arm", "second source arm"]);
+});
+
+test("select emits zero bodies over 240 lines until explicitly approved", (t) => {
+  const root = fixture(t);
+  const paths = [];
+  for (let index = 1; index <= 3; index += 1) {
+    const content = body(Array.from({ length: 72 }, (_, line) => `\uBB38\uC7A5 ${index}-${line}`).join("\n"));
+    const target = writeCapsule(root, header({ topic: `topic-${index}` }), content, String(index).padStart(3, "0"));
+    paths.push(path.relative(root, target).split(path.sep).join("/"));
+  }
+  const args = paths.flatMap((item) => ["--path", item]);
+  const blocked = run(root, "select", ...args);
+  assert.equal(blocked.status, 3);
+  assert.match(blocked.stdout, /opened=0/);
+  assert.equal((blocked.stdout.match(/^candidate:/gm) || []).length, 3);
+  assert.doesNotMatch(blocked.stdout, /^body:/m);
+  assert.match(blocked.stderr, /opening budget exceeded/);
+
+  const approved = run(root, "select", ...args, "--approved");
+  assertOk(approved);
+  assert.match(approved.stdout, /opened=3 .*approved=1/);
+  assert.equal((approved.stdout.match(/^body:/gm) || []).length, 3);
+});
+
+test("select enforces the 24 KiB budget independently of line count", (t) => {
+  const root = fixture(t);
+  const huge = `\uD55C${"\uAC00".repeat(9000)}`;
+  const target = writeCapsule(root, header(), body(huge));
+  const relative = path.relative(root, target).split(path.sep).join("/");
+  const result = run(root, "select", "--path", relative);
+  assert.equal(result.status, 3);
+  assert.match(result.stdout, /opened=0/);
+  assert.doesNotMatch(result.stdout, /^body:/m);
+});
+
+test("retired capsules are bounded tombstones and invalid UTF-8 is rejected", (t) => {
+  const retiredRoot = fixture(t);
+  writeCapsule(retiredRoot, header({ state: "retired" }), "# \uC88C\uD45C \uC2E0\uB8B0\nRetired: \uC0C8 \uCEA1\uC290\uC774 \uB300\uC2E0\uD55C\uB2E4.");
+  assertOk(run(retiredRoot, "validate"));
+  const longRoot = fixture(t);
+  writeCapsule(longRoot, header({ state: "retired" }), "# \uC88C\uD45C \uC2E0\uB8B0\n1\n2\n3\n4\n5");
+  const long = run(longRoot, "validate");
+  assert.equal(long.status, 1);
+  assert.match(long.stderr, /hard limit is 5/);
+
+  const invalidRoot = fixture(t);
+  const target = writeCapsule(invalidRoot);
+  fs.writeFileSync(target, Buffer.from([0xc3, 0x28]));
+  const invalid = run(invalidRoot, "validate");
+  assert.equal(invalid.status, 1);
+  assert.match(invalid.stderr, /not valid UTF-8/);
+});
+
+test("CLI rejects missing selections, unknown options, and invalid roots", (t) => {
+  const root = fixture(t);
+  const missing = run(root, "select");
+  assert.equal(missing.status, 1);
+  assert.match(missing.stderr, /requires at least one --path/);
+  const option = run(root, "project", "--mystery", "x");
+  assert.equal(option.status, 1);
+  assert.match(option.stderr, /unknown option/);
+  const invalid = spawnSync(process.execPath, [tool, "validate", "--root", path.join(root, "missing")], { encoding: "utf8" });
+  assert.equal(invalid.status, 1);
+  assert.match(invalid.stderr, /root is not a directory/);
+});

@@ -51,7 +51,12 @@ capability-list number, not the unit's tree or baseline number.
 3. Answer in this order: path; purpose and boundary; concepts and invariants; verified
    current behavior and entry points; consumed contracts and traps; freshness of both zones;
    and the symmetric difference in completed cards since the baseline. When the evidence is
-   `None.`, say so.
+   `None.`, say so. When the selected capability has a knowledge capsule folder, present the
+   header projection from
+   `node <plugin root>/scripts/project-knowledge.mjs project --capability <capability number>`
+   as an index alongside, and open only the capsules the user picks through the same tool's
+   `select --path`, within the opening budget — a request for all of them is that budget's
+   explicit approval (`--approved`).
 
 This answer changes no file or state and asks no normal-resume approval question. If the
 user then requests implementation, return to the normal procedure, report state, obtain

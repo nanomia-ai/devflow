@@ -269,6 +269,10 @@ CHANGELOG 맨 위에 날짜·무엇·왜·파일을 적는다. 약 60줄 안에�
 | 구축 범위 | build scope | | 처분 | disposition |
 | 결정 기록 | decision record | | 증거 기록 | evidence record |
 | 기록 게이트 | record gate | | 기록 도구 | record tool |
+| 지식 캡슐 | knowledge capsule | | 개봉 예산 | opening budget |
+| 출처 표기 | provenance mark | | Intent 총론 | Intent overview |
+| 종합 | synthesis | | 추정 | conjecture |
+| 다툼 | dispute | | 출처 표본 검사 | provenance sampling check |
 
 가설은 능력 지식 기준선의 신뢰 상태이며 검증 결과인 `unverified`와 다른 개념이다. artifact의 정식
 명칭은 `capability document`, 짧은 이름은 `baseline`뿐이다. `capability file`과 `capability baseline`을

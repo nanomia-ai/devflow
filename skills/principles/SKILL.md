@@ -452,7 +452,11 @@ split owns the tree and task cards; verify owns verify.md. Decision and evidence
 are written by product, arch, design, adopt, split, and work through the canonical record
 gate above and the discovery→update table. arch, or adopt in a brownfield,
 owns the design zone under `devflow/project/capabilities/`; verify owns the verified zone
-after creation. The canonical baseline predicates govern the initial empty verified
+after creation. The same-numbered knowledge capsule folder belongs to the design-zone
+writer, and the canonical baseline predicates govern its path, header, provenance marks,
+and opening budget. Skills never delete, move, or edit the source documents a capsule was
+processed from — disposition belongs to a person alone. The canonical baseline predicates
+govern the initial empty verified
 scaffold, mechanical path replacement when an ADR is superseded, the exact byte boundary,
 the exact mechanical v0.10 migration, and the human-deletion exception.
 Fixed target ownership means ownership of rerunning the whole document; the current skill walking this table performs a one-line update named by the table.
@@ -764,9 +768,9 @@ decision — a blockade does not block this lane.
   binding decision.
 - **Capability-design commit**: after every confirmed Layer 0 commit has landed, arch, or
   adopt in a brownfield, writes the design zones for the expected capability documents as
-  its final output. Land only those capability documents as `arch — capabilities` or
-  `adopt — capabilities`; if no capability bytes change, do not commit. This is a
-  binding decision.
+  its final output. Land only those capability documents and their knowledge capsules as
+  `arch — capabilities` or `adopt — capabilities`; if no capability bytes change, do not
+  commit. This is a binding decision.
 - **Planning commit**: split bundles newly created or revised pending cards,
   user-confirmed card-dependency format corrections, tree structure, card Approval and
   Review, arch.md `Settled by` replacements, verify.md

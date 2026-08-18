@@ -133,6 +133,18 @@ Read the card fully (including Coordinates and Identity — know what this is a 
   yet. Apply the consumer judgment below first; only when its shape gate permits, read both
   zones and the exact Binding ADR paths regardless of `Read first`. Foundation and research
   cards follow the same rule
++ when a same-numbered knowledge capsule folder exists beside the capability document just
+  read, project only the capsules' first-line headers:
+  `node <plugin root>/scripts/project-knowledge.mjs project --capability <capability number>`,
+  never without `--capability`. Open bodies only for capsules named by the card's
+  `Read first` and `current` capsules whose `use-when` matches the card's destination and
+  target, through the same tool's `select --path <exact path>` (repeat `--path` for several).
+  The tool enforces the opening budget as a hard cap — over it, it returns zero bodies with
+  the candidate list and the cost; pass that report to the user unchanged and either narrow
+  or obtain explicit approval (`--approved` on the same command). An opened capsule's `conjecture` sentence is not an
+  implementation basis, and a `dispute` leans on neither arm before the decision — when
+  continuing requires leaning on one, stop and report. When a capsule's claim moves into the
+  progress log, a `carry:` line, or a delegation briefing, its provenance mark moves with it
 + run a mechanical query over every non-`.stale.` `.done.` card below that depth-1 unit whose
   number is not in the capability document's `Covered cards`, emitting each card's number and
   the last `carry:` line of its progress log and nothing else. Read only that output and open

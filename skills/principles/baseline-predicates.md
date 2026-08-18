@@ -16,7 +16,9 @@ knowledge baselines are always on; there is no per-project switch.
   folder, waiting file, or existing baseline when one exists. Different numbers claimed by
   two or more of those paths are a format anomaly. When no disk path has a number yet,
   derive it from the capability's position in the product.md capability list. The first
-  capability is `02`, and retired rows keep their positions and count.
+  capability is `02`, and retired rows keep their positions and count. A subfolder in the
+  same folder whose name equals a capability document's filename is that number's knowledge
+  capsule folder — the "Domain knowledge capsules" section below owns its contract.
 - A filename is the number, `-`, then the name suffix. When a tree folder or waiting file
   exists, use its text after the number unchanged. Before either exists, use the product.md
   capability name exactly as split would use it in the tree; invent no separate slug
@@ -42,22 +44,30 @@ the boundary.
 | # | Section | Zone | Form | Cap | Exclude |
 |---|---|---|---|---|---|
 | 1 | H1 · purpose · boundary · trust notice | design | fixed 4 lines: `# <number> <name>` · purpose · boundary · trust | 4 lines | relative claims (`latest`, `most current`) |
-| 2 | Concept model | design | table: concept / what the user gets / identifier / relation | 8 rows | code fields, types, signatures |
-| 3 | Invariants | design | numbered list of falsifiable statements | 8 items | rules equally true of other capabilities |
-| 4 | Non-goals | design | bullet: item — one-clause reason | 5 items | things merely not built yet |
-| 5 | Binding ADRs | design | exact paths under `devflow/project/decisions/` that this capability document's design statements actually cite — legacy ADRs and **current** decision records alike | 5 lines | uncited paths and superseded records |
-| 6 | Design metadata | design | the two `key: value` fields below | 2 fields | every other field |
+| 2 | Intent overview | design | free prose: what we set out to build · why this shape and which directions were dropped · what failures taught | soft | code details, chronology, card states |
+| 3 | Concept model | design | table: concept / what the user gets / identifier / relation | soft | code fields, types, signatures |
+| 4 | Invariants | design | numbered list of falsifiable statements | soft | rules equally true of other capabilities |
+| 5 | Non-goals | design | bullet: item — one-clause reason | soft | things merely not built yet |
+| 6 | Binding ADRs | design | exact paths under `devflow/project/decisions/` that this capability document's design statements actually cite — legacy ADRs and **current** decision records alike | soft | uncited paths and superseded records |
+| 7 | Design metadata | design | the two `key: value` fields below | 2 fields | every other field |
 | — | `## Verified state` | boundary | fixed H2 heading | 1 line | — |
-| 7 | Main flow | verified | mermaid flowchart LR | 9 nodes | unimplemented paths |
-| 8 | Lifecycle | verified | mermaid stateDiagram-v2, only when illegal transitions exist | 8 states | state sets with only legal transitions |
-| 9 | Current behavior | verified | table: action / precondition / what the user sees / entrypoint | 10 rows | planned behavior and display-only wording changes |
-| 10 | Entrypoints | verified | table: exact path / role / entered from | 12 rows | a whole “related” folder |
-| 11 | Consumed contracts | verified | table: exact path / other capability number / expectation | 6 rows | anything this capability does not consume directly |
-| 12 | Traps | verified | table: symptom / reproduction condition / cause / use instead | 10 rows | universal development knowledge |
-| 13 | Verify | verified | commands and scenarios actually run at this closure, verbatim | 8 steps | accumulated past passes |
-| 14 | Verification metadata | verified | the five `key: value` fields below, at end of file | 5 fields | every other field |
+| 8 | Main flow | verified | mermaid flowchart LR | soft | unimplemented paths |
+| 9 | Lifecycle | verified | mermaid stateDiagram-v2, only when illegal transitions exist | soft | state sets with only legal transitions |
+| 10 | Current behavior | verified | table: action / precondition / what the user sees / entrypoint | soft | planned behavior and display-only wording changes |
+| 11 | Entrypoints | verified | table: exact path / role / entered from | soft | a whole “related” folder |
+| 12 | Consumed contracts | verified | table: exact path / other capability number / expectation | soft | anything this capability does not consume directly |
+| 13 | Traps | verified | table: symptom / reproduction condition / cause / use instead | soft | universal development knowledge |
+| 14 | Verify | verified | commands and scenarios actually run at this closure, verbatim | soft | accumulated past passes |
+| 15 | Verification metadata | verified | the five `key: value` fields below, at end of file | 5 fields | every other field |
 
-The deployed section headings are exactly `## Concept model`, `## Invariants`,
+`soft` in the Cap column means no per-section row count is contract — the total cap and
+over-cap reporting govern, and only the form contracts (fixed 4 lines, 1 boundary line,
+2 fields, 5 fields) are hard. The Intent overview is the unconditional reach point for
+intent that runs through the whole capability — capsules open only on demand, so judgment
+criteria, dropped directions, and lessons from failure that every card must reach live
+only here.
+
+The deployed section headings are exactly `## Intent`, `## Concept model`, `## Invariants`,
 `## Non-goals`, `## Binding ADRs`, `## Design metadata`, `## Verified state`,
 `### Main flow`, `### Lifecycle`, `### Current behavior`, `### Entrypoints`,
 `### Consumed contracts`, `### Traps`, `### Verify`, `### Verification metadata`, in that
@@ -72,10 +82,11 @@ Boundary: owns <owned scope>; does not own <neighbor capability number and name,
 Trust: design reflects confirmed Layer 0; verified state reflects the last passing capability verification, or contains no evidence before one. Judge each zone by its metadata.
 ```
 
-- The total cap is about 185 lines: about 45 for design and 140 for verified state. An
+- The total cap is about 185 lines. An
   over-cap write succeeds; its writer reports the section and actual row, node, or step
   count. Splitting a capability is a user decision about a product change, not an automatic
-  result.
+  result. Domain knowledge beyond this budget is not cut — it moves down into knowledge
+  capsules.
 - Purpose and ownership boundary must be readable in the first 4 lines, followed immediately
   by `Concept model`; order concepts from most central. Do not copy a contract body from code
   or another document; retain its exact location and only invariants specific to this
@@ -104,6 +115,129 @@ Trust: design reflects confirmed Layer 0; verified state reflects the last passi
   skill runs.
 - Never record chronology, current card status, progress, assignee, or next work. The tree,
   card progress log, commits, HANDOFF, and journal own those facts respectively.
+
+## Domain knowledge capsules
+
+The capability document is the map that is always read; a capsule is a jar holding one
+topic, opened only when needed. Measured basis: one real brownfield capability's domain
+source ran to 3,699 lines — pressed into a 185-line vessel as summary, what survives is
+confidence, not understanding.
+
+- The path is `devflow/project/capabilities/<number>-<name suffix>/K-<three digits, zero-padded>-<topic slug>.md`.
+  The folder name equals the same-numbered capability document's filename without `.md`.
+  K numbers are immutable and never reused within the folder, and only `.md` files of this
+  form inside that folder are capsules. A capability without capsules is the default —
+  capsules exist only when knowledge overflows the capability document budget. On a
+  capability rename the capsule folder follows the new name in the same capability design
+  commit.
+- The first line is a single line with fixed key order:
+  `knowledge: {"v":1,"capability":<number as integer>,"facet":"<facet slug within the capability>","topic":"<topic slug>","use-when":"<one clause: when to open this capsule>","state":"current|retired","synopsis":"<one-line summary>"}`
+  When the header does not match this form, no consumer opens the body; report the format
+  anomaly in one line. `facet` groups capsules within one capability and its vocabulary is
+  the project's to choose — the repository imposes no closed list, but one capability uses
+  one slug for one facet. A `retired` capsule's body is a tombstone of five lines or fewer —
+  git keeps the history.
+- The body is free prose. No section structure, table, or fill-in form is imposed. A
+  `current` capsule has one H1 line plus exactly five fixed elements, in this order: an
+  `Intent: ` line, a `Desired outcome: ` line, `## Grounded state`, `## Revisit when`, and
+  `Source basis: [...]` at end of file. These are not a fill-in form but the anchors
+  consumers actually look for — the prose between them takes no imposed shape.
+  `Source basis` grounds the unmarked sentences at file level, and every element must be a
+  string satisfying the coordinate grammar below — it is not a place for free description or
+  a bare document name. **It cannot be empty**: a capsule is born only from processing a
+  source (see "Creation and refresh inputs" below), so having no coordinate to cite means
+  that capsule should not exist.
+  **`validate` checks each element's path existence and line range with the same strength as
+  an insertion coordinate** — unmarked is the default, so most of a capsule leans on this
+  one line.
+- The coordinate grammar is `<repository-relative path>[@<revision>]:<start line>[-<end line>]`.
+  Anything that does not reopen an exact place for a person is not a coordinate.
+- The authoring cap is soft at 120 lines per capsule — exceeding it never blocks the write;
+  the writer reports it, and a split that would tear meaning apart is not made — the capsule
+  stays with its reason.
+- Capsules are owned by the same number's design-zone writer (arch; adopt for brownfield).
+  They ride the same confirmation bundle and the same `arch — capabilities` ·
+  `adopt — capabilities` commit, and verify never writes capsules. The human deletion
+  exception matches the capability document's.
+- Capsules and the capability document are a derived account of the source documents, not
+  their owner. Skills never delete, move, or edit the source documents a capsule was
+  processed from — disposition is always a person's act.
+
+### Provenance marks — unmarked is the default
+
+When a reading session cannot tell what the source said from what the processor made,
+smooth confidence replaces accuracy — in measurement, sessions reading only the processed
+text answered a source contradiction as settled fact, while the control group that read
+the source was more accurate in its honest not-knowing. So sentences are written unmarked
+by default, and only a sentence departing from the default carries an opening bracket and
+one closed head. There is no marking quota — a faithful capsule with zero marks is normal.
+
+- Defaults: an unmarked sentence in a capsule body is source content within the
+  `Source basis` coordinates, held with no more confidence than the source states. An
+  unmarked sentence in the capability document's `Intent` section is the processor's
+  synthesis — an overview is synthesis by nature, and marking every sentence there is
+  noise. Sentences carried verbatim from the source are the ones marked, with quotes and a
+  coordinate.
+- The head literals are exactly four, ASCII everywhere in ko and en — a token a machine reads
+  does not follow a human language, and the decision record's `affects` literals already
+  carry that discipline. Prose stays in its own language; only the head is ASCII.
+  **This section is the canonical home of this vocabulary, and a head that is not listed here
+  is rejected whether or not it carries a coordinate** — `conjecture` in particular is the
+  only head with no coordinate, so a misspelling of it passing as unmarked would promote a
+  guess into source-and-confident. Machines read only the head after the opening delimiter.
+  - `(synthesis@<coordinate>[,<coordinate>]: free prose)` — this sentence is not in the
+    source. The processor distilled it from those coordinates and the distillation basis
+    follows as prose. One or two coordinates.
+  - `(code@<coordinate>[,<coordinate>]: free prose)` — confirmed in code, not documents. It
+    proves current behavior, never intent or a desired future.
+  - `(conjecture: free prose)` — a judgment with no coordinate to pin it to. It carries no
+    coordinate, and a later session must not cite it as fact.
+  - `[dispute C-<three digits>@<coordinate>,<coordinate>: free prose]` — the source contains
+    differing statements. Do not pick one side and smooth it over — keep both contents, each
+    with its own coordinate; interpretation candidates (such as "these may be different
+    scenes") may be noted, but no resolution. Two distinct coordinates are required; missing
+    either is a format anomaly. A dispute is itself an item for a person to decide; before
+    that decision no arm is cited as settled fact. C numbers are immutable and never reused
+    within a capability.
+- Source silence is written as a sentence, not a mark — "the source does not specify the
+  mechanism" is a settled statement about the source. Marks carry only the three
+  distinctions accurate prose cannot: a synthesized sentence looks identical to a quoted
+  one, a preserved contradiction can be "fixed" in good faith by the next editor, and a
+  guess hardens into fact within two sessions.
+- Travel rule: when a capsule's claim moves into a card, a progress-log `carry:` line, or a
+  delegation briefing, its mark moves with it. A dispute's two arms are never reduced to
+  one in transit.
+
+### Opening budget — a hard cap
+
+- Within one card's execution, opened capsule bodies total at most 240 lines or 24 KiB.
+  Beyond that, open none — report the candidates' header projection and the total cost,
+  then narrow or obtain explicit approval; explicit approval is this cap's only exit. The
+  authoring cap is soft and, symmetrically, the opening cap is hard — the right place for
+  hard is reading, not writing. 240 lines/24 KiB is provisional (measured: 112–180 opened
+  lines per card in the trial processing); the design backlog records the reopen
+  conditions.
+- Capsule selection and indexing use machine queries that open no body — project each
+  capsule's first-line `knowledge:` header only. Do not create a hand-written index
+  section in the capability document — a summary living in two places drifts apart.
+- The only means of projection, selection, and format checking are the read-only
+  `project`, `disputes`, `select`, and `validate` subcommands of the capsule tool
+  `scripts/project-knowledge.mjs`. `disputes` is the dispute-only projection: it emits the C
+  number, both coordinates, and the source content each coordinate points at, with no body,
+  while `project` in the same place emits only the C number — a consumer that must show a
+  person both arms calls `disputes`. Compute the tool's location from the plugin root by the
+  same rule as the record tool. Sessions write capsule files themselves, and a capsule must
+  pass `validate` before its commit. The tool is stateless and read-only; it owns its
+  judgment internals and this document does not restate them.
+- **Call the index projection narrowed to one capability** — `project --capability <number>`
+  is the canonical call. An unfiltered `project` gathers every capability's headers at once
+  and overruns the index budget. The index carries a 24 KiB cap too, kept in two tiers: the
+  full projection when it fits (`form=full`), and otherwise an automatic downgrade to a
+  compact projection that drops the fields choosing never reads and keeps the path and
+  `use-when` (`form=compact` — measured: one capability's 100 capsules fit compact in 21 KB
+  and all 100 are emitted). When even compact overruns, it reports zero entries and the
+  filters to narrow by. When several capabilities must be seen, call once per capability and
+  report the total to the person the same way the opening budget is reported.
 
 ## Metadata and freshness
 
@@ -281,6 +415,10 @@ verified zone's sole writer.
   glossary.md, and only ADR paths actually cited by current design statements. Compress
   purpose, boundary, concepts, invariants, and non-goals per capability; do not copy Layer 0
   paragraphs or code contract bodies.
+- A capsule's input is the HEAD capsule for byte stability, the source documents the user
+  named together with their revision, and current code at the points needing confirmation.
+  Never invent a capsule without a source — greenfield knowledge lives in the capability
+  document until it overflows that budget.
 - The foundation records only shared contracts and boundaries named by arch.md. Do not copy
   coding style, verify-channel details, or universal rules.
 - Foundation has no capability-layer verification closure, so its initial verified scaffold
@@ -316,6 +454,12 @@ verified zone's sole writer.
   `design: baseline missing — judge from the card and supplied shared documents` projection.
   With one boundary but malformed section or metadata shape, read the zones and mark the
   affected one a hypothesis.
+- After reading the selected capability document, work projects only the capsule headers by
+  machine query when a same-numbered capsule folder exists. It opens bodies only for capsules
+  named by the card's `Read first` and `current` capsules whose `use-when` matches the card's
+  destination and target paths. An opened capsule's `conjecture` sentence cannot be cited as
+  an implementation basis, and a `dispute` leans on neither arm before the decision — when
+  continuing requires leaning on one, stop and report the dispute number with both arms.
 - work opens each exact path in a valid Binding ADRs section of the file. If the section itself
   is absent or unparseable, open and infer no ADR path and make the design zone a hypothesis.
   For a path named by a valid section, report a missing path in one line and
@@ -351,7 +495,10 @@ verified zone's sole writer.
   requests the full expected set, apply this judgment per number, read only valid files, skip anomalous
   numbers, and continue. Ordinary resume reads only filenames and the shape projection,
   never file bodies. When a Binding ADR path is absent during domain entry, report that exact
-  path, make the design zone a hypothesis, and search for no substitute.
+  path, make the design zone a hypothesis, and search for no substitute. When the selected
+  capability has a capsule folder, present the header projection as an index alongside and
+  open only the capsules the user picks, within the opening budget — the user's request for
+  all of them is that budget's explicit approval.
 
 ## Relations and consumer projection
 

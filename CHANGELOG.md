@@ -15,6 +15,33 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.18.1 — 2026-08-18 — domain knowledge that overflows a capability document lives in capsules, and processing no longer trades accuracy for confidence
+
+A real brownfield capability's domain source ran to 3,699 lines against a 185-line capability
+document. Two processed artifacts were built and comprehension measured across three arms
+(processed A, processed B, source control C, the same 13 questions). Direction survived
+processing — all three arms rejected the same wrong directions for the same reasons — but the
+processing produced confidence, not accuracy: a contradiction in the source was pushed to one
+side and written as settled fact, synthesized sentences were indistinguishable from quoted
+ones, and the control group's honest not-knowing was the more accurate answer. This release
+adds domain knowledge capsules (DD-76). A capability document stays the always-read map and
+gains an `## Intent` overview — the unconditional reach point for capability-wide intent —
+while overflow moves into `capabilities/NN-name/K-NNN-topic.md` capsules under the same
+number, selected by projecting their one-line `knowledge:` header and opened only on demand.
+Authoring is soft-capped at 120 lines per capsule with over-cap reporting; opening is
+hard-capped at 240 lines / 24 KiB per card, whose only exit is explicit approval. Provenance
+marking defaults to unmarked — an unmarked body sentence is source, an unmarked Intent
+sentence is synthesis — and four closed ASCII heads mark only the exceptions: `synthesis` and
+`code` carry coordinates, `conjecture` carries none and cannot be cited as fact, and
+`[dispute C-NNN@a,b]` keeps both arms of a source contradiction with their coordinates instead
+of resolving it, rising as an item for a person to decide. adopt's capsule processing runs a
+clean-session refutation that includes a provenance sampling check, and source documents are
+never deleted, moved, or edited by any skill. Per-section row counts in the capability
+document, which never had a measured basis, become soft; the total 185-line cap stands. Wired
+through `skills/principles/{SKILL,baseline-predicates}{,_ko}.md` and the arch, adopt, split,
+work, resume, and verify pairs, with `scripts/project-knowledge.mjs` (`project`, `select`,
+`validate`) as the read-only capsule tool.
+
 ## 0.18.0 — 2026-08-18 — planning decisions and evidence survive as records, and only reproducible evidence stops re-verification
 
 The first real project left 115 lines of canon after 6+ hours of planning: a fresh session

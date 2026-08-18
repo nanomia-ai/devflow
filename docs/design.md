@@ -177,11 +177,11 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-63 | Journal merge conflicts resolve 3-way, not as a union | Concurrency, claims, integration | v0.14.0 | active |
 | DD-66 | The tweak lane confirms its landing by machine first, and in same-file contention the tweak side yields | Concurrency, claims, integration | v0.14.2 | active |
 | DD-70 | `coordinator` is a declared role, not a devflow stage; one role contract owns its duties, and devflow behavior and state do not branch on whether orchestration is in use | Concurrency, claims, integration | v0.16.0 | active |
-| DD-28 | Durable knowledge is connected through bounded consumers of existing records, not through a new document layer | The knowledge layer and capability documents | v0.9.21 | active, partly corrected by DD-74 (v0.18.0) |
+| DD-28 | Durable knowledge is connected through bounded consumers of existing records, not through a new document layer | The knowledge layer and capability documents | v0.9.21 | active, partly corrected by DD-74 (v0.18.0), DD-76 (v0.18.1) |
 | DD-33 | The knowledge-reachability set — standing of outside records · conversation decisions land immediately · a user-confirmation gate on product's four core sections · a disproof row (replace the statement, or re-run product) · a means row · a pre-HANDOFF landing check · a survival path for research answers that are tools · verify's disproof arbitration | The knowledge layer and capability documents | v0.9.18 | active |
-| DD-42 | The capability knowledge baseline — the domain blueprint a verification closure produces | The knowledge layer and capability documents | v0.10.0 | active |
-| DD-43 | Capability documents physically separate a design zone born with Layer 0 from a verified zone refreshed at closure, and are always on | The knowledge layer and capability documents | v0.11.0 | active |
-| DD-44 | Domain reachability is owned by the depth-1 number rule and resume's domain-entry branch, not by card fields | The knowledge layer and capability documents | v0.11.0 | active |
+| DD-42 | The capability knowledge baseline — the domain blueprint a verification closure produces | The knowledge layer and capability documents | v0.10.0 | active, partly corrected by DD-76 (v0.18.1) |
+| DD-43 | Capability documents physically separate a design zone born with Layer 0 from a verified zone refreshed at closure, and are always on | The knowledge layer and capability documents | v0.11.0 | active, partly corrected by DD-76 (v0.18.1) |
+| DD-44 | Domain reachability is owned by the depth-1 number rule and resume's domain-entry branch, not by card fields | The knowledge layer and capability documents | v0.11.0 | active, partly corrected by DD-76 (v0.18.1) |
 | DD-45 | Capability-document recovery is judged in HEAD, and an interrupted design write finishes by regeneration rather than byte comparison | The knowledge layer and capability documents | v0.11.1 | active |
 | DD-48 | Knowledge that used to die in HANDOFF now lands on two keyed lines | The knowledge layer and capability documents | v0.12.0 | active |
 | DD-56 | Reading is bounded to open work: a depth-1 folder carrying `.done` is read by name | The knowledge layer and capability documents | v0.13.0 | active |
@@ -191,6 +191,7 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-73 | Capability documents are arch's final output and must exist before the first tree opening, while decision and external-contract grounds are preserved at confirmation | The knowledge layer and capability documents | v0.17.0 | active |
 | DD-74 | The planning record layer — the record gate lands decision and evidence records at settlement | The knowledge layer and capability documents | v0.18.0 | active |
 | DD-75 | Record succession — one successor changes the present; stale evidence cascades; conflicts are preserved then merged | The knowledge layer and capability documents | v0.18.0 | active |
+| DD-76 | Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute | The knowledge layer and capability documents | v0.18.1 | active |
 | DD-10 | No retroactive tree records (brownfield) | Brownfield and entry | origin | active |
 | DD-20 | Brownfield entry is its own skill, adopt — split out of arch | Brownfield and entry | v0.9.10 | active |
 | DD-26 | Brownfield and layer transitions have explicit disk states, preserving their meaning across interruption | Brownfield and entry | v0.9.21 | active |

@@ -516,7 +516,7 @@ DD-53 made several sessions in one working folder safe, but an outside actor ass
 
 ### DD-28 · Durable knowledge is connected through bounded consumers of existing records, not through a new document layer (v0.9.21)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.9.21 | State: active, partly corrected by DD-74 (v0.18.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.9.21 | State: active, partly corrected by DD-74 (v0.18.0), DD-76 (v0.18.1)
 
 glossary and journal were produced but arch, design, work, verify, and delegated implementers did not read them; conclusions completed after two dependent cards opened together also could not reach the next implementer. The repaired read set is completely enumerated by name: glossary and journal when present, plus only the cards directly named in `Depends`. For brownfields, adopt indexes only exact per-capability paths to existing handoff and specification files under arch.md `Existing records`. The index is neither a read instruction nor canon; work opens only a path that split rechecked against current code and placed in the card's `Read first`. "Related records" and whole-capability-folder reading remain forbidden. Layer 0 completeness includes glossary; when only it is missing, resume sends a brownfield to adopt and a greenfield to product without rewriting another confirmed document. This does not force a second domain-handoff layer in the style of jgnote; it closes reachability within the existing canon, tree, and short-record hierarchy. The retrospective likewise receives exactly one event-specific input set, so capability and whole-project scopes cannot merge. This index differs from the observation-cache registration field rejected in v0.9.18: `Existing records` substantively avoids all three rejection reasons — a rule consumes it (split rechecks each path and puts it in a card's `Read first`), it indexes brownfield existing records instead of restating the outside-records standing declaration, and its only home is arch.md (see that entry in the rejection lineage)
 
@@ -528,19 +528,19 @@ Grounds: cross-corroborated field evidence — the rdsf structural diagnosis (20
 
 ### DD-42 · The capability knowledge baseline — the domain blueprint a verification closure produces (v0.10.0, lifecycle extended by v0.11.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.10.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.10.0 | State: active, partly corrected by DD-76 (v0.18.1)
 
 Grounds are three measurements: across jgnote's 12 existing handoffs the chronology sections held 60–68% of each document while hand-written freshness declarations failed; ade's G-T2 produced a dual-ownership incident; and the rdsf knowledge-reachability diagnosis pointed at the same gap. v0.10.0 adopted option D, where one writer replaces one file wholesale at the last verification closure. A verification campaign (16 refutation findings → 3 research passes → 2 Fable refutation passes with 15 findings → a re-audit with 13) refined that candidate contract. The [proposal](rounds/v0.10.0/proposal.md) now preserves only the grounds and rejection lineage; the executable contract lives in exactly one place, the canonical baseline predicates. The rejections of time decay, continuous refresh, append-only inheritance, Assumptions and Open Questions, an index, automatic glob attachment, staging consumption, and symbol binding all carry forward
 
 ### DD-43 · Capability documents physically separate a design zone born with Layer 0 from a verified zone refreshed at closure, and are always on (v0.11.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1)
 
 The owner's operating intent is that a new MVP, a brownfield, and a mid-project join all obtain domain boundaries and concepts before the first card and reach them by number without card wiring. arch, or adopt in a brownfield, replaces the design zone; verify replaces the verified zone. They own disjoint byte ranges separated by the fixed `## Verified state` boundary. This decomposes rather than overturns v0.10.0's one-writer grounds: the two writing moments are serial, no byte is shared, design declares trust through `Design head`, and verification through `Scope head` and `Covered cards`. One seven-field machine block would overlap the two owners again, so the two design-metadata fields sit before the boundary and the five verification-metadata fields after it. The switch is removed because the adopted shape is not a 1,100–1,700-line relay-note second handoff layer: it is capped near 185 lines per capability, forbids chronology, and costs O(1) reads per card; even a small project gets the same lifecycle from a six-section design zone. Design freshness uses only the actual sources product.md, arch.md, and glossary.md. Including code-style.md or design.md would make every capability hypothetical with no failure path that changes its design zone — an over-harness. The exact v0.10 predecessor is separated from damage reset: design is re-derived from current Layer 0 and verified bodies plus compatible metadata migrate mechanically, but its old `Scope head` did not include consumed paths and therefore does not carry forward; verified statements remain hypotheses until the next capability closure
 
 ### DD-44 · Domain reachability is owned by the depth-1 number rule and resume's domain-entry branch, not by card fields (v0.11.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1)
 
 If split copies a baseline and ADRs into every card, the path lives in two places and requires a research-card exception. work uses the claimed card's depth-1 number to read one document and only the exact ADRs named by that document. A baseline path left in a v0.10 card's `Read first` is treated only as legacy wiring and deferred to that number rule. resume normally reads only file names and a shape projection, but when the user asks to explain a capability it opens one document by number or name and answers with both freshness states. It opens the entire expected set only when the user explicitly requests that full set. Foundation is reached by the same `01` number rule. Relationships live on the consuming side as exact paths in `Consumed paths`; provider closure, retirement, and split project only bounded metadata plus the Consumed-contract path/number columns and report consumers with their actual current freshness. That column projection detects an unchanged path reassigned to another capability without opening other prose. With no observed failure, this does not automatically expand into execution, card creation, or cross-capability regression
 
@@ -689,6 +689,65 @@ successor, deletion, and Layer 0 changes still wait.
 
 Affected coordinates: the same set as DD-74. Revisit when a merge or concurrency scene
 produces a loss or double-plan that these rules do not classify.
+
+### DD-76 · Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute (v0.18.1)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active
+
+Observed problem: one capability's domain source in a real brownfield (jgnote property) ran
+to 3,699 lines — pressed as summary into a 185-line capability document, knowledge is lost;
+left out, it does not exist for the next session. Two processed artifacts and a three-arm
+comprehension measurement (processed A and B against source control C, the same 13 questions)
+gave two facts. Directional understanding does travel through processing: all three arms
+correctly rejected the directional questions. But **the processing produced confidence, not
+accuracy** — a contradiction in the source (reverse geocoding: §4.1 "does not overwrite"
+against the later addendum "replaces") was pushed to one side and written as settled fact,
+sentences the processor synthesized were indistinguishable from source sentences, and C's
+honest not-knowing was more accurate than the processed text's smooth confidence.
+
+Chosen boundary: keep the capability document as the always-read map (total cap stays about
+185 lines; per-section row counts, which never had a measured basis, become soft; add the
+Intent overview section as the unconditional reach point for capability-wide intent), and
+move overflow down into capsules at `NN-<name>/K-NNN-<topic>.md` under the same capability
+number — only the first-line knowledge header (topic, use-when, state, synopsis) is machine
+projected, and bodies open only on demand. The authoring cap is soft at 120 lines per capsule
+with over-cap reporting; the opening cap is hard at 240 lines / 24 KiB per card with explicit
+approval as its only exit (provisional — measured openings were 112–180 lines). Provenance
+marking defaults to unmarked (an unmarked body sentence is source and confidence; an unmarked
+Intent sentence is synthesis), and only four closed heads mark the exceptions:
+`synthesis`, `code`, `conjecture`, `dispute C-n`. Mandatory per-block attachment was rejected:
+a required field whose value is the same nine times out of ten is the fill-in form the owner
+forbade, and in cross review the artifact carrying mandatory tags shipped a wrong source date
+straight through its own checker — proving form validation is not provenance validation.
+Source contradictions are not resolved; both dispute arms stay with their coordinates and
+rise as an item for a person to decide. Unmarked synthesis escaping machine detection is
+caught in the verification layer rather than by a writing-layer stamp — adopt's capsule
+procedure now includes, in its clean-session refutation, a provenance sampling check of three
+unmarked sentences per capsule. Source disposition (deletion, moving) is not part of the
+procedure — it belongs to a person alone.
+
+Rejection lineage refuted: DR-30 (rejecting a new per-capability work-note layer) reasoned
+that "relay notes already exist in four layers" — a capsule is not a fifth free-form note
+layer but the capability document's overflow moved under the same number, with the same
+writer, confirmation, and commit as the capability design commit, and it is a bounded
+contract of fixed header, closed marks, and an opening budget rather than free recording.
+What justifies the addition is not taste but a 3,699-line measurement. DR-19 (rejecting a
+split into two files: "two paths, double the reading") reasoned about an always-read path —
+capsules are not always read and their opening cap is hard, so fixed reading does not grow.
+DR-25 and DR-17 (rejecting unbounded reading and free linking) stand: capsule reach is only
+an exact path (`Read first`) plus a use-when match, and the opening total is a hard cap.
+DD-28's "no new document layer" widened its own list the way DD-74 did; DD-42 and DD-43's
+sole capability-document ownership and DD-44's number reachability are each partly corrected
+by capsule folders and header-projection reach.
+
+Affected coordinates: the canonical baseline predicates (capsule, provenance-mark, and
+opening-budget sections), the canonical rules (ownership and the capability-design commit),
+the arch, adopt, split, work, resume, and verify pairs, and
+`scripts/repository-invariants.test.js`.
+Revisit when: comprehension-question failure rate (a processed-text-only session answering a
+source contradiction or a synthesis wrongly), the rate of opening-budget overruns, the rate
+of disputes that are never collected, and repeated over-cap reports in capabilities with no
+capsules, which would reopen the budget numbers.
 
 ### Rejected under this subject
 

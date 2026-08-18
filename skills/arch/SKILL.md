@@ -272,9 +272,12 @@ current command output for those three paths.
 - The expected set is `01-foundation.md` plus one document for every non-retired
   capability in product.md. Assign numbers by the canonical baseline predicates'
   disk-first rule.
-- Derive only purpose, boundary, Concept model, invariants, non-goals, and the binding
-  ADRs cited by current statements, organized per capability. Do not put planned flows,
-  entry points, code fields, code-style.md content, or design.md content in the design zone.
+- Derive only purpose, boundary, Intent overview, Concept model, invariants, non-goals, and
+  the binding ADRs cited by current statements, organized per capability. Do not put planned
+  flows, entry points, code fields, code-style.md content, or design.md content in the design zone.
+- Domain knowledge overflowing the capability-document budget moves down into the canonical
+  baseline predicates' knowledge capsules. Processing a source document uses adopt's capsule
+  procedure under the same contract, and capsules ride the same commit as the design batch below.
 - When a HEAD file has the canon's exact `legacy v0.10` shape, apply the canonical mechanical
   migration and include it in the design-confirmation batch. Do not treat it as boundary
   damage or a data-loss reset.
@@ -289,9 +292,9 @@ current command output for those three paths.
   the existing bytes.
 - Before changing disk, present all design zones that would change as one batch and obtain
   user confirmation. Change no capability-document path before confirmation. Then put only
-  changed capability documents in one `arch — capabilities` commit. It is this run's last
-  commit and carries no Layer 0 path. If no file changes, ask no confirmation question and
-  do not commit.
+  changed capability documents and their knowledge capsules in one `arch — capabilities`
+  commit. It is this run's last commit and carries no Layer 0 path. If no file changes, ask
+  no confirmation question and do not commit.
 
 When a capability retires or splits, or another code-boundary change alters path ownership, run
 the canonical baseline predicates' consumer projection and report the registered
