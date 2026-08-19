@@ -438,7 +438,7 @@ The recorded ground for "one claim per id per depth-1 unit" (containing half-don
 
 ### DD-62 · During a blockade, journal appends that mint nothing, claim nothing, and consume nothing are written immediately (v0.14.0)
 
-Subject: Concurrency, claims, integration | Introduced: v0.14.0 | State: active, partly corrected by DD-74 (v0.18.0)
+Subject: Concurrency, claims, integration | Introduced: v0.14.0 | State: active
 
 v0.13.0's publishing paragraph made even journal line creation wait for integration to open, and the real result of that freeze was the loss this system guards against most: a session dying while blocked takes the user's spoken request with it, existing nowhere but the dead conversation (the independent review's only top-grade risk). The original ground — no coordination point, no global answer — does not reach appends: an append needs no global answer, and that decision's own measurements showed appends merge safely. The allowance is an exact enumeration: maintenance requests, capability notes, attributed open items and decisions, product re-run pending. Layer opening (it mints numbers), evidence records (they need a push), verification-state lines, and every consumption (deletion) still wait. The final task commit is named on the continue side — it belongs to the session's own branch, yet sat in neither list, violating the same paragraph's own declaration that nothing waits unnamed
 
@@ -516,7 +516,7 @@ DD-53 made several sessions in one working folder safe, but an outside actor ass
 
 ### DD-28 · Durable knowledge is connected through bounded consumers of existing records, not through a new document layer (v0.9.21)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.9.21 | State: active, partly corrected by DD-74 (v0.18.0), DD-76 (v0.18.1)
+Subject: The knowledge layer and capability documents | Introduced: v0.9.21 | State: active, partly corrected by DD-76 (v0.18.1)
 
 glossary and journal were produced but arch, design, work, verify, and delegated implementers did not read them; conclusions completed after two dependent cards opened together also could not reach the next implementer. The repaired read set is completely enumerated by name: glossary and journal when present, plus only the cards directly named in `Depends`. For brownfields, adopt indexes only exact per-capability paths to existing handoff and specification files under arch.md `Existing records`. The index is neither a read instruction nor canon; work opens only a path that split rechecked against current code and placed in the card's `Read first`. "Related records" and whole-capability-folder reading remain forbidden. Layer 0 completeness includes glossary; when only it is missing, resume sends a brownfield to adopt and a greenfield to product without rewriting another confirmed document. This does not force a second domain-handoff layer in the style of jgnote; it closes reachability within the existing canon, tree, and short-record hierarchy. The retrospective likewise receives exactly one event-specific input set, so capability and whole-project scopes cannot merge. This index differs from the observation-cache registration field rejected in v0.9.18: `Existing records` substantively avoids all three rejection reasons — a rule consumes it (split rechecks each path and puts it in a card's `Read first`), it indexes brownfield existing records instead of restating the outside-records standing declaration, and its only home is arch.md (see that entry in the rejection lineage)
 
@@ -576,7 +576,7 @@ v0.13.0's K3 row ("otherwise one line in journal.md") created a line with no cla
 
 ### DD-67 · Planning evidence discipline settles facts from four authorities before questions and isolates answer-only research, while the main session owns structural understanding and binding decisions (v0.15.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.15.0 | State: active, partly corrected by DD-74 (v0.18.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.15.0 | State: active
 
 product, arch, adopt, and split treated current repository facts, external contract facts,
 execution facts, and owner decisions as the same unknown. That created paths where the user
@@ -611,7 +611,7 @@ This catches absence at the first tree entrance even when an active claim would 
 
 ### DD-74 · The planning record layer — the record gate lands confirmed choices and reproducible observations immediately, the record tool judges the current set and bounded opening, and human deletion is a sanctioned exception (v0.18.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.18.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.18.0 | State: replaced by DD-77 (v0.18.2)
 
 Observed problem: after 6+ hours of real planning (synky), the only canon left was a
 115-line product.md and a 21-line glossary. A same-model session reading only that canon
@@ -669,7 +669,7 @@ reported-mode evidence hollows out the re-verification savings.
 
 ### DD-75 · Record succession — one successor changes the present, stale evidence cascades by reverse search, and conflicting or concurrent records are preserved then merged (v0.18.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.18.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.18.0 | State: replaced by DD-77 (v0.18.2)
 
 Immutability is a property of history, not of the present: every reversal costs one
 successor record naming its predecessors in supersedes. A user changing a confirmed
@@ -692,7 +692,7 @@ produces a loss or double-plan that these rules do not classify.
 
 ### DD-76 · Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute (v0.18.1)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2)
 
 Observed problem: one capability's domain source in a real brownfield (jgnote property) ran
 to 3,699 lines — pressed as summary into a 185-line capability document, knowledge is lost;
@@ -748,6 +748,73 @@ Revisit when: comprehension-question failure rate (a processed-text-only session
 source contradiction or a synthesis wrongly), the rate of opening-budget overruns, the rate
 of disputes that are never collected, and repeated over-cap reports in capabilities with no
 capsules, which would reopen the budget numbers.
+
+### DD-77 · A document speaks only of the present — an updated concept overwrites that concept's place, and the dropped direction lives beside that conclusion as a present fact (v0.18.2)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.18.2 | State: active
+
+Observed problem: one canonical file contradicted itself across 55 lines — `SKILL.md:390` said
+"add a successor record instead of editing or deleting" while `:445-447` said "modification
+means replacement by default: if you added a line, check whether you deleted the stale one. A
+document that only grows is a dead document." The first applied only to the record layer and
+the second only to documents, and a literally executing session kept that distinction exactly —
+documents did not grow and the record folder grew forever. The cost was measured: a scoring
+session that opened one discarded decision file wrote "the sentences were firm and it carried
+both its grounds and its dropped alternative. I thought I had solved everything … had I opened
+selectively I would have confidently reported a discarded decision as current. It was 577 lines
+so reading all of it was possible; at 5,770 lines I would have been wrong." The fact that it was
+void appeared nowhere in that file — it lived only inside another file's `supersedes` array.
+
+Desired behavior: when the same concept is updated, that concept's place is overwritten — the
+concept, not the file. The dropped direction and its reason are not the past but present fact
+and live beside that conclusion: what was dropped, why, and when it reopens. Only the reading
+condition differs — it is opened only when that conclusion is being overturned. Git carries the
+past versions and they are not read routinely; the overwriting commit's subject indexes the
+concept by name.
+
+Chosen boundary: four conditions that keep overwriting from being unbounded. (1) Only what can
+be recomputed may be overwritten — execution results, observations, and human confirmations land
+first, before the overwrite, in the place that document keeps them (which place is fixed by the
+discovery→update table). (2) Update or discard is decided by the reader's action — would a
+person reading the old sentence now take a wrong action. If yes it stays as a dropped direction;
+if no it is simply overwritten. (3) At adoption time (brownfield) nothing is overwritten — only
+what code confirmed is newly written, and the remaining old documents are neither deleted nor
+promoted but kept as source. (4) "One fact, one durable home" becomes this law's precondition —
+when a copy sits on another branch the overwrite finds no place and the contradiction stays.
+
+Why the boundary is needed: DD-74's core argument was that immutable-plus-successor has no
+consumption, deletion, or merge lifecycle — the axis that killed all three predecessors. The law
+does not evade that axis, it answers it: the session that updates the concept overwrites it, at
+that moment, at that concept's single home. No separate consumption, deletion, or merge lifecycle
+is needed because there is no separate file, and this is not a new mechanism — the discovery→update
+table's 21 rows already do exactly this for every other kind of knowledge ("replace it, don't add
+beside it" · "replace just that statement" · "replace or delete that exact path"). The bill for the
+evasion is the measurement above: what is not deleted goes on pretending to be alive. DD-74's own
+revisit condition, "the share of reported-mode evidence hollows out the re-verification savings",
+was met at its maximum: moving the same material into the record layer produced 6 of 6 evidence
+records at `mode: reported` with 0 of 6 code coordinates, because the experiment results live
+outside the repository and the validator rejects `mode: reproducible` without a real path. And
+form was not the value — the same material built in four forms scored 9/13 on the same 13
+questions in all four, and what drove "this experiment has to be re-run" to 0 in all four was not
+the record grade but one thing: writing, beside the number, the conditions under which it is true
+and the command that measures it again. Needing no prompt to enforce beats enforcing well:
+current-set filtering has nothing left to filter once nothing is superseded, and the `affects`
+literal tokens broke on Korean parentheses, which 28 of 32 decisions used.
+
+Rejected alternative: keeping the record layer but replacing succession with in-place overwriting.
+The wiring sweep produced not one item that only that variant could carry and this law could not,
+so there was no reason to keep two mechanisms for one job. Existing ADR files are unaffected by
+this rejection and stay — only the new succession practice goes unused.
+
+Affected coordinates: the canonical rules pair (the law paragraph before the discovery→update
+table, the deleted planning-records section, ownership), the planning-evidence pair, the baseline
+predicates pair (the capsule's two header lines, the four body words, the deleted `retired`
+tombstone), the product, arch, design, split, work, resume, adopt, and verify pairs,
+`scripts/project-knowledge.mjs`, the deleted `scripts/project-records.mjs`, and
+`scripts/repository-invariants.test.js`.
+Revisit when: keeping reasons inside the owning document is observed pushing that owning document
+out of its budget in a real project. Or when a contradiction is actually observed because the
+place of "the same concept" could not be found and a copy stayed.
 
 ### Rejected under this subject
 

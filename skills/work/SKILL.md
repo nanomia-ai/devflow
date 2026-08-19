@@ -137,7 +137,7 @@ Read the card fully (including Coordinates and Identity — know what this is a 
   read, project only the capsules' first-line headers:
   `node <plugin root>/scripts/project-knowledge.mjs project --capability <capability number>`,
   never without `--capability`. Open bodies only for capsules named by the card's
-  `Read first` and `current` capsules whose `use-when` matches the card's destination and
+  `Read first` and capsules whose "when to open it" matches the card's destination and
   target, through the same tool's `select --path <exact path>` (repeat `--path` for several).
   The tool enforces the opening budget as a hard cap — over it, it returns zero bodies with
   the candidate list and the cost; pass that report to the user unchanged and either narrow
@@ -219,11 +219,11 @@ Land upper-document feedback — when the judgment recorded an update, fix that 
         upper document outranks your measurement, and the next implementer follows it.
         User confirmation for product.md edits follows the canonical rules' Document
         Hierarchy section (identity paragraph · Capabilities · Boundary · success criteria).
-        A successor record written while walking the table's decision-record row carries
-        `during: work`. When an execution fact this card settled will be reused by later
-        cards, promote it to an evidence record in the canonical rules' planning-records
-        format — the progress log points only at that exact path and never duplicates the
-        observation
+        When an execution fact this card settled will be reused by later
+        cards, promote it to the statement that owns that
+        fact — the number, the execution conditions under which it is true, and the command
+        that measures it again, in one block. The progress log points only at that document
+        and place and never duplicates the observation
   ↓
 Rename the card to .done. — only once the canonical rules' status-notation conditions
         for `.done.` are all met

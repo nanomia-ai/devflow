@@ -15,6 +15,57 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.18.2 — 2026-08-20 — a document speaks only of the present, and what is updated overwrites the concept's place
+
+One canonical file contradicted itself across 55 lines. `skills/principles/SKILL.md:390` said
+"add a successor record instead of editing or deleting"; `:445-447` said "modification means
+replacement by default: if you added a line, check whether you deleted the stale one. A document
+that only grows is a dead document." The first governed the record layer and the second governed
+documents, and a literally executing session kept that distinction exactly — documents did not
+grow and the record folder grew forever. The cost was measured: a session that opened one
+discarded decision file reported it as current, because the sentences were firm, the grounds and
+the dropped alternative were both attached, and the fact that it was void lived only inside
+another file's `supersedes` array. Building the same material in four shapes and scoring all four
+on the same 13 questions separated nothing — every shape scored 9/13, and re-verification of
+already-proven experiments fell to zero in all four. What separated them was one thing: whether
+something dead was still lying in the documents.
+
+This release replaces the planning record layer with one law (DD-77). When the same concept is
+updated, that concept's place is overwritten — the concept, not the file. Four conditions bound
+it: only what can be recomputed is overwritten, so execution results, observations, and human
+confirmations land first in the place that document keeps them, which the discovery→update table
+already routes; update versus discard is decided by asking whether a person reading the old
+sentence would now take a wrong action; brownfield adoption overwrites nothing and writes anew
+only what code confirmed; and "one fact, one durable home" becomes the law's precondition. The
+dropped direction and its reason are present fact, not history, and live beside the conclusion
+they lost to. Git carries past versions, and the overwriting commit's subject names the concept.
+
+Three accumulating sites are gone. The planning record layer (DD-74, DD-75) and its
+`scripts/project-records.mjs` are deleted — six producers now overwrite the owning document's
+place instead of minting a successor file, and the root templates already carried "the reason
+beside the conclusion" (`arch.md`'s ✔/✘ plus one-line grounds, `product.md`'s dropped
+approaches), so no new section was added to them. The ADR succession practice is gone — a
+reversed ADR is overwritten in place with a one-line dropped direction, and existing `ADR-NNN.md`
+files are never deleted. The capsule `retired` tombstone is gone, and with it the `state` field.
+
+Domain knowledge capsules keep their budgets and their four provenance heads, and their form
+gets lighter (DD-76 partly corrected). The one-line `knowledge:` JSON header becomes two prose
+lines — `# <what it is> · <when to open it>` and `about: <the words a searcher would use>` —
+because the capability number and topic are already in the path, and `facet` had zero skill
+consumers. The five fixed body anchors become four place names that apply only when they apply
+(`## Concept model`, `## Decisions`, `## Reproducible scene`, `## Unknowns`) with no checker;
+two worked capsules now carry the form contract in their place. `Source basis:` and its
+coordinate validation stay, because unmarked is the default and that line is what grounds it.
+The reaching procedure now reports each sibling's last-changed commit date from git rather than
+a header field, which costs nothing to author and cannot drift.
+
+Wired through `skills/principles/{SKILL,baseline-predicates,planning-evidence}{,_ko}.md`, the
+product, arch, design, adopt, split, work, resume, and verify pairs, and
+`scripts/project-knowledge.mjs` with its tests. The `Execution-check (spike) approval, five
+elements` and `Secrets and bulk` disciplines, which had been sitting inside the deleted section
+without depending on it, moved into `## Isolated Research` where they are read at the moment of
+judgment. DD-28's "not through a new document layer" returns to its original position.
+
 ## 0.18.1 — 2026-08-18 — domain knowledge that overflows a capability document lives in capsules, and processing no longer trades accuracy for confidence
 
 A real brownfield capability's domain source ran to 3,699 lines against a 185-line capability

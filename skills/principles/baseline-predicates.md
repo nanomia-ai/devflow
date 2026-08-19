@@ -48,7 +48,7 @@ the boundary.
 | 3 | Concept model | design | table: concept / what the user gets / identifier / relation | soft | code fields, types, signatures |
 | 4 | Invariants | design | numbered list of falsifiable statements | soft | rules equally true of other capabilities |
 | 5 | Non-goals | design | bullet: item — one-clause reason | soft | things merely not built yet |
-| 6 | Binding ADRs | design | exact paths under `devflow/project/decisions/` that this capability document's design statements actually cite — legacy ADRs and **current** decision records alike | soft | uncited paths and superseded records |
+| 6 | Binding ADRs | design | exact paths under `devflow/project/decisions/` of the legacy ADRs this capability document's design statements actually cite | soft | uncited paths and superseded records |
 | 7 | Design metadata | design | the two `key: value` fields below | 2 fields | every other field |
 | — | `## Verified state` | boundary | fixed H2 heading | 1 line | — |
 | 8 | Main flow | verified | mermaid flowchart LR | soft | unimplemented paths |
@@ -130,19 +130,33 @@ confidence, not understanding.
   capsules exist only when knowledge overflows the capability document budget. On a
   capability rename the capsule folder follows the new name in the same capability design
   commit.
-- The first line is a single line with fixed key order:
-  `knowledge: {"v":1,"capability":<number as integer>,"facet":"<facet slug within the capability>","topic":"<topic slug>","use-when":"<one clause: when to open this capsule>","state":"current|retired","synopsis":"<one-line summary>"}`
-  When the header does not match this form, no consumer opens the body; report the format
-  anomaly in one line. `facet` groups capsules within one capability and its vocabulary is
-  the project's to choose — the repository imposes no closed list, but one capability uses
-  one slug for one facet. A `retired` capsule's body is a tombstone of five lines or fewer —
-  git keeps the history.
-- The body is free prose. No section structure, table, or fill-in form is imposed. A
-  `current` capsule has one H1 line plus exactly five fixed elements, in this order: an
-  `Intent: ` line, a `Desired outcome: ` line, `## Grounded state`, `## Revisit when`, and
-  `Source basis: [...]` at end of file. These are not a fill-in form but the anchors
-  consumers actually look for — the prose between them takes no imposed shape.
-  `Source basis` grounds the unmarked sentences at file level, and every element must be a
+- The first two lines are prose and the third is blank. Line one is
+  `# <what it is> · <when to open it>`, line two is
+  `about: <the words a searcher would use that are not already in line one>`, and the body
+  starts on line four. The capability number and the topic are already in the path, so they
+  drop out of the first two lines. When the first two lines match this form, consumers open
+  the body. When the shape differs, report the format anomaly in one line.
+  The words in `about:` come first from that project's `glossary.md` — the words a project
+  actually uses are the words a searcher uses. Proper nouns, error codes, and product names
+  that the glossary does not carry are written as they are. Neither a word count nor a closed
+  vocabulary is imposed.
+- The body is free prose. No section structure, table, or fill-in form is imposed. The four
+  words below are place names, not checked slots — write only the ones that apply, and give
+  anything the four do not hold a heading of your own choosing. There is no checker.
+  - `## Concept model` — how to see this area. It holds the sentence everything below stands on.
+  - `## Decisions` — what was decided · why · what was dropped · when it reopens.
+  - `## Reproducible scene` — a number, the run conditions under which it is true, and the
+    command that measures it again, in one block.
+  - `## Unknowns` — what is open and why it is open.
+- Four for two reasons. At eight, "payment is idempotent" belonged to two sections and both
+  answers were defensible, and a statement written in a different section each session leaves
+  a refresh no place to overwrite. And the section count has to be small enough to almost
+  always all apply, so that "this section has nothing to fill" stops being a question —
+  measured, the fixed-slot form had 5 of 12 capsules pass with a slot filled by "could not
+  fill this", and 0 defects were detected. There is no evidence four raises comprehension:
+  four forms of the same material all scored 9/13 on the same 13 questions.
+- The last line of the file is `Source basis: [...]`. It grounds the unmarked sentences at file
+  level, and every element must be a
   string satisfying the coordinate grammar below — it is not a place for free description or
   a bare document name. **It cannot be empty**: a capsule is born only from processing a
   source (see "Creation and refresh inputs" below), so having no coordinate to cite means
@@ -179,8 +193,8 @@ one closed head. There is no marking quota — a faithful capsule with zero mark
   noise. Sentences carried verbatim from the source are the ones marked, with quotes and a
   coordinate.
 - The head literals are exactly four, ASCII everywhere in ko and en — a token a machine reads
-  does not follow a human language, and the decision record's `affects` literals already
-  carry that discipline. Prose stays in its own language; only the head is ASCII.
+  does not follow a human language. These four are themselves the canon of that discipline.
+  Prose stays in its own language; only the head is ASCII.
   **This section is the canonical home of this vocabulary, and a head that is not listed here
   is rejected whether or not it carries a coordinate** — `conjecture` in particular is the
   only head with no coordinate, so a misspelling of it passing as unmarked would promote a
@@ -208,33 +222,136 @@ one closed head. There is no marking quota — a faithful capsule with zero mark
   delegation briefing, its mark moves with it. A dispute's two arms are never reduced to
   one in transit.
 
+### Two worked capsules
+
+The contract for the form is not a checker but the two capsules below. The first uses all four
+words; the second uses two — what "write only the ones that apply" means is visible in the
+second. In both, most sentences are unmarked.
+
+**One — `devflow/project/capabilities/04-settlement/K-002-payout-hold.md`**
+
+```text
+# When a settlement payout is held and how the hold is released · open on a "the payout never arrived" inquiry
+about: payout cycle, payout hold, risk review, KYC recheck, receiving account
+
+## Concept model
+
+Settlement is not an event where money moves; it is filling a box called a payout cycle and
+then emptying it. Everything below stands on that sentence — while a cycle is open the balance
+rises and falls, and only the balance at the instant the cycle closes becomes payable.
+
+A hold attaches to a payout, not to a cycle. The cycle closes on schedule and one payout it
+produced stays `held`. (synthesis@docs/ops/settlement-runbook.md@a41c9f2:88-140,docs/ops/risk-review.md@a41c9f2:12-31:
+the runbook uses "hold" only as a payout status and never as a cycle status, and the risk
+review document also calls the payout the unit under review.)
+
+## Decisions
+
+Cycle close and payout execution were separated, because risk review is a person's work and
+cannot hold to a close time. The dropped direction was "keep the cycle open until review
+finishes" — while a cycle stays open, that period's new transactions land in the same cycle and
+the review set keeps growing. Reopen when: risk review gains an automatic judgment that
+finishes inside the close time.
+
+A person releases a hold. The dropped direction was "resume automatically when the reason
+disappears" — risk review emits no event announcing that disappearance, so we would have had to
+imitate the judgment. Reopen when: risk review emits a reason-cleared event.
+
+## Reproducible scene
+
+How many holds one cycle produces is the input to operations staffing.
+
+    condition: 2026-07 cycle, 12,400 active merchants, risk rules v7
+    command:   psql -c "select status, count(*) from payouts where cycle='2026-07' group by 1"
+    result:    held 318 — 2.6% of that cycle's 12,207 payouts
+               of those, 241 awaiting KYC recheck and 77 with a receiving-account mismatch
+
+The set of hold reasons is fixed by code. (code@src/settlement/payout_state.py:44-79: the
+`HeldReason` enum holds only `KYC_RECHECK`, `ACCOUNT_MISMATCH`, and `MANUAL`, and the two
+numbers above are its first two.)
+
+## Unknowns
+
+When one payout is held across two cycles, which cycle's balance pays it is stated two ways.
+[dispute C-003@docs/ops/settlement-runbook.md@a41c9f2:151-158,docs/finance/close-policy.md@a41c9f2:60-66:
+the runbook says "the cycle at the moment the hold was released" and the close policy says "the
+cycle that created the hold". The two documents may describe operations of different periods;
+no choice is made here.]
+
+Whether a failed payout becomes a hold or enters a separate retry queue is not yet confirmed.
+(conjecture: failure codes do not use the same enum as `HeldReason`, which suggests a separate
+path.)
+
+Source basis: ["docs/ops/settlement-runbook.md@a41c9f2:80-170", "docs/ops/risk-review.md@a41c9f2:1-58", "docs/finance/close-policy.md@a41c9f2:40-96", "src/settlement/payout_state.py:1-120"]
+```
+
+**Two — `devflow/project/capabilities/06-notification/K-001-delivery-retry.md`**
+
+This capsule has no dropped direction and no open question. One concept and one number are all
+of it, so it has two sections: `## Decisions` and `## Unknowns` are absent rather than standing
+empty.
+
+```text
+# How many times a failed notification is retried and when it gives up · open on a "I got the alert twice" report
+about: delivery retry, backoff, duplicate delivery, channel priority
+
+## Concept model
+
+A retry is not sending the same notification again; it is one delivery attempt chain. One chain
+can carry several channels, and a chain ends exactly two ways: success or give-up. So a user
+who received two alerts got two chains, not one chain going around twice — a duplicate report
+is investigated at whatever created the chains, not in the retry settings.
+
+## Reproducible scene
+
+    condition: 2026-08-11 for one day, 1,840,552 delivery attempts, gateway sms-a
+    command:   node scripts/notif-stats.mjs --day 2026-08-11 --by chain-outcome
+    result:    1,802,301 chains — 1,799,657 succeeded, 2,644 gave up
+               every give-up took 4 attempts, spaced 0s · 30s · 5m · 30m
+
+The four intervals are constants in code. (code@src/notify/retry.ts:18-26: `BACKOFF_MS` is
+`[0, 30_000, 300_000, 1_800_000]` and its length is the maximum attempt count.)
+
+Source basis: ["docs/ops/notification-runbook.md@a41c9f2:31-92", "src/notify/retry.ts:1-64"]
+```
+
 ### Opening budget — a hard cap
 
 - Within one card's execution, opened capsule bodies total at most 240 lines or 24 KiB.
-  Beyond that, open none — report the candidates' header projection and the total cost,
+  Beyond that, open none — report the candidates' first-two-lines projection and the total cost,
   then narrow or obtain explicit approval; explicit approval is this cap's only exit. The
   authoring cap is soft and, symmetrically, the opening cap is hard — the right place for
   hard is reading, not writing. 240 lines/24 KiB is provisional (measured: 112–180 opened
   lines per card in the trial processing); the design backlog records the reopen
   conditions.
 - Capsule selection and indexing use machine queries that open no body — project each
-  capsule's first-line `knowledge:` header only. Do not create a hand-written index
+  capsule's first two lines only. Do not create a hand-written index
   section in the capability document — a summary living in two places drifts apart.
+- When scanning sibling capsules' first two lines, emit each file's last-changed commit date
+  alongside — `git log -1 --format=%ad --date=short -- <capsule path>`. The date is the second
+  clue when choosing: picking three capsules out of forty, "this one changed yesterday and that
+  one eight months ago" earns its keep. The date is read from git rather than held in the first
+  two lines — a field a person or a model fills drifts, and git already holds the same value at
+  no authoring or upkeep cost. This value is not a freshness judgment: when the capsule is
+  unchanged but the code it describes has moved, this date does not see it.
 - The only means of projection, selection, and format checking are the read-only
   `project`, `disputes`, `select`, and `validate` subcommands of the capsule tool
   `scripts/project-knowledge.mjs`. `disputes` is the dispute-only projection: it emits the C
   number, both coordinates, and the source content each coordinate points at, with no body,
   while `project` in the same place emits only the C number — a consumer that must show a
-  person both arms calls `disputes`. Compute the tool's location from the plugin root by the
-  same rule as the record tool. Sessions write capsule files themselves, and a capsule must
+  person both arms calls `disputes`. The tool is `scripts/project-knowledge.mjs` under the
+  plugin root two levels above this loaded file; in a runtime
+  that sets `${CLAUDE_PLUGIN_ROOT}`, `${CLAUDE_PLUGIN_ROOT}/scripts/project-knowledge.mjs`
+  is a shortcut to the same place. When the platform gives this file no source path, report
+  in one line that the tool cannot be called and open no capsule body. Sessions write capsule files themselves, and a capsule must
   pass `validate` before its commit. The tool is stateless and read-only; it owns its
   judgment internals and this document does not restate them.
 - **Call the index projection narrowed to one capability** — `project --capability <number>`
-  is the canonical call. An unfiltered `project` gathers every capability's headers at once
+  is the canonical call. An unfiltered `project` gathers every capability's first two lines at once
   and overruns the index budget. The index carries a 24 KiB cap too, kept in two tiers: the
   full projection when it fits (`form=full`), and otherwise an automatic downgrade to a
-  compact projection that drops the fields choosing never reads and keeps the path and
-  `use-when` (`form=compact` — measured: one capability's 100 capsules fit compact in 21 KB
+  compact projection that drops what choosing never reads and keeps the path and the first
+  line (`form=compact` — measured: one capability's 100 capsules fit compact in 21 KB
   and all 100 are emitted). When even compact overruns, it reports zero entries and the
   filters to narrow by. When several capabilities must be seen, call once per capability and
   report the total to the person the same way the opening budget is reported.
@@ -285,11 +402,11 @@ Scope head: <output of the Scope head command | none>
 A consumer makes only three comparisons.
 
 1. When the Design head command output equals stored `Design head`, the design statements
-   in sections 1–4 are fresh. When it differs or is empty, they are hypotheses.
+   in sections 1–5 are fresh. When it differs or is empty, they are hypotheses.
 2. When the union is nonempty, the Scope head command output equals stored `Scope head`,
    the exact-path set in Consumed contracts equals `Consumed paths`, and every
    other-capability number equals the provider currently mapped by arch.md's Code structure,
-   the verified statements in sections 7–13 are fresh under this comparison. When the union
+   the verified statements in sections 8–14 are fresh under this comparison. When the union
    is empty, the output differs or is empty, or either the path sets or provider mapping
    differ or are ambiguous, they are hypotheses.
 3. When the current non-`.stale.` `.done.` card-number set differs from `Covered cards`,
@@ -300,9 +417,7 @@ A consumer makes only three comparisons.
    non-`.stale.` `.done.` card — never the empty set.
 
 Only the design-zone writers — arch, and adopt in a brownfield — update the Binding ADRs
-list. A decision record another producer creates enters it at the next arch or adopt
-design-zone re-derivation, when a design statement actually cites it.
-`Verified at: none` makes the verified statements hypotheses. Binding ADRs are outside
+list. `Verified at: none` makes the verified statements hypotheses. Binding ADRs are outside
 both statement groups; a consumer checks each exact path when reading it. Metadata is the
 comparison itself. The symmetric difference between the current completed-card set and
 `Covered cards` is the completed-card change list since the baseline. For a current-only
@@ -334,8 +449,7 @@ follows the canonical Document Hierarchy.
   capability-document path before the user confirms that batch. After confirmation, a
   commit containing capability documents only, `arch — capabilities` or
   `adopt — capabilities`, is the last commit of that run. When no bytes change, ask no
-  confirmation question and make no commit. This applies to ordinary design refreshes, not
-  the mechanical ADR-supersession exception below. It is a binding decision
+  confirmation question and make no commit. It is a binding decision
   on the integration branch.
 - An uncommitted diff from a post-confirmation interrupted write is a capability-design
   commit prefix only when it touches current and final expected capability-document paths
@@ -454,10 +568,10 @@ verified zone's sole writer.
   `design: baseline missing — judge from the card and supplied shared documents` projection.
   With one boundary but malformed section or metadata shape, read the zones and mark the
   affected one a hypothesis.
-- After reading the selected capability document, work projects only the capsule headers by
-  machine query when a same-numbered capsule folder exists. It opens bodies only for capsules
-  named by the card's `Read first` and `current` capsules whose `use-when` matches the card's
-  destination and target paths. An opened capsule's `conjecture` sentence cannot be cited as
+- After reading the selected capability document, work projects only the capsules' first two
+  lines by machine query when a same-numbered capsule folder exists. It opens bodies only for
+  capsules named by the card's `Read first` and capsules whose first-line "when to open"
+  matches the card's destination and target paths. An opened capsule's `conjecture` sentence cannot be cited as
   an implementation basis, and a `dispute` leans on neither arm before the decision — when
   continuing requires leaning on one, stop and report the dispute number with both arms.
 - work opens each exact path in a valid Binding ADRs section of the file. If the section itself
@@ -496,7 +610,7 @@ verified zone's sole writer.
   numbers, and continue. Ordinary resume reads only filenames and the shape projection,
   never file bodies. When a Binding ADR path is absent during domain entry, report that exact
   path, make the design zone a hypothesis, and search for no substitute. When the selected
-  capability has a capsule folder, present the header projection as an index alongside and
+  capability has a capsule folder, present the first-two-lines projection as an index alongside and
   open only the capsules the user picks, within the opening budget — the user's request for
   all of them is that budget's explicit approval.
 
@@ -554,11 +668,6 @@ verified zone's sole writer.
 - A rename re-derives every expected design zone, so neighboring `Boundary` names change too.
   A consumed relation is identified by the other capability's number and exact code path,
   not its name; run no consumer projection unless code-path ownership also changes.
-- When an ADR is superseded, arch replaces the old path in the Binding ADRs section of every
-  affected design zone in the same binding decision as the successor ADR and the dated note
-  on the old ADR. This is not an `arch — capabilities` commit and changes no capability-
-  document byte except the old exact path to the new exact path in Binding ADRs. Replace the
-  path too on pending or claimed cards that name it directly in `Read first`.
 - resume uses a machine query **against the HEAD file** that exposes only filename number,
   fixed-boundary count, fixed
   section order and presence, metadata field presence and parse status, and the Boolean result

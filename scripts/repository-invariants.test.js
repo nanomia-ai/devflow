@@ -229,21 +229,15 @@ test("English deploy artifacts contain no Korean except README's language switch
       .filter((name) => name.endsWith(".js") || name.endsWith(".mjs"))
       .map((name) => path.join("scripts", name)),
   ].map((relative) => path.join(root, relative));
-  // Two files carry a counted allowance: README's language switcher, and the record tool's
-  // one regex that matches a Korean heading a user wrote in their own product.md. Both are
-  // locked to their exact count, so a second Korean line anywhere fails.
-  const allowance = { "README.md": 1, "scripts/project-records.mjs": 1 };
+  // One file carries a counted allowance: README's language switcher. It is locked to its
+  // exact count, so a second Korean line anywhere fails.
+  const allowance = { "README.md": 1 };
   for (const file of deployFiles) {
     const relative = path.relative(root, file).replace(/\\/g, "/");
     const matches = fs.readFileSync(file, "utf8").split(/\r?\n/)
       .filter((line) => /[\uAC00-\uD7A3]/.test(line));
     assert.equal(matches.length, allowance[relative] ?? 0, `${relative}: lines containing Korean`);
   }
-  // The allowance is a matcher for user content, never prose devflow emits.
-  const records = fs.readFileSync(path.join(root, "scripts", "project-records.mjs"), "utf8");
-  const korean = records.split(/\r?\n/).filter((line) => /[\uAC00-\uD7A3]/.test(line));
-  assert.match(korean[0], /^\s*const start = lines\.findIndex\(/,
-    "the record tool's Korean allowance moved off its user-heading matcher");
 });
 
 test("the decision index and the decision bodies hold the same identifiers", () => {
@@ -423,7 +417,6 @@ test("every maintenance script and document has a declared lifecycle", () => {
     ["remove-generated-codex-prompts.js", ["codex/install.ps1", "codex/install.sh"]],
     ["remove-legacy-codex-hook.js", ["codex/install.ps1", "codex/install.sh"]],
     ["project-knowledge.mjs", ["skills/principles/baseline-predicates.md", "skills/principles/baseline-predicates_ko.md"]],
-    ["project-records.mjs", ["skills/principles/SKILL.md", "skills/principles/SKILL_ko.md"]],
     ["session-start.js", ["hooks/hooks.json"]],
     ["verify-codex-plugin-install.js", ["codex/install.ps1", "codex/install.sh"]],
   ]);
@@ -843,7 +836,7 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.match(reviewer, /design: hypothesis — <exact path#heading reconfirmed\[, \.\.\.\]>/);
   assert.match(verify, /replace from exactly one `## Verified state`\s+heading through EOF/);
   assert.match(verify, /union of the closing baseline's HEAD-before and refreshed-after Scope paths/);
-  assert.match(verify, /Capability first closure[\s\S]*every legacy `ADR-NNN\.md` directly under[\s\S]*Binding ADRs list cites/);
+  assert.match(verify, /Capability first closure[\s\S]*every legacy `ADR-NNN\.md` directly under[\s\S]*Binding ADRs list/);
   assert.match(retrospector, /do not use a hypothetical verification\s+statement as strain evidence/);
   assert.match(retrospector, /supplied product\.md, arch\.md,\s+glossary\.md, or ADRs/);
   assert.match(resume, /^## Domain-Entry Questions$/m);
@@ -868,7 +861,7 @@ test("domain knowledge capsules are bounded, provenance-marked, and reachable on
   // The capsule contract lives in exactly one canon; every other file points at it.
   assert.match(baseline, /^## Domain knowledge capsules$/m);
   assert.match(baseline, /K-<three digits, zero-padded>-<topic slug>\.md/);
-  assert.match(baseline, /"use-when":"<one clause: when to open this capsule>"/);
+  assert.match(baseline, /`# <what it is> · <when to open it>`[\s\S]*`about: <the words a searcher would use that are not already in line one>`/);
   assert.match(baseline, /A capability without capsules is the default/);
   assert.match(baseline, /`Source basis: \[\.\.\.\]`/);
   // Unmarked is the default, so most of a capsule leans on Source basis: it must be checked
@@ -933,7 +926,7 @@ test("domain knowledge capsules are bounded, provenance-marked, and reachable on
   }
   assert.match(baseline, /`project --capability <number>`\s+is the canonical call/);
   // The index is bounded in two tiers so a large capability stays selectable rather than blocked.
-  assert.match(baseline, /An unfiltered `project` gathers every capability's headers at once\s+and overruns the index budget/);
+  assert.match(baseline, /An unfiltered `project` gathers every capability's first two lines at once\s+and overruns the index budget/);
   assert.match(baseline, /the\s+full projection when it fits \(`form=full`\), and otherwise an automatic downgrade to a\s+compact projection/);
   assert.match(baseline, /When even compact overruns, it reports zero entries and the\s+filters to narrow by/);
   // `disputes` is a canonical means, not a fifth undocumented command.
@@ -1040,7 +1033,6 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(baseline, /retirement or split that does not change path\s+ownership, use the original capability's stored Scope paths/);
   assert.match(baseline, /A rename re-derives every expected design zone[\s\S]*identified by the other capability's number and exact code path/);
   assert.match(baseline, /current and final expected capability-document paths[\s\S]*rename may delete the old same-numbered path and add the final path[\s\S]*number-matched existing\s+file's HEAD verified zone/);
-  assert.match(baseline, /This is not an `arch — capabilities` commit and changes no capability-[\s\S]*except the old exact path to the new exact path in Binding ADRs/);
   assert.match(baseline, /registered consumers: unknown —\s+provider baseline no-op: <same reason>/);
   assert.match(verify, /When the baseline refresh is a no-op, run no consumer projection/);
   assert.match(baseline, /Delete any other Trap only when its reproduction condition[\s\S]*Replace the Verify section every time with only the\s+commands and scenarios actually run at this closure/);
@@ -1063,7 +1055,7 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
     "new-adoption maintenance state must land before the final capability-document commit",
   );
   assert.match(principles, /A capability's name changed[\s\S]*first update product\.md[\s\S]*following arch capability-design commit/);
-  assert.match(principles, /Outside a canonical capability-design commit, the mechanical\s+exact-path replacement for a superseded ADR, the canonical human-deletion exception,\s+restoration of one complete one-boundary file from a user-identified Git revision to its current expected path, or this begin transition, any\s+`devflow\/project\/capabilities\/` diff is an integrity anomaly/);
+  assert.match(principles, /Outside a canonical capability-design commit, the canonical human-deletion exception,\s+restoration of one complete one-boundary file from a user-identified Git revision to its current expected path, or this begin transition, any\s+`devflow\/project\/capabilities\/` diff is an integrity anomaly/);
 
   assert.ok(
     resume.indexOf("| A card of mine is claimed | work |") <
@@ -1753,55 +1745,4 @@ test("journal merges resolve 3-way and blockade appends are exactly enumerated",
   assert.doesNotMatch(principles, /Journal merge conflicts resolve as a union/);
   assert.match(principles, /`maintenance\s+routing pending`, `capability note`, attributed open-item and decision lines, `product\s+re-run pending`/);
   assert.match(principles, /nothing waits unnamed/);
-});
-
-test("planning records have one schema canon, literal affects, producers, and bounded consumers", () => {
-  const principlesEn = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
-  const principlesKo = fs.readFileSync(path.join(root, "skills", "principles", "SKILL_ko.md"), "utf8");
-  for (const principles of [principlesEn, principlesKo]) {
-    assert.match(principles, /record: \{"v":1,"kind":"decision\|evidence"/);
-    assert.match(principles, /product:Identity\|Approach\|Capabilities\|Boundary\|Success-criteria/);
-    assert.match(principles, /arch:Components\|Stack\|Code-structure\|Data\|Verify-channel/);
-    assert.match(principles, /\$\{CLAUDE_PLUGIN_ROOT\}\/scripts\/project-records\.mjs/);
-    for (const cmd of ["`summary`", "`select`", "`reverse-evidence`", "`prune-check`", "`validate`"]) {
-      assert.ok(principles.includes(cmd), `principles omits record subcommand ${cmd}`);
-    }
-  }
-  assert.match(principlesEn, /with no disproving measurement/);
-  assert.match(principlesKo, new RegExp("\uCE21\uC815 \uBC18\uC99D \uC5C6\uC774 \uC2A4\uC2A4\uB85C \uBC14\uAFC8"));
-  for (const principles of [principlesEn, principlesKo]) {
-    assert.ok(principles.includes("mode: reproducible") && principles.includes("mode: reported"),
-      "the canon lost the evidence-mode split");
-    assert.ok(principles.includes("Invalidates-when"), "the canon lost the body grammar");
-  }
-  const peEn = fs.readFileSync(path.join(root, "skills", "principles", "planning-evidence.md"), "utf8");
-  const peKo = fs.readFileSync(path.join(root, "skills", "principles", "planning-evidence_ko.md"), "utf8");
-  for (const pe of [peEn, peKo]) {
-    assert.ok(pe.includes("`reverse-evidence`"), "planning evidence omits the stale-evidence cascade");
-    assert.ok(pe.includes("`select`"), "planning evidence omits the projection subcommand");
-  }
-  for (const [skill, token] of [
-    ["product", "during: product"],
-    ["design", "during: design"],
-    ["split", "canonical record gate"],
-    ["split", "during: split"],
-    ["work", "during: work"],
-  ]) {
-    assert.ok(
-      fs.readFileSync(path.join(root, "skills", skill, "SKILL.md"), "utf8").includes(token),
-      `${skill} lost its record-producer wiring (${token})`,
-    );
-  }
-  assert.ok(
-    fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8").includes("`summary`"),
-    "resume no-tree report lost the summary subcommand",
-  );
-  for (const skill of ["arch", "adopt", "resume", "verify"]) {
-    assert.ok(
-      fs.readFileSync(path.join(root, "skills", skill, "SKILL.md"), "utf8").includes("`select`"),
-      `${skill} lost its bounded record projection`,
-    );
-  }
-  const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
-  assert.match(baseline, /design statements actually cite — legacy ADRs and \*\*current\*\* decision records alike/);
 });

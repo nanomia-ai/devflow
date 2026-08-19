@@ -9,7 +9,6 @@ const { execFileSync, spawnSync } = require("node:child_process");
 const { test } = require("node:test");
 
 const tool = path.join(__dirname, "project-knowledge.mjs");
-const headerKeys = ["v", "capability", "facet", "topic", "use-when", "state", "synopsis"];
 
 function fixture(t) {
   const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "devflow-knowledge-")));
@@ -19,29 +18,23 @@ function fixture(t) {
 
 function header(overrides = {}) {
   return {
-    v: 1,
-    capability: 2,
-    facet: "registration",
     topic: "location-trust",
-    "use-when": "\uC8FC\uC18C\uB098 \uC88C\uD45C \uCDE8\uB4DD\uC744 \uBC14\uAFC0 \uB54C",
-    state: "current",
-    synopsis: "\uC8FC\uC18C\uC640 \uC88C\uD45C\uC758 \uC2E0\uB8B0 \uC0AC\uB2E4\uB9AC",
+    what: "\uC8FC\uC18C\uC640 \uC88C\uD45C\uC758 \uC2E0\uB8B0 \uC0AC\uB2E4\uB9AC",
+    when: "\uC8FC\uC18C\uB098 \uC88C\uD45C \uCDE8\uB4DD\uC744 \uBC14\uAFC0 \uB54C",
+    about: "\uB4F1\uB85D, \uC9C0\uC624\uCF54\uB529, \uC704\uCE58 \uC2E0\uB8B0\uB3C4",
     ...overrides,
   };
 }
 
-function body(extra = "") {
+function body(extra = "", value = header()) {
   return [
-    "# \uC88C\uD45C \uC2E0\uB8B0",
-    "Intent: \uC8FC\uC18C\uAC00 \uBD88\uC644\uC804\uD574\uB3C4 \uB4F1\uB85D\uC744 \uB05D\uB0B8\uB2E4.",
-    "Desired outcome: \uC88C\uD45C \uCD9C\uCC98\uAC00 \uB4DC\uB7EC\uB09C\uB2E4.",
+    `# ${value.what} · ${value.when}`,
+    `about: ${value.about}`,
     "",
     extra,
     "",
-    "## Grounded state",
+    "## Concept model",
     "- \uD604\uC7AC \uB3D9\uC791\uC744 \uD655\uC778\uD588\uB2E4.",
-    "## Revisit when",
-    "- \uC88C\uD45C API\uAC00 \uBC14\uB014 \uB54C.",
     "Source basis: [\"docs/source.md:1-2\"]",
   ].join("\n").replace(/\n{3,}/g, "\n\n");
 }
@@ -59,7 +52,7 @@ function writeCapsule(root, value = header(), content = body(), number = "006", 
   fs.mkdirSync(path.join(base, directory), { recursive: true });
   fs.writeFileSync(path.join(base, `${directory}.md`), `# ${directory}\n`, "utf8");
   const target = path.join(base, directory, `K-${number}-${value.topic}.md`);
-  fs.writeFileSync(target, `knowledge: ${JSON.stringify(value)}\n${content}\n`, "utf8");
+  fs.writeFileSync(target, `${content}\n`, "utf8");
   return target;
 }
 
@@ -91,7 +84,7 @@ test("missing capsule folders are valid empty states", (t) => {
   }
 });
 
-test("project emits header, costs, and marker counts without bodies and never writes", (t) => {
+test("project emits the first two lines, costs, and marker counts without bodies and never writes", (t) => {
   const root = fixture(t);
   writeSource(root);
   const target = writeCapsule(root, header(), body(
@@ -101,18 +94,20 @@ test("project emits header, costs, and marker counts without bodies and never wr
     + "[dispute C-006@docs/source.md:1,docs/source.md:2: \uC6D0\uBB38 \uB450 \uC11C\uC220\uC774 \uCDA9\uB3CC\uD558\uBBC0\uB85C \uACE0\uB974\uC9C0 \uC54A\uB294\uB2E4.]",
   ));
   const before = fs.readFileSync(target);
-  const result = run(root, "project", "--capability", "2", "--facet", "registration");
+  const result = run(root, "project", "--capability", "2");
   assertOk(result);
   assert.match(result.stdout, /project: capsules=1 bodies=0/);
   assert.doesNotMatch(result.stdout, /^body:/m);
   const projected = JSON.parse(/^projection: (.+)$/m.exec(result.stdout)[1]);
   assert.equal(projected.path, "devflow/project/capabilities/02-property/K-006-location-trust.md");
+  assert.match(projected.heading, /^# .* · .*$/);
+  assert.equal(projected.about, "\uB4F1\uB85D, \uC9C0\uC624\uCF54\uB529, \uC704\uCE58 \uC2E0\uB8B0\uB3C4");
   assert.deepEqual(projected.markers, { synthesis: 1, code: 1, conjecture: 1, dispute: 1 });
   assert.deepEqual(projected.disputes, ["C-006"]);
   assert.deepEqual(fs.readFileSync(target), before);
 });
 
-test("validate rejects malformed JSON, key order, and path/header disagreement", (t) => {
+test("validate rejects headers outside the two-line prose format", (t) => {
   const malformedRoot = fixture(t);
   const malformedDir = path.join(malformedRoot, "devflow", "project", "capabilities", "02-property");
   fs.mkdirSync(malformedDir, { recursive: true });
@@ -120,30 +115,16 @@ test("validate rejects malformed JSON, key order, and path/header disagreement",
   fs.writeFileSync(path.join(malformedDir, "K-006-location-trust.md"), "knowledge: {no}\n# X\n");
   const malformed = run(malformedRoot, "validate");
   assert.equal(malformed.status, 1);
-  assert.match(malformed.stderr, /first-line JSON is invalid/);
+  assert.match(malformed.stderr, /capsule header format anomaly/);
 
   const orderRoot = fixture(t);
-  const reordered = { capability: 2, v: 1 };
-  for (const key of headerKeys.slice(2)) reordered[key] = header()[key];
-  writeCapsule(orderRoot, reordered);
+  writeCapsule(orderRoot, header(), body().replace(/^about: /m, "about "));
   const order = run(orderRoot, "validate");
   assert.equal(order.status, 1);
-  assert.match(order.stderr, /header keys must be exactly/);
-
-  const mismatchRoot = fixture(t);
-  writeCapsule(mismatchRoot, header({ capability: 3 }));
-  const mismatch = run(mismatchRoot, "validate");
-  assert.equal(mismatch.status, 1);
-  assert.match(mismatch.stderr, /capability does not match/);
+  assert.match(order.stderr, /capsule header format anomaly/);
 });
 
-test("current capsule shape and sibling entrance are structural requirements", (t) => {
-  const shapeRoot = fixture(t);
-  writeCapsule(shapeRoot, header(), body().replace("## Revisit when", "## Later"));
-  const shape = run(shapeRoot, "validate");
-  assert.equal(shape.status, 1);
-  assert.match(shape.stderr, /requires Intent, Desired outcome, Grounded state, Revisit when, and Source basis/);
-
+test("the sibling capability entrance remains a structural requirement", (t) => {
   const entranceRoot = fixture(t);
   const target = writeCapsule(entranceRoot);
   fs.rmSync(path.join(path.dirname(path.dirname(target)), "02-property.md"));
@@ -154,7 +135,7 @@ test("current capsule shape and sibling entrance are structural requirements", (
 
 test("the 120-line authoring target warns but does not reject", (t) => {
   const root = fixture(t);
-  const filler = Array.from({ length: 112 }, (_, index) => `\uC790\uC720 \uC0B0\uBB38 ${index}`).join("\n");
+  const filler = Array.from({ length: 114 }, (_, index) => `\uC790\uC720 \uC0B0\uBB38 ${index}`).join("\n");
   writeCapsule(root, header(), body(filler));
   const result = run(root, "validate");
   assertOk(result);
@@ -277,7 +258,7 @@ test("dispute ids are unique within a capability, not across capabilities", (t) 
   writeSource(root);
   const conflict = "[dispute C-001@docs/source.md:1,docs/source.md:2: \uB450 \uD314\uC744 \uBCF4\uC874\uD55C\uB2E4.]";
   writeCapsule(root, header(), body(conflict), "001", "02-property");
-  writeCapsule(root, header({ capability: 3 }), body(conflict), "001", "03-other");
+  writeCapsule(root, header(), body(conflict), "001", "03-other");
   assertOk(run(root, "validate"));
 
   writeCapsule(root, header({ topic: "second-topic" }), body(conflict), "002", "02-property");
@@ -294,7 +275,7 @@ test("select opens exact paths under both hard budgets", (t) => {
   assertOk(result);
   assert.match(result.stdout, /select: candidates=1 opened=1/);
   assert.match(result.stdout, new RegExp(`^body: ${relative.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m"));
-  assert.match(result.stdout, /knowledge: \{"v":1/);
+  assert.match(result.stdout, /^# .* · .*$/m);
 });
 
 test("select validates only its exact path set", (t) => {
@@ -338,21 +319,25 @@ test("a capability of 100 capsules stays selectable through the compact index", 
   let first;
   for (let index = 1; index <= 100; index += 1) {
     const number = String(index).padStart(3, "0");
+    const value = header({
+      topic: `topic-${number}`,
+      about: `projection budget fixture ${number} `.repeat(3).trim(),
+    });
     const target = writeCapsule(
       root,
-      header({ topic: `topic-${number}`, synopsis: `projection budget fixture ${number}` }),
-      body(),
+      value,
+      body("", value),
       number,
     );
     first ??= path.relative(root, target).split(path.sep).join("/");
   }
-  // Choosing a capsule needs its path and use-when; dropping the rest keeps 100 selectable.
+  // Choosing a capsule needs its path and first line; dropping the rest keeps 100 selectable.
   const compact = run(root, "project", "--capability", "2");
   assertOk(compact);
   assert.match(compact.stdout, /capsules=100 bodies=0 form=compact index-bytes=\d+\/24576 emitted=100/);
   assert.equal((compact.stdout.match(/^projection:/gm) || []).length, 100);
   const entry = JSON.parse(compact.stdout.match(/^projection: (.+)$/m)[1]);
-  assert.deepEqual(Object.keys(entry), ["path", "facet", "topic", "use-when", "state"]);
+  assert.deepEqual(Object.keys(entry), ["path", "heading"]);
 
   const narrowed = run(root, "project", "--path", first);
   assertOk(narrowed);
@@ -365,7 +350,8 @@ test("an index too large even compacted emits zero entries and asks for a narrow
   const wide = "the situation that opens this capsule ".repeat(8);
   for (let index = 1; index <= 100; index += 1) {
     const number = String(index).padStart(3, "0");
-    writeCapsule(root, header({ topic: `topic-${number}`, "use-when": `${wide} ${number}` }), body(), number);
+    const value = header({ topic: `topic-${number}`, when: `${wide} ${number}` });
+    writeCapsule(root, value, body("", value), number);
   }
   const blocked = run(root, "project", "--capability", "2");
   assert.equal(blocked.status, 3);
@@ -393,7 +379,7 @@ test("select emits zero bodies over 240 lines until explicitly approved", (t) =>
   const root = fixture(t);
   const paths = [];
   for (let index = 1; index <= 3; index += 1) {
-    const content = body(Array.from({ length: 72 }, (_, line) => `\uBB38\uC7A5 ${index}-${line}`).join("\n"));
+    const content = body(Array.from({ length: 74 }, (_, line) => `\uBB38\uC7A5 ${index}-${line}`).join("\n"));
     const target = writeCapsule(root, header({ topic: `topic-${index}` }), content, String(index).padStart(3, "0"));
     paths.push(path.relative(root, target).split(path.sep).join("/"));
   }
@@ -422,16 +408,7 @@ test("select enforces the 24 KiB budget independently of line count", (t) => {
   assert.doesNotMatch(result.stdout, /^body:/m);
 });
 
-test("retired capsules are bounded tombstones and invalid UTF-8 is rejected", (t) => {
-  const retiredRoot = fixture(t);
-  writeCapsule(retiredRoot, header({ state: "retired" }), "# \uC88C\uD45C \uC2E0\uB8B0\nRetired: \uC0C8 \uCEA1\uC290\uC774 \uB300\uC2E0\uD55C\uB2E4.");
-  assertOk(run(retiredRoot, "validate"));
-  const longRoot = fixture(t);
-  writeCapsule(longRoot, header({ state: "retired" }), "# \uC88C\uD45C \uC2E0\uB8B0\n1\n2\n3\n4\n5");
-  const long = run(longRoot, "validate");
-  assert.equal(long.status, 1);
-  assert.match(long.stderr, /hard limit is 5/);
-
+test("invalid UTF-8 is rejected", (t) => {
   const invalidRoot = fixture(t);
   const target = writeCapsule(invalidRoot);
   fs.writeFileSync(target, Buffer.from([0xc3, 0x28]));

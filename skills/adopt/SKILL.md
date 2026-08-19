@@ -10,9 +10,7 @@ First read the canonical rules (`../principles/SKILL.md`), the planning evidence
 predicates (`../principles/baseline-predicates.md`). If present, read all of
 `devflow/project/product.md`, `devflow/project/arch.md`, `devflow/project/code-style.md`,
 `devflow/project/design.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each
-legacy `ADR-NNN.md` directly under `devflow/project/decisions/`. Do not read decision and
-evidence records whole — project only the current candidates matching the affects of what
-is being back-derived with the record tool's `select`, opening at most 3.
+legacy `ADR-NNN.md` directly under `devflow/project/decisions/`.
 
 Purpose: give a **brownfield** (a project that already has code, joined mid-way) its
 Layer 0 documents (product.md · arch.md · code-style.md · glossary.md) by

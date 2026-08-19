@@ -16,10 +16,9 @@ tree, it derives the next stage from the Layer 0 documents and continues.
 ## Domain-Entry Questions
 
 When the user's request is to explain or enter a capability or domain rather than resume
-state, run this section before normal routing. Project the selected capability's decision
-and evidence records with the record tool's `select` as `capability:<n>` current
-candidates only, opening at most 3. Here `<n>` is that capability's product.md
-capability-list number, not the unit's tree or baseline number.
+state, run this section before normal routing. The selected capability's confirmed reasons
+and reproducible observations live inside that capability document — there is no separate
+record set to open.
 
 1. If any of product.md, arch.md, or glossary.md is absent or arch.md lacks `Brownfield`,
    report only each exact missing path or field and `domain knowledge not initialized`; open no capability body. When the user asks
@@ -209,7 +208,7 @@ locally during a blockade stay visible:
 | journal contains a `product verification running` line | verify — rerun the recorded flight |
 | journal contains a `product verification result` line | verify — finish the stored result's failure routing, events, and report |
 | An `evidence-wait` or `evidence-finalizing` journal line names a card of mine | work — take that remote-evidence transition first; report the exact card path work's precondition 2 selects and the next action of that branch |
-| The canonical claim→done move is uncommitted, or the last commit changing one of my claimed cards that no evidence record names has the canonical final task subject | work — make no second final task commit; finish only upper-document feedback and the boundary |
+| The canonical claim→done move is uncommitted, or the last commit changing one of my claimed cards has the canonical final task subject | work — make no second final task commit; finish only upper-document feedback and the boundary |
 | An Audit or Retrospective section has a `routing · source id:` state | verify — land pending-finding routing one at a time in finding-number order |
 | An Audit or Retrospective section contains findings `awaiting user decision` | verify — present the recorded findings verbatim and record the decision |
 | Any verify.md Failure history has `routing: pending` | verify — without executing, route one entry: first verify.md in canonical path order, then lowest source id in that file |
@@ -324,9 +323,7 @@ the re-anchor procedure.
 - HANDOFF missing or empty: normal. Resume from the tree alone.
 - No tree at all: read the Layer 0 file list and all of journal when it exists, first run
   every applicable canonical integrity check, derive the next stage in this order, report
-  it in one paragraph, and get approval. When decision or evidence records exist, include
-  the record tool's one-line `summary` output in the report as printed — opening bodies
-  belongs to the routed owning skill.
+  it in one paragraph, and get approval.
   1. No `devflow/project/product.md`: ask, "Must this work preserve implementation behavior
      that already exists in the repository?" Yes goes to adopt; no goes to product.
   2. If journal has an exact `product re-run pending` line, run product.

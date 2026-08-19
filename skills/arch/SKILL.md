@@ -10,10 +10,7 @@ First read the canonical rules (`../principles/SKILL.md`), the planning evidence
 predicates (`../principles/baseline-predicates.md`), and all of `devflow/project/product.md`.
 If present, read all of `devflow/project/arch.md`,
 `devflow/project/code-style.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each legacy `ADR-NNN.md` directly under
-`devflow/project/decisions/`. Do not read decision and evidence records whole — project
-only the current candidates matching the current frontier's affects with the record tool's
-`select`, and follow the canonical record gate and the planning evidence discipline's
-projection section for opening and binding.
+`devflow/project/decisions/`.
 If `product.md` is missing: with no code either, direct the user to the product stage
 first; with existing code, to adopt (existing-project adoption — it produces
 product.md too, by reverse-derivation).
@@ -208,9 +205,10 @@ three conditions hold**:
 (e.g., JWT instead of sessions for auth = passes / library A instead of B = fails)
 ```
 
-A decision below the three conditions but caught by the record gate lands as a canonical
-decision record. When an ADR's or decision record's ground rests on an evidence record,
-cite that exact filename in the body.
+A decision below the three conditions makes no ADR — write the choice and its ground on one
+line in the arch.md section where that decision lives, and leave each discarded alternative
+as a ✘ line in the same section. When the ground is a number, attach the execution
+conditions under which it is true and the command that measures it again on the same line.
 
 ## Output 2 — devflow/project/code-style.md
 
@@ -243,12 +241,13 @@ method. Cap: 1 page.
 ```
 
 Before taking confirmation on arch.md, enumerate together the decisions in it that meet
-all three ADR conditions and those the record gate caught but that were not recorded, and
-confirm with the user, one by one, whether each is kept. At this point also accept each
-`during: product` decision record or refine it with a successor record — confirming the
-technical choices product handed over is arch's ownership. A decision that
-passes but that the user chooses not to record stays as it is; the enumeration is not skipped.
-After it lands there is no route back to an unrecorded item.
+all three ADR conditions and those whose ground is not yet in the document, and
+confirm with the user, one by one, whether each is kept. At this point also take the
+development choices product left as attributed journal lines and land each beside the
+conclusion it belongs to in arch.md — confirming the
+technical choices product handed over is arch's ownership. A decision that is
+enumerated but that the user chooses not to keep stays as it is; the enumeration is not skipped.
+After it lands there is no route back to that conversation.
 
 Immediately after the user confirms arch.md or code-style.md, land it in the canonical
 Layer 0 commit.

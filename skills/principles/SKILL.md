@@ -102,9 +102,7 @@ not a binding decision), and the final task commit (it
 belongs to the session's own branch) of a card whose initial claim has already landed on
 integration, plus journal appends that mint no number and make no claim — `maintenance
 routing pending`, `capability note`, attributed open-item and decision lines, `product
-re-run pending` — and their local commits. Adding a unique decision or evidence record
-file continues the same way, as a local `record — <filename>` commit on the session's own
-branch. These wait until integration opens: a new
+re-run pending` — and their local commits. These wait until integration opens: a new
 claim, a new tree number, a new verify source id, a card's `.done.` rename and its
 boundary commit, a layer-opening marker (it mints numbers), new `evidence-wait` and `evidence-finalizing`
 journal lines (their record commit needs a push), `audit requested` and `retrospective requested` lines,
@@ -311,6 +309,31 @@ unchanged, rename the card `.stale.`.
 adopt neither side — stop, reconcile through this procedure, then proceed. A delegated
 implementer stops and reports only; reconciling is the main session's job.
 
+A document states only the present. When the same concept is updated, overwrite the place
+that concept lives — the concept, not the file. Then whoever reads next takes what they
+read as current, with no version to choose between.
+
+What can be overwritten is what can be recomputed. Execution results, observations, and a
+person's confirmation are not recomputed, so land them where that fact lives in that
+document before overwriting — the place differs by document, and the table just below names
+which one. The number, the execution conditions under which that number is true, and the
+command that measures it again go in one block — together they let the next person settle
+it by measuring again.
+
+One sentence separates an update from a drop — would someone reading the old statement now
+take a wrong action? Then keep it as a dropped direction. Otherwise overwrite that place.
+
+A dropped direction is a present fact, not a past one, and it lives beside the conclusion
+it lost to — what was dropped, why, and what reopens it. Only the reading condition
+differs: open it when you are about to reverse that conclusion.
+
+At brownfield adoption, write anew only what was confirmed in code. The remaining old
+documents stay in place as sources, and their disposition belongs to a person alone.
+
+Past versions are git's to carry. Name the overwritten concept in the subject of the commit
+that overwrote it — that is git's index, and it is what lets ordinary reading end at the
+current document.
+
 What you discovered → where to update:
 
 | Discovery | Update target |
@@ -324,12 +347,12 @@ What you discovered → where to update:
 | A design build result confirms or disproves design.md's source, token, component, or review-surface reference | If it remains true with the approved direction, replace only the exact one-line path, name, or command. If the direction of the Approach, Design source authority, Token strategy, Component strategy, Decomposition axis, or Review surface changes, first record it in a canonical `maintenance routing pending` line and re-run design through split 2a. After confirmation, split applies `.stale.` and the `re-split pending` marker above to affected cards that need replacement work |
 | A success criterion turns out unrunnable as written | product.md (+ the cards that quote it) |
 | A measurement disproves the content of the confirmed identity paragraph or a success criterion (not unrunnable as written — running it as written gives a wrong signal) | After user confirmation — if the replacement statement is settled, replace just that statement; if what replaces it is a planning question again, re-run product with the line below (and arch if the change reaches it). In either case, affected cards that need replacement work receive `.stale.` and the `re-split pending` markers above. The next session may take up the re-run on the strength of its line |
-| The user changes a confirmed statement themselves, with no disproving measurement | That conversation IS the confirmation. If the replacement statement is settled, replace just that statement; if what replaces it is a planning question again, re-run product with the line above. Affected cards that need replacement work receive `.stale.` and the `re-split pending` markers above. When a related decision record exists, a successor record names the old one in supersedes, and `owner decision` is a sufficient one-line ground |
+| The user changes a confirmed statement themselves, with no disproving measurement | That conversation IS the confirmation. If the replacement statement is settled, replace just that statement; if what replaces it is a planning question again, re-run product with the line above. Affected cards that need replacement work receive `.stale.` and the `re-split pending` markers above. When a related decision is recorded, overwrite it in place; `owner decision` is a sufficient one-line ground |
 | A `.done.` card's completion signal turns out unrunnable | fix that card's signal text too — regression must stay runnable |
 | A new coding-convention decision is needed | one line in code-style.md "Project choices" |
 | A verification means is newly created or changed | the means line of arch.md's verify_channel |
 | A file in arch.md's `Existing records` moved or no longer matches current code | replace or delete that exact path (+ `Read first` in pending or claimed cards carrying it) |
-| A decision recorded in an ADR or a decision record is reversed or no longer applies | for an ADR, write the successor ADR and add a dated update note to the superseded one naming that successor path; for a decision record, create a successor record naming the old one in supersedes. In the same binding decision, arch replaces the old path in every baseline design zone whose binding list carries it, and replaces it on pending or claimed cards that name it directly in `Read first` |
+| A decision recorded in an ADR is reversed or no longer applies | overwrite that ADR in place with the decision that now holds, and add one dropped-direction line — what was dropped, why, and what reopens it. The ADR keeps its path, so every reference naming it stays valid |
 | A new term becomes necessary | one line in glossary.md — the current skill walking this table lands it immediately |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | An observation confirmed in code about a capability other than the one being worked on | one canonical `capability note` line in journal.md carrying that capability's number. Do not edit the other capability's document directly — its next closure harvests the line |
@@ -348,116 +371,23 @@ lands through this table, immediately. The confirmed product.md's identity parag
 Capabilities, Boundary, and success criteria are modified only after user confirmation,
 whichever path the change arrives by — the conversation in which the user confirmed that
 change IS the confirmation. Planning lives as edits to product.md, arch.md, design.md,
-and the planning records below (ADRs included) — never create a new planning document
-beyond them.
+and the legacy ADRs — never create a new planning document beyond them.
 
-### Planning records — decision records and evidence records
-
-**Records are the channel by which confirmed choices and measurements outlive the
-session's death and become the next session's machine selection.
-Immutability is a property of history, not of the present — the cost of changing the
-present is always one successor record.** The current chosen value is owned once by its
-owning document, the reason and discarded alternatives by a decision record, and the
-reproducible observation with its applicability boundary by an evidence record.
-
-- Paths: `devflow/project/decisions/D-YYYYMMDD-<slug>-<full-blob-oid>.md` ·
-  `devflow/project/evidence/E-YYYYMMDD-<slug>-<full-blob-oid>.md`. Existing `ADR-NNN.md`
-  files coexist unchanged as the legacy decision-record form and are never backfilled.
-- The first line is one fixed line, key order included:
-  `record: {"v":1,"kind":"decision|evidence","during":"product|arch|design|adopt|split|work","affects":[...],"scope":"project|foundation|capability","mode":"reported|reproducible|null","evidence":[...],"checked-at":"YYYY-MM-DD|null","review-after":"YYYY-MM-DD|null","supersedes":[...]}`
-  `mode`, `checked-at`, and `review-after` carry values only on evidence records and are
-  null on decision records — `mode` separates observations from an approved run or pinned
-  source (`reproducible`) from conversation or on-screen observations (`reported`), and
-  evidence past its `review-after` is not cited as a ground before reconfirmation.
-  `scope` is the second filter over coarse affects. `evidence` is the array of exact
-  evidence-record filenames a decision record cites, and `supersedes` is the array of
-  exact filenames of superseded records.
-- The only permitted `affects` literals are this list (only this ASCII, in ko and en alike):
-  `product:Identity|Approach|Capabilities|Boundary|Success-criteria`,
-  `arch:Components|Stack|Code-structure|Data|Verify-channel`,
-  `design:Approach|Design-source|Token-strategy|Component-strategy|Decomposition-axis|Review-surface`,
-  `capability:<n>`. `validate` rejects every other token — an improvised token slips past
-  the intersection filter silently, so the machine blocks it. `capability:<n>` is mandatory only on records made after
-  product.md's capability list fixes that number; before that, Layer 0 fields alone are legal.
-  `<n>` is the product.md capability-list number written without leading zeros (① is
-  `1`) — not the tree and baseline numbering that counts the foundation as `01` and the
-  first capability as `02`, and copying a tree number points at a different capability.
-  The mapping between the two systems is owned by the canonical baseline predicates'
-  numbering rule. **This section is the canon of this vocabulary** — it is not a copy of split's Layer 0
-  field enumeration, and that enumeration does not define this list.
-- The body cap is 15 lines excluding the header — this cap guards the opening cost that
-  multiplies by the record count. The current set is "all valid files minus
-  every supersedes target". Add a successor record instead of editing or deleting. Content differs, so
-  paths differ — same-path collisions cannot carry different content. When a session finds
-  two incompatible current records on the same affects, it never picks one itself: it asks
-  the user once, and one user-confirmed successor names both in supersedes.
-- **The record gate** (all six producers, immediately after applying one confirmed answer
-  batch and immediately before a document's final confirmation): ① did a confirmed answer
-  set or change a Layer 0 field's value; ② was a named candidate kept or discarded on
-  external, repository, or execution facts rather than owner taste; ③ was a blocking fact
-  settled by execution or a pinned-version source — when any is true, create one decision
-  record per bundle of interdependent decisions; when all are false, create none. This
-  gate keeps confirmed reasons from evaporating with the conversation while not
-  duplicating, as a separate record, a local choice a card or owning statement already
-  fully carries. An
-  evidence record is created only when no existing owning statement can carry the
-  reproduction coordinates and applicability boundary. Before recording, show the three
-  lines `record: <title> / affects / ground` — the conversation that just confirmed the
-  answer is the approval, and the record is not made when the user declines.
-- **Body grammar**: a decision record's body carries the decision statement, grounds,
-  discarded alternatives, and cited evidence filenames. An evidence record's body must
-  carry `Reproduce` and `Invalidates-when` sections — with `mode: reproducible`,
-  `Reproduce` must name at least one repository path that exists — a reproduction
-  command passes only when it contains such a path — and `validate` rejects a
-  `Reproduce` naming none; with `mode: reported`, write only the
-  observation source — reported evidence says of itself that it settles no execution fact
-  and reduces no re-verification. A well-formed false entry pointing at a real path is
-  beyond machine reach — the next session's failed reproduction exposes it.
-- A session writes record files directly, and each must pass the record tool's
-  `validate` before its commit. The filename's oid is judged by the tool — write the body
-  under a temporary name with a placeholder oid (40 zeros), run `validate`, and its
-  mismatch error prints the correct oid; rename to that name and pass `validate` again.
-  Never mint the name with a shell hash yourself — line-ending conversion settings make
-  it disagree with the tool's judgment.
-  Picking the current set and candidates, reverse search,
-  and deletion judgment run only through the `summary`, `select`, `reverse-evidence`,
-  `prune-check`, and `validate` subcommands of the record tool `project-records.mjs`.
-  Locate the tool as `scripts/project-records.mjs` under the plugin root two levels above
-  this loaded skill file — in a runtime that sets `${CLAUDE_PLUGIN_ROOT}`,
-  `${CLAUDE_PLUGIN_ROOT}/scripts/project-records.mjs` is a shortcut to the same place.
-  The tool is stateless and
-  read-only and never modifies the repository; it owns its judgment internals, and this
-  document does not restate them.
-- A record commit is a `record — <filename>` binding-decision commit carrying only that
-  record file. During a blockade, adding a unique record file continues as a local commit
-  on the session's own branch but is not shared authority before integration — this
-  continuation keeps confirmations from evaporating during a blockade. Successors,
-  deletions, and Layer 0 or capability-document changes wait until the blockade opens. A
-  journal `evidence-wait` record and an evidence-record file are different concepts.
-- **Human record deletion is a sanctioned exception.** A session deletes only a leaf
-  record that passes the `prune-check` judgment and user confirmation. A person deleting
-  directly is not blocked — a session that meets a leftover citation reports `record
-  deleted` rather than an integrity anomaly and repairs that citation through the
-  discovery→update table, and the absence of a file named by supersedes is likewise not
-  an anomaly. Git keeps the history of deleted records.
+### Core document ownership
 
 Core documents (`devflow/project/*`) are modified **only through this procedure or by
-re-running the owning skill** — never edited in passing during a task. And modification
-means **replacement by default**: if you added a line, check whether you deleted the stale
-one. A document that only grows is a dead document.
+re-running the owning skill** — never edited in passing during a task.
 Target ownership is fixed: product owns product.md and glossary.md; arch owns arch.md,
 code-style.md, and the legacy ADRs; design owns design.md; adopt owns arch.md `Existing records`
 and may add only a missing `Brownfield` field to an existing arch.md;
-split owns the tree and task cards; verify owns verify.md. Decision and evidence records
-are written by product, arch, design, adopt, split, and work through the canonical record
-gate above and the discovery→update table. arch, or adopt in a brownfield,
+split owns the tree and task cards; verify owns verify.md. arch, or adopt in a brownfield,
 owns the design zone under `devflow/project/capabilities/`; verify owns the verified zone
 after creation. The same-numbered knowledge capsule folder belongs to the design-zone
 writer, and the canonical baseline predicates govern its path, header, provenance marks,
 and opening budget. Skills never delete, move, or edit the source documents a capsule was
 processed from — disposition belongs to a person alone. The canonical baseline predicates
 govern the initial empty verified
-scaffold, mechanical path replacement when an ADR is superseded, the exact byte boundary,
+scaffold, the exact byte boundary,
 the exact mechanical v0.10 migration, and the human-deletion exception.
 Fixed target ownership means ownership of rerunning the whole document; the current skill walking this table performs a one-line update named by the table.
 
@@ -904,8 +834,7 @@ decision — a blockade does not block this lane.
   the specified state is the passing verify.md record, one exact baseline path of the closing
   capability (absent, partial, or any bytes), and — when already created — the
   capability-closing record; the baseline predicates govern that baseline file's regeneration
-  before that commit lands. Outside a canonical capability-design commit, the mechanical
-  exact-path replacement for a superseded ADR, the canonical human-deletion exception,
+  before that commit lands. Outside a canonical capability-design commit, the canonical human-deletion exception,
   restoration of one complete one-boundary file from a user-identified Git revision to its current expected path, or this begin transition, any
   `devflow/project/capabilities/` diff is an integrity anomaly.
 - **git belongs to the main session.** Subagents implement and write the progress log —

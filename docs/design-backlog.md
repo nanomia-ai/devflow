@@ -109,26 +109,6 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   `maintenance routing pending` line makes the other's capability closure report an
   unexplainable integrity anomaly. Safe (nothing is lost, the stop is the strict-prefix
   safety device working), but the user sees a stop they cannot read. Watch whether it is met.
-- **Capture-gate omission and record volume** (v0.18.0) — the record gate keeps three model
-  judgments; whether a real 6-hour interview under-records (fresh sessions re-deriving
-  choices) or over-records (form-C decay) is unmeasured. Watch per-session record counts,
-  the bind-stop rate on ordinary splits (over 10% reopens the affects vocabulary), the
-  first current-set projection reported over 200 lines (opens capability partitioning),
-  and the share of `mode: reported` evidence records (a high share hollows out the
-  re-verification savings).
-- **The q>3 self-approval rate** (observed in the v0.18.0 re-measurement) — a reading
-  session split `select` into three calls, opened all 7 current bodies, and substituted
-  itself for the approval subject (the user). The prose was replaced with a hard
-  per-judgment cap. Correctness is guarded by the tool's current-set computation, so only
-  cost is breached — if observed repeatedly, promote it to a design defect where
-  prompt-only restraint failed.
-- **The unused `checked-at` key — a v2 schema candidate** (found by the v0.18.0 final
-  check) — the tool only shape-validates this key and uses it in no judgment (staleness
-  is `review-after`, sorting is the filename date). Records are immutable, so
-  reconfirmation cannot update it and it effectively duplicates the filename date. Each
-  header key is projection cost multiplied by every record, but a schema change now is
-  the class that twice produced two-sided drift defects — re-evaluate removal at the
-  `v:1`→v2 evolution.
 - **Tense tension between arch's verify-channel pass bar and the "first task" creation
   rows** (predates v0.17.0, observed by the v0.18.0 walkthrough) — the bar "confirm it can
   actually run now" and the table rows "create the missing `.http` or run command as the
@@ -220,11 +200,13 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 
 - **A capability that overruns even the compact index** (v0.18.1) — the index projection
   downgrades from full to compact at 24 KiB, and one capability's 100 capsules fit compact in
-  21 KB. Past that only zero entries and the filters to narrow by come back, and at that point
-  `--facet` and `--state` help only if those axes actually differ while `--path` needs the very
-  paths the index was to supply. It does not occur at measured scale (12 capsules per
-  capability), so no rule is added now. Open index paging (`--after`) or explicit approval when
-  one capability passes 100 capsules or a compact-index overrun is actually reported.
+  21 KB. Past that only zero entries and the filters to narrow by come back. v0.18.2 removed the
+  `--facet` and `--state` axes from both the capsule header and the tool, so the remaining
+  filters are `--capability` and `--path`: the first cannot narrow further because this
+  observation is already inside one capability, and the second needs the very paths the index was
+  to supply. It does not occur at measured scale (12 capsules per capability), so no rule is
+  added now. Open index paging (`--after`) or explicit approval when one capability passes 100
+  capsules or a compact-index overrun is actually reported.
 
 ## Observations already settled — lineage
 
@@ -265,9 +247,28 @@ The items below were carried out and left the watch list. Re-proposals consult t
   device exists; it is a matter of usage judgment.~~ — DD-73 in v0.17.0 implemented a step before arch.md confirmation that enumerates
   every decision passing the three ADR conditions and confirms whether each is recorded.
 - ~~A plain user correction to a confirmed product.md statement has no lightweight row.~~ —
-  settled by DD-75 in v0.18.0: a user-initiated change without a disproving measurement is
-  a first-class discovery→update row — the conversation is the confirmation, and a
-  successor record carries `owner decision` as a sufficient ground.
+  settled by DD-75 in v0.18.0 and relanded by DD-77 in v0.18.2: a user-initiated change without
+  a disproving measurement is a first-class discovery→update row — the conversation is the
+  confirmation, and a related decision is overwritten in place with `owner decision` as a
+  sufficient one-line ground.
+- ~~Capture-gate omission and record volume — whether a real 6-hour interview under-records or
+  over-records~~ — voided by DD-77 in v0.18.2: the record gate and the decision and evidence
+  record layer are gone, so the item has no subject. Of its four watches, the share of
+  `mode: reported` evidence was DD-74's own revisit condition and hit its maximum at 6 of 6 in
+  measurement, which became this round's ground. Whether settlements push the owning document
+  out of its budget is carried on by DD-77's revisit condition.
+- ~~The q>3 self-approval rate~~ — voided by DD-77 in v0.18.2: `select`'s current-set projection
+  over records and its per-judgment cap went together, so the bypass has no subject. The
+  same-shaped risk (a session substituting itself for the approval subject) is watched on by the
+  capsule opening-budget hard cap observation.
+- ~~The unused `checked-at` key — a v2 schema candidate~~ — voided by DD-77 in v0.18.2: the
+  record header schema itself is gone, so there is no `v:1`→v2 evolution at which to re-evaluate
+  removal.
+- ~~Whether `--facet` and `--state` are the axes to narrow by at a compact-index overrun~~ —
+  settled by v0.18.2 removing both axes from the capsule header and the tool together (a sweep
+  confirmed no skill called `--facet`). The observation that carried the question, "a capability
+  that overruns even the compact index", stays on the watch list because the index and its 24 KiB
+  cap are unchanged; only that sentence was rewritten to the remaining filters.
 
 ## On hold — candidates for coming versions
 

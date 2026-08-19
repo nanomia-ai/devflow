@@ -22,10 +22,10 @@ Purpose: complete the service plan through an interview with the user, producing
 `devflow/project/product.md`.
 This stage is **service** planning — "not entertained" means product generates no
 development questions (stack, DB, framework, architecture). A development choice the user
-confirms first is not something to refuse but something to record — when the canonical
-record gate passes, land it immediately as a `during: product`
-decision record, say "arch confirms it" in one line, and return to the product questions.
-It does not enter product.md.
+confirms first is not something to refuse but something to hand over — leave the choice and
+the reason it was chosen as one attributed journal line, say "arch confirms it" in one line,
+and return to the product questions. arch harvests that line before taking confirmation on
+arch.md. It does not enter product.md.
 
 ## The Six Judgments (= the table of contents of product.md)
 
@@ -62,11 +62,14 @@ decide the stack or DB. Both choices belong to arch.
 - Before creating the next frontier after applying an answer, and before final confirmation,
   run the planning evidence discipline's pre-commitment review. With no candidate, produce
   no additional output or question.
-- At the same two points, also run the canonical record gate — a
-  settlement it catches lands as a decision or evidence record on the spot. Immediately
-  before confirming product.md, enumerate one by one the gate-qualifying items this run
-  confirmed but did not record and confirm each with the user — after landing there is no
-  canonical route back to an unrecorded item.
+- At the same two points, write the confirmed reason and the discarded alternative into the
+  product.md section that owns that conclusion — `Approach` carries why this approach and
+  each discarded one, `Boundary` carries what will not be built and why. When the ground is
+  a number, attach the execution conditions under which it is true and the command that
+  measures it again in the same place. Immediately before confirming product.md, enumerate
+  one by one the reasons this run confirmed that are not yet in the document and confirm
+  each with the user — after confirmation there is no canonical route back to that
+  conversation.
 
 **Capability composition is the heart.** The capability names chosen here become the
 module names in the architecture and the folder names in the task tree — the same words,

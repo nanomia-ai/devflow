@@ -57,7 +57,6 @@ points to from their actual sources.
 | `verify` | executes capability and product verdicts and owns survival paths for failure, audit, and retrospective events | closed code, signals, and baseline → repair through split or closure | DD-21–DD-24 · DD-30 · DD-36 · DD-68 |
 | `resume` | checks disk integrity, recovers interrupted transitions, and routes the next stage | Git, tree, journal, and verify projection → the applicable entry skill | DD-11 · DD-25 · DD-26 · DD-44 |
 | predicate companions | fix shared state, verification, and baseline judgments in one place | only named consumers read them; each stage owns its procedure | DD-28 · DD-42 · DD-56 |
-| record tool (`project-records.mjs`) | read-only record judgment: current set, selection, reverse search, prune check | planning stages and resume → bounded reads | DD-74 · DD-75 |
 | role contracts | brief reviewer, verifier, auditor, and retrospector verbatim into clean contexts | an entry-skill event → an independently constrained judgment | DD-19 · DD-21–DD-23 |
 | `coordinator` role contract | dispatches and supervises workers above devflow without creating a stage or state | orchestrator → existing entry skills | DD-70 |
 
@@ -173,11 +172,11 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-52 | A shared transition is published against a remembered integration id | Concurrency, claims, integration | v0.13.0 | active, partly corrected by DD-62 (v0.14.0), DD-70 (v0.16.0) |
 | DD-53 | Several sessions in one working folder are normal, and their safety is five measured lines rather than a lock | Concurrency, claims, integration | v0.13.0 | active |
 | DD-60 | Claims are freely parallel, and a checkpoint carries only the changes this session made | Concurrency, claims, integration | v0.14.0 | active |
-| DD-62 | During a blockade, journal appends that mint nothing, claim nothing, and consume nothing are written immediately | Concurrency, claims, integration | v0.14.0 | active, partly corrected by DD-74 (v0.18.0) |
+| DD-62 | During a blockade, journal appends that mint nothing, claim nothing, and consume nothing are written immediately | Concurrency, claims, integration | v0.14.0 | active |
 | DD-63 | Journal merge conflicts resolve 3-way, not as a union | Concurrency, claims, integration | v0.14.0 | active |
 | DD-66 | The tweak lane confirms its landing by machine first, and in same-file contention the tweak side yields | Concurrency, claims, integration | v0.14.2 | active |
 | DD-70 | `coordinator` is a declared role, not a devflow stage; one role contract owns its duties, and devflow behavior and state do not branch on whether orchestration is in use | Concurrency, claims, integration | v0.16.0 | active |
-| DD-28 | Durable knowledge is connected through bounded consumers of existing records, not through a new document layer | The knowledge layer and capability documents | v0.9.21 | active, partly corrected by DD-74 (v0.18.0), DD-76 (v0.18.1) |
+| DD-28 | Durable knowledge is connected through bounded consumers of existing records, not through a new document layer | The knowledge layer and capability documents | v0.9.21 | active, partly corrected by DD-76 (v0.18.1) |
 | DD-33 | The knowledge-reachability set — standing of outside records · conversation decisions land immediately · a user-confirmation gate on product's four core sections · a disproof row (replace the statement, or re-run product) · a means row · a pre-HANDOFF landing check · a survival path for research answers that are tools · verify's disproof arbitration | The knowledge layer and capability documents | v0.9.18 | active |
 | DD-42 | The capability knowledge baseline — the domain blueprint a verification closure produces | The knowledge layer and capability documents | v0.10.0 | active, partly corrected by DD-76 (v0.18.1) |
 | DD-43 | Capability documents physically separate a design zone born with Layer 0 from a verified zone refreshed at closure, and are always on | The knowledge layer and capability documents | v0.11.0 | active, partly corrected by DD-76 (v0.18.1) |
@@ -187,11 +186,12 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-56 | Reading is bounded to open work: a depth-1 folder carrying `.done` is read by name | The knowledge layer and capability documents | v0.13.0 | active |
 | DD-59 | Open decisions live in journal, so HANDOFF holds only what the tree recomputes | The knowledge layer and capability documents | v0.13.0 | active |
 | DD-64 | The third branch of a shared-contract observation is an attributed open item | The knowledge layer and capability documents | v0.14.0 | active |
-| DD-67 | Planning evidence discipline settles facts from four authorities before questions and isolates answer-only research, while the main session owns structural understanding and binding decisions | The knowledge layer and capability documents | v0.15.0 | active, partly corrected by DD-74 (v0.18.0) |
+| DD-67 | Planning evidence discipline settles facts from four authorities before questions and isolates answer-only research, while the main session owns structural understanding and binding decisions | The knowledge layer and capability documents | v0.15.0 | active |
 | DD-73 | Capability documents are arch's final output and must exist before the first tree opening, while decision and external-contract grounds are preserved at confirmation | The knowledge layer and capability documents | v0.17.0 | active |
-| DD-74 | The planning record layer — the record gate lands decision and evidence records at settlement | The knowledge layer and capability documents | v0.18.0 | active |
-| DD-75 | Record succession — one successor changes the present; stale evidence cascades; conflicts are preserved then merged | The knowledge layer and capability documents | v0.18.0 | active |
-| DD-76 | Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute | The knowledge layer and capability documents | v0.18.1 | active |
+| DD-74 | The planning record layer — the record gate lands decision and evidence records at settlement | The knowledge layer and capability documents | v0.18.0 | replaced by DD-77 (v0.18.2) |
+| DD-75 | Record succession — one successor changes the present; stale evidence cascades; conflicts are preserved then merged | The knowledge layer and capability documents | v0.18.0 | replaced by DD-77 (v0.18.2) |
+| DD-76 | Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute | The knowledge layer and capability documents | v0.18.1 | active, partly corrected by DD-77 (v0.18.2) |
+| DD-77 | A document speaks only of the present — an updated concept overwrites that concept's place, and the dropped direction lives beside that conclusion as a present fact | The knowledge layer and capability documents | v0.18.2 | active |
 | DD-10 | No retroactive tree records (brownfield) | Brownfield and entry | origin | active |
 | DD-20 | Brownfield entry is its own skill, adopt — split out of arch | Brownfield and entry | v0.9.10 | active |
 | DD-26 | Brownfield and layer transitions have explicit disk states, preserving their meaning across interruption | Brownfield and entry | v0.9.21 | active |

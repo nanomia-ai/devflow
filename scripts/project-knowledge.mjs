@@ -5,12 +5,9 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { TextDecoder } from "node:util";
 
-const HEADER_KEYS = ["v", "capability", "facet", "topic", "use-when", "state", "synopsis"];
-const STATES = new Set(["current", "retired"]);
 const MARKERS = new Set(["synthesis", "code", "conjecture", "dispute"]);
 const CAPSULE_NAME = /^K-(?<number>(?!000)[0-9]{3})-(?<topic>[a-z0-9]+(?:-[a-z0-9]+)*)\.md$/;
 const CAPABILITY_NAME = /^(?<number>0*[1-9][0-9]*)-(?<name>[a-z0-9]+(?:-[a-z0-9]+)*)$/;
-const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const COORDINATE = /^(?<file>[^@:\r\n]+(?:\/[^@:\r\n]+)*?)(?:@(?<revision>[0-9a-f]{7,40}))?:(?<start>[1-9][0-9]*)(?:-(?<end>[1-9][0-9]*))?$/;
 const SOFT_LINES = 120;
 const HARD_LINES = 240;
@@ -231,86 +228,36 @@ function parseSourceBasis(line, root, relative) {
 }
 
 function validateCurrentBody(lines, root, relative) {
-  const first = lines.findIndex((line) => line.trim().length > 0);
-  if (first < 0 || !/^# (?!#)/.test(lines[first])) fail(`${relative}: current capsule requires one H1`);
-  const positions = [
-    lines.findIndex((line) => line.startsWith("Intent: ")),
-    lines.findIndex((line) => line.startsWith("Desired outcome: ")),
-    lines.indexOf("## Grounded state"),
-    lines.indexOf("## Revisit when"),
-    lines.findIndex((line) => line.startsWith("Source basis: ")),
-  ];
-  if (positions.some((position) => position < 0)) {
-    fail(`${relative}: current capsule requires Intent, Desired outcome, Grounded state, Revisit when, and Source basis`);
-  }
-  if (positions.some((position, index) => index > 0 && position <= positions[index - 1])) {
-    fail(`${relative}: capsule sections are out of order`);
-  }
-  parseSourceBasis(lines[positions[4]], root, relative);
-}
-
-function validateRetiredBody(lines, relative) {
-  const present = lines.filter((line) => line.trim().length > 0);
-  if (present.length === 0 || !/^# (?!#)/.test(present[0])) fail(`${relative}: retired capsule requires one H1`);
-  if (lines.length > 5) fail(`${relative}: retired tombstone has ${lines.length} body lines; hard limit is 5`);
+  if (!/^# (?!#)/.test(lines[0] ?? "")) fail(`${relative}: capsule requires one H1 on line one`);
+  parseSourceBasis(lines.at(-1) ?? "", root, relative);
 }
 
 function parseCapsule(file, root) {
   const relative = repositoryPath(root, file);
-  const bytes = fs.readFileSync(file);
-  const text = decodeUtf8(bytes, relative);
-  const lines = text.replace(/\r\n/g, "\n").split("\n");
-  if (lines.at(-1) === "") lines.pop();
-  if (!lines[0]?.startsWith("knowledge: ")) fail(`${relative}: first line must start with "knowledge: "`);
-  let header;
-  try {
-    header = JSON.parse(lines[0].slice("knowledge: ".length));
-  } catch (error) {
-    fail(`${relative}: first-line JSON is invalid (${error.message})`);
-  }
-  if (!header || Array.isArray(header) || typeof header !== "object") {
-    fail(`${relative}: first-line JSON must be an object`);
-  }
-  const keys = Object.keys(header);
-  if (keys.length !== HEADER_KEYS.length || keys.some((key, index) => key !== HEADER_KEYS[index])) {
-    fail(`${relative}: header keys must be exactly ${HEADER_KEYS.join(",")} in that order`);
-  }
-  if (lines[0] !== `knowledge: ${JSON.stringify(header)}`) {
-    fail(`${relative}: header JSON must be compact and canonical`);
-  }
-  if (header.v !== 1) fail(`${relative}: v must be 1`);
-  if (!Number.isInteger(header.capability) || header.capability < 1) {
-    fail(`${relative}: capability must be a positive integer`);
-  }
-  if (typeof header.facet !== "string" || !SLUG.test(header.facet)) fail(`${relative}: facet must be an ASCII slug`);
-  if (typeof header.topic !== "string" || !SLUG.test(header.topic)) fail(`${relative}: topic must be an ASCII slug`);
-  for (const key of ["use-when", "synopsis"]) {
-    if (typeof header[key] !== "string" || header[key].trim().length === 0 || /[\r\n]/.test(header[key])) {
-      fail(`${relative}: ${key} must be a non-empty one-line string`);
-    }
-  }
-  if (!STATES.has(header.state)) fail(`${relative}: state must be current or retired`);
-
   const directoryMatch = CAPABILITY_NAME.exec(path.basename(path.dirname(file)));
   const fileMatch = CAPSULE_NAME.exec(path.basename(file));
   if (!directoryMatch) fail(`${relative}: capsule parent must be NN-ascii-name`);
   if (!fileMatch) fail(`${relative}: filename must be K-NNN-ascii-topic.md`);
-  if (Number(directoryMatch.groups.number) !== header.capability) {
-    fail(`${relative}: header capability does not match its parent directory`);
+  const bytes = fs.readFileSync(file);
+  const text = decodeUtf8(bytes, relative);
+  const lines = text.replace(/\r\n/g, "\n").split("\n");
+  if (lines.at(-1) === "") lines.pop();
+  const heading = /^# \S(?:.*\S)? · \S(?:.*\S)?$/u.test(lines[0] ?? "") ? lines[0] : null;
+  const about = /^about: (\S(?:.*\S)?)$/u.exec(lines[1] ?? "");
+  if (heading === null || about === null || lines[2] !== "") {
+    fail(`${relative}: capsule header format anomaly`);
   }
-  if (fileMatch.groups.topic !== header.topic) fail(`${relative}: header topic does not match its filename`);
   const entry = path.join(path.dirname(path.dirname(file)), `${path.basename(path.dirname(file))}.md`);
   if (!fs.existsSync(entry) || !fs.statSync(entry).isFile()) {
     fail(`${relative}: sibling capability entrance ${repositoryPath(root, entry)} is missing`);
   }
 
-  const bodyLines = lines.slice(1);
-  if (header.state === "current") validateCurrentBody(bodyLines, root, relative);
-  else validateRetiredBody(bodyLines, relative);
+  validateCurrentBody(lines, root, relative);
+  const bodyLines = lines.slice(3);
   const insertions = parseInsertions(bodyLines.join("\n"), root, relative);
   const totalLines = lineCount(text);
   const warnings = [];
-  if (header.state === "current" && totalLines > SOFT_LINES) {
+  if (totalLines > SOFT_LINES) {
     warnings.push(`${relative}: ${totalLines} lines exceeds the ${SOFT_LINES}-line soft target`);
   }
   return {
@@ -321,7 +268,10 @@ function parseCapsule(file, root) {
     bytes,
     text,
     lines: totalLines,
-    header,
+    capability: Number(directoryMatch.groups.number),
+    topic: fileMatch.groups.topic,
+    heading,
+    about: about[1],
     insertions,
     warnings,
   };
@@ -367,13 +317,13 @@ function loadCapsules(root, rawPaths = []) {
   const identities = new Map();
   const disputes = new Map();
   for (const capsule of capsules) {
-    const identity = `${capsule.header.capability}:${capsule.number}`;
+    const identity = `${capsule.capability}:${capsule.number}`;
     if (identities.has(identity)) fail(`duplicate capsule number: ${capsule.relative} and ${identities.get(identity)}`);
     identities.set(identity, capsule.relative);
     for (const dispute of capsule.insertions.disputes) {
-      const disputeIdentity = `${capsule.header.capability}:${dispute.id}`;
+      const disputeIdentity = `${capsule.capability}:${dispute.id}`;
       if (disputes.has(disputeIdentity)) {
-        fail(`duplicate dispute id ${dispute.id} in capability ${capsule.header.capability}: ${capsule.relative} and ${disputes.get(disputeIdentity)}`);
+        fail(`duplicate dispute id ${dispute.id} in capability ${capsule.capability}: ${capsule.relative} and ${disputes.get(disputeIdentity)}`);
       }
       disputes.set(disputeIdentity, capsule.relative);
     }
@@ -398,8 +348,6 @@ function parseArguments(argv) {
       case "--root": options.root = value; break;
       case "--path": options.paths.push(value); break;
       case "--capability": options.capability = value; break;
-      case "--facet": options.facet = value; break;
-      case "--state": options.state = value; break;
       default: fail(`unknown option ${flag}`);
     }
   }
@@ -410,8 +358,6 @@ function parseArguments(argv) {
   if (options.capability !== undefined && !/^[1-9][0-9]*$/.test(options.capability)) {
     fail("--capability must be a positive integer");
   }
-  if (options.facet !== undefined && !SLUG.test(options.facet)) fail("--facet must be an ASCII slug");
-  if (options.state !== undefined && !STATES.has(options.state)) fail("--state must be current or retired");
   return { command, options };
 }
 
@@ -427,9 +373,7 @@ function selectedCapsules(capsules, options, { requirePaths = false } = {}) {
     });
   }
   return selected.filter((capsule) => (
-    (options.capability === undefined || capsule.header.capability === Number(options.capability))
-    && (options.facet === undefined || capsule.header.facet === options.facet)
-    && (options.state === undefined || capsule.header.state === options.state)
+    options.capability === undefined || capsule.capability === Number(options.capability)
   ));
 }
 
@@ -442,12 +386,8 @@ function printWarnings(capsules) {
 function projection(capsule) {
   return {
     path: capsule.relative,
-    capability: capsule.header.capability,
-    facet: capsule.header.facet,
-    topic: capsule.header.topic,
-    "use-when": capsule.header["use-when"],
-    state: capsule.header.state,
-    synopsis: capsule.header.synopsis,
+    heading: capsule.heading,
+    about: capsule.about,
     lines: capsule.lines,
     bytes: capsule.bytes.length,
     markers: capsule.insertions.counts,
@@ -458,17 +398,14 @@ function projection(capsule) {
 function compactProjection(entry) {
   return {
     path: entry.path,
-    facet: entry.facet,
-    topic: entry.topic,
-    "use-when": entry["use-when"],
-    state: entry.state,
+    heading: entry.heading,
   };
 }
 
 function disputeProjection(capsule, dispute) {
   return {
     path: capsule.relative,
-    capability: capsule.header.capability,
+    capability: capsule.capability,
     id: dispute.id,
     coordinates: dispute.coordinates,
     arms: dispute.arms,
@@ -483,8 +420,6 @@ function emitBoundedIndex(command, summary, prefix, values, compactOf) {
   let lines = render(values);
   let bytes = sizeOf(lines);
   if (bytes > INDEX_BYTES && compactOf) {
-    // A capability large enough to overflow the full index still has to be selectable, so drop
-    // the fields a chooser never reads and keep the path and use-when it picks by.
     form = "compact";
     lines = render(values.map(compactOf));
     bytes = sizeOf(lines);
@@ -492,7 +427,7 @@ function emitBoundedIndex(command, summary, prefix, values, compactOf) {
   const over = bytes > INDEX_BYTES;
   console.log(`${command}: ${summary} bodies=0 form=${form} index-bytes=${bytes}/${INDEX_BYTES} emitted=${over ? 0 : lines.length}`);
   if (over) {
-    console.error(`blocked: index budget exceeded; narrow --path, --capability, --facet, or --state filters`);
+    console.error(`blocked: index budget exceeded; narrow --path or --capability filters`);
     process.exitCode = 3;
     return;
   }

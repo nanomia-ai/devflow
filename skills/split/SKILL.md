@@ -352,11 +352,11 @@ When a new term is confirmed, immediately land it through the one-line `glossary
 in the canonical discovery→update table. After the four card fields first become unique and
 before writing the card bytes, run the planning evidence discipline's pre-commitment review
 once. Do not compare a candidate that changes Layer 0; route it to 2a.
-In grades 1 and 2b alike, run the canonical record gate at the same
-point — a settlement it catches lands as a `during: split` decision or evidence record, and
-put at most 3 exact paths of the current records that actually ground the card into the new
-card's `Read first`. A card-local choice fully carried by the card's `Why` and `Forbidden`
-makes no record.
+In grades 1 and 2b alike, at the same point land every settlement that outlives the card
+through the place the canonical discovery→update table fixes — overwrite that place in the
+document that owns the conclusion. Put at most 3 exact paths that actually ground the card
+into the new card's `Read first`. A card-local choice fully carried by the card's `Why` and
+`Forbidden` changes no document.
 
 1. **Map the request's scope to a location.** Before mapping, read the `Design head`
    metadata line of each candidate capability document, count only exact `## Verified state`
@@ -451,7 +451,7 @@ projection, never a capsule body: locate `scripts/project-knowledge.mjs` from th
 by the canonical baseline predicates' rule and run
 `node <plugin root>/scripts/project-knowledge.mjs project --capability <capability number>`
 for that number. Call it once per capability and never without `--capability`. Put the
-exact path of each capsule whose `use-when` matches the card's destination and target on
+exact path of each capsule whose "when to open it" matches the card's destination and target on
 `Read first` — approving the execution proposal approves that selection, and opening the
 body and judging the opening budget belong to work. The legacy-wiring rule that keeps paths
 directly below `devflow/project/capabilities/` off `Read first` does not apply to capsule

@@ -21,9 +21,10 @@ change design.md; send it through split's maintenance routing so the line and th
 or when the same unresolved line exists. design does not delete that line — after confirmation and
 the commit, split consumes it when planning build cards from the same source.
 
-When a confirmed decision or observation is caught by the canonical rules' planning-records
-section, land it immediately as a `during: design` decision or evidence record, and the
-owning statement in design.md cites that exact filename.
+Write a confirmed decision's reason and its discarded alternatives beside the design.md
+field that owns that decision. A reproducible observation goes beside the field that owns
+that value — the number, the execution conditions under which it is true, and
+the command that measures it again, in one block.
 
 Purpose: decide the direction and boundary of the UI build and record them in
 `devflow/project/design.md`. This stage does not build token, theme, component, or preview code.
