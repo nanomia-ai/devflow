@@ -824,8 +824,9 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.match(baseline, /With an empty resolution set it reports only foundation plus non-retired number\/name\s+candidates and asks; with two or more it reports only the resolved candidates and asks/);
   assert.match(baseline, /registered consumers: <number \(status\), \.\.\. \| none>/);
 
-  assert.match(arch, /`arch — capabilities`[\s\S]*run's last\s+commit/);
-  assert.match(adopt, /`adopt — capabilities`[\s\S]*run's last\s+commit/);
+  assert.match(baseline, /a\s+commit containing capability documents only, `arch — capabilities` or\s+`adopt — capabilities`, is the last commit of that run/);
+  assert.match(arch, /run the\s+canonical baseline predicates' design-writer procedure/);
+  assert.match(adopt, /run the canonical\s+baseline predicates' brownfield design-writer procedure/);
   assert.doesNotMatch(split, /capability_baseline|baseline's exact path/);
   assert.match(work, /depth-1 ancestor directly below\s+`devflow\/tree\/`/);
   assert.match(work, /baseline path directly under\s+`devflow\/project\/capabilities\/` is legacy wiring[\s\S]*defer it to the number judgment/);
@@ -976,8 +977,8 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(baseline, /Preserve the body bytes of the old Main\s+flow, Lifecycle, Current behavior, Entrypoints, Traps, and Verify[\s\S]*add `Consumed paths: \[\]` and `Scope\s+head: none`[\s\S]*discard the old `Scope head` and `Docs head`/);
   assert.match(baseline, /old `Scope head` was\s+calculated from Scope paths alone[\s\S]*verified statements are hypotheses immediately after migration/);
   assert.match(principles, /exact mechanical v0\.10 migration/);
-  assert.match(arch, /exact `legacy v0\.10` shape[\s\S]*canonical mechanical\s+migration[\s\S]*not treat it as boundary\s+damage or a data-loss reset/);
-  assert.match(adopt, /exact `legacy v0\.10` shape[\s\S]*canonical mechanical\s+migration[\s\S]*not treat it as boundary\s+damage or a data-loss reset/);
+  assert.match(baseline, /In the ordinary design batch, arch or adopt derives the design zone anew from current Layer\s+0 and transforms the verified zone mechanically/);
+  assert.match(baseline, /Except for the exact v0\.10 migration below,\s+never auto-heal zero or multiple boundaries/);
   assert.match(resume, /expected file has the canonical baseline predicates' exact `legacy v0\.10` shape[\s\S]*mechanically carried verified zone/);
   assert.match(work, /legacy baseline:\s+migration pending — <path>[\s\S]*open no body/);
   assert.match(verify, /baseline no-op: legacy v0\.10 migration pending[\s\S]*do not migrate its verified zone/);
@@ -1000,16 +1001,13 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(resume, /split's maintenance-mapping gate does not open on that deferral/);
   assert.match(adopt, /When Layer 0 is complete and\s+only capability documents are missing or need repair/);
   assert.match(baseline, /present them as one batch; change no\s+capability-document path before the user confirms that batch/);
-  assert.match(arch, /Before changing disk, present all design zones that would change as one batch and obtain\s+user confirmation/);
-  assert.match(adopt, /Before changing disk, present all design zones that would change as one batch and obtain\s+user confirmation/);
+  assert.match(baseline, /Show the exact migrating paths and this mechanical transformation with the design batch\.\s+After the user confirms the batch, land it in the same capability-design commit/);
   assert.match(baseline, /Do not load the whole original into the report\. Report its path, the HEAD boundary count\s+that selected this route, the working-tree\s+boundary count and line count, the HEAD blob object ID for that exact path or `none`, and\s+the expected boundary/);
   assert.match(baseline, /The HEAD blob identifies provenance; it is not presumed valid/);
   assert.match(baseline, /resume writes no file and offers only two choices: after confirming that a user-identified\s+Git revision and path has one boundary, the user restores those bytes to the damaged\s+file's current expected path and commits only that file[\s\S]*or the user discards the old verified\s+prose/);
   assert.match(baseline, /Search no history for a known-good revision/);
-  assert.match(resume, /offer only two choices: \(1\) after confirming that a user-identified Git revision and path has one boundary, the user restores those bytes to the damaged file's current expected path and commits only that file; \(2\)[\s\S]*route `Brownfield: yes` to adopt or `no` to arch/);
-  assert.match(resume, /Search no history for a known-good revision; resume writes no file/);
-  assert.match(arch, /zero or more\s+than one boundary and the user did not choose in resume[\s\S]*reset the whole file from\s+current Layer 0 design plus the empty initial verified scaffold/);
-  assert.match(adopt, /zero or more than one boundary and the user did not choose in resume[\s\S]*reset the whole file from current Layer 0 design plus the empty initial\s+verified scaffold/);
+  assert.match(resume, /\| resume — apply the canonical baseline predicates' `Writers and replacement boundaries` section exactly \|/);
+  assert.match(baseline, /When a file is absent or the user confirms a boundary reset, arch or adopt creates both\s+zones; verified sections start as/);
   assert.match(baseline, /user-confirmed deletion exception changes no path and has a diff with zero added lines/);
   assert.match(baseline, /fixed section headings[\s\S]*metadata fields are not deletion-exception targets/);
   assert.match(baseline, /Do not use this exception for the last admissible body item in a section[\s\S]*replace the section body with `None\.`/);
@@ -1046,8 +1044,6 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   const documentOnlyBranch = product.indexOf("When there is no contradiction but the capability list");
   assert.ok(contradictionCheck >= 0 && contradictionCheck < documentOnlyBranch);
   assert.match(arch, /When confirmed arch\.md says `Brownfield: yes`, do not run this section[\s\S]*adopt's\s+capability-document-only branch/);
-  assert.match(arch, /When a capability retires or splits, or another code-boundary change alters path ownership/);
-  assert.match(adopt, /When a capability retires or splits, or another code-boundary change alters path ownership/);
   const adoptionMarker = adopt.indexOf("first append\nsplit's exact `maintenance routing pending`");
   const capabilityDocuments = adopt.indexOf("## Capability documents — final output after the adoption commit");
   assert.ok(

@@ -154,17 +154,6 @@ code details or flows into the capability documents again.
 - Derive purpose, boundary, Intent overview, Concept model, invariants, non-goals, and
   binding ADRs for `01-foundation.md` and every non-retired capability from Layer 0,
   organized per capability.
-- When a HEAD file has the canon's exact `legacy v0.10` shape, apply the canonical mechanical
-  migration and include it in the design-confirmation batch. Do not treat it as boundary
-  damage or a data-loss reset.
-- For any other file, if it is absent under the canon's initial-creation definition, create its initial verified zone too. If an existing file has
-  exactly one fixed boundary, preserve its verified-zone bytes and replace only its design
-  zone. If it has zero or more than one boundary and the user did not choose in resume to
-  discard the old verified prose and reset it, do not write it; report
-  `baseline no-op: <reason naming the exact path>`. After the user chooses reset with the data loss and
-  HEAD blob ID stated, reset the whole file from current Layer 0 design plus the empty initial
-  verified scaffold and include it in the ordinary design-batch confirmation below.
-- Do not change retired files. When re-derivation yields the same bytes, preserve them.
 - **Capsule processing.** When existing domain documents the user named overflow the
   capability-document budget, process them into the canonical baseline predicates' knowledge
   capsules. The order is five steps: ① inventory the source (headings and line ranges) at the
@@ -176,18 +165,9 @@ code details or flows into the capability documents again.
   and inventions of key intent, boundaries, and traps must be zero, it includes a provenance
   sampling check that finds three unmarked sentences per capsule at their source coordinates,
   and a capsule that fails does not land ⑤ land with the same confirmation and the same commit
-  as the design batch below. Report the dispute list in the confirmation batch as items for
+  as the canonical baseline predicates' design batch. Report the dispute list in the confirmation batch as items for
   the owner to decide. Deleting or moving the source is not part of this procedure — report
   only the material for that judgment.
-- Before changing disk, present all design zones that would change as one batch and obtain
-  user confirmation. Change no capability-document path before confirmation. Then put only
-  changed capability documents and their knowledge capsules in one `adopt — capabilities`
-  commit. It is this run's last commit and carries no Layer 0 file. If no file changes, ask
-  no confirmation question and do not commit.
-
-When a capability retires or splits, or another code-boundary change alters path ownership, report
-the registered-consumer projection in one line. The report triggers neither verification
-nor card creation.
 
 On completion: if the new-adoption Layer 0 commit included `maintenance routing pending`, or
 the current conversation contains an existing-project change request, say "next is split."

@@ -8,7 +8,8 @@ description: Resume and domain entry. Restores a new session from disk and conti
 First read the canonical rules (`../principles/SKILL.md`), canonical state predicates
 (`../principles/state-predicates.md`), canonical verification predicates
 (`../principles/verification-predicates.md`), and canonical capability knowledge baseline
-predicates (`../principles/baseline-predicates.md`).
+predicates (`../principles/baseline-predicates.md`) except its `Two worked capsules`
+section.
 
 Purpose: a new session restores state from the bounded reads below when the tree exists; without a
 tree, it derives the next stage from the Layer 0 documents and continues.
@@ -227,7 +228,7 @@ locally during a blockade stay visible:
 | An expected file has the canonical baseline predicates' exact `legacy v0.10` shape | with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone |
 | An expected file under the canonical baseline predicates is missing from HEAD, or an expected HEAD file with exactly one fixed boundary has a design section, design metadata, or current Design head that differs from the contract | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |
 | journal contains an exact `maintenance routing pending` line | split — plan the earliest line's request through maintenance routing |
-| An expected HEAD file has zero or more than one `## Verified state` boundary | resume — instead of the whole original, report its path, the HEAD boundary count that selected this route, the working-tree boundary count and line count, the HEAD blob object ID for that exact path or `none`, and the expected boundary, then offer only two choices: (1) after confirming that a user-identified Git revision and path has one boundary, the user restores those bytes to the damaged file's current expected path and commits only that file; (2) state the discarded verified prose and HEAD blob ID, obtain confirmation, and route `Brownfield: yes` to adopt or `no` to arch for a whole reset from current Layer 0 plus an empty verified scaffold under the ordinary design-batch confirmation. Search no history for a known-good revision; resume writes no file, and deferral changes no file |
+| An expected HEAD file has zero or more than one `## Verified state` boundary | resume — apply the canonical baseline predicates' `Writers and replacement boundaries` section exactly |
 | journal contains an exact `product verification requested` line | verify — product layer |
 | A Retrospective section has a `pending · source id:` state, or an Audit `pending · source id:` state passes the Audit execution boundary | verify — run and record one runnable pending event |
 | Under the verification predicates, an automatic Retrospective is unrun; an automatic Audit is unrun and passes the Audit boundary; a user-request Retrospective has its target record; or a user-request Audit has its target record and passes the Audit boundary | verify — run and record one new event |

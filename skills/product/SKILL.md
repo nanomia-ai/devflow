@@ -56,9 +56,6 @@ decide the stack or DB. Both choices belong to arch.
 
 - In one frontier, batch questions that do not change one another's necessity, options,
   or recommended defaults — usually 3–5, and no more than 5.
-- When one option changes a later question, ask that one dependent question first.
-- After free-form user input, recompute remaining dependencies and recommended defaults
-  from the actual answer.
 - Before creating the next frontier after applying an answer, and before final confirmation,
   run the planning evidence discipline's pre-commitment review. With no candidate, produce
   no additional output or question.

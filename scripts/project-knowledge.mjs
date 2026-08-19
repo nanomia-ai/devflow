@@ -355,7 +355,7 @@ function parseArguments(argv) {
   if (!fs.existsSync(options.root) || !fs.statSync(options.root).isDirectory()) {
     fail(`root is not a directory: ${options.root}`);
   }
-  if (options.capability !== undefined && !/^[1-9][0-9]*$/.test(options.capability)) {
+  if (options.capability !== undefined && !/^0*[1-9][0-9]*$/.test(options.capability)) {
     fail("--capability must be a positive integer");
   }
   return { command, options };
@@ -383,11 +383,34 @@ function printWarnings(capsules) {
   }
 }
 
-function projection(capsule) {
+// The last-changed date is the second clue when choosing among siblings: what changed
+// yesterday is likelier to bear on today's work than what changed eight months ago. Git
+// already holds it exactly, so no header field is authored and none can drift. One call
+// covers every capsule; `git log` is newest-first, so a path's first appearance is its
+// last change. This is not a freshness verdict — a document can sit still while the code
+// it describes moves, and that case is invisible here.
+function lastChangedDates(root, relativePaths) {
+  const dates = new Map();
+  if (relativePaths.length === 0) return dates;
+  const run = spawnSync("git",
+    ["log", "--format=%ad", "--date=short", "--name-only", "--", ...relativePaths],
+    { cwd: root, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  if (run.status !== 0 || typeof run.stdout !== "string") return dates;
+  let current = null;
+  for (const line of run.stdout.split(/\r?\n/)) {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(line)) { current = line; continue; }
+    if (line === "" || current === null) continue;
+    if (!dates.has(line)) dates.set(line, current);
+  }
+  return dates;
+}
+
+function projection(capsule, changed) {
   return {
     path: capsule.relative,
     heading: capsule.heading,
     about: capsule.about,
+    changed: changed ?? null,
     lines: capsule.lines,
     bytes: capsule.bytes.length,
     markers: capsule.insertions.counts,
@@ -399,6 +422,7 @@ function compactProjection(entry) {
   return {
     path: entry.path,
     heading: entry.heading,
+    changed: entry.changed,
   };
 }
 
@@ -437,8 +461,9 @@ function emitBoundedIndex(command, summary, prefix, values, compactOf) {
 function project(options) {
   const capsules = selectedCapsules(loadCapsules(options.root, options.paths), options);
   printWarnings(capsules);
+  const changed = lastChangedDates(options.root, capsules.map((capsule) => capsule.relative));
   emitBoundedIndex("project", `capsules=${capsules.length}`, "projection",
-    capsules.map(projection), compactProjection);
+    capsules.map((capsule) => projection(capsule, changed.get(capsule.relative))), compactProjection);
 }
 
 function disputes(options) {

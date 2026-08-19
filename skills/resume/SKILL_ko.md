@@ -8,7 +8,7 @@ description: 재개와 도메인 진입. 새 세션의 디스크 상태를 복�
 먼저 규칙 정본(`../principles/SKILL.md`)·상태 판정 정본
 (`../principles/state-predicates.md`)·검증 판정 정본
 (`../principles/verification-predicates.md`)·능력 지식 기준선 판정 정본
-(`../principles/baseline-predicates.md`)을 읽는다.
+(`../principles/baseline-predicates.md`)에서 `본보기 두 편` 절을 제외하고 읽는다.
 
 목적: 새 세션이 트리가 있으면 아래의 유계 읽기로 상태를 복원하고, 없으면 Layer 0 문서에서
 다음 단계를 판정해 이어간다.
@@ -185,7 +185,7 @@ HANDOFF에 남은 `Open decisions` 절의 내용은 보고에 포함한다.
 | 기대 파일이 기준선 판정 정본의 정확한 `legacy v0.10` 형식임 | `브라운필드: 예`면 adopt, `아니오`면 arch — 현재 Layer 0 설계와 기계적으로 옮긴 검증 구역으로 이관 |
 | 기준선 판정 정본의 기대 파일이 HEAD에 없거나, 고정 경계가 하나인 기대 HEAD 파일의 설계 절·설계 메타데이터·현재 Design head가 계약과 다름 | `브라운필드: 예`면 adopt, `아니오`면 arch — Layer 0를 다시 만들지 않고 기대 집합의 설계 구역만 갱신 |
 | journal에 정확한 `유지보수 라우팅 대기` 줄이 있음 | split — timestamp가 가장 빠른 줄의 요청을 유지보수 라우팅으로 계획함 |
-| 기대 HEAD 파일의 `## Verified state` 경계가 없거나 둘 이상임 | resume — 원본 전체 대신 경로·이 경로를 결정한 HEAD 경계 개수·작업 트리 경계 개수·줄 수·그 정확 경로의 HEAD blob 객체 ID(`없음` 가능)·기대 경계를 보고하고 두 선택만 제시: (1) 사용자가 지목한 Git revision과 경로가 경계 하나임을 확인한 뒤 그 바이트를 손상된 파일의 현재 기대 경로로 복구해 그 파일만 커밋, (2) 기존 검증 서술의 폐기와 HEAD blob ID를 명시해 확인받고 `브라운필드: 예`면 adopt, `아니오`면 arch가 통상 설계 묶음 확인을 거쳐 현재 Layer 0와 빈 검증 골격으로 전면 초기화. 정상 revision을 찾으려고 이력을 검색하지 않으며 resume은 파일을 쓰지 않고, 미루면 아무 파일도 바꾸지 않음 |
+| 기대 HEAD 파일의 `## Verified state` 경계가 없거나 둘 이상임 | resume — 기준선 판정 정본의 `작성자와 교체 경계` 절을 그대로 적용 |
 | journal에 정확한 `product 검증 요청` 줄이 있음 | verify — 제품층 |
 | 회고 절에 `대기 · 출처 id:` 상태가 있거나, 감리 절의 `대기 · 출처 id:` 상태가 감리 실행 경계를 충족함 | verify — 실행 가능한 대기 사건 하나를 실행하고 기록 |
 | 검증 판정 정본상 자동 회고가 미실행이거나, 자동 감리가 감리 실행 경계를 충족한 채 미실행이거나, journal의 사용자 요청 회고가 대상 기록을 가지거나, 사용자 요청 감리가 대상 기록과 감리 실행 경계를 모두 충족함 | verify — 새 사건 하나를 실행하고 기록 |

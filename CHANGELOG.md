@@ -15,6 +15,39 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.18.3 — 2026-08-20 — the index carries the date it already knows, and four rules stop being said twice
+
+Verification after 0.18.2 shipped found two places where the deployed text promised
+something the deployed tool did not do. The canon numbers the foundation `01` and the first
+capability `02`, and the capsule folder carries that exact string — but the tool rejected
+`--capability 02` as "not a positive integer", so the canonical call named in five skills
+failed on the number a session actually holds. It now accepts the zero-padded form and a
+test pins `2`/`02`/`002` accepted and `0`/`00`/`abc` rejected. And the canon told the session
+to run `git log -1 --format=%ad --date=short` beside each capsule's first two lines, but
+nothing delivered it. The index now emits that date as `changed` — one `git log` covers every
+capsule at once, the compact projection keeps it because choosing reads it, and no header
+field is authored, so nothing drifts. This is not a freshness verdict: a capsule can sit
+still while the code it describes moves, and this date does not see that.
+
+Four rules that were said in two places now live in one. product defers the dependent-question
+rule to the planning evidence canon; resume's boundary-damage row keeps its trigger and points
+at the canonical recovery section; arch and adopt drop their restatement of the baseline
+authoring contract while keeping the capsule steps, the expected set, and the input derivation;
+and verify and resume no longer read the two worked capsules, which only capsule authors need.
+The worked capsules themselves are untouched — they are the only contract the capsule form has,
+and arch and adopt still read them whole. Measured per-entry fixed input: resume −5,438 B,
+verify −4,744 B, arch −1,618 B, adopt −1,579 B, product −197 B.
+
+A measurement decided one thing by not doing it. The largest single load is
+`principles/SKILL.md` at 67,205 B, read whole by all eight entry skills, and splitting it by
+consumer is a standing backlog item that DR-44 put on hold because "a rule work needs, sitting
+under a verify-only heading, disappears with no error." Mapping all 21 sections against the
+eight skills, four role contracts, and the hook measured that 46,593 B of it is executed by
+every skill, and that every low-consumer section is coupled to a universal one — read Identity
+without Commit Discipline and a session mints a commit subject with no room id; read the
+journal formats without the Integrity Check and a malformed line passes silently. DR-44's
+recorded reason moves from asserted to measured, and the canon stays whole.
+
 ## 0.18.2 — 2026-08-20 — a document speaks only of the present, and what is updated overwrites the concept's place
 
 One canonical file contradicted itself across 55 lines. `skills/principles/SKILL.md:390` said

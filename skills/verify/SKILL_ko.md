@@ -8,7 +8,8 @@ description: 검증. 능력 단위·제품 단위로 실제 실행을 통해 수
 먼저 규칙 정본(`../principles/SKILL.md`)·상태 판정 정본
 (`../principles/state-predicates.md`)·검증 판정 정본
 (`../principles/verification-predicates.md`)·능력 지식 기준선 판정 정본
-(`../principles/baseline-predicates.md`)·`devflow/project/product.md`·
+(`../principles/baseline-predicates.md`)에서 `본보기 두 편` 절을 제외한 나머지·
+`devflow/project/product.md`·
 `devflow/project/arch.md`·`devflow/project/code-style.md`를 통독한다. 존재하면
 `devflow/project/glossary.md`와 `devflow/journal.md`도 각각 통독한다.
 

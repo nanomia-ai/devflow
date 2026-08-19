@@ -327,8 +327,9 @@ Source basis: ["docs/ops/notification-runbook.md@a41c9f2:31-92", "src/notify/ret
 - Capsule selection and indexing use machine queries that open no body — project each
   capsule's first two lines only. Do not create a hand-written index
   section in the capability document — a summary living in two places drifts apart.
-- When scanning sibling capsules' first two lines, emit each file's last-changed commit date
-  alongside — `git log -1 --format=%ad --date=short -- <capsule path>`. The date is the second
+- The index emits each file's last-changed commit date as `changed` beside its first two lines.
+  There is no separate command to run — the tool reads it from git into the projection, and the
+  compact projection keeps it. The date is the second
   clue when choosing: picking three capsules out of forty, "this one changed yesterday and that
   one eight months ago" earns its keep. The date is read from git rather than held in the first
   two lines — a field a person or a model fills drifts, and git already holds the same value at

@@ -107,6 +107,23 @@ test("project emits the first two lines, costs, and marker counts without bodies
   assert.deepEqual(fs.readFileSync(target), before);
 });
 
+test("the canonical call takes the zero-padded number the canon writes on disk", (t) => {
+  // The canon numbers the foundation `01` and the first capability `02`, and the capsule
+  // folder carries that exact string. A session reading `02-property.md` passes `02`.
+  const root = fixture(t);
+  writeSource(root);
+  writeCapsule(root, header(), body("The address is preserved."));
+  for (const value of ["2", "02", "002"]) {
+    const result = run(root, "project", "--capability", value);
+    assertOk(result);
+    assert.match(result.stdout, /project: capsules=1 bodies=0/, `--capability ${value}`);
+  }
+  for (const value of ["0", "00", "abc", "-1"]) {
+    const result = run(root, "project", "--capability", value);
+    assert.notEqual(result.status, 0, `--capability ${value} must be rejected`);
+  }
+});
+
 test("validate rejects headers outside the two-line prose format", (t) => {
   const malformedRoot = fixture(t);
   const malformedDir = path.join(malformedRoot, "devflow", "project", "capabilities", "02-property");
@@ -337,7 +354,7 @@ test("a capability of 100 capsules stays selectable through the compact index", 
   assert.match(compact.stdout, /capsules=100 bodies=0 form=compact index-bytes=\d+\/24576 emitted=100/);
   assert.equal((compact.stdout.match(/^projection:/gm) || []).length, 100);
   const entry = JSON.parse(compact.stdout.match(/^projection: (.+)$/m)[1]);
-  assert.deepEqual(Object.keys(entry), ["path", "heading"]);
+  assert.deepEqual(Object.keys(entry), ["path", "heading", "changed"]);
 
   const narrowed = run(root, "project", "--path", first);
   assertOk(narrowed);

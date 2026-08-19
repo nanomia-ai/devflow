@@ -8,7 +8,8 @@ description: Verification. Checks acceptance criteria at the capability and prod
 First read all of the canonical rules (`../principles/SKILL.md`), the canonical state
 predicates (`../principles/state-predicates.md`), the canonical verification predicates
 (`../principles/verification-predicates.md`), the canonical capability knowledge baseline
-predicates (`../principles/baseline-predicates.md`), `devflow/project/product.md`,
+predicates (`../principles/baseline-predicates.md`) except its `Two worked capsules`
+section, `devflow/project/product.md`,
 `devflow/project/arch.md`, and
 `devflow/project/code-style.md`. If present, also read all of
 `devflow/project/glossary.md` and `devflow/journal.md`.

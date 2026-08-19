@@ -208,6 +208,30 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   added now. Open index paging (`--after`) or explicit approval when one capability passes 100
   capsules or a compact-index overrun is actually reported.
 
+- **Splitting the canon is blocked by measurement** (v0.18.3) — DR-44's on-hold item, splitting
+  `principles/SKILL.md` (67,205 B) per consumer, was mapped section by section: 21 sections
+  against the eight entry skills, the four role contracts, and the hook. **46,593 B (69%)** of it
+  is executed by all eight, and the six rows with three or fewer consumers total **16,366 B** —
+  the maximum a split could win. But all six are coupled to universal sections: read Identity
+  without Commit Discipline and a session mints a commit subject with no room id; read the
+  journal formats without the Integrity Check and a malformed line passes silently. DR-44's
+  recorded reason **moves from asserted to measured.** Reopen when a group of sections with no
+  such coupling is found, or when a check exists that catches misplaced content. (The
+  repository's own consumer tests catch **wiring mismatches**, not **content placement** — a
+  different layer.)
+- **Whether capability documents should carry tags and dates — not now** (v0.18.3) — the
+  relevance judgment ends at the capability list in `product.md`; even `resume`'s domain entry
+  reads only the name and the shape projection, never the body. A tag on the capability document
+  arrives **after the choice is already made**, so it separates nothing. Capsules are the
+  opposite case — up to 100 under one capability — which is where `about:` and `changed` earn
+  their place. Reopen if a project's capabilities grow numerous enough that choosing from the
+  `product.md` list alone is observed to be hard.
+- **The token weight is left short of the mark** (v0.18.3) — the hook routes every session to
+  resume, so in a repository with devflow state a session spends about **148,000 B ≈ 37k tokens**
+  before doing anything. 0.18.3 cut between −5,438 B (resume) and −197 B (product) per entry,
+  which does not change the order of magnitude. The cause is measured: 69% is universal and the
+  rest is coupled to it. **An angle other than splitting is needed.**
+
 ## Observations already settled — lineage
 
 The items below were carried out and left the watch list. Re-proposals consult this lineage first.

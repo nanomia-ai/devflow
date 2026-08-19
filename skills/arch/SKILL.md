@@ -276,27 +276,7 @@ current command output for those three paths.
   flows, entry points, code fields, code-style.md content, or design.md content in the design zone.
 - Domain knowledge overflowing the capability-document budget moves down into the canonical
   baseline predicates' knowledge capsules. Processing a source document uses adopt's capsule
-  procedure under the same contract, and capsules ride the same commit as the design batch below.
-- When a HEAD file has the canon's exact `legacy v0.10` shape, apply the canonical mechanical
-  migration and include it in the design-confirmation batch. Do not treat it as boundary
-  damage or a data-loss reset.
-- For any other file, if it is absent under the canon's initial-creation definition, create its initial verified zone too. If an existing file has
-  exactly one fixed boundary, preserve its verified-zone bytes. If it has zero or more
-  than one boundary and the user did not choose in resume to discard the old verified
-  prose and reset it, do not write it; report `baseline no-op: <reason naming the exact path>`. After
-  the user chooses reset with the data loss and HEAD blob ID stated, reset the whole file from
-  current Layer 0 design plus the empty initial verified scaffold and include it in the
-  ordinary design-batch confirmation below.
-- Do not change retired files. When re-derivation yields the same design zone, preserve
-  the existing bytes.
-- Before changing disk, present all design zones that would change as one batch and obtain
-  user confirmation. Change no capability-document path before confirmation. Then put only
-  changed capability documents and their knowledge capsules in one `arch — capabilities`
-  commit. It is this run's last commit and carries no Layer 0 path. If no file changes, ask
-  no confirmation question and do not commit.
-
-When a capability retires or splits, or another code-boundary change alters path ownership, run
-the canonical baseline predicates' consumer projection and report the registered
-consumers in one line. The report triggers neither verification nor card creation.
+  procedure under the same contract, and capsules ride the same commit as the canonical
+  baseline predicates' design batch.
 
 On completion: if `frontend: needed` — "design (optional) or split"; if `none` — "split."
