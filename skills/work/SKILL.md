@@ -239,13 +239,15 @@ If a depth-1 capability folder reaches the canonical verification gate → propo
 ```
 
 The consumer judgment for an automatically read capability document is as follows. Compare
-numbers as integers. If the document is absent, report `baseline missing: <number>` in one
-line, continue from Layer 0 and the card, and give reviewer
+numbers as integers. If the document is absent, report
+`no capability document for <number> — nothing on disk describes that capability, so the planning documents and this card carry the work`
+in one line, continue from Layer 0 and the card, and give reviewer
 `design: baseline missing — judge from the card and supplied shared documents`. If two or more documents have
 the same number, report their exact paths, select none, and continue with the same projection.
 
-When the unique file has the canon's exact `legacy v0.10` shape, report `legacy baseline:
-migration pending — <path>` in one line, open no body, and continue active work with the same
+When the unique file has the canon's exact `legacy v0.10` shape, report
+`<path> is a capability document in the earlier shape, so it stays unread until it is migrated — the planning documents and this card carry the work`
+in one line, open no body, and continue active work with the same
 baseline-missing projection.
 
 When the selected file has zero or multiple fixed boundaries, guess no zone and read no
@@ -286,8 +288,10 @@ which for reconfirmation alone also holds `Consumed paths`.
 Expand neither further. Keep every design reconfirmation as `exact path#heading`, without duplicates
 and in canonical path order, in the reviewer projection. Use the canon's current path/status
 notation for the symmetric difference of current completed cards and `Covered cards` as the
-post-baseline change list. Report one line: `baseline <Verified at>, design <fresh|
-hypothesis|missing>, verification <fresh|hypothesis|missing>, <M> card changes since`; with no
+post-baseline change list. Report one line: `capability document verified <Verified at>,
+design <fresh|hypothesis|missing>, verification <fresh|hypothesis|missing>, <M> cards changed
+since — fresh means its inputs have not moved, hypothesis means it is reconfirmed before use,
+and missing means there is no such statement`; with no
 baseline, the Verified-at value is `missing`.
 
 When the user, mid-card, asks for something that qualifies under the canonical rules'

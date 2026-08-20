@@ -7,7 +7,10 @@ import { TextDecoder } from "node:util";
 
 const MARKERS = new Set(["synthesis", "code", "conjecture", "dispute"]);
 const CAPSULE_NAME = /^K-(?<number>(?!000)[0-9]{3})-(?<topic>[a-z0-9]+(?:-[a-z0-9]+)*)\.md$/;
-const CAPABILITY_NAME = /^(?<number>0*[1-9][0-9]*)-(?<name>[a-z0-9]+(?:-[a-z0-9]+)*)$/;
+// The folder name equals the capability document's filename, which the canon takes from
+// product.md unchanged and in the project's own language. Only the number before the first
+// `-` is read, so the rest keeps its own bytes and a Korean capability keeps its folder.
+const CAPABILITY_NAME = /^(?<number>0*[1-9][0-9]*)-(?<name>.+)$/;
 const COORDINATE = /^(?<file>[^@:\r\n]+(?:\/[^@:\r\n]+)*?)(?:@(?<revision>[0-9a-f]{7,40}))?:(?<start>[1-9][0-9]*)(?:-(?<end>[1-9][0-9]*))?$/;
 const SOFT_LINES = 120;
 const HARD_LINES = 240;
@@ -236,7 +239,7 @@ function parseCapsule(file, root) {
   const relative = repositoryPath(root, file);
   const directoryMatch = CAPABILITY_NAME.exec(path.basename(path.dirname(file)));
   const fileMatch = CAPSULE_NAME.exec(path.basename(file));
-  if (!directoryMatch) fail(`${relative}: capsule parent must be NN-ascii-name`);
+  if (!directoryMatch) fail(`${relative}: capsule parent folder must be <number>-<name>`);
   if (!fileMatch) fail(`${relative}: filename must be K-NNN-ascii-topic.md`);
   const bytes = fs.readFileSync(file);
   const text = decodeUtf8(bytes, relative);
@@ -277,13 +280,20 @@ function parseCapsule(file, root) {
   };
 }
 
-function capsulePaths(root) {
+// `--capability` narrows here, before a single capsule is read, so a session that named one
+// capability keeps its projection while a capability it never named holds a malformed capsule.
+// Argument-less `validate` still walks every folder, and that is where global format defects
+// are caught.
+function capsulePaths(root, capability) {
   const base = path.join(root, "devflow", "project", "capabilities");
   if (!fs.existsSync(base)) return [];
   if (!fs.statSync(base).isDirectory()) fail("devflow/project/capabilities is not a directory");
   const files = [];
   for (const entry of fs.readdirSync(base, { withFileTypes: true })) {
-    if (!entry.isDirectory() || !CAPABILITY_NAME.test(entry.name)) continue;
+    if (!entry.isDirectory()) continue;
+    const match = CAPABILITY_NAME.exec(entry.name);
+    if (!match) continue;
+    if (capability !== undefined && Number(match.groups.number) !== Number(capability)) continue;
     const directory = path.join(base, entry.name);
     for (const child of fs.readdirSync(directory, { withFileTypes: true })) {
       if (child.isFile() && child.name.startsWith("K-") && child.name.endsWith(".md")) {
@@ -309,10 +319,10 @@ function requestedCapsulePaths(root, rawPaths) {
   });
 }
 
-function loadCapsules(root, rawPaths = []) {
+function loadCapsules(root, rawPaths = [], capability) {
   const files = rawPaths.length > 0
     ? requestedCapsulePaths(root, rawPaths)
-    : capsulePaths(root);
+    : capsulePaths(root, capability);
   const capsules = files.map((file) => parseCapsule(file, root));
   const identities = new Map();
   const disputes = new Map();
@@ -459,7 +469,7 @@ function emitBoundedIndex(command, summary, prefix, values, compactOf) {
 }
 
 function project(options) {
-  const capsules = selectedCapsules(loadCapsules(options.root, options.paths), options);
+  const capsules = selectedCapsules(loadCapsules(options.root, options.paths, options.capability), options);
   printWarnings(capsules);
   const changed = lastChangedDates(options.root, capsules.map((capsule) => capsule.relative));
   emitBoundedIndex("project", `capsules=${capsules.length}`, "projection",
@@ -467,7 +477,7 @@ function project(options) {
 }
 
 function disputes(options) {
-  const capsules = selectedCapsules(loadCapsules(options.root, options.paths), options);
+  const capsules = selectedCapsules(loadCapsules(options.root, options.paths, options.capability), options);
   printWarnings(capsules);
   const items = capsules.flatMap((capsule) => (
     capsule.insertions.disputes.map((dispute) => disputeProjection(capsule, dispute))
@@ -494,7 +504,10 @@ function select(options) {
   const over = lines > HARD_LINES || bytes > HARD_BYTES;
   const opened = over && !options.approved ? 0 : capsules.length;
   console.log(`select: candidates=${capsules.length} opened=${opened} lines=${lines}/${HARD_LINES} bytes=${bytes}/${HARD_BYTES} approved=${options.approved ? 1 : 0}`);
-  for (const capsule of capsules) console.log(`candidate: ${JSON.stringify(projection(capsule))}`);
+  const changed = lastChangedDates(options.root, capsules.map((capsule) => capsule.relative));
+  for (const capsule of capsules) {
+    console.log(`candidate: ${JSON.stringify(projection(capsule, changed.get(capsule.relative)))}`);
+  }
   if (over && !options.approved) {
     console.error("blocked: opening budget exceeded; narrow --path choices or repeat with explicit --approved");
     process.exitCode = 3;

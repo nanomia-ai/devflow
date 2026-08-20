@@ -980,7 +980,7 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(baseline, /In the ordinary design batch, arch or adopt derives the design zone anew from current Layer\s+0 and transforms the verified zone mechanically/);
   assert.match(baseline, /Except for the exact v0\.10 migration below,\s+never auto-heal zero or multiple boundaries/);
   assert.match(resume, /expected file has the canonical baseline predicates' exact `legacy v0\.10` shape[\s\S]*mechanically carried verified zone/);
-  assert.match(work, /legacy baseline:\s+migration pending — <path>[\s\S]*open no body/);
+  assert.match(work, /capability document in the earlier shape[\s\S]*open no body/);
   assert.match(verify, /baseline no-op: legacy v0\.10 migration pending[\s\S]*do not migrate its verified zone/);
   assert.match(baseline, /uncommitted diff from a post-confirmation interrupted write is a capability-design[\s\S]*regenerate the whole expected set/);
   assert.doesNotMatch(baseline, /equals the\s+current writer's final re-derivation from HEAD/);
@@ -1058,7 +1058,7 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
       resume.indexOf("| An expected file under the canonical baseline predicates is missing"),
     "an active claimed card must outrank baseline repair",
   );
-  assert.match(work, /baseline missing: <number>[\s\S]*continue from Layer 0 and the card/);
+  assert.match(work, /no capability document for <number>[\s\S]*continue from Layer 0 and the card/);
   assert.match(work, /exact-path set in Consumed contracts differs from `Consumed paths`[\s\S]*other-capability number differs from or is ambiguous under the current provider\s+mapping/);
   assert.match(work, /zero or multiple fixed boundaries, guess no zone and read no\s+body[\s\S]*baseline-missing\s+projection/);
   assert.doesNotMatch(work, /git log -1 --format=%H --\r?\n/);
@@ -1567,7 +1567,7 @@ test("foundation is verified through its consumers", () => {
 test("the resume report names its reason and the alternatives", () => {
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   assert.match(resume, /The selection reason comes straight out of the canonical candidate order/);
-  assert.match(resume, /Also open:\n<every other unit holding a candidate under the same matched row \| none>/);
+  assert.match(resume, /Also open:\n<every other unit that could be started now for the same reason \| none>/);
   assert.match(resume, /When the session unit\nholds no candidate, say so in that clause/);
 });
 

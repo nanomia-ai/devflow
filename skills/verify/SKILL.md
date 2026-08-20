@@ -262,7 +262,8 @@ section below).
    same-numbered baseline, that HEAD file's boundary is not exactly one, a format anomaly
    involves the closing capability's number or path, or a standard-refresh-set input cannot
    be parsed, write no baseline, let closure proceed, and apply the canon's disposition while
-   reporting `baseline no-op: <reason>` in one line. Boundary count is judged in the HEAD
+   reporting `baseline no-op: <reason> — this capability document was left exactly as it stood
+   and the closure went ahead` in one line. Boundary count is judged in the HEAD
    file. Otherwise the regeneration from HEAD also heals working-tree
    verified-zone shape damage in this full replacement.
    In prefix recovery and in a new closure alike, recalculate this closure's capability code
@@ -289,7 +290,9 @@ section below).
    projection from other non-retired capability documents. For each registered consumer whose `Consumed paths` matches the
    union of the closing baseline's HEAD-before and refreshed-after Scope paths under the
    canonical baseline predicates, apply the canon's `fresh`, `hypothesis`, or `unknown` judgment,
-   and report one line: `registered consumers: <number (status), ... | none>`. Do not read a
+   and report one line: `registered consumers: <number (status), ... | none> — these are the
+   other capabilities built on this one, hypothesis marks one to reconfirm before trusting it,
+   and nothing in them changed here`. Do not read a
    body, execute consumer verification, or create a card, and do not claim this closure
    caused a state change.
 
@@ -388,7 +391,7 @@ previous route cards: <JSON array of completed fix-card numbers routed in the pr
 
 `max recurrence` is the same root's maximum regardless of route kind. At 0 use the root's first-entry route; after that use every route in the largest completed repair round at or below that maximum, while document replacement and product re-run keep the count but are skipped as rounds. Deduplicate card numbers, sort them in canonical card-number order, and impose no arbitrary cap. If a root, recurrence observation, or route cannot be parsed, do not aggregate partially. Output neither failure bodies nor entries untouched by current labels; with no label, make no projection.
 A capability-layer first entry is in the signal-card-owning capability's verify.md, a product-layer first entry is in the tree-root verify.md, and entries for the current target or a one-hop `Depends` capability are in the first or third path respectively, so no normal route lies outside these three paths. Immediately before writing results, if the integration tip differs from `base`, restart shared-state synchronization and revision judgment, then project and perform any needed execution from the new tip.
-If any label has two or more candidate roots or an existing field that produced a candidate cannot be parsed, run neither the verifier nor any subset of labels and write no verify.md result. Report `repair lineage cannot be determined` with the exact label, candidate roots, and source entry; after human reconciliation, restart the whole verify run. If interruption comes after the verifier returns but before the write, there is no new record, so rerun the whole verify.
+If any label has two or more candidate roots or an existing field that produced a candidate cannot be parsed, run neither the verifier nor any subset of labels and write no verify.md result. Report `repair lineage cannot be determined — which earlier failure this one continues cannot be told, so the run stops here for a person to decide` with the exact label, candidate roots, and source entry; after human reconciliation, restart the whole verify run. If interruption comes after the verifier returns but before the write, there is no new record, so rerun the whole verify.
 If interruption comes after the result commit but before routing, do not call the verifier again. When the current pending source is in the second form and stores only a signal card, restore its root as `<that file's verification target key>@<entry source id>`, its recurrence observation as 0, and its inheritance as only that signal card; when it is in the third form, run the same query from its stored signal card, root, and recurrence observation. Exclude the still-`routing: pending` current entry from the previous round. For a pre-0.15.0 pending entry without a signal card, perform its existing route with inheritance 0; after that card completes, the next non-pass for the current label restores the root from the past route and writes the new fields.
 
 ## Bias Removal

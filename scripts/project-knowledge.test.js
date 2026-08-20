@@ -107,6 +107,20 @@ test("project emits the first two lines, costs, and marker counts without bodies
   assert.deepEqual(fs.readFileSync(target), before);
 });
 
+test("select carries the same last-changed date the index promises", (t) => {
+  // The canon says the index emits `changed` beside the first two lines. select shows the
+  // same candidates when the opening budget is exceeded, so it owes the same field — a null
+  // there would make "open the one that changed yesterday" impossible at the moment it matters.
+  const root = fixture(t);
+  writeSource(root);
+  const target = writeCapsule(root, header(), body("The address is preserved."));
+  const relative = path.relative(root, target).split(path.sep).join("/");
+  const result = run(root, "select", "--path", relative);
+  assertOk(result);
+  const entry = JSON.parse(result.stdout.match(/^candidate: (.+)$/m)[1]);
+  assert.ok("changed" in entry, "select candidate must carry the changed field");
+});
+
 test("the canonical call takes the zero-padded number the canon writes on disk", (t) => {
   // The canon numbers the foundation `01` and the first capability `02`, and the capsule
   // folder carries that exact string. A session reading `02-property.md` passes `02`.
@@ -445,4 +459,64 @@ test("CLI rejects missing selections, unknown options, and invalid roots", (t) =
   const invalid = spawnSync(process.execPath, [tool, "validate", "--root", path.join(root, "missing")], { encoding: "utf8" });
   assert.equal(invalid.status, 1);
   assert.match(invalid.stderr, /root is not a directory/);
+});
+
+test("a capability folder keeps the product's own capability name, and only its number is read", (t) => {
+  // The canon takes the folder name from the capability document's filename, which itself comes
+  // from the product.md capability name unchanged. A Korean-language project therefore has
+  // `02-<Korean name>`; an ASCII-only parent rule skipped it with no error and reported zero
+  // capsules, so knowledge sitting on disk reached nothing.
+  for (const directory of ["02-\uACB0\uC81C", "03-order flow", "04-Billing"]) {
+    const number = directory.slice(0, directory.indexOf("-"));
+    const root = fixture(t);
+    writeSource(root);
+    writeCapsule(root, header(), body("The address is preserved."), "006", directory);
+    const result = run(root, "project", "--capability", number);
+    assertOk(result);
+    assert.match(result.stdout, /project: capsules=1 bodies=0/, directory);
+    const projected = JSON.parse(/^projection: (.+)$/m.exec(result.stdout)[1]);
+    assert.equal(projected.path, `devflow/project/capabilities/${directory}/K-006-location-trust.md`);
+  }
+});
+
+test("folders whose numbers compare equal as integers are one capability", (t) => {
+  const root = fixture(t);
+  writeSource(root);
+  writeCapsule(root, header(), body("\uD558\uB098"), "006", "02-property");
+  writeCapsule(root, header(), body("\uB458"), "007", "2-property-old");
+  const both = run(root, "project", "--capability", "2");
+  assertOk(both);
+  assert.match(both.stdout, /project: capsules=2 bodies=0/);
+
+  const clash = fixture(t);
+  writeSource(clash);
+  writeCapsule(clash, header(), body("\uD558\uB098"), "006", "02-property");
+  writeCapsule(clash, header(), body("\uB458"), "006", "2-property-old");
+  const duplicate = run(clash, "project", "--capability", "2");
+  assert.equal(duplicate.status, 1);
+  assert.match(duplicate.stderr, /duplicate capsule number/);
+});
+
+test("one capability's projection survives another capability's malformed capsule", (t) => {
+  // `--capability` narrows the folder walk before any capsule is read, so a stale coordinate in
+  // a capability this session never named leaves the named capability's index intact.
+  const root = fixture(t);
+  writeSource(root);
+  writeCapsule(root, header(), body("\uD558\uB098"), "006", "02-property");
+  writeCapsule(root, header(), body("\uB458").replace("docs/source.md:1-2", "docs/source.md:9999"),
+    "006", "09-shipping");
+
+  for (const command of ["project", "disputes"]) {
+    const narrowed = run(root, command, "--capability", "2");
+    assertOk(narrowed);
+    assert.match(narrowed.stdout, /capsules=1/, command);
+  }
+
+  const owner = run(root, "project", "--capability", "9");
+  assert.equal(owner.status, 1);
+  assert.match(owner.stderr, /09-shipping[\s\S]*coordinate exceeds/);
+
+  const global = run(root, "validate");
+  assert.equal(global.status, 1);
+  assert.match(global.stderr, /09-shipping[\s\S]*coordinate exceeds/);
 });

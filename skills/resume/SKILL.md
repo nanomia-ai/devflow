@@ -158,7 +158,7 @@ Report what you read in **one paragraph**:
 The progress log reaches <last point>; capability documents are
 <non-retired filenames|none>. The next step is <one step>, selected by
 <your request | the last handoff | canonical order>. Also open:
-<every other unit holding a candidate under the same matched row | none>; uncommitted and
+<every other unit that could be started now for the same reason | none>; uncommitted and
 unattributed: <those paths | none>; not yet on integration: <N paths | none>. Proceed?"
 ```
 

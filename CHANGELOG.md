@@ -15,6 +15,51 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.18.4 — 2026-08-20 — a capability keeps its own name, one capability's index stands alone, and seven reports speak to the person reading them
+
+Four defects, each reproduced on a fixture before and after the repair.
+
+The canon takes a capability document's filename from the product.md capability name unchanged
+and invents no separate slug normalization, and the capsule folder carries that filename. The
+tool required that folder to be ASCII lowercase letters, digits, and hyphens, and the global
+walk skipped a folder that did not match with no error at all. In a project whose capability
+names are not ASCII, split writes `02-<name>`, the baseline author writes `02-<name>.md` and
+`02-<name>/K-001-settlement.md`, and the next session's canonical call `project --capability 2`
+answered `capsules=0` and exit 0. The session saw no error and continued as though the
+capability had no capsule, while the knowledge sat on disk reaching nothing. The parent-folder
+rule is now only "a positive integer before the first hyphen, and something after it"; the rest
+of the name keeps its own bytes, and capability selection still reads only that leading number.
+`K-NNN-<topic>.md` is unchanged — that is the capsule file's own name and its ASCII contract
+still holds.
+
+`--capability` filtered after parsing. `project --capability 2` parsed every capability's
+capsules first and threw on the first malformed one anywhere, so a single stale `Source basis`
+coordinate in an untouched capability 09 emptied capability 02's index — and because the canon
+fixes this tool as the only means of projection and selection, no hand route was left. The
+filter now narrows the folder walk before one file is read, for `project` and `disputes`.
+Argument-less `validate` still walks every folder, and that is where a global format defect is
+caught. `select --path` already validated exact paths only, and that boundary is unchanged.
+
+Seven report strings reached the person in devflow's own vocabulary. resume's report said
+"under the same matched row" about a routing table its reader has never seen; work reported
+`baseline missing: <number>` and `legacy baseline: migration pending`; verify reported
+`baseline no-op`, `registered consumers`, and `repair lineage cannot be determined`. Four are
+rewritten so a first-time reader knows what happened and what follows. Three keep their literal
+head and gain plain words after it, because something else reads that head: `baseline no-op:`
+is quoted by name inside the canonical `registered consumers: unknown — provider baseline
+no-op: <same reason>` line, `registered consumers:` is fixed by the baseline canon, and
+`fresh|hypothesis|missing` is the canonical status notation other consumers judge on.
+
+Files: `scripts/project-knowledge.mjs`, `scripts/project-knowledge.test.js`,
+`scripts/repository-invariants.test.js`, `skills/resume/SKILL{,_ko}.md`,
+`skills/work/SKILL{,_ko}.md`, `skills/verify/SKILL{,_ko}.md`, both plugin manifests.
+
+And `select` dropped the date the index promises. 0.18.3 made the index emit each capsule's
+last-changed commit date as `changed`, but `select` — the command that shows candidates when
+the opening budget is exceeded and asks the person to narrow — projected them without it, so
+every candidate read `changed: null` at exactly the moment "open the one that changed
+yesterday" would decide. It now reads the same dates from the same single `git log` call.
+
 ## 0.18.3 — 2026-08-20 — the index carries the date it already knows, and four rules stop being said twice
 
 Verification after 0.18.2 shipped found two places where the deployed text promised
