@@ -78,15 +78,16 @@ value equals the capability-folder path or starts with `<capability-folder path>
 targets the product layer.
 
 Before calculating revisions for a new product- or capability-layer verification, classify
-every journal line. Retain a line in the canonical format. For cross-task decisions, take
+every journal line that starts with the canonical timestamp. Retain a line in the canonical
+format. For cross-task decisions, take
 the first line in file order that the discovery→update table maps to an exact core-document
 target, report that source line and target, and return without writing or executing to the
 canonical target-owning skill. That skill applies the table and lands the core-
 document update with deletion of its source line in the same binding-decision commit; then
 restart state routing from the beginning. Retain a cross-task decision with no target, and
 retain an attributed open-item line a person must decide — the canon allows that content,
-and its resolution belongs to a person. A line in none of these classes is an integrity
-anomaly; report it and do not verify.
+and its resolution belongs to a person. A timestamped line in none of these classes is an
+integrity anomaly; report it and do not verify.
 
 Start the capability layer only when the target depth-1 capability folder has at least
 one direct child that is not `.stale.`, and every such child has a `.done` status. An
@@ -323,7 +324,8 @@ section below).
    `devflow/`. If any condition then fails, rerun the capability layer and replace the pass and
    marker in a new begin commit.
 8. When a valid capability-closing marker exists in HEAD with its begin commit landed,
-   finish its interrupted closure. Classify every journal line. Do not delete a marker,
+   finish its interrupted closure. Classify every journal line that starts with the
+   canonical timestamp. Do not delete a marker,
    request, evidence-wait, or evidence-finalizing line whose exact format the canonical
    rules define during this sweep; only
    the current capability-closing marker is deleted when closure below finishes. Of the
@@ -337,8 +339,8 @@ section below).
    document target is a valid late decision: retain the marker, report its source line and
    target, and return without writing or executing to the canonical target-owning skill
    document. After that skill lands its binding decision, repeat step 7 with the changed
-   revisions. Retain an attributed open-item line a person must decide. A line in none of
-   these classes is an integrity anomaly; report it and neither write
+   revisions. Retain an attributed open-item line a person must decide. A timestamped line in
+   none of these classes is an integrity anomaly; report it and neither write
    nor commit. Before the first write, calculate from current HEAD and the
    marker the final bytes of verify.md with its one-line sweep result and journal.md with
    only this marker and those collected capability notes removed. Apply them in this order: verify.md below the still-open

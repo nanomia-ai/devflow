@@ -7,8 +7,8 @@ description: Implementation. Takes one task card, codes it, keeps the progress l
 
 First read the canonical rules (`../principles/SKILL.md`). Then run
 `node ../principles/scripts/project-state.mjs state` and read its `claim:`, `ready:`, and
-`integrity:` lines; add `--card <path>` for one card's judgment detail. Those lines carry
-the card judgments this skill uses; take them as they stand.
+`integrity:` lines. Those lines carry the card judgments this skill uses; take them as they
+stand.
 
 Purpose: carry one task card all the way to its completion signal, then commit.
 

@@ -158,7 +158,7 @@ node를 실행할 수 없거나 플랫폼이 이 파일의 원본 경로를 주�
 |---|---|
 | `git.open-operation` | resume — 정상 라우팅을 멈추고 규칙 정본의 열린 Git 작업 관문 절만 읽어 그대로 사용자 결정을 받음 |
 | `integrity.blocking` | 라우팅과 모든 트리 쓰기가 막힘 — 그 줄의 원문·기대 형식과 교체 제안을 사용자에게 내고, 확인받기 전에는 아무것도 고치지 않음 |
-| `integrity.shape` | 막지 않음 — 그 경로와 구역을 승인 문단에 한 줄로 덧붙이고 별도 단계를 열지 않음. 다음 능력 폐쇄의 verify가 그 구역을 전면 교체해 치유한다 |
+| `integrity.shape` | 막지 않음 — 그 경로와 구역을 승인 문단에 한 줄로 덧붙이고 별도 단계를 열지 않음. 능력 문서 안의 구역은 다음 능력 폐쇄의 verify가 전면 교체해 치유한다. 능력 문서 밖의 경로는 그 문서를 쓰는 단계가 고치고, 그때까지 그 줄은 세션마다 다시 뜬다 |
 | `transition.prepared-route` | verify — payload를 대조·적용하고 준비 객체를 다시 커밋하지 않은 채 완료 상태와 지정 라우팅 커밋을 끝냄 |
 | `transition.interrupted` | verify — 실행을 반복하지 않고 빠진 출력과 해당 상태 또는 라우팅 커밋을 먼저 마침 |
 | `transition.source-id-migration` | verify — 규칙 정본의 출처 id 이관 커밋을 먼저 마침 |

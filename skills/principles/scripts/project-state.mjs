@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { TextDecoder } from "node:util";
 
 const OUTPUT_LIMIT = 24 * 1024;
+const COMPACT_FIELD_LIMIT = 96;
 const MAX_BUFFER = 64 * 1024 * 1024;
 const CARD_NUMBER = "[0-9]+[a-z]*(?:\\.[0-9]+[a-z]*)+";
 const FOLDER_NUMBER = "[0-9]+[a-z]*(?:\\.[0-9]+[a-z]*)*";
@@ -324,6 +325,14 @@ function fields(text) {
   return result;
 }
 
+function normalizedHeading(line) {
+  return line.replace(/(?:\s*<!--[\s\S]*?-->\s*)+$/g, "").trim();
+}
+
+function headingIndex(lines, heading) {
+  return lines.findIndex((line) => normalizedHeading(line) === heading);
+}
+
 function statusless(component) {
   return component
     .replace(/\.wip(?:-[a-z0-9]{2,8})?(?=\.|$)/, "")
@@ -432,7 +441,10 @@ function currentRoom(root, owners) {
 function parseProduct(text) {
   const lines = (text ?? "").split("\n");
   const service = /^#\s+(.+)$/.exec(lines.find((line) => /^#\s+/.test(line)) ?? "")?.[1]?.trim() ?? "unknown";
-  const start = lines.findIndex((line) => line.trim() === "## Capabilities");
+  const start = headingIndex(lines, "## Capabilities");
+  const anomalies = text !== null && start < 0
+    ? [{ path: "devflow/project/product.md", zone: "product", detail: "capabilities-heading-missing" }]
+    : [];
   const body = start < 0 ? [] : lines.slice(start + 1, lines.findIndex((line, index) => index > start && /^##\s+/.test(line)) < 0
     ? lines.length : lines.findIndex((line, index) => index > start && /^##\s+/.test(line)));
   const circled = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳";
@@ -441,6 +453,7 @@ function parseProduct(text) {
     const trimmed = line.replace(/^[-*|\s]+/, "").trim();
     if (!trimmed || /^[-:| ]+$/.test(trimmed)) continue;
     let position = circled.indexOf(trimmed[0]);
+    if (position >= 0 && circled.includes(trimmed[1])) continue;
     let name = null;
     if (position >= 0) name = trimmed.slice(1).replace(/^\s*[-:|]\s*/, "").split("|")[0].trim();
     else {
@@ -451,12 +464,21 @@ function parseProduct(text) {
     name = name.replace(/\s+[—-].*$/, "").replace(/\*\*/g, "").replace(/~~/g, "").trim();
     capabilities.push({ number: position + 2, name, retired: /retired|~~/.test(line) });
   }
-  return { service, capabilities };
+  const counts = new Map();
+  for (const capability of capabilities) counts.set(capability.number, (counts.get(capability.number) ?? 0) + 1);
+  for (const [number, count] of counts) {
+    if (count > 1) anomalies.push({
+      path: "devflow/project/product.md",
+      zone: "product",
+      detail: `duplicate-capability-number:${number}`,
+    });
+  }
+  return { service, capabilities, anomalies };
 }
 
 function extractSection(text, heading) {
   const lines = (text ?? "").split("\n");
-  const index = lines.findIndex((line) => line === heading);
+  const index = headingIndex(lines, heading);
   if (index < 0) return null;
   const level = heading.startsWith("### ") ? 3 : 2;
   let end = lines.length;
@@ -738,14 +760,15 @@ function parseJournalLine(line, lineNumber) {
     if (reserved) return { ...out, kind: "invalid", valid: false, ...timestamped.groups, reason: `reserved-format:${reserved}` };
     return { ...out, kind: "attributed", ...timestamped.groups };
   }
-  const reserved = RESERVED_JOURNAL_HEADS.find((head) => line.includes(head));
-  return { ...out, kind: "invalid", valid: false, reason: reserved ? `reserved-format:${reserved}` : "unrecognized-journal-line" };
+  const body = line.replace(/^\s*(?:[-*+]\s+)?/, "");
+  const reserved = RESERVED_JOURNAL_HEADS.find((head) => body.startsWith(head));
+  return reserved ? { ...out, kind: "invalid", valid: false, reason: `reserved-format:${reserved}` } : null;
 }
 
 function parseJournal(text) {
   if (text === null || text === "") return [];
   return text.split("\n").map((line, index) => ({ line, index: index + 1 })).filter((item) => item.line !== "")
-    .map((item) => parseJournalLine(item.line, item.index));
+    .map((item) => parseJournalLine(item.line, item.index)).filter(Boolean);
 }
 
 function parseHandoff(root, room, cards) {
@@ -757,7 +780,8 @@ function parseHandoff(root, room, cards) {
   const date = /^# HANDOFF · (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)$/.exec(lines[0] ?? "")?.[1] ?? null;
   const nextBody = extractSection(text, "## Next single step") ?? "";
   const pathMatch = /devflow\/tree\/[A-Za-z0-9._/ -]+\.md/.exec(nextBody);
-  const nextStep = pathMatch?.[0]?.trim() ?? nextBody.split("\n").find((line) => line.trim())?.trim() ?? null;
+  const parsedNextStep = pathMatch?.[0]?.trim() ?? nextBody.split("\n").find((line) => line.trim())?.trim() ?? null;
+  const nextStep = parsedNextStep === "none" ? null : parsedNextStep;
   const legacy = extractSection(text, "## Open decisions");
   const openItems = legacy && legacy !== "None." ? legacy.split("\n").filter((line) => line.trim()).map((line) => line.trim()) : [];
   let stale = date === null;
@@ -1225,7 +1249,7 @@ function locatorResolutionCount(snapshot, locator) {
   if ((match = /^core:(devflow\/[^#]+)#(.+)$/.exec(locator))) {
     const text = readFile(snapshot.root, match[1]);
     if (text === null) return 0;
-    return text.split("\n").filter((line) => line.replace(/^#{1,6}\s+/, "") === match[2]).length;
+    return text.split("\n").filter((line) => normalizedHeading(line).replace(/^#{1,6}\s+/, "") === match[2]).length;
   }
   if ((match = /^card:(devflow\/[^@]+)@([0-9a-f]{40,64})$/.exec(locator))) {
     return gitFile(snapshot.root, match[2], match[1]) === null ? 0 : 1;
@@ -1448,7 +1472,10 @@ function evaluateZones(snapshot) {
   const integrityItems = integrity(snapshot, verify);
   const blocking = integrityItems.filter((item) => item.blocking);
   const nonblocking = integrityItems.filter((item) => !item.blocking);
-  const shapeAnomalies = snapshot.baseline.anomalies.filter((item) => item.zone === "verified");
+  const shapeAnomalies = [
+    ...snapshot.product.anomalies,
+    ...snapshot.baseline.anomalies.filter((item) => item.zone === "verified"),
+  ];
 
   const changedOnBranch = snapshot.integration.hash
     ? gitNulList(snapshot.root, ["diff", "--name-only", "-z", `${snapshot.integration.ref}..HEAD`, "--", "devflow/tree", "devflow/journal.md"])
@@ -1716,6 +1743,37 @@ function fieldString(values, omitted = new Set()) {
     .map(([key, value]) => `${key}=${scalar(value)}`).join(" ");
 }
 
+function boundedUtf8(value, limit = COMPACT_FIELD_LIMIT) {
+  if (Buffer.byteLength(value) <= limit) return { value, truncated: false };
+  const suffix = "...";
+  let prefix = "";
+  for (const character of value) {
+    if (Buffer.byteLength(`${prefix}${character}${suffix}`) > limit) break;
+    prefix += character;
+  }
+  return { value: `${prefix}${suffix}`, truncated: true };
+}
+
+function compactFieldString(values, omitted = new Set()) {
+  const fields = [];
+  for (const [key, value] of Object.entries(values)) {
+    if (omitted.has(key) || value === undefined) continue;
+    const rendered = typeof value === "string" ? value : JSON.stringify(value);
+    const bounded = boundedUtf8(rendered);
+    if (bounded.truncated) {
+      fields.push(`${key}=${JSON.stringify(bounded.value)}`, `${key}Truncated=1`);
+    } else {
+      fields.push(`${key}=${scalar(value)}`);
+    }
+  }
+  return fields.join(" ");
+}
+
+function compactFact(prefix, value) {
+  const bounded = boundedUtf8(value);
+  return `${prefix}: ${bounded.value}${bounded.truncated ? " [truncated]" : ""}`;
+}
+
 function zoneOrder(treePresent, zones) {
   return [...ZONE_DEFINITIONS].sort((left, right) => {
     if (treePresent) return left.present - right.present;
@@ -1763,33 +1821,30 @@ export function selectFirstRoute(activeRoutes, treePresent = true) {
 function renderBody(snapshot, evaluated, form) {
   const order = zoneOrder(snapshot.treePresent, evaluated.zones);
   const body = [];
+  const fieldsFor = form === "full" ? fieldString : compactFieldString;
   for (const definition of order) {
     const zone = evaluated.zones[definition.zone];
     if (zone.summary === null && zone.entries.length === 0) body.push(`${definition.zone}: none`);
     else {
-      if (zone.summary !== null) body.push(`${definition.zone}: ${fieldString(zone.summary)}`);
+      if (zone.summary !== null) body.push(`${definition.zone}: ${fieldsFor(zone.summary)}`);
       else body.push(`${definition.zone}: count=${zone.entries.length}`);
-      if (form === "full") {
-        for (const entry of sortedEntries(definition.zone, zone.entries, snapshot.treePresent)) {
-          if (entry.detail) body.push(`${definition.zone}: ${fieldString(entry, new Set(["detail"]))}`);
-          else body.push(`${definition.zone}: kind=${entry.kind} ${fieldString(entry, new Set(["kind"]))}`.trimEnd());
-        }
+      for (const entry of sortedEntries(definition.zone, zone.entries, snapshot.treePresent)) {
+        if (entry.detail === true) body.push(`${definition.zone}: ${fieldsFor(entry, new Set(["detail"]))}`);
+        else body.push(`${definition.zone}: kind=${entry.kind} ${fieldsFor(entry, new Set(["kind"]))}`.trimEnd());
       }
     }
   }
-  body.push(`report: ${fieldString(evaluated.facts.report)}`);
-  body.push(`handoff: ${fieldString(evaluated.facts.handoff)}`);
-  if (form === "full") {
-    for (const line of evaluated.facts.openItems) body.push(`open-item: ${line}`);
-    for (const line of evaluated.facts.existingRequests) body.push(`existing-request: ${line}`);
-    for (const line of evaluated.facts.findings) body.push(`finding: ${line}`);
-  }
+  body.push(`report: ${fieldsFor(evaluated.facts.report)}`);
+  body.push(`handoff: ${fieldsFor(evaluated.facts.handoff)}`);
+  for (const line of evaluated.facts.openItems) body.push(form === "full" ? `open-item: ${line}` : compactFact("open-item", line));
+  for (const line of evaluated.facts.existingRequests) body.push(form === "full" ? `existing-request: ${line}` : compactFact("existing-request", line));
+  for (const line of evaluated.facts.findings) body.push(form === "full" ? `finding: ${line}` : compactFact("finding", line));
   body.push(`next: ${firstRoute(order, evaluated.zones, snapshot.treePresent)}`);
   return body;
 }
 
 function stateLine(snapshot, evaluated, form, bytes) {
-  const anomalies = evaluated.integrityItems.length + snapshot.baseline.anomalies.length;
+  const anomalies = evaluated.integrityItems.length + snapshot.product.anomalies.length + snapshot.baseline.anomalies.length;
   const head = snapshot.head === "none" ? "none" : snapshot.head.slice(0, 8);
   const integration = snapshot.integration.hash ? `${snapshot.integration.branch}@${snapshot.integration.hash.slice(0, 8)}` : `${snapshot.integration.branch}@unknown`;
   return `state: schema=1 root=${scalar(snapshot.root)} head=${head} integration=${integration} networkNeeded=${snapshot.integration.networkNeeded ? 1 : 0} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${anomalies} bytes=${bytes}/${OUTPUT_LIMIT} form=${form}`;
@@ -1815,8 +1870,8 @@ export async function calculateState(options) {
   if (rendered.bytes <= OUTPUT_LIMIT) return { ...rendered, status: 0, form: "full", snapshot, evaluated };
   rendered = render(snapshot, evaluated, "compact");
   if (rendered.bytes <= OUTPUT_LIMIT) return { ...rendered, status: 0, form: "compact", snapshot, evaluated };
-  const filters = options.capability === undefined ? "--capability <n> or --card <path>" : "--card <path>";
-  const output = `state: schema=1 root=${scalar(snapshot.root)} head=${snapshot.head.slice(0, 8)} integration=${snapshot.integration.branch}@${snapshot.integration.hash?.slice(0, 8) ?? "unknown"} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${evaluated.integrityItems.length} bytes=0/${OUTPUT_LIMIT} form=compact emitted=0\nblocked: output budget exceeded; narrow ${filters}\n`;
+  const anomalies = evaluated.integrityItems.length + snapshot.product.anomalies.length + snapshot.baseline.anomalies.length;
+  const output = `state: schema=1 root=${scalar(snapshot.root)} head=${snapshot.head.slice(0, 8)} integration=${snapshot.integration.branch}@${snapshot.integration.hash?.slice(0, 8) ?? "unknown"} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${anomalies} bytes=0/${OUTPUT_LIMIT} form=compact emitted=0\nblocked: output budget exceeded; narrow --capability <n>\n`;
   return { output, bytes: Buffer.byteLength(output), status: 3, form: "refused", snapshot, evaluated };
 }
 

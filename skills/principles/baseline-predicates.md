@@ -1,8 +1,9 @@
 # Canonical Capability Knowledge Baseline Predicates
 
 This document defines only the disk contract and bounded projections for capability
-knowledge baselines. arch, adopt, verify, and resume read this canon directly; work,
-reviewer, and retrospector receive only their required projections in their own contracts.
+knowledge baselines. arch, adopt, and verify read this canon directly; resume opens only
+the `Writers and replacement boundaries` section, and work, reviewer, and retrospector
+receive only their required projections in their own contracts.
 Each skill owns its execution procedure and does not redefine this contract. Capability
 knowledge baselines are always on; there is no per-project switch.
 

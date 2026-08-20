@@ -12,9 +12,8 @@ all of `devflow/project/design.md`, `devflow/project/code-style.md`,
 of earlier cards live in journal, and HANDOFF is overwritten and will not carry them.
 
 Then run `node ../principles/scripts/project-state.mjs state` and read its `claim:`,
-`ready:`, `integrity:`, `layer:`, and `request:` lines; add `--card <path>` for one card's
-judgment detail. Those lines carry the card, layer, and integrity judgments this skill
-uses; take them as they stand.
+`ready:`, `integrity:`, `layer:`, and `request:` lines. Those lines carry the card, layer,
+and integrity judgments this skill uses; take them as they stand.
 
 Read the planning evidence discipline (`../principles/planning-evidence.md`) boundedly only
 when judging the maintenance planning depth grade below. First read `Four Kinds of Unknown`,

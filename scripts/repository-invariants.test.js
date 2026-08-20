@@ -809,7 +809,7 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.doesNotMatch(proposal, /capability_baseline/);
 
   assert.match(baseline, /Capability\s+knowledge baselines are always on; there is no\s+per-project switch/);
-  assert.match(baseline, /arch, adopt, verify, and resume read this canon directly; work,\s+reviewer, and retrospector receive only their required projections/);
+  assert.match(baseline, /arch, adopt, and verify read this canon directly; resume opens only\s+the `Writers and replacement boundaries` section, and work, reviewer, and retrospector\s+receive only their required projections/);
   assert.match(baseline, /Each file contains exactly one `## Verified state` H2 heading/);
   assert.match(baseline, /bytes before it are the \*\*design zone\*\*[\s\S]*heading through end of file is the \*\*verified\s+zone\*\*/);
   assert.match(baseline, /\| 7 \| Design metadata \| design \|[\s\S]*\| 15 \| Verification metadata \| verified \|/);
@@ -1787,6 +1787,28 @@ test("journal merges resolve 3-way and blockade appends are exactly enumerated",
   // the continuing side is a closed set of four, never a predicate a literal reader can extend
   assert.match(blockade, /Those four are the whole set of journal appends that continue during a\s+blockade/);
   assert.doesNotMatch(blockade, /journal appends that mint no number and make no claim/);
+});
+
+test("the canonical timestamp divides journal ownership line by line", () => {
+  // Measured before 0.18.8 in two real projects: every one of the 98 blocking integrity
+  // reports was a note a person had written into journal.md by hand, and the accident item
+  // 12 guards -- a reserved headword in a broken format -- happened zero times. Machine
+  // ownership of every line locks a person out of the file they keep as a notebook. A line
+  // the machine owns carries one of two marks -- the canonical timestamp, or a reserved
+  // headword leading the line -- and everything else is the person's.
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  assert.match(principles, /A line that starts with the canonical\s+timestamp or is led by a reserved\s+headword below is the machine's/);
+  assert.match(principles, /Every other line is a person's — it enters no judgment and\s+stays as it stands/);
+  assert.doesNotMatch(principles, /journal\s+admits only/);
+  // Item 12 is the third leg of the same predicate. Before 0.18.8 it named only the
+  // timestamped case while the tool judged both, and that gap is what let prose and code
+  // say different things about the very line this test divides.
+  assert.match(principles, /Does a journal line led by `layer opening:`[\s\S]{0,400}?with or without the canonical timestamp before it/);
+  // verify classifies twice -- once before revisions, once in the closure sweep. A person's
+  // line has to survive both, so both sites carry the same scope and the same anomaly test.
+  assert.equal(count(verify, /classify\s+every\s+journal\s+line\s+that\s+starts\s+with\s+the\s+canonical\s+timestamp/gi), 2);
+  assert.equal(count(verify, /A\s+timestamped\s+line\s+in\s+none\s+of\s+these\s+classes\s+is\s+an\s+integrity\s+anomaly/g), 2);
 });
 
 // The one canon range an entry skill may leave unread. Everything below keeps that gate

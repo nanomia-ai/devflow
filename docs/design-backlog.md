@@ -296,6 +296,25 @@ The items below were carried out and left the watch list. Re-proposals consult t
 
 ## On hold — candidates for coming versions
 
+- **The 0.18.9 agenda — the four 0.18.8 left open** — 0.18.8 closed "the tool meets the
+  writers it had never met" and deliberately deferred the rest of the same root. The root form is **prose
+  states something unconditionally while code acts conditionally**. The four: (1) deleting
+  `state-predicates{,_ko}.md` — no skill reads it, but it moves together with the ten
+  integrity items whose judgment the tool now owns, and four coordinates cite those items by
+  number (three in `principles`, one in `product/SKILL.md`); DR-44's recorded reason applies
+  as written, that mixing deletion with repairs hides which change broke what · (2)
+  `verification-predicates{,_ko}.md` — `verify` requires a tool output ("the tool reports
+  missing") that does not exist and has no test; **the tool output and its test come first** ·
+  (3) the closed-folder projection — the canon says a machine query "opens no body" while
+  `loadSnapshot` opens every card, with no test · (4) integrity item 8's three exemptions
+  (user-authorized reassignment, departure, planning transition) are absent from the
+  implementation. Adoption condition: (2)(3)(4) need the tool output and its test standing
+  first; (1) follows in the release after that.
+- **Two surfaces nothing uses** — `--card` is parsed and validated but reaches no projection
+  (0.18.8 removed only the instruction to pass it). `--capability` reaches `baseline` but not
+  `integrity`. Until a consumer meaning exists to wire, removing them from the CLI and from
+  DD-80's filter list is the smaller move. Adoption condition: a real session is observed
+  needing that filter.
 This list stays inside this document set. The next AI does not read closed issues, but the
 gate forces this set to be read — so the v0.9.0-era plan to migrate the list to GitHub Issues
 after going public is retracted, its own reason having refuted it (2026-08-13).

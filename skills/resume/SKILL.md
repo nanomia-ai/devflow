@@ -186,7 +186,7 @@ The row for the name `next:` produced is the next stage.
 |---|---|
 | `git.open-operation` | resume — stop normal routing, read only the canonical rules' open-Git-operation gate section, and obtain the user's decision exactly there |
 | `integrity.blocking` | routing and every tree write are blocked — present that line's verbatim text, expected format, and replacement proposal to the user, and change nothing before confirmation |
-| `integrity.shape` | not blocking — append that path and zone as one line in the approval paragraph and open no separate stage. The next capability closure's verify replaces that zone in full and heals it |
+| `integrity.shape` | not blocking — append that path and zone as one line in the approval paragraph and open no separate stage. A zone inside a capability document is healed when the next capability closure's verify replaces that zone in full. A path outside a capability document is repaired by the stage that writes that document, and the line reappears every session until then |
 | `transition.prepared-route` | verify — compare and apply its payload, then finish the completed state and specified route commit without committing the prepared object again |
 | `transition.interrupted` | verify — without repeating execution, first finish the missing output and that state or routing commit |
 | `transition.source-id-migration` | verify — first finish the canonical source-id migration commit |

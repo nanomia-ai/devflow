@@ -7,8 +7,7 @@ description: 구현. 작업 카드 하나를 잡아 코딩하고, 진행 로그�
 
 먼저 규칙 정본(`../principles/SKILL.md`)을 읽는다. 이어
 `node ../principles/scripts/project-state.mjs state`를 실행해 `claim:`·`ready:`·`integrity:`
-줄을 읽고, 카드 하나의 판정 근거가 필요하면 `--card <경로>`를 붙인다. 이 스킬이 쓰는 카드
-판정은 그 줄이 낸 값을 그대로 쓴다.
+줄을 읽는다. 이 스킬이 쓰는 카드 판정은 그 줄이 낸 값을 그대로 쓴다.
 
 목적: 작업 카드 하나를 완료 신호까지 끌고 가서 커밋한다.
 

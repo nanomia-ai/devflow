@@ -70,8 +70,8 @@ Fixture identity.
 Fixture problem.
 ## Approach
 Fixture approach.
-## Capabilities
-${capabilities.map((name, index) => `${circled[index]} ${name}`).join("\n") || "None."}
+## Capabilities        <!-- ① ② ③ number + name + user outcome + why that outcome is needed for success -->
+${capabilities.map((name, index) => `- **${circled[index]} ${name}** — Fixture user outcome because success needs it.`).join("\n") || "None."}
 ## Boundary
 Fixture boundary.
 ## Success criteria
@@ -784,6 +784,55 @@ test("T4 report service is the exact current project identity", (t) => {
   assertFragment(result.stdout, "report:", 'service="Fixture service"');
 });
 
+test("T4 product producer heading round-trips with its canonical HTML comment", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha"] });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "baseline:", "expected=2");
+  assertFragment(result.stdout, "integrity:", "shape=0");
+});
+
+test("T4 product arbitrary heading suffix stays rejected and visible", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha"] });
+  const current = read(root, "devflow/project/product.md");
+  write(root, "devflow/project/product.md", current.replace(
+    "## Capabilities        <!-- ① ② ③ number + name + user outcome + why that outcome is needed for success -->",
+    "## Capabilities of the old plan",
+  ));
+  commit(root, "old product heading");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "baseline:", "expected=1");
+  assertFragment(result.stdout, "integrity:", "shape=1");
+  assertFragment(result.stdout, "integrity: kind=shape", "zone=product");
+  assertFragment(result.stdout, "integrity: kind=shape", "detail=capabilities-heading-missing");
+});
+
+test("T4 product prose beginning with bold circled numbers is not a capability", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha", "Beta", "Gamma", "Delta"] });
+  const current = read(root, "devflow/project/product.md");
+  write(root, "devflow/project/product.md", current.replace(
+    "- **④ Delta** — Fixture user outcome because success needs it.\n## Boundary",
+    "- **④ Delta** — Fixture user outcome because success needs it.\n**①② are the MVP.** ③④ support that flow.\n## Boundary",
+  ));
+  commit(root, "product prose");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "baseline:", "expected=5");
+  assertFragment(result.stdout, "integrity:", "shape=0");
+});
+
+test("T4 product prose beginning with one circled number is a named duplicate anomaly", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha", "Beta", "Gamma", "Delta"] });
+  const current = read(root, "devflow/project/product.md");
+  write(root, "devflow/project/product.md", current.replace(
+    "- **④ Delta** — Fixture user outcome because success needs it.\n## Boundary",
+    "- **④ Delta** — Fixture user outcome because success needs it.\n**④ Work surface recovery comes later.**\n## Boundary",
+  ));
+  commit(root, "single-number product prose");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "baseline:", "expected=6");
+  assertFragment(result.stdout, "integrity:", "shape=1");
+  assertFragment(result.stdout, "integrity: kind=shape", "detail=duplicate-capability-number:5");
+});
+
 test("T4 report progressLastPoint is the exact last nonempty progress entry", (t) => {
   const root = makeRepo(t); const card = writeClaim(root, { progress: "2026-08-20T01:02:03Z exact last point" });
   const result = run(root); ok(result);
@@ -812,12 +861,41 @@ test("T4 openItems round-trips punctuation without parsing the prose", (t) => {
   assert.match(result.stdout, new RegExp(`^open-item: ${open.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m"));
 });
 
+test("T4 human journal prose mentioning a reserved head is outside machine ownership", (t) => {
+  const root = makeRepo(t);
+  write(root, "devflow/journal.md", "# Journal\nThis is a human notebook line.\n- Today I documented how a line beginning with audit requested: is written.\n");
+  commit(root, "human journal prose");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity:", "blocking=0");
+  assertFragment(result.stdout, "report:", "openItems=0");
+  assert.equal(result.stdout.includes("unrecognized-journal-line"), false, result.stdout);
+});
+
+test("T4 timestamp-less reserved journal head after a list marker remains blocking", (t) => {
+  const root = makeRepo(t);
+  write(root, "devflow/journal.md", "  - audit requested: product\n");
+  commit(root, "reserved journal head without timestamp");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity:", "blocking=1");
+  assertFragment(result.stdout, "integrity: kind=blocking", 'reason="reserved-format:audit requested:"');
+  assert.equal(nextOf(result.stdout), "integrity.blocking");
+});
+
 test("T4 selection reason exposes a valid HANDOFF exact path", (t) => {
   const root = makeRepo(t); const card = writeClaim(root);
-  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step\n${card}\n`); commit(root, "jmp handoff");
+  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${card}\n`); commit(root, "jmp handoff");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "report:", "selectionReason=last-handoff");
   assertFragment(result.stdout, "handoff:", `date=2099-01-01T00:00:00Z stale=0 nextStep=${card}`);
+});
+
+test("T4 HANDOFF none is a canonical sentinel, not a path or stale cause", (t) => {
+  const root = makeRepo(t);
+  write(root, "devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\nnone\n");
+  commit(root, "jmp none handoff");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "handoff:", "date=2099-01-01T00:00:00Z stale=0 nextStep=none");
+  assert.equal(result.stdout.includes("handoff-path-resolves-0"), false, result.stdout);
 });
 
 test("T4 selection reason rejects a stale HANDOFF and exposes its stale fact", (t) => {
@@ -877,23 +955,38 @@ test("T6 missing tool source path stops and emits no guessed next", () => {
   assert.doesNotMatch(result.stdout, /^next:/m);
 });
 
-test("output budget degrades to compact and then refuses without truncation", (t) => {
+test("output budget compact emits every item, then refuses without dropping a subset", (t) => {
   const compactRoot = makeRepo(t);
-  const rows = Array.from({ length: 400 }, (_, index) => `2026-08-20T00:${String(index % 60).padStart(2, "0")}:00Z jmp: ${index}-${"x".repeat(100)}`);
+  const rows = Array.from({ length: 180 }, (_, index) => `2026-08-20T00:${String(index % 60).padStart(2, "0")}:00Z jmp: ${index}-${"x".repeat(100)}`);
   write(compactRoot, "devflow/journal.md", `${rows.join("\n")}\n`);
   const compact = run(compactRoot); ok(compact);
   assert.match(compact.stdout, /^state: .* bytes=\d+\/24576 form=compact$/m);
   assert.equal(Buffer.byteLength(compact.stdout) <= 24 * 1024, true);
-  assert.doesNotMatch(compact.stdout, /^open-item:/m);
+  assert.equal(compact.stdout.split(/\r?\n/).filter((line) => line.startsWith("open-item:")).length, rows.length);
+  assert.match(compact.stdout, /^open-item: .+ \[truncated\]$/m);
 
   const refusedRoot = makeRepo(t);
-  write(refusedRoot, "devflow/project/product.md", product().replace("# Fixture service", `# ${"S".repeat(30 * 1024)}`));
+  const refusedRows = Array.from({ length: 400 }, (_, index) => `2026-08-20T00:${String(index % 60).padStart(2, "0")}:00Z jmp: ${index}-${"x".repeat(100)}`);
+  write(refusedRoot, "devflow/journal.md", `${refusedRows.join("\n")}\n`);
   const refused = run(refusedRoot);
   assert.equal(refused.status, 3, refused.stderr);
   assert.equal(refused.stderr, "");
   assert.match(refused.stdout, /form=compact emitted=0/);
-  assert.match(refused.stdout, /^blocked: output budget exceeded; narrow --capability <n> or --card <path>$/m);
+  assert.match(refused.stdout, /^blocked: output budget exceeded; narrow --capability <n>$/m);
+  assert.doesNotMatch(refused.stdout, /--card/);
   assert.doesNotMatch(refused.stdout, /^next:/m);
+});
+
+test("compact integrity blocking keeps every repair item with explicit line truncation", (t) => {
+  const root = makeRepo(t);
+  const rows = Array.from({ length: 50 }, (_, index) =>
+    `2026-08-20T00:${String(index % 60).padStart(2, "0")}:00Z product verification running: malformed-${index}-${"x".repeat(400)}`);
+  write(root, "devflow/journal.md", `${rows.join("\n")}\n`);
+  const result = run(root); ok(result);
+  assert.match(result.stdout, /^state: .* form=compact$/m);
+  assert.equal(result.stdout.split(/\r?\n/).filter((line) => line.startsWith("integrity: kind=blocking")).length, rows.length);
+  assert.equal(result.stdout.split(/\r?\n/).filter((line) => line.startsWith("integrity: kind=blocking") && line.includes("lineTruncated=1")).length, rows.length);
+  assert.equal(nextOf(result.stdout), "integrity.blocking");
 });
 
 test("adversarial F1 canonical Failure history without source id requires migration", (t) => {

@@ -15,6 +15,75 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.18.8 — 2026-08-21 — the tool meets the writers it had never met
+
+0.18.7 moved the entry-state calculation out of prose and into a read-only tool, and that
+direction held under two independent reviews. What had not happened was a meeting: the tool
+had only ever been run against fixtures it wrote itself. It had never read a person's prose,
+an older session's document, or the output skeleton this canon's own `product` skill prints.
+Every defect below sits on that unmet boundary.
+
+The measurement that reframed the round: in the two real projects that keep a journal, all
+98 blocking integrity reports were notes a person had typed by hand, and the accident item 12
+guards — a reserved headword in a broken format — had happened zero times. Machine ownership
+of every line had locked people out of a file they use as a notebook, and both projects could
+no longer enter devflow at all.
+
+**The canonical timestamp now divides journal ownership line by line.** A line the machine
+owns carries one of two marks: the canonical timestamp, or a reserved headword leading the
+line. Every other line is the person's — it enters no judgment and stays as it stands. A
+reserved headword in a broken format still stops entry, with or without the timestamp before
+it, so the accident the check exists for is still caught. The predicate now reads the same in
+all three places that state it: the canonical journal-format paragraph, integrity item 12,
+and the tool.
+
+**Heading comparison became one function, and silence became a report.** `normalizedHeading`
+strips a trailing HTML comment and surrounding space before comparing, and `parseProduct`,
+`extractSection`, and the locator count all use it — the canon's own skeleton line
+`## Capabilities        <!-- … -->` was unreadable to the parser that the same release
+shipped. An arbitrary suffix such as `## Capabilities (draft)` is still refused, because
+widening that far replaces the grammar rather than repairing a defect; what changed is that
+the refusal now says so. A product file whose canonical heading cannot be found reports
+`integrity: kind=shape … detail=capabilities-heading-missing` instead of continuing with zero
+capabilities and no anomaly.
+
+**Prose in the capability list stopped becoming a capability, without silencing the authors.**
+A sentence like `**①② are the MVP.**` is prose because two circled numerals sit next to each
+other, not because it is bold — so the leading decoration class keeps `*`, and the real
+authoring form `- **① Name** — …` that a live project uses is read as it always should have
+been. A number that resolves twice reports `duplicate-capability-number`, which is what let a
+silent overwrite pass with `anomalies=0`.
+
+**`none` is a value, not a path.** The canonical "no next step" value in HANDOFF was resolved
+as a path, producing both a false advisory and the staleness that makes `resume` distrust the
+handoff. It is filtered before resolution now.
+
+**Compact emits every item again.** The budget ladder is three tiers in this repository — full,
+then per-item shortening that keeps every entry, then zero entries plus the filters to narrow
+by — and the state tool had implemented the first and third while making the second drop
+entries wholesale. One real project reported 82 blocking anomalies and printed not one of
+them, in 1,306 of 24,576 bytes, while `resume` is told to present that line's verbatim text.
+Long fields are now bounded and marked, and every entry is emitted.
+
+**Four tests were pinning the defects as the contract.** One asserted that compact must *not*
+emit `open-item:` under the name "without truncation"; another fixed the inert `--card` as the
+documented remedy; a producer fixture wrote a clean heading the real producer never writes.
+Fixtures were made red against the canon first and then turned green, and the run went from
+263 tests to 272.
+
+Also: `resume` no longer promises that every shape anomaly heals at the next capability
+closure — only a zone inside a capability document does, and a path outside it is repaired by
+the stage that writes that document. `split` and `work` no longer instruct a reader to pass
+`--card`, which reaches no projection. `baseline-predicates` no longer names `resume` as a
+direct reader of the whole canon.
+
+Deliberately not in this release, with reasons recorded in `docs/rounds/v0.18.8/report_ko.md`:
+deleting `state-predicates` and the ten integrity items whose judgment the tool now owns —
+four coordinates cite those items by number and mixing deletion with seven repairs would hide
+which change broke what; `verification-predicates`, whose prose still requires a tool output
+that does not exist; and three further places where the canon assumes a tool behavior the tool
+does not implement.
+
 ## 0.18.7 — 2026-08-20 — the entry stops computing the state and calls a tool that owns it
 
 A new session used to pay 137,514 B of canon before it read one character of the project it

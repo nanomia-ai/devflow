@@ -12,8 +12,8 @@ description: 작업 분할. 작업 트리(devflow/tree/)를 한 층 열고 작�
 HANDOFF는 덮어써져 그것을 나르지 못한다.
 
 이어 `node ../principles/scripts/project-state.mjs state`를 실행해 `claim:`·`ready:`·
-`integrity:`·`layer:`·`request:` 줄을 읽고, 카드 하나의 판정 근거가 필요하면 `--card <경로>`를
-붙인다. 이 스킬이 쓰는 카드·층·정합성 판정은 그 줄이 낸 값을 그대로 쓴다.
+`integrity:`·`layer:`·`request:` 줄을 읽는다. 이 스킬이 쓰는 카드·층·정합성 판정은 그 줄이 낸
+값을 그대로 쓴다.
 
 기획 증거 규율(`../principles/planning-evidence.md`)은 아래 유지보수 기획 깊이 등급을 판정할 때만
 유계하게 읽는다. 먼저 `미지수 네 종류`·`차단 사실과 후속 사실`·`출처 소유권`·`정지 조건`·

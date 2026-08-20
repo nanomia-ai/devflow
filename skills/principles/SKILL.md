@@ -182,11 +182,14 @@ Whenever a canonical procedure says to write or append a journal line, create
 ### Exact journal formats
 
 The formats below are the sole canon for reserved journal records. Other skills fill in
-their values; they do not redefine the formats. Outside the reserved formats, journal
-admits only cross-task decisions and open items a person must decide, and such a line
-must start with the canonical timestamp and carry one token exactly equal to an existing
-room's id (a substring is not a match) — those two
-checks are what "attributed" means. `source-json` contains the whole of one
+their values; they do not redefine the formats. A line that starts with the canonical
+timestamp or is led by a reserved headword below is the machine's — with a reserved
+headword it stands in that format exactly, and with any other headword after the timestamp
+it is a cross-task decision or an open item a person
+must decide and carries one token exactly equal to an existing room's id (a substring is
+not a match) — starting with the canonical timestamp and carrying that token are the two
+checks "attributed" means. Every other line is a person's — it enters no judgment and
+stays as it stands. `source-json` contains the whole of one
 locator below as a JSON string. Paths are repository-relative, hashes are unabbreviated full
 commit object IDs output by Git, and headings are verbatim document headings. A verify `source id` is a
 positive integer within that verify.md section; each new entry takes the previous maximum
@@ -458,12 +461,12 @@ resolution, and the `Covered cards` comparison.
     layer-opening marker?
 11. Does a non-capability folder have at least one direct child that is not `.stale.`, all
     such children with a `.done` status, but no `.done` on the folder?
-12. Does a journal line whose timestamp is followed by `layer opening:`,
+12. Does a journal line led by `layer opening:`,
     `re-split pending:`, `maintenance routing pending:`, `product re-run pending:`,
     `product verification requested`, `product verification running:`,
     `product verification result:`, `capability closing:`, `capability note:`,
     `audit requested:`, `retrospective requested:`, `evidence-wait:`, or
-    `evidence-finalizing:` differ from
+    `evidence-finalizing:` — with or without the canonical timestamp before it — differ from
     the canonical format above; does any `-json` value fail to parse as a JSON string; or
     does a decoded layer-opening `source-json` fail to match one of the locator forms
     above or resolve to exactly one source?
