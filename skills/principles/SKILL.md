@@ -100,13 +100,18 @@ all — another worktree holds it, or permission, protection, or the network blo
 these continue: code edits, progress-log checkpoints, tweak commits (the lane's commit is
 not a binding decision), and the final task commit (it
 belongs to the session's own branch) of a card whose initial claim has already landed on
-integration, plus journal appends that mint no number and make no claim — `maintenance
+integration, plus four journal appends and their local commits — `maintenance
 routing pending`, `capability note`, attributed open-item and decision lines, `product
-re-run pending` — and their local commits. These wait until integration opens: a new
+re-run pending`. Those four are the whole set of journal appends that continue during a
+blockade. These wait until integration opens: a new
 claim, a new tree number, a new verify source id, a card's `.done.` rename and its
-boundary commit, a layer-opening marker (it mints numbers), new `evidence-wait` and `evidence-finalizing`
+boundary commit, a layer-opening marker (it mints numbers), a `re-split pending` marker
+(it lands in one binding-decision commit with the upper-document edit that called for it),
+new `evidence-wait` and `evidence-finalizing`
 journal lines (their record commit needs a push), `audit requested` and `retrospective requested` lines,
-verification-state lines, consuming (deleting) a canonical journal line, and any
+verification-state lines, a `capability closing` marker (it lands in the
+`boundary — begin` commit with the passing verify.md record and the refreshed capability
+document), consuming (deleting) a canonical journal line, and any
 Layer 0 or capability-document change. One exception: when an already-published
 `evidence-wait` line passes during the blockade, the final task commit's replacement of
 that line with `evidence-finalizing` is not a consumption but a state swap inside that

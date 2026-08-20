@@ -11,7 +11,11 @@ predicates (`../principles/state-predicates.md`), the canonical verification pre
 `devflow/project/arch.md`, and
 `devflow/project/code-style.md`. If present, also read all of
 `devflow/project/glossary.md` and `devflow/journal.md`. Then run
-`node <plugin root>/scripts/project-knowledge.mjs presence`. On output
+`node <plugin root>/scripts/project-knowledge.mjs presence`. `<plugin root>` is the folder
+two levels above this loaded file, and in a runtime that sets `${CLAUDE_PLUGIN_ROOT}` that
+variable names the same folder. When the platform gives this file no source path, or the
+tool cannot be run there, report that in one line and take the every-other-output branch
+below. On output
 `capsuleArtifacts=absent`, read the canonical capability knowledge baseline predicates
 (`../principles/baseline-predicates.md`) with the range from `## Domain knowledge capsules`
 up to but not including `## Metadata and freshness` left out. On every other output, read

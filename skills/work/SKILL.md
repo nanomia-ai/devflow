@@ -136,7 +136,10 @@ Read the card fully (including Coordinates and Identity — know what this is a 
 + when a same-numbered knowledge capsule folder exists beside the capability document just
   read, project only the capsules' first-line headers:
   `node <plugin root>/scripts/project-knowledge.mjs project --capability <capability number>`,
-  never without `--capability`. Open bodies only for capsules named by the card's
+  never without `--capability`. `<plugin root>` is the folder two levels above this loaded
+  file, and in a runtime that sets `${CLAUDE_PLUGIN_ROOT}` that variable names the same
+  folder. When the platform gives this file no source path, or the tool cannot be run there,
+  report that in one line and open no capsule body. Open bodies only for capsules named by the card's
   `Read first` and capsules whose "when to open it" matches the card's destination and
   target, through the same tool's `select --path <exact path>` (repeat `--path` for several).
   The tool enforces the opening budget as a hard cap — over it, it returns zero bodies with

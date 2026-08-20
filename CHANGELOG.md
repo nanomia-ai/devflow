@@ -15,6 +15,60 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.18.6 — 2026-08-20 — every capsule-tool call carries the rule that resolves it, and two journal kinds stop having two dispositions
+
+Two repairs where the skill text sent a literal reader somewhere the canon did not mean.
+
+Every site that calls the capsule tool now resolves `<plugin root>` itself. `resume` and
+`verify` open by running `node <plugin root>/scripts/project-knowledge.mjs presence`, and the
+rule that turns that placeholder into a path — two levels above the loaded file,
+`${CLAUDE_PLUGIN_ROOT}` as the same place where a runtime sets it — lived in
+`baseline-predicates.md`, the very file whose read range that command decides. The session met
+the placeholder before it could read the rule, and a model that meets a placeholder guesses
+rather than stops. A guess that misses is silent: the tool never runs, or runs from the wrong
+root, and a project with capsules on disk reads as capsule-less, losing 11 KB of canon it
+needed. `split` and `work` call the same tool for the header projection and never read that
+canon at all — `split` pointed at the rule it could not reach, and `work` had no pointer
+either — so the same guess sits there, and what it loses is quieter still: no capsule path
+reaches `Read first`, no body is opened, and the card runs on as though the capability had no
+capsule. All eight files now carry the same two resolution sentences, in the same words, and
+each names its own exit for a tool it cannot reach: the entry gate takes the every-other-output
+branch, which is the full read; `split` puts no capsule path on `Read first`; `work` opens no
+capsule body. Each exit is the canonical disposition already fixed by
+`baseline-predicates.md`, restated where the judgment happens. Fail-closed is unchanged; what
+changed is that it now also covers the model reaching the wrong path instead of only the tool
+exiting nonzero. `baseline-predicates.md` stays the canonical owner of where the capsule tool
+lives, and `split`'s pointer to that rule is gone, since a pointer plus a restatement is two
+places for one fact.
+
+The blockade paragraph now gives every canonical journal kind exactly one disposition. Its
+continuing side folded four kinds under "journal appends that mint no number and make no
+claim", and a literal reader could run that fold as a predicate and derive a fifth member:
+`re-split pending` mints no number and makes no claim. But the Document Hierarchy procedure
+lands that marker in one binding-decision commit with the upper-document edit that caused it,
+and a binding decision waits during a blockade — so the same document answered continue and
+wait, and a blockaded session that did either could say it followed the canon. DD-62 already
+settled it ("the allowance is an exact enumeration"), so the fold is now written as the closed
+set it always was, and the two kinds that sat in neither list — `re-split pending` and
+`capability closing` — are named on the waiting side with the commit each one rides. This is
+the same defect class the 0.14.0 audit found in this paragraph when the final task commit sat
+in neither list, and the paragraph's own promise, "nothing waits unnamed", is what it breaks.
+Two test assertions now hold it: every canonical journal kind appears in that paragraph, and
+the continuing side stays a closed four rather than a predicate. The Korean waiting list also
+stops calling the audit-requested and retrospective-requested kinds by their English names,
+since the same file's format block writes them in Korean — a Korean session could not match
+its own line by name.
+
+Tests go from 134 to 135. One new case walks every `<plugin root>` call site and fails on a
+caller that does not resolve the placeholder or does not name its exit — including a caller
+added later that is missing from the table.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`;
+`skills/principles/SKILL{,_ko}.md`; `skills/resume/SKILL{,_ko}.md`;
+`skills/verify/SKILL{,_ko}.md`; `skills/split/SKILL{,_ko}.md`;
+`skills/work/SKILL{,_ko}.md`; `scripts/repository-invariants.test.js`;
+`docs/design-backlog{,_ko}.md`; `docs/usecase-matrix_ko.md`.
+
 ## 0.18.5 — 2026-08-20 — a project with no capsule stops paying for the capsule contract, and README becomes a line the AI does not cross
 
 One conditional read, and one boundary drawn where a repeated instruction had no decision to stand on.

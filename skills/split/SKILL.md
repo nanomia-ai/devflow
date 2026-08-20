@@ -447,10 +447,13 @@ unparseable replacement; never infer it. Put the confirmed correction in a plann
 commit without changing other fields or status. Release a claimed card first.
 
 When the card's target capability has a knowledge capsule folder, read only the header
-projection, never a capsule body: locate `scripts/project-knowledge.mjs` from the plugin root
-by the canonical baseline predicates' rule and run
+projection, never a capsule body: run
 `node <plugin root>/scripts/project-knowledge.mjs project --capability <capability number>`
-for that number. Call it once per capability and never without `--capability`. Put the
+for that number. `<plugin root>` is the folder two levels above this loaded file, and in a
+runtime that sets `${CLAUDE_PLUGIN_ROOT}` that variable names the same folder. When the
+platform gives this file no source path, or the tool cannot be run there, report that in one
+line and put no capsule path on `Read first`. Call it once per capability and never without
+`--capability`. Put the
 exact path of each capsule whose "when to open it" matches the card's destination and target on
 `Read first` — approving the execution proposal approves that selection, and opening the
 body and judging the opening budget belong to work. The legacy-wiring rule that keeps paths

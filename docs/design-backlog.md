@@ -349,3 +349,12 @@ after going public is retracted, its own reason having refuted it (2026-08-13).
   from v0.9.21 was "the problem was ambiguity, not interruption", and that has to be refuted
   first; and nobody has measured whether those 150 lines actually cost session quality. The
   first real cycles are what answer that.
+- **A full ko/en translation-consistency sweep** — v0.18.6 minimally repaired, in
+  `skills/principles/SKILL_ko.md`, **the place where the blockade waiting list names the
+  audit-requested and retrospective-requested kinds** (`:90-91` as of 0.18.6): it named both
+  under their English names, so a Korean session could not match, by name, a line it had
+  written in the form **the canonical journal-format block in the same file** gives
+  (`:215-216` as of the same release). Later edits push line numbers, so **find those two places by
+  name**; the numbers are what they were then. Whether the same drift sits in other pairs has
+  not been counted. A full sweep is a separate round — it reads
+  whole ko/en pairs rather than one file, so folding it into a minimal repair opens the scope.

@@ -1617,7 +1617,7 @@ test("one integration branch is the only shared authority", () => {
   assert.match(principles, /When the tip is an ancestor and the publish is still refused, it is a\s+structural blocker/);
   assert.match(principles, /never by error text, which\s+varies by locale and Git version/);
   assert.match(principles, /these continue: code edits, progress-log checkpoints, tweak commits \(the lane's commit is\s+not a binding decision\), and the final task commit/);
-  assert.match(principles, /journal appends that mint no number and make no claim/);
+  assert.match(principles, /Those four are the whole set of journal appends that continue during a\s+blockade/);
   assert.match(principles, /consuming \(deleting\) a canonical journal line/);
   assert.match(principles, /a layer-opening marker \(it mints numbers\)/);
   // paragraph 3 — several hands in one working folder
@@ -1729,6 +1729,23 @@ test("journal merges resolve 3-way and blockade appends are exactly enumerated",
   assert.doesNotMatch(principles, /Journal merge conflicts resolve as a union/);
   assert.match(principles, /`maintenance\s+routing pending`, `capability note`, attributed open-item and decision lines, `product\s+re-run pending`/);
   assert.match(principles, /nothing waits unnamed/);
+  // "nothing waits unnamed" holds only while every canonical journal kind sits on one side of
+  // this paragraph. Ten are named outright; the three product-verification kinds ride the one
+  // phrase that names them as a family. A kind on neither side leaves a blockaded session free
+  // to write it or hold it — the 0.18.6 defect, and the same class as the 0.14.0 one.
+  const start = principles.indexOf("**Publishing a shared transition.**");
+  const end = principles.indexOf("**Several hands in one working folder.**");
+  assert.ok(start >= 0 && end > start, "the blockade paragraph must be findable by its two headings");
+  const blockade = principles.slice(start, end);
+  for (const kind of [/a layer-opening marker \(it mints numbers\)/, /`re-split pending` marker/,
+    /`maintenance\s+routing pending`/, /`product\s+re-run pending`/, /`capability closing` marker/,
+    /`capability note`/, /`audit requested`/, /`retrospective requested`/, /`evidence-wait`/,
+    /`evidence-finalizing`/, /verification-state lines/]) {
+    assert.match(blockade, kind, "unnamed in the blockade paragraph, so this kind has no disposition");
+  }
+  // the continuing side is a closed set of four, never a predicate a literal reader can extend
+  assert.match(blockade, /Those four are the whole set of journal appends that continue during a\s+blockade/);
+  assert.doesNotMatch(blockade, /journal appends that mint no number and make no claim/);
 });
 
 // The one canon range an entry skill may leave unread. Everything below keeps that gate
@@ -1784,6 +1801,63 @@ test("no rule a capsule-less project still needs has drifted inside the capsule 
   }
 });
 
+// Every skill that calls the capsule tool names it by a `<plugin root>` placeholder, and the
+// canon that resolves that placeholder lives in `baseline-predicates.md` \u2014 the file the entry
+// call decides the read range of, and a file `split` and `work` never read at all. So each
+// call site carries the resolution itself; without it a model guesses a path, and a guess
+// that misses is silent: the entry reads a capsule-bearing project as capsule-less, and
+// split and work select no capsule while the card runs on regardless.
+// The two resolution clauses are identical everywhere (one concept, one word); only the exit
+// differs, because each site loses a different thing when the tool cannot be reached.
+const PLUGIN_ROOT_RESOLUTION = {
+  en: "`<plugin root>` is the folder two levels above this loaded file, and in a runtime that sets `${CLAUDE_PLUGIN_ROOT}` that variable names the same folder.",
+  ko: "`<\uD50C\uB7EC\uADF8\uC778 \uB8E8\uD2B8>`\uB294 \uC9C0\uAE08 \uC5F4\uC5B4 \uB454 \uC774 \uD30C\uC77C\uC5D0\uC11C \uB450 \uB2E8\uACC4 \uC704 \uD3F4\uB354\uC774\uACE0, `${CLAUDE_PLUGIN_ROOT}`\uB97C \uC124\uC815\uD558\uB294 \uB7F0\uD0C0\uC784\uC5D0\uC11C\uB294 \uADF8 \uBCC0\uC218\uAC00 \uAC19\uC740 \uD3F4\uB354\uB97C \uAC00\uB9AC\uD0A8\uB2E4.",
+};
+const PLUGIN_ROOT_EXIT_PREFIX = {
+  en: "When the platform gives this file no source path, or the tool cannot be run there, report that in one line and ",
+  ko: "\uD50C\uB7AB\uD3FC\uC774 \uC774 \uD30C\uC77C\uC758 \uC6D0\uBCF8 \uACBD\uB85C\uB97C \uC8FC\uC9C0 \uC54A\uAC70\uB098 \uADF8 \uC790\uB9AC\uC5D0\uC11C \uB3C4\uAD6C\uB97C \uC2E4\uD589\uD560 \uC218 \uC5C6\uC73C\uBA74 \uD55C \uC904\uB85C \uBCF4\uACE0\uD558\uACE0 ",
+};
+// entry: the gate falls back to reading the whole canon. split: nothing reaches `Read first`.
+// work: no body is opened. Each is the canonical disposition for that site, not a new rule.
+const CAPSULE_TOOL_CALL_SITES = [
+  ["skills/resume/SKILL.md", "en", "take the every-other-output branch below."],
+  ["skills/verify/SKILL.md", "en", "take the every-other-output branch below."],
+  ["skills/split/SKILL.md", "en", "put no capsule path on `Read first`."],
+  ["skills/work/SKILL.md", "en", "open no capsule body."],
+  ["skills/resume/SKILL_ko.md", "ko", "\uC544\uB798 \u300C\uADF8 \uBC16\uC758 \uBAA8\uB4E0 \uCD9C\uB825\u300D \uAC08\uB798\uB97C \uD0C4\uB2E4."],
+  ["skills/verify/SKILL_ko.md", "ko", "\uC544\uB798 \u300C\uADF8 \uBC16\uC758 \uBAA8\uB4E0 \uCD9C\uB825\u300D \uAC08\uB798\uB97C \uD0C4\uB2E4."],
+  ["skills/split/SKILL_ko.md", "ko", "\uCEA1\uC290 \uACBD\uB85C\uB97C `\uC77D\uC744 \uAC83`\uC5D0 \uB123\uC9C0 \uC54A\uB294\uB2E4."],
+  ["skills/work/SKILL_ko.md", "ko", "\uCEA1\uC290 \uBCF8\uBB38\uC744 \uC5F4\uC9C0 \uC54A\uB294\uB2E4."],
+];
+
+test("every capsule-tool call site resolves <plugin root> and names its own failure exit", () => {
+  // line wrapping differs per file, so compare on flattened whitespace
+  const flat = (text) => text.replace(/\s+/g, " ");
+  const called = new Set();
+  for (const [relative, language, exit] of CAPSULE_TOOL_CALL_SITES) {
+    const text = flat(fs.readFileSync(path.join(root, relative), "utf8"));
+    assert.ok(/project-knowledge\.mjs (presence|project|disputes|select)/.test(text),
+      `${relative}: listed as a call site but calls no capsule subcommand`);
+    assert.ok(text.includes(PLUGIN_ROOT_RESOLUTION[language]),
+      `${relative}: must resolve <plugin root> at the call site, in the same words as every other site`);
+    assert.ok(text.includes(PLUGIN_ROOT_EXIT_PREFIX[language] + exit),
+      `${relative}: must name its own exit for a tool it cannot reach`);
+    called.add(relative);
+  }
+  // no skill may call the tool from outside this table \u2014 a new caller without the resolution
+  // is exactly the defect this check exists for
+  for (const dir of fs.readdirSync(path.join(root, "skills"))) {
+    for (const name of ["SKILL.md", "SKILL_ko.md"]) {
+      const relative = `skills/${dir}/${name}`;
+      const full = path.join(root, relative);
+      if (!fs.existsSync(full)) continue;
+      const placeholder = /<plugin root>|<\uD50C\uB7EC\uADF8\uC778 \uB8E8\uD2B8>/.test(fs.readFileSync(full, "utf8"));
+      assert.equal(placeholder, called.has(relative),
+        `${relative}: uses the <plugin root> placeholder but is not in CAPSULE_TOOL_CALL_SITES`);
+    }
+  }
+});
+
 test("both entry skills gate the capsule range on the tool, and fall to reading on anything else", () => {
   for (const [skill, language, gate] of [
     ["resume", "SKILL.md", CAPSULE_GATE["skills/principles/baseline-predicates.md"]],
@@ -1795,6 +1869,7 @@ test("both entry skills gate the capsule range on the tool, and fall to reading 
     const text = fs.readFileSync(path.join(root, "skills", skill, language), "utf8");
     // the machine, not the model, computes the predicate
     assert.match(text, /project-knowledge\.mjs presence/, label);
+    // reaching that machine is held by the call-site check above, for every caller at once
     // the entry sentence names the same boundary the canon carries, so a rename breaks here
     assert.ok(text.includes(gate.open), `${label}: must name ${gate.open}`);
     assert.ok(text.includes(gate.close), `${label}: must name ${gate.close}`);

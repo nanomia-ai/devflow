@@ -8,7 +8,11 @@ description: Resume and domain entry. Restores a new session from disk and conti
 First read the canonical rules (`../principles/SKILL.md`), canonical state predicates
 (`../principles/state-predicates.md`), and canonical verification predicates
 (`../principles/verification-predicates.md`). Then run
-`node <plugin root>/scripts/project-knowledge.mjs presence`. On output
+`node <plugin root>/scripts/project-knowledge.mjs presence`. `<plugin root>` is the folder
+two levels above this loaded file, and in a runtime that sets `${CLAUDE_PLUGIN_ROOT}` that
+variable names the same folder. When the platform gives this file no source path, or the
+tool cannot be run there, report that in one line and take the every-other-output branch
+below. On output
 `capsuleArtifacts=absent`, read the canonical capability knowledge baseline predicates
 (`../principles/baseline-predicates.md`) with the range from `## Domain knowledge capsules`
 up to but not including `## Metadata and freshness` left out. On every other output, read

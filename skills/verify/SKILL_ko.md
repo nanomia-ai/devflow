@@ -10,7 +10,11 @@ description: 검증. 능력 단위·제품 단위로 실제 실행을 통해 수
 (`../principles/verification-predicates.md`)·`devflow/project/product.md`·
 `devflow/project/arch.md`·`devflow/project/code-style.md`를 통독한다. 존재하면
 `devflow/project/glossary.md`와 `devflow/journal.md`도 각각 통독한다. 이어
-`node <플러그인 루트>/scripts/project-knowledge.mjs presence`를 실행한다. 출력이
+`node <플러그인 루트>/scripts/project-knowledge.mjs presence`를 실행한다.
+`<플러그인 루트>`는 지금 열어 둔 이 파일에서 두 단계 위 폴더이고, `${CLAUDE_PLUGIN_ROOT}`를
+설정하는 런타임에서는 그 변수가 같은 폴더를 가리킨다. 플랫폼이 이 파일의 원본 경로를 주지
+않거나 그 자리에서 도구를 실행할 수 없으면 한 줄로 보고하고 아래 「그 밖의 모든 출력」
+갈래를 탄다. 출력이
 `capsuleArtifacts=absent`이면 능력 지식 기준선 판정 정본
 (`../principles/baseline-predicates.md`)을 `## 도메인 지식 캡슐`부터
 `## 메타데이터와 신선도` 직전까지를 빼고 읽는다. 그 밖의 모든 출력에서는 같은 정본을
