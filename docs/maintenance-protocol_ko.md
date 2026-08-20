@@ -13,7 +13,7 @@
 조건 적용이 불확실하면 읽기를 늘리고, 조용히 줄이지 않는다.
 
 `skills/**`를 바꾸지 않는 유지보수 구조 작업은 스킬의 결함을 발견해도 고치지 않는다. 정확한
-경로·실패 장면·관련 결정을 보고하고 별도 요청으로 넘긴다. README, CHANGELOG 전체, 여러 라운드,
+경로·실패 장면·관련 결정을 보고하고 별도 요청으로 넘긴다. CHANGELOG 전체, 여러 라운드,
 blueprint 전부는 새 세션의 기본 온보딩 집합이 아니다. 필요한 좌표가 생겼을 때만 연다.
 
 ## 2. 이중 언어와 문서 정합성
@@ -27,7 +27,6 @@ skills/principles/{state-predicates,verification-predicates,baseline-predicates,
 skills/work/reviewer_ko.md ↔ reviewer.md
 skills/verify/{verifier,auditor,retrospector}_ko.md ↔ 같은 이름의 .md
 codex/AGENTS-devflow_ko.md ↔ AGENTS-devflow.md
-README_ko.md ↔ README.md
 docs/{design,design-decisions,design-backlog,maintenance-protocol}_ko.md ↔ 같은 이름의 .md
 docs/rounds/v0.10.0/proposal_ko.md ↔ proposal.md
 docs/rounds/v0.11.0/report_ko.md ↔ report.md
@@ -47,8 +46,8 @@ docs/rounds/v0.9.21/report_ko.md ↔ report.md
 
 외부 기여자는 영어를 먼저 고칠 수 있으나, 관리자가 다음 릴리스 전에 한국어 원본을 역동기화한다.
 한국어는 `_ko.md`, 두 한국어 전용 상시 수단, 쌍이 없는 라운드 기록, 그리고 이 문서의 용어표에만
-산다. 영어 배포물에는 한국어가 없어야 한다. 예외는 `README.md`의 언어 전환 링크 `[한국어]`
-한 줄뿐이다. `node --test "scripts/*.test.js"`가 한국어 0건과 한영 구조 대응을 검사한다.
+산다. 영어 배포물에는 한국어가 한 줄도 없어야 하며 예외는 없다.
+`node --test "scripts/*.test.js"`가 한국어 0건과 한영 구조 대응을 검사한다.
 
 ## 3. 설계 의도와 기록의 착지
 
@@ -61,7 +60,6 @@ docs/rounds/v0.9.21/report_ko.md ↔ report.md
 | 미채택 관찰·후보 | `docs/design-backlog_ko.md` | 증거·긴장·다시 볼 조건 |
 | 한 라운드의 측정·판정 | `docs/rounds/<version>/report_ko.md` | 실행 증거·한계·미착지 항목 |
 | 실제 배포 결과 | `CHANGELOG.md` | 무엇·왜·파일 |
-| 사람용 설명 | `README_ko.md` | 도입 판단·사용법·신뢰 경계 |
 | 런타임 규칙 | `skills/**` | 별도 명시적 스킬 변경에서만 |
 
 수동 `CURRENT.md`, 자유 형식 메모층, 종합 요약 파일은 만들지 않는다. 현재 위치는 Git, manifest,
@@ -159,22 +157,9 @@ audit의 채택 소견은 그 라운드가 끝나기 전에 승격하거나 각 
 
 ## 6. README
 
-스킬은 문자 실행용이고 README는 사람이 도입을 판단하는 문서다. 다음 문체를 지킨다.
-
-- 명사 복합어보다 동사를 쓴다.
-- em dash는 제목과 부제, 용어와 정의 사이에서만 쓴다. 문장 호흡에는 마침표를 쓴다.
-- 굵은 글씨는 절이 기대는 주장에만 쓴다.
-- 문장 길이를 섞는다.
-- 한국어는 번역투(`~에 대하여`, `가지고 있다`, `판단되어진다`, `~에 의해` 수동)를 쓰지 않는다.
-
-**빼되 새 상투어를 넣지 않는다.** 사실·수치·정본 용어는 byte 단위로 그대로 둔다. **국소적으로 고친다.** 문서
-절반보다 많이 바뀌면 의미가 흔들린 것이므로 멈춘다. README가 스킬 개념을 쉬운 말로 설명할 수는
-있지만 같은 개념의 두 번째 이름을 만들지 않는다.
-
-산문을 바꾸면 `—`, `**`, 관료적 복합어의 전후 개수를 그 변경의 report에 기록한다. 같은 변경이 이미
-CHANGELOG를 요구할 때에는 거기에도 싣는다. README만 바꾼 문서 작업은 이 이유로 CHANGELOG를 만들지
-않는다. 오탈자나 링크 경로는 산문 변경이 아니라고 기록한다. 외부 taxonomy는 인용만 하고 텍스트를
-들여오려면 먼저 허락받는다.
+README는 사람의 문서이고, 이 프로토콜에는 그것을 다루는 절차가 없다. 문체 규칙도 전후 개수도
+CHANGELOG 연동도 AI가 실행할 일이 아니다 — 무엇을 언제 쓸지는 소유자가 직접 정한다. 경계 자체는
+`docs/design_ko.md`가 진다.
 
 ## 7. 릴리스와 설치
 
@@ -201,11 +186,10 @@ CHANGELOG 맨 위에 날짜·무엇·왜·파일을 적는다. 약 60줄 안에�
 - [ ] `_ko` 먼저 수정, 고정 용어 적용, 한영 구조·수치 대응 확인
 - [ ] audit가 있었다면 채택 소견 승격 또는 미승격 이유 확인
 - [ ] 감사 지침 §2 기준과 §5 종료 조건으로 비례 검증 보고
-- [ ] README 산문 변경 시 전후 개수, 링크·오탈자면 그 사실 기록
 - [ ] skill·hook·installer 변경 시 Codex 로컬 설치 snapshot 갱신 여부 기록
 - [ ] 두 플랫폼의 현재 네이티브 skills·plugins·hooks 채널 재확인
 - [ ] 배포 artifact 변경 시 CHANGELOG와 버전, 문서만이면 둘 다 없음
-- [ ] 생성·삭제·이동 시 문서 지도·참조·테스트·installer·README 좌표 훑기
+- [ ] 생성·삭제·이동 시 문서 지도·참조·테스트·installer 좌표 훑기
 - [ ] `skills/**`가 범위 밖이면 기준 commit 대비 diff 0
 
 ## 9. 고정 용어표

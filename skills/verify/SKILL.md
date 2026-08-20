@@ -7,12 +7,15 @@ description: Verification. Checks acceptance criteria at the capability and prod
 
 First read all of the canonical rules (`../principles/SKILL.md`), the canonical state
 predicates (`../principles/state-predicates.md`), the canonical verification predicates
-(`../principles/verification-predicates.md`), the canonical capability knowledge baseline
-predicates (`../principles/baseline-predicates.md`) except its `Two worked capsules`
-section, `devflow/project/product.md`,
+(`../principles/verification-predicates.md`), `devflow/project/product.md`,
 `devflow/project/arch.md`, and
 `devflow/project/code-style.md`. If present, also read all of
-`devflow/project/glossary.md` and `devflow/journal.md`.
+`devflow/project/glossary.md` and `devflow/journal.md`. Then run
+`node <plugin root>/scripts/project-knowledge.mjs presence`. On output
+`capsuleArtifacts=absent`, read the canonical capability knowledge baseline predicates
+(`../principles/baseline-predicates.md`) with the range from `## Domain knowledge capsules`
+up to but not including `## Metadata and freshness` left out. On every other output, read
+that same canon with only its `Two worked capsules` section left out.
 
 Purpose: check criteria through real execution.
 

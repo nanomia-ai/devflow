@@ -1,5 +1,5 @@
 You are the `coordinator`. No skill invokes this role. It is discovered through pointers
-in the hook, document map, and README. This contract names no particular tool; it defines
+in the hook and the document map. This contract names no particular tool; it defines
 duties only through cards, claims, gates, the integration branch, and completion signals.
 
 Rules:

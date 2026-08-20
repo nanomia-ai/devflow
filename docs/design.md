@@ -78,7 +78,6 @@ judged from source and repository checks.
 | `docs/usecase-matrix_ko.md` | standing instrument — the enumerated shapes of use | when changing `skills/**` |
 | `docs/rounds/<version>/` | round record — request, handoff, plan, report, audit | the previous one only, when opening a round |
 | `docs/blueprints/` | snapshot — versioned blueprints kept per release (the target-project file system, among others). An existing snapshot is never edited | when a baseline is needed to compare a structure against, or roll it back to |
-| `README.md` | for people — what this is and how to use it | users read it |
 | `CHANGELOG.md` | history — what shipped in which version, 0.10.0 onward. Deploy changes only | when tracing when a shipped behavior changed |
 | `docs/changelog-archive.md` | history — shipped changes before 0.10.0 | when tracing something older than 0.10.0 |
 | `skills/principles/SKILL.md` | canonical rules — what the runtime executes | every session devflow runs in |
@@ -88,6 +87,13 @@ judged from source and repository checks.
 The two standing instruments are opened by the session changing this repository **itself**,
 not briefed in by the owner. What makes a session open them is fixed by the wiring table in
 `AGENTS.md`.
+
+`README.md` and `README_ko.md` are **a person's documents, and they live outside the AI's read
+set.** What skills, tools, and procedures reach is `skills/`, `scripts/`, `hooks/`, `codex/`,
+`docs/`, and the manifests; README is beyond that edge — not read, not updated, not used as
+grounds for a judgment. The owner decides directly what goes in one and when. **This line holds
+after README returns** — what returns is the file, not the wiring. Right now the files
+themselves are gone and git keeps the last version.
 
 Round records moved out of a flat `docs/` into `docs/rounds/<version>/` on 2026-08-13 and
 their filenames became roles (handoff, plan, report, audit). Sentences in `CHANGELOG.md` that
@@ -110,9 +116,10 @@ length is not written into the prose.
 - **`Read first` opens all of it** — that is the device that replaces searching.
 - **verify, audit and retrospective at closure** — that is the moment knowledge lands in the capability document.
 
-The places devflow **declares it does not guard** are a separate list, and the "What this
-does not cover" table in `README.md` is its canon. A proposal to remove a row from that
-table passes the same gate as overturning a decision here.
+The places devflow **declares it does not guard** are a separate list, and that list lives in a
+person's document — that is, beyond the boundary above. The owner decides what enters and
+leaves it. That such a decision carries the same weight as overturning a decision here is
+unchanged, and the owner is the one who weighs it.
 
 ## Decision index — read all of it, then state that this change moves none of them
 
@@ -136,6 +143,7 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-57 | The flat Codex prompt channel is removed; the plugin cache carries the companions | Identity, packaging, platforms | v0.13.0 | active |
 | DD-71 | Repository maintenance reads the whole design intent first, and AGENTS conditionally routes detailed procedure; history is not onboarding | Identity, packaging, platforms | v0.16.2 | active |
 | DD-72 | A versioned implementation with no named document role leaves one report_ko.md as its default round record | Identity, packaging, platforms | v0.16.2 | active |
+| DD-79 | README is a person's document and lives outside the AI's read set — not read, not updated, not used as grounds for a judgment, and the line holds after README returns | Identity, packaging, platforms | v0.18.5 | active |
 | DD-08 | TDD procedure not adopted | Verification and roles | origin | active |
 | DD-17 | The terms of the review and verification roles live in the skill text — agents/*.md is Claude packaging | Verification and roles | v0.9.5 | active |
 | DD-19 | Role contracts are one companion file beside each skill (reviewer.md · verifier.md); every platform runs them by briefing a clean context with the file verbatim — no Claude agent registration | Verification and roles | v0.9.6 | active |
@@ -192,6 +200,7 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-75 | Record succession — one successor changes the present; stale evidence cascades; conflicts are preserved then merged | The knowledge layer and capability documents | v0.18.0 | replaced by DD-77 (v0.18.2) |
 | DD-76 | Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute | The knowledge layer and capability documents | v0.18.1 | active, partly corrected by DD-77 (v0.18.2) |
 | DD-77 | A document speaks only of the present — an updated concept overwrites that concept's place, and the dropped direction lives beside that conclusion as a present fact | The knowledge layer and capability documents | v0.18.2 | active |
+| DD-78 | One canon range goes unread only when a tool proves that range has no subject — the machine cuts, it reads HEAD and the working tree both, and every other answer collapses to the full read | The knowledge layer and capability documents | v0.18.5 | active |
 | DD-10 | No retroactive tree records (brownfield) | Brownfield and entry | origin | active |
 | DD-20 | Brownfield entry is its own skill, adopt — split out of arch | Brownfield and entry | v0.9.10 | active |
 | DD-26 | Brownfield and layer transitions have explicit disk states, preserving their meaning across interruption | Brownfield and entry | v0.9.21 | active |

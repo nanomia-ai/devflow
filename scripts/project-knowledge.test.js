@@ -520,3 +520,93 @@ test("one capability's projection survives another capability's malformed capsul
   assert.equal(global.status, 1);
   assert.match(global.stderr, /09-shipping[\s\S]*coordinate exceeds/);
 });
+
+// --- presence: the one predicate an entry skill may gate a canon section on -------------
+
+function repo(t) {
+  const root = fixture(t);
+  execFileSync("git", ["init", "-q"], { cwd: root });
+  execFileSync("git", ["config", "user.name", "Fixture"], { cwd: root });
+  execFileSync("git", ["config", "user.email", "fixture@example.test"], { cwd: root });
+  return root;
+}
+
+function commit(root, message = "state") {
+  execFileSync("git", ["add", "-A"], { cwd: root });
+  execFileSync("git", ["commit", "-q", "-m", message], { cwd: root });
+}
+
+function presenceOf(root) {
+  const result = run(root, "presence");
+  assertOk(result);
+  const match = /capsuleArtifacts=(absent|present|unknown)/.exec(result.stdout);
+  assert.ok(match, result.stdout);
+  return { value: match[1], line: result.stdout.trim() };
+}
+
+test("presence answers absent only when no capsule artifact exists in HEAD or the working tree", (t) => {
+  const root = repo(t);
+  fs.mkdirSync(path.join(root, "devflow", "project", "capabilities"), { recursive: true });
+  fs.writeFileSync(path.join(root, "seed.txt"), "seed\n", "utf8");
+  commit(root, "seed");
+  assert.equal(presenceOf(root).value, "absent", "empty capabilities folder");
+
+  // A capability document is a file beside the capsule folders; it is not a capsule artifact.
+  fs.writeFileSync(path.join(root, "devflow", "project", "capabilities", "02-property.md"), "# 02\n", "utf8");
+  commit(root, "capability document");
+  assert.equal(presenceOf(root).value, "absent", "capability document only");
+
+  // The tool never opens a body: absent and present alike report bodies=0.
+  assert.match(presenceOf(root).line, /bodies=0/);
+});
+
+test("presence reports present from the working tree alone and from HEAD alone", (t) => {
+  const worktreeOnly = repo(t);
+  fs.writeFileSync(path.join(worktreeOnly, "seed.txt"), "seed\n", "utf8");
+  commit(worktreeOnly, "seed");
+  writeCapsule(worktreeOnly);
+  assert.equal(presenceOf(worktreeOnly).value, "present", "never committed, still real");
+
+  const headOnly = repo(t);
+  writeCapsule(headOnly);
+  commit(headOnly, "capsule");
+  fs.rmSync(path.join(headOnly, "devflow", "project", "capabilities", "02-property"),
+    { recursive: true, force: true });
+  assert.equal(presenceOf(headOnly).value, "present", "deleted here, still in HEAD");
+});
+
+test("presence counts a capsule folder whose name the capability pattern rejects", (t) => {
+  const root = repo(t);
+  const base = path.join(root, "devflow", "project", "capabilities", "property");
+  fs.mkdirSync(base, { recursive: true });
+  fs.writeFileSync(path.join(base, "K-001-settlement.md"), "# body\n", "utf8");
+  commit(root, "odd folder");
+
+  // This is the v0.18.4 scene: the projection walks past a folder it cannot name-match and
+  // answers zero. presence must not inherit that confidence.
+  const projected = run(root, "project");
+  assertOk(projected);
+  assert.match(projected.stdout, /capsules=0/, "project still reports zero over the skipped folder");
+  assert.equal(presenceOf(root).value, "present", "presence sees the artifact project skipped");
+
+  const empty = repo(t);
+  fs.mkdirSync(path.join(empty, "devflow", "project", "capabilities", "02-property"), { recursive: true });
+  assert.equal(presenceOf(empty).value, "present", "an empty capsule folder is not proof of absence");
+});
+
+test("presence falls to unknown on every uncertainty, and unknown is not absent", (t) => {
+  const notARepository = fixture(t);
+  fs.mkdirSync(path.join(notARepository, "devflow", "project", "capabilities"), { recursive: true });
+  assert.equal(presenceOf(notARepository).value, "unknown", "no git history to read");
+
+  const notADirectory = repo(t);
+  fs.mkdirSync(path.join(notADirectory, "devflow", "project"), { recursive: true });
+  fs.writeFileSync(path.join(notADirectory, "devflow", "project", "capabilities"), "x\n", "utf8");
+  commit(notADirectory, "capabilities is a file");
+  assert.equal(presenceOf(notADirectory).value, "unknown", "capabilities is not a directory");
+
+  // An unborn HEAD is proof, not uncertainty: nothing has ever been committed.
+  const unborn = repo(t);
+  fs.mkdirSync(path.join(unborn, "devflow", "project", "capabilities"), { recursive: true });
+  assert.equal(presenceOf(unborn).value, "absent", "a repository with no commit holds no capsule");
+});

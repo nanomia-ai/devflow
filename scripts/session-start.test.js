@@ -34,7 +34,7 @@ function runHook(root, startDirectory = root) {
 }
 
 test("a repository without devflow state produces no hook output", (t) => {
-  const root = makeProject(t, { "README.md": "# Fixture\n" }, { git: true });
+  const root = makeProject(t, { "NOTES.md": "# Fixture\n" }, { git: true });
   assert.equal(runHook(root), "");
 });
 

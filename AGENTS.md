@@ -14,7 +14,7 @@ that uses devflow. A cheap edit here can be an expensive behavioral change.
    the latest five commit subjects with changed paths. Read only the newest CHANGELOG entry.
    From the greatest numeric-version round below the current version, read the shipped/result
    and limitations/carry-forward sections; if that legacy report has no such sections, read
-   that one report in full. Do not use README, the whole CHANGELOG, all rounds, or all
+   that one report in full. Do not use the whole CHANGELOG, all rounds, or all
    blueprints as onboarding.
 3. Fix the requested write scope as exact paths. Open only the sections that the wiring
    table below triggers. When uncertain whether a condition applies, expand the read set;
@@ -41,7 +41,6 @@ whole by default.
 | running an independent pass in a separate context | `docs/audit-guideline_ko.md` §8 verbatim |
 | opening a folder under `docs/rounds/` to create, revise, implement, review, or audit its records — not the bounded current-state read in Entry gate 2 | previous numeric-version round report and its unlanded audit findings; maintenance protocol §5 |
 | writing or revising a round plan | that round's request and handoff when present, read-only; maintenance protocol §5 |
-| changing README prose | maintenance protocol §6 |
 | changing a deploy artifact or bumping version | maintenance protocol §7–§8; for a version bump, also §5, the full audit guideline, and matrix §6 |
 | deciding where new knowledge belongs | maintenance protocol §3 |
 
@@ -62,7 +61,7 @@ maintenance protocol §4 stands in their place.
 - **One fact, one durable home.** Do not create `CURRENT.md`, an omnibus summary, a free-form
   note layer, or another skill map. Git and manifests own current facts; design owns intent;
   decisions own reasons; backlog owns unadopted observations; rounds own evidence;
-  CHANGELOG owns shipped history; README is for people; skills own runtime behavior.
+  CHANGELOG owns shipped history; skills own runtime behavior.
 - **Round records are immutable moments.** Edit one only when the owner asks to revise that
   exact role. Outside the versioned-implementation report fixed by maintenance protocol §5,
   a new request, handoff, plan, report, or audit is not implied by another.

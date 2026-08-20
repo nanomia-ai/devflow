@@ -153,6 +153,52 @@ an existing role smaller than report can preserve the same evidence without loss
 unnamed versioned implementation, or if a real repair release conflicts with the rule that
 keeps its record in the preceding round.
 
+### DD-79 · README is a person's document and lives outside the AI's read set (v0.18.5)
+
+Subject: Identity, packaging, platforms | Introduced: v0.18.5 | State: active
+
+Observed problem: the owner had instructed **earlier** that README not be consulted, and the
+wiring stayed alive anyway. The instruction was recorded in no decision, so it quietly grew
+back round after round. A sweep found all three directions still live — the canon handed a
+residual risk to a "README guideline" (`skills/principles/SKILL.md:557`), the role contract
+listed README as one of three paths by which it is discovered
+(`skills/principles/coordinator.md:2`), maintenance protocol §6 taught an AI how to **edit**
+README prose, test assertions read README content as grounds for a judgment, and two matrix
+cells set "the guideline exists in README" as a verification condition. As skill development
+grew frequent, citing and updating README became a repeated cost on every pass.
+
+Desired behavior: README is a document a person reads, and no AI work is affected by it. The
+owner decides directly what goes in it and when.
+
+Chosen boundary: what skills, tools, and procedures reach is `skills/`, `scripts/`, `hooks/`,
+`codex/`, `docs/`, and the manifests; README is beyond that edge — not read, not updated, not
+used as grounds for a judgment. **This line holds after README returns.** What returns is the
+file, not the wiring.
+
+Why the boundary is needed: written as a "suspension", the next session reads it as "the
+wiring returns when the file does", and that is precisely the path by which it grew back this
+time. Deletion alone is not enough either — deletion removes a file, it does not draw a line.
+Only a line keeps the wiring from following the file back. One cost is recorded honestly: the
+canon of the list of places devflow **declares it does not guard** now sits outside this line.
+Moving that list somewhere an AI reads looks like the answer, but that builds a new home, and
+the owner asked for no move. The list stays the owner's.
+
+Rejected alternative: **move the table into `docs/design.md`** — it builds a new home for
+people-facing prose, and "one fact, one home" forbids the copy. **Leave §6 marked as
+suspended** — rejected for the reason above. **State the same boundary in `AGENTS.md` too** —
+it charges the minimal entry gate every session and puts one fact in two places. The boundary
+has one home, `docs/design.md`.
+
+Affected coordinates: `docs/design{,_ko}.md` (the boundary paragraph, the invariants section,
+the document map), `AGENTS.md` (the wiring row, the one-fact-one-home list, the onboarding
+exclusion list), `docs/maintenance-protocol{,_ko}.md` (§1, §2's pair list and Korean
+exception, §3's landing table, §6, §8's checklist), `skills/principles/SKILL{,_ko}.md`,
+`skills/principles/coordinator{,_ko}.md`, `scripts/repository-invariants.test.js`,
+`scripts/session-start.test.js`, `docs/usecase-matrix_ko.md` cells 3.4 and A20, and
+`docs/design-backlog{,_ko}.md`.
+Revisit when: the owner decides to use README as an input to AI work again. What is reverted
+then is this line, not a file.
+
 ### Rejected under this subject
 
 - **[DR-03 · v0.7.0]** **Journal injection by the hook** — duplicates what resume reads.
@@ -815,6 +861,62 @@ tombstone), the product, arch, design, split, work, resume, adopt, and verify pa
 Revisit when: keeping reasons inside the owning document is observed pushing that owning document
 out of its budget in a real project. Or when a contradiction is actually observed because the
 place of "the same concept" could not be found and a copy stayed.
+
+### DD-78 · One canon range goes unread only when a tool proves that range has no subject (v0.18.5)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.18.5 | State: active
+
+Observed problem: resume's entry pays 147,921 B of canon before it reads one byte of the
+project. Two design arms decomposed that 147,921 B section by section without knowing about
+each other and reached the same conclusion — in the whole canon there is exactly one range a
+disk condition can safely cut, the capsule contract. The reason is placement, not size: the
+canon is grouped on a **subject axis** and disk state hangs on a **state axis**. The two axes
+are skewed, so the rules most conditions point at are not a contiguous range (`evidence-wait`
+is scattered over 12 places inside the canon and its recovery rules are one 40-row table). A
+condition can only cut a contiguous range.
+
+Desired behavior: a project with no capsule does not read the capsule contract. In every state
+where a capsule may exist, the read stays exactly what it is today.
+
+Chosen boundary: four parts. ① **The machine does the cutting.** The model does not look at
+disk and decide — `project-knowledge.mjs presence` answers in one line and the skill reads only
+that word. ② **Fail-closed.** `absent` alone closes the range; `present`, `unknown`, and a
+nonzero exit all collapse to the full read. ③ **HEAD and the working tree both** are read — a
+capsule committed on the integration branch is real while this checkout has not written it yet,
+and a capsule deleted here is still in HEAD. ④ **Not one byte of canon moves.** The range is
+not split and no new document appears.
+
+Why the boundary is needed: the only realistic failure of this gate is "needed it, never read
+it", and it has two paths. One is a predicate that is confidently wrong — v0.18.4 showed that
+as a real artifact. `project` walks silently past a folder whose name misses the pattern and
+reports `capsules=0` (reproduce: put a capsule in such a folder and `project` still answers
+`capsules=0`). So `presence` does not **count** capsules; it reads only the **existence** of a
+direct child directory under capabilities — whatever its name, and `present` even when the
+folder is empty. The other path is a later generation writing a rule a capsule-less project
+still executes into this range, and an enumerated seal test holds that place. Both paths have
+tests.
+
+Rejected alternative: **the hook judges and injects it.** The predicate would have to live in
+the hook (JS) and in the skill sentence (the skill must run without the hook), and when the two
+judgments diverge they diverge with no error. DD-05 and DD-29 stand, and so does DR-03 (journal
+injection by the hook — it duplicates what resume reads). **Use the existing `project` output's
+`capsules=`** — the measurement above answers that this count cannot be the predicate.
+**Issue a certificate (authority id and fingerprint) and re-check it before the report** — it
+narrows the race between judgment and report, but a session that created a capsule in that
+window did not have its capsule missed; the capsule did not exist yet. It spends a new
+mechanism where the residual risk is not what it looks like. **This is not a re-proposal of
+DR-44** (splitting canon per consumer) — nothing moves, so its rejection reason needs no
+refutation and got none.
+
+Honest accounting: this gate's ceiling is **11,025 B (7.45%)**. 95.0% of the entry is the rule
+body of three functions a competitor does not perform at all — interruption recovery,
+concurrency safety, and the knowledge lifecycle — and this angle does not shrink it.
+
+Affected coordinates: the entry paragraph of `skills/resume/SKILL{,_ko}.md`, the entry paragraph
+of `skills/verify/SKILL{,_ko}.md`, `presence` in `scripts/project-knowledge.mjs`,
+`scripts/project-knowledge.test.js`, and `scripts/repository-invariants.test.js`.
+Revisit when: a scene is actually observed where a capsule-less project needs a rule from the
+capsule contract. Or when measurement finds a second range that cuts the same way.
 
 ### Rejected under this subject
 

@@ -15,6 +15,52 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.18.5 — 2026-08-20 — a project with no capsule stops paying for the capsule contract, and README becomes a line the AI does not cross
+
+One conditional read, and one boundary drawn where a repeated instruction had no decision to stand on.
+
+The entry read is now conditional in exactly one place. `resume` and `verify` run
+`project-knowledge.mjs presence` before they read the capability knowledge baseline predicates.
+On the single answer `capsuleArtifacts=absent` they read that canon with the range from
+`## Domain knowledge capsules` up to but not including `## Metadata and freshness` left out;
+on `present`, on `unknown`, and on a nonzero exit they read what they read before. Measured
+end to end on fixtures, resume's entry falls from 147,921 B to 136,896 B where no capsule
+exists and rises to 148,187 B where one does — a ceiling of 11,025 B, 7.45%. Not one byte of
+canon moved and no document was added. `presence` is a new body-free subcommand rather than
+the existing `project` count, because `project` walks past a folder whose name misses the
+capability pattern and answers `capsules=0` over a capsule that is sitting on disk — the
+v0.18.4 defect, still reproducible, now covered by a test. It reads HEAD as well as the
+working tree, so a capsule committed on the integration branch and a capsule deleted here both
+read as present, and every uncertainty answers `unknown`. Seven tests hold the gate: the
+boundary headings exist exactly once in both languages, ten capability-document rules a
+capsule-less project still executes are proven to sit outside the range, and all four entry
+sentences name the same boundary the canon carries.
+
+README is now a boundary rather than a file that happens to be missing. DD-79 draws the line:
+README is a person's document and lives outside the AI's read set — what skills, tools, and
+procedures reach is `skills/`, `scripts/`, `hooks/`, `codex/`, `docs/`, and the manifests, and
+README is beyond that edge, not read, not updated, not used as grounds for a judgment. The
+line holds after README returns, because what returns is the file and not the wiring. The
+owner had given this instruction before and the wiring grew back for want of a decision to
+record it, so all three directions were swept and cut: the canon no longer hands the
+two-terminals-on-one-card risk to a "README guideline" and the `coordinator` contract no
+longer lists README among the pointers that find it (its sentence already carried the reason
+and the owner, so only the pointer went); maintenance protocol §6 no longer teaches an AI to
+edit README prose and now states that the protocol holds no procedure for it; the test
+assertions that read README content are gone, and with them the Korean allowance they carried,
+so English deploy artifacts now permit zero Korean lines with no exception. `README.md` and
+`README_ko.md` are deleted and git keeps the last version. One cost is recorded rather than
+hidden: the canon of what devflow declares it does not guard sits outside this line and stays
+the owner's.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `skills/resume/SKILL{,_ko}.md`;
+`skills/verify/SKILL{,_ko}.md`; `skills/principles/SKILL{,_ko}.md`;
+`skills/principles/coordinator{,_ko}.md`; `scripts/project-knowledge.mjs`;
+`scripts/project-knowledge.test.js`; `scripts/repository-invariants.test.js`;
+`scripts/session-start.test.js`; `README.md`; `README_ko.md`; `AGENTS.md`;
+`docs/design{,_ko}.md`; `docs/design-decisions{,_ko}.md`; `docs/design-backlog{,_ko}.md`;
+`docs/maintenance-protocol{,_ko}.md`; `docs/usecase-matrix_ko.md`.
+
 ## 0.18.4 — 2026-08-20 — a capability keeps its own name, one capability's index stands alone, and seven reports speak to the person reading them
 
 Four defects, each reproduced on a fixture before and after the repair.

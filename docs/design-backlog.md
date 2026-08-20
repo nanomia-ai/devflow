@@ -81,10 +81,10 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   regeneration after an interrupted confirmed write and mechanical path replacement when an ADR
   is superseded. Revisit the confirmation boundary if either path produces an unexpected diff.
 - **The term `Layer 0` splits on whether it includes capability documents** (v0.17.0) — the
-  runtime contract separates them after Layer 0, while both READMEs,
-  `docs/blueprints/memory-fs-0.15.2_ko.md`, and `docs/rounds/v0.12.0/handoff_ko.md` read as
-  including them or do so explicitly. Only the READMEs now match the current contract; the
-  blueprint and historical record stay untouched as records of their time.
+  runtime contract separates them after Layer 0, while
+  `docs/blueprints/memory-fs-0.15.2_ko.md` and `docs/rounds/v0.12.0/handoff_ko.md` read as
+  including them or do so explicitly. The blueprint and historical record stay untouched as
+  records of their time.
 - **No canonical route recovers an unrecorded ADR after arch.md has landed** (v0.17.0) — the
   ADR rows in the discovery→update table cover a mismatched existing ADR, a settled Provisional
   value, a reversed decision, and a code-confirmed fact. If an unrecorded ADR is still discovered
@@ -141,8 +141,8 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   observation.
 - **Plugin version skew** — a repository has no way to record the devflow version it
   assumes, so a 0.12 session and a 0.13 session can judge shared state under different
-  definitions in one repository. The README team paragraph is the documentary defense; the
-  structural limit itself is watched here.
+  definitions in one repository. A documentary defense belongs to a person's document and does
+  not live inside devflow; the structural limit itself is watched here.
 - **Trap reach at first cross-capability consumption** — when an 02 card first consumes an
   03 contract it reads 03's code but has no path to a trap that lives only in 03's
   document. The capability-side version of the problem the shared-parts decision solved for

@@ -6,10 +6,13 @@ description: Resume and domain entry. Restores a new session from disk and conti
 # resume — Resume
 
 First read the canonical rules (`../principles/SKILL.md`), canonical state predicates
-(`../principles/state-predicates.md`), canonical verification predicates
-(`../principles/verification-predicates.md`), and canonical capability knowledge baseline
-predicates (`../principles/baseline-predicates.md`) except its `Two worked capsules`
-section.
+(`../principles/state-predicates.md`), and canonical verification predicates
+(`../principles/verification-predicates.md`). Then run
+`node <plugin root>/scripts/project-knowledge.mjs presence`. On output
+`capsuleArtifacts=absent`, read the canonical capability knowledge baseline predicates
+(`../principles/baseline-predicates.md`) with the range from `## Domain knowledge capsules`
+up to but not including `## Metadata and freshness` left out. On every other output, read
+that same canon with only its `Two worked capsules` section left out.
 
 Purpose: a new session restores state from the bounded reads below when the tree exists; without a
 tree, it derives the next stage from the Layer 0 documents and continues.

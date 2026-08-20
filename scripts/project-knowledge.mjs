@@ -11,6 +11,7 @@ const CAPSULE_NAME = /^K-(?<number>(?!000)[0-9]{3})-(?<topic>[a-z0-9]+(?:-[a-z0-
 // product.md unchanged and in the project's own language. Only the number before the first
 // `-` is read, so the rest keeps its own bytes and a Korean capability keeps its folder.
 const CAPABILITY_NAME = /^(?<number>0*[1-9][0-9]*)-(?<name>.+)$/;
+const CAPSULE_BASE = "devflow/project/capabilities";
 const COORDINATE = /^(?<file>[^@:\r\n]+(?:\/[^@:\r\n]+)*?)(?:@(?<revision>[0-9a-f]{7,40}))?:(?<start>[1-9][0-9]*)(?:-(?<end>[1-9][0-9]*))?$/;
 const SOFT_LINES = 120;
 const HARD_LINES = 240;
@@ -342,7 +343,7 @@ function loadCapsules(root, rawPaths = [], capability) {
 }
 
 function parseArguments(argv) {
-  if (argv.length === 0) fail("missing subcommand (project|disputes|select|validate)");
+  if (argv.length === 0) fail("missing subcommand (presence|project|disputes|select|validate)");
   const command = argv[0];
   const options = { root: process.cwd(), paths: [], approved: false };
   for (let index = 1; index < argv.length; index += 1) {
@@ -468,6 +469,63 @@ function emitBoundedIndex(command, summary, prefix, values, compactOf) {
   for (const line of lines) console.log(line);
 }
 
+// `presence` answers one question and opens no body: does any capsule artifact exist under
+// devflow/project/capabilities? It reads HEAD as well as the working tree, because a capsule
+// committed on the integration branch is real while this checkout has not written it yet, and
+// a capsule deleted in the working tree is still reachable in HEAD. It counts a direct child
+// *directory* whatever its name — matching the name here is exactly how v0.18.4 reported a
+// confident zero over a folder the walk had silently skipped. Every uncertainty answers
+// `unknown`, and only `absent` lets a caller leave a section unread.
+function git(root, args) {
+  const run = spawnSync("git", args, { cwd: root, maxBuffer: 64 * 1024 * 1024 });
+  if (run.error || !Buffer.isBuffer(run.stdout)) return null;
+  return { status: run.status, stdout: run.stdout };
+}
+
+function workingTreeArtifacts(root) {
+  const base = path.join(root, ...CAPSULE_BASE.split("/"));
+  try {
+    if (!fs.existsSync(base)) return "absent";
+    if (!fs.statSync(base).isDirectory()) return "unknown";
+    for (const entry of fs.readdirSync(base, { withFileTypes: true })) {
+      if (entry.isSymbolicLink()) return "unknown";
+      if (entry.isDirectory()) return "present";
+    }
+    return "absent";
+  } catch {
+    return "unknown";
+  }
+}
+
+function headArtifacts(root) {
+  const head = git(root, ["rev-parse", "--verify", "--quiet", "HEAD"]);
+  if (head === null) return "unknown";
+  if (head.status !== 0) {
+    // An unborn HEAD in a real repository proves no capsule was ever committed. Anything that
+    // is not a repository at all is uncertainty and reads as such.
+    const directory = git(root, ["rev-parse", "--git-dir"]);
+    return directory !== null && directory.status === 0 ? "absent" : "unknown";
+  }
+  // -z keeps the raw bytes of a path: a capability folder carries the project's own language,
+  // and git's default quoting would hide it behind escapes.
+  const listed = git(root, ["ls-tree", "-r", "--name-only", "-z", "HEAD", "--", CAPSULE_BASE]);
+  if (listed === null || listed.status !== 0) return "unknown";
+  const prefix = `${CAPSULE_BASE}/`;
+  for (const entry of listed.stdout.toString("utf8").split("\0")) {
+    if (entry.startsWith(prefix) && entry.slice(prefix.length).includes("/")) return "present";
+  }
+  return "absent";
+}
+
+function presence(options) {
+  const worktree = workingTreeArtifacts(options.root);
+  const head = headArtifacts(options.root);
+  const combined = worktree === "present" || head === "present"
+    ? "present"
+    : worktree === "unknown" || head === "unknown" ? "unknown" : "absent";
+  console.log(`presence: capsuleArtifacts=${combined} head=${head} worktree=${worktree} bodies=0`);
+}
+
 function project(options) {
   const capsules = selectedCapsules(loadCapsules(options.root, options.paths, options.capability), options);
   printWarnings(capsules);
@@ -524,6 +582,7 @@ function select(options) {
 function main() {
   const { command, options } = parseArguments(process.argv.slice(2));
   switch (command) {
+    case "presence": presence(options); break;
     case "project": project(options); break;
     case "disputes": disputes(options); break;
     case "select": select(options); break;

@@ -554,7 +554,7 @@ decisions. These records do not directly change card or folder status. A task ca
   stays in the card). `.done.` and `.stale.` stay unattributed — completion's ownership
   is git's memory
 - A person may hold several claims. One card is carried by one session at a time: disk cannot tell terminals apart,
-  so never directing two terminals at one card is the user's part (README guideline)
+  so never directing two terminals at one card is the user's part
 - `.done.` **only after the completion signal passes, the review that applies to the card
   passes, and the commit lands.** In this system, "verification" is reserved for verify's
   capability and product layers

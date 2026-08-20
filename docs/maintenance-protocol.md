@@ -16,7 +16,7 @@ expand the read set and never silently shrink it.
 
 A maintenance-structure task that does not change `skills/**` does not repair a skill defect
 it discovers. Report the exact path, failure scene, and related decision, then route it to a
-separate request. Whole README, whole CHANGELOG, multiple rounds, and every blueprint are not
+separate request. The whole CHANGELOG, multiple rounds, and every blueprint are not
 the default onboarding set. Open them only after an exact coordinate requires them.
 
 ## 2. Dual language and document integrity
@@ -30,7 +30,6 @@ skills/principles/{state-predicates,verification-predicates,baseline-predicates,
 skills/work/reviewer_ko.md ↔ reviewer.md
 skills/verify/{verifier,auditor,retrospector}_ko.md ↔ same-name .md
 codex/AGENTS-devflow_ko.md ↔ AGENTS-devflow.md
-README_ko.md ↔ README.md
 docs/{design,design-decisions,design-backlog,maintenance-protocol}_ko.md ↔ same-name .md
 docs/rounds/v0.10.0/proposal_ko.md ↔ proposal.md
 docs/rounds/v0.11.0/report_ko.md ↔ report.md
@@ -53,8 +52,8 @@ The modification order is fixed.
 External contributors may change English first, but a maintainer back-syncs the Korean
 original before the next release. Korean lives only in `_ko.md`, the two Korean-only standing
 instruments, unpaired round records, and the terminology table in the Korean original of this
-document. English deploy artifacts contain no Korean. The only exception is README's one
-language-switcher line `[Korean]`. `node --test "scripts/*.test.js"` owns the zero-Korean and
+document. English deploy artifacts contain not one Korean line, and there is no exception.
+`node --test "scripts/*.test.js"` owns the zero-Korean and
 ko/en structural checks.
 
 ## 3. Landing design intent and records
@@ -69,7 +68,6 @@ lifetime shares a home.
 | unadopted observation or candidate | `docs/design-backlog.md` | evidence, strain, condition to revisit |
 | one round's measurement and judgment | `docs/rounds/<version>/report_ko.md` | execution evidence, limitations, unlanded items |
 | actual shipped result | `CHANGELOG.md` | what, why, files |
-| explanation for people | `README.md` | adoption decision, use, trust boundary |
 | runtime rule | `skills/**` | only in a separately requested skill change |
 
 Do not create a manual `CURRENT.md`, free-form note layer, or omnibus summary. Recover the
@@ -183,25 +181,9 @@ canon that retells history.
 
 ## 6. README
 
-Skills are literal execution artifacts; README is for a person deciding whether to adopt.
-Keep these prose constraints.
-
-- Prefer verbs to noun compounds.
-- Use an em dash between heading and subtitle or term and definition, not as sentence breath.
-- Bold only the claim on which a section rests.
-- Vary sentence length.
-- In Korean, avoid translation-like padding and passive constructions.
-
-**Subtract without inserting a new cliché.** Preserve facts, figures, and canonical terms
-byte-for-byte.
-**Keep the edit local.** If more than half the document changes, stop because meaning drifted.
-README may explain a skill concept plainly but does not coin a second name for it.
-
-For a prose edit, record before/after counts of `—`, `**`, and bureaucratic compounds in that
-change's report. When the same change already requires CHANGELOG, include the counts there too.
-A docs-only README edit does not create CHANGELOG for this reason. A typo or link path records
-that it was not a prose change. Cite external taxonomies rather than vendoring them; importing
-text still needs prior permission.
+README is a person's document, and this protocol holds no procedure for it. Prose rules,
+before/after counts, and CHANGELOG coupling are not work an AI performs — the owner decides
+directly what goes in it and when. The boundary itself is carried by `docs/design.md`.
 
 ## 7. Release and installation
 
@@ -229,11 +211,10 @@ before 0.10.0 is in `docs/changelog-archive.md`.
 - [ ] `_ko` changed first; fixed terms and ko/en structure and figures match
 - [ ] when an audit ran, adopted findings promoted or reasons for not promoting recorded
 - [ ] proportional verification reported under audit §2 and §5
-- [ ] README prose edit has before/after counts; link or typo records that fact
 - [ ] skill, hook, or installer change records whether the local Codex snapshot was refreshed
 - [ ] current native skills, plugins, and hooks channel rechecked on both platforms
 - [ ] deploy artifact has CHANGELOG and version; docs-only work has neither
-- [ ] create, delete, or move swept through document map, references, tests, installers, README
+- [ ] create, delete, or move swept through document map, references, tests, installers
 - [ ] when `skills/**` is out of scope, its diff against the base commit is zero
 
 ## 9. Fixed terminology

@@ -7,8 +7,12 @@ description: 재개와 도메인 진입. 새 세션의 디스크 상태를 복�
 
 먼저 규칙 정본(`../principles/SKILL.md`)·상태 판정 정본
 (`../principles/state-predicates.md`)·검증 판정 정본
-(`../principles/verification-predicates.md`)·능력 지식 기준선 판정 정본
-(`../principles/baseline-predicates.md`)에서 `본보기 두 편` 절을 제외하고 읽는다.
+(`../principles/verification-predicates.md`)을 읽는다. 이어
+`node <플러그인 루트>/scripts/project-knowledge.mjs presence`를 실행한다. 출력이
+`capsuleArtifacts=absent`이면 능력 지식 기준선 판정 정본
+(`../principles/baseline-predicates.md`)을 `## 도메인 지식 캡슐`부터
+`## 메타데이터와 신선도` 직전까지를 빼고 읽는다. 그 밖의 모든 출력에서는 같은 정본을
+`본보기 두 편` 절만 빼고 읽는다.
 
 목적: 새 세션이 트리가 있으면 아래의 유계 읽기로 상태를 복원하고, 없으면 Layer 0 문서에서
 다음 단계를 판정해 이어간다.

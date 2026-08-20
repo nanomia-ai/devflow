@@ -22,7 +22,6 @@ const pairRelatives = [
   "skills/verify/auditor_ko.md",
   "skills/verify/retrospector_ko.md",
   "codex/AGENTS-devflow_ko.md",
-  "README_ko.md",
   "docs/design_ko.md",
   "docs/design-decisions_ko.md",
   "docs/design-backlog_ko.md",
@@ -200,10 +199,9 @@ test("every Korean design original has an English deploy pair with the same stru
   }
 });
 
-test("English deploy artifacts contain no Korean except README's language switcher", () => {
+test("English deploy artifacts contain no Korean", () => {
   const deployFiles = [
     "AGENTS.md",
-    "README.md",
     "CHANGELOG.md",
     "docs/design.md",
     "docs/design-decisions.md",
@@ -229,14 +227,11 @@ test("English deploy artifacts contain no Korean except README's language switch
       .filter((name) => name.endsWith(".js") || name.endsWith(".mjs"))
       .map((name) => path.join("scripts", name)),
   ].map((relative) => path.join(root, relative));
-  // One file carries a counted allowance: README's language switcher. It is locked to its
-  // exact count, so a second Korean line anywhere fails.
-  const allowance = { "README.md": 1 };
   for (const file of deployFiles) {
     const relative = path.relative(root, file).replace(/\\/g, "/");
     const matches = fs.readFileSync(file, "utf8").split(/\r?\n/)
       .filter((line) => /[\uAC00-\uD7A3]/.test(line));
-    assert.equal(matches.length, allowance[relative] ?? 0, `${relative}: lines containing Korean`);
+    assert.equal(matches.length, 0, `${relative}: lines containing Korean`);
   }
 });
 
@@ -535,7 +530,7 @@ test("the Windows installer keeps its UTF-8 BOM", () => {
 });
 
 test("active adapters do not call the removed global-hook registrar", () => {
-  for (const relative of ["codex/install.ps1", "codex/install.sh", "README.md", "README_ko.md"]) {
+  for (const relative of ["codex/install.ps1", "codex/install.sh"]) {
     const text = fs.readFileSync(path.join(root, relative), "utf8");
     assert.doesNotMatch(text, /install-codex-hook\.js/, relative);
   }
@@ -605,7 +600,6 @@ test("task-local execution state stays on the card, not in journal or an assignm
     split,
     fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8"),
     fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8"),
-    fs.readFileSync(path.join(root, "README.md"), "utf8"),
   ].join("\n");
   assert.match(split, /^Approval:\s+pending \| YYYY-MM-DDTHH:MM:SSZ; parallel: <number\+number\|none>$/m);
   assert.match(split, /^Review:\s+required \| waived$/m);
@@ -1516,14 +1510,12 @@ test("an observation about another capability has a keyed line and a harvester",
 
 test("HANDOFF carries only a recomputable pointer", () => {
   const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
-  const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
   assert.match(work, /^## Next single step\s+<!-- one tree path \| none -->$/m);
   assert.doesNotMatch(work, /^## Open decisions/m);
   assert.match(work, /Add no other section to this file/);
   assert.doesNotMatch(work, /^## Just learned/m);
   assert.doesNotMatch(work, /^## Traps$/m);
   assert.doesNotMatch(work, /If all four are empty, an empty file is fine/);
-  assert.doesNotMatch(readme, /An empty HANDOFF is normal/);
   assert.match(work, /`Next single step` is mandatory and holds one tree path/);
   assert.match(work, /The first time this room's HANDOFF still carries a `## Just learned`, `## Traps`, or\n`## Open decisions` section,\s+land that content before overwriting/);
   assert.match(work, /Do not backfill carry lines\nonto older `\.done\.` cards/);
@@ -1611,7 +1603,6 @@ test("devflow requires a Git work tree and has no degraded mode", () => {
 test("one integration branch is the only shared authority", () => {
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
-  const readme = fs.readFileSync(path.join(root, "README.md"), "utf8");
   const skillTexts = skillDirs.flatMap((dir) => fs.readdirSync(dir)
     .filter((name) => name.endsWith(".md") && !name.endsWith("_ko.md"))
     .map((name) => fs.readFileSync(path.join(dir, name), "utf8")));
@@ -1650,9 +1641,6 @@ test("one integration branch is the only shared authority", () => {
     assert.doesNotMatch(text, /unioned with each worktree HEAD/);
   }
   assert.match(resume, /the devflow\/tree\/ listing at the integration tip/);
-  assert.match(readme, /Any number of terminals in one folder is safe/);
-  // the earlier wrong claim that a remote is required must not come back
-  assert.doesNotMatch(readme, /tracks no\s*remote/);
 });
 
 test("a change request is recorded at once but planned only after the claim closes", () => {
@@ -1741,4 +1729,78 @@ test("journal merges resolve 3-way and blockade appends are exactly enumerated",
   assert.doesNotMatch(principles, /Journal merge conflicts resolve as a union/);
   assert.match(principles, /`maintenance\s+routing pending`, `capability note`, attributed open-item and decision lines, `product\s+re-run pending`/);
   assert.match(principles, /nothing waits unnamed/);
+});
+
+// The one canon range an entry skill may leave unread. Everything below keeps that gate
+// honest: the boundary has to be real, nothing but the capsule contract may live inside it,
+// and the four entry sentences have to name the same boundary the canon carries.
+const CAPSULE_GATE = {
+  "skills/principles/baseline-predicates.md": {
+    open: "## Domain knowledge capsules",
+    close: "## Metadata and freshness",
+    kept: "Two worked capsules",
+  },
+  "skills/principles/baseline-predicates_ko.md": {
+    open: "## \uB3C4\uBA54\uC778 \uC9C0\uC2DD \uCEA1\uC290",
+    close: "## \uBA54\uD0C0\uB370\uC774\uD130\uC640 \uC2E0\uC120\uB3C4",
+    kept: "\uBCF8\uBCF4\uAE30 \uB450 \uD3B8",
+  },
+};
+
+function gatedRange(text, gate) {
+  const open = text.indexOf(`\n${gate.open}\n`);
+  const close = text.indexOf(`\n${gate.close}\n`);
+  assert.ok(open >= 0 && close > open, `${gate.open} ... ${gate.close}: range not found in order`);
+  return { inside: text.slice(open, close), outside: text.slice(0, open) + text.slice(close) };
+}
+
+test("the capsule gate boundary is a real, single, ordered pair in both languages", () => {
+  for (const [relative, gate] of Object.entries(CAPSULE_GATE)) {
+    const text = fs.readFileSync(path.join(root, relative), "utf8");
+    for (const heading of [gate.open, gate.close]) {
+      assert.equal(text.split(/\r?\n/).filter((line) => line === heading).length, 1,
+        `${relative}: ${heading} must appear exactly once for the range to be unambiguous`);
+    }
+    const { inside } = gatedRange(text, gate);
+    // The narrower exception the other branch keeps sits inside the wider one, so a session
+    // that skips the range never needs the narrower rule spelled out twice.
+    assert.ok(inside.includes(gate.kept), `${relative}: ${gate.kept} must sit inside the gated range`);
+  }
+});
+
+test("no rule a capsule-less project still needs has drifted inside the capsule gate", () => {
+  const relative = "skills/principles/baseline-predicates.md";
+  const text = fs.readFileSync(path.join(root, relative), "utf8");
+  const { inside, outside } = gatedRange(text, CAPSULE_GATE[relative]);
+  // Each token is a capability-document rule that a project with no capsule still executes.
+  // If one of them ever moves inside the range, a capsule-less session loses it in silence —
+  // that is the only realistic path from this gate to a "needed it, never read it" failure.
+  for (const token of ["## Verified state", "Design head", "Scope head", "Covered cards",
+    "v0.10 Baseline Migration", "Brownfield", "Writers and replacement",
+    "Capability-closing begin commit", "Accepted limits", "Lifecycle and recovery"]) {
+    assert.ok(outside.includes(token), `${token}: token no longer exists outside the gate, so this check is dead`);
+    assert.equal(inside.includes(token), false,
+      `${token}: moved inside the capsule gate, so a capsule-less session would lose it`);
+  }
+});
+
+test("both entry skills gate the capsule range on the tool, and fall to reading on anything else", () => {
+  for (const [skill, language, gate] of [
+    ["resume", "SKILL.md", CAPSULE_GATE["skills/principles/baseline-predicates.md"]],
+    ["verify", "SKILL.md", CAPSULE_GATE["skills/principles/baseline-predicates.md"]],
+    ["resume", "SKILL_ko.md", CAPSULE_GATE["skills/principles/baseline-predicates_ko.md"]],
+    ["verify", "SKILL_ko.md", CAPSULE_GATE["skills/principles/baseline-predicates_ko.md"]],
+  ]) {
+    const label = `${skill}/${language}`;
+    const text = fs.readFileSync(path.join(root, "skills", skill, language), "utf8");
+    // the machine, not the model, computes the predicate
+    assert.match(text, /project-knowledge\.mjs presence/, label);
+    // the entry sentence names the same boundary the canon carries, so a rename breaks here
+    assert.ok(text.includes(gate.open), `${label}: must name ${gate.open}`);
+    assert.ok(text.includes(gate.close), `${label}: must name ${gate.close}`);
+    // only one exact answer opens the gate
+    assert.match(text, /capsuleArtifacts=absent/, label);
+    // and every other answer keeps the current full read
+    assert.ok(text.includes(gate.kept), `${label}: the other branch must still name ${gate.kept}`);
+  }
 });
