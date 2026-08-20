@@ -238,6 +238,7 @@ CHANGELOG 맨 위에 날짜·무엇·왜·파일을 적는다. 약 60줄 안에�
 | 가설 | hypothesis | | 설계 구역 | design zone |
 | 검증 구역 | verified zone | | 능력 문서 | capability document |
 | 경량 변경 | tweak | | 게시 | publish |
+| 상태 도구 | state tool | | 구역 | zone |
 | 묘비 | tombstone | | 닫힌 폴더 투영 | closed-folder projection |
 | 구조적 막힘 | structural blocker | | 지속 경합 | sustained contention |
 | 묶기 | bundling | | 고아 점유 | orphan claim |

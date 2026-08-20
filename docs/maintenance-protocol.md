@@ -263,6 +263,7 @@ new concepts; add a row in the same change that coins a canonical term.
 | hypothesis | hypothesis | | design zone | design zone |
 | verified zone | verified zone | | capability document | capability document |
 | tweak | tweak | | publish | publish |
+| state tool | state tool | | zone | zone |
 | tombstone | tombstone | | closed-folder projection | closed-folder projection |
 | structural blocker | structural blocker | | sustained contention | sustained contention |
 | bundling | bundling | | orphan claim | orphan claim |

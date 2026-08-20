@@ -37,6 +37,7 @@ whole by default.
 | creating, deleting, or moving a file other than this round's report | `docs/design-backlog.md`; `docs/audit-guideline_ko.md` §3-4; maintenance protocol §1 |
 | changing a ko/en pair or coining a canonical term | maintenance protocol §2 and §9 |
 | changing `skills/**` | `docs/usecase-matrix_ko.md` §1–§2 and applicable §3 cells; maintenance protocol §1–§4 and §7–§9 |
+| changing the state tool or a predicate it executes | the tool source, its zone array and shape table, and `scripts/project-state.test.js` |
 | reporting a verification result, including zero findings | `docs/audit-guideline_ko.md` §2, §5, §6; maintenance protocol §4 |
 | running an independent pass in a separate context | `docs/audit-guideline_ko.md` §8 verbatim |
 | opening a folder under `docs/rounds/` to create, revise, implement, review, or audit its records — not the bounded current-state read in Entry gate 2 | previous numeric-version round report and its unlanded audit findings; maintenance protocol §5 |

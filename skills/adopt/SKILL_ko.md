@@ -12,6 +12,11 @@ description: 기존 프로젝트 도입. 이미 코드가 있는 저장소에서
 `devflow/project/glossary.md`, `devflow/journal.md`, 그리고
 `devflow/project/decisions/` 바로 아래의 legacy `ADR-NNN.md`를 각각 통독한다.
 
+대상 능력 문서마다
+`node ../principles/scripts/project-state.mjs state --capability <능력 번호>`를 실행한다.
+그 `baseline:` 줄이 기대 집합·경로 상태·경계·형태·신선도·`legacy v0.10` 판정을 내고, 그 값을
+그대로 쓴다. 기준선 판정 정본에서는 무엇이 본문에 들어갈 자격이 있는지를 읽는다.
+
 목적: **브라운필드(이미 코드가 있는 프로젝트에 중간 참여)**에 Layer 0 문서
 (product.md·arch.md·code-style.md·glossary.md)를 역산으로 만들어 상속시킨다.
 인터뷰하지 않는다. 역산한다. 이 절차가 곧 "이해 단계"다 — split은 이것 없이 돌지 않는다.

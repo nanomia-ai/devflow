@@ -5,12 +5,16 @@ description: Task splitting. Opens the task tree (devflow/tree/) one layer at a 
 
 # split — Task Splitting
 
-First read the canonical rules (`../principles/SKILL.md`), canonical state predicates
-(`../principles/state-predicates.md`), `devflow/project/product.md`
+First read the canonical rules (`../principles/SKILL.md`), `devflow/project/product.md`
 (identity paragraph, capability list), `devflow/project/arch.md`, and, if they exist,
 all of `devflow/project/design.md`, `devflow/project/code-style.md`,
 `devflow/project/glossary.md`, and **`devflow/journal.md`** — the durable discoveries
 of earlier cards live in journal, and HANDOFF is overwritten and will not carry them.
+
+Then run `node ../principles/scripts/project-state.mjs state` and read its `claim:`,
+`ready:`, `integrity:`, `layer:`, and `request:` lines; add `--card <path>` for one card's
+judgment detail. Those lines carry the card, layer, and integrity judgments this skill
+uses; take them as they stand.
 
 Read the planning evidence discipline (`../principles/planning-evidence.md`) boundedly only
 when judging the maintenance planning depth grade below. First read `Four Kinds of Unknown`,
@@ -125,8 +129,8 @@ missing, from that same source. Mint no number outside the marker. If the source
 determine one Destination, ask the user only for that Destination and create no child
 before the answer. A marker child exists when its number matches the leading number of
 exactly one direct child under the parent; multiple matches are an integrity anomaly.
-Once every number has one match, reapprove any execution proposal whose cards' `Approval`
-is not effective under the state predicates, then finish the cards, approvals, structure, and marker deletion in that layer's
+Once every number has one match, reapprove any execution proposal whose cards the `ready:`
+zone reports as `approval-invalid`, then finish the cards, approvals, structure, and marker deletion in that layer's
 planning commit. A layer interrupted after its begin commit mints no new number.
 
 When journal has a `re-split pending` marker, process one before a normal layer: choose
@@ -440,8 +444,8 @@ Review:            required | waived
 <!-- work appends here while .wip. -->
 ```
 
-`Depends` follows the canonical format and legacy interpretation in the state predicates.
-A new card writes only the canonical value. When split next edits a pending legacy card,
+A new card writes only the canonical value shown above; the tool reads both it and the
+legacy form. When split next edits a pending legacy card,
 delete trailing prose and replace the field with the canonical value. Ask the user for an
 unparseable replacement; never infer it. Put the confirmed correction in a planning
 commit without changing other fields or status. Release a claimed card first.
@@ -461,7 +465,7 @@ directly below `devflow/project/capabilities/` off `Read first` does not apply t
 paths — a capsule is not reached by the depth-1 number rule.
 
 When split starts with a pending card whose
-`Approval` is not `pending` but is ineffective under the state predicates, report the
+`Approval` is not `pending` and `ready:` reports the card as `approval-invalid`, report the
 exact reason and reset it to `pending`. Present the whole current card in a new execution
 proposal, then land the new approval value and card change together in the planning commit.
 
@@ -526,7 +530,7 @@ every card in the group. Use `none` when the card is not parallel. Changing a gr
 updates every pending card in the old or new group in one planning commit. Do not change
 a claimed card's approval; release it first if it must join the new group. Do not rewrite
 the historical approval value of a `.done` or `.stale` card. The `parallel:` value is the
-plan's recorded judgment — it neither permits nor blocks a claim (the state predicates),
+plan's recorded judgment — it neither permits nor blocks a claim,
 and work reads it as information when naming same-unit claims.
 
 An implementation card's default `Review` is `required`. The main session cannot waive
@@ -535,8 +539,8 @@ uses `not-applicable`; if the real code gets a diff, change it to `required`. Pe
 assignment. The claim suffix alone names the current owner.
 
 For a task-card layer, land the cards, `Approval`, `Review`, and deletion of the layer-
-opening marker together in the canonical planning commit. Do not claim before Approval
-meets the state predicates.
+opening marker together in the canonical planning commit. Claim only once the `ready:`
+zone lists that card.
 
 After closing the root waiting-capability-file layer, say "next is split" to open the
 foundation layer. After approving any other task-card layer, say "next is work."

@@ -199,6 +199,89 @@ exception, §3's landing table, §6, §8's checklist), `skills/principles/SKILL{
 Revisit when: the owner decides to use README as an input to AI work again. What is reverted
 then is this line, not a file.
 
+### DD-80 · The executor of a machine judgment is code, and the document that wrote that judgment down is deleted in the release after its last runtime reader moves (v0.18.7)
+
+Subject: Identity, packaging, platforms | Introduced: v0.18.7 | State: active
+
+Observed problem: `resume` entry spends **137,514 B** of canon before it reads one character
+of a target project file (measured at 0.18.6 — resume 30,477 + principles 67,498 + canonical
+state predicates 2,114 + canonical verification predicates 3,495 + 33,930 of the baseline
+predicates outside the capsule gate). Most of that canon is not a rule that asks for the
+model's judgment but a **computation whose truth is settled by disk and Git facts alone** — a
+full classification of the canon's 295 lines put 221 in what a tool can execute, 23 in
+sentences said to a person and judgments of meaning, and 51 on the boundary where a
+conversation or an approval lands. Of resume's 48 routing rows, **exactly one reads the
+conversation**. And because the prose writes that computation down literally, the model runs
+it by hand — "split that output on NUL", "run that same pipe inside `cmd /d /s /c`", "never
+drop `--no-renames`" are those sentences.
+
+Desired behavior: a read-only tool executes that computation. `resume` calls the tool **once**,
+reads only the **action side** of the first non-empty zone on the sheet the tool produced,
+reports, obtains approval, and calls the stage. The canon tax does not disappear — **the stage
+actually entered after approval pays it.**
+
+Chosen boundaries, four:
+
+① The tool lives **in the same place as the canon**
+(`skills/principles/scripts/project-state.mjs`) — it is reached by the same relative-path rule
+that reaches the canon, and it travels with the canon on all three install channels. The
+`<plugin root>` resolution defect v0.18.6 removed from eight call sites is not recreated at a
+new site.
+
+② Prose does **not restate** the internals of a judgment the tool owns
+(`baseline-predicates.md:348-349` already writes that sentence for the capsule tool).
+
+③ **The release after the one that moved a predicate document's last runtime reader deletes
+that document. Git carries the past.** Sentences said to a person, judgments of meaning, and
+approval discipline stay prose.
+
+④ **The tool emits facts and takes no conversation.** The call is `state` alone and the input
+is `--root` plus two filters (`--capability`, `--card`). The output is **fourteen zones** in
+priority order and **an empty zone still prints its line**; the closing `next:` names the first
+zone that is not empty and its kind — a summary derived from the facts, not a contract. What
+the session knows (a named card, a deferred item, this conversation's request) is written by
+the model, not encoded into the tool.
+
+Why the boundaries are needed: allow restatement and the document and the code diverge, and at
+the moment they diverge nobody can say which is canonical. "Keep it as a specification" is a
+second home, and the moment two homes exist a mechanism to bind them has a reason to exist —
+**make it one home and no mechanism is needed.** And placing the tool outside the canon creates
+the scene where "the canon travelled but its executor did not", which then needs another file
+to cover. ④ is needed for a different reason: encoding a session fact into a flag requires the
+model to **remember that fact first**, and once the memory is in the model, the difference
+between judging from it directly and encoding it for the tool is one round trip and eight
+contract surfaces. A flag does not replace memory; it transcribes it.
+
+Rejected alternatives: **53 joined keys, six subcommands, and eight session flags** — the
+contract surface grows and prose carries the protocol for it, and telling whether a key is
+wrong means opening the condition side again, which is why a separate flag for the exhaustive
+verdict becomes necessary. Fourteen fact zones with empty ones printed carry the same
+information under **fewer contracts**. **Generate the document from the code** — code cannot
+hold the *reasons* prose carries. **Keep the document permanently as a specification** — it
+breaks one-fact-one-home and stops DD-25's "owns … once" from being literally true. **Put the
+tool in `scripts/` and leave the condition-side prose in `skills/`** — one more file, one more
+ko/en pair, and one more mechanism, and the placeholder-resolution defect v0.18.6 removed
+appears again at a new site. **Shorten the prose with no tool** — an earlier generation already
+failed at this and the total recovery stops at 5–10 KB.
+
+Affected coordinates: `skills/principles/scripts/project-state.mjs` (new, 88,382 B),
+`scripts/project-state.test.js` (new, 37,898 B, 114 new tests),
+`skills/resume/SKILL{,_ko}.md` (rewritten — 30,477→21,713 B, 32,042→22,893 B),
+`skills/{verify,work,split,arch,adopt}/SKILL{,_ko}.md` (the entry sentence and the places that
+use those judgments), `skills/principles/{state,verification}-predicates{,_ko}.md` (no skill
+reads either — deleted in the next release),
+`skills/principles/baseline-predicates{,_ko}.md` (dropped from resume's consumers),
+`scripts/repository-invariants.test.js`, two rows of the skill intent index in
+`docs/design{,_ko}.md`, one wiring row in `AGENTS.md`, two terms in
+`docs/maintenance-protocol{,_ko}.md` §9, one observation in `docs/design-backlog{,_ko}.md`.
+
+Revisit when: a third-party skills.sh install is actually used and that channel is observed
+not to carry `skills/<name>/scripts/*.mjs` · the routing table's conversation-dependent rows
+grow past one · leaving integrity item 14's prefix clause at `prefix=unchecked` in v1 is
+observed to miss a defect in practice · a real session is observed going to a zone other than
+the one `next:` named and the cause is "the facts were visible but the order was misread" —
+what moves then is the standing of that one `next:` line, not the return of a key registry
+
 ### Rejected under this subject
 
 - **[DR-03 · v0.7.0]** **Journal injection by the hook** — duplicates what resume reads.
@@ -322,7 +405,7 @@ If auto-correction misjudges, it accelerates contamination
 
 ### DD-25 · Ready-card semantics, per-card execution-proposal approval, and resume routing are decided from disk state (v0.9.21)
 
-Subject: The task tree and its cards | Introduced: v0.9.21 | State: active
+Subject: The task tree and its cards | Introduced: v0.9.21 | State: active, partly corrected by DD-80 (v0.18.7)
 
 Two independent literal executions cross-confirmed deterministic session-boundary failures: a card with completed `Depends` remained forever unclaimable under the words "dependency-free"; ending a session after adopt but before split produced an adopt↔resume loop; resume called only work even at split and verify boundaries; and ordinary execution-proposal approval left no disk trace, so the next session could not distinguish before from after approval. Ready means `Depends` is `none`, or exactly one `.done.` card exists for every comma-delimited number. New cards use one dependency format. Only a card missing `Approval` or `Review` is legacy; its leading numbers are parsed mechanically and normalized when next planned, while the user decides an unparseable member. `state-predicates` owns task-card judgments once; `verification-predicates` owns revision and event judgments once. The former enters Claude and Codex input for split, work, verify, and resume; the latter only for verify and resume. Approval, parallel group, and review policy live in each card and land in a planning commit; the claim suffix alone owns assignment. Approval is effective only when the same authority path exists and both index and working tree equal solo HEAD or the fetched multi integration branch under Git-normalized comparison. An out-of-scope prerequisite changes the new card, the original card's `Depends`, approval, and release in one planning commit. The resume table covers partial trees, retired capabilities, blocked dependencies, and a completed product. The arithmetic conflict that forbade a two-card split was removed too
 
@@ -1060,11 +1143,11 @@ Subject: Git mechanics and interruption recovery | Introduced: v0.9.21 | State: 
 
 Failure path: when only a remote result remains in the completion signal and the session ends between the checkpoint commit and the journal record commit, the next session judges the same CI result twice or makes a second final task commit. The canonical journal line therefore carries the checkpoint hash and `check-json` so recovery has exactly one point, and a pass becomes `evidence-finalizing`, meaning the final task commit is done and only upper-document feedback and boundary cleanup remain (CHANGELOG 0.9.21)
 
-### DD-39 · Tree-input revision hashes are computed only through a binary pipe inside `cmd /d /s /c` on Windows (v0.9.21)
+### DD-39 · Tree-input revision hashes are computed only through a binary pipe inside `cmd /d /s /c` on Windows (v0.9.21, executor moved v0.18.7)
 
 Subject: Git mechanics and interruption recovery | Introduced: v0.9.21 | State: active
 
-Actually reproduced: on 2026-08-11 in this repository, the PowerShell 5.1 object pipeline touched the NUL-bearing stdout of `git ls-tree -r -z` and corrupted the hash — the POSIX binary pipe and the `cmd` pipe produced the same hash, and only the object pipeline differed. Same "actually reproduced" class as the install.ps1 BOM row
+Actually reproduced: on 2026-08-11 in this repository, the PowerShell 5.1 object pipeline touched the NUL-bearing stdout of `git ls-tree -r -z` and corrupted the hash — the POSIX binary pipe and the `cmd` pipe produced the same hash, and only the object pipeline differed. Same "actually reproduced" class as the install.ps1 BOM row. In v0.18.7 the executor of this computation moved from prose to the state tool and **the boundary is preserved verbatim inside the code** — a native binary pipe on POSIX, the same pipe inside `cmd.exe /d /s /c` on Windows, and NUL-bearing stdout is never decoded to a string. A changed executor **does not mean the boundary became unnecessary**: no prototype has refuted the recorded reason, so this row is preserved rather than discharged, and changing the boundary requires proving equivalence and recording a new decision (during the v0.18.7 implementation Node's argument passing did hand the inner quotes through as literal characters and made a revision `unresolved`; what was fixed was the argument passing, not the boundary)
 
 ### Rejected under this subject
 

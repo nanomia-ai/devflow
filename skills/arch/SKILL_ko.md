@@ -14,6 +14,11 @@ description: 개발 기획. product.md를 받아 구성요소·스택·코드 �
 `product.md`가 없으면: 코드도 없으면 product 단계를, 기존 코드가 있으면
 adopt(기존 프로젝트 도입 — product.md까지 역산으로 함께 만든다)를 먼저 안내한다.
 
+대상 능력 문서마다
+`node ../principles/scripts/project-state.mjs state --capability <능력 번호>`를 실행한다.
+그 `baseline:` 줄이 기대 집합·경로 상태·경계·형태·신선도·`legacy v0.10` 판정을 내고, 그 값을
+그대로 쓴다. 기준선 판정 정본에서는 무엇이 본문에 들어갈 자격이 있는지를 읽는다.
+
 목적: 서비스 기획을 개발 계획으로 번역해 `devflow/project/arch.md`를 만든다.
 
 resume이 Layer 0는 완성됐고 능력 문서만 없거나 수리가 필요하다고 라우팅했다면

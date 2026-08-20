@@ -15,6 +15,71 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.18.7 — 2026-08-20 — the entry stops computing the state and calls a tool that owns it
+
+A new session used to pay 137,514 B of canon before it read one character of the project it
+was resuming. Most of that was not a rule asking for the model's judgment; it was a
+computation whose truth is settled by disk and Git alone, written out literally so the model
+would run it by hand — split that output on NUL, run the same pipe inside `cmd /d /s /c`,
+never drop `--no-renames`. Classifying all 295 canon lines put 221 of them in that class, and
+of resume's 48 routing rows exactly one read the conversation. A model executing a git
+plumbing recipe by hand is the expensive way to be wrong quietly: a mis-split output does not
+raise an error, it just routes somewhere else.
+
+`skills/principles/scripts/project-state.mjs` now owns that computation. It is read-only and
+stateless — it writes no file, runs no fetch or push, and repairs nothing it finds. One call,
+`state`, plus two filters (`--capability`, `--card`). Its output is one sheet: fourteen zones
+in priority order, and **an empty zone still prints its line**, so "nothing is pending here"
+is visible without a second call and there is no separate explain mode. The closing `next:`
+names the first zone that is not empty and its kind, and the prose says outright that this is
+a summary derived from the facts and not a contract — every ingredient of the judgment is on
+the same screen, so a session that disagrees can say why from what it already has.
+
+The tool sits beside the canon on purpose. It is reached by `../principles/scripts/…`, the
+same relative rule that reaches `../principles/SKILL.md`, so it needs no `<plugin root>`
+placeholder at all — 0.18.6 spent a whole release removing the defect class where a session
+meets a placeholder before it can read the rule that resolves it, and putting the new tool
+outside `skills/` would have recreated it at a new site. Beside the canon it also travels with
+the canon on every install channel.
+
+`resume` became a caller. Its file went from 30,477 B to 21,713 B, the seven-step bounded read
+became three things opened on top of the sheet (the one claimed card this invocation
+continues, the canonical range the matched row names, and capsules), and the 48-row condition
+column became fifty-two `next:` names against the same action text. `verify`, `work`, `split`,
+`arch`, and `adopt` all open with the same sentence now and differ only in which zones they
+read. `state-predicates.md` and `verification-predicates.md` lost their last runtime reader;
+both files stay this release and are deleted in the next, so that a session upgrading across
+one version never meets a judgment with no executor. Two rules those files carried that a
+*writer* needs — the collision-free event key and the legacy record's event-section
+preparation — moved into `verify`, where the writing happens.
+
+What did not move: the `cmd /d /s /c` binary-pipe boundary is preserved verbatim inside the
+tool, and a changed executor is not a claim that the boundary became unnecessary (DD-39).
+Integrity items still report and never auto-correct (DD-11). Sentences said to a person are
+still assembled by prose, not the tool (DD-16).
+
+The measured entry to the approval report is **22,892–22,977 B, down 83.3%** from 137,514.
+The design estimated 18,066 B and 86.9%; the implementation came in above it and the estimate
+was not defended by cutting sentences — five facts the tests caught being dropped were put
+back instead. `docs/rounds/v0.18.7/report_ko.md` carries the block-level accounting of
+where the two diverge, and the two numbers that matter to a reader: a session that answers a
+status, domain, or tweak question and stops saves the whole 83%, while a session that goes on
+to `work` saves about 28% because `principles` is still read in full there. The only real
+usage record points at the second kind.
+
+Adversarial verification before release caught the tool reading a syntax the canon does not
+write — `## Failure history` as a heading where the canon keeps `Failure history:` as an
+ordinary field — so on a real record the source-id migration never appeared and integrity item
+14 never checked duplicate source ids, with the tests green because the fixtures modelled the
+same wrong syntax. The parser now follows the canon; `audit requested` and `retrospective
+requested` journal lines reach the evaluator instead of being parsed and dropped; integrity
+items 8, 12, 13 and 14 run their full predicates; `01-foundation` closes as a folder boundary,
+not a capability; and non-blocking items 1–11 print as `kind=advisory` and never route, leaving
+`integrity.shape` its verified-zone meaning — one more kind, eleven more bytes per sheet.
+
+127 new tests cover the tool against real temporary Git repositories, thirteen of them
+adversarial fixtures made to fail before the repair. The suite is 263 and passes.
+
 ## 0.18.6 — 2026-08-20 — every capsule-tool call carries the rule that resolves it, and two journal kinds stop having two dispositions
 
 Two repairs where the skill text sent a literal reader somewhere the canon did not mean.

@@ -432,10 +432,17 @@ test("every maintenance script and document has a declared lifecycle", () => {
     "git-state-transitions.test.js",
     "repository-invariants.test.js",
   ]);
+  // A tool that executes the canon lives beside the canon (`skills/<name>/scripts/`) so it
+  // travels on every install channel, while its suite stays here so no user gets it installed.
+  // Such a suite still needs a real runtime source; it just is not this folder's sibling.
+  const skillToolDirs = fs.readdirSync(path.join(root, "skills"))
+    .map((name) => path.join(root, "skills", name, "scripts"))
+    .filter((dir) => fs.existsSync(dir));
   for (const testFile of fs.readdirSync(scriptsDir).filter((name) => name.endsWith(".test.js"))) {
     const source = testFile.replace(/\.test\.js$/, ".js");
     const sourceMjs = testFile.replace(/\.test\.js$/, ".mjs");
-    assert.ok(fs.existsSync(path.join(scriptsDir, source)) || fs.existsSync(path.join(scriptsDir, sourceMjs)) || standaloneTests.has(testFile),
+    const beside = skillToolDirs.some((dir) => fs.existsSync(path.join(dir, source)) || fs.existsSync(path.join(dir, sourceMjs)));
+    assert.ok(fs.existsSync(path.join(scriptsDir, source)) || fs.existsSync(path.join(scriptsDir, sourceMjs)) || beside || standaloneTests.has(testFile),
       `${testFile} is neither a direct runtime test nor a declared standalone suite`);
   }
 
@@ -552,9 +559,22 @@ test("each canonical companion is referenced only by its consumers", () => {
     .filter((dir) => fs.readFileSync(path.join(dir, "SKILL.md"), "utf8").includes("`../principles/" + companion + "`"))
     .map((dir) => path.basename(dir))
     .sort();
-  assert.deepEqual(consumersOf("state-predicates.md"), ["resume", "split", "verify", "work"]);
-  assert.deepEqual(consumersOf("verification-predicates.md"), ["resume", "verify"]);
-  assert.deepEqual(consumersOf("baseline-predicates.md"), ["adopt", "arch", "resume", "verify"]);
+  // The state tool executes both predicate companions, so no skill reads either at runtime.
+  // The files stay one more release and are deleted in the next; until then the invariant is
+  // that nobody reads them, which is what makes that deletion safe.
+  assert.deepEqual(consumersOf("state-predicates.md"), []);
+  assert.deepEqual(consumersOf("verification-predicates.md"), []);
+  // resume drops out of the baseline canon too: it reads only the tool's `baseline:` lines,
+  // plus the one `Writers and replacement boundaries` range its own row names.
+  assert.deepEqual(consumersOf("baseline-predicates.md"), ["adopt", "arch", "verify"]);
+  // Every skill that lost a companion gained the same call, so no judgment lost its executor.
+  for (const name of ["resume", "verify", "work", "split", "arch", "adopt"]) {
+    assert.match(
+      fs.readFileSync(path.join(root, "skills", name, "SKILL.md"), "utf8"),
+      /node \.\.\/principles\/scripts\/project-state\.mjs state/,
+      `${name} must call the state tool for the judgments it stopped computing`,
+    );
+  }
   assert.deepEqual(consumersOf("planning-evidence.md"), ["adopt", "arch", "product", "split"]);
   for (const name of ["work", "verify", "resume", "design"]) {
     assert.doesNotMatch(
@@ -563,7 +583,7 @@ test("each canonical companion is referenced only by its consumers", () => {
       `${name} must not read the planning-evidence companion`,
     );
   }
-  for (const name of ["split", "work"]) {
+  for (const name of ["split", "work", "resume"]) {
     assert.doesNotMatch(
       fs.readFileSync(path.join(root, "skills", name, "SKILL.md"), "utf8"),
       /baseline-predicates\.md/,
@@ -618,23 +638,23 @@ test("brownfield, layer-opening, and product-re-run states have producers and co
   assert.match(arch, /^Brownfield: no$/m);
   assert.match(adopt, /`Brownfield: yes`/);
   assert.match(split, /When arch\.md says `Brownfield: yes`/);
-  assert.match(resume, /arch\.md lacks the Brownfield field/);
+  assert.match(resume, /\| `setup\.brownfield-field` \| ask once, "Did implementation code exist before devflow entered\?"/);
 
   const layerMarker = /YYYY-MM-DDTHH:MM:SSZ layer opening: parent: <devflow\/tree or folder path with status suffixes removed>; children: <number\+number>; source-json: <JSON string containing the exact durable source locator>/;
   assert.match(principles, layerMarker);
   assert.match(split, /`split — begin <parent>`/);
   assert.match(principles, /layer-opening marker/);
-  assert.match(resume, /layer-opening marker/);
+  assert.match(resume, /\| `transition\.layer-opening` \| split — take that marker together with every marker carrying the same `source-json`/);
 
   const productMarker = /YYYY-MM-DDTHH:MM:SSZ product re-run pending: statement-json: <JSON string containing the whole disproved identity or success-criterion text>/;
   assert.match(principles, productMarker);
   assert.match(product, /product re-run pending/);
-  assert.match(resume, /product re-run pending/);
+  assert.match(resume, /\| `marker\.product-rerun` \| product \|/);
 
   const maintenanceMarker = /YYYY-MM-DDTHH:MM:SSZ maintenance routing pending: request-json: <JSON string containing the whole user request>/;
   assert.match(principles, maintenanceMarker);
   assert.match(adopt, /maintenance routing pending/);
-  assert.match(resume, /maintenance routing pending/);
+  assert.match(resume, /\| `request\.existing` \| split — plan that line's request through maintenance routing \|/);
 
   assert.match(product, /decode each `statement-json` as a JSON string/);
   assert.match(split, /decode `request-json` as a JSON string/);
@@ -673,12 +693,12 @@ test("verification events use a durable three-state record and revision-independ
   assert.doesNotMatch(state, /product <Product revision>/);
   assert.match(verify, /not run: scope unresolved/);
   assert.match(verify, /This completed entry\s+suppresses the same automatic key/);
-  assert.match(resume, /`pending · source id:`/);
+  assert.match(resume, /\| `event\.pending` \| verify — run and record one runnable pending event \|/);
   assert.match(verify, /continue the caller's remaining state/);
   assert.match(verify, /exact blocking path or branch state and reason/);
   assert.match(verify, /Before an Audit, regardless of verdict/);
-  assert.match(resume, /The blocked-Audit reporting row does not gate a verdict/);
-  assert.match(resume, /as not unrun events for the rest of this\s+session's table scans/);
+  assert.match(resume, /`blocked\.audits` does not gate a verdict/);
+  assert.match(resume, /leave disk unchanged and skip those\s+candidates alone for the rest of this session's judgments/);
 });
 
 test("existing-record compatibility is an indexed, bounded read path", () => {
@@ -698,9 +718,11 @@ test("glossary has a producer and deterministic recovery on both project types",
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   assert.match(product, /create only glossary\.md/);
   assert.match(adopt, /product\.md, code-style\.md, glossary\.md, and arch\.md/);
-  assert.match(resume, /`devflow\/project\/glossary\.md` is missing/);
-  assert.match(resume, /with `Brownfield: yes`, adopt reverse-derives only glossary\.md/);
-  assert.match(resume, /with `no`, product creates only glossary\.md/);
+  // The missing-glossary condition is the tool's `setup:` zone now; the recovery split is
+  // still resume's, and it still says "only" on both sides.
+  assert.match(resume, /\| `setup\.layer0-incomplete` \| ask the same question/);
+  assert.match(resume, /yes makes adopt reverse-derive only the documents `missing` names/);
+  assert.match(resume, /no makes product create only glossary\.md without changing the confirmed product\.md/);
 });
 
 test("explicit product verification and capability closure markers have resume consumers", () => {
@@ -710,9 +732,9 @@ test("explicit product verification and capability closure markers have resume c
   assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ product verification requested/);
   assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ product verification running:/);
   assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ product verification result:/);
-  assert.match(resume, /journal contains an exact `product verification requested` line/);
-  assert.match(resume, /journal contains a `product verification running` line/);
-  assert.match(resume, /journal contains a `product verification result` line/);
+  assert.match(resume, /\| `event\.product-requested` \| verify — product layer \|/);
+  assert.match(resume, /\| `transition\.product-running` \| verify — rerun the recorded flight \|/);
+  assert.match(resume, /\| `transition\.product-result` \| verify — finish the stored result's failure routing, events, and report \|/);
   assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ capability closing: folder: <devflow\/tree\/capability folder path with status suffixes removed>; head: <git rev-parse HEAD>; product: <Product revision>; verification: <Verification revision>; capability: <Capability revision>/);
   assert.match(verify, /`boundary — begin <capability number>`/);
   assert.match(verify, /`boundary — product verification running`/);
@@ -725,7 +747,7 @@ test("explicit product verification and capability closure markers have resume c
   assert.match(verify, /rejoin the branch determined by steps 4 and 5/);
   assert.match(verify, /before selecting the entry, first land this run's complete verify\.md and all its\s+new pending entries as `boundary — capability verification result <capability number>`/);
   assert.match(principles, /Land a capability verification's fail or unverified result[\s\S]*`boundary — capability verification result <capability number>`/);
-  assert.match(resume, /valid capability-closing marker exists in HEAD/);
+  assert.match(resume, /\| `marker\.capability-closure` \| verify — finish the interrupted capability closure \|/);
   assert.match(resume, /first finish the missing output and that state or routing commit/);
 });
 
@@ -744,8 +766,8 @@ test("a Git-work-tree operation blocks every normal route without breaking non-G
   assert.match(principles, /Never abort automatically/);
   assert.match(principles, /confirmed conflict-resolution paths and commits Git\s+makes while continuing the existing operation/);
   assert.ok(
-    resume.indexOf("| `git status` reports an open rebase or merge |") <
-      resume.indexOf("| Any verify.md in HEAD contains a valid `routing prepared` object |"),
+    resume.indexOf("| `git.open-operation` |") <
+      resume.indexOf("| `transition.prepared-route` |"),
     "an open Git operation must outrank every devflow recovery route",
   );
   assert.doesNotMatch(principles, /40-character/);
@@ -835,11 +857,11 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.match(retrospector, /do not use a hypothetical verification\s+statement as strain evidence/);
   assert.match(retrospector, /supplied product\.md, arch\.md,\s+glossary\.md, or ADRs/);
   assert.match(resume, /^## Domain-Entry Questions$/m);
-  assert.match(resume, /If any of product\.md, arch\.md, or glossary\.md is absent or arch\.md lacks `Brownfield`[\s\S]*domain knowledge not initialized[\s\S]*open no capability body/);
+  assert.match(resume, /When the `setup:` zone is not empty, report only each exact missing path or field it\s+names and `domain knowledge not initialized`; open no capability body/);
   assert.match(resume, /no same-numbered file exists for the selection, including foundation/);
-  assert.match(resume, /Zero or multiple boundaries follow the canon's\s+recovery procedure[\s\S]*verified-only shape anomaly/);
-  assert.match(resume, /With an empty resolution set, present only foundation plus\s+non-retired number\/name candidates and ask; with two or more, present only the resolved\s+candidates and ask\. Open no body before the answer/);
-  assert.match(resume, /only when the user explicitly requests the full expected set/);
+  assert.match(resume, /zero or multiple boundaries follow the\s+`next: baseline\.boundary` row[\s\S]*verified-only shape\s+anomaly/);
+  assert.match(resume, /With an empty resolution set, present only foundation\s+plus non-retired number\/name candidates and ask; with two or more, present only the\s+resolved candidates and ask\. Open no body before the answer/);
+  assert.match(resume, /only when the user\s+explicitly requests the full expected set/);
   assert.doesNotMatch(active, /capability_baseline/);
 });
 
@@ -973,7 +995,7 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(principles, /exact mechanical v0\.10 migration/);
   assert.match(baseline, /In the ordinary design batch, arch or adopt derives the design zone anew from current Layer\s+0 and transforms the verified zone mechanically/);
   assert.match(baseline, /Except for the exact v0\.10 migration below,\s+never auto-heal zero or multiple boundaries/);
-  assert.match(resume, /expected file has the canonical baseline predicates' exact `legacy v0\.10` shape[\s\S]*mechanically carried verified zone/);
+  assert.match(resume, /\| `baseline\.legacy-v010` \| with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone \|/);
   assert.match(work, /capability document in the earlier shape[\s\S]*open no body/);
   assert.match(verify, /baseline no-op: legacy v0\.10 migration pending[\s\S]*do not migrate its verified zone/);
   assert.match(baseline, /uncommitted diff from a post-confirmation interrupted write is a capability-design[\s\S]*regenerate the whole expected set/);
@@ -987,12 +1009,12 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(baseline, /Every routing judgment, including absence\s+and boundary count, therefore uses the same HEAD values as writer eligibility/);
   assert.match(baseline, /gives an exact v0\.10 file the mechanical verified-zone transformation below/);
   assert.match(arch, /only capability documents are\s+missing or need repair/);
-  assert.match(resume, /An expected HEAD file has zero or more than one `## Verified state` boundary/);
+  assert.match(resume, /\| `baseline\.boundary` \|/);
   assert.match(principles, /user-identified Git revision to its current expected path/);
   assert.match(verify, /a standard-refresh-set input cannot\s+be parsed/);
   assert.match(verify, /recalculate this closure's capability code\s+scope and consumed paths from current topology/);
-  assert.match(resume, /skip only the three baseline\s+rows \(exact `legacy v0\.10`; a missing expected file or a design-shape mismatch; zero or\s+more than one boundary\)/);
-  assert.match(resume, /split's maintenance-mapping gate does not open on that deferral/);
+  assert.match(resume, /skip only the `baseline:` zone's three kinds during the\s+rest of this session's judgments/);
+  assert.match(resume, /split's maintenance-mapping\s+gate does not open on that deferral/);
   assert.match(adopt, /When Layer 0 is complete and\s+only capability documents are missing or need repair/);
   assert.match(baseline, /present them as one batch; change no\s+capability-document path before the user confirms that batch/);
   assert.match(baseline, /Show the exact migrating paths and this mechanical transformation with the design batch\.\s+After the user confirms the batch, land it in the same capability-design commit/);
@@ -1000,7 +1022,7 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(baseline, /The HEAD blob identifies provenance; it is not presumed valid/);
   assert.match(baseline, /resume writes no file and offers only two choices: after confirming that a user-identified\s+Git revision and path has one boundary, the user restores those bytes to the damaged\s+file's current expected path and commits only that file[\s\S]*or the user discards the old verified\s+prose/);
   assert.match(baseline, /Search no history for a known-good revision/);
-  assert.match(resume, /\| resume — apply the canonical baseline predicates' `Writers and replacement boundaries` section exactly \|/);
+  assert.match(resume, /\| `baseline\.boundary` \| resume — read only the canonical baseline predicates' `Writers and replacement boundaries` section and apply it exactly \|/);
   assert.match(baseline, /When a file is absent or the user confirms a boundary reset, arch or adopt creates both\s+zones; verified sections start as/);
   assert.match(baseline, /user-confirmed deletion exception changes no path and has a diff with zero added lines/);
   assert.match(baseline, /fixed section headings[\s\S]*metadata fields are not deletion-exception targets/);
@@ -1009,8 +1031,8 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(baseline, /Preserve an\s+`external` Trap's HEAD row byte-for-byte unless a person authorizes deletion/);
   assert.match(baseline, /the selected unit's number names the same-numbered capability document/);
   assert.match(baseline, /Before opening a body, exactly one same-numbered file[\s\S]*read only valid files, skip anomalous\s+numbers, and continue/);
-  assert.match(resume, /Before opening a body, require exactly one same-numbered\s+file with valid fixed boundary, sections, and metadata shape/);
-  assert.match(resume, /When a Binding ADR path is\s+absent, report the exact path, make the design zone a hypothesis, and search for no\s+substitute/);
+  assert.match(resume, /Before opening a body,\s+require exactly one same-numbered file with `shapeValid` true and one fixed boundary/);
+  assert.match(resume, /When a Binding ADR path is absent, report the exact path that line names, make the\s+design zone a hypothesis, and search for no substitute/);
   assert.match(baseline, /union of that provider's Scope paths before the\s+refresh in HEAD and after the refresh/);
   assert.match(baseline, /Consumed contracts has exactly one row per `Consumed paths` member in the same canonical\s+path order and no other row/);
   assert.match(baseline, /every\s+other-capability number equals the provider currently mapped by arch\.md's Code structure/);
@@ -1048,8 +1070,8 @@ test("capability knowledge lifecycle has deterministic creation, recovery, and r
   assert.match(principles, /Outside a canonical capability-design commit, the canonical human-deletion exception,\s+restoration of one complete one-boundary file from a user-identified Git revision to its current expected path, or this begin transition, any\s+`devflow\/project\/capabilities\/` diff is an integrity anomaly/);
 
   assert.ok(
-    resume.indexOf("| A card of mine is claimed | work |") <
-      resume.indexOf("| An expected file under the canonical baseline predicates is missing"),
+    resume.indexOf("| `claim.mine` | work |") <
+      resume.indexOf("| `baseline.design-refresh` |"),
     "an active claimed card must outrank baseline repair",
   );
   assert.match(work, /no capability document for <number>[\s\S]*continue from Layer 0 and the card/);
@@ -1080,8 +1102,8 @@ test("requested verification and events do not preempt this session's claimed ca
   assert.match(verify, /never preempts a task card claimed by this\s+session/);
   assert.match(verify, /When this session still holds a claimed card it was carrying, select no event/);
   assert.ok(
-    resume.indexOf("| A card of mine is claimed | work |") <
-      resume.indexOf("| journal contains an exact `product verification requested` line |"),
+    resume.indexOf("| `claim.mine` | work |") <
+      resume.indexOf("| `event.product-requested` |"),
     "claimed work must outrank a requested product verification",
   );
 });
@@ -1101,7 +1123,7 @@ test("verification routing has reconstructible prepared state and repair lineage
   assert.match(principles, /Never\s+select a new route or create the output twice/);
   assert.match(verify, /canonical prepared-route prefix/);
   assert.match(verify, /canonical\s+integrity item 14/);
-  assert.match(resume, /Any verify\.md in HEAD contains a valid `routing prepared` object/);
+  assert.match(resume, /\| `transition\.prepared-route` \| verify — compare and apply its payload/);
 
   for (const template of FAILURE_HISTORY_TEMPLATES) assert.ok(verify.includes(template), template);
   const historySamples = [
@@ -1220,7 +1242,7 @@ test("normal task completion has one final commit and a restartable boundary", (
       && work.indexOf("Integration gate") < work.indexOf("Land upper-document feedback"),
     "integration must precede every boundary working-tree mutation",
   );
-  assert.match(resume, /canonical final task subject/);
+  assert.match(resume, /\| `transition\.finish-boundary` \| work — make no second final task commit; finish only upper-document feedback and the boundary \|/);
 });
 
 test("a greenfield root cannot create an empty foundation or mistake waiting files for cards", () => {
@@ -1230,8 +1252,8 @@ test("a greenfield root cannot create an empty foundation or mistake waiting fil
   assert.match(principles, /waiting capability file, not a task card/);
   assert.match(split, /create no empty foundation folder/);
   assert.match(split, /`01-foundation\/` must have at least one direct card/);
-  assert.match(resume, /neither `01-foundation\/` nor `01-foundation\.done\/`/);
-  assert.match(resume, /A waiting capability file exists \| split — open one layer of that capability/);
+  assert.match(resume, /\| `layer\.no-foundation` \| split — create `01-foundation\/` and at least one direct task card in the same layer \|/);
+  assert.match(resume, /\| `ready\.waiting-capability` \| split — open one layer of that capability \|/);
 });
 
 test("dependency syntax is canonical while legacy cards have an explicit migration path", () => {
@@ -1247,11 +1269,15 @@ test("dependency syntax is canonical while legacy cards have an explicit migrati
   assert.match(state, /git diff --cached --name-only -z --no-renames\s+<authority> -- devflow\/tree/);
   assert.match(state, /Split that output on NUL, never on newlines, and never drop\s+`--no-renames`/);
   assert.match(principles, /state predicates' canonical or legacy format/);
-  assert.match(resume, /state predicates cannot parse/);
-  assert.match(resume, /`Approval` is not `pending` and is not effective under the state predicates/);
-  assert.match(split, /`Approval` is not `pending` but is ineffective under the state\s+predicates/);
-  assert.match(work, /state predicates' canonical or legacy format/);
-  assert.match(verify, /canonical state\s+predicates/);
+  // The parse and effectiveness judgments moved into the tool; the consumers now name the
+  // zone kind that carries each one, so an unparseable member and an ineffective approval
+  // still have exactly one named route each.
+  assert.match(resume, /\| `claim\.depends-anomaly` \| split — replace it with the user-confirmed canonical dependency value/);
+  assert.match(resume, /\| `ready\.approval-invalid` \| split — report the exact invalidity, reset `Approval` to `pending`/);
+  assert.match(split, /`Approval` is not `pending` and `ready:` reports the card as `approval-invalid`/);
+  assert.match(work, /The claimed card's `claim:` line carries its `Depends` judgment/);
+  assert.match(work, /`kind=depends-anomaly`, report that line's anomaly and stop/);
+  assert.match(verify, /project-state\.mjs state/);
 });
 
 test("stale task history is non-blocking only after replacement planning is durable", () => {
@@ -1262,7 +1288,7 @@ test("stale task history is non-blocking only after replacement planning is dura
   const marker = /YYYY-MM-DDTHH:MM:SSZ re-split pending: folder: <direct parent folder path with status suffixes removed>; stale: <number\+number>; source: <devflow\/project file path>#<heading>/;
   assert.match(principles, marker);
   assert.match(split, /When journal has a `re-split pending` marker/);
-  assert.match(resume, /journal contains an exact `re-split pending` line/);
+  assert.match(resume, /\| `marker\.re-split` \| split — finish that marker's replacement-card plan \|/);
   assert.match(principles, /excluded from active-child counts and closure judgment/);
   assert.match(verify, /A `\.stale\.` task card\s+is history and is excluded from this judgment/);
   assert.doesNotMatch(resume, /no pending,\s*claimed, or `\.stale\.` card/);
@@ -1311,7 +1337,9 @@ test("planning transitions have one canonical registry and committed begin state
   assert.match(principles, /boundary — verify source ids/);
   assert.match(split, /first land it, together with any uncommitted source record, in a\s+`split — begin <parent>` commit/);
   assert.match(split, /integrate the\s+current branch through that commit[\s\S]*before writing a marker or\s+tree diff/);
-  assert.match(resume, /working tree or HEAD/);
+  // Which of the working tree and HEAD carries a marker is the tool's read now, so the
+  // registry stays in the canon and resume names only the route the marker produces.
+  assert.match(resume, /\| `transition\.layer-opening` \| split/);
   assert.equal(count(deploy, /^YYYY-MM-DDTHH:MM:SSZ layer opening:/gm), 1);
   assert.equal(count(deploy, /^YYYY-MM-DDTHH:MM:SSZ maintenance routing pending:/gm), 1);
 });
@@ -1328,10 +1356,8 @@ test("product verdict freshness binds product, verification inputs, and committe
   const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   const state = fs.readFileSync(path.join(root, "skills", "principles", "verification-predicates.md"), "utf8");
-  for (const text of [verify, resume]) {
-    assert.match(text, /Code revision/);
-    assert.match(text, /Verification revision/);
-  }
+  assert.match(verify, /Code revision/);
+  assert.match(verify, /Verification revision/);
   assert.match(state, /git log -1 --format=%H -- \. ':\(exclude\)devflow\/\*\*'/);
   assert.match(state, /git ls-tree -r -z --full-tree HEAD --/);
   assert.match(state, /git hash-object --stdin/);
@@ -1340,8 +1366,12 @@ test("product verdict freshness binds product, verification inputs, and committe
   assert.match(verify, /direct-dependency card/);
   assert.match(state, /never use the PowerShell object pipeline/);
   assert.match(verify, /Before either layer, combine the non-empty output/);
-  assert.match(resume, /a path outside devflow is uncommitted/);
-  assert.match(resume, /differs from the verification predicates' current value/);
+  // The revision comparison and the uncommitted-outside-devflow trigger are the tool's
+  // `product:` zone; resume keeps the route each one produces, and verify still names
+  // where the four revisions come from.
+  assert.match(resume, /\| `product\.shape-or-revision` \| verify — product layer \|/);
+  assert.match(resume, /\| `product\.unverified` \| verify — rerun the product layer \|/);
+  assert.match(verify, /take the four\s+revisions from the tool/);
 });
 
 test("verification roles have stable targets and current-topology audit scope", () => {
@@ -1388,8 +1418,8 @@ test("devflow has exactly one mode", () => {
   assert.match(principles, /Upgrading from a version without rooms/);
   assert.match(principles, /6\. Is there a bare `\.wip\.` or a root `devflow\/HANDOFF\.md`/);
   assert.match(work, /finish the canonical room\s+transition before anything below/);
-  assert.match(resume, /A bare `\.wip\.` card or a root `devflow\/HANDOFF\.md` exists \| work/);
-  assert.match(resume, /arch\.md lacks the `integration` or `merge` line \| arch/);
+  assert.match(resume, /\| `setup\.room-upgrade` \| work — confirm the owner with the user/);
+  assert.match(resume, /\| `setup\.integration-config` \| arch — propose under arch's integration default rule/);
   assert.match(arch, /The default proposal for `integration` forks on how many worktrees `git worktree list`\s+reports/);
   assert.match(arch, /With one, it is the current branch and there is no extra question/);
   assert.match(arch, /devflow creates\nneither a branch nor a worktree/);
@@ -1409,20 +1439,27 @@ test("claims are freely parallel and terminal identity stays with the user", () 
   assert.match(work, /information, not a question/);
   assert.doesNotMatch(work, /Never claim a pending card in a depth-1 unit where I already hold a claim/);
   assert.doesNotMatch(work, /reciprocal parallel/);
-  assert.match(resume, /every claim of mine \u2014 path and status for all, and in full only the one this\s+invocation continues/);
-  assert.match(resume, /the matched row's selection settles it at report time/);
-  assert.match(resume, /Only\s+when the matched row is work and that row does not itself name the card, show the\s+claim paths, ask which one to continue/);
-  assert.match(resume, /run its\s+deferred uncommitted comparison/);
-  assert.match(resume, /uncommitted change to that claimed card's file/);
-  assert.match(resume, /report every remaining uncommitted path\s+without attributing it to a card/);
+  assert.match(resume, /\*\*The one claimed card this invocation continues\*\* is read in full/);
+  assert.match(resume, /For others' claims, the `claim:` line's path and claimant are enough/);
+  assert.match(resume, /otherwise `next:` settles it at report time/);
+  assert.match(resume, /show the claim paths, ask which one to continue/);
+  assert.match(resume, /run its deferred uncommitted comparison/);
+  assert.match(resume, /neither\s+`uncommittedUnattributed` nor `notYetOnIntegration` holds the card this invocation would\s+continue/);
+  assert.match(resume, /report every remaining uncommitted path without attributing\s+it to a card/);
 });
 
 test("the unintegrated count judges the commit set, not bare ancestry", () => {
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
-  assert.match(resume, /the commits `integration\.\.HEAD` contains/);
-  assert.match(resume, /it is `none` only when that commit set\s+is empty/);
-  assert.match(resume, /The integration tip being an ancestor\s+of the current branch is no ground for `none`/);
-  assert.doesNotMatch(resume, /is `none` when the integration tip is an ancestor of the current\s+branch/);
+  const stateTool = fs.readFileSync(path.join(root, "skills", "principles", "scripts", "project-state.mjs"), "utf8");
+  // resume reports the count; the tool computes it. Both halves have to exist or the number
+  // reaches the user with nobody deriving it.
+  assert.match(resume, /not yet on integration: <N paths \| none>/);
+  assert.match(stateTool, /notYetOnIntegration/);
+  // The count is a commit-range read, never an ancestry test — a branch with local commits
+  // piled up is exactly the shape an ancestry test calls `none`. The behavioral form of this
+  // (an ancestor tip with a non-empty set still counts) belongs to the tool's own suite.
+  assert.match(stateTool, /integration\.ref\}\.\.HEAD/);
+  assert.doesNotMatch(stateTool, /is-ancestor/);
 });
 
 test("candidate selection has one canonical order", () => {
@@ -1439,18 +1476,18 @@ test("candidate selection has one canonical order", () => {
   const deploy = [principles, baseline, resume, work, split].join("\n");
   assert.ok(count(deploy, /complete product\.md capability name|complete capability name/g) <= 3,
     "canonical recognition must not be restated in more than one place");
-  assert.match(resume, /Resolve the target by the canonical\n   rules' canonical recognition/);
+  assert.match(resume, /Resolve the target by the\n   canonical rules' canonical recognition/);
   assert.match(work, /in canonical\s+candidate order over my remaining claims/);
   assert.match(resume, /selected by\n<your request \| the last handoff \| canonical order>/);
-  assert.match(resume, /The current conversation carries a change request from the user that no journal line or verify entry preserves yet, that canonical recognition does not resolve to an existing card — pending or claimed — and that is not an item the tweak lane already handled in this conversation \(its commit is that item's preservation\) \| split — record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table \|/);
+  assert.match(resume, /When this conversation carries a change request that no `existing-request:` line holds yet,\s+record it as one canonical journal line before routing/);
   assert.ok(
-    resume.indexOf("| The current conversation carries a change request") <
-      resume.indexOf("| A card of mine is claimed | work |"),
-    "a fresh change request is recorded before a claim resumes, like the persisted form above it",
+    resume.indexOf("record it as one canonical journal line before routing") <
+      resume.indexOf("| `claim.mine` | work |"),
+    "a fresh change request is recorded before a claim resumes, like the persisted form below it",
   );
   assert.ok(
-    resume.indexOf("| A card of mine is claimed | work |") <
-      resume.indexOf("| journal contains an exact `maintenance routing pending` line |"),
+    resume.indexOf("| `claim.mine` | work |") <
+      resume.indexOf("| `request.existing` |"),
     "planning a maintenance request yields to an open claim; only recording it does not",
   );
   for (const consumer of [work, split, resume]) {
@@ -1558,7 +1595,9 @@ test("foundation is verified through its consumers", () => {
 
 test("the resume report names its reason and the alternatives", () => {
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
-  assert.match(resume, /The selection reason comes straight out of the canonical candidate order/);
+  assert.match(resume, /The selection reason comes straight out of `selectionReason`/);
+  // the seventh axis: the report has to show which line the judgment came from
+  assert.match(resume, /\*\*Quote the\s+fact line that carries that one step beside the next step\*\*/);
   assert.match(resume, /Also open:\n<every other unit that could be started now for the same reason \| none>/);
   assert.match(resume, /When the session unit\nholds no candidate, say so in that clause/);
 });
@@ -1640,23 +1679,25 @@ test("one integration branch is the only shared authority", () => {
     assert.doesNotMatch(text, /union of the integration tip/);
     assert.doesNotMatch(text, /unioned with each worktree HEAD/);
   }
-  assert.match(resume, /the devflow\/tree\/ listing at the integration tip/);
+  // The tree listing is read at the integration tip by the tool; resume keeps the fetch step
+  // that makes that tip current before anything is judged from it.
+  assert.match(resume, /On `integration=<branch>@unknown networkNeeded=1`, fetch integration and call the tool again/);
 });
 
 test("a change request is recorded at once but planned only after the claim closes", () => {
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
-  assert.match(resume, /record the request as the canonical journal line in one commit, read no code, plan nothing, then rescan this table/);
+  assert.match(resume, /record it as one canonical journal line before routing — unless `git:` or `integrity:`\nblocks — and call the tool again/);
   assert.match(split, /land that commit alone as a binding decision and return to the card/);
   assert.match(split, /`<id> boundary — request recorded`/);
   assert.ok(
-    resume.indexOf("| The current conversation carries a change request") <
-      resume.indexOf("| A card of mine is claimed | work |"),
+    resume.indexOf("record it as one canonical journal line before routing") <
+      resume.indexOf("| `claim.mine` | work |"),
     "recording a fresh request outranks the claim",
   );
   assert.ok(
-    resume.indexOf("| A card of mine is claimed | work |") <
-      resume.indexOf("| journal contains an exact `maintenance routing pending` line |"),
+    resume.indexOf("| `claim.mine` | work |") <
+      resume.indexOf("| `request.existing` |"),
     "planning it yields to the claim",
   );
 });
@@ -1672,7 +1713,7 @@ test("a completion signal is scoped so one flow cannot fail another's card", () 
 
 test("resume asks which unit instead of guessing when several are open", () => {
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
-  assert.match(resume, /When the conversation named no depth-1 unit and two or more units hold a candidate under\s+the matched row, ask which unit to continue instead of proposing one/);
+  assert.match(resume, /When the conversation named no depth-1 unit and two or more units hold a candidate in that\s+zone, ask which unit to continue instead of proposing one/);
   assert.match(resume, /With a single unit\s+holding candidates there is nothing to ask; propose it/);
 });
 
@@ -1712,7 +1753,7 @@ test("the tweak lane lives in the canon and every consumer only cites it", () =>
   assert.match(split, /A recorded request line holds no item that passed the tweak\s+gate/);
   assert.doesNotMatch(split, /goes through the tweak lane, not a card/);
   assert.match(split, /minus any items that passed the canonical\s+tweak gate/);
-  assert.match(resume, /A commit whose subject has the canonical tweak form/);
+  assert.match(resume, /A commit whose subject has the canonical\s+tweak form/);
   for (const consumer of [resume, work, split]) {
     assert.doesNotMatch(
       consumer,
@@ -1817,14 +1858,15 @@ const PLUGIN_ROOT_EXIT_PREFIX = {
   en: "When the platform gives this file no source path, or the tool cannot be run there, report that in one line and ",
   ko: "\uD50C\uB7AB\uD3FC\uC774 \uC774 \uD30C\uC77C\uC758 \uC6D0\uBCF8 \uACBD\uB85C\uB97C \uC8FC\uC9C0 \uC54A\uAC70\uB098 \uADF8 \uC790\uB9AC\uC5D0\uC11C \uB3C4\uAD6C\uB97C \uC2E4\uD589\uD560 \uC218 \uC5C6\uC73C\uBA74 \uD55C \uC904\uB85C \uBCF4\uACE0\uD558\uACE0 ",
 };
-// entry: the gate falls back to reading the whole canon. split: nothing reaches `Read first`.
-// work: no body is opened. Each is the canonical disposition for that site, not a new rule.
+// verify: the gate falls back to reading the whole canon. resume: the domain answer stands
+// without the capsule index. split: nothing reaches `Read first`. work: no body is opened.
+// Each is the canonical disposition for that site, not a new rule.
 const CAPSULE_TOOL_CALL_SITES = [
-  ["skills/resume/SKILL.md", "en", "take the every-other-output branch below."],
+  ["skills/resume/SKILL.md", "en", "answer from the capability document alone, with no capsule index."],
   ["skills/verify/SKILL.md", "en", "take the every-other-output branch below."],
   ["skills/split/SKILL.md", "en", "put no capsule path on `Read first`."],
   ["skills/work/SKILL.md", "en", "open no capsule body."],
-  ["skills/resume/SKILL_ko.md", "ko", "\uC544\uB798 \u300C\uADF8 \uBC16\uC758 \uBAA8\uB4E0 \uCD9C\uB825\u300D \uAC08\uB798\uB97C \uD0C4\uB2E4."],
+  ["skills/resume/SKILL_ko.md", "ko", "\ucea1\uc290 \uc0c9\uc778 \uc5c6\uc774 \ub2a5\ub825 \ubb38\uc11c\ub9cc\uc73c\ub85c \ub2f5\ud55c\ub2e4."],
   ["skills/verify/SKILL_ko.md", "ko", "\uC544\uB798 \u300C\uADF8 \uBC16\uC758 \uBAA8\uB4E0 \uCD9C\uB825\u300D \uAC08\uB798\uB97C \uD0C4\uB2E4."],
   ["skills/split/SKILL_ko.md", "ko", "\uCEA1\uC290 \uACBD\uB85C\uB97C `\uC77D\uC744 \uAC83`\uC5D0 \uB123\uC9C0 \uC54A\uB294\uB2E4."],
   ["skills/work/SKILL_ko.md", "ko", "\uCEA1\uC290 \uBCF8\uBB38\uC744 \uC5F4\uC9C0 \uC54A\uB294\uB2E4."],
@@ -1858,11 +1900,12 @@ test("every capsule-tool call site resolves <plugin root> and names its own fail
   }
 });
 
-test("both entry skills gate the capsule range on the tool, and fall to reading on anything else", () => {
+test("the entry skill that reads the baseline canon gates its capsule range on the tool, and falls to reading on anything else", () => {
+  // resume stopped reading the baseline canon when the state tool took over its judgments, so
+  // the gate has one reader left. It is not weakened for that reader: both branches, the exact
+  // opening answer, and both range headings are still required, in both languages.
   for (const [skill, language, gate] of [
-    ["resume", "SKILL.md", CAPSULE_GATE["skills/principles/baseline-predicates.md"]],
     ["verify", "SKILL.md", CAPSULE_GATE["skills/principles/baseline-predicates.md"]],
-    ["resume", "SKILL_ko.md", CAPSULE_GATE["skills/principles/baseline-predicates_ko.md"]],
     ["verify", "SKILL_ko.md", CAPSULE_GATE["skills/principles/baseline-predicates_ko.md"]],
   ]) {
     const label = `${skill}/${language}`;
@@ -1878,4 +1921,35 @@ test("both entry skills gate the capsule range on the tool, and fall to reading 
     // and every other answer keeps the current full read
     assert.ok(text.includes(gate.kept), `${label}: the other branch must still name ${gate.kept}`);
   }
+});
+
+test("the state tool is called by relative path and none of the retired call protocol survives", () => {
+  for (const language of ["SKILL.md", "SKILL_ko.md"]) {
+    const resume = fs.readFileSync(path.join(root, "skills", "resume", language), "utf8");
+    // The tool sits beside the canon, so it is reached the same way the canon is. A skill that
+    // reintroduced the placeholder here would reintroduce the resolution defect v0.18.6 removed.
+    assert.match(resume, /node ..[/]principles[/]scripts[/]project-state[.]mjs state/, language);
+    assert.doesNotMatch(resume, /<plugin root>[/]scripts[/]project-state/, language);
+    assert.doesNotMatch(resume, /<\ud50c\ub7ec\uadf8\uc778 \ub8e8\ud2b8>[/]scripts[/]project-state/, language);
+    // The four sentences the narrowed call retired. Each one asked the session to encode a
+    // conversational fact, hand it to the tool, and call again; the tool answers none of them
+    // now, so a session still carrying one waits on a round trip that never returns.
+    for (const retired of [/changeRequestPending/, /pending-input/, /--answer /,
+      /--defer-|--named-card|--session-unit|--chosen-claim|--carried-claim|--reported-blocked-audit|--full-set|--explain/]) {
+      assert.doesNotMatch(resume, retired, `${language}: retired call protocol survives`);
+    }
+  }
+  // A prohibition on re-reading the conditions was what held the saving up in the earlier
+  // design. The conditions are on the screen now, so the prohibition has no subject and its
+  // presence would only invite a reader to look for one.
+  assert.doesNotMatch(fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8"),
+    /do not read the conditions again|never read the conditions again/i);
+  assert.doesNotMatch(fs.readFileSync(path.join(root, "skills", "resume", "SKILL_ko.md"), "utf8"),
+    /\uc870\uac74\uc740 \ub2e4\uc2dc \uc77d\uc9c0 \uc54a\ub294\ub2e4/);
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  // `next:` is derived, and saying so is what lets a session override it from the same screen.
+  assert.match(resume, /it is a summary\s+derived from the facts, not a contract/);
+  // Every zone prints even when empty, which is what makes "nothing is pending here" visible
+  // without a second call.
+  assert.match(resume, /an empty zone still prints its line/);
 });

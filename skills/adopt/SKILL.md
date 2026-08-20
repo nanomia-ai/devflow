@@ -12,6 +12,11 @@ predicates (`../principles/baseline-predicates.md`). If present, read all of
 `devflow/project/design.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each
 legacy `ADR-NNN.md` directly under `devflow/project/decisions/`.
 
+Run `node ../principles/scripts/project-state.mjs state --capability <capability number>`
+for each capability document in scope. Its `baseline:` lines carry the expected set, path
+state, boundary, shape, freshness, and `legacy v0.10` judgments; take them as they stand.
+Read the baseline predicates for what earns a place in a body.
+
 Purpose: give a **brownfield** (a project that already has code, joined mid-way) its
 Layer 0 documents (product.md · arch.md · code-style.md · glossary.md) by
 reverse-derivation, inherited from then on. Do not interview. Reverse-derive.

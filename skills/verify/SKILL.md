@@ -5,12 +5,15 @@ description: Verification. Checks acceptance criteria at the capability and prod
 
 # verify — Verification
 
-First read all of the canonical rules (`../principles/SKILL.md`), the canonical state
-predicates (`../principles/state-predicates.md`), the canonical verification predicates
-(`../principles/verification-predicates.md`), `devflow/project/product.md`,
+First read all of the canonical rules (`../principles/SKILL.md`),
+`devflow/project/product.md`,
 `devflow/project/arch.md`, and
 `devflow/project/code-style.md`. If present, also read all of
 `devflow/project/glossary.md` and `devflow/journal.md`. Then run
+`node ../principles/scripts/project-state.mjs state` and read its `transition:`, `event:`,
+`product:`, and `complete:` lines; add `--capability <capability number>` for one
+capability's revision and baseline detail. Those lines carry the revision and event
+judgments this skill uses; take them as they stand. Then run
 `node <plugin root>/scripts/project-knowledge.mjs presence`. `<plugin root>` is the folder
 two levels above this loaded file, and in a runtime that sets `${CLAUDE_PLUGIN_ROOT}` that
 variable names the same folder. When the platform gives this file no source path, or the
@@ -88,10 +91,11 @@ anomaly; report it and do not verify.
 Start the capability layer only when the target depth-1 capability folder has at least
 one direct child that is not `.stale.`, and every such child has a `.done` status. An
 empty folder, a folder with no active direct child, or an active direct child without
-`.done` returns to split, or to resume's non-capability-folder boundary row (add `.done`
+`.done` returns to split, or to resume's `layer.folder-boundary` row (add `.done`
 from the deepest matching folder upward). A `.stale.` task card
-is history and is excluded from this judgment. At the start of either layer, calculate
-the revisions by the verification predicates. Step 2 routes an `unresolved` Capability revision.
+is history and is excluded from this judgment. At the start of either layer, take the four
+revisions from the tool — `state` for the product layer, `state --capability <capability
+number>` for the capability layer. Step 2 routes an `unresolved` Capability revision.
 
 Before either layer, combine the non-empty output
 of `git diff --name-only`, `git diff --cached --name-only`, and
@@ -414,17 +418,18 @@ Recommended tier: T-high + low effort, kept short (it is a verdict, not an explo
 
 ## Event Record — shared by Audit and Retrospective
 
-The verification predicates alone own automatic-event keys, due conditions, and duplicate
+The `event:` zone alone owns automatic-event keys, due conditions, and duplicate
 judgment. Before a user-requested run, write one canonical `audit requested` or
-`retrospective requested` line in journal. Its collision-free timestamp selected by the
-verification predicates is the event key.
+`retrospective requested` line in journal. Its event key is a UTC-second timestamp that no
+unresolved request line and no verify.md event timestamp for the same role and target
+already holds — the `event:` lines name those; add one second until the value is unused.
 
 For a capability-number request, the target record is that capability's verify.md; for
 `product`, it is tree-root verify.md. Record a user request for the whole project with the
 target value `product`. A request is not runnable before that target file
 exists. Keep its journal line, let other work proceed, and process it after that boundary
-is first verified. For a legacy target file, include the verification predicates' event-section
-preparation in the pending-event commit.
+is first verified. For a legacy target file, add each `## Audit` and `## Retrospective`
+section the tool reports missing, with `- not run`, in the same pending-event commit.
 
 resume and verify process exactly one event in this order: an existing `routing` entry → awaiting user decision → an
 existing `pending` entry → automatic Audit → automatic Retrospective → a runnable user

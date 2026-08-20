@@ -5,11 +5,13 @@ description: 검증. 능력 단위·제품 단위로 실제 실행을 통해 수
 
 # verify — 검증
 
-먼저 규칙 정본(`../principles/SKILL.md`)·상태 판정 정본
-(`../principles/state-predicates.md`)·검증 판정 정본
-(`../principles/verification-predicates.md`)·`devflow/project/product.md`·
+먼저 규칙 정본(`../principles/SKILL.md`)·`devflow/project/product.md`·
 `devflow/project/arch.md`·`devflow/project/code-style.md`를 통독한다. 존재하면
 `devflow/project/glossary.md`와 `devflow/journal.md`도 각각 통독한다. 이어
+`node ../principles/scripts/project-state.mjs state`를 실행해 `transition:`·`event:`·
+`product:`·`complete:` 줄을 읽고, 능력 하나의 revision·기준선 상세가 필요하면
+`--capability <능력 번호>`를 붙인다. 이 스킬이 쓰는 revision·사건 판정은 그 줄이 낸 값을
+그대로 쓴다. 이어
 `node <플러그인 루트>/scripts/project-knowledge.mjs presence`를 실행한다.
 `<플러그인 루트>`는 지금 열어 둔 이 파일에서 두 단계 위 폴더이고, `${CLAUDE_PLUGIN_ROOT}`를
 설정하는 런타임에서는 그 변수가 같은 폴더를 가리킨다. 플랫폼이 이 파일의 원본 경로를 주지
@@ -75,7 +77,8 @@ product로 돌아간다. 대상 범위의 `재분할 대기` 마커가 있으면
 `.done` 상태일 때만 시작한다. 빈 폴더, 활성 직계 자식이 없는 폴더, `.done` 아닌 활성 직계
 자식이 있는 폴더는 split 또는 resume의 능력 폴더 아닌 폴더 경계 정리 행(가장 깊은 해당
 폴더부터 `.done`을 붙임)으로 돌아간다. `.stale.` 작업 카드는 역사이며
-이 판정에서 제외한다. 제품층과 능력층 모두 시작할 때 검증 판정 정본대로 revision을 계산한다.
+이 판정에서 제외한다. 제품층과 능력층 모두 시작할 때 네 revision은 도구가 낸다 — 제품층은
+`state`, 능력층은 `state --capability <능력 번호>`다.
 Capability revision이 `미해결`이면 2단계가 라우팅한다.
 
 어느 층이든 `git diff --name-only`,
@@ -341,14 +344,15 @@ previous route cards: <직전 수리 라운드의 완료된 수정 route 카드 
 
 ## 사건 기록 — 감리·회고 공통
 
-자동 사건의 key·발동·중복 판정은 검증 판정 정본만 소유한다. 사용자 요청은 역할을 부르기 전에
-규칙 정본 형식의 `감리 요청` 또는 `회고 요청` 한 줄로 journal에 남긴다. 검증 판정 정본이 고른
-충돌 없는 timestamp가 사건 key다.
+자동 사건의 key·발동·중복 판정은 `event:` 구역만 소유한다. 사용자 요청은 역할을 부르기 전에
+규칙 정본 형식의 `감리 요청` 또는 `회고 요청` 한 줄로 journal에 남긴다. 그 사건 key는 같은
+역할·대상의 미해소 요청 줄과 verify.md 사건 timestamp가 아직 쓰지 않은 UTC 초 값이다 —
+`event:` 줄이 그것들을 이름 대며, 쓰이지 않은 값이 될 때까지 1초씩 더한다.
 
 사용자 요청의 대상 기록은 능력 번호면 그 능력의 verify.md, `product`면 트리 루트
 verify.md다. 프로젝트 전체에 대한 사용자 요청은 대상값을 `product`로 기록한다. 대상 파일이 아직 없으면 요청은 실행 가능하지 않다. journal 줄을 유지하고 다른
-작업을 막지 않은 채, 그 경계가 처음 검증된 뒤 처리한다. 구형 대상 파일은 검증 판정 정본의
-사건 절 준비를 pending 사건 커밋에 함께 싣는다.
+작업을 막지 않은 채, 그 경계가 처음 검증된 뒤 처리한다. 구형 대상 파일은 도구가 없다고 낸
+`## Audit`·`## Retrospective` 절을 `- not run`으로 같은 pending 사건 커밋에 함께 싣는다.
 
 resume과 verify는 아래 순서로 사건 하나만 처리한다: 기존 `라우팅` → 사용자 결정 대기 → 기존 `대기` →
 감리 자동 사건 → 회고 자동 사건 → 실행 가능한 사용자 요청. 같은 우선순위가 여럿이면

@@ -5,8 +5,10 @@ description: Implementation. Takes one task card, codes it, keeps the progress l
 
 # work — Implementation
 
-First read the canonical rules (`../principles/SKILL.md`) and canonical state predicates
-(`../principles/state-predicates.md`).
+First read the canonical rules (`../principles/SKILL.md`). Then run
+`node ../principles/scripts/project-state.mjs state` and read its `claim:`, `ready:`, and
+`integrity:` lines; add `--card <path>` for one card's judgment detail. Those lines carry
+the card judgments this skill uses; take them as they stand.
 
 Purpose: carry one task card all the way to its completion signal, then commit.
 
@@ -81,17 +83,17 @@ remainder and the commit.
    or progress log in an `NN.N wip: legacy card migration` checkpoint. Then release the
    card, finish split's legacy normalization, execution-proposal approval, and planning
    commit, and reclaim it.
-   Read the claimed card's `Depends` under the state predicates' canonical or legacy format. If any
-   member is unparseable, or a number does not resolve to exactly one card, report an
-   integrity anomaly and stop. If any resolved card is not `.done.`, do not resume
-   implementation; return to split, release the original card, and finish the prerequisite.
+   The claimed card's `claim:` line carries its `Depends` judgment. On
+   `kind=depends-anomaly`, report that line's anomaly and stop. On
+   `kind=blocked-by-prerequisite`, do not resume implementation; return to split, release
+   the original card, and finish the prerequisite.
    If journal in HEAD or the working tree has an active layer-opening marker whose
    `source-json` decodes to a `card:` locator naming my claimed card, do not resume
    implementation; return to split to finish that marker's planning commit first.
 3. Select this invocation's card and begin. When this session already reported an exact
    card path and the user approved it, that card. Otherwise the first entry in canonical
-   candidate order over my remaining claims plus every pending card that is ready under the
-   state predicates. Continue a claim of mine; claim a ready pending card as below. Never
+   candidate order over my remaining claims plus every pending card the `ready:` zone
+   lists. Continue a claim of mine; claim a ready pending card as below. Never
    claim a card that is not ready. When the user named a card and this selection does not
    take it, say which card it took and why before claiming anything. When claiming a
    pending card in a unit where I already hold claims, name those claims in one line, and
@@ -346,7 +348,7 @@ claimed — any other card can simply be claimed instead.
    not make belong to another flow and do not ride. With nothing changed, make no commit
 ② Remove the claim suffix, returning the card to pending
 ③ Claim, in this same invocation, the replacement card the user named in it, when that
-   card is ready under the state predicates. With no card named, or a named card that is
+   card is listed in the `ready:` zone. With no card named, or a named card that is
    not ready, claim no automatic candidate: say which condition fails and ask what to do. Integrate the checkpoint first,
    then land the release as the canonical binding decision it is
 ```

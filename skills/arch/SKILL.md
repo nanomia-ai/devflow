@@ -15,6 +15,11 @@ If `product.md` is missing: with no code either, direct the user to the product 
 first; with existing code, to adopt (existing-project adoption — it produces
 product.md too, by reverse-derivation).
 
+Run `node ../principles/scripts/project-state.mjs state --capability <capability number>`
+for each capability document in scope. Its `baseline:` lines carry the expected set, path
+state, boundary, shape, freshness, and `legacy v0.10` judgments; take them as they stand.
+Read the baseline predicates for what earns a place in a body.
+
 If resume routed here because Layer 0 is complete and only capability documents are
 missing or need repair, do not run steps 1–5 or modify arch.md or
 code-style.md. Keep the confirmed documents unchanged and run only `Capability documents`

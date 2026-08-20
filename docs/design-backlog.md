@@ -358,3 +358,26 @@ after going public is retracted, its own reason having refuted it (2026-08-13).
   name**; the numbers are what they were then. Whether the same drift sits in other pairs has
   not been counted. A full sweep is a separate round — it reads
   whole ko/en pairs rather than one file, so folding it into a minimal repair opens the scope.
+- **A generation gap in capability-document grammar** — the capability document (v0.11.0)
+  demands fifteen fixed headings, table columns, and `None.` in an empty section, while the
+  capsule (v0.18.1) gives only slot names with no checker. There is a measurement behind the
+  capsule's choice — five of twelve fixed slots came back filled with "cannot fill", the form
+  detected zero defects, and four forms tied across thirteen questions. And **the machine
+  actually reads only eight lines of a capability document** (one zone boundary plus seven
+  metadata fields). The adoption condition is the share of sections filled with `None.` in the
+  first real 0.18 use; before that, changing the grammar is a change with no measurement.
+- **The window a person reads** — the roughly 4 KB of "just learned · traps" in v0.9.9's
+  HANDOFF was the one place a person read it all at once, and that content is now scattered
+  across three, so **a person cannot read it until the capability closes.** A new file is not
+  the answer — the query work already runs (the last carry line of a done card outside Covered
+  cards) plus the state tool's `ready:` and `claim:` zones, **made callable by a person from a
+  shell**, stands the same window up. Zero new files, zero new rules.
+- **ADRs and a capsule's `## Decisions` play the same role** — the canon already calls ADRs
+  legacy, so this is the one pair that could merge, but the cost is frozen behind that legacy
+  label and **it is not the work to do now.** Merging moves the `Binding ADRs` section, the
+  reviewer and retrospector inputs, and the tests. arch's three conditions survive unchanged:
+  they are a threshold, not a file kind.
+- **The tool has two homes** — v0.18.7 put the state tool in `skills/principles/scripts/` and
+  the capsule tool stayed in `scripts/`. Moving the capsule tool is a separate round candidate,
+  and moving it takes eight call sites and the canonical location sentence (the "where the tool
+  lives" section of `baseline-predicates.md`) with it.

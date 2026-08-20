@@ -56,7 +56,8 @@ points to from their actual sources.
 | `work` | carries one card's code, progress log, completion signal, and upper-document feedback to completion | approved card, canon, and baseline → verify or the next card | DD-09 · DD-48 · DD-56 |
 | `verify` | executes capability and product verdicts and owns survival paths for failure, audit, and retrospective events | closed code, signals, and baseline → repair through split or closure | DD-21–DD-24 · DD-30 · DD-36 · DD-68 |
 | `resume` | checks disk integrity, recovers interrupted transitions, and routes the next stage | Git, tree, journal, and verify projection → the applicable entry skill | DD-11 · DD-25 · DD-26 · DD-44 |
-| predicate companions | fix shared state, verification, and baseline judgments in one place | only named consumers read them; each stage owns its procedure | DD-28 · DD-42 · DD-56 |
+| predicate companions | fix the shared baseline judgment in one place; state and verification judgments moved to the state tool | only named consumers read them; each stage owns its procedure | DD-28 · DD-42 · DD-56 · DD-80 |
+| state tool | owns the entry, predicate, and integrity computation, read-only and repairing nothing | disk and Git → fourteen zones and a derived `next:` line; one call, six consumers | DD-11 · DD-25 · DD-39 · DD-80 |
 | role contracts | brief reviewer, verifier, auditor, and retrospector verbatim into clean contexts | an entry-skill event → an independently constrained judgment | DD-19 · DD-21–DD-23 |
 | `coordinator` role contract | dispatches and supervises workers above devflow without creating a stage or state | orchestrator → existing entry skills | DD-70 |
 
@@ -144,6 +145,7 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-71 | Repository maintenance reads the whole design intent first, and AGENTS conditionally routes detailed procedure; history is not onboarding | Identity, packaging, platforms | v0.16.2 | active |
 | DD-72 | A versioned implementation with no named document role leaves one report_ko.md as its default round record | Identity, packaging, platforms | v0.16.2 | active |
 | DD-79 | README is a person's document and lives outside the AI's read set — not read, not updated, not used as grounds for a judgment, and the line holds after README returns | Identity, packaging, platforms | v0.18.5 | active |
+| DD-80 | The executor of a machine judgment is code, and the document that wrote it down is deleted the release after its last runtime reader moves | Identity, packaging, platforms | v0.18.7 | active |
 | DD-08 | TDD procedure not adopted | Verification and roles | origin | active |
 | DD-17 | The terms of the review and verification roles live in the skill text — agents/*.md is Claude packaging | Verification and roles | v0.9.5 | active |
 | DD-19 | Role contracts are one companion file beside each skill (reviewer.md · verifier.md); every platform runs them by briefing a clean context with the file verbatim — no Claude agent registration | Verification and roles | v0.9.6 | active |
@@ -158,7 +160,7 @@ and that subject's rejection lineage sits behind its decisions. A re-proposal st
 | DD-06 | No model names in files (tiers T-high/T-mid/T-low only) | The task tree and its cards | origin | active |
 | DD-09 | 1 task = 1 commit (only after verification passes) | The task tree and its cards | origin | active |
 | DD-11 | Integrity check reports only, never auto-corrects | The task tree and its cards | origin | active |
-| DD-25 | Ready-card semantics, per-card execution-proposal approval, and resume routing are decided from disk state | The task tree and its cards | v0.9.21 | active |
+| DD-25 | Ready-card semantics, per-card execution-proposal approval, and resume routing are decided from disk state | The task tree and its cards | v0.9.21 | active, partly corrected by DD-80 (v0.18.7) |
 | DD-27 | `.stale.` task cards remain as history, and a `re-split pending` marker recovers interruption before replacement planning | The task tree and its cards | v0.9.21 | active |
 | DD-38 | `Approval` is effective only with Git-diff freshness, not the card value alone | The task tree and its cards | v0.9.21 | active |
 | DD-50 | A change request is recorded immediately and planned later; a completion signal is scoped to its capability | The task tree and its cards | v0.12.0 | active |
