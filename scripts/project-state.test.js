@@ -37,6 +37,7 @@ const ROUTE_MAP = [
   ["complete", "product-pass"],
   ["setup", "no-product"], ["setup", "layer0-incomplete"],
   ["complete", "adoption"], ["layer", "no-tree"],
+  ["ready", "digest-behind"],
   null, // design.entry is the conversation-owned choice inside layer.no-tree.
 ];
 
@@ -223,7 +224,6 @@ function makeRepo(t, options = {}) {
   if (options.codeStyle !== false) write(root, "devflow/project/code-style.md", "# Code Style\n\nNone.\n");
   write(root, "devflow/users/jmp/owner.md", "id: jmp\ngit: Jmp, jmp@example.test\n");
   write(root, "devflow/users/jmp/HANDOFF.md", "");
-  write(root, "devflow/users/jmp/digest.md", "none\n");
   write(root, "devflow/journal.md", "");
   if (options.tree !== false) fs.mkdirSync(path.join(root, "devflow", "tree"), { recursive: true });
   write(root, "seed.txt", "seed\n");
@@ -576,6 +576,12 @@ function mappingScene(t, number) {
     case 48:
       root = completedRepo(t, "pass");
       break;
+    case 53: {
+      const marker = git(root, "rev-parse", "HEAD");
+      write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+      commit(root, "jmp boundary — digest marker");
+      break;
+    }
     case 51:
       break;
     default:
@@ -748,7 +754,7 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
 for (let index = 0; index < ROUTE_MAP.length; index += 1) {
   const number = index + 1;
   test(`T1 mapping ${String(number).padStart(2, "0")} has the exact zone, kind, values, and derived next`, async (t) => {
-    if (number === 53) {
+    if (number === 54) {
       const module = await registry();
       assert.equal(module.ZONE_DEFINITIONS.flatMap((zone) => zone.kinds).some((kind) => kind.name === "design-entry"), false);
       const root = mappingScene(t, 52);
@@ -809,7 +815,7 @@ test("T2 priority structure has one canonical array position per zone", async ()
   const module = await registry();
   assert.deepEqual(module.ZONE_DEFINITIONS.map((item) => item.zone), ROUTE_ZONES);
   assert.equal(new Set(module.ZONE_DEFINITIONS.map((item) => item.zone)).size, 14);
-  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 53);
+  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 54);
 });
 
 test("T2 priority selector uses the canonical array for every i less than j", async () => {
@@ -841,7 +847,7 @@ test("T2 overlap open Git and my claim keeps both and routes Git first", (t) => 
 
 test("T2 overlap product rerun marker and my claim keeps both and routes marker first", (t) => {
   const root = makeRepo(t);
-  const card = writeClaim(root);
+  const card = writeClaim(root, { commitSubject: "jmp 02.1 claim" });
   write(root, "devflow/journal.md", `2026-08-20T00:00:00Z product re-run pending: statement-json: ${JSON.stringify("identity is disproved")}\n`);
   commit(root, "jmp boundary — marker");
   const result = run(root);
@@ -1233,8 +1239,8 @@ test("adversarial F2 first capability closure Retrospective is automatic", (t) =
   commit(root, "jmp capability done");
   capabilityVerify(root, "devflow/tree/02-capability.done/verify.md");
   const result = run(root); ok(result);
-  assertFragment(result.stdout, "event: kind=new", "role=Retrospective");
-  assertFragment(result.stdout, "event: kind=new", 'key="first closure 2"');
+  const events = result.stdout.split(/\r?\n/).filter((line) => line.startsWith("event: kind=new"));
+  assert.ok(events.some((line) => line.includes("role=Retrospective") && line.includes('key="first closure 2"')), result.stdout);
 });
 
 test("adversarial F3 item 8 checks authors after my current claim commit", (t) => {
@@ -1434,4 +1440,367 @@ test("adversarial F5 nonblocking integrity uses advisory while shape retains zon
   assertFragment(result.stdout, "integrity: kind=advisory", "item=1");
   assert.equal(result.stdout.split(/\r?\n/).some((line) => line.startsWith("integrity: kind=shape") && line.includes("item=1")), false);
   assert.notEqual(nextOf(result.stdout), "integrity.advisory");
+});
+
+function integrityItemLines(output, item) {
+  return output.split(/\r?\n/)
+    .filter((line) => line.startsWith("integrity: kind=") && line.includes(`item=${item} `));
+}
+
+test("R1 closed-folder projection suppresses integrity 1, 4, 8, 9, and 13 while preserving item 3", async (t) => {
+  await t.test("item 1 orphan claim", () => {
+    const root = makeRepo(t);
+    write(root, "devflow/tree/02-capability.done/02.1-orphan.wip-ghost.md", cardText("02.1"));
+    commit(root, "ghost closed claim");
+    const result = run(root); ok(result);
+    assert.equal(integrityItemLines(result.stdout, 1).length, 0, result.stdout);
+    assert.equal(integrityItemLines(result.stdout, 3).length, 1, result.stdout);
+  });
+
+  await t.test("item 4 dependency body", () => {
+    const root = makeRepo(t);
+    write(root, "devflow/tree/02-capability.done/02.1-dependency.done.md", cardText("02.1", { depends: "02.9 prose" }));
+    commit(root, "closed dependency history");
+    const result = run(root); ok(result);
+    assert.equal(integrityItemLines(result.stdout, 4).length, 0, result.stdout);
+  });
+
+  await t.test("item 8 claimant author", () => {
+    const root = makeRepo(t);
+    write(root, "devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
+    write(root, "devflow/users/other/HANDOFF.md", "");
+    write(root, "devflow/users/other/digest.md", "none\n");
+    write(root, "devflow/tree/02-capability.done/02.1-author.wip-other.md", cardText("02.1"));
+    commit(root, "mismatched closed author");
+    const result = run(root); ok(result);
+    assert.equal(integrityItemLines(result.stdout, 8).length, 0, result.stdout);
+    assert.equal(integrityItemLines(result.stdout, 3).length, 1, result.stdout);
+  });
+
+  await t.test("item 9 pending fields", () => {
+    const root = makeRepo(t);
+    write(root, "devflow/tree/02-capability.done/02.1-fields.md", cardText("02.1", { omit: ["Approval", "Review"] }));
+    commit(root, "closed pending history");
+    const result = run(root); ok(result);
+    assert.equal(integrityItemLines(result.stdout, 9).length, 0, result.stdout);
+    assert.equal(integrityItemLines(result.stdout, 3).length, 1, result.stdout);
+  });
+
+  await t.test("item 13 remote evidence", () => {
+    const root = makeRepo(t);
+    const card = "devflow/tree/02-capability.done/02.1-evidence.wip-jmp.md";
+    write(root, card, `${cardText("02.1")}2026-08-20T00:00:00Z remote evidence check: check-json: ${JSON.stringify("https://example.test/actual")}; verdict: unrun; detail-json: ""\n`);
+    const checkpoint = commit(root, "jmp 02.1 wip: evidence-wait");
+    write(root, "devflow/journal.md", `2026-08-20T00:00:01Z evidence-wait: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify("https://example.test/different")}\n`);
+    commit(root, "jmp boundary — closed evidence");
+    const result = run(root); ok(result);
+    assert.equal(integrityItemLines(result.stdout, 13).length, 0, result.stdout);
+    assert.equal(integrityItemLines(result.stdout, 3).length, 1, result.stdout);
+  });
+});
+
+test("R1 a done card body in a closed folder is never opened", (t) => {
+  const root = makeRepo(t);
+  const relative = "devflow/tree/02-capability.done/02.1-history.done.md";
+  const target = path.join(root, ...relative.split("/"));
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(target, Buffer.from([0xff, 0xfe, 0xfd]));
+  commit(root, "closed opaque history");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity:", "blocking=0");
+});
+
+test("R2 unstaged delete plus untracked done card is a bounded claim-done move", (t) => {
+  const root = makeRepo(t);
+  const claimed = writeClaim(root);
+  const done = claimed.replace(".wip-jmp.md", ".done.md");
+  fs.renameSync(path.join(root, ...claimed.split("/")), path.join(root, ...done.split("/")));
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "transition: kind=finish-boundary", `card=${claimed}`);
+  assertFragment(result.stdout, "transition: kind=finish-boundary", `path=${done}`);
+  assertFragment(result.stdout, "transition: kind=finish-boundary", "case=claim-done-move");
+});
+
+test("R2 a similar untracked filename is not guessed to be a claim-done move", (t) => {
+  const root = makeRepo(t);
+  const claimed = writeClaim(root);
+  fs.rmSync(path.join(root, ...claimed.split("/")));
+  write(root, "devflow/tree/02-capability/02.2-fixture.done.md", cardText("02.2"));
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("case=claim-done-move"), false, result.stdout);
+});
+
+test("R2 a staged canonical claim-done rename remains recognized", (t) => {
+  const root = makeRepo(t);
+  const claimed = writeClaim(root);
+  const done = claimed.replace(".wip-jmp.md", ".done.md");
+  git(root, "mv", claimed, done);
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "transition: kind=finish-boundary", "case=claim-done-move");
+});
+
+test("R2 a line-ending-only byte change is not a canonical claim-done move", (t) => {
+  const root = makeRepo(t);
+  const claimed = writeClaim(root);
+  const done = claimed.replace(".wip-jmp.md", ".done.md");
+  const text = read(root, claimed);
+  fs.renameSync(path.join(root, ...claimed.split("/")), path.join(root, ...done.split("/")));
+  fs.writeFileSync(path.join(root, ...done.split("/")), text.replace(/\n/g, "\r\n"), "utf8");
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("case=claim-done-move"), false, result.stdout);
+});
+
+test("R2 a staged rename with a changed card body is not a canonical claim-done move", (t) => {
+  const root = makeRepo(t);
+  const claimed = writeClaim(root);
+  const done = claimed.replace(".wip-jmp.md", ".done.md");
+  git(root, "mv", claimed, done);
+  fs.appendFileSync(path.join(root, ...done.split("/")), "changed after rename\n", "utf8");
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("case=claim-done-move"), false, result.stdout);
+});
+
+test("R3 unrelated source changes do not hide an interrupted canonical output", (t) => {
+  const root = makeRepo(t);
+  write(root, "devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
+  write(root, "devflow/journal.md", "2026-08-20T00:00:00Z jmp: interrupted fixture\n");
+  write(root, "src/x.js", "export const x = 1;\n");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "transition: kind=interrupted", 'paths=["devflow/journal.md","devflow/tree/02-capability/verify.md"]');
+  assertFragment(result.stdout, "report:", 'uncommittedUnattributed=["devflow/journal.md","devflow/tree/02-capability/verify.md","src/x.js"]');
+});
+
+test("R3 an unrelated source change alone does not invent an interrupted transition", (t) => {
+  const root = makeRepo(t);
+  write(root, "src/x.js", "export const x = 1;\n");
+  const result = run(root); ok(result);
+  assert.equal(hasKind(result.stdout, "transition", "interrupted"), false, result.stdout);
+});
+
+test("R4 capability filtering keeps global judgment and adds only requested detail", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha", "Beta"] });
+  write(root, "devflow/tree/02-Alpha/02.1-alpha.md", cardText("02.1"));
+  write(root, "devflow/tree/03-Beta/03.1-beta.md", cardText("03.1"));
+  commit(root, "jmp split — two capabilities");
+  write(root, "outside.txt", "global diff\n");
+  const full = run(root); ok(full);
+  const narrowed = run(root, "--capability", "2"); ok(narrowed);
+  assert.doesNotMatch(full.stdout, /^baseline: capability=/m,
+    "an unfiltered entry call must not compute or emit per-capability baseline detail");
+  const narrowedWithoutDetail = narrowed.stdout.split(/\r?\n/)
+    .filter((line) => !line.startsWith("baseline: capability="))
+    .join("\n");
+  assert.ok(Buffer.byteLength(narrowedWithoutDetail) <= Buffer.byteLength(full.stdout),
+    `${Buffer.byteLength(narrowedWithoutDetail)} > ${Buffer.byteLength(full.stdout)}`);
+  assert.match(narrowed.stdout, /^state: .* narrow=2(?:\s|$)/m);
+  assert.match(narrowed.stdout, /^baseline: capability=2(?:\s|$)/m);
+  assert.doesNotMatch(narrowed.stdout, /^baseline: capability=3(?:\s|$)/m);
+  assert.match(narrowed.stdout, /02\.1-alpha\.md/);
+  assert.doesNotMatch(narrowed.stdout, /03\.1-beta\.md/);
+  assertFragment(narrowed.stdout, "git:", "uncommittedUnattributed");
+  assertFragment(narrowed.stdout, "report:", "uncommittedUnattributed");
+});
+
+test("R4 a capability filter with nothing to reduce reports narrow=none and still supplies detail", (t) => {
+  const root = makeRepo(t);
+  const full = run(root); ok(full);
+  const narrowed = run(root, "--capability", "1"); ok(narrowed);
+  assert.match(narrowed.stdout, /^state: .* narrow=none(?:\s|$)/m);
+  assert.match(narrowed.stdout, /^baseline: capability=1(?:\s|$)/m);
+});
+
+test("R4 capability filtering projects aggregate blocked facts and counts to the selected capability", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha", "Beta"] });
+  write(root, "devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
+  write(root, "devflow/users/other/HANDOFF.md", "");
+  write(root, "devflow/tree/02-Alpha/02.1-prerequisite.wip-other.md", cardText("02.1"));
+  write(root, "devflow/tree/02-Alpha/02.2-work.md", cardText("02.2", { depends: "02.1" }));
+  write(root, "devflow/tree/03-Beta/03.1-prerequisite.wip-other.md", cardText("03.1"));
+  write(root, "devflow/tree/03-Beta/03.2-work.md", cardText("03.2", { depends: "03.1" }));
+  commit(root, "jmp split — two blocked capabilities");
+  const result = run(root, "--capability", "2"); ok(result);
+  const blocked = result.stdout.split(/\r?\n/).find((line) => line.startsWith("blocked: kind=dependencies"));
+  assert.ok(blocked, result.stdout);
+  assert.match(blocked, /cards=\["02\.2"\]/);
+  assert.doesNotMatch(blocked, /03\.[12]/);
+  assert.match(result.stdout, /^claim: mine=0 others=1$/m);
+  assert.match(result.stdout, /^baseline: expected=1 /m);
+  assert.match(result.stdout, /^ready: count=1$/m);
+});
+
+test("R4 the consumerless --card surface is rejected", (t) => {
+  const result = run(makeRepo(t), "--card", "devflow/tree/02-capability/02.1-fixture.md");
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /unknown option --card/);
+  assert.equal(result.stdout, "");
+});
+
+test("an actual open card makes baseline verifiedFreshness report the open-card reason", async (t) => {
+  for (const [status, expected] of [["", true], [".done", false]]) {
+    await t.test(status === "" ? "open card" : "done card negative control", () => {
+      const root = makeRepo(t, { capabilities: ["capability"] });
+      write(root, `devflow/tree/02-capability/02.1-fixture${status}.md`, cardText("02.1"));
+      commit(root, `jmp ${status === "" ? "open" : "closed"} card freshness`);
+      const result = run(root, "--capability", "2"); ok(result);
+      const detail = result.stdout.split(/\r?\n/)
+        .find((line) => line.startsWith("baseline: capability=2 "));
+      assert.ok(detail, result.stdout);
+      assert.equal(detail.includes('verifiedFreshness={"value":"hypothesis","reasons":') && detail.includes("open-card"), expected, detail);
+    });
+  }
+});
+
+test("R5 digest lag is a ready fact and does not interrupt a current claim", (t) => {
+  const root = makeRepo(t);
+  const marker = git(root, "rev-parse", "HEAD");
+  write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+  commit(root, "jmp boundary — digest marker");
+  git(root, "config", "user.name", "Other");
+  git(root, "config", "user.email", "other@example.test");
+  write(root, "other.txt", "other\n");
+  commit(root, "other change");
+  git(root, "config", "user.name", "Jmp");
+  git(root, "config", "user.email", "jmp@example.test");
+  write(root, "mine.txt", "mine\n");
+  commit(root, "change without room prefix");
+  const card = writeClaim(root, { commitSubject: "jmp 02.1 claim" });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker}`);
+  assertFragment(result.stdout, "ready: kind=digest-behind", "behind=4");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "others=2");
+  assertFragment(result.stdout, "claim: kind=mine", `path=${card}`);
+  assert.equal(nextOf(result.stdout), "claim.mine", result.stdout);
+});
+
+test("R5 a digest marker outside integration reports unknown rather than inventing distance", (t) => {
+  const root = makeRepo(t);
+  git(root, "checkout", "-qb", "side");
+  write(root, "side.txt", "side\n");
+  const marker = commit(root, "side-only");
+  git(root, "checkout", "main");
+  write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+  commit(root, "jmp boundary — divergent digest marker");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker}`);
+  assertFragment(result.stdout, "ready: kind=digest-behind", "behind=unknown");
+});
+
+test("R5 a none digest marker counts from the first integration commit", (t) => {
+  const root = makeRepo(t);
+  write(root, "devflow/users/jmp/digest.md", "none\n");
+  commit(root, "jmp boundary — initial digest marker");
+  const count = git(root, "rev-list", "--count", "HEAD");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "ready: kind=digest-behind", "marker=none");
+  assertFragment(result.stdout, "ready: kind=digest-behind", `behind=${count}`);
+  assertFragment(result.stdout, "ready: kind=digest-behind", "others=0");
+});
+
+test("R6 final-task boundary reports missing carry and claim exposes carry absence", (t) => {
+  const root = makeRepo(t);
+  const card = writeClaim(root, { commitSubject: "jmp 02.1 fixture card", progress: "2026-08-20T00:00:00Z implementation complete" });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "transition: kind=finish-boundary", 'missing=["carry"]');
+  assertFragment(result.stdout, "claim: kind=mine", `path=${card}`);
+  assertFragment(result.stdout, "claim: kind=mine", "carry=absent");
+});
+
+test("R6 a final carry line makes boundary completeness explicit", (t) => {
+  const root = makeRepo(t);
+  writeClaim(root, {
+    commitSubject: "jmp 02.1 fixture card",
+    progress: "2026-08-20T00:00:00Z implementation complete\n2026-08-20T00:01:00Z carry: exact trap",
+  });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "transition: kind=finish-boundary", "missing=[]");
+  assertFragment(result.stdout, "claim: kind=mine", "carry=present");
+});
+
+test("R6 a stale HANDOFF remains a repairable boundary passenger", (t) => {
+  const root = makeRepo(t);
+  const card = writeClaim(root, {
+    commitSubject: "jmp 02.1 fixture card",
+    progress: "2026-08-20T00:00:00Z implementation complete\n2026-08-20T00:01:00Z carry: exact trap",
+  });
+  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step\n${card}\n`);
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "transition: kind=finish-boundary", 'missing=["handoff"]');
+  assertFragment(result.stdout, "handoff:", "stale=1");
+});
+
+test("R6 capability closure projects only non-none carry facts", (t) => {
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  const first = "devflow/tree/02-capability/02.1-first.done.md";
+  const second = "devflow/tree/02-capability/02.2-second.done.md";
+  write(root, first, cardText("02.1", { progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: exact trap" }));
+  write(root, second, cardText("02.2", { progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: none" }));
+  commit(root, "jmp completed capability children");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "layer: kind=children-done", "carry=1");
+  assertFragment(result.stdout, "layer: kind=children-done", `carryFacts=[{\"card\":\"${first}\",\"fact\":\"exact trap\"}]`);
+});
+
+test("current claim origin is derived from the card-creation commit's deleted request", (t) => {
+  const root = makeRepo(t);
+  const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact request")}`;
+  write(root, "devflow/journal.md", `${request}\n`);
+  commit(root, "jmp boundary — request recorded");
+  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  write(root, pending, cardText("02.1"));
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp split — request planned");
+  const claimed = pending.replace(".md", ".wip-jmp.md");
+  git(root, "mv", pending, claimed);
+  commit(root, "jmp 02.1 claim");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "report:", `origin=${JSON.stringify(`journal:${request}`)}`);
+});
+
+test("current claim origin is none when its creation commit deleted no canonical input", (t) => {
+  const root = makeRepo(t);
+  writeClaim(root);
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "report:", "origin=none");
+});
+
+test("S2 an old product verify without event sections emits each existing event kind once", (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const revisions = currentRevisions(root);
+  const oldVerify = `# Verification · product\nProduct revision: ${revisions.productRevision}\nVerification revision: ${revisions.verificationRevision}\nCode revision: ${revisions.codeRevision}\nCapability revision: not-applicable\nVerdict: pass\nFailure history:\nNone.\n`;
+  const relative = "devflow/tree/verify.md";
+  write(root, relative, oldVerify);
+  commit(root, "jmp old capability verify");
+  const result = run(root); ok(result);
+  const events = result.stdout.split(/\r?\n/).filter((line) => line.startsWith("event: kind=new"));
+  assert.equal(events.filter((line) => line.includes("role=Audit")).length, 1, result.stdout);
+  assert.equal(events.filter((line) => line.includes("role=Retrospective")).length, 1, result.stdout);
+  const completed = "- source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key: product · 0 findings · 0 adopted · routing: none";
+  write(root, relative, `${oldVerify}## Audit\n${completed}\n## Retrospective\n${completed}\n`);
+  commit(root, "jmp old capability events complete");
+  const negative = run(root); ok(negative);
+  assert.equal(negative.stdout.split(/\r?\n/).filter((line) => line.startsWith("event: kind=new")).length, 0, negative.stdout);
+});
+
+test("S3 Windows cmd and shell-less Node binary pipes hash the same revision bytes", {
+  skip: process.platform !== "win32",
+}, (t) => {
+  const root = makeRepo(t);
+  const paths = ["devflow/project/arch.md", "devflow/project/code-style.md", "devflow/project/glossary.md"];
+  const tree = execFileSync("git", ["ls-tree", "-r", "-z", "--full-tree", "HEAD", "--", ...paths], { cwd: root });
+  const nodeHash = execFileSync("git", ["hash-object", "--stdin"], { cwd: root, input: tree, encoding: "utf8" }).trim();
+  const quote = (value) => `"${String(value).replace(/([\"^&|<>])/g, "^$1").replace(/%/g, "%%")}"`;
+  const command = ["git", "ls-tree", "-r", "-z", "--full-tree", "HEAD", "--", ...paths].map(quote).join(" ")
+    + " | " + ["git", "hash-object", "--stdin"].map(quote).join(" ");
+  const cmd = spawnSync(process.env.ComSpec || "cmd.exe", ["/d", "/s", "/c", `"${command}"`], {
+    cwd: root,
+    encoding: "utf8",
+    windowsHide: true,
+    windowsVerbatimArguments: true,
+  });
+  assert.equal(cmd.status, 0, cmd.stderr);
+  assert.equal(cmd.stdout.trim(), nodeHash);
+  const changedHash = execFileSync("git", ["hash-object", "--stdin"], {
+    cwd: root, input: Buffer.concat([tree, Buffer.from([0])]), encoding: "utf8",
+  }).trim();
+  assert.notEqual(changedHash, nodeHash);
 });

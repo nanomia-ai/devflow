@@ -1,10 +1,11 @@
 # devflow design document — why it is built this way
 
 This document is the **canonical "why"** of devflow, and the one layer read on every
-change. Identity and philosophy, the invariants that are not touched, and an index of
-every decision live here. The decisions in full and the rejection lineage are in
-`design-decisions.md`; observations and on-hold candidates are in `design-backlog.md`;
-what every other document owns and when it is read is fixed by the document map below.
+change. Identity and philosophy, the invariants that are not touched, and the whole
+structural map live here. The decisions in full and the rejection lineage are owned by
+`design-decisions.md`, and their index is generated from that source (see the decision
+index below); observations and on-hold candidates are in `design-backlog.md`; what every
+other document owns and when it is read is fixed by the document map below.
 
 **To overturn a decision recorded here, refute its recorded reason first.**
 To re-propose a rejected idea, refute its recorded rejection reason first.
@@ -70,8 +71,8 @@ judged from source and repository checks.
 
 | Document | Standing | When it is read |
 |---|---|---|
-| `docs/design.md` (this file) | canon — identity, invariants, decision index | always, on every change |
-| `docs/design-decisions.md` | canon — decisions in full and the rejection lineage | when any index row moves |
+| `docs/design.md` (this file) | canon — identity, invariants, structural map | always, on every change |
+| `docs/design-decisions.md` | canon — decisions in full and the rejection lineage. The one home of a decision, and the source the index is generated from | when a row the index names moves; the index itself always |
 | `docs/design-backlog.md` | canon — observations and on-hold candidates | when planning a release |
 | `AGENTS.md` | procedure — minimal entry gate and conditional read wiring | automatically, at session start |
 | `docs/maintenance-protocol.md` | procedure canon — translation, record landing, verification, rounds, README, release, terminology | only the sections named by `AGENTS.md` |
@@ -122,94 +123,22 @@ person's document — that is, beyond the boundary above. The owner decides what
 leaves it. That such a decision carries the same weight as overturning a decision here is
 unchanged, and the owner is the one who weighs it.
 
-## Decision index — read all of it, then state that this change moves none of them
+## Decision index — read all of the generated projection, then state that this change moves none of them
 
-This index is always read. If even one row moves, open that subject's section in `design-decisions.md`.
-Rejections are not indexed here — open the subject section for whatever is being proposed
-and that subject's rejection lineage sits behind its decisions. A re-proposal starts there.
+The one home of a decision is `design-decisions.md`, and the index is a read-only projection
+generated from that source's titles and metadata. This document does not carry the index by hand.
 
-| ID | Decision | Subject | Introduced | State |
-|---|---|---|---|---|
-| DD-01 | Output folder named `devflow/` (not docs/) | Identity, packaging, platforms | origin | active |
-| DD-02 | Name is devflow — Claude uses the `devflow:` namespace, Codex uses the `devflow-` filename prefix | Identity, packaging, platforms | origin | active |
-| DD-03 | Canonical rules live inside skills/principles/ | Identity, packaging, platforms | origin | active |
-| DD-04 | Codex prompts embed the canon (no file reference) | Identity, packaging, platforms | origin | replaced by DD-57 (v0.13.0) |
-| DD-05 | One hook only: SessionStart | Identity, packaging, platforms | origin | active |
-| DD-12 | Cross-references between skills use slash-less stage names | Identity, packaging, platforms | origin | active |
-| DD-13 | install.ps1 requires UTF-8 **BOM** | Identity, packaging, platforms | origin | active |
-| DD-16 | Design in Korean, deploy in English (dual language) | Identity, packaging, platforms | origin | active |
-| DD-18 | The Codex install leads with the native plugin channel (marketplace add + plugin add); generated slash prompts stay as the explicit channel; the hook stays separately registered in ~/.codex/hooks.json | Identity, packaging, platforms | v0.9.9 | active, partly corrected by DD-57 (v0.13.0) |
-| DD-29 | Platform adapters only connect to the shared skill; they do not duplicate its procedure | Identity, packaging, platforms | v0.9.21 | active |
-| DD-32 | Codex hooks ride along with the plugin — `.codex-plugin/plugin.json` declares `hooks`, and installing is two remote lines | Identity, packaging, platforms | v0.9.20 | active |
-| DD-57 | The flat Codex prompt channel is removed; the plugin cache carries the companions | Identity, packaging, platforms | v0.13.0 | active |
-| DD-71 | Repository maintenance reads the whole design intent first, and AGENTS conditionally routes detailed procedure; history is not onboarding | Identity, packaging, platforms | v0.16.2 | active |
-| DD-72 | A versioned implementation with no named document role leaves one report_ko.md as its default round record | Identity, packaging, platforms | v0.16.2 | active |
-| DD-79 | README is a person's document and lives outside the AI's read set — not read, not updated, not used as grounds for a judgment, and the line holds after README returns | Identity, packaging, platforms | v0.18.5 | active |
-| DD-80 | The executor of a machine judgment is code, and the document that wrote it down is deleted the release after its last runtime reader moves | Identity, packaging, platforms | v0.18.7 | active |
-| DD-08 | TDD procedure not adopted | Verification and roles | origin | active |
-| DD-17 | The terms of the review and verification roles live in the skill text — agents/*.md is Claude packaging | Verification and roles | v0.9.5 | active |
-| DD-19 | Role contracts are one companion file beside each skill (reviewer.md · verifier.md); every platform runs them by briefing a clean context with the file verbatim — no Claude agent registration | Verification and roles | v0.9.6 | active |
-| DD-21 | The audit — event-triggered deep inspection; findings are not verdicts | Verification and roles | v0.9.15 | active |
-| DD-22 | The retrospective — a fourth role that post-hoc evaluates design alternatives at the MVP boundary; findings are not verdicts | Verification and roles | v0.9.16 | active |
-| DD-23 | The retrospective also runs when a capability first closes — scoped to that capability | Verification and roles | v0.9.17 | active |
-| DD-24 | A signal pass goes stale when its inputs change + a fix card's completion signal is the verifier's reproduction steps | Verification and roles | v0.9.4 | active |
-| DD-30 | Verification failures, repairable unverified results, and Audit and Retrospective events survive verify.md overwrites and session interruption | Verification and roles | v0.9.21 | active |
-| DD-36 | Capability pass gates are explicit state between verdict and closure, and closure does not change verification revision inputs | Verification and roles | v0.9.21 | active |
-| DD-41 | A Record states its own entry count — New entries | Verification and roles | v0.9.23 | active |
-| DD-68 | Signal cards connect a completed repair's later non-pass to the same root, inherit the previous repair evidence, and return to the human at recurrence observation 2 or higher | Verification and roles | v0.15.0 | active |
-| DD-06 | No model names in files (tiers T-high/T-mid/T-low only) | The task tree and its cards | origin | active |
-| DD-09 | 1 task = 1 commit (only after verification passes) | The task tree and its cards | origin | active |
-| DD-11 | Integrity check reports only, never auto-corrects | The task tree and its cards | origin | active |
-| DD-25 | Ready-card semantics, per-card execution-proposal approval, and resume routing are decided from disk state | The task tree and its cards | v0.9.21 | active, partly corrected by DD-80 (v0.18.7) |
-| DD-27 | `.stale.` task cards remain as history, and a `re-split pending` marker recovers interruption before replacement planning | The task tree and its cards | v0.9.21 | active |
-| DD-38 | `Approval` is effective only with Git-diff freshness, not the card value alone | The task tree and its cards | v0.9.21 | active |
-| DD-50 | A change request is recorded immediately and planned later; a completion signal is scoped to its capability | The task tree and its cards | v0.12.0 | active |
-| DD-54 | One request that spans several capabilities keeps one source and one marker per parent | The task tree and its cards | v0.13.0 | active |
-| DD-55 | Items that do not change the precondition-to-outcome transition ride one card | The task tree and its cards | v0.13.0 | active, partly corrected by DD-61 (v0.14.0) |
-| DD-58 | A finished card's number is never renumbered | The task tree and its cards | v0.13.0 | active |
-| DD-61 | A tweak's commit is its record | The task tree and its cards | v0.14.0 | active, partly corrected by DD-66 (v0.14.2) |
-| DD-65 | A mixed request records only its gate-failing items — a passing item enters no journal line | The task tree and its cards | v0.14.2 | active |
-| DD-69 | design confirms six Layer 0 decisions, split cards own the build, and only result facts enter design.md as upper-document feedback | The task tree and its cards | v0.15.2 | active |
-| DD-07 | devflow does not create or manage a Git-worktree workflow | Concurrency, claims, integration | origin | active |
-| DD-14 | The multi-mode split axis is the **scope of truth**, not people | Concurrency, claims, integration | origin | active |
-| DD-15 | HANDOFF is committed to git but never in a dedicated commit — it rides the boundary commit only | Concurrency, claims, integration | origin | active |
-| DD-31 | Shared routing state in multi comes from the integration tip, not the local branch | Concurrency, claims, integration | v0.9.21 | active |
-| DD-40 | An approved parallel group is claimed together in one step | Concurrency, claims, integration | v0.9.23 | replaced by DD-60 (v0.14.0) |
-| DD-46 | One mode — rooms are always on, and working alone folds the integration branch into the branch you are already on | Concurrency, claims, integration | v0.12.0 | active |
-| DD-47 | Claims move to the depth-1 unit axis, and one canonical candidate order settles every selection | Concurrency, claims, integration | v0.12.0 | active, partly corrected by DD-60 (v0.14.0) |
-| DD-49 | Git is a requirement, and worktrees are the flow registry | Concurrency, claims, integration | v0.12.0 | active, partly corrected by DD-51 (v0.13.0) |
-| DD-51 | Shared truth is one integration branch; another worktree's HEAD is evidence, not authority | Concurrency, claims, integration | v0.13.0 | active |
-| DD-52 | A shared transition is published against a remembered integration id | Concurrency, claims, integration | v0.13.0 | active, partly corrected by DD-62 (v0.14.0), DD-70 (v0.16.0) |
-| DD-53 | Several sessions in one working folder are normal, and their safety is five measured lines rather than a lock | Concurrency, claims, integration | v0.13.0 | active |
-| DD-60 | Claims are freely parallel, and a checkpoint carries only the changes this session made | Concurrency, claims, integration | v0.14.0 | active |
-| DD-62 | During a blockade, journal appends that mint nothing, claim nothing, and consume nothing are written immediately | Concurrency, claims, integration | v0.14.0 | active |
-| DD-63 | Journal merge conflicts resolve 3-way, not as a union | Concurrency, claims, integration | v0.14.0 | active |
-| DD-66 | The tweak lane confirms its landing by machine first, and in same-file contention the tweak side yields | Concurrency, claims, integration | v0.14.2 | active |
-| DD-70 | `coordinator` is a declared role, not a devflow stage; one role contract owns its duties, and devflow behavior and state do not branch on whether orchestration is in use | Concurrency, claims, integration | v0.16.0 | active |
-| DD-28 | Durable knowledge is connected through bounded consumers of existing records, not through a new document layer | The knowledge layer and capability documents | v0.9.21 | active, partly corrected by DD-76 (v0.18.1) |
-| DD-33 | The knowledge-reachability set — standing of outside records · conversation decisions land immediately · a user-confirmation gate on product's four core sections · a disproof row (replace the statement, or re-run product) · a means row · a pre-HANDOFF landing check · a survival path for research answers that are tools · verify's disproof arbitration | The knowledge layer and capability documents | v0.9.18 | active |
-| DD-42 | The capability knowledge baseline — the domain blueprint a verification closure produces | The knowledge layer and capability documents | v0.10.0 | active, partly corrected by DD-76 (v0.18.1) |
-| DD-43 | Capability documents physically separate a design zone born with Layer 0 from a verified zone refreshed at closure, and are always on | The knowledge layer and capability documents | v0.11.0 | active, partly corrected by DD-76 (v0.18.1) |
-| DD-44 | Domain reachability is owned by the depth-1 number rule and resume's domain-entry branch, not by card fields | The knowledge layer and capability documents | v0.11.0 | active, partly corrected by DD-76 (v0.18.1) |
-| DD-45 | Capability-document recovery is judged in HEAD, and an interrupted design write finishes by regeneration rather than byte comparison | The knowledge layer and capability documents | v0.11.1 | active |
-| DD-48 | Knowledge that used to die in HANDOFF now lands on two keyed lines | The knowledge layer and capability documents | v0.12.0 | active |
-| DD-56 | Reading is bounded to open work: a depth-1 folder carrying `.done` is read by name | The knowledge layer and capability documents | v0.13.0 | active |
-| DD-59 | Open decisions live in journal, so HANDOFF holds only what the tree recomputes | The knowledge layer and capability documents | v0.13.0 | active |
-| DD-64 | The third branch of a shared-contract observation is an attributed open item | The knowledge layer and capability documents | v0.14.0 | active |
-| DD-67 | Planning evidence discipline settles facts from four authorities before questions and isolates answer-only research, while the main session owns structural understanding and binding decisions | The knowledge layer and capability documents | v0.15.0 | active |
-| DD-73 | Capability documents are arch's final output and must exist before the first tree opening, while decision and external-contract grounds are preserved at confirmation | The knowledge layer and capability documents | v0.17.0 | active |
-| DD-74 | The planning record layer — the record gate lands decision and evidence records at settlement | The knowledge layer and capability documents | v0.18.0 | replaced by DD-77 (v0.18.2) |
-| DD-75 | Record succession — one successor changes the present; stale evidence cascades; conflicts are preserved then merged | The knowledge layer and capability documents | v0.18.0 | replaced by DD-77 (v0.18.2) |
-| DD-76 | Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute | The knowledge layer and capability documents | v0.18.1 | active, partly corrected by DD-77 (v0.18.2) |
-| DD-77 | A document speaks only of the present — an updated concept overwrites that concept's place, and the dropped direction lives beside that conclusion as a present fact | The knowledge layer and capability documents | v0.18.2 | active |
-| DD-78 | One canon range goes unread only when a tool proves that range has no subject — the machine cuts, it reads HEAD and the working tree both, and every other answer collapses to the full read | The knowledge layer and capability documents | v0.18.5 | active |
-| DD-10 | No retroactive tree records (brownfield) | Brownfield and entry | origin | active |
-| DD-20 | Brownfield entry is its own skill, adopt — split out of arch | Brownfield and entry | v0.9.10 | active |
-| DD-26 | Brownfield and layer transitions have explicit disk states, preserving their meaning across interruption | Brownfield and entry | v0.9.21 | active |
-| DD-34 | An open Git rebase or merge in a Git work tree returns to the user before every devflow route | Git mechanics and interruption recovery | v0.9.21 | active |
-| DD-35 | Commit locators use Git's full object ID, while path and card order have canonical byte and numeric rules | Git mechanics and interruption recovery | v0.9.21 | active |
-| DD-37 | Remote evidence splits the final task commit into the `evidence-wait` and `evidence-finalizing` states | Git mechanics and interruption recovery | v0.9.21 | active |
-| DD-39 | Tree-input revision hashes are computed only through a binary pipe inside `cmd /d /s /c` on Windows | Git mechanics and interruption recovery | v0.9.21 | active |
+```
+node scripts/decision-index.mjs
+```
+
+An entering session reads this document in full and that output. If even one row moves, open
+that row's subject section in `design-decisions.md`. Rejections are not indexed here — open the
+subject section for whatever is being proposed and that subject's rejection lineage sits behind
+its decisions. A re-proposal starts there.
+
+The output is `ID | Decision | State` grouped by subject; the introducing version is owned by
+the source metadata. The Korean pair is projected with `--lang ko`. The command writes nothing.
 
 ## Borrowings and their boundary
 
@@ -238,7 +167,9 @@ User rule: any further borrowing into this repository requires prior permission.
   `active, partly corrected by DD-nn (vX.Y.Z)`; when another correction follows, append
   `, DD-nn (vX.Y.Z)` in introduction order under the same state. What replaced it is what the next
   re-proposal has to refute.
-- **The index and the body must hold the same set of IDs.** A mismatch turns a test red.
+- **The index is not maintained by hand.** One source owns the decisions and the index is its
+  projection, so a new row appears in exactly one place. A projection that is not 1:1 with the
+  source turns a test red.
 - **What rises here out of a round record** is fixed by the promotion table in
   `docs/maintenance-protocol.md` §5.
   This document set takes only what that table names.

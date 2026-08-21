@@ -209,7 +209,10 @@ Upper-document feedback judgment — before the final task commit, ask whether t
         write the exact document path, heading, and replacement text in the progress log
         and continue
   ↓
-Carry line — append the canonical `carry:` line to the progress log
+Carry check — immediately before the final task commit, rerun the state tool. Continue
+        only when the current card's `claim: kind=mine` line says `carry=present`. When it
+        says `carry=absent`, append the canonical `carry:` line to the progress log, rerun
+        the tool, and confirm `present`
   ↓
 Final task commit — the canonical 1 task = 1 commit discipline. On a remote-evidence pass,
         this commit replaces `evidence-wait` with `evidence-finalizing` while preserving
@@ -236,54 +239,54 @@ Rename the card to .done. — only once the canonical rules' status-notation con
 Foundation and intermediate folders: close each eligible non-capability ancestor under
         the canonical Status Notation, stopping before the depth-1 capability folder
   ↓
-Boundary commit — bundle renames, HANDOFF, journal, and the documents fixed by feedback
-        (the canonical rules' commit discipline)
+Boundary commit — immediately before the commit, run the state tool again and see this
+        transition's `missing=` empty (the canonical Boundary commit). Bundle renames,
+        HANDOFF, journal, and the documents fixed by feedback
   ↓
 If a depth-1 capability folder reaches the canonical verification gate → propose verify
         (capability layer)
 ```
 
-The consumer judgment for an automatically read capability document is as follows. Compare
-numbers as integers. If the document is absent, report
+The judgment for an automatically read capability document comes from
+`node ../principles/scripts/project-state.mjs state --capability <capability number>` called
+with that number. Take its `expectedSet`, `pathState`, `legacyV010`, `boundary`,
+`shapeValid`, `anomalies`, `bindingAdrStatus`, `designHead`, `scopeHead`,
+`designFreshness`, `verifiedFreshness`, and `coveredFreshness` values as they stand, and
+recompute no git command or section comparison for the same judgment by hand.
+
+If no document has that number as an integer, report
 `no capability document for <number> — nothing on disk describes that capability, so the planning documents and this card carry the work`
 in one line, continue from Layer 0 and the card, and give reviewer
 `design: baseline missing — judge from the card and supplied shared documents`. If two or more documents have
 the same number, report their exact paths, select none, and continue with the same projection.
 
-When the unique file has the canon's exact `legacy v0.10` shape, report
+When `legacyV010` is true, report
 `<path> is a capability document in the earlier shape, so it stays unread until it is migrated — the planning documents and this card carry the work`
 in one line, open no body, and continue active work with the same
 baseline-missing projection.
 
 When the selected file has zero or multiple fixed boundaries, guess no zone and read no
-body. Report the bounded shape facts in one line and continue with the baseline-missing
-projection above. With one boundary but malformed section or metadata shape, read the zones
-and mark the affected zone a hypothesis.
+body — that is `boundary` not equal to one. Report the bounded shape facts that line carries
+in one line and continue with the baseline-missing
+projection above. With one boundary but `shapeValid` false, read the zones and mark the zone
+`anomalies` names a hypothesis.
 
-With one boundary, open only exact paths from a valid Binding ADRs section. If that section is
+With one boundary, open only exact paths from a valid Binding ADRs section — `bindingAdrStatus`
+says which. If that section is
 absent or unparseable, open and infer no ADR path and make the design zone a hypothesis. If a
 path named by a valid section is missing, report it, make the design zone a hypothesis, and
 guess no substitute.
 
-With exactly one fixed `## Verified state` boundary, check section and
-metadata shape. A malformed zone is a hypothesis. Run the single-line command
-`git log -1 --format=%H -- devflow/project/product.md devflow/project/arch.md devflow/project/glossary.md`. When its
-output equals `Design head`, design statements in Purpose, Boundary, Concept model,
-Invariants, and Non-goals are fresh; when it differs or is empty, they are a hypothesis.
-
-Put `Scope paths ∪ Consumed paths` in canonical path order without duplicates. When the
-union is empty, run no git command and treat verification statements as a hypothesis. When
-it is nonempty, pass every path to `git log -1 --format=%H --` as one `:(literal)` pathspec
-and one shell-quoted argument. When the output equals `Scope head`, this comparison is
-fresh; when it differs or is empty, it is a hypothesis. Verification statements are also a
-hypothesis when the exact-path set in Consumed contracts differs from `Consumed paths`, or
-when a row's other-capability number differs from or is ambiguous under the current provider
-mapping in arch.md's Code structure. Enumerate non-`.stale.` `.done.`
-card numbers below that capability's folder from names alone in canonical card-number
-order. When they differ from `Covered cards`, when any non-`.stale.` card below that folder
-lacks a `.done` status, or when `Verified at` is `none`, verification
-statements are a hypothesis. Verification statements are Main flow, Lifecycle, Current
-behavior, Entrypoints, Consumed contracts, Traps, and Verify.
+Design statements are Purpose, Boundary, Concept model, Invariants, and Non-goals;
+verification statements are Main flow, Lifecycle, Current behavior, Entrypoints, Consumed
+contracts, Traps, and Verify. `designFreshness` carries the design side, and verification
+statements are fresh only when `verifiedFreshness` and `coveredFreshness` are both `fresh` —
+`verifiedFreshness`'s `consumed-contracts` reason is the case where the
+exact-path set in Consumed contracts differs from `Consumed paths`.
+One further condition sits on top of that and the tool does not carry it — when a Consumed
+contracts row's other-capability number differs from or is ambiguous under the current provider
+mapping in arch.md's Code structure, verification statements are a hypothesis even
+where the tool reports fresh.
 
 Before implementation uses a design hypothesis, reconfirm it in the exact authoritative
 section already read from product.md, arch.md, or glossary.md, or at an already-open exact
@@ -292,7 +295,7 @@ hypothesis in current code or cards inside the existing read set and code-search
 which for reconfirmation alone also holds `Consumed paths`.
 Expand neither further. Keep every design reconfirmation as `exact path#heading`, without duplicates
 and in canonical path order, in the reviewer projection. Use the canon's current path/status
-notation for the symmetric difference of current completed cards and `Covered cards` as the
+notation for `coveredFreshness`'s `symmetricDifference` as the
 post-baseline change list. Report one line: `capability document verified <Verified at>,
 design <fresh|hypothesis|missing>, verification <fresh|hypothesis|missing>, <M> cards changed
 since — fresh means its inputs have not moved, hypothesis means it is reconfirmed before use,
@@ -440,8 +443,10 @@ context only:
 ## Next single step          <!-- one tree path | none -->
 ```
 
-`Next single step` is mandatory and holds one tree path — the one the canonical candidate
-order would take next. Write `none` only when the tree has no pending and no claimed card
+`Next single step` is mandatory and holds one tree path. The mechanical next card is owned
+by the tool's `ready:` order, so write that value as it stands, and write a different path
+only when this session heard a fresher preference from the user — that difference is all
+HANDOFF adds. Write `none` only when the tree has no pending and no claimed card
 at all. Add no other section to this file, so that when two sessions of one room overwrite
 each other, the only thing lost is a value that is recomputed. Anything else this session
 learned lands durably instead — the card's carry line inside this unit, a journal

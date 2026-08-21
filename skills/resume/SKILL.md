@@ -125,7 +125,7 @@ The sheet carries every disk and Git fact. Only three things are opened on top o
 Report what you read in **one paragraph**:
 
 ```
-"<service> is complete through <capability>, with <task> in progress.
+"<service> is complete through <capability>, with <task> in progress (that card came from: <origin>).
 The progress log reaches <last point>; capability documents are
 <non-retired filenames|none>. The next step is <one step>, selected by
 <your request | the last handoff | canonical order>. Also open:
@@ -133,7 +133,10 @@ The progress log reaches <last point>; capability documents are
 unattributed: <those paths | none>; not yet on integration: <N paths | none>. Proceed?"
 ```
 
-The `report:`, `handoff:`, and `open-item:` lines fill those blanks verbatim. **Quote the
+The `report:`, `handoff:`, and `open-item:` lines fill those blanks verbatim. `<origin>` is
+`report:`'s `origin`; pass that value through without interpreting it — `none` means no
+original request called that card, and `unknown` goes through together with the reason that
+line carries. **Quote the
 fact line that carries that one step beside the next step** — the report then shows which
 line the judgment came from. Include the content of the `open-item:` lines a person must
 decide.
@@ -223,6 +226,7 @@ The row for the name `next:` produced is the next stage.
 | `layer.correspondence-gap` | split — restore product.md-to-tree correspondence |
 | `layer.no-foundation` | split — create `01-foundation/` and at least one direct task card in the same layer |
 | `layer.no-tree` | split — open the first layer. Run design only when the user explicitly selects it |
+| `ready.digest-behind` | resume — advance the marker through the digestion procedure below and let it ride the next boundary or claim commit. It does not interrupt a claim in progress |
 | `ready.needs-normalization` | split — normalize legacy `Depends`, ask the user about any unparseable member, add missing fields as `pending` and `required` except a research card's Review is `not-applicable`, then present the execution proposal |
 | `ready.approval-invalid` | split — report the exact invalidity, reset `Approval` to `pending`, reapprove the execution proposal, and finish the planning commit |
 | `ready.approval-pending` | split — present the execution proposal and get approval |

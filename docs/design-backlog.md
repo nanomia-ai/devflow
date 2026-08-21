@@ -511,9 +511,14 @@ The items below are what v0.18.9 — the repair of the first field test — left
   forbids; and it skipped the whole closure procedure because the verdict was not a pass. **What fails is
   "written clearly means executed," not "the model follows rules."** devflow already owns the three
   mechanisms — blocking (integrity), observing (the clean verifier), and giving an output its own commit
-  (commit discipline) — and simply never wired them to these obligations. **Adoption condition: already
-  met as the next round's axis** — applying the test per obligation, and deciding structure or detector
-  for each, is that round's work.
+  (commit discipline) — and simply never wired them to these obligations. **Adopted — v0.19.0's DD-83
+  landed this observation.** The side taken is neither "structure" nor "a detector per obligation" but
+  **one computation recalled at the boundaries that need it**: a read-only tool shows the difference
+  between the complete transition state the canon already fixed and disk, at entry and again just before
+  each commit that carries a passenger
+  (`finish-boundary missing=[…]`, `claim.mine carry=…`, `layer.children-done carry=N`,
+  `ready.digest-behind`). **What real use still owns**: if a session is observed failing to close the
+  boundary after detection exists, a separate writer reopens then — that is DD-83's recorded condition.
 - **★ Whether the record alone lets a new session take over — measured by running it** — a clean session
   was given only `devflow/` (no git, no product code, no canon) and answered eight questions, then
   reconciled against git and the code (`REPORT-15-comprehension-{claude,codex}.md`). **Claude: zero
@@ -531,7 +536,16 @@ The items below are what v0.18.9 — the repair of the first field test — left
   hypothesis, what not to do next, the "this is not a product defect" classification) and recording the
   rejected alternative and its cost beside every decision (*"Q4 was the easiest cell in this measurement,
   because the documents left an argument rather than a conclusion"*). And **nothing inside `devflow/` says
-  where a first reader should start.** **Adoption condition: measurement complete. The next round owns it.**
+  where a first reader should start.** **Partly adopted — v0.19.0's DD-83.** The first gap is closed by
+  **projecting from existing facts** rather than by an `Origin:` field on the card (the card's creating
+  commit and the request or layer-opening marker it deleted → `report: origin=…`, `none` when there was
+  no original input, `unknown` with a reason on a shallow history or multiple matches) — a new field would
+  be one more passenger unrelated to whether the planning commit succeeded. The third is reached by showing
+  `layer.children-done carry=N` and the carry facts before closure so the model compares them against the
+  capability document's `Traps`; the semantic verdict stays the model's. **Still open**: HANDOFF's
+  staleness signal is watched in real use rather than given a new rule (the mechanical next action is owned
+  by `ready` order, and HANDOFF carries only a fresh human preference that differs from it). And nothing
+  still says where a first reader should start.
 - **★ Entry density — gate B's accounting measured a whole cycle for the first time** — building a
   one-page web app as a single capability with three cards read roughly **365 KB** of canon and produced
   **13,087 B** of product code plus **34,694 B** of devflow documents across 54 commits. **What was read
@@ -548,9 +562,11 @@ The items below are what v0.18.9 — the repair of the first field test — left
   the decision index.** The budget collision below is why, and raising the budget is forbidden by the test's
   recorded comment. **Until then the reasons for both rules are owned by the v0.18.9 round record**
   — the field coordinates, the scope-distinction argument against DD-68, and the grounds for "continue
-  rather than stop", in full. **Adopt when the index-splitting round lands both decision records together.**
-  Because the coordinates live here, the next reader has no reason to meet these rules ungrounded and
-  relitigate them.
+  rather than stop", in full. **Adopted — v0.19.0 landed both decisions together: DD-81 (channel
+  acquisition failure) and DD-82 (canon against canon).** Both are introduced at v0.18.9, the release that
+  actually deployed the rules, and DD-68 became `active, partly corrected by DD-81 (v0.18.9)`. The home of
+  the reasons moved from the round record to the decision source, so these rules are now visible in the
+  index itself.
 - **★ The decision index collides with a fixed budget on a schedule** — `docs/design.md` grows one row per
   decision forever while `scripts/repository-invariants.test.js` holds it to 26 KiB. v0.18.1 raised it once
   from 24 to 26 KiB at the first collision (headroom 29 B then), and the test comment recorded *"do not raise
@@ -558,5 +574,11 @@ The items below are what v0.18.9 — the repair of the first field test — left
   answer** — yet that item had never been written here. v0.18.9 met the second collision at the two rules of
   the item above (headroom 81 B, roughly 450 B needed). The structural answer is splitting or relocating the
   index, and because it changes what "always read" means, it moves DD-71, the `AGENTS.md` entry sentence,
-  protocol §3, and three tests with it. **Adopt the moment the next decision needs an index row.** That
-  moment will come, because the table grows monotonically.
+  protocol §3, and three tests with it. **Adopted — v0.19.0's DD-84.** The structural answer taken is
+  neither splitting nor relocating but **generating**: the 80-row manual table (14,012 B) is deleted and
+  `node scripts/decision-index.mjs` projects the index from the decision source. Before the table went,
+  the 8-of-80 drift was merged into the source titles so the meaning loss is zero. DD-71 became
+  `active, partly corrected by DD-84`, and `AGENTS.md` entry gate 1, the first wiring row, and protocol
+  §3 and §8 moved with it. **What real use still owns**: the before-and-after comprehension comparison on
+  clean Claude and Codex entries has not run, and whether an entry path exists that cannot call the
+  generating command is still unknown.

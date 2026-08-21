@@ -4,6 +4,7 @@
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
+const { spawnSync } = require("node:child_process");
 const { test } = require("node:test");
 
 const root = path.join(__dirname, "..");
@@ -235,21 +236,25 @@ test("English deploy artifacts contain no Korean", () => {
   }
 });
 
-test("the decision index and the decision bodies hold the same identifiers", () => {
-  for (const [indexFile, bodyFile] of [
-    ["docs/design.md", "docs/design-decisions.md"],
-    ["docs/design_ko.md", "docs/design-decisions_ko.md"],
+test("the generated decision projections and decision bodies hold the same identifiers", () => {
+  const tool = path.join(root, "scripts", "decision-index.mjs");
+  const projected = [];
+  for (const [language, bodyFile] of [
+    [[], "docs/design-decisions.md"],
+    [["--lang", "ko"], "docs/design-decisions_ko.md"],
   ]) {
-    const index = fs.readFileSync(path.join(root, indexFile), "utf8");
+    const result = spawnSync(process.execPath, [tool, ...language], { cwd: root, encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+    const indexed = [...result.stdout.matchAll(/^\|\s*(DD-\d+)\s*\|/gm)].map((match) => match[1]);
     const body = fs.readFileSync(path.join(root, bodyFile), "utf8");
-    const indexed = [...index.matchAll(/^\|\s*(DD-\d+)\s*\|/gm)].map((m) => m[1]);
-    const bodied = [...body.matchAll(/^###\s+(DD-\d+)\s+·/gm)].map((m) => m[1]);
-    assert.ok(indexed.length > 0, `${indexFile}: no indexed decisions`);
-    assert.deepEqual(new Set(indexed).size, indexed.length, `${indexFile}: duplicate index rows`);
+    const bodied = [...body.matchAll(/^###\s+(DD-\d+)\s+·/gm)].map((match) => match[1]);
+    assert.ok(indexed.length > 0, `${bodyFile}: generated projection has no decisions`);
+    assert.deepEqual(new Set(indexed).size, indexed.length, `${bodyFile}: duplicate projected rows`);
     assert.deepEqual(new Set(bodied).size, bodied.length, `${bodyFile}: duplicate decision bodies`);
-    assert.deepEqual([...indexed].sort(), [...bodied].sort(),
-      `${indexFile} and ${bodyFile} disagree on which decisions exist`);
+    assert.deepEqual(indexed, bodied, `${bodyFile}: projection is not a source-ordered 1:1 view`);
+    projected.push(indexed);
   }
+  assert.deepEqual(projected[0], projected[1], "English and Korean projections disagree on identifiers");
 });
 
 test("decision and rejection identifiers are dense, unreused, and carry a known state", () => {
@@ -409,6 +414,7 @@ test("the always-read design intent index covers every skill and companion", () 
 test("every maintenance script and document has a declared lifecycle", () => {
   const scriptsDir = path.join(root, "scripts");
   const scriptWiring = new Map([
+    ["decision-index.mjs", ["AGENTS.md", "docs/design.md", "docs/design_ko.md"]],
     ["remove-generated-codex-prompts.js", ["codex/install.ps1", "codex/install.sh"]],
     ["remove-legacy-codex-hook.js", ["codex/install.ps1", "codex/install.sh"]],
     ["project-knowledge.mjs", ["skills/principles/baseline-predicates.md", "skills/principles/baseline-predicates_ko.md"]],
@@ -1239,7 +1245,7 @@ test("normal task completion has one final commit and a restartable boundary", (
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   assert.match(principles, /last commit that changed it has this exact subject, the final task commit is complete/);
   assert.match(principles, /Canonical claim→done move/);
-  assert.match(principles, /Whether git reports a rename or a deletion plus untracked\s+file is not part of the judgment/);
+  assert.match(principles, /`transition: kind=finish-boundary case=claim-done-move` carries that fact/);
   assert.match(principles, /that commit includes the claimed card and its progress log/);
   assert.match(principles, /before writing any status rename, HANDOFF, journal, verify\.md, or feedback\s+document change/);
   assert.match(work, /make no second final task commit/);
@@ -1466,7 +1472,9 @@ test("the unintegrated count judges the commit set, not bare ancestry", () => {
   // piled up is exactly the shape an ancestry test calls `none`. The behavioral form of this
   // (an ancestor tip with a non-empty set still counts) belongs to the tool's own suite.
   assert.match(stateTool, /integration\.ref\}\.\.HEAD/);
-  assert.doesNotMatch(stateTool, /is-ancestor/);
+  const commitSet = /const changedOnBranch = [\s\S]+?\n\s+: \[\];/.exec(stateTool)?.[0] ?? "";
+  assert.notEqual(commitSet, "", "changedOnBranch projection is missing");
+  assert.doesNotMatch(commitSet, /is-ancestor/);
 });
 
 test("candidate selection has one canonical order", () => {
@@ -1525,18 +1533,21 @@ test("each card leaves one carry line and the next card reads only those", () =>
   const verifier = fs.readFileSync(path.join(root, "skills", "verify", "verifier.md"), "utf8");
   assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ carry: <a fact that could make the next card in this depth-1 unit wrong \| none>/);
   assert.match(principles, /The line rides the final task commit, so the canonical claim→done move\n  stays byte-identical/);
+  assert.match(principles, /immediately before the\s+final task commit, work reruns the state tool/i);
+  assert.match(principles, /Continue only when `carry=present`/);
   assert.match(work, /number is not in the capability document's `Covered cards`[\s\S]{0,200}last `carry:` line/);
   assert.match(work, /Read only that output and open\n  no card body/);
   assert.match(work, /carry-\n  line query output/);
   for (const role of [reviewer, verifier]) assert.doesNotMatch(role, /carry:/);
   assert.ok(
-    work.indexOf("Carry line — append the canonical `carry:` line") > work.indexOf("Upper-document feedback judgment"),
-    "the carry line is written after the landing check",
+    work.indexOf("Carry check — immediately before the final task commit") > work.indexOf("Upper-document feedback judgment"),
+    "the carry check runs after the landing check",
   );
   assert.ok(
-    work.indexOf("Carry line — append the canonical `carry:` line") < work.indexOf("Final task commit — the canonical"),
-    "the carry line rides the final task commit",
+    work.indexOf("Carry check — immediately before the final task commit") < work.indexOf("Final task commit — the canonical"),
+    "the carry check runs before the vehicle leaves",
   );
+  assert.match(work, /Carry check —[\s\S]{0,240}`claim: kind=mine`[\s\S]{0,160}`carry=present`/);
 });
 
 test("an observation about another capability has a keyed line and a harvester", () => {
@@ -1576,7 +1587,7 @@ test("a reopened capability cannot report verified statements as fresh", () => {
   const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
   const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
   assert.match(baseline, /They are hypotheses too while any non-`\.stale\.`\s+card below that folder lacks a `\.done` status/);
-  assert.match(work, /when any non-`\.stale\.` card below that folder\nlacks a `\.done` status/);
+  assert.match(work, /`verifiedFreshness` and `coveredFreshness` are both `fresh`/);
 });
 
 test("an external trap survives without a source URL", () => {

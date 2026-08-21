@@ -244,6 +244,12 @@ Product revision·Verification revision·Code revision을 쓰고, verifier를 �
    그리고 이미 만들었다면 마커만 현재 체크아웃에 남은 중단도 같은 시작 커밋부터 끝내며, 그
    커밋 전 그 기준선 검증 구역의 재생성은 기준선 판정 정본이 지배한다.
 
+   검증 구역을 갱신하기 전에 그 능력 폴더의 `layer: kind=children-done` 줄이 낸 `carry=N`을
+   읽는다. N이 0이 아니면 표준 갱신 집합 안의 그 카드들의 `carry:` 줄을 갱신한 `함정`과
+   대조한다 — 같은 사실이 이미 있으면 그대로 두고, 없으면 이번 갱신에 싣거나 싣지 않는
+   이유를 verify.md 실행 근거에 남긴다. 문구가 같은지가 아니라 뜻이 같은지가 판정이고 그
+   판정은 메인의 것이다. 도구는 수만 내며 폐쇄를 막지 않는다.
+
    폐쇄 능력에 지식 캡슐 폴더가 있으면
    `node <플러그인 루트>/scripts/project-knowledge.mjs disputes --capability <능력 번호>`를
    실행한다 — 이 명령이 dispute 전용 투영이고, `project`는 같은 자리에서 C 번호만 내므로 여기서
@@ -360,8 +366,9 @@ previous route cards: <직전 수리 라운드의 완료된 수정 route 카드 
 
 사용자 요청의 대상 기록은 능력 번호면 그 능력의 verify.md, `product`면 트리 루트
 verify.md다. 프로젝트 전체에 대한 사용자 요청은 대상값을 `product`로 기록한다. 대상 파일이 아직 없으면 요청은 실행 가능하지 않다. journal 줄을 유지하고 다른
-작업을 막지 않은 채, 그 경계가 처음 검증된 뒤 처리한다. 구형 대상 파일은 도구가 없다고 낸
-`## Audit`·`## Retrospective` 절을 `- not run`으로 같은 pending 사건 커밋에 함께 싣는다.
+작업을 막지 않은 채, 그 경계가 처음 검증된 뒤 처리한다. 구형 대상 파일은 `event: kind=new`의
+`role`이 이름 댄 절 가운데 그 파일에 없는 `## Audit`·`## Retrospective` 절을 `- not run`으로
+같은 pending 사건 커밋에 함께 싣는다 — 도구는 절 부재를 따로 내지 않는다.
 
 resume과 verify는 아래 순서로 사건 하나만 처리한다: 기존 `라우팅` → 사용자 결정 대기 → 기존 `대기` →
 감리 자동 사건 → 회고 자동 사건 → 실행 가능한 사용자 요청. 같은 우선순위가 여럿이면

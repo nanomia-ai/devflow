@@ -64,7 +64,7 @@ lifetime shares a home.
 | Information | One landing place | Content |
 |---|---|---|
 | identity, invariants, whole structure | `docs/design.md` | short canon every future change must know |
-| binding decision and design intent | `docs/design-decisions.md` | problem, desired behavior, boundary, reason, revisit condition |
+| binding decision and design intent | `docs/design-decisions.md` | problem, desired behavior, boundary, reason, revisit condition. The one home of a decision, and `node scripts/decision-index.mjs` projects the index from it — no hand-maintained index table is created anywhere |
 | unadopted observation or candidate | `docs/design-backlog.md` | evidence, strain, condition to revisit |
 | one round's measurement and judgment | `docs/rounds/<version>/report_ko.md` | execution evidence, limitations, unlanded items |
 | actual shipped result | `CHANGELOG.md` | what, why, files |
@@ -210,7 +210,7 @@ before 0.10.0 is in `docs/changelog-archive.md`.
       parser — is green. It is not a separate command
 - [ ] when the release changes the verification contract, gate B has been passed once: one
       capability carried through split → work → verify → closure in a real project
-- [ ] full `docs/design.md` decision index read; reason read for every moved subject
+- [ ] `docs/design.md` read in full and the generated decision index (`node scripts/decision-index.mjs`) read; reason read for every moved subject
 - [ ] when `skills/**` changes, matrix cells re-judged and new shapes checked
 - [ ] `_ko` changed first; fixed terms and ko/en structure and figures match
 - [ ] when an audit ran, adopted findings promoted or reasons for not promoting recorded

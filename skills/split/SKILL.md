@@ -12,8 +12,9 @@ all of `devflow/project/design.md`, `devflow/project/code-style.md`,
 of earlier cards live in journal, and HANDOFF is overwritten and will not carry them.
 
 Then run `node ../principles/scripts/project-state.mjs state` and read its `claim:`,
-`ready:`, `integrity:`, `layer:`, and `request:` lines. Those lines carry the card, layer,
-and integrity judgments this skill uses; take them as they stand.
+`ready:`, `integrity:`, `layer:`, `baseline:`, and `request:` lines. Those lines carry the
+card, layer, integrity, and capability-document judgments this skill uses; take them as they
+stand.
 
 Read the planning evidence discipline (`../principles/planning-evidence.md`) boundedly only
 when judging the maintenance planning depth grade below. First read `Four Kinds of Unknown`,
@@ -27,13 +28,12 @@ Purpose: open the task tree **one layer at a time**, and get the execution propo
 
 1. **If product.md is missing, stop.** With no code, direct the user to product first;
    with existing code, to adopt (brownfield = the understanding stage). Never split a
-   project you don't know. **At the first opening of the tree, check for `01` and for each
-   non-retired capability number in product.md whether a lowercase `.md` whose leading token
-   before the first `-` is exactly that number exists directly below
-   `devflow/project/capabilities/`, and stop when any is missing** — this applies to
-   greenfield and brownfield alike, subfolders are not looked at, what is checked is
-   per-number existence rather than a count, and the match is on the token rather than a
-   prefix. Do not call
+   project you don't know. **At the first opening of the tree, stop when any
+   capability document in the expected set is missing** — this applies to greenfield and
+   brownfield alike. The `baseline:` zone carries that judgment: a number in the expected set
+   whose `kind=design-refresh` line has `missing` among its `reasons` has no document. Path
+   and number matching and the definition of absence belong to the canonical capability
+   knowledge baseline predicates and are not recounted here. Do not call
    the skill directly there; direct the user to re-enter through `resume` with no card of
    theirs claimed, and resume routes by arch.md's `Brownfield` value — `yes` to adopt, `no`
    to arch's capability-document-only branch. A deferred run skips this gate along with

@@ -73,7 +73,7 @@ export const ZONE_DEFINITIONS = Object.freeze([
     "no-foundation", "no-tree",
   ].map((name, index) => ({ name, present: 10 + index / 100, absent: name === "no-tree" ? 12 : null })) },
   { zone: "ready", present: 11, absent: 21, kinds: [
-    "needs-normalization", "approval-invalid", "approval-pending", "ready", "waiting-capability",
+    "digest-behind", "needs-normalization", "approval-invalid", "approval-pending", "ready", "waiting-capability",
   ].map((name, index) => ({ name, present: 11 + index / 100, absent: null })) },
   { zone: "blocked", present: 12, absent: 22, kinds: [
     "audits", "dependencies", "other-claims",
@@ -298,19 +298,14 @@ function parseArguments(argv) {
   for (let index = 1; index < argv.length; index += 1) {
     const flag = argv[index];
     const value = argv[index + 1];
-    if (!["--root", "--capability", "--card"].includes(flag)) fail(`unknown option ${flag}`);
+    if (!["--root", "--capability"].includes(flag)) fail(`unknown option ${flag}`);
     if (value === undefined || value.startsWith("--")) fail(`${flag} requires a value`);
     index += 1;
     if (flag === "--root") options.root = value;
     if (flag === "--capability") options.capability = value;
-    if (flag === "--card") options.card = value.replace(/\\/g, "/").replace(/^\.\//, "");
   }
   if (options.capability !== undefined && !/^0*[1-9][0-9]*$/.test(options.capability)) {
     fail("--capability must be a positive integer");
-  }
-  if (options.card !== undefined && (path.posix.isAbsolute(options.card)
-      || options.card.split("/").some((part) => !part || part === "." || part === ".."))) {
-    fail("--card must be a repository-relative / path");
   }
   const requested = path.resolve(options.root);
   if (!fs.existsSync(requested) || !fs.statSync(requested).isDirectory()) fail(`root is not a directory: ${requested}`);
@@ -396,11 +391,24 @@ function parseDepends(raw, legacy) {
   return { canonical: false, numbers, anomalies };
 }
 
-function parseCard(root, relative) {
-  const text = readFile(root, relative);
-  if (text === null) return null;
+function parseCard(root, relative, closedFolder = false) {
   const identity = cardIdentity(relative);
   if (identity === null) return null;
+  if (closedFolder) {
+    return {
+      ...identity,
+      path: relative,
+      text: null,
+      fields: new Map(),
+      depends: { canonical: true, numbers: [], anomalies: [] },
+      approval: null,
+      review: null,
+      legacy: false,
+      closedFolder: true,
+    };
+  }
+  const text = readFile(root, relative);
+  if (text === null) return null;
   const cardFields = fields(text);
   const legacy = !cardFields.has("Approval") || !cardFields.has("Review");
   const depends = parseDepends(cardFields.get("Depends"), legacy);
@@ -413,6 +421,7 @@ function parseCard(root, relative) {
     approval: cardFields.get("Approval") ?? null,
     review: cardFields.get("Review") ?? null,
     legacy,
+    closedFolder: false,
   };
 }
 
@@ -645,6 +654,7 @@ function sameStringSet(left, right) {
 
 async function baselineProjection(snapshot, capabilityFilter) {
   const expected = baselineExpected(snapshot);
+  const detailedNumbers = capabilityFilter === undefined ? new Set() : new Set([Number(capabilityFilter)]);
   const output = [];
   const records = [];
   const allAnomalies = [];
@@ -652,7 +662,6 @@ async function baselineProjection(snapshot, capabilityFilter) {
   let designRefreshCount = 0;
   let boundaryState = "ok";
   const currentDesignHead = await designHead(snapshot.root);
-  const detailedNumbers = capabilityFilter === undefined ? new Set() : new Set([Number(capabilityFilter)]);
   for (const item of expected) {
     const sameNumber = snapshot.baselineFiles.filter((relative) => {
       const match = /^(\d+)-/.exec(path.posix.basename(relative));
@@ -813,8 +822,7 @@ function parseStatus(root) {
     let relative = entry.slice(3);
     let from = null;
     if (code.includes("R") || code.includes("C")) {
-      from = relative;
-      relative = entries[index + 1] ?? relative;
+      from = entries[index + 1] ?? null;
       index += 1;
     }
     result.push({ code, path: relative.replace(/\\/g, "/"), from: from?.replace(/\\/g, "/") ?? null });
@@ -909,8 +917,11 @@ async function loadSnapshot(options) {
   const productText = readFile(root, "devflow/project/product.md");
   const archText = readFile(root, "devflow/project/arch.md");
   const tree = directTree(root);
+  const closedDepth1 = tree.folders.filter((relative) => ["done", "stale"].includes(folderIdentity(relative)?.status));
   const cardPaths = listFiles(root, "devflow/tree").filter((relative) => relative.endsWith(".md") && cardIdentity(relative));
-  const cards = cardPaths.map((relative) => parseCard(root, relative)).filter(Boolean).sort((a, b) => canonicalCardCompare(a.number, b.number) || byteCompare(a.path, b.path));
+  const cards = cardPaths.map((relative) => parseCard(root, relative,
+    closedDepth1.some((folder) => relative.startsWith(`${folder}/`))))
+    .filter(Boolean).sort((a, b) => canonicalCardCompare(a.number, b.number) || byteCompare(a.path, b.path));
   const directories = listDirectories(root, "devflow/tree");
   const owners = parseOwners(root);
   const room = currentRoom(root, owners);
@@ -934,6 +945,7 @@ async function loadSnapshot(options) {
     archFields: fields(archText),
     treePresent: fs.existsSync(path.join(root, "devflow", "tree")) && fs.statSync(path.join(root, "devflow", "tree")).isDirectory(),
     depth1Folders,
+    closedDepth1,
     directories,
     waitingFiles,
     baselineFiles,
@@ -950,7 +962,7 @@ async function loadSnapshot(options) {
     worktrees: gitText(root, ["worktree", "list", "--porcelain"], { allowFailure: true }).split("\n").filter((line) => line.startsWith("worktree ")).length,
   };
   snapshot.handoff = parseHandoff(root, room, cards, waitingFiles);
-  snapshot.revisions = await revisions(snapshot, options.capability === undefined ? undefined : Number(options.capability));
+  snapshot.revisions = await revisions(snapshot);
   snapshot.baseline = await baselineProjection(snapshot, options.capability);
   return snapshot;
 }
@@ -1336,7 +1348,7 @@ function integrity(snapshot, verify) {
   const report = (item, blocking, values) => anomalies.push({ item, blocking, ...values });
   const roomIds = new Set(snapshot.owners.map((owner) => owner.id));
 
-  for (const card of snapshot.cards) {
+  for (const card of snapshot.cards.filter((item) => !item.closedFolder)) {
     if (card.claimant && !roomIds.has(card.claimant)) report(1, false, { path: card.path, reason: `orphan-claim:${card.claimant}` });
   }
   const byNumber = new Map();
@@ -1351,9 +1363,11 @@ function integrity(snapshot, verify) {
   for (const card of snapshot.cards) {
     const parentDone = card.path.split("/").slice(0, -1).some((component) => /\.done$/.test(component));
     if (parentDone && !["done", "stale"].includes(card.status)) report(3, false, { path: card.path, reason: "active-card-in-done-folder" });
-    for (const reason of card.depends.anomalies) report(4, false, { path: card.path, reason });
-    for (const number of card.depends.numbers) {
-      if ((byNumber.get(number) ?? []).length !== 1) report(4, false, { path: card.path, reason: `dependency-resolves-${(byNumber.get(number) ?? []).length}:${number}` });
+    if (!card.closedFolder) {
+      for (const reason of card.depends.anomalies) report(4, false, { path: card.path, reason });
+      for (const number of card.depends.numbers) {
+        if ((byNumber.get(number) ?? []).length !== 1) report(4, false, { path: card.path, reason: `dependency-resolves-${(byNumber.get(number) ?? []).length}:${number}` });
+      }
     }
   }
   if (snapshot.handoff.nextStep) {
@@ -1372,11 +1386,11 @@ function integrity(snapshot, verify) {
   for (const owners of identityOwners.values()) {
     if (owners.length > 1) report(7, false, { path: owners.map((owner) => owner.path).join(","), reason: "duplicate-git-identity" });
   }
-  for (const card of snapshot.cards.filter((item) => item.claimant)) {
+  for (const card of snapshot.cards.filter((item) => item.claimant && !item.closedFolder)) {
     const owner = snapshot.owners.find((candidate) => candidate.id === card.claimant);
     if (owner && claimAuthorMismatch(snapshot, card, owner)) report(8, false, { path: card.path, reason: "claimant-author-mismatch" });
   }
-  for (const card of snapshot.cards.filter((item) => item.status === "pending")) {
+  for (const card of snapshot.cards.filter((item) => item.status === "pending" && !item.closedFolder)) {
     if (!card.fields.has("Approval") || !card.fields.has("Review")) report(9, false, { path: card.path, reason: "missing-approval-or-review" });
     else if (card.approval !== "pending" && !APPROVAL_RE.test(card.approval)) report(9, false, { path: card.path, reason: "approval-format" });
     if (card.review !== null && !["required", "waived", "not-applicable"].includes(card.review)) report(9, false, { path: card.path, reason: "review-format" });
@@ -1407,6 +1421,7 @@ function integrity(snapshot, verify) {
     if (count !== 1) report(12, true, { path: "devflow/journal.md", line: line.raw, expected: "canonical source locator resolving to exactly one source", reason: `source-resolves-${count}` });
   }
   for (const line of snapshot.journal.filter((item) => ["evidence-wait", "evidence-finalizing"].includes(item.kind))) {
+    if (snapshot.closedDepth1.some((folder) => line.card?.startsWith(`${folder}/`))) continue;
     const reason = evidenceIntegrityReason(snapshot, line);
     if (reason) report(13, true, { path: "devflow/journal.md", line: line.raw, expected: "valid evidence line naming one claimed card with matching checkpoint subject, path, and check JSON", reason });
   }
@@ -1478,13 +1493,43 @@ function cardJudgment(snapshot, card) {
 }
 
 function classifyWorkingTransition(snapshot) {
-  const paths = snapshot.status.map((entry) => entry.path);
+  const paths = snapshot.status.map((entry) => entry.path).filter((relative) => relative === "devflow/journal.md"
+    || /(?:^|\/)verify\.md$/.test(relative) || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
   if (paths.length === 0) return null;
-  const allowed = paths.every((relative) => relative === "devflow/journal.md" || /(?:^|\/)verify\.md$/.test(relative)
-    || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
-  if (!allowed) return null;
   if (snapshot.verifyTexts.size === 0) return null;
   return { paths, state: "working-tree", case: "canonical-output-prefix" };
+}
+
+function claimMoveBytesMatch(snapshot, from, target) {
+  const targetPath = path.resolve(snapshot.root, ...target.split("/"));
+  if (!inside(snapshot.root, targetPath) || !fs.existsSync(targetPath) || !fs.statSync(targetPath).isFile()) return false;
+  const source = gitRun(snapshot.root, ["show", `${snapshot.head}:${from}`], { allowFailure: true });
+  return source.status === 0 && source.stdout.equals(fs.readFileSync(targetPath));
+}
+
+function claimDoneMoves(snapshot) {
+  const moves = [];
+  const add = (from, target) => {
+    const source = cardIdentity(from);
+    const destination = cardIdentity(target);
+    if (source?.status !== "claimed" || destination?.status !== "done") return;
+    if (path.posix.dirname(from) !== path.posix.dirname(target)
+        || source.number !== destination.number || source.name !== destination.name) return;
+    if (!claimMoveBytesMatch(snapshot, from, target)) return;
+    if (moves.some((move) => move.card === from && move.path === target)) return;
+    moves.push({ card: from, path: target, case: "claim-done-move" });
+  };
+  for (const status of snapshot.status.filter((item) => (item.code.includes("R") || item.code.includes("C")) && item.from)) {
+    add(status.from, status.path);
+  }
+  const deleted = snapshot.status.filter((item) => item.code.includes("D") && item.from === null);
+  const untracked = snapshot.status.filter((item) => item.code === "??");
+  for (const source of deleted) {
+    for (const target of untracked) {
+      add(source.path, target.path);
+    }
+  }
+  return moves.sort((left, right) => byteCompare(left.card, right.card) || byteCompare(left.path, right.path));
 }
 
 function directChildren(snapshot, directory) {
@@ -1511,10 +1556,80 @@ function productPreconditions(snapshot) {
 }
 
 function firstMine(snapshot) {
-  return snapshot.cards.find((card) => card.claimant === snapshot.room?.id) ?? null;
+  return snapshot.cards.find((card) => card.claimant === snapshot.room?.id && !card.closedFolder) ?? null;
+}
+
+function progressLines(card) {
+  if (!card?.text) return [];
+  return extractSection(card.text, "## Progress log")?.split("\n").filter((line) => line.trim()) ?? [];
+}
+
+function carryState(card) {
+  const last = progressLines(card).at(-1)?.trim() ?? "";
+  const match = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z carry: (.+)$/.exec(last);
+  return match ? { present: true, fact: match[1] } : { present: false, fact: null };
+}
+
+function boundaryFields(snapshot, card) {
+  const missing = [];
+  if (!carryState(card).present) missing.push("carry");
+  if (snapshot.room && snapshot.handoff.stale) missing.push("handoff");
+  return { missing };
+}
+
+function claimOrigin(snapshot, card) {
+  if (!card) return { origin: "none" };
+  if (gitLine(snapshot.root, ["rev-parse", "--is-shallow-repository"], { allowFailure: true }) === "true") {
+    return { origin: "unknown", originReason: "shallow-history" };
+  }
+  const history = gitText(snapshot.root, ["log", "--follow", "--format=%H", "--", card.path], { allowFailure: true })
+    .split("\n").filter(Boolean);
+  const creation = history.at(-1);
+  if (!creation) return { origin: "unknown", originReason: "creation-commit-missing" };
+  if (gitRun(snapshot.root, ["rev-parse", "--verify", `${creation}^`], { allowFailure: true }).status !== 0) {
+    return { origin: "unknown", originReason: "creation-parent-missing" };
+  }
+  const diff = gitText(snapshot.root, ["show", "--format=", "--unified=0", "--no-ext-diff", creation, "--", "devflow/journal.md"], { allowFailure: true });
+  const matches = diff.split("\n").filter((line) => line.startsWith("-") && !line.startsWith("---"))
+    .map((line) => line.slice(1))
+    .filter((line) => {
+      const parsed = parseJournalLine(line, 0);
+      return parsed?.valid && ["maintenance-request", "layer-opening"].includes(parsed.kind);
+    });
+  if (matches.length === 0) return { origin: "none" };
+  if (matches.length > 1) return { origin: "unknown", originReason: "multiple-matches" };
+  return { origin: `journal:${matches[0]}` };
+}
+
+function digestLag(snapshot) {
+  if (!snapshot.room || !snapshot.integration.hash) return null;
+  const relative = `devflow/users/${snapshot.room.id}/digest.md`;
+  const markerText = readFile(snapshot.root, relative);
+  if (markerText === null) return null;
+  const marker = markerText.trim();
+  const validHash = /^[0-9a-f]{40,64}$/.test(marker);
+  const isNone = marker === "none";
+  let behind = "unknown";
+  let range = snapshot.integration.ref;
+  if (isNone) {
+    behind = Number(gitLine(snapshot.root, ["rev-list", "--count", snapshot.integration.ref], { allowFailure: true }) || 0);
+  } else if (validHash && gitRun(snapshot.root, ["merge-base", "--is-ancestor", marker, snapshot.integration.ref], { allowFailure: true }).status === 0) {
+    range = `${marker}..${snapshot.integration.ref}`;
+    behind = Number(gitLine(snapshot.root, ["rev-list", "--count", range], { allowFailure: true }) || 0);
+  }
+  const raw = gitRun(snapshot.root, ["log", "-z", "--format=%an%x00%ae%x00%s", range], { allowFailure: true });
+  const values = raw.status === 0 ? decodeUtf8(raw.stdout, "digest history").split("\0").filter((value) => value !== "") : [];
+  let others = 0;
+  for (let index = 0; index + 2 < values.length; index += 3) {
+    const [name, email, subject] = values.slice(index, index + 3);
+    if (name !== snapshot.room.name || email !== snapshot.room.email || !subject.startsWith(`${snapshot.room.id} `)) others += 1;
+  }
+  if (behind === 0 && others === 0) return null;
+  return { marker: isNone ? "none" : marker || "invalid", behind, others };
 }
 
 function finalTaskCommit(snapshot, card) {
+  if (!card.text) return false;
   const firstLine = /^#\s+(.+)$/.exec(card.text.split("\n")[0] ?? "")?.[1] ?? null;
   if (!firstLine) return false;
   const subject = gitLine(snapshot.root, ["log", "-1", "--format=%s", "--", card.path], { allowFailure: true });
@@ -1584,10 +1699,12 @@ function evaluateZones(snapshot) {
     });
   }
   for (const card of snapshot.cards.filter((item) => item.claimant === snapshot.room?.id && finalTaskCommit(snapshot, item))) {
-    addEntry(zones, "transition", "finish-boundary", { card: card.path, case: "final-task-subject" });
+    addEntry(zones, "transition", "finish-boundary", { card: card.path, case: "final-task-subject", ...boundaryFields(snapshot, card) });
   }
-  for (const status of snapshot.status.filter((item) => /\.wip-[a-z0-9]+\.md$/.test(item.from ?? "") && /\.done\.md$/.test(item.path))) {
-    addEntry(zones, "transition", "finish-boundary", { card: status.from, path: status.path, case: "claim-done-move" });
+  for (const move of claimDoneMoves(snapshot)) {
+    const card = snapshot.cards.find((item) => item.path === move.path)
+      ?? parseCard(snapshot.root, move.path, false);
+    addEntry(zones, "transition", "finish-boundary", { ...move, ...boundaryFields(snapshot, card) });
   }
   for (const item of verify.eventRouting) addEntry(zones, "transition", "event-routing", item);
   for (const item of verify.eventDecision) addEntry(zones, "transition", "event-decision", item);
@@ -1618,12 +1735,12 @@ function evaluateZones(snapshot) {
 
   const claimSummary = { mine: 0, others: 0 };
   const cardDetails = new Map();
-  for (const card of snapshot.cards) cardDetails.set(card.path, cardJudgment(snapshot, card));
-  for (const card of snapshot.cards.filter((item) => item.status === "claimed")) {
+  for (const card of snapshot.cards.filter((item) => !item.closedFolder)) cardDetails.set(card.path, cardJudgment(snapshot, card));
+  for (const card of snapshot.cards.filter((item) => item.status === "claimed" && !item.closedFolder)) {
     if (card.claimant !== snapshot.room?.id) { claimSummary.others += 1; continue; }
     claimSummary.mine += 1;
     const judgment = cardDetails.get(card.path);
-    const common = { path: card.path, depends: card.depends.numbers.length === 0 ? "done" : judgment.blockers.length === 0 ? "done" : "blocked", approval: judgment.approval.value, blockers: judgment.blockers };
+    const common = { path: card.path, depends: card.depends.numbers.length === 0 ? "done" : judgment.blockers.length === 0 ? "done" : "blocked", approval: judgment.approval.value, blockers: judgment.blockers, carry: carryState(card).present ? "present" : "absent" };
     if (card.depends.anomalies.length > 0 || card.depends.numbers.some((number) => snapshot.cards.filter((candidate) => candidate.number === number).length !== 1)) addEntry(zones, "claim", "depends-anomaly", { ...common, reasons: card.depends.anomalies });
     else if (card.legacy || card.approval === "pending" || !card.depends.canonical) addEntry(zones, "claim", "needs-reapproval", common);
     else if (judgment.blockers.length > 0) addEntry(zones, "claim", "blocked-by-prerequisite", common);
@@ -1692,7 +1809,11 @@ function evaluateZones(snapshot) {
     if (activeStatuses.length > 0 && activeStatuses.every((status) => status === "done")) {
       if (directory.split("/").length === 3 && Number(identity.number) !== 1) {
         layerSummary.childrenDone += 1;
-        addEntry(zones, "layer", "children-done", { folder: directory });
+        const carryFacts = children.cards.filter((card) => card.status === "done").flatMap((card) => {
+          const carry = carryState(card);
+          return carry.present && carry.fact !== "none" ? [{ card: card.path, fact: carry.fact }] : [];
+        });
+        addEntry(zones, "layer", "children-done", { folder: directory, carry: carryFacts.length, carryFacts });
       } else {
         layerSummary.folderBoundary += 1;
         addEntry(zones, "layer", "folder-boundary", { folder: directory });
@@ -1717,8 +1838,10 @@ function evaluateZones(snapshot) {
   layerSummary.unit = unit;
   zones.layer.summary = layerSummary;
 
-  const pendingCards = snapshot.cards.filter((card) => card.status === "pending");
+  const pendingCards = snapshot.cards.filter((card) => card.status === "pending" && !card.closedFolder);
   const readySummary = { count: pendingCards.length };
+  const digest = digestLag(snapshot);
+  if (digest) addEntry(zones, "ready", "digest-behind", digest);
   for (const card of pendingCards) {
     const judgment = cardDetails.get(card.path);
     const detail = { file: card.path, cards: [card.number], depends: card.depends.numbers, approval: judgment.approval.value, ready: judgment.ready, blockers: judgment.blockers };
@@ -1763,18 +1886,20 @@ function evaluateZones(snapshot) {
   for (const detail of snapshot.baseline.details) zones.baseline.entries.push({ detail: true, ...detail });
   const openItems = snapshot.journal.filter((line) => line.kind === "attributed").map((line) => line.raw).concat(snapshot.handoff.openItems);
   const capabilityDocuments = snapshot.baseline.expected.filter((item) => snapshot.baselineFiles.some((relative) => Number(/^(\d+)-/.exec(path.posix.basename(relative))?.[1]) === item.number)).map((item) => path.posix.basename(item.path));
-  const progressLines = chosen ? extractSection(chosen.text, "## Progress log")?.split("\n").filter((line) => line.trim()) ?? [] : [];
+  const chosenProgress = progressLines(chosen);
+  const origin = claimOrigin(snapshot, chosen);
   const report = {
     service: snapshot.product.service,
     completeThrough: snapshot.depth1Folders.filter((folder) => folderIdentity(folder)?.status === "done").sort(byteCompare).at(-1) ?? "none",
     taskInProgress: chosen?.path ?? "none",
-    progressLastPoint: progressLines.at(-1) ?? "none",
+    progressLastPoint: chosenProgress.at(-1) ?? "none",
     capabilityDocuments: capabilityDocuments.length > 0 ? capabilityDocuments : "none",
     alsoOpen: zones.ready.entries.filter((entry) => !entry.detail).map((entry) => entry.file ?? entry.cards?.[0]).filter(Boolean),
     uncommittedUnattributed: unattributed.length > 0 ? unattributed : "none",
     notYetOnIntegration: changedOnBranch.length > 0 ? changedOnBranch : "none",
     selectionReason: !snapshot.handoff.stale && snapshot.handoff.nextStep ? "last-handoff" : "canonical-order",
     openItems: openItems.length,
+    ...origin,
   };
   const facts = {
     report,
@@ -1863,6 +1988,125 @@ function firstRoute(order, zones, treePresent) {
   return "none";
 }
 
+function capabilityFromValue(snapshot, value) {
+  if (typeof value === "number") return value;
+  if (typeof value !== "string") return null;
+  const tree = /^devflow\/tree\/([^/]+)/.exec(value);
+  if (tree) return Number(folderIdentity(`devflow/tree/${tree[1]}`)?.number) || null;
+  const baseline = /^devflow\/project\/capabilities\/(\d+)-/.exec(value);
+  if (baseline) return Number(baseline[1]);
+  const card = new RegExp(`^(${CARD_NUMBER})(?:$|[-.])`).exec(value);
+  if (card) return Number(/^\d+/.exec(card[1])?.[0]) || null;
+  const folder = /^(\d+)-/.exec(value);
+  return folder ? Number(folder[1]) : null;
+}
+
+function entryCapabilities(snapshot, entry) {
+  const result = new Set();
+  const visit = (value) => {
+    if (Array.isArray(value)) { for (const item of value) visit(item); return; }
+    if (value && typeof value === "object") {
+      for (const key of ["capability", "path", "file", "folder", "card", "paths", "cards", "candidates", "missing", "carryFacts"]) {
+        if (Object.hasOwn(value, key)) visit(value[key]);
+      }
+      return;
+    }
+    const number = capabilityFromValue(snapshot, value);
+    if (number !== null) result.add(number);
+  };
+  visit(entry);
+  return result;
+}
+
+function projectedEntry(snapshot, zone, entry, selected) {
+  if (zone === "blocked" && entry.kind === "audits") {
+    const candidates = (entry.candidates ?? []).filter((value) => {
+      const capability = capabilityFromValue(snapshot, value);
+      return capability === null || capability === selected;
+    });
+    return candidates.length > 0 ? { ...entry, candidates } : null;
+  }
+  if (zone === "blocked" && entry.kind === "dependencies") {
+    const cards = (entry.cards ?? []).filter((value) => capabilityFromValue(snapshot, value) === selected);
+    if (cards.length === 0) return null;
+    const selectedNumbers = new Set(cards);
+    const reasons = snapshot.cards
+      .filter((card) => card.status === "pending" && !card.closedFolder && selectedNumbers.has(card.number))
+      .flatMap((card) => cardJudgment(snapshot, card).blockers);
+    return { ...entry, cards, reasons };
+  }
+  if (zone === "blocked" && entry.kind === "other-claims") {
+    const pairs = (entry.cards ?? []).map((card, index) => ({ card, claimant: entry.claimants?.[index] }))
+      .filter((item) => capabilityFromValue(snapshot, item.card) === selected);
+    return pairs.length > 0 ? { ...entry, cards: pairs.map((item) => item.card), claimants: pairs.map((item) => item.claimant) } : null;
+  }
+  if (zone === "layer" && entry.kind === "correspondence-gap") {
+    const missing = (entry.missing ?? []).filter((value) => capabilityFromValue(snapshot, value) === selected);
+    return missing.length > 0 ? { ...entry, missing } : null;
+  }
+  const capabilities = entryCapabilities(snapshot, entry);
+  return capabilities.size === 0 || capabilities.has(selected) ? entry : null;
+}
+
+function projectedBaselineSummary(snapshot, selected) {
+  const records = snapshot.baseline.records.filter((record) => Number(record.capability) === selected);
+  return {
+    expected: records.length,
+    legacyV010: records.filter((record) => record.legacy).length,
+    designRefresh: records.filter((record) => !record.legacy && (!record.headExists
+      || (record.shape.boundaryCount === 1 && (!record.shape.shapeValid || !record.designFresh)))).length,
+    boundary: records.some((record) => record.shape.boundaryCount !== 1 && record.headExists && !record.legacy) ? "anomaly" : "ok",
+    anomalies: records.flatMap((record) => record.shape.anomalies).length,
+  };
+}
+
+function renderProjection(snapshot, evaluated) {
+  const selected = snapshot.options.capability === undefined ? null : Number(snapshot.options.capability);
+  if (selected === null) return { evaluated, narrow: "none", removed: 0 };
+  const zones = Object.fromEntries(Object.entries(evaluated.zones).map(([name, zone]) => [name, {
+    summary: zone.summary,
+    entries: [...zone.entries],
+  }]));
+  let removed = 0;
+  for (const name of ["claim", "baseline", "ready", "blocked", "layer"]) {
+    const before = zones[name].entries;
+    zones[name].entries = before.map((entry) => projectedEntry(snapshot, name, entry, selected)).filter(Boolean);
+    removed += before.length - zones[name].entries.length;
+    for (let index = 0; index < Math.min(before.length, zones[name].entries.length); index += 1) {
+      if (JSON.stringify(before[index]) !== JSON.stringify(zones[name].entries[index])) removed += 1;
+    }
+  }
+  const selectedCards = snapshot.cards.filter((card) => !card.closedFolder && capabilityFromValue(snapshot, card.path) === selected);
+  const summaries = {
+    claim: {
+      mine: selectedCards.filter((card) => card.status === "claimed" && card.claimant === snapshot.room?.id).length,
+      others: selectedCards.filter((card) => card.status === "claimed" && card.claimant !== snapshot.room?.id).length,
+    },
+    baseline: projectedBaselineSummary(snapshot, selected),
+    ready: { count: selectedCards.filter((card) => card.status === "pending").length },
+  };
+  for (const [name, summary] of Object.entries(summaries)) {
+    if (JSON.stringify(zones[name].summary) !== JSON.stringify(summary)) removed += 1;
+    zones[name].summary = summary;
+  }
+  const report = { ...evaluated.facts.report };
+  if (Array.isArray(report.alsoOpen)) {
+    const before = report.alsoOpen;
+    report.alsoOpen = before.filter((value) => capabilityFromValue(snapshot, value) === selected);
+    removed += before.length - report.alsoOpen.length;
+  }
+  const taskCapability = capabilityFromValue(snapshot, report.taskInProgress);
+  if (taskCapability !== null && taskCapability !== selected) {
+    report.taskInProgress = "none";
+    report.progressLastPoint = "none";
+    report.origin = "none";
+    delete report.originReason;
+    removed += 1;
+  }
+  const facts = { ...evaluated.facts, report };
+  return { evaluated: { ...evaluated, zones, facts }, narrow: removed > 0 ? String(selected) : "none", removed };
+}
+
 // The priority table is executable data. This narrow export lets the structural
 // contract exercise the same selector without manufacturing every filesystem state.
 export function selectFirstRoute(activeRoutes, treePresent = true) {
@@ -1899,19 +2143,19 @@ function renderBody(snapshot, evaluated, form) {
   return body;
 }
 
-function stateLine(snapshot, evaluated, form, bytes) {
+function stateLine(snapshot, evaluated, form, bytes, narrow) {
   const anomalies = evaluated.integrityItems.length + snapshot.product.anomalies.length + snapshot.baseline.anomalies.length;
   const head = snapshot.head === "none" ? "none" : snapshot.head.slice(0, 8);
   const integration = snapshot.integration.hash ? `${snapshot.integration.branch}@${snapshot.integration.hash.slice(0, 8)}` : `${snapshot.integration.branch}@unknown`;
-  return `state: schema=1 root=${scalar(snapshot.root)} head=${head} integration=${integration} networkNeeded=${snapshot.integration.networkNeeded ? 1 : 0} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${anomalies} bytes=${bytes}/${OUTPUT_LIMIT} form=${form}`;
+  return `state: schema=1 root=${scalar(snapshot.root)} head=${head} integration=${integration} networkNeeded=${snapshot.integration.networkNeeded ? 1 : 0} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${anomalies} narrow=${narrow} bytes=${bytes}/${OUTPUT_LIMIT} form=${form}`;
 }
 
-function render(snapshot, evaluated, form) {
+function render(snapshot, evaluated, form, narrow) {
   const body = renderBody(snapshot, evaluated, form);
   let bytes = 0;
   let output = "";
   for (let attempt = 0; attempt < 4; attempt += 1) {
-    output = `${stateLine(snapshot, evaluated, form, bytes)}\n${body.join("\n")}\n`;
+    output = `${stateLine(snapshot, evaluated, form, bytes, narrow)}\n${body.join("\n")}\n`;
     const measured = Buffer.byteLength(output);
     if (measured === bytes) break;
     bytes = measured;
@@ -1922,12 +2166,14 @@ function render(snapshot, evaluated, form) {
 export async function calculateState(options) {
   const snapshot = await loadSnapshot(options);
   const evaluated = evaluateZones(snapshot);
-  let rendered = render(snapshot, evaluated, "full");
+  const projected = renderProjection(snapshot, evaluated);
+  let rendered = render(snapshot, projected.evaluated, "full", projected.narrow);
   if (rendered.bytes <= OUTPUT_LIMIT) return { ...rendered, status: 0, form: "full", snapshot, evaluated };
-  rendered = render(snapshot, evaluated, "compact");
+  rendered = render(snapshot, projected.evaluated, "compact", projected.narrow);
   if (rendered.bytes <= OUTPUT_LIMIT) return { ...rendered, status: 0, form: "compact", snapshot, evaluated };
   const anomalies = evaluated.integrityItems.length + snapshot.product.anomalies.length + snapshot.baseline.anomalies.length;
-  const output = `state: schema=1 root=${scalar(snapshot.root)} head=${snapshot.head.slice(0, 8)} integration=${snapshot.integration.branch}@${snapshot.integration.hash?.slice(0, 8) ?? "unknown"} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${anomalies} bytes=0/${OUTPUT_LIMIT} form=compact emitted=0\nblocked: output budget exceeded; narrow --capability <n>\n`;
+  const advice = snapshot.options.capability === undefined ? "; narrow --capability <n>" : "";
+  const output = `state: schema=1 root=${scalar(snapshot.root)} head=${snapshot.head.slice(0, 8)} integration=${snapshot.integration.branch}@${snapshot.integration.hash?.slice(0, 8) ?? "unknown"} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${anomalies} narrow=${projected.narrow} bytes=0/${OUTPUT_LIMIT} form=compact emitted=0\nblocked: output budget exceeded${advice}\n`;
   return { output, bytes: Buffer.byteLength(output), status: 3, form: "refused", snapshot, evaluated };
 }
 

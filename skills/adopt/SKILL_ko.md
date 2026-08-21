@@ -6,11 +6,19 @@ description: 기존 프로젝트 도입. 이미 코드가 있는 저장소에서
 # adopt — 기존 프로젝트 도입
 
 먼저 규칙 정본(`../principles/SKILL.md`)·기획 증거 규율
-(`../principles/planning-evidence.md`)·능력 지식 기준선 판정 정본
-(`../principles/baseline-predicates.md`)을 읽는다. 존재하면 `devflow/project/product.md`·
+(`../principles/planning-evidence.md`)을 읽는다. 능력 지식 기준선 판정 정본
+(`../principles/baseline-predicates.md`)은 바로 다음 문단의 캡슐 관문에 따라 읽는다. 존재하면
+`devflow/project/product.md`·
 `devflow/project/arch.md`·`devflow/project/code-style.md`·`devflow/project/design.md`·
 `devflow/project/glossary.md`, `devflow/journal.md`, 그리고
 `devflow/project/decisions/` 바로 아래의 legacy `ADR-NNN.md`를 각각 통독한다.
+
+기준선 판정 정본은
+`## 도메인 지식 캡슐`부터 `## 메타데이터와 신선도` 직전까지를 빼고 읽는다. 이번 실행이
+사용자가 지목한 원문 문서를 실제로 캡슐로 가공하거나, 도출한 능력 문서가 그 정본의 총 상한을
+넘길 참이면 그 구역 전문을 먼저 열고 쓴다. 캡슐이 지금 디스크에 있는지 없는지는 이 판정에
+쓰지 않는다 — 첫 캡슐은 언제나 캡슐이 없는 프로젝트에서 태어난다. 어느 쪽인지 불확실하거나
+그 두 제목을 찾지 못하면 전문을 읽는다.
 
 대상 능력 문서마다
 `node ../principles/scripts/project-state.mjs state --capability <능력 번호>`를 실행한다.

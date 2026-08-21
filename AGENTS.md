@@ -6,16 +6,16 @@ that uses devflow. A cheap edit here can be an expensive behavioral change.
 
 ## Entry gate
 
-1. Read `docs/design.md` in full. It owns identity, invariants, the component intent index,
-   and the complete decision index. State which decision rows move. When any row moves, open
-   that subject in `docs/design-decisions.md`; refute a recorded reason before overturning a
-   decision or re-proposing a rejection.
+1. Read `docs/design.md` in full and run `node scripts/decision-index.mjs` (`--lang ko` for
+   Korean). design owns identity, invariants, and the component intent index; the command
+   projects every decision from `docs/design-decisions.md`. State which rows move, open those
+   subjects, and refute a recorded reason before overturning a decision or re-proposing a
+   rejection.
 2. Establish bounded current state: read both manifest versions, `git status --short`, and
    the latest five commit subjects with changed paths. Read only the newest CHANGELOG entry.
    From the greatest numeric-version round below the current version, read the shipped/result
-   and limitations/carry-forward sections; if that legacy report has no such sections, read
-   that one report in full. Do not use the whole CHANGELOG, all rounds, or all
-   blueprints as onboarding.
+   and limitations/carry-forward sections; if that report has no such sections, read it in
+   full. Do not use the whole CHANGELOG, all rounds, or all blueprints as onboarding.
 3. Fix the requested write scope as exact paths. Open only the sections that the wiring
    table below triggers. When uncertain whether a condition applies, expand the read set;
    never silently shrink it.
@@ -31,7 +31,7 @@ whole by default.
 
 | When this is true | Open this |
 |---|---|
-| always | `docs/design.md` in full |
+| always | `docs/design.md` in full; `node scripts/decision-index.mjs` |
 | a decision-index row moves | that subject in `docs/design-decisions.md` |
 | planning a release | `docs/design-backlog.md` |
 | creating, deleting, or moving a file other than this round's report | `docs/design-backlog.md`; `docs/audit-guideline_ko.md` §3-4; maintenance protocol §1 |
@@ -45,20 +45,19 @@ whole by default.
 | changing a deploy artifact or bumping version | maintenance protocol §7–§8; for a version bump, also §5, the full audit guideline, and matrix §6 |
 | deciding where new knowledge belongs | maintenance protocol §3 |
 
-An adopted finding that fits no audit-guideline §2 row proposes a new row there. A request
-shape that fits no matrix §1–§2 row proposes a matrix row. A new document role adds one row
-to the document map in `docs/design.md`.
+An adopted finding fitting no audit-guideline §2 row proposes a new row there; a request shape
+fitting no matrix §1–§2 row proposes a matrix row; a new document role adds one row to the
+document map in `docs/design.md`.
 
 The audit guideline and use-case matrix are Korean-only standing instruments. External
-contributors are not required to open either one; the equivalent PR evidence required by
-maintenance protocol §4 stands in their place.
+contributors are not required to open either one; maintenance protocol §4's equivalent PR
+evidence stands in their place.
 
 ## Hard boundaries
 
 - **A repository-maintenance structure request does not authorize `skills/**`.** A skill
   problem found during it is report-only: give the exact source, failure scene, and decision
-  coordinates, then leave it for a separately scoped request. Verify the final diff against
-  the base commit.
+  coordinates, then leave it for a separately scoped request.
 - **One fact, one durable home.** Do not create `CURRENT.md`, an omnibus summary, a free-form
   note layer, or another skill map. Git and manifests own current facts; design owns intent;
   decisions own reasons; backlog owns unadopted observations; rounds own evidence;

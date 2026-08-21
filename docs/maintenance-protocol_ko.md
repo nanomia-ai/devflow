@@ -56,7 +56,7 @@ docs/rounds/v0.9.21/report_ko.md ↔ report.md
 | 정보 | 유일한 착지점 | 기록할 내용 |
 |---|---|---|
 | 정체성·불변식·전체 구조 | `docs/design_ko.md` | 모든 미래 변경이 알아야 할 짧은 정본 |
-| 구속 결정과 설계 의도 | `docs/design-decisions_ko.md` | 문제·원하는 동작·경계·이유·재검토 조건 |
+| 구속 결정과 설계 의도 | `docs/design-decisions_ko.md` | 문제·원하는 동작·경계·이유·재검토 조건. 결정의 유일한 집이고, 색인은 `node scripts/decision-index.mjs --lang ko`가 여기서 투영한다 — 손으로 유지하는 색인 표를 어디에도 만들지 않는다 |
 | 미채택 관찰·후보 | `docs/design-backlog_ko.md` | 증거·긴장·다시 볼 조건 |
 | 한 라운드의 측정·판정 | `docs/rounds/<version>/report_ko.md` | 실행 증거·한계·미착지 항목 |
 | 실제 배포 결과 | `CHANGELOG.md` | 무엇·왜·파일 |
@@ -185,7 +185,7 @@ CHANGELOG 맨 위에 날짜·무엇·왜·파일을 적는다. 약 60줄 안에�
       별도 명령이 아니다
 - [ ] 검증 계약을 바꾸는 릴리스면 관문 B를 한 번 지났다 — 실제 프로젝트에서 능력 하나를
       split → work → verify → 폐쇄까지 끌고 간다
-- [ ] `docs/design.md` 결정 색인 전문 확인, 움직인 주제 절의 이유 확인
+- [ ] `docs/design.md` 전문과 생성된 결정 색인(`node scripts/decision-index.mjs`) 확인, 움직인 주제 절의 이유 확인
 - [ ] `skills/**` 변경 시 matrix 셀 재판정과 새 사용 형태 확인
 - [ ] `_ko` 먼저 수정, 고정 용어 적용, 한영 구조·수치 대응 확인
 - [ ] audit가 있었다면 채택 소견 승격 또는 미승격 이유 확인

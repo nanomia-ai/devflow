@@ -1,6 +1,6 @@
 # devflow decisions and rejection lineage
 
-This file is the body that `design.md`'s decision index points at. Each subject holds its decisions in full alongside the proposals rejected under it — overturning a decision and re-proposing a rejected idea pass through the same gate.
+This file is the one home of a decision, and the decision index is generated from it (`node scripts/decision-index.mjs`). Each subject holds its decisions in full alongside the proposals rejected under it — overturning a decision and re-proposing a rejected idea pass through the same gate.
 
 **To overturn a decision, refute its recorded reason first. To re-propose a rejected idea, refute its recorded rejection reason first.**
 
@@ -78,9 +78,9 @@ Subject: Identity, packaging, platforms | Introduced: v0.13.0 | State: active
 
 Probed live (2026-08-13): Codex installs a plugin into `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/`, the whole repository, and the model reads its skill from that absolute path - so `../principles/SKILL.md` resolves there exactly as it does in Claude. The recorded reason for embedding ("the Codex prompt folder is flat, relative references are unreliable") was true of `~/.codex/prompts/` and does not reach the plugin. The eight prompts held 50-120 KB each, embedding the whole rulebook, and two installers each carried their own embedding logic, so every rule change had to be applied twice. Removing generation alone would leave earlier files callable, so cleanup deletes the exact eight names for one release, keyed to the generated marker, and a file a user wrote under one of those names survives
 
-### DD-71 · Repository maintenance reads the whole design intent first and opens detailed procedure conditionally (v0.16.2)
+### DD-71 · The always-read maintenance entry is design in full plus a decision index generated from the source; AGENTS routes detailed procedure conditionally, and history is not onboarding (v0.16.2)
 
-Subject: Identity, packaging, platforms | Introduced: v0.16.2 | State: active
+Subject: Identity, packaging, platforms | Introduced: v0.16.2 | State: active, partly corrected by DD-84 (v0.19.0)
 
 Observed problem: a new maintenance session first paid for the automatically entered
 30,716B `AGENTS.md` and the always-read 20,080B `design.md`, then walked README at 42,569B,
@@ -89,24 +89,44 @@ CHANGELOG at 63,177B, and round records to learn the structure. The Claude basel
 opened most entry-skill bodies. The root AGENTS alone also sat near Codex's default 32KiB
 project-instruction limit, leaving room for lower instructions to be silently truncated.
 
+A second observation, v0.19.0: the structure built then left the decision index as a **manual
+table inside `design.md`**, and that table produced three things. ① **An 8-of-80 drift** from
+the source — 8 of the 80 rows carried a sentence different from the decision's own title.
+② **A budget collision** — of the 32,679 B always-read fixed cost (AGENTS 6,136 + design
+26,543), 14,012 B was that table, and the 26 KiB cap left 81 B of headroom, so v0.18.9's two
+decisions could not take a row and their reasons stayed trapped in a round record.
+③ That structure grew an **always-read** document in proportion to the decision count.
+This decision's always-read entry is therefore not a place that carries the index by hand.
+
+Measured across v0.19.0 (80 → 84 decisions): the always-read entry went from 32,679 B to
+**31,370 B** (AGENTS.md 6,136 → 6,142, design.md 26,543 → 13,331, the generated index 11,897).
+**The byte reduction is small, 1,309 B** — this change's product is not subtraction but one
+home, zero drift, and moving the growth that tracks the decision count **outside the fixed-size
+`design.md` and its 26 KiB cap**. The generated index remains always-read, and its per-row cost
+fell from 175 B to 141.6 B.
+
 Desired behavior: a new session first understands the whole philosophy, structure,
 invariants, decisions, and why every skill exists, then opens every actual source inside the
 impact boundary of a concrete change. History and conditional operating procedure are read
 only when needed, and lower comprehension rejects the refactor regardless of token savings.
 
-Chosen boundary: `design.md` is the only whole-system intent map; `AGENTS.md` owns only an
-automatic entry gate and wiring capped at 6KiB. Detailed procedure lives by section in one
-`maintenance-protocol` pair, and every section must be reachable from root wiring. Whole
-README, whole CHANGELOG, multiple rounds, and blueprints are not onboarding. No manual
-`CURRENT.md`, separate maintenance map, or free-form note layer is created. A map alone can
-never authorize deleting, moving, or consolidating an affected skill before its source is
-read.
+Chosen boundary: **the always-read entry is `design.md` in full plus the output of
+`node scripts/decision-index.mjs`.** `design.md` is the only whole-system intent map, and the
+decision index is not a table inside it but a read-only projection of the decision source,
+whose reason DD-84 owns. `AGENTS.md` owns only an automatic entry gate and wiring capped at
+6KiB. Detailed procedure lives by section in one `maintenance-protocol` pair, and every
+section must be reachable from root wiring. Whole README, whole CHANGELOG, multiple rounds, and
+blueprints are not onboarding. No manual `CURRENT.md`, separate maintenance map, or free-form
+note layer is created. The generating command is not a document role, so it takes no row in the
+document map. A map alone can never authorize deleting, moving, or consolidating an affected
+skill before its source is read.
 
 Why the boundary is needed: `design.md` already owns origin, structure, the document map,
-invariants, and the decision index. A separate map creates the second knowledge layer and
-freshness race DD-28 forbids. Keeping every detailed procedure in AGENTS instead charges
-translation, round, README, and release rules to sessions that never use them. This boundary
-keeps one home for intent and one for procedure while making only the reading conditional.
+invariants, and the skill intent index, and the decision index is projected from its source. A
+separate map creates the second knowledge layer and freshness race DD-28 forbids. Keeping every
+detailed procedure in AGENTS instead charges translation, round, README, and release rules to
+sessions that never use them. This boundary keeps one home for intent and one for procedure
+while making only the reading conditional.
 
 Rejected alternatives: shortening or splitting skill sources is outside this decision and
 belongs to a separately scoped session. An AI-written omnibus summary and `CURRENT.md` turn
@@ -115,12 +135,15 @@ with design. Shrinking README or CHANGELOG into onboarding material contaminates
 explanation and shipped history with current-canon duties.
 
 Affected coordinates: `AGENTS.md`, `docs/design{_ko}.md`,
-`docs/maintenance-protocol{_ko}.md`, and `scripts/repository-invariants.test.js`. Revisit
+`docs/maintenance-protocol{_ko}.md`, `scripts/decision-index.mjs`, and
+`scripts/repository-invariants.test.js`. Revisit
 when a clean Claude or Codex entry misses any critical invariant, component, consumer, or
-design reason; when input to the first safe plan exceeds 70% of the baseline; or when the
-always-read `AGENTS.md + design.md` exceeds 30KiB.
+design reason; when input to the first safe plan exceeds 70% of the baseline; when either
+`AGENTS.md` or `design.md` exceeds its existing cap; or when the generated index exceeds an
+average 150 B per decision without a new column that gives the reader new decision meaning.
+Growth caused only by more decisions is measured separately from those four conditions.
 
-### DD-72 · A versioned implementation with no named document role leaves one report_ko.md as its default record (v0.16.2)
+### DD-72 · A versioned implementation with no named document role leaves one report_ko.md as its default round record (v0.16.2)
 
 Subject: Identity, packaging, platforms | Introduced: v0.16.2 | State: active
 
@@ -153,7 +176,7 @@ an existing role smaller than report can preserve the same evidence without loss
 unnamed versioned implementation, or if a real repair release conflicts with the rule that
 keeps its record in the preceding round.
 
-### DD-79 · README is a person's document and lives outside the AI's read set (v0.18.5)
+### DD-79 · README is a person's document and lives outside the AI's read set — not read, not updated, not used as grounds for a judgment, and the line holds after README returns (v0.18.5)
 
 Subject: Identity, packaging, platforms | Introduced: v0.18.5 | State: active
 
@@ -201,7 +224,7 @@ then is this line, not a file.
 
 ### DD-80 · The executor of a machine judgment is code, and the document that wrote that judgment down is deleted in the release after its last runtime reader moves (v0.18.7)
 
-Subject: Identity, packaging, platforms | Introduced: v0.18.7 | State: active
+Subject: Identity, packaging, platforms | Introduced: v0.18.7 | State: active, partly corrected by DD-83 (v0.19.0)
 
 Observed problem: `resume` entry spends **137,514 B** of canon before it reads one character
 of a target project file (measured at 0.18.6 — resume 30,477 + principles 67,498 + canonical
@@ -236,11 +259,24 @@ that document. Git carries the past.** Sentences said to a person, judgments of 
 approval discipline stay prose.
 
 ④ **The tool emits facts and takes no conversation.** The call is `state` alone and the input
-is `--root` plus two filters (`--capability`, `--card`). The output is **fourteen zones** in
+is `--root` plus one filter (`--capability`). The output is **fourteen zones** in
 priority order and **an empty zone still prints its line**; the closing `next:` names the first
 zone that is not empty and its kind — a summary derived from the facts, not a contract. What
 the session knows (a named card, a deferred item, this conversation's request) is written by
 the model, not encoded into the tool.
+
+Partly corrected in v0.19.0 (DD-83): read-only and stateless are unchanged; only ④'s input and
+output contract narrows. `--card`, which had no consumer at all, is removed — it parsed and
+changed no judgment. `--capability` becomes a **render filter applied after the judgment, not a
+snapshot filter applied before it**: global consistency is always computed from the whole
+snapshot, and only the per-capability lines (claim, ready, blocked, layer, carry) are narrowed
+in the render. The expensive capability-document detail has no global consumer, so it is
+computed only for the one capability when a number is supplied. The git, integrity,
+transition, marker, setup, request, event, product, and
+complete facts are not narrowed, and when there is nothing to narrow the output shows
+`narrow=none` instead of a false recall instruction. And boundary completeness's `missing` and
+`carry`, together with `digest` and `origin`, are not new judgments but **an extension of the
+same disk and Git fact emission**.
 
 Why the boundaries are needed: allow restatement and the document and the code diverge, and at
 the moment they diverge nobody can say which is canonical. "Keep it as a specification" is a
@@ -273,7 +309,8 @@ reads either — deleted in the next release),
 `skills/principles/baseline-predicates{,_ko}.md` (dropped from resume's consumers),
 `scripts/repository-invariants.test.js`, two rows of the skill intent index in
 `docs/design{,_ko}.md`, one wiring row in `AGENTS.md`, two terms in
-`docs/maintenance-protocol{,_ko}.md` §9, one observation in `docs/design-backlog{,_ko}.md`.
+`docs/maintenance-protocol{,_ko}.md` §9, one observation in `docs/design-backlog{,_ko}.md`. The v0.19.0 correction's own coordinates are
+owned by DD-83.
 
 Revisit when: a third-party skills.sh install is actually used and that channel is observed
 not to carry `skills/<name>/scripts/*.mjs` · the routing table's conversation-dependent rows
@@ -281,6 +318,142 @@ grow past one · leaving integrity item 14's prefix clause at `prefix=unchecked`
 observed to miss a defect in practice · a real session is observed going to a zone other than
 the one `next:` named and the cause is "the facts were visible but the order was misread" —
 what moves then is the standing of that one `next:` line, not the return of a key registry
+
+### DD-82 · When two canon rules point to different actions in one place, report both sources and the side taken, then continue (v0.18.9)
+
+Subject: Identity, packaging, platforms | Introduced: v0.18.9 | State: active
+
+Observed problem: the first real-use test produced seven prose-against-prose conflicts. From the
+same three ADR conditions one session raised SSE and the other raised SQLite as the ADR — **exactly
+opposite conclusions**. The code-structure table's `3+ capabilities` and `Under 20 files` were true
+at once. Then the capability document's heading order, `slug` against "do not normalize the slug",
+the planning order, the addressee of `always ask`, and the English identity frame. On the heading
+order **one session filled the gap silently and the other reported it, then chose.**
+
+Desired behavior: when two canon sentences both apply and produce different actions, do not choose
+silently. Report both sources with their coordinates, the side taken, and the reason — then
+**continue**.
+
+Chosen boundary: report, then continue. This event alone does not stop the session.
+
+Why the boundary is needed: the rule is not new. `AGENTS.md`'s Hard boundaries already say
+*"Report before judgment calls are applied."* — it **lived only in the maintainer's document and
+runtime sessions had never received it.** This writes no new rule; it moves an existing one.
+devflow already has an arbitration machine for mismatches a machine can check (integrity items
+12–15 → present the source, the expected form, and a replacement → user confirmation → landing).
+**Prose against prose had no such machine.**
+
+Rejected alternatives: **stop** — a session would halt on every prose conflict, recreating the very
+disease this lineage is treating (a harness locking product work). Stopping is decided by the
+existing gates (Layer 0 change confirmation, binding decision). **Cover it with DD-11** — DD-11
+handles a contradiction **between documents**, and this decision handles **two rules of the canon
+itself applying together**. DD-11 does not move.
+
+Affected coordinates: `skills/principles/SKILL{,_ko}.md` and `docs/rounds/v0.18.9/report_ko.md` §4.
+Revisit when: reporting and continuing is observed to have produced a wrong artifact.
+
+### DD-83 · One read-only computation shows the difference between the complete transition state the canon already fixed and disk, at entry and before each passenger's commit (v0.19.0)
+
+Subject: Identity, packaging, platforms | Introduced: v0.19.0 | State: active
+
+Observed problem: comparing the 81 commits of the first real use, **every duty with its own
+artifact and its own commit was kept, without exception** (card state renames, task commits,
+`verify.md`, the progress log, commit-message form), and **only the duties that ride on someone
+else's commit eroded** (advancing the digest marker, refreshing HANDOFF, the final card's
+`carry:`, arch's channel confirmation). The canon itself wires HANDOFF as a passenger — *"it only
+rides here"*. The invalid premise was not "AI follows rules" but **"writing it clearly makes it
+run"**: in the same record those sessions kept four rules that cut against their own convenience.
+
+Desired behavior: do not add a rule or a commit per duty. The tool shows the difference between
+the complete transition state the canon already enumerates and the current disk state, and the
+model reads those facts, judges their meaning, and acts.
+
+Chosen boundary: one computation —
+`the complete transition state the canon already fixed − the current disk state = missing` —
+used at session entry and just before each commit that carries a passenger. At entry it **finds
+what is already missing**. Before the final task commit it shows the current claim's
+`carry=absent|present`; before the boundary commit it shows `missing=[carry|handoff]`, so each
+vehicle is checked **before it leaves**. Fact fields are attached to
+existing output kinds (`finish-boundary missing=[…]`, `claim.mine carry=absent|present`,
+`layer.children-done carry=N`). Exactly one new kind is allowed, `ready.digest-behind`, because it
+has a separate subject on disk. **The tool performs no rename, record, stage, or commit** —
+DD-80 ④'s read-only, stateless identity is unchanged. Records copy no new field but project from
+existing facts: `report: origin=…` is computed from the card's creating commit and the request or
+layer-opening marker that commit deleted; with no original input it is `none`, and on a shallow
+history or multiple matches it is `unknown` with the reason. No new `Origin:` duty is added to
+the card.
+
+Why the boundary is needed: every observed failure is a scene where **detection itself was zero**.
+Where detection is zero, adding write authority solves nothing and only mints new authority,
+input, and call duties. Using the same computation at entry and at each actual commit boundary
+makes recovery and prevention share one definition, and removes the one-commit-late path where
+a passenger was checked only after its vehicle had left.
+
+Rejected alternatives: **a separate boundary writer** (the tool performs the rename, the record,
+the commit) — it cannot hold an integration merge or rebase, it mints new authority, input, and
+call duties, and on the present evidence it adds no value. It is not a user preference but the
+evidentially weaker option. **The condition that reopens it** is a real-use scene where the tool
+caught the omission exactly and the same session still failed to close the boundary. **A state
+query that also writes** — read-only is this tool's identity, and combining both in one call
+dissolves it. **A new local rule per duty** — that directly contradicts the diagnosis above, that
+the cause of erosion is absent observation rather than absent rules. **An `Origin:` field on the
+card** — one more passenger unrelated to whether the planning commit succeeded.
+
+Affected coordinates: `skills/principles/scripts/project-state.mjs`,
+`scripts/project-state.test.js`, and the boundary-fact readers in
+`skills/{work,split,verify,resume}/SKILL{,_ko}.md`.
+Revisit when: the writer-reopening condition above is observed in real use. Or when `missing`
+calls something absent that is in fact present and a session does needless work because of it.
+
+### DD-84 · The decision index is a read-only projection generated from the source, and the manual table is gone (v0.19.0)
+
+Subject: Identity, packaging, platforms | Introduced: v0.19.0 | State: active
+
+Observed problem: the 80-row manual decision table in `docs/design{,_ko}.md` wrote the same fact
+twice as the titles in `docs/design-decisions{,_ko}.md`, and the two had actually diverged —
+**8 of the 80 rows** carried a sentence different from the source title. Five (DD-65, 71, 72, 78,
+79) had more meaning in the table; three (DD-74, 75, 80) had more meaning in the source. And the
+table hit its budget: `design.md` at 26,543 B against a fixed 26 KiB cap left **81 B** of
+headroom against roughly 200 B per row. v0.18.9's two decisions could not take a row, so their
+reasons stayed trapped in a round record, and the test comment had already forbidden raising the
+cap — *"do not raise these again to fit one more row"*.
+
+Desired behavior: one fact lives in one home. The place that owns a decision is the decision
+source alone, and the index is computed from it. A new decision grows exactly one place.
+
+Chosen boundary: a read-only `node scripts/decision-index.mjs` parses the decision source's
+titles and metadata and prints a complete `ID | Decision | State` index grouped by subject.
+English is the default; the Korean source is selected with `--lang ko`. The manual table and the
+sentence telling a maintainer to keep it by hand are removed from `docs/design{,_ko}.md`, while
+origin, philosophy, structure, the document map, the invariants, and the skill intent index stay
+in the full-text entry. Before the table is deleted, **the meaning the table alone carried is
+merged into the source titles so the content loss is zero.** The generating command is a
+projection of the source, not a document role, so it takes no home in the document map. The
+24 KiB value is an observation warning, not a failure cap: crossing it writes a warning to
+stderr but neither truncates nor blocks the complete index.
+
+Why the boundary is needed: the 8-of-80 drift is the scheduled outcome of one fact in two homes,
+and once the index is a function of the source that drift has no path left. The 81 B collision
+has the same root — the always-read design document grew in proportion to the decision count —
+and the projection moves that proportionality **outside the fixed-size `design.md` and its 26 KiB
+budget**, while the generated index remains part of the always-read entry.
+
+Rejected alternatives: **a new manual index file** — it leaves the two-homes problem exactly as it
+is and adds one file. **A large hand-written index block at the head of the source file** — the
+same drift returns the same way, and the cost of opening the decision source is welded to the cost
+of reading the index. **Delete only the duplicated columns** (subject and introduced) — the cause
+of the drift is writing the same fact by hand twice, not the column count, so 8-of-80 comes back.
+None of the three makes one source the sole origin of the index. **The full five-column
+projection** — 15,166 B against the adopted subject-grouped 11,897 B at the same 84 decisions,
+and the introducing version is right there in the source metadata the moment a moving row is
+opened.
+
+Affected coordinates: `docs/design{,_ko}.md`, `docs/design-decisions{,_ko}.md` (title merges),
+`AGENTS.md` entry gate 1 and the first wiring row, `docs/maintenance-protocol{,_ko}.md` §8,
+`scripts/decision-index.mjs` (new), and `scripts/repository-invariants.test.js`.
+Revisit when: a clean Claude or Codex entry actually fails to consume a complete projection that
+raised the 24 KiB warning. Or when an entry path that cannot call the projection is actually
+observed — what is restored then is not the table but **a callable path**.
 
 ### Rejected under this subject
 
@@ -354,11 +527,46 @@ Right after a verdict and before the commit, disk alone could not judge whether 
 
 ### DD-68 · Signal cards connect a completed repair's later non-pass to the same root, inherit the previous repair evidence, and return to the human at recurrence observation 2 or higher (v0.15.0)
 
-Subject: Verification and roles | Introduced: v0.15.0 | State: active
+Subject: Verification and roles | Introduced: v0.15.0 | State: active, partly corrected by DD-81 (v0.18.9)
 
 Preserve the current regression label executed by the verifier in Failure history as the `signal card`, and reverse-index completed fix-card numbers to roots keyed by the existing verify key and source id. Before the verifier, mechanically project only three verify.md paths — the current target, tree root, and label capability — and judge each label's candidate roots as 0, 1, or 2+. Record each item in one run independently, sharing one recurrence observation number only among items with the same root. If one label has two or more candidates or a stored field cannot be parsed, do not choose by meaning; stop both execution and result recording. Create no UUID, symptom-similarity match, or typed evidence graph, so DR-08 remains closed.
 
 A new fix card reads only the union of the current signal card and every route card left by the same root's previous completed repair round, in canonical card-number order. split puts each card's exact path after the final route operations into the existing `Read first`, writes the current non-pass and the previous repair's failure to make the signal pass in `Why`, and writes `Forbidden` only with direct evidence that repeating the same approach unchanged would produce the same result. It requires no separate cause document or work method, keeping DR-09 closed. A new root and recurrence observation 1 use the current fix route; recurrence observation 2 or higher goes to a human gate without an automatic card, and a later non-pass returns to the same gate. Do not backfill legacy entries; closure knowledge remains owned by the existing capability knowledge baseline full refresh, which already harvests the current card and direct `Read first`.
+
+### DD-81 · An unverified result caused by a channel that could not be acquired goes to the person from the first occurrence, and its reason carries the failing command and its timeout (v0.18.9)
+
+Subject: Verification and roles | Introduced: v0.18.9 | State: active
+
+Observed problem: in the first real-use test after 0.18.8 shipped, session B piled up 81 commits
+and never closed a single capability. Bias removal requires the verification to run in a clean
+session, and that session could not acquire the browser channel the main session had already
+driven successfully. A tool failure was handled as a product failure, so fix cards multiplied,
+and the state tool then offered the impossible card as `ready=true blockers=[]`.
+
+Desired behavior: when channel acquisition fails (tool bind, attach, timeout) before a single
+scenario step has run, that is not information about the product. No card is created, and the
+item goes to the person from the first occurrence, whatever the recurrence count.
+
+Chosen boundary: add exactly one `unverified` reason to the verifier and fix its form —
+`unverified: channel unavailable — <the exact failing command>; timeout=<value>`. Requiring the
+failing command and the timeout value together is the device that closes the escape hatch: to
+file a product defect as a tool failure, the model would have to invent both values.
+
+Why the boundary is needed: DD-68 handles the recurrence of a non-pass **about the product** and
+returns to the human at recurrence observation 2 or higher. A channel failure is by definition
+not product information, so walking that ladder one more time only produces one more impossible
+card. DD-68's recorded reason is not negated — the scope divides, which is why DD-68 is partly
+corrected rather than replaced.
+
+Rejected alternatives: **carry the first recurrence as usual and escalate on the second** — the
+observed scene is precisely "never closed once", so another lap buys nothing. **Leave the reason
+as free prose** — without the failing command and the timeout the classification cannot be
+checked, and this decision loses its only enforcement device.
+
+Affected coordinates: the `unverified` reason list in `skills/verify/SKILL{,_ko}.md`, the verify
+channel confirmation in `skills/arch/SKILL{,_ko}.md`, and `docs/rounds/v0.18.9/report_ko.md` §4.
+Revisit when: an item classified as a channel acquisition failure turns out to have been a
+product defect. Tests cannot close this decision — gate B passes it.
 
 ### Rejected under this subject
 
@@ -451,7 +659,7 @@ Subject: The task tree and its cards | Introduced: v0.14.0 | State: active, part
 
 The recorded reason in the v0.13.0 row's "'too small to record' is never created" — one unrecorded path becomes the default path — is refuted thus: a commit IS a record. This lane does not skip recording; it changes the recording layer, and the owner corrected the direction personally (a button label or a border colour is fully recorded by its diff and almost never revisited). Only when all three gate questions are "no" and none is uncertain — does it change a precondition-to-outcome transition the user sees; does it produce a design decision or conflict with one (design tokens, ADRs); does it leave a trap the next worker must know — the change runs without a card, journal line, or review: read the existing Layer 0 documents, edit, run the cheapest check that touches the changed files once, and land one `tweak` commit. No `devflow/` path is touched. Knowledge-bearing changes are routed to the document layer by the gate, and the discovery→update table applies regardless of change size. A fresh session holding only a tweak request skips state restoration — the lane consumes no prior record and changes no shared state, so bypassing the nets breaks nothing, and it is the first landing of the owner's requirement that inferring from code alone is sometimes exactly right. When the verdict flips mid-change, stop and switch to the ordinary path. The one remaining risk is misclassification — a field observation item (corrected 2026-08-13: "bypassing the nets breaks nothing" was partly refuted by reproduction in the v0.14.0 audit — a tweak commit still advances HEAD, which turns a `routing prepared` recovery pinned to a base commit id into an integrity anomaly, and a stale checkout's documents produce a "no" that conflicts with the latest decision on integration. DD-66's landing checks close this; skipping state restoration itself stands. The judgment inputs gained the existing glossary.md when an item could touch a name or term — term decisions live only there, and nearby code shows a spelling without showing it is a decision)
 
-### DD-65 · A mixed request records only its gate-failing items (v0.14.2)
+### DD-65 · A mixed request records only its gate-failing items — a passing item enters no journal line (v0.14.2)
 
 Subject: The task tree and its cards | Introduced: v0.14.2 | State: active
 
@@ -945,7 +1153,7 @@ Revisit when: keeping reasons inside the owning document is observed pushing tha
 out of its budget in a real project. Or when a contradiction is actually observed because the
 place of "the same concept" could not be found and a copy stayed.
 
-### DD-78 · One canon range goes unread only when a tool proves that range has no subject (v0.18.5)
+### DD-78 · One canon range goes unread only when a tool proves that range has no subject — the machine cuts, it reads HEAD and the working tree both, and every other answer collapses to the full read (v0.18.5, scope extended v0.19.0)
 
 Subject: The knowledge layer and capability documents | Introduced: v0.18.5 | State: active
 
@@ -959,15 +1167,22 @@ is scattered over 12 places inside the canon and its recovery rules are one 40-r
 condition can only cut a contiguous range.
 
 Desired behavior: a project with no capsule does not read the capsule contract. In every state
-where a capsule may exist, the read stays exactly what it is today.
+where a capsule may exist, the read stays exactly what it is today. **And the session writing
+the first capsule is not blocked** — having no capsule yet is precisely the state in which the
+first one has to be written.
 
-Chosen boundary: four parts. ① **The machine does the cutting.** The model does not look at
+Chosen boundary: five parts. ① **The machine does the cutting.** The model does not look at
 disk and decide — `project-knowledge.mjs presence` answers in one line and the skill reads only
 that word. ② **Fail-closed.** `absent` alone closes the range; `present`, `unknown`, and a
 nonzero exit all collapse to the full read. ③ **HEAD and the working tree both** are read — a
 capsule committed on the integration branch is real while this checkout has not written it yet,
 and a capsule deleted here is still in HEAD. ④ **Not one byte of canon moves.** The range is
-not split and no new document appears.
+not split and no new document appears. ⑤ **The first writer's condition is different**
+(v0.19.0). resume's and verify's presence gate is unchanged. arch and adopt read the remaining
+ranges first and open this one **when they actually process a named source document, or just
+before a capability document they derived overflows its budget**. When the judgment is unclear
+they read — fail-closed. The capsule contract stays the same 241-line, 16,076 B contiguous
+range inside `baseline-predicates{,_ko}.md`; not one byte moves here either.
 
 Why the boundary is needed: the only realistic failure of this gate is "needed it, never read
 it", and it has two paths. One is a predicate that is confidently wrong — v0.18.4 showed that
@@ -987,19 +1202,28 @@ injection by the hook — it duplicates what resume reads). **Use the existing `
 **Issue a certificate (authority id and fingerprint) and re-check it before the report** — it
 narrows the race between judgment and report, but a session that created a capsule in that
 window did not have its capsule missed; the capsule did not exist yet. It spends a new
-mechanism where the residual risk is not what it looks like. **This is not a re-proposal of
+mechanism where the residual risk is not what it looks like. **Using plain absence (`absent`) as the first writer's condition too** — that is a bootstrap
+deadlock. Having no capsule is exactly the state in which the first capsule must be written, so
+an absence condition means the first one is never written. arch's and adopt's condition is
+therefore not absence on disk but a **writing event**. **This is not a re-proposal of
 DR-44** (splitting canon per consumer) — nothing moves, so its rejection reason needs no
-refutation and got none.
+refutation and got none. The v0.19.0 scope extension is the same: DR-44's recorded failure mode
+is "a rule work needs, filed under a verify-only heading, disappears with no error", and here
+**zero range movement, four named consumers (resume, verify, arch, adopt), and a machine
+structural seal** each block one path to it.
 
-Honest accounting: this gate's ceiling is **11,025 B (7.45%)**. 95.0% of the entry is the rule
+Honest accounting: this gate's ceiling is **16,076 B (10.87%)**. 95.0% of the entry is the rule
 body of three functions a competitor does not perform at all — interruption recovery,
 concurrency safety, and the knowledge lifecycle — and this angle does not shrink it.
 
 Affected coordinates: the entry paragraph of `skills/resume/SKILL{,_ko}.md`, the entry paragraph
-of `skills/verify/SKILL{,_ko}.md`, `presence` in `scripts/project-knowledge.mjs`,
+of `skills/verify/SKILL{,_ko}.md`, the capsule-opening condition in
+`skills/arch/SKILL{,_ko}.md` and `skills/adopt/SKILL{,_ko}.md`, the capsule range boundary in
+`skills/principles/baseline-predicates{,_ko}.md`, `presence` in `scripts/project-knowledge.mjs`,
 `scripts/project-knowledge.test.js`, and `scripts/repository-invariants.test.js`.
 Revisit when: a scene is actually observed where a capsule-less project needs a rule from the
-capsule contract. Or when measurement finds a second range that cuts the same way.
+capsule contract. Or when a first writer is observed being blocked out of the capsule range by
+this condition. Or when measurement finds a second range that cuts the same way.
 
 ### Rejected under this subject
 

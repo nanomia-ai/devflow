@@ -6,11 +6,21 @@ description: Development planning. Takes product.md and decides components, stac
 # arch — Development Planning
 
 First read the canonical rules (`../principles/SKILL.md`), the planning evidence discipline
-(`../principles/planning-evidence.md`), the canonical capability knowledge baseline
-predicates (`../principles/baseline-predicates.md`), and all of `devflow/project/product.md`.
+(`../principles/planning-evidence.md`), and all of `devflow/project/product.md`. Read the
+canonical capability knowledge baseline predicates (`../principles/baseline-predicates.md`)
+under the capsule gate in the next paragraph.
 If present, read all of `devflow/project/arch.md`,
 `devflow/project/code-style.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each legacy `ADR-NNN.md` directly under
 `devflow/project/decisions/`.
+
+Read the baseline predicates with the range from `## Domain knowledge capsules` up to but
+not including `## Metadata and freshness` left out. When this run actually processes a source
+document the user named into capsules, or the capability document it derives is about to
+exceed that canon's total cap, open and write from that range in full first. Whether capsules
+exist on disk right now is not part of this judgment — the first capsule is always born in a
+project that has none. When either side is unclear, or the two headings cannot be found, read
+all of it.
+
 If `product.md` is missing: with no code either, direct the user to the product stage
 first; with existing code, to adopt (existing-project adoption — it produces
 product.md too, by reverse-derivation).

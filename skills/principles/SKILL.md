@@ -761,7 +761,9 @@ decision — a blockade does not block this lane.
   completed state named by `result`, and land all of it in the one specified commit. Never
   select a new route or create the output twice.
 - **Carry line.** After the upper-document feedback judgment and immediately before the
-  final task commit, work appends exactly this one line to the claimed card's progress log.
+  final task commit, work reruns the state tool and reads the current claimed card's
+  `claim: kind=mine` line. When it says `carry=absent`, append exactly the line below to
+  the progress log and rerun the tool. Continue only when `carry=present`.
 
   ```text
   YYYY-MM-DDTHH:MM:SSZ carry: <a fact that could make the next card in this depth-1 unit wrong | none>
@@ -779,10 +781,10 @@ decision — a blockade does not block this lane.
   last commit that changed it has this exact subject, the final task commit is complete:
   that commit includes the claimed card and its progress log at that point. work does not
   make it again and finishes only upper-document feedback and the boundary.
-- **Canonical claim→done move**: the claimed card path in HEAD is absent from the working
-  tree, exactly one `.done.` card in the same parent has the same number and name, and the
-  two files are byte-identical. Whether git reports a rename or a deletion plus untracked
-  file is not part of the judgment. An uncommitted move is an unfinished boundary.
+- **Canonical claim→done move**: the claimed card becomes a `.done.` card with the same
+  number and name in the same parent, and the two files are byte-identical — that byte
+  identity is the writer's contract. An uncommitted move is an unfinished boundary, and the
+  state tool's `transition: kind=finish-boundary case=claim-done-move` carries that fact.
 - Mid-checkpoint commits for long tasks are allowed as `02.2 wip: <what>`. The "current
   diff" any checkpoint-style commit carries always means the changes this session made
   for that card — the first bullet's own-paths rule, scoped to sessions.
@@ -818,7 +820,15 @@ decision — a blockade does not block this lane.
   the failure ladder. An inaccessible pointer or one with no verdict is unverified and
   retains the line.
 - **Boundary commit**: bundle status renames, HANDOFF, journal, verify.md, and documents
-  fixed by upper-document feedback (see work) into one commit. Message: `boundary — <what closed>`.
+  fixed by upper-document feedback (see work) into one commit. They are bundled because they
+  are parts of one transition — committed separately, whatever is left over becomes an
+  ownerless fragment for the next session. Do not count that bundle by hand: immediately
+  before the commit, run the state tool again, and the boundary closes only when that
+  transition's `missing=` is empty. When `handoff` is missing, refresh the HANDOFF that
+  can ride this commit and rerun the tool. When `carry` is missing, the already-landed
+  final task commit omitted its carry line: report the exact card and do not close the
+  boundary, guess the lost fact, or invent a new after-the-fact record format. Message:
+  `boundary — <what closed>`.
   HANDOFF never gets a dedicated commit — it only rides here.
   If a task boundary records a final task commit or checkpoint not yet on
   integration, first integrate the current branch through that commit with arch.md's

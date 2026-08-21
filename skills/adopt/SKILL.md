@@ -5,12 +5,21 @@ description: Existing-project adoption. In a repository that already has code, t
 
 # adopt — Existing-Project Adoption
 
-First read the canonical rules (`../principles/SKILL.md`), the planning evidence discipline
-(`../principles/planning-evidence.md`), and the canonical capability knowledge baseline
-predicates (`../principles/baseline-predicates.md`). If present, read all of
+First read the canonical rules (`../principles/SKILL.md`) and the planning evidence discipline
+(`../principles/planning-evidence.md`). Read the canonical capability knowledge baseline
+predicates (`../principles/baseline-predicates.md`) under the capsule gate in the next paragraph.
+If present, read all of
 `devflow/project/product.md`, `devflow/project/arch.md`, `devflow/project/code-style.md`,
 `devflow/project/design.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each
 legacy `ADR-NNN.md` directly under `devflow/project/decisions/`.
+
+Read the baseline predicates with the range from `## Domain knowledge capsules` up to but
+not including `## Metadata and freshness` left out. When this run actually processes a source
+document the user named into capsules, or the capability document it derives is about to
+exceed that canon's total cap, open and write from that range in full first. Whether capsules
+exist on disk right now is not part of this judgment — the first capsule is always born in a
+project that has none. When either side is unclear, or the two headings cannot be found, read
+all of it.
 
 Run `node ../principles/scripts/project-state.mjs state --capability <capability number>`
 for each capability document in scope. Its `baseline:` lines carry the expected set, path

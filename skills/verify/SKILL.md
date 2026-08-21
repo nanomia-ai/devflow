@@ -294,6 +294,14 @@ section below).
    created — the marker finishes the same begin commit first; the baseline predicates govern
    regenerating that baseline's verified zone before the commit.
 
+   Before refreshing the verified zone, read the `carry=N` on that capability folder's
+   `layer: kind=children-done` line. When N is not zero, compare the `carry:` lines of those
+   cards inside the standard refresh set against the refreshed Traps — where the same fact is
+   already there, leave it; where it is not, either carry it into this refresh or record why
+   it was not, in verify.md's execution grounds. The judgment is whether the meaning is the
+   same, not whether the wording is, and it belongs to the main session. The tool carries the
+   count alone and blocks no closure.
+
    When the closing capability has a knowledge capsule folder, run
    `node <plugin root>/scripts/project-knowledge.mjs disputes --capability <capability number>`.
    That command is the dispute-only projection; `project` yields only the C number in the same
@@ -436,8 +444,10 @@ For a capability-number request, the target record is that capability's verify.m
 `product`, it is tree-root verify.md. Record a user request for the whole project with the
 target value `product`. A request is not runnable before that target file
 exists. Keep its journal line, let other work proceed, and process it after that boundary
-is first verified. For a legacy target file, add each `## Audit` and `## Retrospective`
-section the tool reports missing, with `- not run`, in the same pending-event commit.
+is first verified. For a legacy target file, add each `## Audit` or `## Retrospective`
+section that the `event: kind=new` lines name by `role` and the file itself does not have,
+with `- not run`, in the same pending-event commit — the tool carries no separate
+missing-section fact.
 
 resume and verify process exactly one event in this order: an existing `routing` entry → awaiting user decision → an
 existing `pending` entry → automatic Audit → automatic Retrospective → a runnable user
