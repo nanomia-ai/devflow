@@ -191,6 +191,7 @@ section below).
    Immediately after it returns, write the verdict, current Product revision, Verification revision, Code revision, the capability layer's Capability revision, execution evidence, and `New entries` (this run's new Failure-history entry count, or 0) to verify.md.
    For a capability-layer pass, write or replace `Standards: pending for current pass` and `Provisional: pending for current pass` in that same write.
    Give each fail or unverified reproduction, criterion, or reason one new source id, replace only its line breaks with one space before recording, and parse the fixed trailing field prefixes `; signal card:`, `; repair lineage:`, `; recurrence observation:`, and `; routing:` from right to left so semicolons inside the body remain data. Use the Record section's first form without a label, its second for a label with 0 candidate roots, and its third plus that root's `max recurrence + 1` for exactly 1 candidate root.
+   A reason that the verify channel could not be acquired, so no step of the scenario ran, is written as `unverified: channel unavailable — <the exact command that failed>; timeout=<observed value>`; naming the command and the value is what keeps a product defect from being filed as a tool failure.
    When several items return to the same root in one run, freeze its maximum once before writing and give them the same recurrence observation, but keep each item's own source id and `routing: pending`; record different roots and rootless new items independently.
    Preserve all three fields with the entry, and count only new entries in `New entries`. Two or more candidate roots or an unparseable format blocks the whole execution before the verifier.
    At the product layer, write the complete tree-root verify.md first, then immediately
@@ -230,9 +231,14 @@ section below).
    no automatic card, execution, or additional source id; keep the entry pending and report
    its root, signal card, past routes, and current result to the human. Continue only when
    the human explicitly names one currently allowed route; a later non-pass returns to the
-   same human gate. If that selected entry is not at recurrence observation 2 or higher, send
-   only that failure or unverified entry through split's maintenance routing and determine
-   the fix card and number for the same folder (e.g., 02.3b-fix-...). Its
+   same human gate.
+   At the capability layer, an unverified entry whose reason is `channel unavailable` takes
+   that same human route from its first entry, whatever its recurrence count. That reason
+   carries no fact about the product, so a fix card would have no destination the product
+   can satisfy; report it with the failed command and timeout the entry already records.
+   If that selected entry is neither `channel unavailable` nor at recurrence observation 2 or
+   higher, send only that failure or unverified entry through split's maintenance routing and
+   determine the fix card and number for the same folder (e.g., 02.3b-fix-...). Its
    completion signal is the exact failure reproduction or executable check that proves an
    unverified reason is gone. The escaped defect or evidence gap becomes a regression signal.
    Product-layer failure or unverified entry → never create a card at the tree root. Send

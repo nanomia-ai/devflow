@@ -78,6 +78,8 @@ maintenance protocol §4 stands in their place.
 ## Completion gate
 
 - Run `node --test "scripts/*.test.js"`.
+- Gate A rides that run: every canonical reserved journal line parses.
+- A release changing the verification contract passes gate B once, by hand.
 - Report which audit-guideline §5 stop clauses were evaluated; unexecuted behavior is
   `unverified`, never passed.
 - For entry-system changes, compare clean read-only Claude and Codex sessions before and

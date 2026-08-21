@@ -11,7 +11,7 @@ knowledge baselines are always on; there is no per-project switch.
 
 - There is one baseline per depth-1 tree unit. The foundation uses
   `devflow/project/capabilities/01-foundation.md`; a capability uses
-  `devflow/project/capabilities/NN-<capability-name-slug>.md`. Only `.md` files directly
+  `devflow/project/capabilities/NN-<capability-name>.md`. Only `.md` files directly
   below that folder are baselines; deeper paths are not.
 - The foundation number is `01`. A capability uses the number on a same-numbered tree
   folder, waiting file, or existing baseline when one exists. Different numbers claimed by
@@ -88,10 +88,10 @@ Trust: design reflects confirmed Layer 0; verified state reflects the last passi
   count. Splitting a capability is a user decision about a product change, not an automatic
   result. Domain knowledge beyond this budget is not cut — it moves down into knowledge
   capsules.
-- Purpose and ownership boundary must be readable in the first 4 lines, followed immediately
-  by `Concept model`; order concepts from most central. Do not copy a contract body from code
-  or another document; retain its exact location and only invariants specific to this
-  capability.
+- Purpose and ownership boundary must be readable in the first 4 lines, followed by the
+  sections in the order above; in `Concept model`, order concepts from most central. Do not
+  copy a contract body from code or another document; retain its exact location and only
+  invariants specific to this capability.
 - Write exactly `None.` in a section with no admissible evidence-backed content. Invent
   nothing without evidence.
 - A Current behavior row exists only when one user action changes an externally observable

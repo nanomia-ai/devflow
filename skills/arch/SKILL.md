@@ -105,6 +105,15 @@ execution; when writing, cost, or authority is required, request exact permissio
 to Provisional according to whether the planning evidence discipline classifies it as
 blocking. Do not bind an unconfirmed blocking channel in arch.md.
 
+Confirm the channel the verifier will drive by actually running it once in a clean context —
+the same way verify briefs one with `verifier.md`, using the smallest command and its exit
+code. **The command you confirm with and the command you write into arch.md are the same
+string** — run one of the commands you will record, verbatim, and record that same command.
+Confirming through a different selector or a different surface of the same tool is not
+confirmation. A channel that runs only in this session is not decided: guide connection of
+one that runs in a clean context, or stop as the `If missing` column below says. When the platform
+cannot start a clean context, report that fact and let the user decide.
+
 | Type | Channel | If missing |
 |---|---|---|
 | Has a frontend | **A browser-control tool that can inspect rendered output and interact with it is required** (one provided by the active platform) | Guide connection of an available tool, then stop. UI verification you cannot see is guesswork |
@@ -148,7 +157,7 @@ Brownfield: no
 frontend: none | needed
 verify_channel:
   work server: <run command + port>     # verification always happens here
-  means: <browser-control tool | .http | CLI command | screen/accessibility tool>
+  means: <exact commands the verifier drives> — confirmed in a clean context by running one of them verbatim: `<that same command>` exit <code>
 integration: <branch>                   # where minting, closure, and binding decisions land. The current branch when one person works alone
 merge: merge-commit | rebase            # Squash forbidden — it erodes NN.N history
 ```

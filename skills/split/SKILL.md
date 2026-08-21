@@ -275,7 +275,9 @@ Review:            not-applicable
   not apply to that tool. A following card brings it into the real code or registers it
   as the verify channel's means (the discovery→update table's means row).
 - Keep the following implementation card at `Approval: pending` and do not claim it before
-  the answer exists. Once answered, replace every Destination, Forbidden, Completion
+  the answer exists. The same holds for a research card inserted later through work's
+  leave-the-card route: that planning commit returns the original card to
+  `Approval: pending`. Once answered, replace every Destination, Forbidden, Completion
   signal, or Depends value changed by the answer; get the revised execution proposal
   approved and land it in a planning commit before proceeding. If that card is already
   claimed, release it before editing. Thirty minutes of research replaces days of rework.

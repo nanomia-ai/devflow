@@ -5,7 +5,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
-const { execFileSync, spawnSync } = require("node:child_process");
+const { execFileSync, spawn, spawnSync } = require("node:child_process");
 const { test } = require("node:test");
 const { pathToFileURL } = require("node:url");
 
@@ -405,7 +405,7 @@ function mappingScene(t, number) {
       verify("# Verification\nFailure history:\n- timestamp: 2026-08-20T00:00:00Z; failure: fixture; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n");
       break;
     case 5:
-      journal(`2026-08-20T00:00:00Z layer opening: parent: devflow/tree/02-capability; children: 02.1+02.2; source-json: ${JSON.stringify("core:devflow/project/product.md#Capabilities")}`);
+      journal(`2026-08-20T00:00:00Z layer opening: parent: devflow/tree; children: 02+03+04+05; source-json: ${JSON.stringify("core:devflow/project/product.md#Capabilities")}`);
       break;
     case 6: {
       const r = currentRevisions(root);
@@ -588,6 +588,163 @@ function read(root, relative) {
   return fs.readFileSync(path.join(root, ...relative.split("/")), "utf8");
 }
 
+test("gate A feeds every canon-reserved journal line to the deployed parser", { timeout: 10_000 }, async (t) => {
+  const timestamp = "2026-08-21T00:00:00Z";
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  rootVerify(root, "pass");
+  capabilityVerify(root, "devflow/tree/02-capability/verify.md");
+  const check = "https://example.test/check";
+  const card = writeClaim(root, {
+    commitSubject: "jmp 02.1 wip: evidence-wait",
+    progress: `2026-08-21T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: unrun; detail-json: ""`,
+  });
+  const checkpoint = git(root, "rev-parse", "HEAD");
+  const revisions = currentRevisions(root);
+  const valid = [
+    { name: "layer opening (root)", head: "layer opening:", batch: "root",
+      line: `${timestamp} layer opening: parent: devflow/tree; children: 02+03+04+05; source-json: ${JSON.stringify("core:devflow/project/product.md#Capabilities")}`,
+      zone: "transition", kind: "layer-opening", fragment: "parent=devflow/tree children=02+03+04+05" },
+    { name: "layer opening (nested)", head: "layer opening:", batch: "base",
+      line: `${timestamp} layer opening: parent: devflow/tree/01-foundation; children: 01.1+01.2; source-json: ${JSON.stringify("core:devflow/project/arch.md#Components")}`,
+      zone: "transition", kind: "layer-opening", fragment: "parent=devflow/tree/01-foundation children=01.1+01.2" },
+    { name: "re-split pending", head: "re-split pending:", batch: "base",
+      line: `${timestamp} re-split pending: folder: devflow/tree/02-capability; stale: 02.1; source: devflow/project/product.md#Capabilities`,
+      zone: "marker", kind: "re-split", fragment: "stale=02.1" },
+    { name: "maintenance routing pending", head: "maintenance routing pending:", batch: "base",
+      line: `${timestamp} maintenance routing pending: request-json: ${JSON.stringify("rename the third column")}`,
+      zone: "request", kind: "existing", fragment: `timestamp=${timestamp}` },
+    { name: "product re-run pending", head: "product re-run pending:", batch: "base",
+      line: `${timestamp} product re-run pending: statement-json: ${JSON.stringify("a team can finish a retro in ten minutes")}`,
+      zone: "marker", kind: "product-rerun", fragment: `timestamp=${timestamp}` },
+    { name: "product verification requested", head: "product verification requested", batch: "product-requested",
+      line: `${timestamp} product verification requested`,
+      zone: "event", kind: "product-requested", fragment: `key=${timestamp}` },
+    { name: "product verification running", head: "product verification running:", batch: "product-running",
+      line: `${timestamp} product verification running: trigger: requested; product: ${revisions.productRevision}; verification: ${revisions.verificationRevision}; code: ${revisions.codeRevision}`,
+      zone: "transition", kind: "product-running", fragment: "trigger=requested" },
+    { name: "product verification result", head: "product verification result:", batch: "product-result",
+      line: `${timestamp} product verification result: trigger: requested; product: ${revisions.productRevision}; verification: ${revisions.verificationRevision}; code: ${revisions.codeRevision}; verdict: pass`,
+      zone: "transition", kind: "product-result", fragment: "verdict=pass" },
+    { name: "capability closing", head: "capability closing:", batch: "base",
+      line: `${timestamp} capability closing: folder: devflow/tree/02-capability; head: ${checkpoint}; product: ${revisions.productRevision}; verification: ${revisions.verificationRevision}; capability: ${checkpoint}`,
+      zone: "marker", kind: "capability-closure", fragment: "folder=devflow/tree/02-capability" },
+    { name: "capability note", head: "capability note:", batch: "base",
+      line: `${timestamp} capability note: capability: 02; note-json: ${JSON.stringify("the column names are display-only")}` },
+    { name: "audit requested (capability)", head: "audit requested:", batch: "base",
+      line: `${timestamp} audit requested: 02`,
+      zone: "event", kind: "new", fragment: "role=Audit target=2" },
+    { name: "audit requested (product)", head: "audit requested:", batch: "base",
+      line: `${timestamp} audit requested: product`,
+      zone: "event", kind: "new", fragment: "role=Audit target=product" },
+    { name: "retrospective requested", head: "retrospective requested:", batch: "base",
+      line: `${timestamp} retrospective requested: 02`,
+      zone: "event", kind: "new", fragment: "role=Retrospective target=2" },
+    { name: "evidence-wait", head: "evidence-wait:", batch: "base",
+      line: `${timestamp} evidence-wait: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify(check)}`,
+      zone: "transition", kind: "remote-evidence", fragment: "state=evidence-wait" },
+    { name: "evidence-finalizing", head: "evidence-finalizing:", batch: "base",
+      line: `${timestamp} evidence-finalizing: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify(check)}`,
+      zone: "transition", kind: "remote-evidence", fragment: "state=evidence-finalizing" },
+  ];
+  const invalid = [
+    { name: "layer opening", head: "layer opening:", line: `${timestamp} layer opening: parent: devflow/tree; children: 02+03+04+05` },
+    { name: "re-split pending", head: "re-split pending:", line: `${timestamp} re-split pending: folder: devflow/tree/02-capability; stale: 02; source: devflow/project/product.md#Capabilities` },
+    { name: "maintenance routing pending", head: "maintenance routing pending:", line: `${timestamp} maintenance routing pending: request-json:` },
+    { name: "product re-run pending", head: "product re-run pending:", line: `${timestamp} product re-run pending: statement-json:` },
+    { name: "product verification requested", head: "product verification requested", line: `${timestamp} product verification requested: extra` },
+    { name: "product verification running", head: "product verification running:", line: `${timestamp} product verification running: trigger: requested; product: p; verification: v` },
+    { name: "product verification result", head: "product verification result:", line: `${timestamp} product verification result: trigger: requested; product: p; verification: v; code: c` },
+    { name: "capability closing", head: "capability closing:", line: `${timestamp} capability closing: folder: devflow/tree/02-capability; head: ${checkpoint}; product: p; verification: v` },
+    { name: "capability note", head: "capability note:", line: `${timestamp} capability note: capability: 02` },
+    { name: "audit requested", head: "audit requested:", line: `${timestamp} audit requested: 02x` },
+    { name: "retrospective requested", head: "retrospective requested:", line: `${timestamp} retrospective requested: 02x` },
+    { name: "evidence-wait", head: "evidence-wait:", line: `${timestamp} evidence-wait: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}` },
+    { name: "evidence-finalizing", head: "evidence-finalizing:", line: `${timestamp} evidence-finalizing: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}` },
+  ];
+
+  const uniqueSorted = (values) => [...new Set(values)].sort();
+  const tableHeads = uniqueSorted(valid.map((item) => item.head));
+  assert.equal(valid.length, 15);
+  assert.equal(invalid.length, 13);
+  assert.deepEqual(uniqueSorted(invalid.map((item) => item.head)), tableHeads);
+
+  const toolSource = fs.readFileSync(TOOL, "utf8");
+  const reservedBlock = /const RESERVED_JOURNAL_HEADS = \[\r?\n(?<body>[\s\S]*?)\r?\n\];/.exec(toolSource);
+  assert.ok(reservedBlock, "RESERVED_JOURNAL_HEADS block missing");
+  const parserHeads = uniqueSorted([...reservedBlock.groups.body.matchAll(/^\s+"([^"]+)",\s*$/gm)].map((match) => match[1]));
+  assert.deepEqual(parserHeads, tableHeads);
+
+  const canon = fs.readFileSync(path.resolve(__dirname, "../skills/principles/SKILL.md"), "utf8");
+  const canonPrefix = "YYYY-MM-DDTHH:MM:SSZ ";
+  const canonStart = canon.indexOf(`${canonPrefix}layer opening:`);
+  const canonEnd = canon.indexOf("\n```", canonStart);
+  assert.notEqual(canonStart, -1, "canonical journal-format block start missing");
+  assert.notEqual(canonEnd, -1, "canonical journal-format block end missing");
+  const canonHeads = uniqueSorted(canon.slice(canonStart, canonEnd).split(/\r?\n/)
+    .filter((line) => line.startsWith(canonPrefix))
+    .map((line) => {
+      const body = line.slice(canonPrefix.length);
+      const colon = body.indexOf(":");
+      return colon === -1 ? body : body.slice(0, colon + 1);
+    }));
+  assert.deepEqual(canonHeads, tableHeads);
+
+  const execute = async (lines, subject) => {
+    const batchRoot = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "devflow-gate-a-")));
+    t.after(() => fs.rmSync(batchRoot, { recursive: true, force: true }));
+    fs.cpSync(root, batchRoot, { recursive: true });
+    write(batchRoot, "devflow/journal.md", `${lines.join("\n")}\n`);
+    commit(batchRoot, subject);
+    const before = snapshot(batchRoot);
+    const result = await new Promise((resolve, reject) => {
+      const child = spawn(process.execPath, [TOOL, "state", "--root", batchRoot], {
+        cwd: batchRoot, windowsHide: true,
+      });
+      const stdout = [];
+      const stderr = [];
+      child.stdout.on("data", (chunk) => stdout.push(chunk));
+      child.stderr.on("data", (chunk) => stderr.push(chunk));
+      child.on("error", reject);
+      child.on("close", (status) => resolve({ status, stdout: Buffer.concat(stdout).toString("utf8"), stderr: Buffer.concat(stderr).toString("utf8") }));
+    });
+    ok(result);
+    assertReadOnly(batchRoot, before);
+    return result.stdout;
+  };
+  const pendingOutputs = new Map();
+  for (const batch of uniqueSorted(valid.map((item) => item.batch))) {
+    pendingOutputs.set(batch, execute(valid.filter((item) => item.batch === batch).map((item) => item.line), `jmp gate A — ${batch}`));
+  }
+  const pendingInvalid = execute(invalid.map((item) => item.line), "jmp gate A — invalid controls");
+  const outputs = new Map();
+  for (const [batch, pending] of pendingOutputs) outputs.set(batch, await pending);
+  const invalidOutput = await pendingInvalid;
+  const item12 = invalidOutput.split(/\r?\n/)
+    .filter((line) => line.startsWith("integrity: kind=blocking") && line.includes("item=12 "));
+  assert.equal(item12.length, 13, invalidOutput);
+
+  for (const item of valid) {
+    await t.test(`accepts ${item.name}`, () => {
+      const output = outputs.get(item.batch);
+      assertFragment(output, "integrity:", "blocking=0");
+      if (item.zone) {
+        assert.ok(hasKind(output, item.zone, item.kind), `missing ${item.zone}.${item.kind}\n${output}`);
+        const matching = output.split(/\r?\n/).filter((line) => line.startsWith(`${item.zone}: kind=${item.kind}`));
+        assert.ok(matching.some((line) => line.includes(item.fragment)), `missing ${item.fragment}\n${matching.join("\n")}`);
+      } else {
+        assert.equal(lineWith(output, "open-item:"), undefined, output);
+      }
+    });
+  }
+  for (const item of invalid) {
+    await t.test(`rejects damaged ${item.name}`, () => {
+      const reason = `reserved-format:${item.head}`;
+      assert.ok(item12.some((line) => line.includes(`reason=${JSON.stringify(reason)}`) || line.includes(`reason=${reason}`)),
+        `missing ${reason}\n${invalidOutput}`);
+    });
+  }
+});
+
 for (let index = 0; index < ROUTE_MAP.length; index += 1) {
   const number = index + 1;
   test(`T1 mapping ${String(number).padStart(2, "0")} has the exact zone, kind, values, and derived next`, async (t) => {
@@ -613,6 +770,10 @@ for (let index = 0; index < ROUTE_MAP.length; index += 1) {
       const [zone, kind] = ROUTE_MAP[index];
       assert.ok(hasKind(result.stdout, zone, kind), `missing ${zone}.${kind}\n${result.stdout}`);
       assert.equal(nextOf(result.stdout), `${zone}.${kind}`, result.stdout);
+      if (number === 5) {
+        assertFragment(result.stdout, "integrity:", "blocking=0");
+        assertFragment(result.stdout, "transition: kind=layer-opening", "parent=devflow/tree children=02+03+04+05");
+      }
     }
     assertReadOnly(root, before);
   });
@@ -889,6 +1050,20 @@ test("T4 selection reason exposes a valid HANDOFF exact path", (t) => {
   assertFragment(result.stdout, "handoff:", `date=2099-01-01T00:00:00Z stale=0 nextStep=${card}`);
 });
 
+test("T4 HANDOFF waiting capability path is live and selected", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha"] });
+  const waiting = "devflow/tree/02-Alpha.md";
+  write(root, waiting, "# 02 Alpha\n");
+  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
+  commit(root, "jmp waiting capability handoff");
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("handoff-path-resolves-0"), false, result.stdout);
+  assertFragment(result.stdout, "handoff:", `date=2099-01-01T00:00:00Z stale=0 nextStep=${waiting}`);
+  assertFragment(result.stdout, "report:", "selectionReason=last-handoff");
+  assertFragment(result.stdout, "ready: kind=waiting-capability", `file=${waiting}`);
+  assert.equal(nextOf(result.stdout), "ready.waiting-capability", result.stdout);
+});
+
 test("T4 HANDOFF none is a canonical sentinel, not a path or stale cause", (t) => {
   const root = makeRepo(t);
   write(root, "devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\nnone\n");
@@ -1094,6 +1269,137 @@ test("adversarial F3 item 13 checks checkpoint subject path and remote check JSO
   const result = run(root); ok(result);
   assertFragment(result.stdout, "integrity: kind=blocking", "item=13");
   assertFragment(result.stdout, "integrity: kind=blocking", "reason=checkpoint-check-json");
+});
+
+test("adversarial F3 prepared-route accepts CRLF payload content matching the working tree", (t) => {
+  const root = makeRepo(t);
+  const verify = "devflow/tree/02-capability/verify.md";
+  const target = "devflow/tree/02-capability/02.1-fix.md";
+  const pending = "# Verification\nFailure history:\n- source id: 1; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n";
+  write(root, verify, pending);
+  commit(root, "jmp boundary — verify pending");
+  const base = git(root, "rev-parse", "HEAD");
+  const content = "# fix\r\n\r\nWindows payload\r\n";
+  const object = { base, result: "routing: fix cards 02.1", operations: [{ op: "write", path: target, content }] };
+  write(root, target, content);
+  write(root, verify, pending.replace("routing: pending", `routing prepared: ${JSON.stringify(object)}`));
+  const result = run(root); ok(result);
+  assert.equal(hasKind(result.stdout, "transition", "prepared-route"), true, result.stdout);
+  assertFragment(result.stdout, "transition: kind=prepared-route", `path=${verify}`);
+  assertFragment(result.stdout, "transition: kind=prepared-route", "prefix=1");
+  assert.equal(nextOf(result.stdout), "transition.prepared-route", result.stdout);
+});
+
+test("adversarial F3 prepared-route treats CRLF payload matching the base as no change", (t) => {
+  const root = makeRepo(t);
+  const verify = "devflow/tree/02-capability/verify.md";
+  const target = "devflow/tree/02-capability/02.1-fix.md";
+  const pending = "# Verification\nFailure history:\n- source id: 1; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n";
+  const content = "# fix\r\n\r\nWindows payload\r\n";
+  write(root, target, content);
+  write(root, verify, pending);
+  commit(root, "jmp boundary — verify pending");
+  const base = git(root, "rev-parse", "HEAD");
+  const object = { base, result: "routing: fix cards 02.1", operations: [{ op: "write", path: target, content }] };
+  write(root, verify, pending.replace("routing: pending", `routing prepared: ${JSON.stringify(object)}`));
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity: kind=blocking", "item=14");
+  assertFragment(result.stdout, "integrity: kind=blocking", "reason=operation-write-no-change");
+  assert.equal(hasKind(result.stdout, "transition", "prepared-route"), false, result.stdout);
+});
+
+test("adversarial F3 prepared-route move resolves an Audit locator from its base", (t) => {
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  const closed = "devflow/tree/02-capability.done";
+  const open = "devflow/tree/02-capability";
+  const baseVerify = `${closed}/verify.md`;
+  const currentVerify = `${open}/verify.md`;
+  const pending = "# Verification\nFailure history:\nNone.\n## Audit\n- routing · source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key: capability:02 · 1 findings · 1 adopted\n  1. reopen exact finding\n     routing: pending\n## Retrospective\n- not run\n";
+  const locator = `verify:${baseVerify}#Audit@1/1`;
+  write(root, baseVerify, pending);
+  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: ${open}; children: 02.1; source-json: ${JSON.stringify(locator)}\n`);
+  commit(root, "jmp boundary — closed Audit routing pending");
+  const base = git(root, "rev-parse", "HEAD");
+  const object = {
+    base,
+    result: "routing: fix cards 02.1",
+    operations: [
+      { op: "move", from: closed, to: open },
+      { op: "write", path: `${open}/02.1-fix.md`, content: cardText("02.1") },
+    ],
+  };
+  write(root, baseVerify, pending.replace("routing: pending", `routing prepared: ${JSON.stringify(object)}`));
+  fs.renameSync(path.join(root, ...closed.split("/")), path.join(root, ...open.split("/")));
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
+  assertFragment(result.stdout, "transition: kind=prepared-route", `path=${currentVerify}`);
+  assertFragment(result.stdout, "transition: kind=prepared-route", "prefix=1");
+  assert.equal(nextOf(result.stdout), "transition.prepared-route", result.stdout);
+});
+
+test("adversarial F3 core locator falls back to HEAD when an uncommitted output deletes the file", (t) => {
+  const root = makeRepo(t);
+  const locator = "core:devflow/project/product.md#Capabilities";
+  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
+  commit(root, "jmp split — begin devflow/tree");
+  fs.rmSync(path.join(root, "devflow", "project", "product.md"));
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
+  assert.equal(hasKind(result.stdout, "transition", "layer-opening"), true, result.stdout);
+});
+
+test("adversarial F3 journal locator falls back to HEAD when an uncommitted output deletes the line", (t) => {
+  const root = makeRepo(t);
+  const source = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact source")}`;
+  const marker = `2026-08-20T00:00:01Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(`journal:${source}`)}`;
+  write(root, "devflow/journal.md", `${source}\n${marker}\n`);
+  commit(root, "jmp split — begin devflow/tree");
+  write(root, "devflow/journal.md", `${marker}\n`);
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
+  assert.equal(hasKind(result.stdout, "transition", "layer-opening"), true, result.stdout);
+});
+
+test("adversarial F3 Failure history locator falls back to HEAD after another uncommitted output transition", (t) => {
+  const root = makeRepo(t);
+  const verify = "devflow/tree/02-capability/verify.md";
+  const pending = "# Verification\nFailure history:\n- source id: 1; timestamp: 2026-08-20T00:00:00Z; failure: exact source; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n";
+  const locator = `verify:${verify}#Failure history@1`;
+  write(root, verify, pending);
+  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
+  commit(root, "jmp split — begin devflow/tree");
+  write(root, verify, pending.replace("- source id: 1; timestamp: 2026-08-20T00:00:00Z; failure: exact source; routing: pending", "None."));
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
+  assert.equal(hasKind(result.stdout, "transition", "layer-opening"), true, result.stdout);
+});
+
+test("adversarial F3 event locator falls back to HEAD after another uncommitted output transition", (t) => {
+  const root = makeRepo(t);
+  const verify = "devflow/tree/02-capability/verify.md";
+  const pending = "# Verification\nFailure history:\nNone.\n## Audit\n- not run\n## Retrospective\n- routing · source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key: capability:02 · 1 findings · 1 adopted\n  1. exact source\n     routing: pending\n";
+  const locator = `verify:${verify}#Retrospective@1/1`;
+  write(root, verify, pending);
+  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
+  commit(root, "jmp split — begin devflow/tree");
+  write(root, verify, pending.replace(/## Retrospective[\s\S]*$/, "## Retrospective\n- not run\n"));
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
+  assert.equal(hasKind(result.stdout, "transition", "layer-opening"), true, result.stdout);
+});
+
+test("adversarial F3 card locator remains anchored to its explicit commit hash", (t) => {
+  const root = makeRepo(t);
+  const card = "devflow/tree/02-capability/02.1-source.md";
+  write(root, card, cardText("02.1"));
+  const hash = commit(root, "jmp 02.1 source");
+  const locator = `card:${card}@${hash}`;
+  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
+  commit(root, "jmp split — begin devflow/tree");
+  fs.rmSync(path.join(root, ...card.split("/")));
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
+  assert.equal(hasKind(result.stdout, "transition", "layer-opening"), true, result.stdout);
 });
 
 test("adversarial F3 item 14 rejects delete of an absent prepared-route input", (t) => {

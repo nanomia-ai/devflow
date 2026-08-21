@@ -400,3 +400,163 @@ after going public is retracted, its own reason having refuted it (2026-08-13).
   the capsule tool stayed in `scripts/`. Moving the capsule tool is a separate round candidate,
   and moving it takes eight call sites and the canonical location sentence (the "where the tool
   lives" section of `baseline-predicates.md`) with it.
+
+The items below are what v0.18.9 — the repair of the first field test — left out of scope. Each
+"what remains if it is left out" came from that round's scope judgment.
+
+- **arch does not skip the capsule section either** — `arch/SKILL.md` reads all 50 KB of
+  `baseline-predicates.md`, and `:120-360` of that — 241 lines, 16,076 B — is the domain knowledge
+  capsule contract. A greenfield project has no source to process, so a capsule cannot structurally
+  exist ("never invent a capsule without a source" in the same file), and both test projects ended
+  with zero capsules. v0.18.9 left it out because **the observed failures were 0 of 20 and the
+  predicate was aimed at the wrong side** — arch is the side that *writes* capsules, so the gate
+  cannot be `presence` (do any exist) but "is there a source to process, or is the budget about to
+  overflow". What remains if it is left out: greenfield arch entry keeps reading all 50 KB. Nothing
+  breaks. **Adopt when it is re-derived as behavior-triggered** — "read that section when processing
+  a source document or just before the capability document budget overflows". In that form DD-78
+  does not move.
+- **`.done` conflates "finished" with "succeeded"** — a research card whose answer is "no" is still
+  `.done.` and still releases its dependents. In the test, when 02.5 closed with "the channel cannot
+  be acquired", the state tool reported 02.4 as `ready=true blockers=[]`. Instead of a new field,
+  v0.18.9 closed only the one observed scene through **P5** — work's leave-the-card route returns the
+  original card to `Approval: pending` when the inserted prerequisite is a research card, with zero
+  tool change. What remains if it is left out: when later evidence refutes an earlier research card,
+  the wrong answer stays behind a `.done` suffix (01.3 did exactly that) — a rediscovery cost, not
+  damage. **Adopt when the same misrouting is observed somewhere other than the prerequisite-insertion
+  path.** The sample is still one.
+- **A closed folder's progress log is sealed** — the canon asserts that for a `.done` depth-1 folder
+  a machine query "reads only path names and status suffixes and opens no body — that folder's
+  knowledge is already folded into its capability document", yet the `node:sqlite` null-prototype row
+  trap that the test's 01.4 isolated closed with `carry: none` and folded into nothing. `carry` is
+  defined as a fact that could make **the next card in this depth-1 unit** wrong, so there is no
+  channel that carries it out of the unit. v0.18.9 left it out because the sample is one and because
+  that trap is equally explained by not using an existing discovery-to-update row (a shared contract
+  or the foundation → ADR / Risks / open item). What remains if it is left out: a trap learned in the
+  foundation can be buried under `carry: none` again. **Adopt when a trap planted for gate B reaches
+  neither Risks nor an ADR nor the capability document.** It is already one of gate B's observations.
+- **A platform where the clean judge cannot acquire an execution surface** — v0.18.9 closed this with
+  **P4** (arch step 5 runs the channel once in the context that will use it) and the
+  **`channel unavailable` rule** (when it still cannot be acquired, a human decides). The two-stage
+  "separate the judge from the executor" proposal was left out because it costs three new concepts
+  and a change to `verifier.md`. What remains if it is left out: **on a platform where no channel runs
+  in a clean context at all, a frontend capability does not close** — that rule sends it to a human.
+  Whether such a platform exists is unverified. **Adopt when gate B shows that even a CLI or HTTP
+  channel does not run in a clean context.** Adopt after a sample exists, not before.
+- **★ Does the product layer need `channel unavailable` too** — the rule is scoped to the capability
+  layer. If the channel cannot be acquired at the product layer, every success criterion becomes
+  unverified and all of them go through verify's maintenance routing, which could reproduce at a
+  larger scale the card growth seen at the capability layer. **The scope exists because product-layer
+  verification has run zero times** — widening a rule into a place with zero observations is the
+  proliferation this document set guards against. **Adopt when product-layer verification runs at
+  least once in real use and that scene is observed.**
+- **★ A canon-conflict report has nowhere to land** — when two canon rules collide, the session now
+  reports both source texts and coordinates, but a report that goes only into conversation evaporates.
+  In the first field test the 20 "sentences whose meaning could not be settled" evaporated exactly that
+  way — they survived only because the test demanded a separate log, and in normal use nothing in
+  `devflow/` would hold them. Fixing it now would create **a new record kind**, and that is the last
+  resort. **Adopt on this measure: among the items a record-comprehension measurement returns as
+  "cannot tell" or "read it wrong", how many would this report have filled?** That count sets what a
+  new place is worth.
+- **Delete the interruption-recovery auto-completion · let the tool execute rename and commit** — the
+  first drops roughly 150 lines of canonical auto-completion down to detect, report, and ask; the
+  second lifts 186 lines of commit discipline, the room procedures, integrity item 15, and the 13
+  reserved journal forms out of prose into the state tool's write commands. **Both are subtraction, so
+  neither mixes with a repair round** — DR-44's recorded reason (mixing deletion with repair makes it
+  impossible to tell which change broke what) applies unchanged. **Adopt immediately after gates A and
+  B are green.** Those two gates are what make the subtraction safe.
+- **Integrity items 12–15 as advisory · `Design head` as per-capability freshness · the tweak ② scope ·
+  one hook line in an empty repository** — v0.18.9 held all four. Advisory lost value because gate A
+  covers the canonical entry path (the 13 reserved heads are a closed list); `Design head` has blocked
+  zero failures; tweak ② turns on whether a glossary term counts as an existing decision, which is the
+  owner's call; and the hook line has **no settled wording** — session A read 21,889 B of `resume` to
+  obtain the single line "go to product", while session B went straight to product. **Adopt when**:
+  advisory, if the "no valid replacement" dead end is reached again despite gate A · `Design head`, if
+  a re-landing actually causes a conflict or a loss · tweak ② and the hook wording, by owner decision.
+- **The implementer brief** — the reviewer works from a 1,909 B contract and caught three real defects
+  (01.1's SQLite leak, 02.1's percent-encoding bypass and async exception), while the implementer path
+  reads 120,510 B for `resume+principles+work` alone. v0.18.9 left it out because **neither the material
+  nor the comparison baseline exists** — a brief is authored from a closed capability document and zero
+  capabilities closed, and there is no same-card full-canon run to compare against. The decision record
+  must state the distinction that DR-44 rejected and deferred the **static classification** of the canon
+  per consumer, while a brief is the **authoring** of a role contract. **Adopt immediately after gate B
+  is green** — the material and the baseline appear together at that moment.
+- **The record system — transitions evaporate** — a consumed user request is deleted along with its
+  routing (in the test "make the voting anonymous" lived 2 minutes 11 seconds and vanished), a reversed
+  decision's former value disappears under the overwrite (DD-77's second half unexecuted), and commit
+  subjects are not structurally unique (81 commits, 55 distinct subjects). **All three fall out naturally
+  as defaults of the round where the tool executes commits** — putting the first few words of the request
+  line into the subject is a default for a tool, not a rule. **Adopt together with that round.** Until
+  then gate B only observes the three (after a reversal, is the dropped direction beside the conclusion ·
+  does an applied decision line remain in journal · can one `git log --oneline` find the transition commit).
+- **The 0.18.9 agenda's second, third, and fourth items move to 0.18.10** — the tool report that `verify`
+  presupposes but does not exist · the closed-folder projection that actually opens every card · the three
+  exceptions to integrity item 8 that are absent from the implementation. Field firings were 0, "fired but
+  harmless" (9–15% of the budget), and 0 respectively. **Adopt in the release after gate A's frame stands.**
+  All three share one root — the canon asserts, the code does otherwise, and no test sits at that seam — so
+  once gate A's shape exists they follow cheaply.
+- **★★ Places where a clear rule went unfollowed do exist — and the diagnosis is named** — the owner's
+  doubt (*"the AI may have ignored a rule that was plainly there; if so the skill design itself is in
+  question"*) was classified blind by two models
+  (`handoff/kl/v0188/REPORT-17-compliance-{claude,codex}.md`). **Class (c) is real** — Codex found 7,
+  Claude 3 confirmed plus 2 provisional. **The counts diverged and the diagnosis did not**: "selective
+  decay of non-blocking secondary obligations" / "an obligation whose result is not observed on the spot
+  decays when it rides on another act." **★ The mechanical test**: outputs that carry their own commit
+  were never missed across 81 commits (card status renames, task commits, `verify.md`, progress lines,
+  commit message form), and **only outputs riding on someone else's commit decayed** (the digest marker,
+  HANDOFF, `capability note`, the arch channel confirmation). The canon itself wires HANDOFF as a
+  passenger — *"it only rides here"* (`principles:817`). **Both models rejected "the model runs ahead of
+  the guidance"** — in the same record the sessions kept four rules that cost them: session A chose a
+  permanent stop over a one-line edit it was forbidden to make; session B refused the conductor's wrong
+  foundation verification citing the canon; the gate B session declined a fallback the browser contract
+  forbids; and it skipped the whole closure procedure because the verdict was not a pass. **What fails is
+  "written clearly means executed," not "the model follows rules."** devflow already owns the three
+  mechanisms — blocking (integrity), observing (the clean verifier), and giving an output its own commit
+  (commit discipline) — and simply never wired them to these obligations. **Adoption condition: already
+  met as the next round's axis** — applying the test per obligation, and deciding structure or detector
+  for each, is that round's work.
+- **★ Whether the record alone lets a new session take over — measured by running it** — a clean session
+  was given only `devflow/` (no git, no product code, no canon) and answered eight questions, then
+  reconciled against git and the code (`REPORT-15-comprehension-{claude,codex}.md`). **Claude: zero
+  "wrong"** — it nearly had one at HANDOFF, and what prevented it was not the document but a manual
+  comparison of card timestamps. **Codex: one "wrong"** — it followed that same HANDOFF into an
+  **unreachable next step** (03.1 presumes cards exist, the product has no card creation at all, and that
+  card explicitly forbids adding the card-writing UI). **The three largest gaps, each with a minimal
+  repair**: the user's original request text is deleted as the marker is consumed → *one line in the card
+  head, `Origin: journal:<timestamp> "<text>"`, would have covered it*; HANDOFF gives no signal that it
+  has gone stale → *one line, "N cards changed after this timestamp," would have covered it*; four real
+  traps live in card progress logs while all five capability documents say `None.` under `Traps` —
+  **"the project with the most traps is the one structurally least able to record them"** (`Traps` sits in
+  the verified zone, so it fills only once a capability closes). **All three add zero new record kinds.**
+  **The two best-working things are kept**: how a block is recorded (call name, timeout value, the refuted
+  hypothesis, what not to do next, the "this is not a product defect" classification) and recording the
+  rejected alternative and its cost beside every decision (*"Q4 was the easiest cell in this measurement,
+  because the documents left an argument rather than a conclusion"*). And **nothing inside `devflow/` says
+  where a first reader should start.** **Adoption condition: measurement complete. The next round owns it.**
+- **★ Entry density — gate B's accounting measured a whole cycle for the first time** — building a
+  one-page web app as a single capability with three cards read roughly **365 KB** of canon and produced
+  **13,087 B** of product code plus **34,694 B** of devflow documents across 54 commits. **What was read
+  is 28× what was made, and the documents are 2.65× the code.** And **`skills/principles/SKILL.md` (891
+  lines) exceeded the tool's output limit, so the session had to read it as 1–300, 301–600, 601–892** —
+  a size at which the act of reading mechanically fails. Session A's observation belongs beside it: the
+  `bytes=…/24576` the tool reports and the bytes a session puts into context **measure different things,
+  the latter 70–180× the former**, so 0.18.7's "−83.35%" was never an answer to this question.
+  **Adoption condition: measurement complete.** The subtraction round takes its target numbers from this
+  accounting.
+- **★ v0.18.9's two rules are deployed with no decision record** — "a verification that could not acquire
+  its channel goes to a human rather than a fix card" and "when two canon rules point to different actions
+  in one place, report both, name the side taken, and continue" landed in `skills/**` but **have no row in
+  the decision index.** The budget collision below is why, and raising the budget is forbidden by the test's
+  recorded comment. **Until then the reasons for both rules are owned by the v0.18.9 round record**
+  — the field coordinates, the scope-distinction argument against DD-68, and the grounds for "continue
+  rather than stop", in full. **Adopt when the index-splitting round lands both decision records together.**
+  Because the coordinates live here, the next reader has no reason to meet these rules ungrounded and
+  relitigate them.
+- **★ The decision index collides with a fixed budget on a schedule** — `docs/design.md` grows one row per
+  decision forever while `scripts/repository-invariants.test.js` holds it to 26 KiB. v0.18.1 raised it once
+  from 24 to 26 KiB at the first collision (headroom 29 B then), and the test comment recorded *"do not raise
+  these again to fit one more row"* together with the claim that **this backlog carries the structural
+  answer** — yet that item had never been written here. v0.18.9 met the second collision at the two rules of
+  the item above (headroom 81 B, roughly 450 B needed). The structural answer is splitting or relocating the
+  index, and because it changes what "always read" means, it moves DD-71, the `AGENTS.md` entry sentence,
+  protocol §3, and three tests with it. **Adopt the moment the next decision needs an index row.** That
+  moment will come, because the table grows monotonically.

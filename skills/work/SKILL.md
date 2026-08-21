@@ -320,7 +320,9 @@ another capability):
    (e.g., 01-foundation/01.7-auth-contract-v2.md), then add its number to the original
    card's `Depends` first. Get the new card's execution proposal approved, then remove the
    original claim suffix last. Put the new card, dependency change, approval, and release
-   in one planning commit
+   in one planning commit. When the inserted prerequisite is a research card, that same
+   commit also returns the original card to `Approval: pending` — its destination and
+   completion signal stand on an answer that does not exist yet
 ④ Once that planning commit is effective, handle the new card. The original card becomes
    ready again when that card is `.done.`
 ```

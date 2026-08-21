@@ -169,10 +169,14 @@ function inside(root, target) {
   return relative !== "" && relative !== ".." && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
 }
 
+function normalizeFileText(text) {
+  return text.replace(/\r\n/g, "\n");
+}
+
 function readFile(root, relative) {
   const target = path.resolve(root, ...relative.split("/"));
   if (!inside(root, target) || !fs.existsSync(target) || !fs.statSync(target).isFile()) return null;
-  return decodeUtf8(fs.readFileSync(target), relative).replace(/\r\n/g, "\n");
+  return normalizeFileText(decodeUtf8(fs.readFileSync(target), relative));
 }
 
 function listFiles(root, relative) {
@@ -225,7 +229,7 @@ function gitRun(root, args, { allowFailure = false, input = undefined } = {}) {
 }
 
 function gitText(root, args, options = {}) {
-  return decodeUtf8(gitRun(root, args, options).stdout, `git ${args[0]} output`).replace(/\r\n/g, "\n");
+  return normalizeFileText(decodeUtf8(gitRun(root, args, options).stdout, `git ${args[0]} output`));
 }
 
 function gitLine(root, args, options = {}) {
@@ -238,7 +242,7 @@ function gitPathExists(root, ref, relative) {
 
 function gitFile(root, ref, relative) {
   const run = gitRun(root, ["show", `${ref}:${relative}`], { allowFailure: true });
-  return run.status === 0 ? decodeUtf8(run.stdout, `${relative}@${ref}`).replace(/\r\n/g, "\n") : null;
+  return run.status === 0 ? normalizeFileText(decodeUtf8(run.stdout, `${relative}@${ref}`)) : null;
 }
 
 function gitNulList(root, args) {
@@ -341,6 +345,11 @@ function statusless(component) {
 
 function normalizedStatusPath(relative) {
   return relative.split("/").map(statusless).join("/");
+}
+
+function handoffPathMatches(cards, waitingFiles, nextStep) {
+  return [...cards.map((card) => card.path), ...waitingFiles]
+    .filter((relative) => normalizedStatusPath(relative) === normalizedStatusPath(nextStep));
 }
 
 function cardIdentity(relative) {
@@ -724,7 +733,7 @@ async function baselineProjection(snapshot, capabilityFilter) {
 function parseJournalLine(line, lineNumber) {
   const out = { raw: line, line: lineNumber, kind: "other", valid: true };
   let match;
-  if ((match = new RegExp(`^${TIMESTAMP} layer opening: parent: (?<parent>devflow/tree(?:/[^;]+)?); children: (?<children>${CARD_NUMBER}(?:\\+${CARD_NUMBER})*); source-json: (?<sourceJson>.+)$`).exec(line))) {
+  if ((match = new RegExp(`^${TIMESTAMP} layer opening: parent: (?<parent>devflow/tree(?:/[^;]+)?); children: (?<children>${FOLDER_NUMBER}(?:\\+${FOLDER_NUMBER})*); source-json: (?<sourceJson>.+)$`).exec(line))) {
     const source = parseJsonValue(match.groups.sourceJson);
     return { ...out, kind: "layer-opening", ...match.groups, source: source.value, valid: source.ok && typeof source.value === "string" };
   }
@@ -771,7 +780,7 @@ function parseJournal(text) {
     .map((item) => parseJournalLine(item.line, item.index)).filter(Boolean);
 }
 
-function parseHandoff(root, room, cards) {
+function parseHandoff(root, room, cards, waitingFiles) {
   if (!room) return { date: null, stale: true, nextStep: null, openItems: [] };
   const relative = `devflow/users/${room.id}/HANDOFF.md`;
   const text = readFile(root, relative);
@@ -789,7 +798,7 @@ function parseHandoff(root, room, cards) {
     const newest = gitLine(root, ["log", "-1", "--format=%cI", "--", ...cards.filter((card) => card.claimant === room.id).map((card) => card.path)], { allowFailure: true });
     if (newest && Date.parse(newest) > Date.parse(date)) stale = true;
   }
-  if (nextStep && !cards.some((card) => normalizedStatusPath(card.path) === normalizedStatusPath(nextStep))) stale = true;
+  if (nextStep && handoffPathMatches(cards, waitingFiles, nextStep).length !== 1) stale = true;
   return { date, stale, nextStep, openItems };
 }
 
@@ -940,7 +949,7 @@ async function loadSnapshot(options) {
     openOperation: openGitOperation(root),
     worktrees: gitText(root, ["worktree", "list", "--porcelain"], { allowFailure: true }).split("\n").filter((line) => line.startsWith("worktree ")).length,
   };
-  snapshot.handoff = parseHandoff(root, room, cards);
+  snapshot.handoff = parseHandoff(root, room, cards, waitingFiles);
   snapshot.revisions = await revisions(snapshot, options.capability === undefined ? undefined : Number(options.capability));
   snapshot.baseline = await baselineProjection(snapshot, options.capability);
   return snapshot;
@@ -1045,7 +1054,7 @@ function preparedPrefix(snapshot, relative, raw, object, states, candidatePaths)
     }
     if (JSON.stringify([...changed].sort(byteCompare)) !== JSON.stringify([...expectedChanged].sort(byteCompare))) continue;
     if ([...expectedChanged].every((candidate) => (candidate === relative ? normalizedVerify : readFile(snapshot.root, candidate)) === (state.tree.has(candidate)
-      ? (state.contents.has(candidate) ? state.contents.get(candidate) : gitFile(snapshot.root, object.base, candidate)) : null))) return { ok: true, prefix };
+      ? (state.contents.has(candidate) ? state.contents.get(candidate) : gitFile(snapshot.root, object.base, candidate)) : null))) return { ok: true, prefix, baseRelative };
   }
   return { ok: false, reason: "prepared-prefix" };
 }
@@ -1078,9 +1087,10 @@ function validatePreparedObject(snapshot, relative, raw, lineNumber) {
     if (["write", "delete"].includes(operation.op) && operation.path === relative) return { ok: false, reason: "operation-current-verify" };
     if (operation.op === "write") {
       if (typeof operation.content !== "string") return { ok: false, reason: "operation-write-content" };
-      if (tree.has(operation.path) && contentAt(operation.path) === operation.content) return { ok: false, reason: "operation-write-no-change" };
+      const normalizedContent = normalizeFileText(operation.content);
+      if (tree.has(operation.path) && contentAt(operation.path) === normalizedContent) return { ok: false, reason: "operation-write-no-change" };
       tree.add(operation.path);
-      contents.set(operation.path, operation.content);
+      contents.set(operation.path, normalizedContent);
     } else if (operation.op === "delete") {
       if (!tree.has(operation.path)) return { ok: false, reason: "operation-delete-input" };
       tree.delete(operation.path);
@@ -1111,7 +1121,7 @@ function validatePreparedObject(snapshot, relative, raw, lineNumber) {
   if (scopeReason) return { ok: false, reason: scopeReason };
   const prefix = preparedPrefix(snapshot, relative, raw, object, states, candidatePaths);
   if (!prefix.ok) return prefix;
-  return { ok: true, object, lineNumber, prefix: prefix.prefix };
+  return { ok: true, object, lineNumber, prefix: prefix.prefix, basePath: prefix.baseRelative };
 }
 
 function verifyProjection(snapshot) {
@@ -1149,13 +1159,24 @@ function verifyProjection(snapshot) {
     });
     for (let index = 0; index < lines.length; index += 1) {
       const line = lines[index];
+      const role = nearestEventRole(lines, index);
       const prepared = /routing prepared:\s*(\{.*\})\s*$/.exec(line);
       if (prepared) {
         const validated = validatePreparedObject(snapshot, relative, prepared[1], index + 1);
-        if (validated.ok) result.prepared.push({ path: relative, base: validated.object.base, result: validated.object.result, operations: validated.object.operations, prefix: validated.prefix, line: index + 1 });
+        if (validated.ok) result.prepared.push({
+          path: relative,
+          base: validated.object.base,
+          basePath: validated.basePath,
+          result: validated.object.result,
+          operations: validated.object.operations,
+          prefix: validated.prefix,
+          line: index + 1,
+          sourceSection: role ?? (!role && failure && index >= failure.start && index < failure.start + failure.lines.length ? "Failure history" : null),
+          sourceId: nearestSourceId(lines, index),
+          findingNumber: role ? nearestFindingNumber(lines, index) : null,
+        });
         else result.invalidPrepared.push({ path: relative, line: index + 1, raw: line, reason: validated.reason });
       }
-      const role = nearestEventRole(lines, index);
       if (role && /routing\s*[·:]\s*source id:\s*\d+/i.test(line)) result.eventRouting.push({ path: relative, line: index + 1 });
       if (role && /awaiting user decision/i.test(line)) result.eventDecision.push({ path: relative, line: index + 1 });
       if (!role && /routing:\s*pending\s*$/.test(line) && failure && index >= failure.start && index < failure.start + failure.lines.length) {
@@ -1190,6 +1211,15 @@ function nearestSourceId(lines, index) {
   for (let cursor = index; cursor >= 0; cursor -= 1) {
     const match = /source id:\s*(\d+)/.exec(lines[cursor]);
     if (match) return Number(match[1]);
+  }
+  return null;
+}
+
+function nearestFindingNumber(lines, index) {
+  for (let cursor = index; cursor >= 0; cursor -= 1) {
+    const match = /^\s+(\d+)\.\s+/.exec(lines[cursor]);
+    if (match) return Number(match[1]);
+    if (/^-\s+/.test(lines[cursor])) return null;
   }
   return null;
 }
@@ -1244,33 +1274,59 @@ function evidenceIntegrityReason(snapshot, line) {
   return finalizingDone ? null : null;
 }
 
-function locatorResolutionCount(snapshot, locator) {
+function resolutionCountWithHead(snapshot, relative, currentText, countInText) {
+  const currentCount = countInText(currentText);
+  return currentCount === 0 ? countInText(gitFile(snapshot.root, snapshot.head, relative)) : currentCount;
+}
+
+function verifyLocatorResolutionCount(snapshot, verify, relative, preparedMatches, countInText) {
+  const currentCount = countInText(snapshot.verifyTexts.get(relative) ?? readFile(snapshot.root, relative));
+  if (currentCount !== 0) return currentCount;
+  const seen = new Set();
+  let preparedCount = 0;
+  for (const item of verify.prepared.filter((candidate) => candidate.basePath === relative && preparedMatches(candidate))) {
+    const key = `${item.base}\0${item.basePath}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    preparedCount += countInText(gitFile(snapshot.root, item.base, item.basePath));
+  }
+  return preparedCount === 0 ? countInText(gitFile(snapshot.root, snapshot.head, relative)) : preparedCount;
+}
+
+function locatorResolutionCount(snapshot, verify, locator) {
   let match;
   if ((match = /^core:(devflow\/[^#]+)#(.+)$/.exec(locator))) {
-    const text = readFile(snapshot.root, match[1]);
-    if (text === null) return 0;
-    return text.split("\n").filter((line) => normalizedHeading(line).replace(/^#{1,6}\s+/, "") === match[2]).length;
+    const countInText = (text) => (text ?? "").split("\n")
+      .filter((line) => normalizedHeading(line).replace(/^#{1,6}\s+/, "") === match[2]).length;
+    return resolutionCountWithHead(snapshot, match[1], readFile(snapshot.root, match[1]), countInText);
   }
   if ((match = /^card:(devflow\/[^@]+)@([0-9a-f]{40,64})$/.exec(locator))) {
     return gitFile(snapshot.root, match[2], match[1]) === null ? 0 : 1;
   }
   if ((match = /^journal:(.+)$/.exec(locator))) {
-    return (snapshot.journalText ?? "").split("\n").filter((line) => line === match[1]).length;
+    const countInText = (text) => (text ?? "").split("\n").filter((line) => line === match[1]).length;
+    return resolutionCountWithHead(snapshot, "devflow/journal.md", snapshot.journalText, countInText);
   }
   if ((match = /^verify:(devflow\/[^#]+)#Failure history@(\d+)$/.exec(locator))) {
-    const part = verificationRecordParts(snapshot.verifyTexts.get(match[1]) ?? readFile(snapshot.root, match[1])).find((item) => item.name === "Failure history");
-    return part?.lines.filter((line) => new RegExp(`\\bsource id:\\s*${match[2]}\\s*(?:[;·]|$)`).test(line)).length ?? 0;
+    const countInText = (text) => verificationRecordParts(text).find((item) => item.name === "Failure history")
+      ?.lines.filter((line) => new RegExp(`\\bsource id:\\s*${match[2]}\\s*(?:[;·]|$)`).test(line)).length ?? 0;
+    return verifyLocatorResolutionCount(snapshot, verify, match[1],
+      (item) => item.sourceSection === "Failure history" && item.sourceId === Number(match[2]), countInText);
   }
   if ((match = /^verify:(devflow\/[^#]+)#(Audit|Retrospective)@(\d+)\/(\d+)$/.exec(locator))) {
-    const part = verificationRecordParts(snapshot.verifyTexts.get(match[1]) ?? readFile(snapshot.root, match[1])).find((item) => item.name === match[2]);
-    if (!part) return 0;
-    let inEvent = false;
-    let count = 0;
-    for (const line of part.lines) {
-      if (/^-\s+/.test(line)) inEvent = new RegExp(`source id:\\s*${match[3]}(?:\\s*[·;]|$)`).test(line);
-      else if (inEvent && new RegExp(`^\\s+${match[4]}\\.\\s+`).test(line)) count += 1;
-    }
-    return count;
+    const countInText = (text) => {
+      const part = verificationRecordParts(text).find((item) => item.name === match[2]);
+      if (!part) return 0;
+      let inEvent = false;
+      let count = 0;
+      for (const line of part.lines) {
+        if (/^-\s+/.test(line)) inEvent = new RegExp(`source id:\\s*${match[3]}(?:\\s*[·;]|$)`).test(line);
+        else if (inEvent && new RegExp(`^\\s+${match[4]}\\.\\s+`).test(line)) count += 1;
+      }
+      return count;
+    };
+    return verifyLocatorResolutionCount(snapshot, verify, match[1],
+      (item) => item.sourceSection === match[2] && item.sourceId === Number(match[3]) && item.findingNumber === Number(match[4]), countInText);
   }
   return 0;
 }
@@ -1301,7 +1357,7 @@ function integrity(snapshot, verify) {
     }
   }
   if (snapshot.handoff.nextStep) {
-    const matches = snapshot.cards.filter((card) => normalizedStatusPath(card.path) === normalizedStatusPath(snapshot.handoff.nextStep));
+    const matches = handoffPathMatches(snapshot.cards, snapshot.waitingFiles, snapshot.handoff.nextStep);
     if (matches.length !== 1) report(5, false, { path: snapshot.handoff.nextStep, reason: `handoff-path-resolves-${matches.length}` });
   }
   for (const card of snapshot.cards.filter((item) => item.bare)) report(6, false, { path: card.path, reason: "bare-wip" });
@@ -1347,7 +1403,7 @@ function integrity(snapshot, verify) {
     report(12, true, { path: "devflow/journal.md", line: line.raw, expected: "canonical reserved journal format", reason: reasonForJournal(line) });
   }
   for (const line of snapshot.journal.filter((item) => item.kind === "layer-opening" && item.valid)) {
-    const count = locatorResolutionCount(snapshot, line.source);
+    const count = locatorResolutionCount(snapshot, verify, line.source);
     if (count !== 1) report(12, true, { path: "devflow/journal.md", line: line.raw, expected: "canonical source locator resolving to exactly one source", reason: `source-resolves-${count}` });
   }
   for (const line of snapshot.journal.filter((item) => ["evidence-wait", "evidence-finalizing"].includes(item.kind))) {

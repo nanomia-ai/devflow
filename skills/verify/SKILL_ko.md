@@ -163,6 +163,7 @@ Product revision·Verification revision·Code revision을 쓰고, verifier를 �
    반환 직후 verify.md에 판정·현재 Product revision·Verification revision·Code revision·능력층의 Capability revision·실행 근거와 `New entries`(이번 실행의 새 실패 이력 항목 수, 없으면 0)를 쓴다.
    능력층 통과이면 같은 쓰기에서 `Standards: pending for current pass`와 `Provisional: pending for current pass` 두 필드를 쓰거나 교체한다.
    실패·미검증의 재현·판정·이유마다 새 출처 id 하나를 부여하고, 기록하기 전에 본문의 줄바꿈만 공백 하나로 바꾸며, 본문 안의 세미콜론은 데이터로 둔 채 줄 끝의 고정 필드 접두인 `; 신호 카드:`·`; 수리 계보:`·`; 재관측:`·`; 라우팅:`을 오른쪽부터 판독한다. label이 없으면 기록 절의 첫째 형식, 후보 root가 0개인 label은 둘째, 정확히 1개인 label은 셋째 형식과 그 root의 `max recurrence + 1`을 쓴다.
+   검증 채널을 얻지 못해 시나리오를 한 단계도 실행하지 못한 이유는 `미검증: channel unavailable — <실패한 정확한 명령>; timeout=<관측값>` 형식으로 쓴다 — 명령과 값을 함께 적게 하는 것이 제품 결함을 도구 고장으로 접수하는 길을 막는다.
    같은 root의 항목 여럿은 쓰기 전에 최댓값을 한 번 고정해 같은 재관측 수를 쓰되 각자 출처 id와 `라우팅: 대기`를 갖고, 서로 다른 root와 root 없는 새 항목은 독립 기록한다.
    세 필드는 항목과 함께 영구 보존하고 `New entries`는 새 항목 수만 센다. 후보 root 2개 이상이나 형식 불명은 verifier 전에 전체 실행을 막는다.
    제품층이면 완성된 트리 루트 verify.md를 먼저 쓰고, 바로 이어 실행 마커의 발동과 세 revision을
@@ -194,7 +195,12 @@ Product revision·Verification revision·Code revision을 쓰고, verifier를 �
    `경계 정리 — 능력 검증 결과 <능력 번호>`로 먼저 착지시킨다. 그 뒤 `재관측: 2` 이상이면
    자동 카드·실행·새 출처 id를 만들지 않고 대기를 유지한 채 root·신호 카드·과거 route·현재
    결과를 사람에게 보고한다. 사람이 현재 허용된 route를 명시한 경우에만 계속하며, 이후
-   non-pass도 같은 사람 관문으로 돌아온다. 선택한 그 항목이 `재관측: 2` 이상이 아니면 그 실패
+   non-pass도 같은 사람 관문으로 돌아온다.
+   능력층에서 미검증 항목의 이유가 `channel unavailable`이면 재관측 수와 무관하게 첫
+   항목부터 같은 사람 관문으로 간다. 그 이유에는 제품에 대한 사실이 없어서 수정 카드가
+   제품이 만족시킬 수 있는 목적지를 갖지 못한다. 그 항목이 이미 담고 있는 실패한 명령과
+   timeout 값을 함께 보고한다.
+   선택한 그 항목이 `channel unavailable`도 `재관측: 2` 이상도 아니면 그 실패
    또는 미검증 항목 하나만 split의 유지보수 라우팅에 넘겨 같은 폴더에 만들
    수정 카드(예: 02.3b-fix-...)와 번호를 정한다. 완료 신호는 실패 재현 절차 또는 미검증 이유가
    해소됐음을 실행해 증명하는 정확한 점검이다 — 빠져나간 결함이나 증거 공백이 이후 회귀 신호가 된다.

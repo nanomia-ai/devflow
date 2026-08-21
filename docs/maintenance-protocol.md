@@ -206,6 +206,10 @@ before 0.10.0 is in `docs/changelog-archive.md`.
 ## 8. Pre-flight checklist
 
 - [ ] `node --test "scripts/*.test.js"` passes
+- [ ] inside that run, gate A — every canonical reserved journal line fed to the deployed
+      parser — is green. It is not a separate command
+- [ ] when the release changes the verification contract, gate B has been passed once: one
+      capability carried through split → work → verify → closure in a real project
 - [ ] full `docs/design.md` decision index read; reason read for every moved subject
 - [ ] when `skills/**` changes, matrix cells re-judged and new shapes checked
 - [ ] `_ko` changed first; fixed terms and ko/en structure and figures match
@@ -216,6 +220,11 @@ before 0.10.0 is in `docs/changelog-archive.md`.
 - [ ] deploy artifact has CHANGELOG and version; docs-only work has neither
 - [ ] create, delete, or move swept through document map, references, tests, installers
 - [ ] when `skills/**` is out of scope, its diff against the base commit is zero
+
+Gate B runs once by hand for every release that changes the verification contract.
+**Never automate it** — an automated gate B is one more harness inspecting itself, and while
+twenty-six releases through 0.18.8 passed on green tests alone, a new project stopped at its
+first split. The round record for that release owns gate B's specification and raw evidence.
 
 ## 9. Fixed terminology
 

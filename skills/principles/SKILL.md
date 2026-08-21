@@ -317,6 +317,11 @@ unchanged, rename the card `.stale.`.
 adopt neither side — stop, reconcile through this procedure, then proceed. A delegated
 implementer stops and reports only; reconciling is the main session's job.
 
+When two canon rules both apply in one place and point to different actions, that is a
+defect in this canon, not a contradiction between documents. Report both source texts,
+their coordinates, the side you take, and why, then proceed with that choice. A side taken
+without that report leaves the next session free to take the opposite with no one noticing.
+
 A document states only the present. When the same concept is updated, overwrite the place
 that concept lives — the concept, not the file. Then whoever reads next takes what they
 read as current, with no version to choose between.

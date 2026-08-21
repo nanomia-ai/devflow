@@ -830,6 +830,13 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.match(baseline, /arch, or adopt in a brownfield, replaces from file start up to but excluding[\s\S]*verify replaces from `## Verified state` through end of file/);
   assert.match(baseline, /The expected set is the foundation plus every non-retired capability number/);
   assert.match(baseline, /Before either exists, use the product\.md\s+capability name exactly as split would use it in the tree; invent no separate slug\s+normalization/);
+  // The filename placeholder names the capability name itself, so it cannot ask for the
+  // slug the rule directly above forbids inventing.
+  assert.match(baseline, /`devflow\/project\/capabilities\/NN-<capability-name>\.md`/);
+  assert.doesNotMatch(baseline, /capability-name-slug/);
+  // The first-4-lines rule defers to the heading order above it, which starts at `## Intent`.
+  assert.match(baseline, /readable in the first 4 lines, followed by the\s+sections in the order above/);
+  assert.doesNotMatch(baseline, /followed immediately\s+by `Concept model`/);
   assert.match(baseline, /absent means no same-numbered baseline in HEAD/);
   assert.match(baseline, /Working-tree bytes with\s+no HEAD counterpart have nothing to preserve, so the creation replaces them/);
   assert.match(baseline, /Those three paths are the only\s+sources for `Design head`/);

@@ -15,6 +15,66 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.18.9 — 2026-08-21 — the first real run found two walls, and two gates now stand where they were
+
+0.18.8 shipped and the first real-use test ran: two sessions, the same request, the same user
+answers, different models, with a conductor answering as the user and recording everything.
+Both sessions stopped — at opposite ends of the loop. Session A never wrote a line of product
+code; session B wrote 81 commits and never closed a single capability. Twenty-six releases had
+passed without one project completing a cycle, and this is the first record of what actually
+happens.
+
+**Wall one: a new project could not start.** The canon assigns capabilities the numbers `02`,
+`03`, … and tells split to write those numbers as a layer-opening marker's `children`. The
+parser required at least one dot, so the line the canon asks for could never parse — item 12
+blocked routing and every tree write, and the recovery clause the canon prescribes had no
+valid replacement to offer. Session A's own words: *following the canonical form exactly is
+what stopped it.* The `children` capture now uses `FOLDER_NUMBER`, which already existed;
+`re-split pending`'s `stale` field keeps the card grammar, because the canon narrows that
+field to direct-child task cards.
+
+**Wall two: a capability could not close.** Bias removal requires a clean session to run the
+verification, and that session could not acquire the browser channel the main session had
+already driven successfully. A tool failure was handled as a product failure, so cards
+multiplied and the state tool then offered the impossible card as `ready=true blockers=[]`.
+Two changes answer it. `verify` gains one `unverified` reason — a channel that could not be
+acquired before a single scenario step ran goes to the person from the first occurrence, not
+after a recurrence, and the reason carries the exact failing command and its timeout so a
+product defect cannot be filed as a tool failure. And `arch` now confirms the verifier's
+channel by running it once in a clean context, with the exact command and its exit code
+recorded in the channel line — a channel that runs only in the current session is not decided.
+
+**Two gates now sit in the completion gate, because "green tests" had said nothing.** All 272
+tests passed while a new project could not start; those tests only ever ran the tool against
+fixtures its own authors wrote. Gate A feeds every canonical reserved journal line to the
+deployed parser — fifteen valid forms plus thirteen deliberately broken ones, so the gate
+itself is checked, and two lid locks tie the table to `RESERVED_JOURNAL_HEADS` and to the
+canon's format block by headword rather than line number. Gate B carries one capability
+through split → work → verify → closure in a real project, by hand, once per release that
+changes the verification contract; automating it would rebuild the very harness this round is
+treating.
+
+**Gate B found four more defects on its first run, and all four were live under 301 green
+tests.** Integrity item 5 searched only task cards, so a HANDOFF pointing at a waiting
+capability file always resolved to zero. The prepared-route prefix compared a normalized read
+against a raw payload, so on the Git-for-Windows default (`core.autocrlf`) a payload built
+from real file content could never match — upper-document feedback was blocked for every
+Windows user. The locator resolved only against the working tree where the canon says to
+resolve against the prepared object's `base` commit, which fires only when a closed capability
+is reopened. And `arch`'s channel confirmation could probe one surface while recording
+another, so the confirmation this release added could be satisfied vacuously.
+
+Two prose conflicts were converged rather than reasoned about: the capability-document heading
+order now states one order, and the `slug` word left the filename rule that another line
+forbids normalizing. Leaving a card to insert a research prerequisite now returns the original
+card's `Approval` to `pending`, matching the rule split already carried.
+
+This release removes no bytes. Its product is not subtraction but the two gates that make
+subtraction safe; the subtraction round is next, and the reason it waits is recorded in
+DR-44. The reasons for the two new decisions live in `docs/rounds/v0.18.9/report_ko.md`
+rather than the decision index — the index sits 81 bytes below a fixed budget, and the test
+that guards it forbids raising it again to fit one more row.
+
 ## 0.18.8 — 2026-08-21 — the tool meets the writers it had never met
 
 0.18.7 moved the entry-state calculation out of prose and into a read-only tool, and that
