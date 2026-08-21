@@ -1270,7 +1270,7 @@ function evidenceIntegrityReason(snapshot, line) {
   if (line.kind === "evidence-finalizing" && current.length === 0 && expected) {
     const candidates = snapshot.cards.filter((card) => card.status === "done" && card.number === expected.number
       && card.name === expected.name && path.posix.dirname(card.path) === path.posix.dirname(line.card));
-    if (candidates.length === 1 && checkpointCard !== null && candidates[0].text === checkpointCard) finalizingDone = candidates[0];
+    if (candidates.length === 1 && checkpointCard !== null && claimMoveBytesMatch(snapshot, line.card, candidates[0].path)) finalizingDone = candidates[0];
     else return `finalizing-done-resolves-${candidates.length}`;
   } else if (current.length !== 1) return `card-resolves-${current.length}`;
   const claimant = current[0]?.claimant ?? /\.wip-([a-z0-9]{2,8})(?=\.|$)/.exec(line.card ?? "")?.[1] ?? null;
@@ -1592,13 +1592,14 @@ function claimOrigin(snapshot, card) {
   const diff = gitText(snapshot.root, ["show", "--format=", "--unified=0", "--no-ext-diff", creation, "--", "devflow/journal.md"], { allowFailure: true });
   const matches = diff.split("\n").filter((line) => line.startsWith("-") && !line.startsWith("---"))
     .map((line) => line.slice(1))
-    .filter((line) => {
-      const parsed = parseJournalLine(line, 0);
-      return parsed?.valid && ["maintenance-request", "layer-opening"].includes(parsed.kind);
-    });
+    .map((raw) => ({ raw, parsed: parseJournalLine(raw, 0) }))
+    .filter(({ parsed }) => parsed?.valid && ["maintenance-request", "layer-opening"].includes(parsed.kind));
   if (matches.length === 0) return { origin: "none" };
-  if (matches.length > 1) return { origin: "unknown", originReason: "multiple-matches" };
-  return { origin: `journal:${matches[0]}` };
+  const identities = new Set(matches.map(({ raw, parsed }) => parsed.kind === "maintenance-request"
+    ? `journal:${raw}` : parsed.source));
+  if (identities.size !== 1) return { origin: "unknown", originReason: "multiple-matches" };
+  const request = matches.find(({ parsed }) => parsed.kind === "maintenance-request");
+  return { origin: `journal:${request?.raw ?? matches[0].raw}` };
 }
 
 function digestLag(snapshot) {

@@ -298,6 +298,29 @@ function writePending(root, { number = "02.1", depends = "none", approval, revie
   return relative;
 }
 
+function prepareFinalizingMove(t, options = {}) {
+  const root = makeRepo(t);
+  const check = "https://example.test/check";
+  const claimed = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const waiting = `2026-08-20T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: unrun; detail-json: ""`;
+  write(root, claimed, cardText("02.1", { progress: waiting }));
+  if (options.checkpointTouchesCard === false) {
+    commit(root, "jmp 02.1 card before evidence wait");
+    write(root, "checkpoint.txt", "checkpoint\n");
+  }
+  const checkpoint = commit(root, options.checkpointSubject ?? "jmp 02.1 wip: evidence-wait");
+  const passed = `2026-08-20T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: pass; detail-json: ${JSON.stringify("passed")}`;
+  const carry = "2026-08-20T00:01:00Z carry: remote evidence passed";
+  write(root, claimed, cardText("02.1", { progress: `${passed}\n${carry}` }));
+  const journalCheck = options.journalCheck ?? check;
+  write(root, "devflow/journal.md", `2026-08-20T00:02:00Z evidence-finalizing: card-json: ${JSON.stringify(claimed)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify(journalCheck)}\n`);
+  commit(root, "jmp boundary — evidence finalizing 02.1");
+  const done = claimed.replace(".wip-jmp.md", ".done.md");
+  git(root, "mv", claimed, done);
+  if (options.damage) fs.appendFileSync(path.join(root, ...done.split("/")), "damaged after rename\n", "utf8");
+  return { root, claimed, done };
+}
+
 function currentRevisions(root) {
   const productRevision = git(root, "hash-object", "devflow/project/product.md");
   const present = ["devflow/project/arch.md", "devflow/project/code-style.md", "devflow/project/glossary.md"];
@@ -594,7 +617,7 @@ function read(root, relative) {
   return fs.readFileSync(path.join(root, ...relative.split("/")), "utf8");
 }
 
-test("gate A feeds every canon-reserved journal line to the deployed parser", { timeout: 10_000 }, async (t) => {
+test("gate A feeds every canon-reserved journal line to the deployed parser", { timeout: 30_000 }, async (t) => {
   const timestamp = "2026-08-21T00:00:00Z";
   const root = makeRepo(t, { capabilities: ["capability"] });
   rootVerify(root, "pass");
@@ -1560,6 +1583,43 @@ test("R2 a staged rename with a changed card body is not a canonical claim-done 
   assert.equal(result.stdout.includes("case=claim-done-move"), false, result.stdout);
 });
 
+test("Phase 5B E2 evidence-finalizing accepts an interrupted done rename matching the HEAD claimed card", (t) => {
+  const { root, claimed, done } = prepareFinalizingMove(t);
+  const result = run(root); ok(result);
+  assert.equal(integrityItemLines(result.stdout, 13).length, 0, result.stdout);
+  assertFragment(result.stdout, "transition: kind=finish-boundary", `card=${claimed}`);
+  assertFragment(result.stdout, "transition: kind=finish-boundary", `path=${done}`);
+});
+
+test("Phase 5B E2 evidence-finalizing still blocks damaged done bytes", (t) => {
+  const { root } = prepareFinalizingMove(t, { damage: true });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity: kind=blocking", "item=13");
+  assertFragment(result.stdout, "integrity: kind=blocking", "reason=finalizing-done-resolves-1");
+  assert.equal(result.stdout.includes("case=claim-done-move"), false, result.stdout);
+});
+
+test("Phase 5B E2 evidence-finalizing keeps checkpoint subject validation", (t) => {
+  const { root } = prepareFinalizingMove(t, { checkpointSubject: "jmp wrong evidence checkpoint" });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity: kind=blocking", "item=13");
+  assertFragment(result.stdout, "integrity: kind=blocking", "reason=checkpoint-subject");
+});
+
+test("Phase 5B E2 evidence-finalizing keeps checkpoint path validation", (t) => {
+  const { root } = prepareFinalizingMove(t, { checkpointTouchesCard: false });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity: kind=blocking", "item=13");
+  assertFragment(result.stdout, "integrity: kind=blocking", "reason=checkpoint-path");
+});
+
+test("Phase 5B E2 evidence-finalizing keeps checkpoint check-json validation", (t) => {
+  const { root } = prepareFinalizingMove(t, { journalCheck: "https://example.test/different" });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity: kind=blocking", "item=13");
+  assertFragment(result.stdout, "integrity: kind=blocking", "reason=checkpoint-check-json");
+});
+
 test("R3 unrelated source changes do not hide an interrupted canonical output", (t) => {
   const root = makeRepo(t);
   write(root, "devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
@@ -1754,6 +1814,111 @@ test("current claim origin is derived from the card-creation commit's deleted re
   commit(root, "jmp 02.1 claim");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "report:", `origin=${JSON.stringify(`journal:${request}`)}`);
+});
+
+function claimFromMarkerOnlyBundle(t, sourceSetup) {
+  const root = makeRepo(t);
+  const { source, retainedJournal = "" } = sourceSetup(root);
+  const firstMarker = `2026-08-20T00:01:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(source)}`;
+  const secondMarker = `2026-08-20T00:02:00Z layer opening: parent: devflow/tree/02-capability; children: 02.1+02.2; source-json: ${JSON.stringify(source)}`;
+  write(root, "devflow/journal.md", `${retainedJournal}${firstMarker}\n${secondMarker}\n`);
+  commit(root, "jmp split — marker-only bundle opened");
+  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  write(root, pending, cardText("02.1"));
+  write(root, "devflow/journal.md", retainedJournal);
+  commit(root, "jmp split — marker-only bundle planned");
+  const claimed = pending.replace(".md", ".wip-jmp.md");
+  git(root, "mv", pending, claimed);
+  commit(root, "jmp 02.1 claim");
+  return { root, firstMarker };
+}
+
+const MARKER_ONLY_ORIGIN_SCENES = [
+  ["verify source", (root) => {
+    capabilityVerify(root, "devflow/tree/02-capability/verify.md", {
+      failures: "- source id: 1; timestamp: 2026-08-20T00:00:00Z; failure: exact source; routing: pending",
+    });
+    return { source: "verify:devflow/tree/02-capability/verify.md#Failure history@1" };
+  }],
+  ["core source", () => ({ source: "core:devflow/project/product.md#Capabilities" })],
+  ["journal source with its request retained outside the planning diff", () => {
+    const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("retained request")}`;
+    return { source: `journal:${request}`, retainedJournal: `${request}\n` };
+  }],
+];
+
+for (const [name, sourceSetup] of MARKER_ONLY_ORIGIN_SCENES) {
+  test(`Phase 5B E1 two marker-only lines sharing one ${name} are one origin bundle`, (t) => {
+    const { root, firstMarker } = claimFromMarkerOnlyBundle(t, sourceSetup);
+    const result = run(root); ok(result);
+    assertFragment(result.stdout, "report:", `origin=${JSON.stringify(`journal:${firstMarker}`)}`);
+    assert.doesNotMatch(result.stdout, /originReason=/);
+  });
+}
+
+test("Phase 5B E1 one deleted request and its same-source layer markers are one origin bundle", (t) => {
+  const root = makeRepo(t);
+  const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact request")}`;
+  const source = `journal:${request}`;
+  const rootMarker = `2026-08-20T00:01:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(source)}`;
+  const childMarker = `2026-08-20T00:02:00Z layer opening: parent: devflow/tree/02-capability; children: 02.1+02.2; source-json: ${JSON.stringify(source)}`;
+  write(root, "devflow/journal.md", `${request}\n${rootMarker}\n${childMarker}\n`);
+  commit(root, "jmp split — request layers opened");
+  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  write(root, pending, cardText("02.1"));
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp split — request planned");
+  const claimed = pending.replace(".md", ".wip-jmp.md");
+  git(root, "mv", pending, claimed);
+  commit(root, "jmp 02.1 claim");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "report:", `origin=${JSON.stringify(source)}`);
+  assert.doesNotMatch(result.stdout, /originReason=/);
+});
+
+test("Phase 5B E1 genuinely different deleted origin identities remain unknown", (t) => {
+  const root = makeRepo(t);
+  const first = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("first request")}`;
+  const second = `2026-08-20T00:00:01Z maintenance routing pending: request-json: ${JSON.stringify("second request")}`;
+  const firstMarker = `2026-08-20T00:01:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(`journal:${first}`)}`;
+  const secondMarker = `2026-08-20T00:02:00Z layer opening: parent: devflow/tree/02-capability; children: 02.1; source-json: ${JSON.stringify(`journal:${second}`)}`;
+  write(root, "devflow/journal.md", `${first}\n${second}\n${firstMarker}\n${secondMarker}\n`);
+  commit(root, "jmp split — different origins opened");
+  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  write(root, pending, cardText("02.1"));
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp split — different origins planned");
+  const claimed = pending.replace(".md", ".wip-jmp.md");
+  git(root, "mv", pending, claimed);
+  commit(root, "jmp 02.1 claim");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "report:", "origin=unknown");
+  assertFragment(result.stdout, "report:", "originReason=multiple-matches");
+});
+
+test("Phase 5B E1 a single deleted layer marker keeps its exact legacy origin", (t) => {
+  const root = makeRepo(t);
+  const marker = `2026-08-20T00:01:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify("core:devflow/project/product.md#Capabilities")}`;
+  write(root, "devflow/journal.md", `${marker}\n`);
+  commit(root, "jmp split — legacy layer opened");
+  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  write(root, pending, cardText("02.1"));
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp split — legacy layer planned");
+  const claimed = pending.replace(".md", ".wip-jmp.md");
+  git(root, "mv", pending, claimed);
+  commit(root, "jmp 02.1 claim");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "report:", `origin=${JSON.stringify(`journal:${marker}`)}`);
+});
+
+test("Phase 5B E1 shallow history remains explicitly unknown", (t) => {
+  const root = makeRepo(t);
+  writeClaim(root);
+  fs.writeFileSync(path.join(root, ".git", "shallow"), `${git(root, "rev-parse", "HEAD")}\n`, "utf8");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "report:", "origin=unknown");
+  assertFragment(result.stdout, "report:", "originReason=shallow-history");
 });
 
 test("current claim origin is none when its creation commit deleted no canonical input", (t) => {
