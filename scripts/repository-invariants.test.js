@@ -1383,7 +1383,7 @@ test("product verdict freshness binds product, verification inputs, and committe
   assert.match(verify, /direct-dependency card/);
   assert.match(verify, /When Failure history has zero entries, write no line between `Failure history:` and\s+`Regression:`/,
     "zero Failure-history entries are represented by an empty span, not a sentinel row");
-  assert.match(state, /never use the PowerShell object pipeline/);
+  assert.match(state, /PowerShell object pipeline and shell text conversion are not/);
   assert.match(verify, /Before either layer, combine the non-empty output/);
   // The revision comparison and the uncommitted-outside-devflow trigger are the tool's
   // `product:` zone; resume keeps the route each one produces, and verify still names
@@ -2793,6 +2793,7 @@ test("a screen verify channel is confirmed only by a read probe and an interacti
 test("a channel that could not be acquired is not product evidence at either layer", () => {
   const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  const decisions = fs.readFileSync(path.join(root, "docs", "design-decisions.md"), "utf8");
   // the reason keeps its one home and its one form
   assert.equal(count(verify, /unverified: channel unavailable — /g), 1);
   assert.match(verify, /`unverified: channel unavailable — <the exact command that failed>; timeout=<observed value>`/);
@@ -2806,8 +2807,20 @@ test("a channel that could not be acquired is not product evidence at either lay
   assert.doesNotMatch(verify, /reason is `channel unavailable`[\s\S]{0,300}`routing: pending`/);
   assert.match(resume, /Also report every `blocked: kind=channel` line even when another route is first/);
   assert.match(resume, /`blocked\.channel` \| report the exact target, verify path, command, and timeout, then wait/);
+  assert.match(decisions.replace(/\s+/g, " "), /DD-81[\s\S]*The item sent to the person is the committed Record's exact `Executed:` result, not a Failure-history entry/);
+  assert.match(decisions.replace(/\s+/g, " "), /state projects its target, verify path, command, and timeout as a human wait without creating a second durable owner/);
   // removing the special entry must not strand ordinary label-less failures
   assert.match(verify, /For `recurrence observation: 2` or higher[\s\S]{0,360}Otherwise, send only that failure or unverified entry through split's maintenance/);
+});
+
+test("tree-input revisions preserve raw bytes without a shell-specific authority", () => {
+  const decisions = fs.readFileSync(path.join(root, "docs", "design-decisions.md"), "utf8").replace(/\s+/g, " ");
+  const predicates = fs.readFileSync(path.join(root, "skills", "principles", "verification-predicates.md"), "utf8").replace(/\s+/g, " ");
+  assert.match(decisions, /DD-39[\s\S]*State: active, partly corrected by DD-85 \(v0\.19\.0\)/);
+  assert.match(decisions, /DD-85 · Tree-input revision hashing preserves raw Git bytes at the process boundary; a Buffer handoff supersedes the Windows-only shell pipe/);
+  assert.match(decisions, /exact stdout `Buffer` becomes `git hash-object --stdin`'s stdin without text decoding or shell parsing/);
+  assert.match(predicates, /pass the raw stdout `Buffer` directly as the stdin of `git hash-object --stdin`/);
+  assert.doesNotMatch(predicates, /run that same pipe inside `cmd \/d \/s \/c`/);
 });
 
 // E3 — one unfinished interaction became source ids 3, 4, 5, 6, then four candidate roots

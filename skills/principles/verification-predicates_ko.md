@@ -21,8 +21,9 @@
   않으면 값은 `미해결`이다.
 
 두 tree 입력 revision은 NUL을 포함한 Git stdout을 text로 decode·재정렬·줄바꿈 변환하지
-않는다. POSIX는 native binary pipe를 쓰고, Windows PowerShell에서는 같은 pipe를
-`cmd /d /s /c` 안에서 실행한다. PowerShell object pipeline은 쓰지 않는다.
+않는다. 상태 도구는 첫 Git process의 raw stdout `Buffer`를 그대로
+`git hash-object --stdin`의 stdin으로 넘긴다. 동등한 native binary pipe는 허용하지만
+PowerShell object pipeline과 shell text 변환은 쓰지 않는다.
 
 ## 검증 사건 판정
 

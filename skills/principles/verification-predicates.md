@@ -23,8 +23,9 @@ this companion.
   dependency does not resolve exactly, the value is `unresolved`.
 
 For both tree-input revisions, never decode, reorder, or newline-convert Git's NUL-bearing
-stdout. Use a native binary pipe on POSIX. In Windows PowerShell, run that same pipe inside
-`cmd /d /s /c`; never use the PowerShell object pipeline.
+stdout. The state tool captures the first Git process's raw stdout and must pass the raw
+stdout `Buffer` directly as the stdin of `git hash-object --stdin`. An equivalent native
+binary pipe is permitted; the PowerShell object pipeline and shell text conversion are not.
 
 ## Verification event predicates
 

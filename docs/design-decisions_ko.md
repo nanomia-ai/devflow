@@ -486,6 +486,11 @@ verifier가 실행한 현재 회귀 label을 `신호 카드`로 실패 이력에
 timeout) 그것은 제품에 대한 정보가 아니다. 카드를 만들지 않고, 재발 몇 번째든 첫 항목부터
 사람에게 간다.
 
+여기서 사람에게 가는 항목은 실패 이력 항목이 아니라 커밋된 Record의 정확한 `Executed:` 결과다.
+`Failure history`·수리 계보·카드는 계속 비어 있고, 상태 도구가 같은 영속 소유자에서 대상·verify
+경로·명령·timeout을 사람 대기로 투영한다. 따라서 자동 재실행을 없앤 결과가 다음 세션에서
+사라지지 않으며, 같은 사실을 담는 두 번째 기록도 생기지 않는다.
+
 선택한 경계: 검증자의 `unverified` 사유 하나를 늘리고 그 형식을 고정한다 —
 `unverified: channel unavailable — <실패한 정확한 명령>; timeout=<값>`. 실패한 명령과 timeout
 값을 함께 적게 한 것이 빠져나갈 구멍을 막는 장치다: 제품 결함을 도구 고장으로 분류해
@@ -1188,9 +1193,25 @@ arch가 개발 기획과 Layer 0 전체 역산이라는 두 개념을 한 이름
 
 실패 경로: 완료 신호에 원격 결과만 남았을 때 checkpoint 커밋과 journal 기록 커밋 사이에서 세션이 끊기면, 다음 세션이 같은 CI 결과를 다시 판정하거나 제2의 최종 작업 커밋을 만든다. 그래서 정본 journal 줄이 checkpoint hash와 `점검-json`을 담아 복구 지점을 하나로 고정하고, 통과는 `증거 마감`으로 바뀌어 최종 작업 커밋이 끝났고 환류와 경계 정리만 남았다는 뜻이 된다 (CHANGELOG 0.9.21)
 
+### DD-85 · tree 입력 revision hash는 process 경계에서 Git raw byte를 보존하며 Buffer 전달이 Windows 전용 shell pipe를 대체한다 (v0.19.0)
+
+주제: Git 기계와 중단 복구 | 도입: v0.19.0 | 상태: 유효
+
+DD-39는 기존 `cmd` binary pipe가 raw-byte hash와 같고 PowerShell 객체 파이프라인만
+달랐음을 이미 측정했다. v0.19.0 S3 fixture는 이제 이관된 실행자를 직접 봉합한다.
+그 결과는 정확한 `ls-tree -z` stdout `Buffer`를 입력한 `git hash-object --stdin`과 같다.
+공백·shell metacharacter·Unicode가 든 경로도 그 byte를 그대로 보존한다. 첫 Git process의
+정확한 stdout `Buffer`는 text decode나 shell parsing 없이 `git hash-object --stdin`의 stdin으로
+넘어간다. 끝에 NUL byte 하나를 더하면 hash가 달라지고, 입력 Git 실패는 빈 hash가 아니라
+`unresolved`로 남는다.
+
+따라서 지켜야 할 경계는 특정 shell이 아니라 두 process 사이의 raw-byte 불변성이다. Windows
+전용 `cmd /d /s /c` wrapper를 유지하면 같은 byte를 더 잘 보존하지 않으면서 quoting과 플랫폼
+분기를 다시 만든다. PowerShell 객체 파이프라인은 실제 재현 사유가 그대로이므로 계속 금지한다.
+
 ### DD-39 · tree 입력 revision의 hash는 Windows에서 `cmd /d /s /c` 안의 이진 파이프로만 계산한다 (v0.9.21, 실행자 이관 v0.18.7)
 
-주제: Git 기계와 중단 복구 | 도입: v0.9.21 | 상태: 유효
+주제: Git 기계와 중단 복구 | 도입: v0.9.21 | 상태: 유효 · 일부 정정 → DD-85 (v0.19.0)
 
 실제 재현: 2026-08-11 이 저장소에서 PowerShell 5.1 객체 파이프라인이 `git ls-tree -r -z`의 NUL 포함 stdout을 건드려 hash를 실제로 오염시켰다 — POSIX 이진 파이프와 `cmd` 파이프는 같은 hash를, 객체 파이프라인만 다른 값을 냈다. install.ps1의 BOM 행과 같은 "실제 재현" 부류다. v0.18.7에서 이 계산의 실행자가 산문에서 상태 도구로 옮겨졌고, **경계는 코드 안에 그대로 보존된다** — POSIX는 네이티브 이진 파이프, Windows는 `cmd.exe /d /s /c` 안의 같은 파이프이며 NUL 포함 stdout을 문자열로 디코드하지 않는다. 실행자가 바뀐 것은 **경계가 불필요해졌다는 뜻이 아니다**: 기록된 이유를 반증한 프로토타입이 없으므로 이 행은 충족이 아니라 보존이고, 경계를 바꾸려면 등가성을 증명하고 새 결정을 기록해야 한다 (v0.18.7 구현에서 Node의 인자 전달이 명령 안 따옴표를 문자로 넘겨 revision을 `unresolved`로 만든 사고가 실제로 났고, 고친 것은 인자 전달이지 경계가 아니다)
 

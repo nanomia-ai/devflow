@@ -2330,6 +2330,13 @@ test("S3 binary revision hashing uses the exact ls-tree bytes without a shell pi
     cwd: root, input: Buffer.concat([tree, Buffer.from([0])]), encoding: "utf8",
   }).trim();
   assert.notEqual(changedHash, nodeHash);
+
+  const unusual = ["src/hash/space & shell.txt", "src/hash/\uB2A5\uB825-#-revision.txt"];
+  for (const relative of unusual) write(root, relative, `// ${relative}\n`);
+  commit(root, "jmp fixture — unusual revision paths");
+  const unusualTree = execFileSync("git", ["ls-tree", "-r", "-z", "--full-tree", "HEAD", "--", ...unusual], { cwd: root });
+  const unusualHash = execFileSync("git", ["hash-object", "--stdin"], { cwd: root, input: unusualTree, encoding: "utf8" }).trim();
+  assert.equal(await nativeBinaryHash(root, "HEAD", unusual), unusualHash);
 });
 
 // ---------------------------------------------------------------------------

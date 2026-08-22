@@ -547,6 +547,12 @@ Desired behavior: when channel acquisition fails (tool bind, attach, timeout) be
 scenario step has run, that is not information about the product. No card is created, and the
 item goes to the person from the first occurrence, whatever the recurrence count.
 
+The item sent to the person is the committed Record's exact `Executed:` result, not a
+Failure-history entry. Failure history, repair lineage, and cards stay empty; state projects
+its target, verify path, command, and timeout as a human wait without creating a second durable
+owner. Suppressing automatic re-entry therefore does not make the result disappear on the next
+session.
+
 Chosen boundary: add exactly one `unverified` reason to the verifier and fix its form —
 `unverified: channel unavailable — <the exact failing command>; timeout=<value>`. Requiring the
 failing command and the timeout value together is the device that closes the escape hatch: to
@@ -1367,9 +1373,26 @@ Subject: Git mechanics and interruption recovery | Introduced: v0.9.21 | State: 
 
 Failure path: when only a remote result remains in the completion signal and the session ends between the checkpoint commit and the journal record commit, the next session judges the same CI result twice or makes a second final task commit. The canonical journal line therefore carries the checkpoint hash and `check-json` so recovery has exactly one point, and a pass becomes `evidence-finalizing`, meaning the final task commit is done and only upper-document feedback and boundary cleanup remain (CHANGELOG 0.9.21)
 
+### DD-85 · Tree-input revision hashing preserves raw Git bytes at the process boundary; a Buffer handoff supersedes the Windows-only shell pipe (v0.19.0)
+
+Subject: Git mechanics and interruption recovery | Introduced: v0.19.0 | State: active
+
+DD-39 already measured that the legacy `cmd` binary pipe matched the raw-byte hash and that only
+the PowerShell object pipeline differed. The v0.19.0 S3 fixture now seals the moved executor
+directly: its result equals `git hash-object --stdin` fed the exact `ls-tree -z` stdout `Buffer`.
+Paths containing spaces, shell metacharacters, and Unicode preserve those bytes too. The first
+Git process's exact stdout `Buffer` becomes `git hash-object --stdin`'s stdin without text decoding
+or shell parsing. Appending one NUL byte changes the hash, and a failed source Git command remains
+`unresolved` rather than becoming the empty-input hash.
+
+The invariant is therefore raw bytes between the two processes, not a particular shell.
+Keeping a Windows-only `cmd /d /s /c` wrapper adds quoting and platform branches without
+preserving the bytes better. The PowerShell object pipeline remains forbidden because its
+reproduced failure still stands.
+
 ### DD-39 · Tree-input revision hashes are computed only through a binary pipe inside `cmd /d /s /c` on Windows (v0.9.21, executor moved v0.18.7)
 
-Subject: Git mechanics and interruption recovery | Introduced: v0.9.21 | State: active
+Subject: Git mechanics and interruption recovery | Introduced: v0.9.21 | State: active, partly corrected by DD-85 (v0.19.0)
 
 Actually reproduced: on 2026-08-11 in this repository, the PowerShell 5.1 object pipeline touched the NUL-bearing stdout of `git ls-tree -r -z` and corrupted the hash — the POSIX binary pipe and the `cmd` pipe produced the same hash, and only the object pipeline differed. Same "actually reproduced" class as the install.ps1 BOM row. In v0.18.7 the executor of this computation moved from prose to the state tool and **the boundary is preserved verbatim inside the code** — a native binary pipe on POSIX, the same pipe inside `cmd.exe /d /s /c` on Windows, and NUL-bearing stdout is never decoded to a string. A changed executor **does not mean the boundary became unnecessary**: no prototype has refuted the recorded reason, so this row is preserved rather than discharged, and changing the boundary requires proving equivalence and recording a new decision (during the v0.18.7 implementation Node's argument passing did hand the inner quotes through as literal characters and made a revision `unresolved`; what was fixed was the argument passing, not the boundary)
 
