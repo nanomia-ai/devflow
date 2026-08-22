@@ -2729,6 +2729,7 @@ test("C design an anchor lookup Git cannot run fails closed ahead of the claim",
   fs.rmSync(path.join(scene.root, ".git", "objects", stale.slice(0, 2), stale.slice(2)));
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-note", "reason=anchor-unavailable");
+  assertFragment(result.stdout, "marker: kind=design-note", "recovery=external");
   assertNoFragment(result.stdout, "marker: kind=design-note", "anchor=");
   assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
 });
@@ -2800,6 +2801,7 @@ test("C design a design-only prefix carrying an unrelated path blocks", (t) => {
   const scene = designOnlyPrefix(t, { unrelated: true });
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-note", "reason=prefix-mismatch");
+  assertFragment(result.stdout, "marker: kind=design-note", "recovery=external");
   assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
 });
 
@@ -2816,6 +2818,7 @@ test("C design an anchor that is not the canonical checkpoint blocks", (t) => {
   const scene = designNoteScene(t, { checkpoint: "bad 02.1 wip: capability design note" });
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-note", "reason=anchor-not-checkpoint");
+  assertFragment(result.stdout, "marker: kind=design-note", "recovery=producer");
   assertNoFragment(result.stdout, "marker: kind=design-note", "anchor=");
   assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
 });

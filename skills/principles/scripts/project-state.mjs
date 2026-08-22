@@ -1722,8 +1722,13 @@ function designNoteAnchor(snapshot, line) {
 // is already deleted from the working tree. A committed design form never leaves this function
 // silently — it leaves as a route or as an exact blocking reason.
 function designNoteRoutes(snapshot) {
+  const producerReasons = new Set([
+    "card-absent", "capability-mismatch", "anchor-not-checkpoint", "anchor-card-absent",
+    "code-duplicate", "code-noncanonical", "code-absent",
+  ]);
   const project = (line, extra) => ({
-    marker: line.raw, capability: line.capability, note: line.note, card: line.card, code: line.code, ...extra,
+    marker: line.raw, capability: line.capability, note: line.note, card: line.card, code: line.code,
+    ...extra, ...(extra.reason ? { recovery: producerReasons.has(extra.reason) ? "producer" : "external" } : {}),
   });
   const working = snapshot.journal.filter((item) => item.kind === "capability-note" && item.valid && item.card !== undefined);
   const changed = snapshot.status.map((entry) => entry.path);

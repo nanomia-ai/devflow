@@ -355,6 +355,16 @@ land first as that card's wip checkpoint through the tweak lane's target-path ch
 Git commit records a path's final content, so without that check the same file's card
 changes ride the tweak commit.
 
+Producer recovery for a routed capability design note begins only when
+`marker.design-note` carries `recovery=producer`; do not enter the implementation loop or
+write design. Replace the malformed producer artifact in one canonical checkpoint: remove
+the exact invalid line, and append a fresh-timestamp line only when the same user-confirmed
+statement and exact live card and code basis still stand. The subject is
+`<id> <NN.N> wip: capability design note`. Never alter the statement, card, or code by
+inference. If that exact basis no longer stands, show the line and reason to the person and
+wait for its withdrawal or corrected basis instead of deleting knowledge. End the invocation
+after the recovery checkpoint so state chooses the design writer from the new anchor.
+
 Returning to the card from a design ascent — after arch or adopt consumed that `capability
 note` design line and rederived the capability design zone — judge this card and its code
 against the new design zone. Compatible means rerun the completion signal and stand one more
@@ -376,7 +386,11 @@ anchored objections about the code after that boundary — one review carrying f
 is one, and `pass`, `unverified`, and an objection about the card's contract raise nothing.
 **The person's disposition** is valid only in the same checkpoint as the third objection
 about the code and immediately after that line — it is a bounded ordinary Progress entry that
-invents no machine format, and a disposition written anywhere else is not one.
+invents no machine format, and a disposition written anywhere else is not one. After a fresh
+third objection, append no implementer-authored Progress prose before the person's reply.
+The person's exact reply is the only line permitted immediately after that objection. A later
+reader trusts that ordinary line by this writer boundary, not by inventing a new journal kind
+or machine tag.
 
 ### 1. The completion precondition
 

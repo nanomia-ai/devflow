@@ -102,7 +102,9 @@ not a binding decision), and the final task commit (it
 belongs to the session's own branch) of a card whose initial claim has already landed on
 integration, plus four journal appends and their local commits — `maintenance
 routing pending`, `capability note`, attributed open-item and decision lines, `product
-re-run pending`. Those four are the whole set of journal appends that continue during a
+re-run pending`. A `capability note` design-form append continues only in its canonical
+`<id> <NN.N> wip: capability design note` checkpoint with that exact card and code basis.
+Those four are the whole set of journal appends that continue during a
 blockade. These wait until integration opens: a new
 claim, a new tree number, a new verify source id, a card's `.done.` rename and its
 boundary commit, a layer-opening marker (it mints numbers), a `re-split pending` marker

@@ -467,8 +467,13 @@ paths — a capsule is not reached by the depth-1 number rule.
 
 When split starts with a pending card whose
 `Approval` is not `pending` and `ready:` reports the card as `approval-invalid`, report the
-exact reason and reset it to `pending`. Present the whole current card in a new execution
-proposal, then land the new approval value and card change together in the planning commit.
+exact reason. When that reason includes `progress-heading`, first restore exactly one
+`## Progress log` boundary without changing the plan or execution evidence. With no heading,
+the boundary goes immediately after the canonical final `Review:` field when that field is
+unique; if it is not unique, report the ambiguous card instead of guessing. With duplicates,
+keep the first boundary and remove only the later heading lines. Only then reset `Approval`
+to `pending` and present the repaired whole card in a new execution proposal. Land the new
+approval value and card repair together in the planning commit.
 
 **When the user changes the Destination of a card in progress, a clean review returns an
 objection about the card's contract, or work names an invalid exact `Read first` path in the

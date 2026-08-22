@@ -1288,6 +1288,10 @@ test("dependency syntax is canonical while legacy cards have an explicit migrati
   assert.match(resume, /\| `claim\.depends-anomaly` \| split — replace it with the user-confirmed canonical dependency value/);
   assert.match(resume, /\| `ready\.approval-invalid` \| split — report the exact invalidity, reset `Approval` to `pending`/);
   assert.match(split, /`Approval` is not `pending` and `ready:` reports the card as `approval-invalid`/);
+  const flatSplit = split.replace(/\s+/g, " ");
+  assert.match(flatSplit, /When that reason includes `progress-heading`, first restore exactly one `## Progress log` boundary/);
+  assert.match(flatSplit, /With no heading, the boundary goes immediately after the canonical final `Review:` field when that field is unique; if it is not unique, report the ambiguous card instead of guessing\. With duplicates, keep the first boundary and remove only the later heading lines/);
+  assert.match(flatSplit, /Only then reset `Approval` to `pending` and present the repaired whole card/);
   assert.match(work, /The claimed card's `claim:` line carries its `Depends` judgment/);
   assert.match(work, /`kind=depends-anomaly`, report that line's anomaly and stop/);
   assert.match(verify, /project-state\.mjs state/);
@@ -1585,8 +1589,16 @@ test("the capability design ascent has one producer, one route, and one design w
   assert.match(principles, /Do not edit the capability document or a capsule directly — the tool routes that line and arch \(Brownfield `no`\) or adopt \(`yes`\) rederives the design zone \|/,
     "the producer never writes the design zone itself");
 
-  assert.match(resume, /\| `marker\.design-note` \| arch when Brownfield is `no`, adopt when `yes` — design only; pass that line's `capability`, `note`, `card`, `code`, and `anchor` through as they stand\. When `reason` came instead of `anchor`, report that reason as it stands and start no design write\. When `prefix=design-only` came, that writer's design-only write was interrupted — start no new one and send it back to finish that same commit\. Rebuild no Layer 0 and recompute nothing from cards or history \|/,
-    "resume maps the one route to the one writer, passes the exact projection, and stops on a reason");
+  assert.match(resume.replace(/\s+/g, " "), /With an `anchor`, arch when Brownfield is `no`, adopt when `yes` — design only; pass that line's `capability`, `note`, `card`, `code`, and `anchor` through as they stand/,
+    "the valid route still reaches exactly one design writer");
+  assert.match(resume.replace(/\s+/g, " "), /When `recovery=producer` came with a `reason`, start no design write and return the exact line and reason to work's producer recovery\. When `recovery=external` came, change nothing and report the exact reason/,
+    "resume sends an invalid producer artifact back to its producer and keeps external Git failures read-only");
+  assert.match(work.replace(/\s+/g, " "), /Producer recovery for a routed capability design note begins only when `marker\.design-note` carries `recovery=producer`/,
+    "work alone owns recovery of its malformed design-note artifact");
+  assert.match(work.replace(/\s+/g, " "), /remove the exact invalid line, and append a fresh-timestamp line only when the same user-confirmed statement and exact live card and code basis still stand/,
+    "producer recovery never silently changes the confirmed knowledge basis");
+  assert.match(principles.replace(/\s+/g, " "), /A `capability note` design-form append continues only in its canonical `<id> <NN\.N> wip: capability design note` checkpoint with that exact card and code basis/,
+    "integration blockade cannot create an invalid first anchor");
 
   for (const skill of ["arch", "adopt"]) {
     const text = read(skill, "SKILL.md").replace(/\s+/g, " ");
@@ -1649,7 +1661,7 @@ test("HANDOFF carries only a recomputable pointer", () => {
   assert.doesNotMatch(work, /^## Traps$/m);
   assert.doesNotMatch(work, /If all four are empty, an empty file is fine/);
   assert.match(work, /`Next single step` is mandatory and holds one tree path/);
-  assert.match(work, /the exact path named by the tool's\nfirst actionable tree route, which is that capability folder when verification is next, and it\nis not limited to a card or a waiting file/,
+  assert.match(work.replace(/\s+/g, " "), /the exact path named by the tool's first actionable tree route: a capability folder when capability verification is next, and `devflow\/tree\/verify\.md` when a product verification transition names that record\. It is not limited to a card or a waiting file/,
     "the pointer is whatever the first actionable tree route names, not a card-only field");
   assert.doesNotMatch(work, /no pending and no claimed card/,
     "`none` is the absence of an actionable tree path, not the absence of cards");
@@ -2744,6 +2756,13 @@ test("composed scenes each reach one end-to-end action", () => {
     const matched = COMPOSED_PREDICATES.filter((one) => one.when(h)).map((one) => one.action);
     assert.deepEqual(matched, [expected], `${what}: the flat predicates disagree`);
   }
+});
+
+test("a third code objection leaves exactly one producer slot for the person's reply", () => {
+  const work = flat(fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8"));
+  assert.match(work, /After a fresh third objection, append no implementer-authored Progress prose before the person's reply/);
+  assert.match(work, /The person's exact reply is the only line permitted immediately after that objection/);
+  assert.match(work, /A later reader trusts that ordinary line by this writer boundary, not by inventing a new journal kind or machine tag/);
 });
 
 // E1 — a channel that only answered `--help` was recorded as confirmed, and the verifier
