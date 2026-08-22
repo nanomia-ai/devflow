@@ -1589,10 +1589,16 @@ test("the capability design ascent has one producer, one route, and one design w
   assert.match(principles, /Do not edit the capability document or a capsule directly — the tool routes that line and arch \(Brownfield `no`\) or adopt \(`yes`\) rederives the design zone \|/,
     "the producer never writes the design zone itself");
 
-  assert.match(resume.replace(/\s+/g, " "), /With an `anchor`, arch when Brownfield is `no`, adopt when `yes` — design only; pass that line's `capability`, `note`, `card`, `code`, and `anchor` through as they stand/,
-    "the valid route still reaches exactly one design writer");
-  assert.match(resume.replace(/\s+/g, " "), /When `recovery=producer` came with a `reason`, start no design write and return the exact line and reason to work's producer recovery\. When `recovery=external` came, change nothing and report the exact reason/,
-    "resume sends an invalid producer artifact back to its producer and keeps external Git failures read-only");
+  const designRoute = resume.split(/\r?\n/).find((line) => line.startsWith("| `marker.design-note` |"));
+  assert.ok(designRoute, "resume has one design-note route row");
+  assert.match(designRoute, /Take the first matching case in this order/);
+  const routeCases = ["`prefix=design-only`", "`recovery=producer`", "`recovery=external`", "an `anchor`"];
+  for (let index = 1; index < routeCases.length; index += 1) {
+    assert.ok(designRoute.indexOf(routeCases[index - 1]) < designRoute.indexOf(routeCases[index]),
+      `${routeCases[index - 1]} must outrank ${routeCases[index]}`);
+  }
+  assert.match(designRoute, /an `anchor` sends design only to arch when Brownfield is `no`, or adopt when `yes`/,
+    "the final valid route still reaches exactly one design writer");
   assert.match(work.replace(/\s+/g, " "), /Producer recovery for a routed capability design note begins only when `marker\.design-note` carries `recovery=producer`/,
     "work alone owns recovery of its malformed design-note artifact");
   assert.match(work.replace(/\s+/g, " "), /remove the exact invalid line, and append a fresh-timestamp line only when the same user-confirmed statement and exact live card and code basis still stand/,
@@ -2809,16 +2815,22 @@ test("a channel that could not be acquired is not product evidence at either lay
   assert.match(resume, /`blocked\.channel` \| report the exact target, verify path, command, and timeout, then wait/);
   assert.match(decisions.replace(/\s+/g, " "), /DD-81[\s\S]*The item sent to the person is the committed Record's exact `Executed:` result, not a Failure-history entry/);
   assert.match(decisions.replace(/\s+/g, " "), /state projects its target, verify path, command, and timeout as a human wait without creating a second durable owner/);
+  const dd81 = decisions.match(/### DD-81[\s\S]*?(?=\r?\n### )/)?.[0] ?? "";
+  assert.match(dd81, /Affected coordinates:[\s\S]*skills\/principles\/scripts\/project-state\.mjs[\s\S]*skills\/resume\/SKILL/);
   // removing the special entry must not strand ordinary label-less failures
   assert.match(verify, /For `recurrence observation: 2` or higher[\s\S]{0,360}Otherwise, send only that failure or unverified entry through split's maintenance/);
 });
 
 test("tree-input revisions preserve raw bytes without a shell-specific authority", () => {
-  const decisions = fs.readFileSync(path.join(root, "docs", "design-decisions.md"), "utf8").replace(/\s+/g, " ");
+  const decisionsRaw = fs.readFileSync(path.join(root, "docs", "design-decisions.md"), "utf8");
+  const decisions = decisionsRaw.replace(/\s+/g, " ");
   const predicates = fs.readFileSync(path.join(root, "skills", "principles", "verification-predicates.md"), "utf8").replace(/\s+/g, " ");
   assert.match(decisions, /DD-39[\s\S]*State: active, partly corrected by DD-85 \(v0\.19\.0\)/);
   assert.match(decisions, /DD-85 · Tree-input revision hashing preserves raw Git bytes at the process boundary; a Buffer handoff supersedes the Windows-only shell pipe/);
   assert.match(decisions, /exact stdout `Buffer` becomes `git hash-object --stdin`'s stdin without text decoding or shell parsing/);
+  const dd85 = decisionsRaw.match(/### DD-85[\s\S]*?(?=\r?\n### )/)?.[0] ?? "";
+  assert.match(dd85, /Affected coordinates:[\s\S]*skills\/principles\/scripts\/project-state\.mjs[\s\S]*verification-predicates/);
+  assert.match(dd85, /Revisit when:[\s\S]*raw stdout `Buffer`/);
   assert.match(predicates, /pass the raw stdout `Buffer` directly as the stdin of `git hash-object --stdin`/);
   assert.doesNotMatch(predicates, /run that same pipe inside `cmd \/d \/s \/c`/);
 });

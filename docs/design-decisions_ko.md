@@ -506,7 +506,10 @@ timeout) 그것은 제품에 대한 정보가 아니다. 카드를 만들지 않
 timeout이 없으면 분류가 검사 불가능해지고 이 결정의 유일한 집행 장치가 사라진다.
 
 영향 좌표: `skills/verify/SKILL{,_ko}.md`의 `unverified` 사유 목록,
-`skills/arch/SKILL{,_ko}.md`의 verify channel 확인, `docs/rounds/v0.18.9/report_ko.md` §4.
+`skills/arch/SKILL{,_ko}.md`의 verify channel 확인,
+`skills/principles/scripts/project-state.mjs`의 영속 결과 투영,
+`skills/resume/SKILL{,_ko}.md`의 사람 대기 소비, `scripts/project-state.test.js`,
+`scripts/repository-invariants.test.js`, `docs/rounds/v0.18.9/report_ko.md` §4.
 재검토 조건: 채널 획득 실패로 분류된 항목이 실제로는 제품 결함이었던 장면이 관측될 때.
 시험이 이 결정을 못 닫는다 — 관문 B가 지난다.
 
@@ -1208,6 +1211,12 @@ DD-39는 기존 `cmd` binary pipe가 raw-byte hash와 같고 PowerShell 객체 �
 따라서 지켜야 할 경계는 특정 shell이 아니라 두 process 사이의 raw-byte 불변성이다. Windows
 전용 `cmd /d /s /c` wrapper를 유지하면 같은 byte를 더 잘 보존하지 않으면서 quoting과 플랫폼
 분기를 다시 만든다. PowerShell 객체 파이프라인은 실제 재현 사유가 그대로이므로 계속 금지한다.
+
+영향 좌표: `skills/principles/scripts/project-state.mjs`의 tree-input hash 실행자,
+`skills/principles/verification-predicates{,_ko}.md`의 raw-byte 불변식,
+`scripts/project-state.test.js`의 S3 fixture, `scripts/repository-invariants.test.js`, DD-39.
+재검토 조건: 지원 플랫폼에서 첫 Git process의 raw stdout `Buffer`를 직접 입력한 hash와 상태
+도구 결과가 달라지거나, 두 Git process 사이 실행 경계가 바뀔 때. shell 선호만으로는 다시 열지 않는다.
 
 ### DD-39 · tree 입력 revision의 hash는 Windows에서 `cmd /d /s /c` 안의 이진 파이프로만 계산한다 (v0.9.21, 실행자 이관 v0.18.7)
 

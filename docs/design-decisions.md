@@ -570,7 +570,10 @@ as free prose** — without the failing command and the timeout the classificati
 checked, and this decision loses its only enforcement device.
 
 Affected coordinates: the `unverified` reason list in `skills/verify/SKILL{,_ko}.md`, the verify
-channel confirmation in `skills/arch/SKILL{,_ko}.md`, and `docs/rounds/v0.18.9/report_ko.md` §4.
+channel confirmation in `skills/arch/SKILL{,_ko}.md`, the durable-result projection in
+`skills/principles/scripts/project-state.mjs`, the human-wait consumer in
+`skills/resume/SKILL{,_ko}.md`, `scripts/project-state.test.js`,
+`scripts/repository-invariants.test.js`, and `docs/rounds/v0.18.9/report_ko.md` §4.
 Revisit when: an item classified as a channel acquisition failure turns out to have been a
 product defect. Tests cannot close this decision — gate B passes it.
 
@@ -1389,6 +1392,14 @@ The invariant is therefore raw bytes between the two processes, not a particular
 Keeping a Windows-only `cmd /d /s /c` wrapper adds quoting and platform branches without
 preserving the bytes better. The PowerShell object pipeline remains forbidden because its
 reproduced failure still stands.
+
+Affected coordinates: the tree-input hash executor in
+`skills/principles/scripts/project-state.mjs`, the raw-byte invariant in
+`skills/principles/verification-predicates{,_ko}.md`, the S3 fixture in
+`scripts/project-state.test.js`, `scripts/repository-invariants.test.js`, and DD-39.
+Revisit when: the state tool's result differs on a supported platform from the hash fed the
+first Git process's raw stdout `Buffer` directly, or when the execution boundary between the
+two Git processes changes. Shell preference alone does not reopen this decision.
 
 ### DD-39 · Tree-input revision hashes are computed only through a binary pipe inside `cmd /d /s /c` on Windows (v0.9.21, executor moved v0.18.7)
 
