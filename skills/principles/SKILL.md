@@ -760,6 +760,44 @@ decision — a blockade does not block this lane.
   verify.md's prepared object to the
   completed state named by `result`, and land all of it in the one specified commit. Never
   select a new route or create the output twice.
+- **Progress log machine lines.** The progress log carries exactly four machine formats and
+  this list is their only home — `completion signal result:` and `review result:` below,
+  `carry:` in the next bullet, and `remote evidence check:` in the remote-evidence bullet.
+  A progress line that starts with the canonical timestamp followed by one of those four
+  heads stands in that format exactly. Every other progress line is the implementer's prose
+  and enters no judgment. work fills the values when it actually runs the thing.
+
+  ```text
+  YYYY-MM-DDTHH:MM:SSZ completion signal result: head: <full object ID of HEAD captured just before that run>; verdict: pass | fail | unverified; detail-json: <short JSON string>
+  YYYY-MM-DDTHH:MM:SSZ review result: head: <full object ID of HEAD captured just before that review input>; verdict: pass | objections | unverified; detail-json: <short JSON string>
+  ```
+
+  One line per run of the local completion signal and per clean review. A later line
+  replaces an earlier result and no earlier line is deleted.
+
+  `head:` is the full object ID of HEAD captured immediately before that run or review input.
+  **`head:` is not the containing commit** — it is the base the execution actually saw, so it
+  survives another flow's commit landing between the result and its anchor. When inputs
+  change, a rerun writes a new line with its own `head:` and deletes no earlier line.
+
+  Each result's revision anchor is the next canonical task commit that first carries that
+  line — a descendant that still contains the line is not the anchor. The result rides that
+  commit before the task diff changes and before this path leaves for a boundary or design
+  commit. The four shapes are instances of that one rule, not exceptions to it: a
+  straight-through final local `pass` and its clean review ride the final task commit;
+  `fail`, `objections`, or `unverified` rides that card's `NN.N wip: <what>` checkpoint; a
+  clean review on the remote-evidence path rides the `NN.N wip: evidence-wait` checkpoint;
+  and a departure that stales the card rides its `NN.N wip: upper-document change`
+  checkpoint.
+
+  A reader holding only Git joins each anchor to the cumulative task commits from the claim
+  through that anchor — the same card number's canonical `NN.N wip: <what>` commits and the
+  exact card-title commit — so two or more checkpoints still reconstruct one whole attempt,
+  and the interleaved boundary or design commits between them, whose subjects and owners
+  differ, are not task diff. When only remote evidence remains in the completion signal, the
+  six-verdict `remote evidence check` line below is its one producer: never write a generic
+  completion line for the same result. A `waived` or `not-applicable` review stays owned by
+  the card's `Review` field.
 - **Carry line.** After the upper-document feedback judgment and immediately before the
   final task commit, work reruns the state tool and reads the current claimed card's
   `claim: kind=mine` line. When it says `carry=absent`, append exactly the line below to

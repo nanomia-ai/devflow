@@ -332,6 +332,23 @@ function headingIndex(lines, heading) {
   return lines.findIndex((line) => normalizedHeading(line) === heading);
 }
 
+// One plan boundary. A card's one `## Progress log` heading separates the plan the user
+// approved from the record the task appends, so every judgment about the plan — its fields
+// and its approval freshness alike — reads only above that heading, and a `Field: value`
+// line below it is the implementer's prose. The slice always carries both halves of that
+// answer: the bounded text to parse, and the reason it cannot be trusted. So no consumer
+// invents a fallback. Two or more headings read above the first one; none at all reads the
+// whole card, because a legacy migration still has to see its fields. Either way the reason
+// travels with the card, and approval fails closed on it whether or not the tree is clean.
+function planSlice(text) {
+  if (text === null) return { reason: "card-diff" };
+  const lines = text.split("\n");
+  const first = headingIndex(lines, "## Progress log");
+  const count = lines.filter((line) => normalizedHeading(line) === "## Progress log").length;
+  if (count === 1) return { plan: lines.slice(0, first).join("\n") };
+  return { plan: count === 0 ? text : lines.slice(0, first).join("\n"), reason: "progress-heading" };
+}
+
 function statusless(component) {
   return component
     .replace(/\.wip(?:-[a-z0-9]{2,8})?(?=\.|$)/, "")
@@ -403,19 +420,22 @@ function parseCard(root, relative, closedFolder = false) {
       depends: { canonical: true, numbers: [], anomalies: [] },
       approval: null,
       review: null,
+      planReason: null,
       legacy: false,
       closedFolder: true,
     };
   }
   const text = readFile(root, relative);
   if (text === null) return null;
-  const cardFields = fields(text);
+  const slice = planSlice(text);
+  const cardFields = fields(slice.plan);
   const legacy = !cardFields.has("Approval") || !cardFields.has("Review");
   const depends = parseDepends(cardFields.get("Depends"), legacy);
   return {
     ...identity,
     path: relative,
     text,
+    planReason: slice.reason ?? null,
     fields: cardFields,
     depends,
     approval: cardFields.get("Approval") ?? null,
@@ -1465,6 +1485,9 @@ function integrity(snapshot, verify) {
 }
 
 function approvalState(snapshot, card) {
+  // A broken plan boundary is not a difference between two revisions, so no clean tree and
+  // no committed baseline makes it go away. It is judged before anything reads the fields.
+  if (card.planReason) return { value: "invalid", reasons: [card.planReason] };
   if (card.approval === "pending") return { value: "pending", reasons: [] };
   if (!APPROVAL_RE.test(card.approval ?? "")) return { value: "invalid", reasons: ["format"] };
   if (!gitPathExists(snapshot.root, snapshot.integration.ref, card.path)) return { value: "invalid", reasons: ["authority-path-missing"] };
@@ -1472,7 +1495,18 @@ function approvalState(snapshot, card) {
     ...gitNulList(snapshot.root, ["diff", "--name-only", "-z", "--no-renames", "--", "devflow/tree"]),
     ...gitNulList(snapshot.root, ["diff", "--cached", "--name-only", "-z", "--no-renames", snapshot.integration.ref, "--", "devflow/tree"]),
   ]);
-  return changed.has(card.path) ? { value: "invalid", reasons: ["card-diff"] } : { value: "effective", reasons: [] };
+  if (!changed.has(card.path)) return { value: "effective", reasons: [] };
+  // Only a card Git already reports as moved costs the three reads below.
+  const sides = [
+    gitFile(snapshot.root, snapshot.integration.ref, card.path),
+    gitFile(snapshot.root, "", card.path),
+    readFile(snapshot.root, card.path),
+  ].map(planSlice);
+  const reason = sides.find((side) => side.reason)?.reason;
+  if (reason) return { value: "invalid", reasons: [reason] };
+  return sides.every((side) => side.plan === sides[0].plan)
+    ? { value: "effective", reasons: [] }
+    : { value: "invalid", reasons: ["card-diff"] };
 }
 
 function cardJudgment(snapshot, card) {

@@ -174,9 +174,18 @@ Implement  ←→  append to the progress log (after completing one named card s
   ↓            session dies. Repeats of the same attempt can be batched into one line.
   ↓            On a long card, checkpoint-commit `02.2 wip:` at the same moments
   ↓            (the main session commits)
-Run the completion signal — actually run it. Record the result in the log
+Run the completion signal — actually run it. Record the result as the canonical `completion signal result:` line in the log
+  ↓            Capture the full `git rev-parse HEAD` immediately before the run and write it as that line's `head:`
+  ↓            That value keeps the base this run actually saw even when another flow's
+  ↓            commit lands between the result and its anchor
   ↓            A signal scoped to this capability's paths survives another flow's
   ↓            uncommitted code in the same working tree; a repository-wide one does not
+  ↓            On `fail` or `unverified`, land that line in an `NN.N wip: <what>` checkpoint
+  ↓            as its anchor before any further code change
+  ↓            An interruption before the anchor commit does not stale a result
+  ↓            — what stales it is a changed completion input or task diff
+  ↓            After an interruption with both unchanged, finish from that checkpoint; run
+  ↓            it again only when they changed or you cannot tell they are the same
   ↓
 Review — omit this step when the card's `Review` is `waived`. Omit `not-applicable` only
         when the diff contains no real-code change. Otherwise brief a clean
@@ -192,6 +201,13 @@ Review — omit this step when the card's `Review` is `waived`. Omit `not-applic
         the implementation has not been reconfirmed. No implementation backstory — the
         progress log IS the backstory. The code must explain itself.
         Recommended: T-high + low effort, kept short.
+        Capture the full `git rev-parse HEAD` immediately before assembling the review input
+        and record the returned result as the canonical `review result:` line, writing that
+        value as its `head:`. The line rides the next canonical task commit before the task
+        diff changes and before this path leaves for a boundary or design commit — the same
+        `NN.N wip: <what>` checkpoint on `objections` or `unverified`, the final task commit
+        for a straight-through final `pass`, and the `NN.N wip: evidence-wait` checkpoint for
+        a clean review on the remote-evidence path.
         Objection → fix → re-review. A fix that changed the diff re-runs the completion
         signal — against the changed code, an earlier pass is unverified. Failure ladder
         applies — 3 strikes calls the human
@@ -213,6 +229,10 @@ Carry check — immediately before the final task commit, rerun the state tool. 
         only when the current card's `claim: kind=mine` line says `carry=present`. When it
         says `carry=absent`, append the canonical `carry:` line to the progress log, rerun
         the tool, and confirm `present`
+        Every signal and review result is written before this line, and no machine
+        line follows it — a re-run after a human disposition included. That is what lets
+        the state tool read one last progress line. If inputs change after it,
+        run the signal and review again and append a new final `carry:`
   ↓
 Final task commit — the canonical 1 task = 1 commit discipline. On a remote-evidence pass,
         this commit replaces `evidence-wait` with `evidence-finalizing` while preserving

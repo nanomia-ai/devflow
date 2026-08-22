@@ -1993,3 +1993,74 @@ test("the state tool is called by relative path and none of the retired call pro
   // without a second call.
   assert.match(resume, /an empty zone still prints its line/);
 });
+
+// ---------------------------------------------------------------------------
+// A: the progress log's machine lines have one format owner, one producer, and a
+// revision anchor a reader with only Git can resolve.
+// ---------------------------------------------------------------------------
+
+// Prose wraps; meaning does not. Collapse runs of whitespace so a rewrap never turns a
+// contract assertion red and never lets a reworded rule pass.
+function flat(text) {
+  return text.replace(/\s+/g, " ");
+}
+
+test("the progress log has four machine formats in one canonical list", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ completion signal result: head: <[^>]+>; verdict: pass \| fail \| unverified; detail-json: <short JSON string>/);
+  assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ review result: head: <[^>]+>; verdict: pass \| objections \| unverified; detail-json: <short JSON string>/);
+  // One list names the closed set, so a fifth format cannot appear beside a bullet.
+  assert.match(principles, /`completion signal result:`[\s\S]{0,160}`review result:`[\s\S]{0,160}`carry:`[\s\S]{0,160}`remote evidence check:`/);
+  // Every other progress line stays the implementer's prose.
+  assert.match(principles, /[Ee]very other progress line is the implementer's prose/);
+  // The format lives here once; work only fills the values.
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  assert.doesNotMatch(work, /verdict: pass \| fail \| unverified; detail-json:/);
+  assert.doesNotMatch(work, /verdict: pass \| objections \| unverified; detail-json:/);
+});
+
+test("each progress result is anchored by the commit that first introduced its line", () => {
+  const principles = flat(fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8"));
+  // One rule, not a branch per path: the anchor is whichever task commit carries the line first.
+  assert.match(principles, /revision anchor is the next canonical task commit that first carries that line/);
+  assert.match(principles, /a descendant that still contains the line is not the anchor/);
+  assert.match(principles, /before the task diff changes and before this path leaves for a boundary or design commit/);
+  // The four shapes are instances of that one rule, not exceptions to it.
+  for (const instance of [
+    /straight-through final local `pass` and its clean review ride the final task commit/,
+    /`fail`, `objections`, or `unverified` rides that card's `NN\.N wip: [^`]*` checkpoint/,
+    /a clean review on the remote-evidence path rides the `NN\.N wip: evidence-wait` checkpoint/,
+    /a departure that stales the card rides its `NN\.N wip: upper-document change` checkpoint/,
+  ]) assert.match(principles, instance);
+  // The execution base is a field, so another flow's commit between run and anchor cannot move it.
+  assert.match(principles, /`head:` is the full object ID of HEAD captured immediately before that run or review input/);
+  assert.match(principles, /`head:` is not the containing commit/);
+  // Two or more checkpoints still reconstruct one attempt.
+  assert.match(principles, /cumulative task commits from the claim through that anchor/);
+  assert.match(principles, /interleaved boundary or design commits[\s\S]{0,120}are not task diff/);
+  // A rerun keeps its own base and deletes nothing.
+  assert.match(principles, /a rerun writes a new line with its own `head:` and deletes no earlier line/);
+  // Remote-only execution keeps its single existing producer.
+  assert.match(principles, /never write a generic completion line for the same result/);
+});
+
+test("work produces the two result lines and keeps carry the last machine line", () => {
+  const raw = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const work = flat(raw);
+  assert.match(work, /Record the result as the canonical `completion signal result:` line/);
+  assert.match(work, /record the returned result as the canonical `review result:` line/);
+  // work is the only place that can know the base it actually ran against.
+  assert.match(work, /Capture the full `git rev-parse HEAD` immediately before the run and write it as that line's `head:`/);
+  assert.match(work, /Capture the full `git rev-parse HEAD` immediately before assembling the review input/);
+  // The ordering that keeps `carryState()` free of parser exceptions.
+  assert.match(work, /Every signal and review result is written before this line, and no machine line follows it/);
+  assert.match(work, /run the signal and review again and append a new final `carry:`/);
+  // DD-24 stays input/diff freshness. An interruption alone does not stale a result.
+  assert.match(work, /An interruption before the anchor commit does not stale a result/);
+  // The reviewer never learns the attempt history.
+  const reviewer = fs.readFileSync(path.join(root, "skills", "work", "reviewer.md"), "utf8");
+  for (const text of [raw, reviewer]) {
+    assert.doesNotMatch(text, /PR_CONTEXT|commit trailer|pull request/i);
+  }
+  assert.match(work, /only the card \(Progress log section excluded\)/);
+});

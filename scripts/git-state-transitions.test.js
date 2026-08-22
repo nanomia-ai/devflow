@@ -321,3 +321,178 @@ test("three same-unit claims land as three clean path-scoped commits", (t) => {
     for (const p of shown) assert.ok(p.includes(`04.${n}-part`), `foreign path in claim: ${p}`);
   }
 });
+
+// The task attempt envelope: a reader with only Git resolves each progress result to the
+// commit that first introduced its line, then joins it to the task commits from the claim
+// through that anchor. Interleaved boundary commits are not part of that diff.
+const repoRoot = path.resolve(__dirname, "..");
+
+// The fixtures below write the canon's exact formats, so they only mean something while the
+// canon still owns them. `head:` is what lets a result name the base it actually ran against.
+function ownsResultFormats() {
+  const principles = fs.readFileSync(path.join(repoRoot, "skills", "principles", "SKILL.md"), "utf8");
+  assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ completion signal result: head: <[^>]+>; verdict: pass \| fail \| unverified; detail-json: <short JSON string>/,
+    "principles must own the completion signal result format, with head:, before a reader can join it");
+  assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ review result: head: <[^>]+>; verdict: pass \| objections \| unverified; detail-json: <short JSON string>/,
+    "principles must own the review result format, with head:, before a reader can join it");
+}
+
+const HEAD_OF = /^\S+ (?:completion signal|review) result: head: ([0-9a-f]{40,64});/;
+
+test("a progress result anchors to its first-introducing commit and joins the cumulative task commits", (t) => {
+  const { root, git, write } = makeRepo(t);
+  ownsResultFormats();
+
+  const pending = "devflow/tree/02-x/02.1-card.md";
+  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  const head = "# 02.1 card\nDestination: fixture becomes true\nForbidden: none\nCompletion signal: node --test\n\n## Progress log\n";
+  write(pending, head);
+  git("add", "-A");
+  git("commit", "-qm", "a split — 02-x");
+  fs.renameSync(path.join(root, pending), path.join(root, card));
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 claim");
+  const claim = git("rev-parse", "HEAD");
+
+  const append = (line) => fs.appendFileSync(path.join(root, card), `${line}\n`);
+  const base = git("rev-parse", "HEAD");
+  const failLine = `2026-01-01T00:00:01Z completion signal result: head: ${base}; verdict: fail; detail-json: "one"`;
+  const objectionLine = `2026-01-01T00:00:02Z review result: head: ${base}; verdict: objections; detail-json: "two"`;
+  const passLine = `2026-01-01T00:00:03Z completion signal result: head: ${base}; verdict: pass; detail-json: "three"`;
+  const reviewPassLine = `2026-01-01T00:00:04Z review result: head: ${base}; verdict: pass; detail-json: "four"`;
+
+  append(failLine);
+  write("src/a.txt", "a\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 wip: signal failed");
+  const firstCheckpoint = git("rev-parse", "HEAD");
+
+  // Another flow's boundary lands between the two attempts.
+  write("devflow/journal.md", "2026-01-01T00:00:00Z capability note: capability: 03; note-json: \"x\"\n");
+  git("add", "-A");
+  git("commit", "-qm", "a boundary — room upgrade");
+  const boundary = git("rev-parse", "HEAD");
+
+  append(objectionLine);
+  write("src/b.txt", "b\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 wip: review objections");
+  const secondCheckpoint = git("rev-parse", "HEAD");
+
+  append(passLine);
+  append(reviewPassLine);
+  append("2026-01-01T00:00:05Z carry: none");
+  write("src/c.txt", "c\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 card");
+  const finalCommit = git("rev-parse", "HEAD");
+
+  const introducedBy = (line) =>
+    git("log", "--reverse", "--format=%H", "-S", line, "--", card).split("\n").filter(Boolean)[0];
+  assert.equal(introducedBy(failLine), firstCheckpoint);
+  assert.equal(introducedBy(objectionLine), secondCheckpoint);
+  assert.equal(introducedBy(passLine), finalCommit);
+  assert.equal(introducedBy(reviewPassLine), finalCommit);
+  // A descendant that still contains the line is not the anchor.
+  assert.notEqual(introducedBy(failLine), finalCommit);
+
+  const taskCommits = (anchor) => git("log", "--reverse", "--format=%H%x00%s", `${claim}..${anchor}`)
+    .split("\n").filter(Boolean).map((row) => row.split("\0"))
+    .filter(([, subject]) => /^a 02\.1(?: wip: .+)?$/.test(subject) || subject === "a 02.1 card")
+    .map(([hash]) => hash);
+  const through = taskCommits(finalCommit);
+  assert.deepEqual(through, [firstCheckpoint, secondCheckpoint, finalCommit]);
+  assert.ok(!through.includes(boundary), "an interleaved boundary commit is not a task commit");
+
+  const pathsOf = (hash) => git("show", "--name-only", "--format=", hash).split("\n").filter(Boolean);
+  // One checkpoint alone loses the earlier attempt; the cumulative set does not.
+  assert.ok(!pathsOf(secondCheckpoint).includes("src/a.txt"));
+  const union = new Set(through.flatMap(pathsOf));
+  for (const p of ["src/a.txt", "src/b.txt", "src/c.txt", card]) assert.ok(union.has(p), `missing ${p}`);
+  assert.ok(!union.has("devflow/journal.md"), "the boundary commit's paths are not task diff");
+});
+
+// Adopted finding 1: between the run and the anchor, another flow's commit moves HEAD. The
+// result's own `head:` is what keeps each run pinned to the base it actually saw.
+test("two results sharing one anchor keep the separate bases they ran against", (t) => {
+  const { root, git, write } = makeRepo(t);
+  ownsResultFormats();
+
+  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  write(card, "# 02.1 card\nForbidden: none\n\n## Progress log\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 claim");
+  const claim = git("rev-parse", "HEAD");
+
+  const append = (line) => fs.appendFileSync(path.join(root, card), `${line}\n`);
+  // The signal runs against the claim tip.
+  const signalBase = git("rev-parse", "HEAD");
+  append(`2026-01-01T00:00:01Z completion signal result: head: ${signalBase}; verdict: fail; detail-json: "one"`);
+
+  // Another flow lands its own boundary while this card is still uncommitted.
+  write("devflow/journal.md", "2026-01-01T00:00:00Z capability note: capability: 03; note-json: \"x\"\n");
+  git("add", "--", "devflow/journal.md");
+  git("commit", "-qm", "b boundary — room upgrade");
+  const foreign = git("rev-parse", "HEAD");
+  assert.notEqual(foreign, signalBase);
+
+  // The review input is assembled after that, so it saw a different base.
+  const reviewBase = git("rev-parse", "HEAD");
+  append(`2026-01-01T00:00:02Z review result: head: ${reviewBase}; verdict: objections; detail-json: "two"`);
+  write("src/a.txt", "a\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 wip: signal failed");
+  const anchor = git("rev-parse", "HEAD");
+
+  const lines = fs.readFileSync(path.join(root, card), "utf8").split("\n").filter(Boolean);
+  const heads = lines.map((line) => HEAD_OF.exec(line)?.[1]).filter(Boolean);
+  assert.deepEqual(heads, [signalBase, reviewBase], "each result keeps the base it ran against");
+  assert.notEqual(heads[0], heads[1], "the interleaved commit must not collapse the two bases");
+
+  // One shared anchor, and the foreign commit is not part of this card's task diff.
+  const introducedBy = (line) =>
+    git("log", "--reverse", "--format=%H", "-S", line, "--", card).split("\n").filter(Boolean)[0];
+  for (const line of lines.filter((value) => HEAD_OF.test(value))) assert.equal(introducedBy(line), anchor);
+  const taskCommits = git("log", "--reverse", "--format=%H%x00%s", `${claim}..${anchor}`)
+    .split("\n").filter(Boolean).map((row) => row.split("\0"))
+    .filter(([, subject]) => /^a 02\.1(?: wip: .+)?$/.test(subject))
+    .map(([hash]) => hash);
+  assert.deepEqual(taskCommits, [anchor]);
+  assert.ok(!taskCommits.includes(foreign), "another flow's boundary commit is not task diff");
+  assert.ok(!git("show", "--name-only", "--format=", anchor).includes("devflow/journal.md"));
+});
+
+// Adopted finding 3: on the remote-evidence path the clean review runs before the
+// evidence-wait checkpoint, so that checkpoint is its anchor — not the later final commit.
+test("a remote-path clean review anchors to the evidence-wait checkpoint", (t) => {
+  const { root, git, write } = makeRepo(t);
+  ownsResultFormats();
+
+  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  write(card, "# 02.1 card\nReview: required\n\n## Progress log\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 claim");
+
+  const append = (line) => fs.appendFileSync(path.join(root, card), `${line}\n`);
+  const reviewBase = git("rev-parse", "HEAD");
+  const reviewLine = `2026-01-01T00:00:01Z review result: head: ${reviewBase}; verdict: pass; detail-json: "clean"`;
+  append(reviewLine);
+  append('2026-01-01T00:00:02Z remote evidence check: check-json: "gh run view"; verdict: unrun; detail-json: ""');
+  write("src/a.txt", "a\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 wip: evidence-wait");
+  const evidenceWait = git("rev-parse", "HEAD");
+
+  // The verdict arrives later and the final task commit still contains the review line.
+  append('2026-01-01T00:00:03Z remote evidence check: check-json: "gh run view"; verdict: pass; detail-json: "green"');
+  append("2026-01-01T00:00:04Z carry: none");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 card");
+  const final = git("rev-parse", "HEAD");
+
+  const introducedBy = (line) =>
+    git("log", "--reverse", "--format=%H", "-S", line, "--", card).split("\n").filter(Boolean)[0];
+  assert.equal(introducedBy(reviewLine), evidenceWait, "the evidence-wait checkpoint is the review's anchor");
+  assert.notEqual(introducedBy(reviewLine), final, "a descendant that still holds the line is not the anchor");
+  assert.ok(git("show", "--name-only", "--format=", evidenceWait).includes(card));
+});

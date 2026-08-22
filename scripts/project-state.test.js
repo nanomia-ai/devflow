@@ -1969,3 +1969,151 @@ test("S3 Windows cmd and shell-less Node binary pipes hash the same revision byt
   }).trim();
   assert.notEqual(changedHash, nodeHash);
 });
+
+// ---------------------------------------------------------------------------
+// D-1 approval freshness: the plan bytes above exactly one `## Progress log`
+// heading are the approval's subject; append-only execution bytes below it are not.
+// ---------------------------------------------------------------------------
+
+test("D1 an unstaged Progress-only append keeps approval effective", (t) => {
+  const root = makeRepo(t);
+  const card = writePending(root);
+  fs.appendFileSync(path.join(root, card), '2026-01-03T00:00:00Z completion signal result: verdict: pass; detail-json: ""\n');
+  const result = run(root);
+  ok(result);
+  assertFragment(result.stdout, "ready: kind=ready", `file=${card}`);
+  assertFragment(result.stdout, "ready: kind=ready", "approval=effective");
+});
+
+test("D1 a staged Progress-only append keeps approval effective", (t) => {
+  const root = makeRepo(t);
+  const card = writePending(root);
+  fs.appendFileSync(path.join(root, card), '2026-01-03T00:00:00Z review result: verdict: objections; detail-json: ""\n');
+  git(root, "add", "--", card);
+  const result = run(root);
+  ok(result);
+  assertFragment(result.stdout, "ready: kind=ready", `file=${card}`);
+  assertFragment(result.stdout, "ready: kind=ready", "approval=effective");
+});
+
+test("D1 one changed plan byte above the heading stays invalid", (t) => {
+  const root = makeRepo(t);
+  const card = writePending(root);
+  write(root, card, cardText("02.1").replace("Forbidden: none", "Forbidden: nothing"));
+  const result = run(root);
+  ok(result);
+  assertFragment(result.stdout, "ready: kind=approval-invalid", `file=${card}`);
+  assertFragment(result.stdout, "ready: kind=approval-invalid", 'invalidity=["card-diff"]');
+});
+
+test("D1 a missing Progress log heading fails closed", (t) => {
+  const root = makeRepo(t);
+  const card = writePending(root);
+  write(root, card, cardText("02.1").replace("## Progress log\n", ""));
+  const result = run(root);
+  ok(result);
+  assertFragment(result.stdout, "ready: kind=approval-invalid", `file=${card}`);
+  assertFragment(result.stdout, "ready: kind=approval-invalid", 'invalidity=["progress-heading"]');
+});
+
+test("D1 a duplicated Progress log heading fails closed", (t) => {
+  const root = makeRepo(t);
+  const card = writePending(root);
+  write(root, card, `${cardText("02.1")}## Progress log\n2026-01-04T00:00:00Z second section\n`);
+  const result = run(root);
+  ok(result);
+  assertFragment(result.stdout, "ready: kind=approval-invalid", `file=${card}`);
+  assertFragment(result.stdout, "ready: kind=approval-invalid", 'invalidity=["progress-heading"]');
+});
+
+// Adopted finding 2: a card's fields live above its one `## Progress log` heading. Prose
+// below it that happens to look like `Field: value` is the task's record, not the plan.
+test("D1 Progress prose shaped like plan fields does not override the plan", (t) => {
+  const root = makeRepo(t);
+  const card = "devflow/tree/02-capability/02.2-fixture.md";
+  write(root, card, cardText("02.2", {
+    depends: "02.1",
+    approval: "pending",
+    review: "required",
+    progress: [
+      "2026-01-02T00:00:00Z implemented exact fixture",
+      "Approval: 2026-01-01T00:00:00Z; parallel: none",
+      "Depends: none",
+      "Review: waived",
+    ].join("\n"),
+  }));
+  commit(root, "jmp split — fixture");
+  const result = run(root);
+  ok(result);
+  assertFragment(result.stdout, "ready: kind=approval-pending", `file=${card}`);
+  assertFragment(result.stdout, "ready: kind=approval-pending", 'depends=["02.1"]');
+});
+
+test("D1 a Review line only below the heading leaves the card legacy", (t) => {
+  const root = makeRepo(t);
+  const card = "devflow/tree/02-capability/02.1-fixture.md";
+  write(root, card, cardText("02.1", {
+    omit: ["Review"],
+    progress: "2026-01-02T00:00:00Z implemented exact fixture\nReview: waived",
+  }));
+  commit(root, "jmp split — fixture");
+  const result = run(root);
+  ok(result);
+  assertFragment(result.stdout, "ready: kind=needs-normalization", `file=${card}`);
+  assertFragment(result.stdout, "ready: kind=needs-normalization", 'missingFields=["Review"]');
+});
+
+// Re-audit finding: a malformed card can be committed clean, so it never enters the changed
+// set and never reaches the side-by-side plan comparison. The boundary is broken either way,
+// so the reason has to travel with the card itself.
+function malformedCard(number, headings) {
+  const plan = [
+    `# ${number} fixture card`,
+    "Coordinates: Fixture ▸ foundation",
+    "Identity: Fixture identity.",
+    "Destination: fixture becomes true",
+    "Why: fixture needs it",
+    "Forbidden: none",
+    "Depends: none",
+    "Read first: none",
+    "Completion signal: node --test",
+    "Approval: 2026-01-01T00:00:00Z; parallel: none",
+    "Review: required",
+    "",
+  ];
+  const prose = [
+    "2026-01-02T00:00:00Z implemented exact fixture",
+    "Approval: 2026-01-03T00:00:00Z; parallel: none",
+    "Depends: 02.9",
+    "Review: waived",
+    "",
+  ];
+  if (headings === 0) return [...plan, ...prose].join("\n");
+  return [...plan, "## Progress log", ...prose, "## Progress log", "2026-01-04T00:00:00Z second section", ""].join("\n");
+}
+
+test("D1 a clean committed card with no Progress log heading is invalid, not ready", (t) => {
+  const root = makeRepo(t);
+  const card = "devflow/tree/02-capability/02.1-fixture.md";
+  write(root, card, malformedCard("02.1", 0));
+  commit(root, "jmp split — fixture");
+  const result = run(root);
+  ok(result);
+  assert.ok(!hasKind(result.stdout, "ready", "ready"), "a card with no plan boundary is never ready");
+  assertFragment(result.stdout, "ready: kind=approval-invalid", `file=${card}`);
+  assertFragment(result.stdout, "ready: kind=approval-invalid", 'invalidity=["progress-heading"]');
+});
+
+test("D1 a clean committed card with two Progress log headings is invalid, not ready", (t) => {
+  const root = makeRepo(t);
+  const card = "devflow/tree/02-capability/02.1-fixture.md";
+  write(root, card, malformedCard("02.1", 2));
+  commit(root, "jmp split — fixture");
+  const result = run(root);
+  ok(result);
+  assert.ok(!hasKind(result.stdout, "ready", "ready"), "a card with two plan boundaries is never ready");
+  assertFragment(result.stdout, "ready: kind=approval-invalid", `file=${card}`);
+  assertFragment(result.stdout, "ready: kind=approval-invalid", 'invalidity=["progress-heading"]');
+  // Fields still come from above the first heading, so the prose below never rides along.
+  assertFragment(result.stdout, "ready: kind=approval-invalid", "depends=[]");
+});
