@@ -1730,6 +1730,7 @@ function designNoteRoutes(snapshot) {
     marker: line.raw, capability: line.capability, note: line.note, card: line.card, code: line.code,
     ...extra, ...(extra.reason ? { recovery: producerReasons.has(extra.reason) ? "producer" : "external" } : {}),
   });
+  const unresolved = (reason) => ({ marker: "unresolved", reason, recovery: "external" });
   const working = snapshot.journal.filter((item) => item.kind === "capability-note" && item.valid && item.card !== undefined);
   const changed = snapshot.status.map((entry) => entry.path);
   const journalChanged = changed.includes("devflow/journal.md");
@@ -1746,7 +1747,7 @@ function designNoteRoutes(snapshot) {
     }
     if (headOwnsJournal === false) return { routes: [], prefix: null };
     const routes = working.map((line) => project(line, { reason: "head-journal-unavailable" }));
-    if (routes.length === 0 && journalChanged) routes.push({ marker: "unresolved", reason: "head-journal-unavailable" });
+    if (routes.length === 0 && journalChanged) routes.push(unresolved("head-journal-unavailable"));
     return { routes, prefix: null };
   }
   let headLines;
@@ -1754,7 +1755,7 @@ function designNoteRoutes(snapshot) {
     headLines = normalizeFileText(decodeUtf8(shown.stdout, "HEAD:devflow/journal.md")).split("\n");
   } catch {
     const routes = working.map((line) => project(line, { reason: "head-journal-undecodable" }));
-    if (routes.length === 0 && journalChanged) routes.push({ marker: "unresolved", reason: "head-journal-undecodable" });
+    if (routes.length === 0 && journalChanged) routes.push(unresolved("head-journal-undecodable"));
     return { routes, prefix: null };
   }
   const routes = [];

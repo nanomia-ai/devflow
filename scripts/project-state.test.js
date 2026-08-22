@@ -2861,6 +2861,7 @@ test("C design an unreadable HEAD journal blocks instead of falling to the claim
   fs.rmSync(path.join(scene.root, ".git", "objects", blob.slice(0, 2), blob.slice(2)));
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-note", "reason=head-journal-unavailable");
+  assertFragment(result.stdout, "marker: kind=design-note", "recovery=external");
   assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
 });
 
@@ -2870,5 +2871,17 @@ test("C design an interrupted prefix with an unreadable HEAD journal still block
   fs.rmSync(path.join(scene.root, ".git", "objects", blob.slice(0, 2), blob.slice(2)));
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-note", "reason=head-journal-unavailable");
+  assertFragment(result.stdout, "marker: kind=design-note", "recovery=external");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design an undecodable HEAD journal classifies its unresolved route as external", (t) => {
+  const root = makeRepo(t);
+  fs.writeFileSync(path.join(root, "devflow", "journal.md"), Buffer.from([0xff, 0xfe, 0x0a]));
+  commit(root, "jmp fixture — undecodable HEAD journal");
+  write(root, "devflow/journal.md", "working journal changed\n");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "reason=head-journal-undecodable");
+  assertFragment(result.stdout, "marker: kind=design-note", "recovery=external");
   assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
 });
