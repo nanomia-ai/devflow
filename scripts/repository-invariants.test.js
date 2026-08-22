@@ -1572,6 +1572,10 @@ test("HANDOFF carries only a recomputable pointer", () => {
   assert.doesNotMatch(work, /^## Traps$/m);
   assert.doesNotMatch(work, /If all four are empty, an empty file is fine/);
   assert.match(work, /`Next single step` is mandatory and holds one tree path/);
+  assert.match(work, /the exact path named by the tool's\nfirst actionable tree route, which is that capability folder when verification is next, and it\nis not limited to a card or a waiting file/,
+    "the pointer is whatever the first actionable tree route names, not a card-only field");
+  assert.doesNotMatch(work, /no pending and no claimed card/,
+    "`none` is the absence of an actionable tree path, not the absence of cards");
   assert.match(work, /The first time this room's HANDOFF still carries a `## Just learned`, `## Traps`, or\n`## Open decisions` section,\s+land that content before overwriting/);
   assert.match(work, /Do not backfill carry lines\nonto older `\.done\.` cards/);
 });

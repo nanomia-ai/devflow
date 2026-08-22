@@ -562,12 +562,14 @@ context only:
 ## Next single step          <!-- one tree path | none -->
 ```
 
-`Next single step` is mandatory and holds one tree path. The mechanical next card is owned
-by the tool's `ready:` order, so write that value as it stands, and write a different path
-only when this session heard a fresher preference from the user — that difference is all
-HANDOFF adds. Write `none` only when the tree has no pending and no claimed card
-at all. Add no other section to this file, so that when two sessions of one room overwrite
-each other, the only thing lost is a value that is recomputed. Anything else this session
+`Next single step` is mandatory and holds one tree path — the exact path named by the tool's
+first actionable tree route, which is that capability folder when verification is next, and it
+is not limited to a card or a waiting file. The mechanical next step is owned by the tool's
+routing order, so write that value as it stands, and write a different path only when this
+session heard a fresher preference from the user — that difference is all HANDOFF adds.
+Write `none` only when there is no actionable tree path at all.
+Add no other section to this file, so that when two sessions of one room overwrite each
+other, the only thing lost is a value that is recomputed. Anything else this session
 learned lands durably instead — the card's carry line inside this unit, a journal
 `capability note` about another capability, an attributed journal line for an open item a
 person must decide.

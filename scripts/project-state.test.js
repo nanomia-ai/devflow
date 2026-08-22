@@ -1122,6 +1122,86 @@ test("T4 selection reason uses canonical order when no HANDOFF points", (t) => {
   assertFragment(result.stdout, "handoff:", "date=none stale=0 nextStep=none");
 });
 
+// Freshness is measured against the history this room claimed. With nothing claimed there is
+// no such history, and `git log -- ` with no path is the whole repository, so the question
+// itself has to be skipped rather than asked wider.
+test("T4 a room with no claimed card is not staled by history it never claimed", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha"] });
+  const waiting = "devflow/tree/02-Alpha.md";
+  write(root, waiting, "# 02 Alpha\n");
+  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
+  commit(root, "jmp waiting capability handoff");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "handoff:", `date=2000-01-01T00:00:00Z stale=0 nextStep=${waiting}`);
+  assertFragment(result.stdout, "report:", "selectionReason=last-handoff");
+});
+
+// A waiting capability file, the folder it opens into, and any status-suffixed form of either
+// are one durable tree identity. A HANDOFF written before the folder existed still names the
+// same subject, and the routable folder is what the layer route hands back.
+test("T4 a HANDOFF path survives its capability opening into the same-identity folder", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha"] });
+  const waiting = "devflow/tree/02-Alpha.md";
+  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
+  write(root, "devflow/tree/02-Alpha/02.1-fixture.done.md", cardText("02.1"));
+  commit(root, "jmp layer opening — 02 Alpha");
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("handoff-path-resolves-"), false, result.stdout);
+  assertFragment(result.stdout, "handoff:", `stale=0 nextStep=${waiting}`);
+  assertFragment(result.stdout, "report:", "selectionReason=last-handoff");
+  assertFragment(result.stdout, "layer: kind=children-done", "folder=devflow/tree/02-Alpha");
+
+  // the same identity written as the folder it now is, trailing separator and all
+  write(root, "devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\ndevflow/tree/02-Alpha/\n");
+  const folderForm = run(root); ok(folderForm);
+  assert.equal(folderForm.stdout.includes("handoff-path-resolves-"), false, folderForm.stdout);
+  assertFragment(folderForm.stdout, "handoff:", "stale=0 nextStep=devflow/tree/02-Alpha/");
+
+  fs.renameSync(path.join(root, "devflow/tree/02-Alpha"), path.join(root, "devflow/tree/02-Alpha.done"));
+  const statusForm = run(root); ok(statusForm);
+  assert.equal(statusForm.stdout.includes("handoff-path-resolves-"), false, statusForm.stdout);
+  assertFragment(statusForm.stdout, "handoff:", "stale=0 nextStep=devflow/tree/02-Alpha/");
+});
+
+test("T4 a waiting file and its folder at once is an ambiguity, not a match", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha"] });
+  const waiting = "devflow/tree/02-Alpha.md";
+  write(root, waiting, "# 02 Alpha\n");
+  write(root, "devflow/tree/02-Alpha/02.1-fixture.md", cardText("02.1"));
+  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
+  commit(root, "jmp waiting file and folder at once");
+  const result = run(root); ok(result);
+  assert.ok(result.stdout.includes("reason=handoff-path-resolves-2"), result.stdout);
+  assertFragment(result.stdout, "handoff:", "stale=1");
+  assertFragment(result.stdout, "report:", "selectionReason=canonical-order");
+});
+
+// The path regex is ASCII, so a Unicode capability reaches nextStep through the raw-line
+// fallback — and the same identity has to hold there. Escaped, because this file is a deploy
+// artifact and carries no Korean of its own.
+test("T4 a Unicode waiting path resolves through the raw-line fallback into its folder", (t) => {
+  const name = "\uB2A5\uB825";
+  const root = makeRepo(t, { capabilities: [name] });
+  const waiting = `devflow/tree/02-${name}.md`;
+  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
+  write(root, `devflow/tree/02-${name}/02.1-fixture.done.md`, cardText("02.1"));
+  commit(root, "jmp layer opening — unicode capability");
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("handoff-path-resolves-"), false, result.stdout);
+  assertFragment(result.stdout, "handoff:", `stale=0 nextStep=${waiting}`);
+  assertFragment(result.stdout, "layer: kind=children-done", `folder=devflow/tree/02-${name}`);
+});
+
+test("T4 the claim-history query cannot run with an empty claimed path list", () => {
+  const body = /\nfunction parseHandoff\(snapshot\) \{\n([\s\S]*?)\n\}\n/.exec(fs.readFileSync(TOOL, "utf8"))?.[1];
+  assert.ok(body, "parseHandoff must be findable in the deployed tool");
+  const query = '"log", "-1", "--format=%cI"';
+  assert.equal(body.split(query).length - 1, 1, "there is exactly one claim-history query to guard");
+  const guard = /if \(date !== null && claimed\.length > 0\) \{/;
+  assert.match(body, guard, "a non-empty claimed path list is what opens the query");
+  assert.ok(body.indexOf(query) > body.search(guard), "the query sits inside that guard");
+});
+
 const BASELINE_FIELDS = [
   ["expectedSet", () => [{ number: 1, path: "devflow/project/capabilities/01-foundation.md", retired: false }]],
   ["pathState", () => ({ "devflow/project/capabilities/01-foundation.md": "present" })],

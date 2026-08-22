@@ -359,9 +359,19 @@ function normalizedStatusPath(relative) {
   return relative.split("/").map(statusless).join("/");
 }
 
-function handoffPathMatches(cards, waitingFiles, nextStep) {
-  return [...cards.map((card) => card.path), ...waitingFiles]
-    .filter((relative) => normalizedStatusPath(relative) === normalizedStatusPath(nextStep));
+// A waiting capability file, the folder it opens into, and every status-suffixed form of
+// either are one durable tree identity: the status suffix on each component and the terminal
+// `.md` are notation, not subject. A HANDOFF path written before the folder existed still
+// names it — and two live paths sharing one identity is not a match but an ambiguity, which
+// the callers below fail closed on rather than pick from.
+function treeIdentity(relative) {
+  return normalizedStatusPath(relative.replace(/\/+$/, "")).replace(/\.md$/, "");
+}
+
+function handoffPathMatches(snapshot, nextStep) {
+  const identity = treeIdentity(nextStep);
+  return [...snapshot.cards.map((card) => card.path), ...snapshot.waitingFiles, ...snapshot.directories]
+    .filter((relative) => treeIdentity(relative) === identity);
 }
 
 function cardIdentity(relative) {
@@ -809,7 +819,8 @@ function parseJournal(text) {
     .map((item) => parseJournalLine(item.line, item.index)).filter(Boolean);
 }
 
-function parseHandoff(root, room, cards, waitingFiles) {
+function parseHandoff(snapshot) {
+  const { root, room } = snapshot;
   if (!room) return { date: null, stale: true, nextStep: null, openItems: [] };
   const relative = `devflow/users/${room.id}/HANDOFF.md`;
   const text = readFile(root, relative);
@@ -823,11 +834,15 @@ function parseHandoff(root, room, cards, waitingFiles) {
   const legacy = extractSection(text, "## Open decisions");
   const openItems = legacy && legacy !== "None." ? legacy.split("\n").filter((line) => line.trim()).map((line) => line.trim()) : [];
   let stale = date === null;
-  if (date !== null) {
-    const newest = gitLine(root, ["log", "-1", "--format=%cI", "--", ...cards.filter((card) => card.claimant === room.id).map((card) => card.path)], { allowFailure: true });
+  // Freshness is measured against the history this room claimed, and with nothing claimed
+  // there is none: `git log -- ` with no path asks the whole repository instead, which stales
+  // a HANDOFF written a moment ago.
+  const claimed = snapshot.cards.filter((card) => card.claimant === room.id).map((card) => card.path);
+  if (date !== null && claimed.length > 0) {
+    const newest = gitLine(root, ["log", "-1", "--format=%cI", "--", ...claimed], { allowFailure: true });
     if (newest && Date.parse(newest) > Date.parse(date)) stale = true;
   }
-  if (nextStep && handoffPathMatches(cards, waitingFiles, nextStep).length !== 1) stale = true;
+  if (nextStep && handoffPathMatches(snapshot, nextStep).length !== 1) stale = true;
   return { date, stale, nextStep, openItems };
 }
 
@@ -981,7 +996,7 @@ async function loadSnapshot(options) {
     openOperation: openGitOperation(root),
     worktrees: gitText(root, ["worktree", "list", "--porcelain"], { allowFailure: true }).split("\n").filter((line) => line.startsWith("worktree ")).length,
   };
-  snapshot.handoff = parseHandoff(root, room, cards, waitingFiles);
+  snapshot.handoff = parseHandoff(snapshot);
   snapshot.revisions = await revisions(snapshot);
   snapshot.baseline = await baselineProjection(snapshot, options.capability);
   return snapshot;
@@ -1391,7 +1406,7 @@ function integrity(snapshot, verify) {
     }
   }
   if (snapshot.handoff.nextStep) {
-    const matches = handoffPathMatches(snapshot.cards, snapshot.waitingFiles, snapshot.handoff.nextStep);
+    const matches = handoffPathMatches(snapshot, snapshot.handoff.nextStep);
     if (matches.length !== 1) report(5, false, { path: snapshot.handoff.nextStep, reason: `handoff-path-resolves-${matches.length}` });
   }
   for (const card of snapshot.cards.filter((item) => item.bare)) report(6, false, { path: card.path, reason: "bare-wip" });
