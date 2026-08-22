@@ -335,14 +335,14 @@ function pathSetRevision(root, paths) {
   return execFileSync("git", ["hash-object", "--stdin"], { cwd: root, input: tree, encoding: "utf8" }).trim();
 }
 
-function rootVerify(root, verdict, { events = true } = {}) {
+function rootVerify(root, verdict, { events = true, executed = null } = {}) {
   const revisions = currentRevisions(root);
   write(root, "devflow/tree/verify.md", `# Verification · product
 Product revision: ${revisions.productRevision}
 Verification revision: ${revisions.verificationRevision}
 Code revision: ${revisions.codeRevision}
 Capability revision: not-applicable
-Verdict: ${verdict}
+${executed === null ? "" : `Executed: ${executed}\n`}Verdict: ${verdict}
 New entries: 0
 Failure history:
 ## Audit
@@ -353,7 +353,7 @@ ${events ? "- source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key
   commit(root, "jmp boundary — product verification result");
 }
 
-function capabilityVerify(root, relative, { failures = "", audit = "- not run", retrospective = "- not run", verdict = "pass" } = {}) {
+function capabilityVerify(root, relative, { failures = "", audit = "- not run", retrospective = "- not run", verdict = "pass", executed = "fixture" } = {}) {
   const revisions = currentRevisions(root);
   write(root, relative, `# Verification · fixture · 2026-08-20
 Product revision: ${revisions.productRevision}
@@ -361,7 +361,7 @@ Verification revision: ${revisions.verificationRevision}
 Code revision: ${revisions.codeRevision}
 Capability revision: unresolved
 Scenario: fixture
-Executed: fixture
+Executed: ${executed}
 Verdict: ${verdict}
 New entries: ${failures === "" || failures === "None." ? 0 : 1}
 Failure history:
@@ -620,6 +620,30 @@ function mappingScene(t, number) {
 function read(root, relative) {
   return fs.readFileSync(path.join(root, ...relative.split("/")), "utf8");
 }
+
+test("E channel-unavailable results wait for an explicit verification request", (t) => {
+  const reason = "unverified: channel unavailable — browser attach; timeout=30s";
+
+  const capabilityRoot = mappingScene(t, 34);
+  capabilityVerify(capabilityRoot, "devflow/tree/02-capability/verify.md", {
+    verdict: "unverified",
+    executed: reason,
+  });
+  const capability = run(capabilityRoot); ok(capability);
+  assert.equal(hasKind(capability.stdout, "layer", "children-done"), false, capability.stdout);
+
+  const productRoot = completedRepo(t);
+  rootVerify(productRoot, "unverified", { events: false, executed: reason });
+  const product = run(productRoot); ok(product);
+  assert.equal(hasKind(product.stdout, "product", "unverified"), false, product.stdout);
+  assert.equal(hasKind(product.stdout, "event", "new"), false, product.stdout);
+
+  write(productRoot, "devflow/journal.md", "2026-08-23T00:00:00Z product verification requested\n");
+  commit(productRoot, "jmp boundary — product verification requested");
+  const requested = run(productRoot); ok(requested);
+  assert.equal(hasKind(requested.stdout, "event", "product-requested"), true, requested.stdout);
+  assert.equal(nextOf(requested.stdout), "event.product-requested", requested.stdout);
+});
 
 test("gate A feeds every canon-reserved journal line to the deployed parser", { timeout: 30_000 }, async (t) => {
   const timestamp = "2026-08-21T00:00:00Z";

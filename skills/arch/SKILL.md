@@ -167,10 +167,21 @@ Brownfield: no
 frontend: none | needed
 verify_channel:
   work server: <run command + port>     # verification always happens here
-  means: <exact commands the verifier drives> — confirmed in a clean context by running one of them verbatim: `<that same command>` exit <code>
+  means: <exact commands the verifier drives> — confirmed in a clean context by running one of them verbatim: `<that same command>` exit <code>; read probe: `<the exact command run>` → <the actual rendered element read, with its value>; interaction probe: `<the exact command run>` → <the change it caused>
 integration: <branch>                   # where minting, closure, and binding decisions land. The current branch when one person works alone
 merge: merge-commit | rebase            # Squash forbidden — it erodes NN.N history
 ```
+
+`means` is confirmed only by a record of the channel actually running. Help output, a
+capability listing, the binary existing, and an attach that
+exits 0 are none of them confirmation — all four come out the same way while the channel
+never reached the screen. When `frontend: needed`, a clean context must
+**read one actually rendered element** and
+**succeed at one real interaction** through the chosen channel before arch writes it down as
+confirmed. Write both probes' exact commands and observed outcomes on that line verbatim —
+the element read down to its value, the interaction down to the change it caused. Failing
+either one leaves the channel unconfirmed, and an unconfirmed channel gets no value written:
+report to the user what did not work.
 
 `Brownfield` records whether implementation code existed before devflow entered this
 repository. arch writes `no` for a new project; adopt writes `yes` when deriving from

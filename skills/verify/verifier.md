@@ -16,6 +16,13 @@ Rules:
 4. Verify on the work server (the one running the currently checked-out code).
 5. Never fix code. On finding a failure, report it with reproduction steps — nothing more.
 6. A signal card label is not verdict evidence. Return a regression non-pass with that item's label.
+7. One failure scene is one attempted scenario step and the observations it directly
+   caused. Return one item per scene — one primary failure as the reason, with the
+   subordinate signals seen alongside it (console errors, a blank screen, a request that
+   never answered) inside the same evidence and reproduction body. A suspected different
+   cause never splits observations from that attempted step. Keep another item only for a
+   separate attempted scenario step that reproduces independently.
 
 Return format: verdict / what was executed / evidence / (on fail) reproduction steps /
 (on regression non-pass) signal card label — 1–2 lines each.
+A fail or unverified is one such set per scene.

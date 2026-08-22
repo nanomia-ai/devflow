@@ -1228,12 +1228,14 @@ function verifyProjection(snapshot) {
     const folder = relative === "devflow/tree/verify.md" ? null : relative.split("/").slice(0, 3).join("/");
     const folderInfo = folderIdentity(folder ?? "");
     const current = ["Product revision", "Verification revision", "Code revision", "Capability revision"].every((name) => recordFields.has(name));
+    const channelUnavailable = /^unverified: channel unavailable — .+; timeout=.+$/.test(recordFields.get("Executed") ?? "");
     const failureIds = [...(failure?.lines.join("\n") ?? "").matchAll(/source id:\s*(\d+)[^\n]*failure:/g)].map((match) => Number(match[1]));
     result.records.push({
       path: relative,
       current,
       target: folderInfo ? Number(folderInfo.number) : "product",
       capabilityDone: folderInfo?.status === "done",
+      channelUnavailable,
       failureMax: failureIds.length > 0 ? Math.max(...failureIds) : null,
       auditKeys: eventKeys(audit ?? { lines: [] }),
       retrospectiveKeys: eventKeys(retrospective ?? { lines: [] }),
@@ -1283,6 +1285,7 @@ function verifyProjection(snapshot) {
         product: recordFields.get("Product revision") ?? null,
         verification: recordFields.get("Verification revision") ?? null,
         code: recordFields.get("Code revision") ?? null,
+        channelUnavailable,
         current,
       };
     }
@@ -2099,8 +2102,8 @@ function evaluateZones(snapshot) {
   const pendingEvents = verify.eventPending.filter((item) => !(item.role === "Audit" && outsideDiff.length > 0));
   const newEvents = [];
   const rootRecord = verify.records.find((record) => record.target === "product");
-  if (verify.root?.verdict && rootRecord?.current && !rootRecord.auditKeys.has("product")) newEvents.push({ role: "Audit", target: "product", key: "product" });
-  if (verify.root?.verdict && rootRecord?.current && !rootRecord.retrospectiveKeys.has("product")) newEvents.push({ role: "Retrospective", target: "product", key: "product" });
+  if (verify.root?.verdict && !verify.root.channelUnavailable && rootRecord?.current && !rootRecord.auditKeys.has("product")) newEvents.push({ role: "Audit", target: "product", key: "product" });
+  if (verify.root?.verdict && !verify.root.channelUnavailable && rootRecord?.current && !rootRecord.retrospectiveKeys.has("product")) newEvents.push({ role: "Retrospective", target: "product", key: "product" });
   for (const record of verify.records.filter((item) => item.target !== "product" && item.current && item.capabilityDone)) {
     if (record.failureMax !== null) {
       const key = `post-failure through ${record.failureMax}`;
@@ -2137,6 +2140,8 @@ function evaluateZones(snapshot) {
       ...children.folders.filter((folder) => folder.status !== "stale").map((folder) => folder.status),
     ];
     if (activeStatuses.length > 0 && activeStatuses.every((status) => status === "done")) {
+      const capabilityRecord = verify.records.find((record) => record.target === Number(identity.number));
+      if (directory.split("/").length === 3 && Number(identity.number) !== 1 && capabilityRecord?.channelUnavailable) continue;
       if (directory.split("/").length === 3 && Number(identity.number) !== 1) {
         layerSummary.childrenDone += 1;
         const carryFacts = children.cards.filter((card) => card.status === "done").flatMap((card) => {
@@ -2205,7 +2210,7 @@ function evaluateZones(snapshot) {
       code: snapshot.revisions.code,
     });
     else if (rootVerify.verdict === "fail") addEntry(zones, "product", "fail", { reasons: ["recorded-fail"] });
-    else if (rootVerify.verdict === "unverified") addEntry(zones, "product", "unverified", { reasons: ["recorded-unverified"] });
+    else if (rootVerify.verdict === "unverified" && !rootVerify.channelUnavailable) addEntry(zones, "product", "unverified", { reasons: ["recorded-unverified"] });
     else if (rootVerify.verdict === "pass" && newEvents.length === 0) addEntry(zones, "complete", "product-pass", { awaitingDecisionCount: verify.eventDecision.length });
   }
   if (snapshot.archFields.get("Brownfield") === "yes" && snapshot.cards.every((card) => ["done", "stale"].includes(card.status))

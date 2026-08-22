@@ -2745,3 +2745,66 @@ test("composed scenes each reach one end-to-end action", () => {
     assert.deepEqual(matched, [expected], `${what}: the flat predicates disagree`);
   }
 });
+
+// E1 — a channel that only answered `--help` was recorded as confirmed, and the verifier
+// then met a screen it could never read.
+test("a screen verify channel is confirmed only by a read probe and an interaction probe", () => {
+  const arch = fs.readFileSync(path.join(root, "skills", "arch", "SKILL.md"), "utf8");
+  const archKo = fs.readFileSync(path.join(root, "skills", "arch", "SKILL_ko.md"), "utf8");
+  const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  // both probes live on the existing verify_channel `means` line — no second channel home
+  assert.match(arch, /^ {2}means:.*read probe: .*interaction probe: /m);
+  // written as escapes so this deploy-scanned file itself stays free of Korean
+  assert.match(archKo, new RegExp("^ {2}\\uD655\\uC778 \\uC218\\uB2E8:.*\\uC77D\\uAE30 \\uD504\\uB85C\\uBE0C: .*\\uC0C1\\uD638\\uC791\\uC6A9 \\uD504\\uB85C\\uBE0C: ", "m"));
+  assert.equal(count(arch, /^verify_channel:$/gm), 1);
+  assert.equal(count(archKo, /^verify_channel:$/gm), 1);
+  // the four things that are not confirmation are named, so the negative is checkable
+  assert.match(arch, /Help output, a\ncapability listing, the binary existing, and an attach that\nexits 0 are none of them confirmation/);
+  assert.match(arch, /read one actually rendered element\*\* and\n\*\*succeed at one real interaction\*\*/);
+  // the stored line has to name the probes and what was observed, not just that it passed
+  assert.match(arch, /exact commands and observed outcomes on that line verbatim/);
+  assert.match(arch, /leaves the channel unconfirmed/);
+  // old project records are checked by the consumer, not trusted forever
+  assert.match(verify, /accept the channel record only when its `means` line contains both\n {3}`read probe:` and `interaction probe:`/);
+  assert.match(verify, /return to arch to reconfirm and replace that one\n {3}channel line; write no verification Record or marker and do not brief the verifier/);
+});
+
+// E2 — DD-81. A tool failure filed as product evidence multiplied impossible cards; the
+// product layer was still walking the DD-68 ladder with it.
+test("a channel that could not be acquired is not product evidence at either layer", () => {
+  const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  // the reason keeps its one home and its one form
+  assert.equal(count(verify, /unverified: channel unavailable — /g), 1);
+  assert.match(verify, /`unverified: channel unavailable — <the exact command that failed>; timeout=<observed value>`/);
+  assert.match(verify, /write `unverified: channel unavailable[\s\S]{0,180}as the exact value of `Executed:`/);
+  // non-product tool evidence never enters the product-defect ledger or its consumers
+  assert.match(verify, /create no Failure-history entry, set `New entries` to 0, and enter no signal-card, maintenance, repair-lineage, or recurrence route/);
+  assert.match(verify, /At the capability layer, land the complete Record as `boundary — capability verification result <capability number>`/);
+  assert.match(verify, /step 9 reports and removes a product result marker with no pending work/);
+  assert.match(verify, /state suppresses automatic capability and product re-entry and automatic product Audit and Retrospective events/);
+  assert.match(verify, /a direct capability verification request or an explicit product verification request starts a new run/);
+  assert.doesNotMatch(verify, /reason is `channel unavailable`[\s\S]{0,300}`routing: pending`/);
+  // removing the special entry must not strand ordinary label-less failures
+  assert.match(verify, /For `recurrence observation: 2` or higher[\s\S]{0,360}Otherwise, send only that failure or unverified entry through split's maintenance/);
+});
+
+// E3 — one unfinished interaction became source ids 3, 4, 5, 6, then four candidate roots
+// and a root choice no human could make.
+test("one attempted scenario step is one failure-history entry", () => {
+  const verifier = fs.readFileSync(path.join(root, "skills", "verify", "verifier.md"), "utf8");
+  const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  // the producer: the verifier returns one item per scene
+  assert.match(verifier, /One failure scene is one attempted scenario step and the observations it directly\n {3}caused/);
+  assert.match(verifier, /one primary failure[\s\S]{0,160}subordinate signals[\s\S]{0,160}same evidence and reproduction/);
+  assert.match(verifier, /A suspected different\n {3}cause never splits observations from that attempted step/);
+  assert.match(verifier, /another item only for a\n {3}separate attempted scenario step that reproduces independently/);
+  // the recorder: one scene, one source id, one root — the old per-reason split is gone
+  assert.doesNotMatch(verify, /Give each fail or unverified reproduction, criterion, or reason one new source id/);
+  assert.match(verify, /Give each failure scene[\s\S]{0,200}one new source id/);
+  assert.match(verify, /so that scene's repair lineage root is one too/);
+  // post-verifier normalization and the pre-verifier label projection have distinct order
+  assert.match(verify, /after the verifier returns[\s\S]{0,180}before the recorder assigns this result's source ids and repair-lineage fields/);
+  assert.match(verify, /does not change the Pre-verifier Repair Lineage Projection[\s\S]{0,140}not a relaxation of the human gate/);
+  // the ambiguous-multi-root stop is untouched
+  assert.match(verify, /Two or more candidate roots or an unparseable format blocks the whole execution before the verifier/);
+});

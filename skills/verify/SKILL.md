@@ -34,7 +34,8 @@ the prepared object under canonical integrity item 14 and finish its missing out
 specified commit only when it passes. Text beginning `routing prepared:` that fails is a
 blocking anomaly, not a prefix. At either layer, a complete current Record contains all four current revisions
 for that layer; the new verdict and execution evidence; every new `routing: pending` entry
-required by each failure, unverified reason, or closure-gate violation; and the Failure
+required by each failure, each unverified reason other than `channel unavailable`, or a
+closure-gate violation; and the Failure
 history, Audit, and Retrospective sections from HEAD. A complete capability-layer pass has
 neither `Standards` nor `Provisional` equal to the exact value `pending for current pass`;
 both contain this run's step-5 result. A current Record is complete only when its
@@ -158,7 +159,13 @@ section below).
 
 ```
 1. Read verify_channel. Verification always runs on the work server (the one running
-   the currently checked-out code) — it is the new code being verified
+   the currently checked-out code) — it is the new code being verified. When
+   `frontend: needed`, accept the channel record only when its `means` line contains both
+   `read probe:` and `interaction probe:` with the exact commands and concrete observed
+   element value and interaction change. A missing probe, a placeholder, or only help,
+   capabilities, binary existence, or attach exit 0 leaves an existing record unconfirmed.
+   Report the exact missing proof and return to arch to reconfirm and replace that one
+   channel line; write no verification Record or marker and do not brief the verifier
 2. Complete the target criteria before execution.
    - Product: every success criterion in product.md.
    - Capability: the main session builds exactly three parts from product.md's capability
@@ -190,8 +197,8 @@ section below).
 4. The verifier verdict is exactly one of three: pass · fail · unverified. A regression non-pass returns with its signal card label.
    Immediately after it returns, write the verdict, current Product revision, Verification revision, Code revision, the capability layer's Capability revision, execution evidence, and `New entries` (this run's new Failure-history entry count, or 0) to verify.md.
    For a capability-layer pass, write or replace `Standards: pending for current pass` and `Provisional: pending for current pass` in that same write.
-   Give each fail or unverified reproduction, criterion, or reason one new source id, replace only its line breaks with one space before recording, and parse the fixed trailing field prefixes `; signal card:`, `; repair lineage:`, `; recurrence observation:`, and `; routing:` from right to left so semicolons inside the body remain data. Use the Record section's first form without a label, its second for a label with 0 candidate roots, and its third plus that root's `max recurrence + 1` for exactly 1 candidate root.
-   A reason that the verify channel could not be acquired, so no step of the scenario ran, is written as `unverified: channel unavailable — <the exact command that failed>; timeout=<observed value>`; naming the command and the value is what keeps a product defect from being filed as a tool failure.
+   Give each failure scene — one attempted scenario step and the observations it directly caused — one new source id. One scene is one Failure-history entry, so that scene's repair lineage root is one too. Write one primary failure as the reason and keep every signal directly observed from that attempted step in the same reason body. A suspected different cause never splits one attempted step; create another entry only for a separately attempted, independently reproducible scenario step. This normalization is producer-side work after the verifier returns and before the recorder assigns this result's source ids and repair-lineage fields. It does not change the Pre-verifier Repair Lineage Projection that prepares labeled regression input, and it is not a relaxation of the human gate. Replace only its line breaks with one space before recording, and parse the fixed trailing field prefixes `; signal card:`, `; repair lineage:`, `; recurrence observation:`, and `; routing:` from right to left so semicolons inside the body remain data. Use the Record section's first form without a label, its second for a label with 0 candidate roots, and its third plus that root's `max recurrence + 1` for exactly 1 candidate root.
+   When the verify channel could not be acquired and no scenario step ran, write `unverified: channel unavailable — <the exact command that failed>; timeout=<observed value>` as the exact value of `Executed:`. At either layer this is a verification-tool result, not a product observation: create no Failure-history entry, set `New entries` to 0, and enter no signal-card, maintenance, repair-lineage, or recurrence route. At the capability layer, land the complete Record as `boundary — capability verification result <capability number>`. At the product layer, preserve the result marker through the result commit. Then report the failed command and timeout to the human immediately and stop; step 9 reports and removes a product result marker with no pending work. While that exact `Executed:` value is current, state suppresses automatic capability and product re-entry and automatic product Audit and Retrospective events. After the person restores or replaces the channel, a direct capability verification request or an explicit product verification request starts a new run.
    When several items return to the same root in one run, freeze its maximum once before writing and give them the same recurrence observation, but keep each item's own source id and `routing: pending`; record different roots and rootless new items independently.
    Preserve all three fields with the entry, and count only new entries in `New entries`. Two or more candidate roots or an unparseable format blocks the whole execution before the verifier.
    At the product layer, write the complete tree-root verify.md first, then immediately
@@ -227,17 +234,13 @@ section below).
 6. The lowest-source-id Failure history entry with `routing: pending` → at the capability
    layer, before selecting the entry, first land this run's complete verify.md and all its
    new pending entries as `boundary — capability verification result <capability number>`
-   when they are not yet committed. Then, for `recurrence observation: 2` or higher, create
+   when they are not yet committed. For `recurrence observation: 2` or higher, create
    no automatic card, execution, or additional source id; keep the entry pending and report
    its root, signal card, past routes, and current result to the human. Continue only when
    the human explicitly names one currently allowed route; a later non-pass returns to the
    same human gate.
-   At the capability layer, an unverified entry whose reason is `channel unavailable` takes
-   that same human route from its first entry, whatever its recurrence count. That reason
-   carries no fact about the product, so a fix card would have no destination the product
-   can satisfy; report it with the failed command and timeout the entry already records.
-   If that selected entry is neither `channel unavailable` nor at recurrence observation 2 or
-   higher, send only that failure or unverified entry through split's maintenance routing and
+   Otherwise, send only that failure or unverified entry through split's maintenance
+   routing and
    determine the fix card and number for the same folder (e.g., 02.3b-fix-...). Its
    completion signal is the exact failure reproduction or executable check that proves an
    unverified reason is gone. The escaped defect or evidence gap becomes a regression signal.
