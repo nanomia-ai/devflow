@@ -2416,3 +2416,160 @@ test("D1 a clean committed card with two Progress log headings is invalid, not r
   // Fields still come from above the first heading, so the prose below never rides along.
   assertFragment(result.stdout, "ready: kind=approval-invalid", "depends=[]");
 });
+
+// D7: the request a card came from is also the partition it belongs to. One planning commit
+// consumes one canonical input and creates several cards; the reader of any one of them needs
+// the exact paths of the others that are still current, and nothing wider.
+function candidateLine(output, zone, relative) {
+  const key = zone === "claim" ? `path=${relative} ` : `file=${relative} `;
+  const line = output.split(/\r?\n/).find((item) => item.startsWith(`${zone}: kind=`) && item.includes(key));
+  assert.ok(line, `missing ${zone} candidate for ${relative}\n${output}`);
+  return line;
+}
+
+function sameOriginPlan(t) {
+  const root = makeRepo(t);
+  const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("one request, three cards")}`;
+  const other = `2026-08-20T00:00:01Z maintenance routing pending: request-json: ${JSON.stringify("another request")}`;
+  write(root, "devflow/journal.md", `${request}\n${other}\n`);
+  commit(root, "jmp boundary — two requests recorded");
+
+  const mineSource = "devflow/tree/02-capability/02.1-first.md";
+  const pending = "devflow/tree/02-capability/02.2-second.md";
+  const closingSource = "devflow/tree/02-capability/02.3-third.md";
+  write(root, mineSource, cardText("02.1"));
+  write(root, pending, cardText("02.2"));
+  write(root, closingSource, cardText("02.3"));
+  write(root, "devflow/journal.md", `${other}\n`);
+  commit(root, "jmp split — first request planned");
+
+  const foreign = "devflow/tree/02-capability/02.4-fourth.md";
+  write(root, foreign, cardText("02.4"));
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp split — second request planned");
+
+  const claimed = mineSource.replace(".md", ".wip-jmp.md");
+  const closed = closingSource.replace(".md", ".done.md");
+  git(root, "mv", mineSource, claimed);
+  git(root, "mv", closingSource, closed);
+  commit(root, "jmp 02.1 claim");
+  return { root, request, other, claimed, pending, closed, foreign };
+}
+
+test("D7 every current candidate of one planning commit carries that origin and its exact siblings", (t) => {
+  const scene = sameOriginPlan(t);
+  const result = run(scene.root); ok(result);
+  const origin = `origin=${JSON.stringify(`journal:${scene.request}`)}`;
+  const mine = candidateLine(result.stdout, "claim", scene.claimed);
+  const sibling = candidateLine(result.stdout, "ready", scene.pending);
+  assert.ok(mine.includes(origin), mine);
+  assert.ok(sibling.includes(origin), sibling);
+  assert.ok(mine.includes(`siblings=[${JSON.stringify(scene.pending)}]`), mine);
+  assert.ok(sibling.includes(`siblings=[${JSON.stringify(scene.claimed)}]`), sibling);
+  // the report stays coherent for the in-progress card, and is no longer the only projection
+  assertFragment(result.stdout, "report:", origin);
+});
+
+test("D7 a current card from another origin is not a sibling", (t) => {
+  const scene = sameOriginPlan(t);
+  const result = run(scene.root); ok(result);
+  const foreign = candidateLine(result.stdout, "ready", scene.foreign);
+  assert.ok(foreign.includes(`origin=${JSON.stringify(`journal:${scene.other}`)}`), foreign);
+  assert.ok(foreign.includes("siblings=[]"), foreign);
+  for (const line of [candidateLine(result.stdout, "claim", scene.claimed), candidateLine(result.stdout, "ready", scene.pending)]) {
+    assert.equal(line.includes(scene.foreign), false, line);
+  }
+});
+
+test("D7 a closed card from the same origin is not a current sibling", (t) => {
+  const scene = sameOriginPlan(t);
+  const result = run(scene.root); ok(result);
+  for (const line of [candidateLine(result.stdout, "claim", scene.claimed), candidateLine(result.stdout, "ready", scene.pending)]) {
+    assert.equal(line.includes(scene.closed), false, line);
+  }
+  assert.equal(result.stdout.includes(`file=${scene.closed}`), false, result.stdout);
+});
+
+test("D7 none and unknown origins never become a sibling bundle", (t) => {
+  const root = makeRepo(t);
+  const noneA = "devflow/tree/02-capability/02.1-none-a.md";
+  const noneB = "devflow/tree/02-capability/02.2-none-b.md";
+  write(root, noneA, cardText("02.1"));
+  write(root, noneB, cardText("02.2"));
+  commit(root, "jmp split — planned with no recorded input");
+
+  const first = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("first request")}`;
+  const second = `2026-08-20T00:00:01Z maintenance routing pending: request-json: ${JSON.stringify("second request")}`;
+  write(root, "devflow/journal.md", `${first}\n${second}\n`);
+  commit(root, "jmp boundary — two requests recorded");
+  const unknownA = "devflow/tree/02-capability/02.3-unknown-a.md";
+  const unknownB = "devflow/tree/02-capability/02.4-unknown-b.md";
+  write(root, unknownA, cardText("02.3"));
+  write(root, unknownB, cardText("02.4"));
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp split — two origins planned at once");
+
+  const result = run(root); ok(result);
+  for (const relative of [noneA, noneB]) {
+    const line = candidateLine(result.stdout, "ready", relative);
+    assert.ok(line.includes("origin=none"), line);
+    assert.ok(line.includes("siblings=[]"), line);
+  }
+  for (const relative of [unknownA, unknownB]) {
+    const line = candidateLine(result.stdout, "ready", relative);
+    assert.ok(line.includes("origin=unknown"), line);
+    assert.ok(line.includes("originReason=multiple-matches"), line);
+    assert.ok(line.includes("siblings=[]"), line);
+  }
+});
+
+// D7 closure: a Git command that could not answer is not an answer. The creation diff is the
+// one read that decides whether a card has an origin at all, so a missing blob or bytes that
+// will not decode must fail closed as unknown — never as `none`, which claims the planning
+// commit consumed no request.
+function unreadableOriginPlan(t, breakJournal) {
+  const root = makeRepo(t);
+  const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact request")}`;
+  const journal = path.join(root, "devflow", "journal.md");
+  breakJournal.before(root, journal, request);
+  commit(root, "jmp boundary — request recorded");
+  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  write(root, pending, cardText("02.1"));
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp split — request planned");
+  breakJournal.after(root);
+  return { root, pending };
+}
+
+test("D7 closure a creation diff Git cannot read is unknown, not none", (t) => {
+  const scene = unreadableOriginPlan(t, {
+    before: (root, journal, request) => fs.writeFileSync(journal, `${request}\n`, "utf8"),
+    // scoped to the journal alone, so the card's own history and parent lookups still answer
+    // and only the creation diff cannot run — a program by this name exists nowhere
+    after: (root) => {
+      fs.writeFileSync(path.join(root, ".gitattributes"), "devflow/journal.md diff=devflow-absent-driver\n", "utf8");
+      git(root, "config", "diff.devflow-absent-driver.textconv", "devflow-textconv-that-does-not-exist");
+    },
+  });
+  const result = run(scene.root); ok(result);
+  const line = candidateLine(result.stdout, "ready", scene.pending);
+  assert.ok(line.includes("origin=unknown"), line);
+  assert.ok(line.includes("originReason=creation-diff-unavailable"), line);
+  assert.ok(line.includes("siblings=[]"), line);
+});
+
+test("D7 closure a creation diff that will not decode is unknown, not none", (t) => {
+  const scene = unreadableOriginPlan(t, {
+    // bytes Git stores and replays verbatim; the working tree is valid UTF-8 again by the
+    // time the tool runs, so only the historic diff is undecodable
+    before: (root, journal, request) => fs.writeFileSync(journal, Buffer.concat([
+      Buffer.from(`${request}\n`), Buffer.from([0xff, 0xfe]), Buffer.from("\n"),
+    ])),
+    after: () => {},
+  });
+  const result = run(scene.root); ok(result);
+  const line = candidateLine(result.stdout, "ready", scene.pending);
+  assert.ok(line.includes("origin=unknown"), line);
+  assert.ok(line.includes("originReason=creation-diff-undecodable"), line);
+  assert.ok(line.includes("siblings=[]"), line);
+});

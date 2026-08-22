@@ -1628,19 +1628,70 @@ function boundaryFields(snapshot, card) {
   return { missing };
 }
 
-function claimOrigin(snapshot, card) {
-  if (!card) return { origin: "none" };
-  if (gitLine(snapshot.root, ["rev-parse", "--is-shallow-repository"], { allowFailure: true }) === "true") {
-    return { origin: "unknown", originReason: "shallow-history" };
+function addedIn(snapshot, commit, relative) {
+  const present = (revision) => gitRun(snapshot.root, ["cat-file", "-e", `${revision}:${relative}`], { allowFailure: true }).status === 0;
+  return present(commit) && !present(`${commit}^`);
+}
+
+// A card's number is immutable and only its status suffix moves, so the one legitimate
+// predecessor of a card path is the same card under another suffix. Git's similarity search
+// does not know that: asked to follow a template-identical card it walks into a different
+// card's history and hands back that card's creation commit, which would attribute another
+// request's origin. The walk therefore stops at this identity's own add; a chain that leaves
+// the identity is either this commit's own add, proved against the parent tree, or an
+// ambiguity — never another card's request.
+function resolveCardCreation(snapshot, card) {
+  const number = cardIdentity(card.path)?.number ?? null;
+  if (!number) return { reason: "creation-commit-missing" };
+  const run = gitRun(snapshot.root, ["log", "-z", "--follow", "--name-status", "--format=%H", "--", card.path], { allowFailure: true });
+  if (run.status !== 0) return { reason: "creation-commit-missing" };
+  let fields;
+  try {
+    fields = decodeUtf8(run.stdout, "card history").split("\0").filter((value) => value !== "");
+  } catch {
+    return { reason: "creation-history-undecodable" };
   }
-  const history = gitText(snapshot.root, ["log", "--follow", "--format=%H", "--", card.path], { allowFailure: true })
-    .split("\n").filter(Boolean);
-  const creation = history.at(-1);
-  if (!creation) return { origin: "unknown", originReason: "creation-commit-missing" };
+  let commit = null;
+  for (let index = 0; index < fields.length; index += 1) {
+    // `git log -z --name-status --format=%H` prints the commit id, then a newline-led status
+    // token, then that record's one or two paths, each field closed by NUL.
+    if (!fields[index].startsWith("\n")) {
+      if (!/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(fields[index])) return { reason: "creation-history-unreadable" };
+      commit = fields[index];
+      continue;
+    }
+    const status = fields[index].slice(1);
+    const paths = fields.slice(index + 1, index + 1 + (/^[RC]/.test(status) ? 2 : 1));
+    index += paths.length;
+    if (!commit || paths.length === 0) return { reason: "creation-history-unreadable" };
+    const followed = paths.at(-1);
+    if (cardIdentity(followed)?.number !== number) return { reason: "creation-identity-crossed" };
+    if (status.startsWith("A")) return { commit };
+    if (paths.length === 2 && cardIdentity(paths[0])?.number !== number) {
+      return addedIn(snapshot, commit, followed) ? { commit } : { reason: "creation-identity-crossed" };
+    }
+  }
+  return { reason: commit ? "creation-add-unresolved" : "creation-commit-missing" };
+}
+
+function cardOrigin(snapshot, card, shallow) {
+  if (shallow) return { origin: "unknown", originReason: "shallow-history" };
+  const created = resolveCardCreation(snapshot, card);
+  if (!created.commit) return { origin: "unknown", originReason: created.reason };
+  const creation = created.commit;
   if (gitRun(snapshot.root, ["rev-parse", "--verify", `${creation}^`], { allowFailure: true }).status !== 0) {
     return { origin: "unknown", originReason: "creation-parent-missing" };
   }
-  const diff = gitText(snapshot.root, ["show", "--format=", "--unified=0", "--no-ext-diff", creation, "--", "devflow/journal.md"], { allowFailure: true });
+  // The creation diff is the one read that decides whether this card has an origin at all, so
+  // a command that could not answer is not the answer `none`.
+  const shown = gitRun(snapshot.root, ["show", "--format=", "--unified=0", "--no-ext-diff", creation, "--", "devflow/journal.md"], { allowFailure: true });
+  if (shown.status !== 0) return { origin: "unknown", originReason: "creation-diff-unavailable" };
+  let diff;
+  try {
+    diff = normalizeFileText(decodeUtf8(shown.stdout, "creation diff"));
+  } catch {
+    return { origin: "unknown", originReason: "creation-diff-undecodable" };
+  }
   const matches = diff.split("\n").filter((line) => line.startsWith("-") && !line.startsWith("---"))
     .map((line) => line.slice(1))
     .map((raw) => ({ raw, parsed: parseJournalLine(raw, 0) }))
@@ -1650,7 +1701,41 @@ function claimOrigin(snapshot, card) {
     ? `journal:${raw}` : parsed.source));
   if (identities.size !== 1) return { origin: "unknown", originReason: "multiple-matches" };
   const request = matches.find(({ parsed }) => parsed.kind === "maintenance-request");
-  return { origin: `journal:${request?.raw ?? matches[0].raw}` };
+  // The identity is what groups cards, and it is the one thing a same-source bundle already
+  // agrees on: two markers of one source, or one deleted request, name the same subject even
+  // when the raw line the origin quotes differs. `none` and `unknown` carry no identity, so
+  // cards that merely share an absence are never grouped.
+  return { origin: `journal:${request?.raw ?? matches[0].raw}`, identity: [...identities][0] };
+}
+
+// The request a card came from is also the partition it belongs to: the other current cards
+// of that request are exactly what a thin split card is missing, and nothing wider. One
+// projection over the current cards — non-closed pending and claimed, never done or stale
+// history — serves the report and every candidate route, so the history walk runs once per
+// card instead of once per consumer. A card is not its own sibling.
+function originProjection(snapshot) {
+  const current = snapshot.cards.filter((card) => !card.closedFolder && ["pending", "claimed"].includes(card.status));
+  const shallow = current.length > 0
+    && gitLine(snapshot.root, ["rev-parse", "--is-shallow-repository"], { allowFailure: true }) === "true";
+  const byPath = new Map(current.map((card) => [card.path, cardOrigin(snapshot, card, shallow)]));
+  const members = new Map();
+  for (const [relative, value] of byPath) {
+    if (value.identity === undefined) continue;
+    members.set(value.identity, [...(members.get(value.identity) ?? []), relative]);
+  }
+  const origin = (card) => {
+    const value = card ? byPath.get(card.path) : null;
+    if (!value) return { origin: "none" };
+    const { identity, ...fields } = value;
+    return fields;
+  };
+  return {
+    origin,
+    candidate: (card) => ({
+      ...origin(card),
+      siblings: (members.get(byPath.get(card.path)?.identity) ?? []).filter((relative) => relative !== card.path),
+    }),
+  };
 }
 
 // A status-zero Git result is evidence only in Git's own grammar. `rev-list --count` prints
@@ -1749,6 +1834,7 @@ function evaluateZones(snapshot) {
     : [];
   const outsideDiff = snapshot.status.filter((item) => !item.path.startsWith("devflow/"));
   const chosen = firstMine(snapshot);
+  const origins = originProjection(snapshot);
   const unattributed = snapshot.status.map((entry) => entry.path).filter((relative) => relative !== chosen?.path).sort(byteCompare);
   zones.git.summary = {
     openOperation: snapshot.openOperation.kind,
@@ -1835,7 +1921,7 @@ function evaluateZones(snapshot) {
     if (card.claimant !== snapshot.room?.id) { claimSummary.others += 1; continue; }
     claimSummary.mine += 1;
     const judgment = cardDetails.get(card.path);
-    const common = { path: card.path, depends: card.depends.numbers.length === 0 ? "done" : judgment.blockers.length === 0 ? "done" : "blocked", approval: judgment.approval.value, blockers: judgment.blockers, carry: carryState(card).present ? "present" : "absent" };
+    const common = { path: card.path, depends: card.depends.numbers.length === 0 ? "done" : judgment.blockers.length === 0 ? "done" : "blocked", approval: judgment.approval.value, blockers: judgment.blockers, carry: carryState(card).present ? "present" : "absent", ...origins.candidate(card) };
     if (card.depends.anomalies.length > 0 || card.depends.numbers.some((number) => snapshot.cards.filter((candidate) => candidate.number === number).length !== 1)) addEntry(zones, "claim", "depends-anomaly", { ...common, reasons: card.depends.anomalies });
     else if (card.legacy || card.approval === "pending" || !card.depends.canonical) addEntry(zones, "claim", "needs-reapproval", common);
     else if (judgment.blockers.length > 0) addEntry(zones, "claim", "blocked-by-prerequisite", common);
@@ -1939,7 +2025,7 @@ function evaluateZones(snapshot) {
   if (digest) addEntry(zones, "ready", "digest-behind", digest);
   for (const card of pendingCards) {
     const judgment = cardDetails.get(card.path);
-    const detail = { file: card.path, cards: [card.number], depends: card.depends.numbers, approval: judgment.approval.value, ready: judgment.ready, blockers: judgment.blockers };
+    const detail = { file: card.path, cards: [card.number], depends: card.depends.numbers, approval: judgment.approval.value, ready: judgment.ready, blockers: judgment.blockers, ...origins.candidate(card) };
     if (card.legacy || !card.depends.canonical) addEntry(zones, "ready", "needs-normalization", { ...detail, missingFields: [!card.fields.has("Approval") ? "Approval" : null, !card.fields.has("Review") ? "Review" : null].filter(Boolean), invalidity: card.depends.anomalies });
     else if (card.approval !== "pending" && judgment.approval.value !== "effective") addEntry(zones, "ready", "approval-invalid", { ...detail, invalidity: judgment.approval.reasons });
     else if (card.approval === "pending") addEntry(zones, "ready", "approval-pending", detail);
@@ -1982,7 +2068,7 @@ function evaluateZones(snapshot) {
   const openItems = snapshot.journal.filter((line) => line.kind === "attributed").map((line) => line.raw).concat(snapshot.handoff.openItems);
   const capabilityDocuments = snapshot.baseline.expected.filter((item) => snapshot.baselineFiles.some((relative) => Number(/^(\d+)-/.exec(path.posix.basename(relative))?.[1]) === item.number)).map((item) => path.posix.basename(item.path));
   const chosenProgress = progressLines(chosen);
-  const origin = claimOrigin(snapshot, chosen);
+  const origin = origins.origin(chosen);
   const report = {
     service: snapshot.product.service,
     completeThrough: snapshot.depth1Folders.filter((folder) => folderIdentity(folder)?.status === "done").sort(byteCompare).at(-1) ?? "none",

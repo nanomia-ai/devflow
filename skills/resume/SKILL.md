@@ -136,7 +136,10 @@ unattributed: <those paths | none>; not yet on integration: <N paths | none>. Pr
 The `report:`, `handoff:`, and `open-item:` lines fill those blanks verbatim. `<origin>` is
 `report:`'s `origin`; pass that value through without interpreting it — `none` means no
 original request called that card, and `unknown` goes through together with the reason that
-line carries. **Quote the
+line carries. The selected candidate's own `claim:` or `ready:` line carries its `origin` and
+its `siblings` — the current card paths from that same origin, with the card itself left out.
+Pass that array on to work (or the next reader) as it stands: never recompute it, never scan
+the tree to fill it, and an empty array means there are no siblings. **Quote the
 fact line that carries that one step beside the next step** — the report then shows which
 line the judgment came from. Include the content of the `open-item:` lines a person must
 decide.

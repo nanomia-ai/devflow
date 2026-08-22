@@ -124,6 +124,11 @@ Read the card fully (including Coordinates and Identity — know what this is a 
 + read devflow/project/design.md, devflow/project/glossary.md, and devflow/journal.md in
   full if they exist
 + read every direct dependency card named in `Depends` in full
++ when the entry passed a non-empty `siblings` list, read exactly those paths and no others —
+  they are the current cards from this card's own request, and they say which slice of that
+  request this card is (the split boundary). Never recompute the paths and never scan the
+  folder. A sibling card is boundary context only: no authority to modify it, and no grounds
+  to widen this card
 + unless `Read first` is `none`, read every exact path it names. If a path is missing,
   report it; do not guess a substitute. A baseline path directly under
   `devflow/project/capabilities/` is legacy wiring: do not open it or report its absence

@@ -1565,6 +1565,22 @@ test("an observation about another capability has a keyed line and a harvester",
   assert.match(verify, /multiset of its\n   numbered lines collected from the journal blob at the marker's `head`/);
 });
 
+test("same-origin siblings are passed, not recomputed", () => {
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  assert.match(resume, /The selected candidate's own `claim:` or `ready:` line carries its `origin` and\nits `siblings` — the current card paths from that same origin, with the card itself left out\./,
+    "resume must name the projected field and the self-excluded convention");
+  assert.match(resume, /Pass that array on to work \(or the next reader\) as it stands: never recompute it, never scan\nthe tree to fill it/,
+    "resume must pass the exact paths through instead of deriving them again");
+  assert.match(work, /when the entry passed a non-empty `siblings` list, read exactly those paths and no others/,
+    "work must consume the exact projected paths");
+  assert.match(work, /Never recompute the paths and never scan the\n  folder\. A sibling card is boundary context only: no authority to modify it, and no grounds\n  to widen this card/,
+    "sibling context is bounded: no scan, no edit, no widening");
+  for (const [name, text] of [["resume", resume], ["work", work]]) {
+    assert.doesNotMatch(text, /^Origin:/m, `${name} must not turn the projection into a card field`);
+  }
+});
+
 test("HANDOFF carries only a recomputable pointer", () => {
   const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
   assert.match(work, /^## Next single step\s+<!-- one tree path \| none -->$/m);
