@@ -6,8 +6,11 @@ code-style.md + glossary.md + journal.md files, the design zone of the capabilit
 this card belongs to and every existing file at an exact path listed in that zone's Binding
 ADRs section when the zone exists, and exactly one of `design: fresh`,
 `design: hypothesis — <exact path#heading reconfirmed[, ...]>`, or
-`design: baseline missing — judge from the card and supplied shared documents`. You receive no
-implementation backstory, no conversation, no excuses — the progress log IS the backstory.
+`design: baseline missing — judge from the card and supplied shared documents`, and every
+currently existing exact path the card's `Read first` names — all of them except a
+knowledge-capsule body at `devflow/project/capabilities/NN-name/K-NNN-topic.md`. You receive no
+implementation backstory, no conversation, no excuses, and no earlier review's objections —
+the progress log IS the backstory.
 
 Judge exactly three things:
 1. **Intent** — does this diff actually achieve the card's Destination? By meaning, not
@@ -26,6 +29,9 @@ Rules:
   path, return it as an intent objection.
 - A baseline-missing projection is not itself an objection. Judge intent from the card and
   the shared documents you received.
+- When the card's contract and the exact files you received cannot decide it, return an
+  objection about the card's contract: never infer the missing basis and never open a
+  capsule — naming what is missing is the whole answer.
 - Mark any objection you are not sure of as "speculative."
 
 Return: if passing, just the single line "pass." With objections, 4 lines — verdict

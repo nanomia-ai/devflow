@@ -470,10 +470,18 @@ When split starts with a pending card whose
 exact reason and reset it to `pending`. Present the whole current card in a new execution
 proposal, then land the new approval value and card change together in the planning commit.
 
-**When the user changes the Destination of a card in progress**, use the existing path:
-work checkpoints and releases the card, split rewrites its Destination, Why, Forbidden, and
-Completion signal, gets the execution proposal approved again and lands it in the planning
-commit, and the card is then claimed again. No upper document changed, so this creates
+**When the user changes the Destination of a card in progress, a clean review returns an
+objection about the card's contract, or work names an invalid exact `Read first` path in the
+progress log before a review and releases the card**, use the existing path: work checkpoints and releases
+the card, split rewrites its Destination, Why, Forbidden, and Completion signal — and for an
+either card-contract defect reads the progress log as a handoff naming what is
+missing, establishes the replacement statement or path from its existing canonical owner
+under its own permitted reads, and repairs only the fields and the exact non-capsule
+`Read first` paths the card already carries — gets the execution proposal approved again and
+lands it in the planning commit, and the card is then claimed again. split writes no arch
+file, capability document, or other `Read first` file from the progress log, opens and infers
+no capsule, and when no legitimate existing non-capsule basis can go into the card's contract
+it stops and reports to the person instead of approving the same card again. No upper document changed, so this creates
 neither `.stale.` nor a `re-split pending` marker.
 
 When the Destination cannot be written in one or two sentences, invent nothing plausible —

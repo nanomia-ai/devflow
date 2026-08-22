@@ -2064,3 +2064,603 @@ test("work produces the two result lines and keeps carry the last machine line",
   }
   assert.match(work, /only the card \(Progress log section excluded\)/);
 });
+
+// ---------------------------------------------------------------------------
+// B: the clean reviewer receives the basis split already approved, and the review
+// flow is one place with a human boundary at the third anchored objection about the code.
+// ---------------------------------------------------------------------------
+
+const REVIEW_HOMES = [
+  ["skills/work/SKILL.md", "skills/work/reviewer.md"],
+  ["skills/work/SKILL_ko.md", "skills/work/reviewer_ko.md"],
+];
+
+test("the clean reviewer receives every approved non-capsule Read first file", () => {
+  const work = flat(fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8"));
+  const reviewer = flat(fs.readFileSync(path.join(root, "skills", "work", "reviewer.md"), "utf8"));
+  // split already approved these exact paths; withholding them is what produced the
+  // speculative objections.
+  for (const text of [work, reviewer]) {
+    assert.match(text, /every currently existing exact path the card's `Read first` names/);
+    // The capsule body is the one exception, and it is named by its exact shape.
+    assert.match(text, /except a knowledge-capsule body at `devflow\/project\/capabilities\/NN-name\/K-NNN-topic\.md`/);
+  }
+  // Resolving the paths belongs to the assembler, not to the role that receives files.
+  assert.match(work, /Report a missing path and invent no substitute/);
+  assert.doesNotMatch(reviewer, /invent no substitute/);
+});
+
+test("no second capsule opening route reaches the reviewer", () => {
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  for (const [, reviewerPath] of REVIEW_HOMES) {
+    const reviewer = fs.readFileSync(path.join(root, reviewerPath), "utf8");
+    // The role contract is briefed verbatim into a clean context, so a tool call there has
+    // no plugin root to resolve and no budget to spend.
+    for (const forbidden of [/project-knowledge/, /select --path/, /--approved/, /<plugin root>/, /opening budget/]) {
+      assert.doesNotMatch(reviewer, forbidden, `${reviewerPath}: the reviewer must not open a capsule`);
+    }
+  }
+  // work keeps exactly one capsule gate: the loop's own opening step.
+  assert.equal((work.match(/project-knowledge\.mjs/g) ?? []).length, 1);
+  // Nothing about a capsule is synthesized for the reviewer.
+  assert.match(flat(work), /synthesize no capsule header, provenance, or remaining budget for the reviewer/);
+  assert.match(flat(work), /the loop's capsule gate stays the only opener/);
+});
+
+test("a capsule-only basis becomes an objection about the card, not an invented fact", () => {
+  // The Korean original carries the same rule in the fixed Korean term for it. Escaped,
+  // because this file is a deploy artifact and carries no Korean of its own.
+  assert.match(flat(fs.readFileSync(path.join(root, "skills", "work", "reviewer_ko.md"), "utf8")),
+    /\uCE74\uB4DC \uACC4\uC57D\uC5D0 \uB300\uD55C \uC9C0\uC801\uC73C\uB85C \uB3CC\uB824\uBCF4\uB0B8\uB2E4[\s\S]{0,80}\uCEA1\uC290\uC744 \uC5F4\uC9C0\uB3C4 \uC54A\uB294\uB2E4/);
+  const reviewer = flat(fs.readFileSync(path.join(root, "skills", "work", "reviewer.md"), "utf8"));
+  assert.match(reviewer, /When the card's contract and the exact files you received cannot decide it, return an objection about the card's contract/);
+  assert.match(reviewer, /never infer the missing basis and never open a capsule/);
+});
+
+// ---------------------------------------------------------------------------
+// The review flow turns on three distinctions, and each is its own table of conditions
+// that do not overlap. The seal proves that: for every modeled history, exactly one row
+// of each table applies — the last row is an explicit complement, never an unconditional
+// default — and the row a second, differently shaped classifier picks is the same one.
+// Each action must also carry its steps in the order the procedure needs them.
+// ---------------------------------------------------------------------------
+
+// 1. The completion precondition — a verdict and freshness, not freshness alone.
+const SIGNAL_ROWS = [
+  (h) => h.remoteOnly,
+  (h) => !h.remoteOnly && (h.signal === "absent" || h.signal === "unreadable" || !h.fresh),
+  (h) => !h.remoteOnly && h.fresh && h.signal === "fail",
+  (h) => !h.remoteOnly && h.fresh && h.signal === "unverified",
+  (h) => !h.remoteOnly && h.fresh && h.signal === "pass",
+];
+function expectedSignalRow(h) {
+  if (h.remoteOnly) return 0;
+  if (h.fresh && h.signal === "pass") return 4;
+  if (h.fresh && h.signal === "unverified") return 3;
+  if (h.fresh && h.signal === "fail") return 2;
+  return 1;
+}
+
+// 2. Settling the tail that is written but not yet anchored.
+const TAIL_ROWS = [
+  (h) => !h.fresh,
+  (h) => h.fresh && h.pending === "pass",
+  (h) => h.fresh && (h.pending === "code12" || h.pending === "card" || h.pending === "unverified"),
+  (h) => h.fresh && h.pending === "code3",
+];
+function expectedTailRow(h) {
+  if (!h.fresh) return 0;
+  switch (h.pending) {
+    case "code3": return 3;
+    case "pass": return 1;
+    default: return 2;
+  }
+}
+
+// 3. Reducing the anchored events. The disposition rows key on how many results followed
+// it; the rest key on the latest result and the objection count.
+const REDUCE_ROWS = [
+  (h) => h.disposition === "valid" && h.after === 0,
+  (h) => h.disposition === "valid" && h.after === 1 && h.afterFirst === "pass",
+  (h) => h.disposition === "valid" && h.after === 1 && h.afterFirst !== "pass",
+  (h) => h.disposition === "valid" && h.after >= 2,
+  (h) => h.disposition !== "valid" && h.latest === "none",
+  (h) => h.disposition !== "valid" && h.latest === "pass",
+  (h) => h.disposition !== "valid" && h.latest === "card",
+  (h) => h.disposition !== "valid" && h.latest === "code" && (h.count === 1 || h.count === 2),
+  (h) => h.disposition !== "valid" && h.latest === "unverified",
+  (h) => h.disposition !== "valid" && h.latest === "code" && h.count >= 3,
+];
+function expectedReduceRow(h) {
+  if (h.disposition === "valid") {
+    if (h.after > 1) return 3;
+    if (h.after === 0) return 0;
+    return h.afterFirst === "pass" ? 1 : 2;
+  }
+  const byLatest = { none: 4, pass: 5, card: 6, unverified: 8 };
+  if (h.latest !== "code") return byLatest[h.latest];
+  return h.count >= 3 ? 9 : 7;
+}
+
+function reachableReduce(h) {
+  if (h.disposition !== "valid" && h.after !== 0) return false;
+  if (h.after === 0 && h.afterFirst !== "pass") return false;
+  if (h.latest === "none") {
+    return h.count === 0 && h.disposition === "none" && h.after === 0;
+  }
+  if (h.latest === "code" && h.count < 1) return false;
+  if (h.disposition === "valid") {
+    if (h.count < 3) return false;
+    if (h.after === 0) return h.latest === "code" && h.count === 3;
+    if (h.after === 1) {
+      if (h.latest !== h.afterFirst) return false;
+      return h.afterFirst === "code" ? h.count === 4 : h.count === 3;
+    }
+  }
+  return true;
+}
+
+const EN_STEPS = {
+  signal: [
+    [/no generic completion line is created or required/, /take the clean review/, /the loop's remote-evidence route above/, /never wait here for a line the canonical rules forbid/],
+    [/run the completion signal/, /record its result/, /read this table again/],
+    [/anchor that line/, /before any code change/, /then repair and run it again/],
+    [/anchor it the same way first/, /clear the reason it records/, /run it again/],
+    [/the precondition stands/, /not yet anchored/, /do not run it again merely because it is unanchored/],
+  ],
+  tail: [
+    [/it is not evidence/, /leave the line where it is/, /only the anchored events in 3/],
+    [/takes no anchor of its own/, /the latest settled event that 3 reads/, /Never take the review again for it/, /never carry out an already-consumed disposition again/],
+    [/anchor it in its own/, /before the action it selects changes the diff or releases the claim/],
+    [/anchor it together with the person's disposition in one checkpoint/, /recognize it and anchor both/, /ask once and anchor both together/],
+  ],
+  reduce: [
+    [/first carry out what that disposition says/, /establish a current `pass` by 1/, /exactly one clean review/],
+    [/the carry line/, /the final task commit/],
+    [/that disposition is spent/, /stop and report to the person/, /Later evidence never revives it/, /does not go to split/],
+    [/the record is broken/, /stop and report to the person/],
+    [/establish a current `pass` by 1/, /the first clean review/],
+    [/the carry line/, /the final task commit/],
+    [/the owner section below/, /whatever the objection count/],
+    [/make the repair it names/, /establish a current `pass` by 1/, /a new clean review/],
+    [/clear the reason it records/, /establish a current `pass` by 1/, /a clean review again/],
+    [/stop and report to the person/, /authorizes nothing/, /fresh execution-proposal approval/],
+  ],
+};
+
+// The Korean original carries the same steps in the same order. Escaped, because this file
+// is a deploy artifact and carries no Korean of its own.
+const KO_STEPS = {
+  signal: [
+    ["\uC77C\uBC18 \uC644\uB8CC \uC904\uC740 \uB9CC\uB4E4\uC9C0\uB3C4 \uC694\uAD6C\uD558\uC9C0\uB3C4 \uC54A\uB294\uB2E4", "\uAE68\uB057\uD55C \uAC80\uD1A0", "\uC6D0\uACA9 \uC99D\uAC70 \uACBD\uB85C", "\uAE30\uB2E4\uB9AC\uC9C0 \uC54A\uB294\uB2E4"],
+    ["\uC644\uB8CC \uC2E0\uD638\uB97C \uC2E4\uD589", "\uB2E4\uC2DC \uC77D\uB294\uB2E4"],
+    ["\uCF54\uB4DC\uB97C \uBC14\uAFB8\uAE30 \uC804\uC5D0", "anchor", "\uB2E4\uC2DC \uC2E4\uD589"],
+    ["\uBA3C\uC800 anchor", "\uC774\uC720\uB97C \uD480\uACE0", "\uC0AC\uB78C\uC5D0\uAC8C \uBCF4\uACE0"],
+    ["\uC804\uC81C\uAC00 \uC130\uB2E4", "\uAC80\uD1A0\uC5D0 \uB123\uB294\uB2E4", "\uB2E4\uC2DC \uC2E4\uD589\uD558\uC9C0 \uC54A\uB294\uB2E4"],
+  ],
+  tail: [
+    ["\uC99D\uAC70\uAC00 \uC544\uB2C8\uB2E4", "anchor\uB41C \uC0AC\uAC74\uB9CC \uC77D\uB294\uB2E4"],
+    ["\uB530\uB85C anchor\uD558\uC9C0 \uC54A\uB294\uB2E4", "3\uC774 \uACE0\uB974\uB294 \uD589\uB3D9", "\uAC80\uD1A0\uB97C \uB2E4\uC2DC \uBC1B\uC9C0 \uC54A\uACE0", "\uB2E4\uC2DC \uC2E4\uD589\uD558\uC9C0\uB3C4 \uC54A\uB294\uB2E4"],
+    ["diff\uB97C \uBC14\uAFB8\uAC70\uB098 \uC810\uC720\uB97C \uD574\uC81C\uD558\uAE30 \uC804\uC5D0", "\uBA3C\uC800 anchor"],
+    ["\uD568\uAED8 anchor", "\uC54C\uC544\uBCF4\uACE0", "\uD55C \uBC88 \uBB3C\uC5B4"],
+  ],
+  reduce: [
+    ["\uCC98\uBD84\uC774 \uB9D0\uD55C \uAC83\uC744 \uBA3C\uC800 \uC2E4\uD589", "\uD604\uC7AC `\uD1B5\uACFC`\uB97C \uC138\uC6B4", "\uC815\uD655\uD788 \uD55C \uBC88"],
+    ["\uC2B9\uACC4 \uC904", "\uCD5C\uC885 \uC791\uC5C5 \uCEE4\uBC0B"],
+    ["\uC18C\uC9C4\uB410\uB2E4", "\uBA48\uCD94\uACE0 \uC0AC\uB78C\uC5D0\uAC8C \uBCF4\uACE0", "split\uC73C\uB85C \uAC00\uC9C0 \uC54A\uB294\uB2E4"],
+    ["\uAE30\uB85D\uC774 \uAE68\uC84C\uB2E4", "\uBA48\uCD94\uACE0 \uC0AC\uB78C\uC5D0\uAC8C \uBCF4\uACE0"],
+    ["\uD604\uC7AC `\uD1B5\uACFC`\uB97C \uC138\uC6B4", "\uCCAB \uAE68\uB057\uD55C \uAC80\uD1A0"],
+    ["\uC2B9\uACC4 \uC904", "\uCD5C\uC885 \uC791\uC5C5 \uCEE4\uBC0B"],
+    ["\uC9C0\uC801 \uD69F\uC218\uC640 \uBB34\uAD00\uD558\uAC8C", "\uC18C\uC720\uC790 \uC808"],
+    ["\uC218\uB9AC\uB97C \uD558\uACE0", "\uD604\uC7AC `\uD1B5\uACFC`\uB97C \uC138\uC6B4", "\uC0C8 \uAE68\uB057\uD55C \uAC80\uD1A0"],
+    ["\uC774\uC720\uB97C \uD480\uACE0", "\uD604\uC7AC `\uD1B5\uACFC`\uB97C \uC138\uC6B4", "\uB2E4\uC2DC \uAE68\uB057\uD55C \uAC80\uD1A0"],
+    ["\uBA48\uCD94\uACE0 \uC0AC\uB78C\uC5D0\uAC8C \uBCF4\uACE0", "\uC544\uBB34\uAC83\uB3C4 \uC2B9\uC778\uD558\uC9C0 \uC54A\uB294\uB2E4", "\uC0C8 \uC2E4\uD589 \uC81C\uC548 \uC2B9\uC778"],
+  ],
+};
+
+// The condition each row states, so that a row cannot quietly widen (a count becoming
+// "any", a verdict becoming "fresh") while its action still reads the same.
+const EN_WHEN = {
+  signal: [
+    /running it establishes that only remote evidence remains/,
+    /its newest local result is absent, unreadable as a verdict, or stale/,
+    /its newest local result is current and `fail`/,
+    /its newest local result is current and `unverified`/,
+    /its newest local result is current and `pass`/,
+  ],
+  tail: [
+    /stale — its completion inputs or this card's task diff changed since that review ran/,
+    /a fresh `pass`/,
+    /a fresh objection about the code that is the first or the second, an objection about the card's contract, or `unverified`/,
+    /a fresh third objection about the code/,
+  ],
+  reduce: [
+    /a valid disposition with no .*`review result` after it/,
+    /exactly one .*`review result` after it, and it is `pass`/,
+    /exactly one .*`review result` after it that is not `pass`/,
+    /two or more .*`review result` lines after it/,
+    /no valid disposition, and no .*`review result` after the boundary/,
+    /no valid disposition, and the latest result is `pass`/,
+    /no valid disposition, and the latest result objects to the card's contract/,
+    /no valid disposition, and the latest result objects to the code and is the first or the second/,
+    /no valid disposition, and the latest result is `unverified`/,
+    /no valid disposition, and the latest result objects to the code and is the third or later/,
+  ],
+};
+
+function flowTable(relative, heading, subHeading) {
+  const lines = fs.readFileSync(path.join(root, relative), "utf8").split(/\r?\n/);
+  const section = lines.findIndex((line) => line === heading);
+  assert.notEqual(section, -1, `${relative}: ${heading} is missing`);
+  const start = lines.findIndex((line, index) => index > section && line === subHeading);
+  assert.notEqual(start, -1, `${relative}: ${subHeading} is missing`);
+  const header = lines.findIndex((line, index) => index > start && line.startsWith("|"));
+  assert.notEqual(header, -1, `${relative}: ${subHeading} has no table`);
+  const rows = [];
+  for (let i = header + 2; i < lines.length && lines[i].startsWith("|"); i += 1) {
+    const cells = lines[i].split("|").slice(1, -1).map((cell) => cell.trim());
+    assert.equal(cells.length, 2, `${relative} ${subHeading}: row ${rows.length + 1} is not two cells`);
+    rows.push({ when: cells[0], action: cells[1] });
+  }
+  assert.doesNotMatch(lines.slice(start, header).join("\n"), /├─|└─/,
+    `${relative}: a branch diagram beside the table is a second, non-total answer`);
+  return rows;
+}
+
+function stepsInOrder(action, steps, label) {
+  let at = 0;
+  for (const step of steps) {
+    const rest = action.slice(at);
+    const found = typeof step === "string" ? rest.indexOf(step) : rest.search(step);
+    assert.notEqual(found, -1, `${label}: the action is missing ${step} after the step before it`);
+    at += found + 1;
+  }
+}
+
+const EN_HEADING = "## Review — one flow";
+const KO_HEADING = "## \uAC80\uD1A0 — \uD558\uB098\uC758 \uD750\uB984";
+const EN_SUBS = ["### 1. The completion precondition", "### 2. Settle the written tail before acting on it", "### 3. Reduce the settled events"];
+const KO_SUBS = ["### 1. \uC644\uB8CC \uC804\uC81C", "### 2. \uC4F0\uC778 \uAF2C\uB9AC\uB97C \uC815\uB9AC\uD55C \uB4A4\uC5D0 \uC6C0\uC9C1\uC778\uB2E4", "### 3. \uC815\uB9AC\uB41C \uC0AC\uAC74\uC744 \uCD95\uC57D\uD55C\uB2E4"];
+const TABLES = ["signal", "tail", "reduce"];
+const PREDICATES = { signal: SIGNAL_ROWS, tail: TAIL_ROWS, reduce: REDUCE_ROWS };
+
+test("each review table is a set of conditions that never overlap and never leave a gap", () => {
+  TABLES.forEach((name, index) => {
+    const en = flowTable("skills/work/SKILL.md", EN_HEADING, EN_SUBS[index]);
+    const ko = flowTable("skills/work/SKILL_ko.md", KO_HEADING, KO_SUBS[index]);
+    assert.equal(en.length, PREDICATES[name].length, `${name}: one row per modeled condition`);
+    assert.equal(ko.length, en.length, `${name}: the ko table must carry the same rows`);
+    en.forEach((row, i) => {
+      assert.match(row.when, EN_WHEN[name][i], `${name} row ${i + 1} must state its own condition`);
+      assert.ok(row.action.length >= 20, `${name} row ${i + 1} must say what happens next`);
+      stepsInOrder(row.action, EN_STEPS[name][i], `en ${name} row ${i + 1}`);
+      stepsInOrder(ko[i].action, KO_STEPS[name][i], `ko ${name} row ${i + 1}`);
+    });
+  });
+
+  const exactlyOne = (rows, h, what) => {
+    const matched = rows.map((when, i) => (when(h) ? i : -1)).filter((i) => i >= 0);
+    assert.equal(matched.length, 1, `${what}: ${JSON.stringify(h)} matched rows ${JSON.stringify(matched)}`);
+    return matched[0];
+  };
+
+  let seen = 0;
+  for (const signal of ["absent", "unreadable", "fail", "unverified", "pass"]) {
+    for (const fresh of [true, false]) {
+      for (const remoteOnly of [true, false]) {
+        const h = { signal, fresh, remoteOnly };
+        seen += 1;
+        assert.equal(exactlyOne(SIGNAL_ROWS, h, "signal"), expectedSignalRow(h), `signal ${JSON.stringify(h)}`);
+      }
+    }
+  }
+  for (const pending of ["pass", "code12", "code3", "card", "unverified"]) {
+    for (const fresh of [true, false]) {
+      for (const answerWritten of [true, false]) {
+        const h = { pending, fresh, answerWritten };
+        seen += 1;
+        assert.equal(exactlyOne(TAIL_ROWS, h, "tail"), expectedTailRow(h), `tail ${JSON.stringify(h)}`);
+      }
+    }
+  }
+  for (const disposition of ["none", "valid", "elsewhere"]) {
+    for (const after of [0, 1, 2]) {
+      for (const afterFirst of ["pass", "code", "card", "unverified"]) {
+        for (const latest of ["none", "pass", "code", "card", "unverified"]) {
+          for (const count of [0, 1, 2, 3, 4]) {
+            const h = { disposition, after, afterFirst, latest, count };
+            if (!reachableReduce(h)) continue;
+            seen += 1;
+            assert.equal(exactlyOne(REDUCE_ROWS, h, "reduce"), expectedReduceRow(h), `reduce ${JSON.stringify(h)}`);
+          }
+        }
+      }
+    }
+  }
+  assert.equal(seen, MODELED_REVIEW_HISTORIES, "the modeled history space itself changed");
+
+  // The last reduce row is the explicit complement, not an unconditional default: a history
+  // it must not answer proves it.
+  assert.equal(REDUCE_ROWS[REDUCE_ROWS.length - 1]({ disposition: "none", latest: "pass", count: 4, after: 0, afterFirst: "pass" }), false,
+    "the last row must be a condition, not a catch-all that swallows a pass");
+});
+const MODELED_REVIEW_HISTORIES = 116;
+
+test("representative histories each reach one action", () => {
+  const scenarios = [
+    ["running the signal establishes that only remote evidence remains", "signal", { signal: "absent", fresh: false, remoteOnly: true }, 0],
+    ["a restart with no completion result yet", "signal", { signal: "absent", fresh: false, remoteOnly: false }, 1],
+    ["a repair landed, so the recorded pass is stale", "signal", { signal: "pass", fresh: false, remoteOnly: false }, 1],
+    ["a current fail is anchored before the repair", "signal", { signal: "fail", fresh: true, remoteOnly: false }, 2],
+    ["a current unverified signal", "signal", { signal: "unverified", fresh: true, remoteOnly: false }, 3],
+    ["a fresh unanchored signal pass feeds the review", "signal", { signal: "pass", fresh: true, remoteOnly: false }, 4],
+    ["a stale unanchored result is not evidence", "tail", { pending: "code12", fresh: false }, 0],
+    ["a fresh unanchored pass takes no anchor of its own", "tail", { pending: "pass", fresh: true }, 1],
+    ["a fresh unanchored card objection anchors before the claim is released", "tail", { pending: "card", fresh: true }, 2],
+    ["a fresh unanchored third objection anchors with the disposition", "tail", { pending: "code3", fresh: true }, 3],
+    ["nothing reviewed yet", "reduce", { disposition: "none", after: 0, afterFirst: "pass", latest: "none", count: 0 }, 4],
+    ["the first objection about the code", "reduce", { disposition: "none", after: 0, afterFirst: "pass", latest: "code", count: 1 }, 7],
+    ["the third objection anchored with no valid disposition", "reduce", { disposition: "none", after: 0, afterFirst: "pass", latest: "code", count: 3 }, 9],
+    ["a disposition written in another checkpoint", "reduce", { disposition: "elsewhere", after: 0, afterFirst: "pass", latest: "code", count: 3 }, 9],
+    ["a valid disposition with nothing after it", "reduce", { disposition: "valid", after: 0, afterFirst: "pass", latest: "code", count: 3 }, 0],
+    ["the one result after the disposition passes", "reduce", { disposition: "valid", after: 1, afterFirst: "pass", latest: "pass", count: 3 }, 1],
+    ["the one result after the disposition objects", "reduce", { disposition: "valid", after: 1, afterFirst: "code", latest: "code", count: 4 }, 2],
+    ["the one result after the disposition objects to the card", "reduce", { disposition: "valid", after: 1, afterFirst: "card", latest: "card", count: 3 }, 2],
+    ["two results after the disposition", "reduce", { disposition: "valid", after: 2, afterFirst: "pass", latest: "code", count: 4 }, 3],
+    ["an objection about the card before the boundary", "reduce", { disposition: "none", after: 0, afterFirst: "pass", latest: "card", count: 2 }, 6],
+    ["a review that could not judge", "reduce", { disposition: "none", after: 0, afterFirst: "pass", latest: "unverified", count: 1 }, 8],
+    ["a fresh approval from split resets the boundary and the count", "reduce", { disposition: "none", after: 0, afterFirst: "pass", latest: "none", count: 0 }, 4],
+    ["the disposition is already written beside the unanchored third objection", "tail", { pending: "code3", fresh: true, answerWritten: true }, 3],
+    ["no disposition is written yet beside it", "tail", { pending: "code3", fresh: true, answerWritten: false }, 3],
+  ];
+  const tables = {
+    signal: flowTable("skills/work/SKILL.md", EN_HEADING, EN_SUBS[0]),
+    tail: flowTable("skills/work/SKILL.md", EN_HEADING, EN_SUBS[1]),
+    reduce: flowTable("skills/work/SKILL.md", EN_HEADING, EN_SUBS[2]),
+  };
+  for (const [what, name, h, expected] of scenarios) {
+    if (name === "reduce") assert.ok(reachableReduce(h), `${what}: the scenario must be a history this procedure can stand in`);
+    const matched = PREDICATES[name].map((when, i) => (when(h) ? i : -1)).filter((i) => i >= 0);
+    assert.deepEqual(matched, [expected], what);
+    const classifier = { signal: expectedSignalRow, tail: expectedTailRow, reduce: expectedReduceRow }[name];
+    assert.equal(classifier(h), expected, `${what}: the second classifier disagrees`);
+    stepsInOrder(tables[name][expected].action, EN_STEPS[name][expected], `${what}: the action`);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// B audit repair: one interruption-safe review flow, a precise boundary between
+// machine records and a person's own authority, and one owner for a card whose
+// contract cannot support judgment.
+// ---------------------------------------------------------------------------
+
+test("prose enters no machine judgment while an explicit human disposition stays a person's authority", () => {
+  const principles = flat(fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8"));
+  // The machine surface is closed: still exactly four formats and no fifth.
+  assert.match(principles, /the four formats above are the whole machine surface, and nothing here adds a fifth/);
+  assert.match(principles, /No machine format, no state-tool predicate, and no recorded result is ever derived from it/);
+  // But a literal reader of a procedure may obey a person's answer written there.
+  assert.match(principles, /when a procedure asks for an explicit human disposition, the answer is one bounded ordinary line and a literal reader obeys it as the person's word/);
+  // Its binding is positional, so it needs no format, key, file, or second writer.
+  assert.match(principles, /same checkpoint, immediately after the line it answers/);
+  assert.match(principles, /needs no format, no key, no new file, and no second writer/);
+  // The ladder and the flow must never name two next actions for one review event —
+  // including a review that could not judge, which the ladder would otherwise retry.
+  assert.match(principles, /Review rounds are not ladder counts either/);
+  assert.match(principles, /`Review — one flow` owns that count, its human boundary, and what a review that could not judge does next/);
+});
+
+test("the boundary, the count, and the disposition's binding are fixed once", () => {
+  const work = flat(fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8"));
+  assert.match(work, /read from the canonical planning commit carrying this card's current `Approval` forward, in commit order/);
+  assert.match(work, /A new execution-proposal approval is a new boundary and the objection count starts again at zero/);
+  assert.match(work, /one review carrying five objections is one, and `pass`, `unverified`, and an objection about the card's contract raise nothing/);
+  assert.match(work, /valid only in the same checkpoint as the third objection about the code and immediately after that line/);
+  assert.match(work, /bounded ordinary Progress entry that invents no machine format, and a disposition written anywhere else is not one/);
+  // Current is a verdict as well as freshness, and no review starts without a passing one.
+  assert.match(work, /Current means both fresh and a verdict: its completion inputs and this card's task diff are unchanged since it ran, and the line carries one of the three verdicts/);
+  assert.match(work, /No clean review starts unless the current local completion result is `pass`/);
+  // One home: the role contract restates none of the flow.
+  const reviewer = fs.readFileSync(path.join(root, "skills", "work", "reviewer.md"), "utf8");
+  for (const forbidden of [/objection count/, /the third objection/, /clean review/, /disposition/]) {
+    assert.doesNotMatch(reviewer, forbidden, "the flow lives in work, not in the role contract");
+  }
+});
+
+test("a forbidden Read first path is a card defect, not a reviewer input", () => {
+  const work = flat(fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8"));
+  assert.match(work, /Validate `Read first` before assembling: a baseline path directly under `devflow\/project\/capabilities\/` is the legacy wiring this loop already refuses to open, and in a card's contract it is a defect — start no review and hand the reviewer nothing: checkpoint, name that exact invalid path in the progress log, release the claim, and take it to the owner section/);
+  // The settled input contract is untouched around it.
+  assert.match(work, /every currently existing exact path the card's `Read first` names/);
+  assert.match(work, /Report a missing path and invent no substitute/);
+  assert.match(work, /except a knowledge-capsule body at `devflow\/project\/capabilities\/NN-name\/K-NNN-topic\.md`/);
+  assert.match(work, /the loop's capsule gate stays the only opener/);
+});
+
+test("an objection about the card's contract routes to split, which owns only the card", () => {
+  const work = flat(fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8"));
+  assert.match(work, /An objection about the card's contract belongs to split/);
+  // Progress is a handoff, not authority over anything outside the card.
+  assert.match(work, /write the missing proposition and what this loop observed into the progress log, concretely — that is a handoff, not authority to change a document outside the card/);
+  assert.match(work, /split changes only what it already owns: the task card's fields and the exact `Read first` paths already in that card/);
+  assert.match(work, /establishes any replacement statement or path from the existing canonical owner under its own permitted reads/);
+  assert.match(work, /writes no arch file, capability document, or other `Read first` file from the progress log, and it neither opens nor infers a capsule/);
+  assert.match(work, /When no legitimate existing non-capsule basis can go into the card's contract, it does not approve the same card again/);
+  assert.match(work, /The same route carries the defect this loop finds itself before a review: an invalid exact `Read first` path named in the progress log is the same card-contract defect, and split repairs it under the same limits/);
+  assert.match(work, /An approval that does land is a new boundary, so the objection count starts at zero/);
+  assert.doesNotMatch(work, /new planning document|second planning layer/);
+  // split carries the same limits on the route it already owns.
+  const split = flat(fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8"));
+  assert.match(split, /a clean review returns an objection about the card's contract, or work names an invalid exact `Read first` path in the progress log before a review and releases the card/);
+  assert.match(split, /either card-contract defect reads the progress log as a handoff naming what is missing, establishes the replacement statement or path from its existing canonical owner under its own permitted reads, and repairs only the fields and the exact non-capsule `Read first` paths the card already carries/);
+  assert.match(split, /writes no arch file, capability document, or other `Read first` file from the progress log, opens and infers no capsule, and when no legitimate existing non-capsule basis can go into the card's contract it stops and reports to the person/);
+});
+
+// ---------------------------------------------------------------------------
+// The three layers have to compose into ONE next action, not three independent answers.
+// 2 settles what is written, 3 reduces the settled events, and 1 is what a review-bearing
+// outcome means by "establish a current `pass`" — including the remote-only branch, which
+// must never sit waiting for a generic line the canonical rules forbid.
+// ---------------------------------------------------------------------------
+
+const COMPOSED_ACTIONS = new Set([
+  "tail:anchor-before-acting", "tail:anchor-third-with-disposition",
+  "card:pre-review-handoff", "signal:remote-only", "signal:run",
+  "signal:anchor-then-repair", "signal:anchor-then-clear",
+  ...Array.from({ length: 10 }, (unused, i) => `reduce:${i}`),
+]);
+
+// Shape one — the pipeline the section describes: 2 settles the written tail, 3 reduces the
+// settled events, and 1 is what the one review-bearing outcome with no step of its own means
+// by "establish a current `pass`". The forbidden-baseline check belongs to assembling the
+// review input, so a step 3 owes first happens before it.
+function composedAction(h) {
+  const tailRow = h.pending === "none" ? -1 : TAIL_ROWS.findIndex((row) => row(h));
+  if (tailRow === 2) return "tail:anchor-before-acting";
+  if (tailRow === 3) return "tail:anchor-third-with-disposition";
+  const settled = tailRow === 1
+    ? {
+      ...h,
+      latest: "pass",
+      after: h.disposition === "valid" ? Math.min(h.after + 1, 2) : h.after,
+      afterFirst: h.disposition === "valid" && h.after === 0 ? "pass" : h.afterFirst,
+    }
+    : h;
+  const row = REDUCE_ROWS.findIndex((one) => one(settled));
+  if (row !== 4) return `reduce:${row}`;
+  const next = ["signal:remote-only", "signal:run", "signal:anchor-then-repair", "signal:anchor-then-clear", "reduce:4"][
+    SIGNAL_ROWS.findIndex((one) => one(h))
+  ];
+  const assemblesTheReviewNow = next === "reduce:4" || next === "signal:remote-only";
+  return assemblesTheReviewNow && h.readFirstInvalid ? "card:pre-review-handoff" : next;
+}
+
+// Shape two — flat exact-action predicates over the raw history, written from the section's
+// own wording rather than from the pipeline. Every composed history must match exactly one,
+// and it must be the action shape one returns.
+const freshTail = (h) => h.pending !== "none" && h.fresh;
+const settledPass = (h) => freshTail(h) && h.pending === "pass";
+const tailBlocks = (h) => freshTail(h) && h.pending !== "pass";
+const latestOf = (h) => (settledPass(h) ? "pass" : h.latest);
+const afterOf = (h) => (h.disposition === "valid" && settledPass(h) ? Math.min(h.after + 1, 2) : h.after);
+const firstOf = (h) => (h.disposition === "valid" && h.after === 0 && settledPass(h) ? "pass" : h.afterFirst);
+const answered = (h) => !tailBlocks(h) && h.disposition === "valid";
+const openFlow = (h) => !tailBlocks(h) && h.disposition !== "valid";
+const assembling = (h) => openFlow(h) && latestOf(h) === "none";
+const currentPass = (h) => !h.remoteOnly && h.fresh && h.signal === "pass";
+const COMPOSED_PREDICATES = [
+  { action: "tail:anchor-before-acting", when: (h) => tailBlocks(h) && h.pending !== "code3" },
+  { action: "tail:anchor-third-with-disposition", when: (h) => tailBlocks(h) && h.pending === "code3" },
+  { action: "reduce:0", when: (h) => answered(h) && afterOf(h) === 0 },
+  { action: "reduce:1", when: (h) => answered(h) && afterOf(h) === 1 && firstOf(h) === "pass" },
+  { action: "reduce:2", when: (h) => answered(h) && afterOf(h) === 1 && firstOf(h) !== "pass" },
+  { action: "reduce:3", when: (h) => answered(h) && afterOf(h) >= 2 },
+  { action: "reduce:5", when: (h) => openFlow(h) && latestOf(h) === "pass" },
+  { action: "reduce:6", when: (h) => openFlow(h) && latestOf(h) === "card" },
+  { action: "reduce:7", when: (h) => openFlow(h) && latestOf(h) === "code" && (h.count === 1 || h.count === 2) },
+  { action: "reduce:8", when: (h) => openFlow(h) && latestOf(h) === "unverified" },
+  { action: "reduce:9", when: (h) => openFlow(h) && latestOf(h) === "code" && h.count >= 3 },
+  { action: "card:pre-review-handoff", when: (h) => assembling(h) && h.readFirstInvalid && (h.remoteOnly || currentPass(h)) },
+  { action: "signal:remote-only", when: (h) => assembling(h) && h.remoteOnly && !h.readFirstInvalid },
+  { action: "signal:run", when: (h) => assembling(h) && !h.remoteOnly && (h.signal === "absent" || h.signal === "unreadable" || !h.fresh) },
+  { action: "signal:anchor-then-repair", when: (h) => assembling(h) && !h.remoteOnly && h.fresh && h.signal === "fail" },
+  { action: "signal:anchor-then-clear", when: (h) => assembling(h) && !h.remoteOnly && h.fresh && h.signal === "unverified" },
+  { action: "reduce:4", when: (h) => assembling(h) && currentPass(h) && !h.readFirstInvalid },
+];
+
+test("the three layers compose into one next action", () => {
+  const raw = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  const work = flat(raw);
+  // The reducer literally consumes settled results, and the definition lives once in 3.
+  assert.match(work, /Read the settled review events after the boundary in commit order: the anchored `review result` lines, and a fresh unanchored `pass` from 2 as the latest of them/);
+  assert.match(work, /After a valid disposition that pass is the one consuming result, so it finishes rather than authorizing another review/);
+  const reduceRows = flowTable("skills/work/SKILL.md", EN_HEADING, EN_SUBS[2]);
+  const settledConditions = reduceRows.filter((row) => /settled `review result`/.test(row.when));
+  assert.equal(settledConditions.length, 5,
+    "every row that counts results must count settled ones, not anchored-only ones");
+  assert.equal(reduceRows.filter((row) => /anchored `review result`/.test(row.when)).length, 0,
+    "no row may still say anchored where it means settled");
+  // The settled pass carries its own anchor and repeats nothing.
+  assert.match(work, /it is the latest settled event that 3 reads, and the action 3 selects — the final task commit, or the `evidence-wait` checkpoint — carries it. Never take the review again for it, and never carry out an already-consumed disposition again/);
+  // The remote-only branch stands ahead of the generic verdict rule.
+  assert.match(work, /running it establishes that only remote evidence remains \| no generic completion line is created or required for that result/);
+  assert.match(work, /A rerun after an interruption may rediscover the same thing; never wait here for a line the canonical rules forbid/);
+  // And the forbidden-path check belongs to assembling the review, not to the front of the flow.
+  assert.match(work, /That check runs when the review input is assembled, so a step 3 owes first — carrying out a disposition, making a repair, clearing an `unverified` reason — happens before it/);
+
+  let seen = 0;
+  for (const disposition of ["none", "valid", "elsewhere"]) {
+    for (const after of [0, 1, 2]) {
+      for (const afterFirst of ["pass", "code", "card", "unverified"]) {
+        for (const latest of ["none", "pass", "code", "card", "unverified"]) {
+          for (const count of [0, 1, 2, 3, 4]) {
+            if (!reachableReduce({ disposition, after, afterFirst, latest, count })) continue;
+            for (const pending of ["none", "pass", "code12", "code3", "card", "unverified"]) {
+              for (const fresh of [true, false]) {
+                for (const signal of ["absent", "fail", "unverified", "pass"]) {
+                  for (const remoteOnly of [true, false]) {
+                    for (const readFirstInvalid of [true, false]) {
+                      const h = { disposition, after, afterFirst, latest, count, pending, fresh, signal, remoteOnly, readFirstInvalid };
+                      const action = composedAction(h);
+                      assert.ok(COMPOSED_ACTIONS.has(action), `no composed action for ${JSON.stringify(h)}`);
+                      const matched = COMPOSED_PREDICATES.filter((one) => one.when(h)).map((one) => one.action);
+                      assert.equal(matched.length, 1, `${JSON.stringify(h)} matched ${JSON.stringify(matched)}`);
+                      assert.equal(matched[0], action, `the two shapes disagree on ${JSON.stringify(h)}`);
+                      seen += 1;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  assert.equal(seen, COMPOSED_HISTORIES, "the composed history space itself changed");
+});
+const COMPOSED_HISTORIES = 14592;
+
+test("composed scenes each reach one end-to-end action", () => {
+  const base = {
+    disposition: "none", after: 0, afterFirst: "pass", latest: "none", count: 0,
+    pending: "none", fresh: true, signal: "pass", remoteOnly: false, readFirstInvalid: false,
+  };
+  const scenes = [
+    // A straight-through review passed and the session died before the commit: the pass is
+    // the latest settled event, so the next action finishes the card — no second review.
+    ["straight-through unanchored pass on restart", { pending: "pass" }, "reduce:5"],
+    // The same line after a valid disposition is that disposition's one consuming result.
+    ["disposition-consuming unanchored pass on restart",
+      { disposition: "valid", after: 0, latest: "code", count: 3, pending: "pass" }, "reduce:1"],
+    // A stale one is ignored and the anchored events decide instead.
+    ["a stale unanchored pass is ignored", { pending: "pass", fresh: false, latest: "code", count: 1 }, "reduce:7"],
+    // Remote-only is discovered by running the signal, and never waits for a generic line.
+    ["remote-only before the review, heading for evidence-wait", { signal: "absent", remoteOnly: true }, "signal:remote-only"],
+    ["remote-only after an interruption does not loop for a generic line",
+      { signal: "absent", fresh: false, remoteOnly: true }, "signal:remote-only"],
+    // The person's instruction is the first action, and the Read first check waits for the
+    // review that instruction leads to.
+    ["a valid disposition with nothing after it is carried out even when Read first is invalid",
+      { disposition: "valid", after: 0, latest: "code", count: 3, readFirstInvalid: true }, "reduce:0"],
+    ["a repair is made before the Read first check", { latest: "code", count: 1, readFirstInvalid: true }, "reduce:7"],
+    ["a stale signal is run before the Read first check",
+      { signal: "absent", fresh: false, readFirstInvalid: true }, "signal:run"],
+    // The forbidden baseline path never reaches the reviewer; it becomes the card handoff.
+    ["pre-review forbidden baseline path becomes the card handoff", { readFirstInvalid: true }, "card:pre-review-handoff"],
+    ["remote-only with an invalid Read first hands off instead of assembling",
+      { signal: "absent", remoteOnly: true, readFirstInvalid: true }, "card:pre-review-handoff"],
+    ["a card already finishing is not diverted by the pre-review check",
+      { readFirstInvalid: true, latest: "pass", count: 0 }, "reduce:5"],
+    // Ordinary settlement still precedes everything that mutates.
+    ["a fresh unanchored objection anchors first", { pending: "code12", latest: "code", count: 1 }, "tail:anchor-before-acting"],
+    ["a fresh unanchored third objection anchors with the disposition",
+      { pending: "code3", latest: "code", count: 2 }, "tail:anchor-third-with-disposition"],
+  ];
+  for (const [what, over, expected] of scenes) {
+    const h = { ...base, ...over };
+    assert.equal(composedAction(h), expected, what);
+    const matched = COMPOSED_PREDICATES.filter((one) => one.when(h)).map((one) => one.action);
+    assert.deepEqual(matched, [expected], `${what}: the flat predicates disagree`);
+  }
+});

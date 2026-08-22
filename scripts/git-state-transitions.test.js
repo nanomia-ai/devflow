@@ -496,3 +496,190 @@ test("a remote-path clean review anchors to the evidence-wait checkpoint", (t) =
   assert.notEqual(introducedBy(reviewLine), final, "a descendant that still holds the line is not the anchor");
   assert.ok(git("show", "--name-only", "--format=", evidenceWait).includes(card));
 });
+
+// The human disposition needs no format because position binds it: it lands in the same
+// checkpoint as the objection it answers, immediately after that line. The first anchored
+// review result after it is what consumes it.
+test("a disposition binds to its objection by checkpoint and line order, and the next result consumes it", (t) => {
+  const { root, git, write } = makeRepo(t);
+  ownsResultFormats();
+
+  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  write(card, "# 02.1 card\nReview: required\n\n## Progress log\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 claim");
+  const append = (line) => fs.appendFileSync(path.join(root, card), `${line}\n`);
+  const base = git("rev-parse", "HEAD");
+  const objection = (n) => `2026-01-01T00:00:0${n}Z review result: head: ${base}; verdict: objections; detail-json: "r${n}"`;
+
+  append(objection(1));
+  git("commit", "-qam", "a 02.1 wip: first objection");
+  append(objection(2));
+  git("commit", "-qam", "a 02.1 wip: second objection");
+
+  // The third result and the person's answer are first-anchored together, in order.
+  append(objection(3));
+  const disposition = "2026-01-01T00:00:04Z human disposition: ship the narrower fix, drop the rename";
+  append(disposition);
+  git("commit", "-qam", "a 02.1 wip: third objection and disposition");
+  const anchor = git("rev-parse", "HEAD");
+
+  const introducedBy = (line) =>
+    git("log", "--reverse", "--format=%H", "-S", line, "--", card).split("\n").filter(Boolean)[0];
+  assert.equal(introducedBy(objection(3)), anchor);
+  assert.equal(introducedBy(disposition), anchor, "the answer shares one anchor with what it answers");
+  assert.notEqual(introducedBy(objection(2)), anchor, "an earlier objection keeps its own anchor");
+
+  // Line order inside that anchor is the whole binding — no key, no format.
+  const atAnchor = git("show", `${anchor}:${card}`).split("\n");
+  assert.equal(atAnchor.indexOf(disposition), atAnchor.indexOf(objection(3)) + 1);
+
+  // The next anchored review result consumes the authorization.
+  const final = `2026-01-01T00:00:05Z review result: head: ${base}; verdict: pass; detail-json: "final"`;
+  append(final);
+  git("commit", "-qam", "a 02.1 card");
+  const finalAnchor = git("rev-parse", "HEAD");
+  assert.equal(introducedBy(final), finalAnchor);
+  const after = git("show", `${finalAnchor}:${card}`).split("\n");
+  assert.ok(after.indexOf(final) > after.indexOf(disposition), "the consuming result follows the disposition");
+  // Exactly one review result exists after the disposition — a second would be a fifth review.
+  const resultsAfter = after.slice(after.indexOf(disposition) + 1)
+    .filter((line) => / review result: /.test(line));
+  assert.equal(resultsAfter.length, 1);
+});
+
+// The one place Git ordering, not wording, decides the answer: a checkpoint that already
+// closed cannot be joined later. If the third objection was anchored alone, no commit made
+// afterwards shares its checkpoint, so no disposition written now binds it — which is why
+// that state fails closed to the person instead of being repaired in place.
+test("a third objection anchored alone cannot be joined by a later disposition commit", (t) => {
+  const { root, git, write } = makeRepo(t);
+  ownsResultFormats();
+  // The row this fixture exists for: work must fail that state closed rather than write a
+  // disposition into a later commit and call it bound.
+  const work = fs.readFileSync(path.join(repoRoot, "skills", "work", "SKILL.md"), "utf8");
+  assert.match(work.replace(/\s+/g, " "),
+    /no valid disposition, and the latest result objects to the code and is the third or later/,
+    "work must carry the row a third objection anchored with no valid disposition lands in");
+  assert.match(work.replace(/\s+/g, " "),
+    /a disposition written in any other checkpoint authorizes nothing/);
+  assert.match(work.replace(/\s+/g, " "),
+    /a disposition written anywhere else is not one/);
+
+  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  write(card, "# 02.1 card\nReview: required\n\n## Progress log\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 claim");
+  const append = (line) => fs.appendFileSync(path.join(root, card), `${line}\n`);
+  const base = git("rev-parse", "HEAD");
+  const result = (n, verdict) =>
+    `2026-01-01T00:00:0${n}Z review result: head: ${base}; verdict: ${verdict}; detail-json: "r${n}"`;
+  const introducedBy = (line) =>
+    git("log", "--reverse", "--format=%H", "-S", line, "--", card).split("\n").filter(Boolean)[0];
+
+  for (const n of [1, 2, 3]) {
+    append(result(n, "objections"));
+    git("commit", "-qam", `a 02.1 wip: objection ${n}`);
+  }
+  const third = git("rev-parse", "HEAD");
+
+  // The person answers afterwards. The answer lands, but in a checkpoint of its own.
+  const disposition = "2026-01-01T00:00:09Z human disposition: ship the narrower fix";
+  append(disposition);
+  git("commit", "-qam", "a 02.1 wip: late disposition");
+  assert.equal(introducedBy(result(3, "objections")), third);
+  assert.notEqual(introducedBy(disposition), third, "a later commit is a different checkpoint");
+  assert.ok(!git("show", `${third}:${card}`).includes(disposition),
+    "the closed checkpoint does not contain the answer, so position cannot bind them");
+
+  // An anchored `unverified` is an event too, and it advances no objection ordinal.
+  append(result(4, "unverified"));
+  git("commit", "-qam", "a 02.1 wip: review could not judge");
+  const objections = git("show", `HEAD:${card}`).split("\n")
+    .filter((line) => / review result: .*verdict: objections;/.test(line));
+  assert.equal(objections.length, 3, "only `objections` verdicts count toward the ordinal");
+});
+
+// Commit order, not the newest line, names the disposition's consumer. A later result
+// cannot take that place back, which is what keeps a spent answer spent.
+test("the first result after a disposition is its consumer, and a later result does not take that place", (t) => {
+  const { root, git, write } = makeRepo(t);
+  ownsResultFormats();
+  const work = fs.readFileSync(path.join(repoRoot, "skills", "work", "SKILL.md"), "utf8");
+  assert.match(work.replace(/\s+/g, " "),
+    /a valid disposition with exactly one settled `review result` after it, and it is `pass`/,
+    "work must decide by how many results followed the disposition, not by the newest line");
+  assert.match(work.replace(/\s+/g, " "),
+    /a valid disposition with two or more settled `review result` lines after it/);
+
+  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  write(card, "# 02.1 card\nReview: required\n\n## Progress log\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 claim");
+  const append = (line) => fs.appendFileSync(path.join(root, card), `${line}\n`);
+  const base = git("rev-parse", "HEAD");
+  const result = (n, verdict) =>
+    `2026-01-01T00:00:0${n}Z review result: head: ${base}; verdict: ${verdict}; detail-json: "r${n}"`;
+  const introducedBy = (line) =>
+    git("log", "--reverse", "--format=%H", "-S", line, "--", card).split("\n").filter(Boolean)[0];
+
+  for (const n of [1, 2]) {
+    append(result(n, "objections"));
+    git("commit", "-qam", `a 02.1 wip: objection ${n}`);
+  }
+  const disposition = "2026-01-01T00:00:04Z human disposition: ship the narrower fix";
+  append(result(3, "objections"));
+  append(disposition);
+  git("commit", "-qam", "a 02.1 wip: third objection and disposition");
+  const answered = git("rev-parse", "HEAD");
+
+  append(result(5, "pass"));
+  git("commit", "-qam", "a 02.1 wip: final review");
+  const consumer = git("rev-parse", "HEAD");
+  // A malformed history keeps going after the answer was already spent.
+  append(result(6, "objections"));
+  git("commit", "-qam", "a 02.1 wip: one more review nobody authorized");
+
+  const order = git("log", "--reverse", "--format=%H", "--", card).split("\n").filter(Boolean);
+  const after = order.slice(order.indexOf(answered) + 1);
+  assert.equal(after[0], consumer, "commit order names the consumer");
+  assert.equal(introducedBy(result(5, "pass")), consumer, "and the consumer is the pass, not the newest line");
+  assert.ok(order.indexOf(introducedBy(result(6, "objections"))) > order.indexOf(consumer),
+    "the later objection stands after the consumer and cannot become it");
+});
+
+// Whether the recorded signal still speaks for the code is decidable from Git alone: a
+// commit touching this card's paths after that anchor is what stales it. Without one, a
+// restart must not pay for the run again.
+test("a signal result is current until a later commit changes this card's task diff", (t) => {
+  const { root, git, write } = makeRepo(t);
+  ownsResultFormats();
+  const work = fs.readFileSync(path.join(repoRoot, "skills", "work", "SKILL.md"), "utf8");
+  assert.match(work.replace(/\s+/g, " "),
+    /Current means both fresh and a verdict: its completion inputs and this card's task diff are unchanged since it ran, and the line carries one of the three verdicts/,
+    "work must fix what makes a recorded signal current");
+
+  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  write(card, "# 02.1 card\nCompletion signal: node --test\n\n## Progress log\n");
+  write("src/a.txt", "one\n");
+  git("add", "-A");
+  git("commit", "-qm", "a 02.1 claim");
+  const base = git("rev-parse", "HEAD");
+  fs.appendFileSync(path.join(root, card),
+    `2026-01-01T00:00:01Z completion signal result: head: ${base}; verdict: pass; detail-json: "ok"\n`);
+  git("commit", "-qam", "a 02.1 wip: signal passed");
+  const anchor = git("rev-parse", "HEAD");
+
+  const codePaths = ["src"];
+  // Another flow's boundary commit is not this card's task diff.
+  write("devflow/journal.md", "2026-01-01T00:00:00Z capability note: capability: 03; note-json: \"x\"\n");
+  git("add", "-A");
+  git("commit", "-qm", "a boundary — room upgrade");
+  assert.equal(git("diff", "--name-only", `${anchor}..HEAD`, "--", ...codePaths), "",
+    "a commit outside this card's paths leaves the signal current");
+
+  write("src/a.txt", "two\n");
+  git("commit", "-qam", "a 02.1 wip: the repair the objection named");
+  assert.notEqual(git("diff", "--name-only", `${anchor}..HEAD`, "--", ...codePaths), "",
+    "the repair changed this card's task diff, so the recorded pass no longer speaks for the code");
+});

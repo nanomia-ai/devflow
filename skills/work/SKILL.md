@@ -195,8 +195,20 @@ Review — omit this step when the card's `Review` is `waived`. Omit `not-applic
         excluded) + the diff limited to this card's paths + code-style.md + glossary.md + journal.md + this card's capability
         document design zone and every existing file at an exact path listed in that zone's
         Binding ADRs section when that zone exists +
-        exactly one design-freshness, reconfirmation, or baseline-missing projection**
-        (project files only when they exist). Do not enter
+        exactly one design-freshness, reconfirmation, or baseline-missing projection +
+        every currently existing exact path the card's `Read first` names**
+        (project files only when they exist). Holding back a basis split already approved is
+        what turns a reviewer into a guesser. Report a missing path and invent no substitute
+        — the same rule the loop applies when it opens `Read first` itself. Validate `Read first`
+        before assembling: a baseline path directly under `devflow/project/capabilities/` is
+        the legacy wiring this loop already refuses to open, and in a card's contract it is a
+        defect — start no review and hand the reviewer nothing: checkpoint, name that exact
+        invalid path in the progress log, release the claim, and take it to the owner section
+        of `Review — one flow` below. Give all of them
+        except a knowledge-capsule body at `devflow/project/capabilities/NN-name/K-NNN-topic.md`.
+        That path stays visible inside the Progress-excluded card, but synthesize no capsule
+        header, provenance, or remaining budget for the reviewer — the loop's capsule gate
+        stays the only opener. Do not enter
         review when a design hypothesis used by
         the implementation has not been reconfirmed. No implementation backstory — the
         progress log IS the backstory. The code must explain itself.
@@ -207,10 +219,12 @@ Review — omit this step when the card's `Review` is `waived`. Omit `not-applic
         diff changes and before this path leaves for a boundary or design commit — the same
         `NN.N wip: <what>` checkpoint on `objections` or `unverified`, the final task commit
         for a straight-through final `pass`, and the `NN.N wip: evidence-wait` checkpoint for
-        a clean review on the remote-evidence path.
-        Objection → fix → re-review. A fix that changed the diff re-runs the completion
-        signal — against the changed code, an earlier pass is unverified. Failure ladder
-        applies — 3 strikes calls the human
+        a clean review on the remote-evidence path. The third objection about the code is the
+        one exception: `Review — one flow` below anchors it together with the person's
+        disposition.
+        The review lifecycle — the completion precondition, the tail written but not yet
+        anchored, the objection count, the human boundary, and recovery — is the
+        `Review — one flow` section below
         When only remote evidence remains in the completion signal, finish the canonical
         exact `remote evidence check` log, evidence-wait checkpoint, journal record commit,
         and push, then end this invocation. Upper-document feedback, the final task commit,
@@ -329,6 +343,91 @@ the commit carries only its own paths, and changes the card work made to the sam
 land first as that card's wip checkpoint through the tweak lane's target-path check. A
 Git commit records a path's final content, so without that check the same file's card
 changes ride the tweak commit.
+
+## Review — one flow
+
+The review lifecycle lives here, in one place, so that no step of it has to be inferred
+from half a sentence somewhere else. It turns on three distinctions — the verdict of the
+completion result, the tail written but not yet anchored, and the reduction of the anchored
+events. All three are functions of evidence already in Git, so an interrupted session reads
+them again instead of remembering.
+
+**Boundary.** Everything below is read from the canonical planning commit carrying this
+card's current `Approval` forward, in commit order. A new execution-proposal approval is a
+new boundary and the objection count starts again at zero. **The objection count** is the
+anchored objections about the code after that boundary — one review carrying five objections
+is one, and `pass`, `unverified`, and an objection about the card's contract raise nothing.
+**The person's disposition** is valid only in the same checkpoint as the third objection
+about the code and immediately after that line — it is a bounded ordinary Progress entry that
+invents no machine format, and a disposition written anywhere else is not one.
+
+### 1. The completion precondition
+
+Current means both fresh and a verdict: its completion inputs and this card's task diff are
+unchanged since it ran, and the line carries one of the three verdicts. No clean review
+starts unless the current local completion result is `pass`. "Establish a current `pass`"
+below means running this table until `pass` stands.
+
+| The card's completion signal | What happens next |
+|---|---|
+| running it establishes that only remote evidence remains | no generic completion line is created or required for that result — take the clean review, then the loop's remote-evidence route above. A rerun after an interruption may rediscover the same thing; never wait here for a line the canonical rules forbid |
+| its newest local result is absent, unreadable as a verdict, or stale | run the completion signal, record its result, and read this table again |
+| its newest local result is current and `fail` | anchor that line in its `NN.N wip: <what>` checkpoint under the canonical rule before any code change, then repair and run it again |
+| its newest local result is current and `unverified` | anchor it the same way first, then clear the reason it records and run it again. A reason this loop cannot clear is reported to the person as the blocker it is |
+| its newest local result is current and `pass` | the precondition stands. Feed it to the review even when it is not yet anchored — do not run it again merely because it is unanchored |
+
+### 2. Settle the written tail before acting on it
+
+With no `review result:` written but unanchored, go to 3. With one, the row below is where
+that line stands, and 3 is read after that settlement.
+
+| A `review result:` written but not yet anchored | What happens next |
+|---|---|
+| stale — its completion inputs or this card's task diff changed since that review ran | it is not evidence: leave the line where it is and read only the anchored events in 3 |
+| a fresh `pass` | it takes no anchor of its own: it is the latest settled event that 3 reads, and the action 3 selects — the final task commit, or the `evidence-wait` checkpoint — carries it. Never take the review again for it, and never carry out an already-consumed disposition again |
+| a fresh objection about the code that is the first or the second, an objection about the card's contract, or `unverified` | anchor it in its own `NN.N wip: <what>` checkpoint before the action it selects changes the diff or releases the claim |
+| a fresh third objection about the code | anchor it together with the person's disposition in one checkpoint — when that disposition is already written beside it, recognize it and anchor both; when it is not, ask once and anchor both together |
+
+### 3. Reduce the settled events
+
+Read the settled review events after the boundary in commit order: the anchored
+`review result` lines, and a fresh unanchored `pass` from 2 as the latest of them. After a
+valid disposition that pass is the one consuming result, so it finishes rather than
+authorizing another review. The conditions below do not overlap, so the one that holds is the
+next action.
+
+| Settled evidence | What happens next |
+|---|---|
+| a valid disposition with no settled `review result` after it | first carry out what that disposition says, establish a current `pass` by 1, then take exactly one clean review |
+| a valid disposition with exactly one settled `review result` after it, and it is `pass` | the carry line, then the final task commit |
+| a valid disposition with exactly one settled `review result` after it that is not `pass` | that disposition is spent — stop and report to the person. Later evidence never revives it, and this objection does not go to split |
+| a valid disposition with two or more settled `review result` lines after it | the record is broken — stop and report to the person |
+| no valid disposition, and no settled `review result` after the boundary | establish a current `pass` by 1, then take the first clean review |
+| no valid disposition, and the latest result is `pass` | the carry line, then the final task commit — the remote-evidence path takes the `evidence-wait` checkpoint above |
+| no valid disposition, and the latest result objects to the card's contract | the owner section below, whatever the objection count |
+| no valid disposition, and the latest result objects to the code and is the first or the second | make the repair it names, establish a current `pass` by 1, then take a new clean review |
+| no valid disposition, and the latest result is `unverified` | clear the reason it records, establish a current `pass` by 1, then take a clean review again. It is no objection and calls no one by itself, and a reason this loop cannot clear is reported to the person as the blocker it is |
+| no valid disposition, and the latest result objects to the code and is the third or later | stop and report to the person — a disposition written in any other checkpoint authorizes nothing. Only a fresh execution-proposal approval from split is a new boundary and starts the flow over |
+
+**An objection about the card's contract belongs to split.** The reviewer is saying that the
+Progress-excluded card plus the exact files it received cannot decide the question, so what
+needs fixing is the card, and the card is split's. Before releasing the claim, write the
+missing proposition and what this loop observed into the progress log, concretely — that is a
+handoff, not authority to change a document outside the card. split changes only what it
+already owns: the task card's fields and the exact `Read first` paths already in that card.
+It establishes any replacement statement or path from the existing canonical owner under its
+own permitted reads. It writes no arch file, capability document, or other `Read first` file
+from the progress log, and it neither opens nor infers a capsule. When no legitimate existing
+non-capsule basis can go into the card's contract, it does not approve the same card again:
+it stops and reports to the person. The same route carries the defect this loop finds itself
+before a review: an invalid exact `Read first` path named in the progress log is the same
+card-contract defect, and split repairs it under the same limits. That check runs when the
+review input is assembled, so a step 3 owes first — carrying out a disposition, making a
+repair, clearing an `unverified` reason — happens before it. An approval that does land
+is a new boundary, so the objection count starts at zero.
+
+This section and `reviewer.md` are different homes — procedure here, role boundary there.
+Do not copy the objection count or the human boundary into the role contract.
 
 ## When You Must Leave the Card — stop and go up
 

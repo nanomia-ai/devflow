@@ -542,6 +542,8 @@ The harness dial — inversely proportional to tier:
 
 Repeated fix attempts under the same hypothesis during implementation are not ladder
 counts — those belong to work's stuck-escape.
+Review rounds are not ladder counts either — work's `Review — one flow` owns that count,
+its human boundary, and what a review that could not judge does next.
 The failure ladder counts only prompt reinforcement, tier escalation, and a human call within one work run.
 A completed card that crosses the verify boundary and later returns non-pass is counted by verify's `repair lineage` and `recurrence observation`.
 A new root and recurrence observation 1 follow the normal fix route; recurrence observation 2 or higher returns to the human without an automatic card.
@@ -764,8 +766,14 @@ decision — a blockade does not block this lane.
   this list is their only home — `completion signal result:` and `review result:` below,
   `carry:` in the next bullet, and `remote evidence check:` in the remote-evidence bullet.
   A progress line that starts with the canonical timestamp followed by one of those four
-  heads stands in that format exactly. Every other progress line is the implementer's prose
-  and enters no judgment. work fills the values when it actually runs the thing.
+  heads stands in that format exactly. Every other progress line is the implementer's prose.
+  No machine format, no state-tool predicate, and no recorded result is ever derived from it
+  — the four formats above are the whole machine surface, and nothing here adds a fifth.
+  What such a line can still carry is a person's own authority: when a procedure asks for an
+  explicit human disposition, the answer is one bounded ordinary line and a literal reader
+  obeys it as the person's word. Position is its whole binding — same checkpoint,
+  immediately after the line it answers — so it needs no format, no key, no new file, and no
+  second writer. work fills the values when it actually runs the thing.
 
   ```text
   YYYY-MM-DDTHH:MM:SSZ completion signal result: head: <full object ID of HEAD captured just before that run>; verdict: pass | fail | unverified; detail-json: <short JSON string>
