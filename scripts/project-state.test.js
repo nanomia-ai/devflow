@@ -1742,6 +1742,23 @@ test("R2 unstaged delete plus untracked done card is a bounded claim-done move",
   assertFragment(result.stdout, "transition: kind=finish-boundary", "case=claim-done-move");
 });
 
+test("R2 a claim-done move still measures HANDOFF freshness against the claimed HEAD path", (t) => {
+  const root = makeRepo(t);
+  const claimed = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step\n${claimed}\n`);
+  commit(root, "jmp boundary — handoff before final task");
+  writeClaim(root, {
+    progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: exact trap",
+    commitSubject: "jmp 02.1 final task",
+  });
+  const done = claimed.replace(".wip-jmp.md", ".done.md");
+  git(root, "mv", claimed, done);
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "transition: kind=finish-boundary", "case=claim-done-move");
+  assertFragment(result.stdout, "transition: kind=finish-boundary", 'missing=["handoff"]');
+  assertFragment(result.stdout, "handoff:", "stale=1");
+});
+
 test("R2 a similar untracked filename is not guessed to be a claim-done move", (t) => {
   const root = makeRepo(t);
   const claimed = writeClaim(root);
@@ -1826,6 +1843,28 @@ test("R3 unrelated source changes do not hide an interrupted canonical output", 
   const result = run(root); ok(result);
   assertFragment(result.stdout, "transition: kind=interrupted", 'paths=["devflow/journal.md","devflow/tree/02-capability/verify.md"]');
   assertFragment(result.stdout, "report:", 'uncommittedUnattributed=["devflow/journal.md","devflow/tree/02-capability/verify.md","src/x.js"]');
+});
+
+test("R3 a work-owned capability note is not a verification output prefix", (t) => {
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  const card = writeClaim(root, { commitSubject: "jmp 02.1 claim" });
+  write(root, "devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
+  commit(root, "jmp boundary — earlier capability verification");
+  write(root, "devflow/journal.md", `${designNote("02", "confirmed intent", card, ["src/x.js"])}\n`);
+  write(root, "src/x.js", "export const x = 1;\n");
+  const result = run(root); ok(result);
+  assert.equal(hasKind(result.stdout, "transition", "interrupted"), false, result.stdout);
+  assert.equal(nextOf(result.stdout), "claim.mine", result.stdout);
+});
+
+test("R3 an added capability-closing line remains a verification output prefix", (t) => {
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  write(root, "devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
+  commit(root, "jmp boundary — earlier capability verification");
+  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z capability closing: folder: devflow/tree/02-capability; head: ${"a".repeat(40)}; product: product-revision; verification: verification-revision; capability: capability-revision\n`);
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "transition: kind=interrupted", 'paths=["devflow/journal.md"]');
+  assert.equal(nextOf(result.stdout), "transition.interrupted", result.stdout);
 });
 
 test("R3 an unrelated source change alone does not invent an interrupted transition", (t) => {
@@ -2174,6 +2213,18 @@ test("R6 capability closure projects only non-none carry facts", (t) => {
   const result = run(root); ok(result);
   assertFragment(result.stdout, "layer: kind=children-done", "carry=1");
   assertFragment(result.stdout, "layer: kind=children-done", `carryFacts=[{\"card\":\"${first}\",\"fact\":\"exact trap\"}]`);
+});
+
+test("R6 capability closure includes carry facts from done cards below promoted subfolders", (t) => {
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  const direct = "devflow/tree/02-capability/02.1-first.done.md";
+  const nested = "devflow/tree/02-capability/02.3-sub.done/02.3.1-nested.done.md";
+  write(root, direct, cardText("02.1", { progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: none" }));
+  write(root, nested, cardText("02.3.1", { progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: nested trap" }));
+  commit(root, "jmp completed nested capability children");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "layer: kind=children-done", "carry=1");
+  assertFragment(result.stdout, "layer: kind=children-done", `carryFacts=[{\"card\":\"${nested}\",\"fact\":\"nested trap\"}]`);
 });
 
 test("current claim origin is derived from the card-creation commit's deleted request", (t) => {

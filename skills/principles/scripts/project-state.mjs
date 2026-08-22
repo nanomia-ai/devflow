@@ -871,7 +871,14 @@ function parseHandoff(snapshot) {
   // Freshness is measured against the history this room claimed, and with nothing claimed
   // there is none: `git log -- ` with no path asks the whole repository instead, which stales
   // a HANDOFF written a moment ago.
-  const claimed = snapshot.cards.filter((card) => card.claimant === room.id).map((card) => card.path);
+  const claimed = [...new Set([
+    ...snapshot.cards.filter((card) => card.claimant === room.id).map((card) => card.path),
+    ...gitNulList(root, ["ls-tree", "-r", "--name-only", "-z", "HEAD", "--", "devflow/tree"])
+      .filter((relative) => {
+        const card = cardIdentity(relative);
+        return card?.status === "claimed" && card.claimant === room.id;
+      }),
+  ])].sort(byteCompare);
   if (date !== null && claimed.length > 0) {
     const newest = gitLine(root, ["log", "-1", "--format=%cI", "--", ...claimed], { allowFailure: true });
     if (newest && Date.parse(newest) > Date.parse(date)) stale = true;
@@ -956,7 +963,7 @@ async function revisions(snapshot, capabilityNumber) {
     const folders = snapshot.depth1Folders.filter((folder) => Number(folderIdentity(folder)?.number) === Number(capabilityNumber));
     if (folders.length !== 1) capability = "unresolved";
     else {
-      const targetCards = snapshot.cards.filter((card) => card.status === "done" && card.path.startsWith(`${folders[0]}/`));
+      const targetCards = doneDescendantCards(snapshot, folders[0]);
       const byNumber = new Map();
       for (const card of snapshot.cards) {
         const values = byNumber.get(card.number) ?? [];
@@ -1586,6 +1593,25 @@ function cardJudgment(snapshot, card) {
   return { approval, blockers, ready: approval.value === "effective" && card.depends.anomalies.length === 0 && blockers.length === 0 };
 }
 
+function addedJournalEntries(snapshot) {
+  const shown = gitRun(snapshot.root, ["show", "HEAD:devflow/journal.md"], { allowFailure: true });
+  if (shown.status !== 0) return [];
+  let head;
+  try {
+    head = parseJournal(normalizeFileText(decodeUtf8(shown.stdout, "HEAD:devflow/journal.md")));
+  } catch {
+    return [];
+  }
+  const remaining = new Map();
+  for (const line of head) remaining.set(line.raw, (remaining.get(line.raw) ?? 0) + 1);
+  return snapshot.journal.filter((line) => {
+    const count = remaining.get(line.raw) ?? 0;
+    if (count === 0) return true;
+    remaining.set(line.raw, count - 1);
+    return false;
+  });
+}
+
 function classifyWorkingTransition(snapshot, designPrefix) {
   // The design-only write owns its own route, so it is never also a generic output prefix.
   if (designPrefix === "design-only") return null;
@@ -1593,6 +1619,11 @@ function classifyWorkingTransition(snapshot, designPrefix) {
     || /(?:^|\/)verify\.md$/.test(relative) || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
   if (paths.length === 0) return null;
   if (snapshot.verifyTexts.size === 0) return null;
+  const changedOutput = paths.some((relative) => /(?:^|\/)verify\.md$/.test(relative)
+    || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
+  const journalOutput = paths.includes("devflow/journal.md")
+    && addedJournalEntries(snapshot).some((line) => ["capability-closing", "product-running", "product-result"].includes(line.kind));
+  if (!changedOutput && !journalOutput) return null;
   return { paths, state: "working-tree", case: "canonical-output-prefix" };
 }
 
@@ -1635,6 +1666,10 @@ function directChildren(snapshot, directory) {
     ...folderIdentity(relative),
   }));
   return { cards, folders };
+}
+
+function doneDescendantCards(snapshot, directory) {
+  return snapshot.cards.filter((card) => card.status === "done" && card.path.startsWith(`${directory}/`));
 }
 
 function productPreconditions(snapshot) {
@@ -2156,7 +2191,7 @@ function evaluateZones(snapshot) {
       if (directory.split("/").length === 3 && Number(identity.number) !== 1 && capabilityRecord?.channelUnavailable) continue;
       if (directory.split("/").length === 3 && Number(identity.number) !== 1) {
         layerSummary.childrenDone += 1;
-        const carryFacts = children.cards.filter((card) => card.status === "done").flatMap((card) => {
+        const carryFacts = doneDescendantCards(snapshot, directory).flatMap((card) => {
           const carry = carryState(card);
           return carry.present && carry.fact !== "none" ? [{ card: card.path, fact: carry.fact }] : [];
         });
