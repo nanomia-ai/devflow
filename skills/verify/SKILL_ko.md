@@ -478,6 +478,8 @@ fetch한 통합 브랜치에서만 실행한다. 새 사건을 고르기 전에 
 Product revision·Verification revision·Code revision·Capability revision은 이번 실행에서 계산한
 값으로 교체한다. 제품층의 Capability revision은 `해당 없음`이다. 아래 문법은 커밋된 상태만
 나타낸다. 미커밋 `라우팅 준비`는 규칙 정본의 라우팅 쓰기 순서가 단독으로 정의한다.
+실패 이력 항목이 0개면 `실패 이력:`과 `회귀:` 사이에 줄을 쓰지 않는다. `- 없음`·`- none`·
+`None.` 같은 대체 표시는 쓰지 않는다. 항목이 있을 때만 아래 출처 id 행을 반복한다.
 
 ```markdown
 # 검증 · <능력이름> · <날짜>

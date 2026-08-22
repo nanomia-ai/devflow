@@ -574,6 +574,9 @@ Verification revision, Code revision, and Capability revision with the values ca
 for this run. Capability revision is `not-applicable` at the product layer. The grammar
 below shows committed states only. The canonical Routing write order alone defines the
 uncommitted `routing prepared` state.
+When Failure history has zero entries, write no line between `Failure history:` and
+`Regression:`. Do not write a sentinel such as `- none` or `None.`; repeat the source-id
+rows below only when entries exist.
 
 ```markdown
 # Verification · <capability> · <date>

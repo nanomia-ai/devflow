@@ -1377,6 +1377,8 @@ test("product verdict freshness binds product, verification inputs, and committe
   assert.match(state, /every direct `Depends`\s+card of those cards/);
   assert.doesNotMatch(state, /git ls-tree[^\n]*:\(exclude\)/);
   assert.match(verify, /direct-dependency card/);
+  assert.match(verify, /When Failure history has zero entries, write no line between `Failure history:` and\s+`Regression:`/,
+    "zero Failure-history entries are represented by an empty span, not a sentinel row");
   assert.match(state, /never use the PowerShell object pipeline/);
   assert.match(verify, /Before either layer, combine the non-empty output/);
   // The revision comparison and the uncommitted-outside-devflow trigger are the tool's

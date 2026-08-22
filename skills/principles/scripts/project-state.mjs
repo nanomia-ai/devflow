@@ -1234,7 +1234,9 @@ function verifyProjection(snapshot) {
     }
     for (const part of parts) {
       const body = part.lines.join("\n").trim();
-      if (body && body !== "- not run" && body !== "None.") {
+      const empty = body === "" || body === "None."
+        || (part.name === "Failure history" && /^-\s+none\.?$/i.test(body));
+      if (!empty && body !== "- not run") {
         for (const line of part.lines.filter((value) => /^-\s+/.test(value))) {
           if (!/source id:\s*\d+/.test(line)) result.sourceMigration.push({ path: relative, section: part.name, raw: line.trim() });
         }

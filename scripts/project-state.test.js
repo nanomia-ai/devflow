@@ -345,7 +345,6 @@ Capability revision: not-applicable
 Verdict: ${verdict}
 New entries: 0
 Failure history:
-None.
 ## Audit
 ${events ? "- source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key: product · 0 findings · 0 adopted · routing: none" : "- not run"}
 ## Retrospective
@@ -354,7 +353,7 @@ ${events ? "- source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key
   commit(root, "jmp boundary — product verification result");
 }
 
-function capabilityVerify(root, relative, { failures = "None.", audit = "- not run", retrospective = "- not run", verdict = "pass" } = {}) {
+function capabilityVerify(root, relative, { failures = "", audit = "- not run", retrospective = "- not run", verdict = "pass" } = {}) {
   const revisions = currentRevisions(root);
   write(root, relative, `# Verification · fixture · 2026-08-20
 Product revision: ${revisions.productRevision}
@@ -364,7 +363,7 @@ Capability revision: unresolved
 Scenario: fixture
 Executed: fixture
 Verdict: ${verdict}
-New entries: ${failures === "None." ? 0 : 1}
+New entries: ${failures === "" || failures === "None." ? 0 : 1}
 Failure history:
 ${failures}
 Regression: none
@@ -1311,6 +1310,18 @@ test("adversarial F1 canonical Failure history without source id requires migrat
   const result = run(root); ok(result);
   assertFragment(result.stdout, "transition: kind=source-id-migration", 'section="Failure history"');
   assert.equal(nextOf(result.stdout), "transition.source-id-migration");
+});
+
+test("D6 an empty Failure history has zero list items and legacy dash-none invents no source id", async (t) => {
+  for (const [label, failures] of [["canonical empty", ""], ["legacy dash-none", "- none"]]) {
+    await t.test(label, () => {
+      const root = makeRepo(t);
+      capabilityVerify(root, "devflow/tree/02-capability/verify.md", { failures });
+      const result = run(root); ok(result);
+      assert.equal(hasKind(result.stdout, "transition", "source-id-migration"), false, result.stdout);
+      assert.equal(result.stdout.includes("reason=source-id"), false, result.stdout);
+    });
+  }
 });
 
 test("adversarial F1 canonical Failure history duplicate source ids blocks", (t) => {
