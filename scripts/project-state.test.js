@@ -663,6 +663,8 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
       zone: "marker", kind: "capability-closure", fragment: "folder=devflow/tree/02-capability" },
     { name: "capability note", head: "capability note:", batch: "base",
       line: `${timestamp} capability note: capability: 02; note-json: ${JSON.stringify("the column names are display-only")}` },
+    { name: "capability note (design)", head: "capability note:", batch: "base",
+      line: `${timestamp} capability note: capability: 02; note-json: ${JSON.stringify("a column rename never changes the export contract")}; card-json: ${JSON.stringify(card)}; code-json: ${JSON.stringify(["src/export/contract.ts", "src/export/rename.ts"])}` },
     { name: "audit requested (capability)", head: "audit requested:", batch: "base",
       line: `${timestamp} audit requested: 02`,
       zone: "event", kind: "new", fragment: "role=Audit target=2" },
@@ -689,6 +691,7 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
     { name: "product verification result", head: "product verification result:", line: `${timestamp} product verification result: trigger: requested; product: p; verification: v; code: c` },
     { name: "capability closing", head: "capability closing:", line: `${timestamp} capability closing: folder: devflow/tree/02-capability; head: ${checkpoint}; product: p; verification: v` },
     { name: "capability note", head: "capability note:", line: `${timestamp} capability note: capability: 02` },
+    { name: "capability note (design)", head: "capability note:", line: `${timestamp} capability note: capability: 02; note-json: ${JSON.stringify("a statement")}; card-json: ${JSON.stringify(card)}; code-json: ${JSON.stringify("src/export/contract.ts")}` },
     { name: "audit requested", head: "audit requested:", line: `${timestamp} audit requested: 02x` },
     { name: "retrospective requested", head: "retrospective requested:", line: `${timestamp} retrospective requested: 02x` },
     { name: "evidence-wait", head: "evidence-wait:", line: `${timestamp} evidence-wait: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}` },
@@ -697,8 +700,8 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
 
   const uniqueSorted = (values) => [...new Set(values)].sort();
   const tableHeads = uniqueSorted(valid.map((item) => item.head));
-  assert.equal(valid.length, 15);
-  assert.equal(invalid.length, 13);
+  assert.equal(valid.length, 16);
+  assert.equal(invalid.length, 14);
   assert.deepEqual(uniqueSorted(invalid.map((item) => item.head)), tableHeads);
 
   const toolSource = fs.readFileSync(TOOL, "utf8");
@@ -754,7 +757,7 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
   const invalidOutput = await pendingInvalid;
   const item12 = invalidOutput.split(/\r?\n/)
     .filter((line) => line.startsWith("integrity: kind=blocking") && line.includes("item=12 "));
-  assert.equal(item12.length, 13, invalidOutput);
+  assert.equal(item12.length, 14, invalidOutput);
 
   for (const item of valid) {
     await t.test(`accepts ${item.name}`, () => {
@@ -848,7 +851,7 @@ test("T2 priority structure has one canonical array position per zone", async ()
   const module = await registry();
   assert.deepEqual(module.ZONE_DEFINITIONS.map((item) => item.zone), ROUTE_ZONES);
   assert.equal(new Set(module.ZONE_DEFINITIONS.map((item) => item.zone)).size, 14);
-  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 54);
+  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 55);
 });
 
 test("T2 priority selector uses the canonical array for every i less than j", async () => {
@@ -2584,4 +2587,205 @@ test("D7 closure a creation diff that will not decode is unknown, not none", (t)
   assert.ok(line.includes("origin=unknown"), line);
   assert.ok(line.includes("originReason=creation-diff-undecodable"), line);
   assert.ok(line.includes("siblings=[]"), line);
+});
+
+// C: a user-confirmed Intent or Invariant of the capability being worked on has no path into
+// its design zone. The note it is written as must reach arch or adopt before the claim
+// continues and before that capability's closure harvest, carrying the exact statement, card,
+// code basis, and the commit that first held it.
+function designNote(capability, statement, card, code) {
+  return `2026-08-21T00:00:00Z capability note: capability: ${capability}; note-json: ${JSON.stringify(statement)}; card-json: ${JSON.stringify(card)}; code-json: ${JSON.stringify(code)}`;
+}
+
+function designNoteScene(t, {
+  capability = "02", commitNote = true, note = null, card: noted = null,
+  code = ["src/export/contract.ts", "src/export/rename.ts"], present = null,
+  checkpoint = "jmp 02.1 wip: capability design note",
+} = {}) {
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  const card = writeClaim(root, { commitSubject: "jmp 02.1 claim" });
+  const statement = "a column rename never changes the export contract";
+  const line = note ?? designNote(capability, statement, noted ?? card, code);
+  // the canonical wip checkpoint that first holds the line is the anchor, and it holds this
+  // card and this code in the same commit
+  for (const relative of present ?? code) write(root, relative, `// ${relative}\n`);
+  write(root, "devflow/journal.md", `${line}\n`);
+  const anchor = commitNote ? commit(root, checkpoint) : null;
+  return { root, card, statement, code, line, anchor };
+}
+
+test("C design a committed current-capability note preempts the claim and projects its exact basis", async (t) => {
+  const scene = designNoteScene(t);
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "capability=02");
+  assertFragment(result.stdout, "marker: kind=design-note", `card=${scene.card}`);
+  assertFragment(result.stdout, "marker: kind=design-note", `note=${JSON.stringify(scene.statement)}`);
+  assertFragment(result.stdout, "marker: kind=design-note", `code=${JSON.stringify(scene.code)}`);
+  assertFragment(result.stdout, "marker: kind=design-note", `anchor=${scene.anchor}`);
+  assertNoFragment(result.stdout, "marker: kind=design-note", "head=");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+  const module = await registry();
+  for (const later of ["claim.mine", "layer.children-done", "marker.capability-closure", "marker.re-split"]) {
+    assert.equal(module.selectFirstRoute([later, "marker.design-note"]), "marker.design-note", later);
+  }
+});
+
+test("C design a line HEAD holds only inside a longer line is not that line", (t) => {
+  const scene = designNoteScene(t, { commitNote: false });
+  write(scene.root, "devflow/journal.md", `${scene.line} and one more clause\n`);
+  commit(scene.root, "jmp 02.1 wip: a different line");
+  write(scene.root, "devflow/journal.md", `${scene.line}\n`);
+  const result = run(scene.root); ok(result);
+  assert.equal(hasKind(result.stdout, "marker", "design-note"), false, result.stdout);
+  assert.equal(nextOf(result.stdout), "claim.mine", result.stdout);
+});
+
+test("C design an earlier longer line is not the exact-line anchor", (t) => {
+  const scene = designNoteScene(t, { commitNote: false });
+  write(scene.root, "devflow/journal.md", `${scene.line} and one more clause\n`);
+  commit(scene.root, "jmp 02.1 wip: capability design note");
+  write(scene.root, "devflow/journal.md", `${scene.line}\n`);
+  const exactAnchor = commit(scene.root, "jmp 02.1 wip: capability design note");
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", `anchor=${exactAnchor}`);
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design an anchor lookup Git cannot run fails closed ahead of the claim", (t) => {
+  const scene = designNoteScene(t);
+  // the pickaxe walks every historical journal blob; removing one loose object is the
+  // narrowest deterministic way to make that lookup impossible
+  const stale = git(scene.root, "rev-parse", "HEAD~1:devflow/journal.md");
+  fs.rmSync(path.join(scene.root, ".git", "objects", stale.slice(0, 2), stale.slice(2)));
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "reason=anchor-unavailable");
+  assertNoFragment(result.stdout, "marker: kind=design-note", "anchor=");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design an uncommitted note is not a durable route", (t) => {
+  const scene = designNoteScene(t, { commitNote: false });
+  const result = run(scene.root); ok(result);
+  assert.equal(hasKind(result.stdout, "marker", "design-note"), false, result.stdout);
+  assert.equal(nextOf(result.stdout), "claim.mine", result.stdout);
+});
+
+test("C design a different-capability observation stays a closure harvest, not a design route", (t) => {
+  const scene = designNoteScene(t, {
+    note: `2026-08-21T00:00:00Z capability note: capability: 03; note-json: ${JSON.stringify("the neighbour capability caches the same column")}`,
+  });
+  const before = snapshot(scene.root);
+  const result = run(scene.root); ok(result);
+  assert.equal(hasKind(result.stdout, "marker", "design-note"), false, result.stdout);
+  assert.equal(nextOf(result.stdout), "claim.mine", result.stdout);
+  assert.equal(read(scene.root, "devflow/journal.md"), `${scene.line}\n`, "the observation stays for that capability's closure");
+  assertReadOnly(scene.root, before);
+});
+
+// C follow-up: a committed design form that cannot take the live same-capability route is not
+// an ordinary observation to harvest, an interrupted design-only write is not a generic verify
+// prefix, and no Git read failure may end as silence.
+test("C design a committed design note with no live card blocks instead of vanishing", (t) => {
+  const scene = designNoteScene(t, { card: "devflow/tree/02-capability/02.9-absent.md" });
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "reason=card-absent");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design a committed design note naming another capability blocks instead of vanishing", (t) => {
+  const scene = designNoteScene(t, { capability: "03" });
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "reason=capability-mismatch");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+function designOnlyPrefix(t, { verifyFile = false, unrelated = false } = {}) {
+  const scene = designNoteScene(t);
+  if (verifyFile) capabilityVerify(scene.root, "devflow/tree/02-capability/verify.md");
+  write(scene.root, "devflow/project/capabilities/02-capability.md",
+    `${read(scene.root, "devflow/project/capabilities/02-capability.md")}\n`);
+  write(scene.root, "devflow/journal.md", "");
+  if (unrelated) write(scene.root, "src/unrelated.ts", "// unrelated\n");
+  return scene;
+}
+
+test("C design an interrupted design-only prefix routes back to the writer", (t) => {
+  const scene = designOnlyPrefix(t);
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "prefix=design-only");
+  assertFragment(result.stdout, "marker: kind=design-note", `card=${scene.card}`);
+  assertFragment(result.stdout, "marker: kind=design-note", `anchor=${scene.anchor}`);
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design an interrupted design-only prefix is not a generic verify prefix", (t) => {
+  const scene = designOnlyPrefix(t, { verifyFile: true });
+  const result = run(scene.root); ok(result);
+  assert.equal(hasKind(result.stdout, "transition", "interrupted"), false, result.stdout);
+  assertFragment(result.stdout, "marker: kind=design-note", "prefix=design-only");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design a design-only prefix carrying an unrelated path blocks", (t) => {
+  const scene = designOnlyPrefix(t, { unrelated: true });
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "reason=prefix-mismatch");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design a design-only prefix changing another capability blocks", (t) => {
+  const scene = designNoteScene(t);
+  write(scene.root, "devflow/project/capabilities/03-neighbour.md", "# Capability 03\n");
+  write(scene.root, "devflow/journal.md", "");
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "reason=prefix-mismatch");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design an anchor that is not the canonical checkpoint blocks", (t) => {
+  const scene = designNoteScene(t, { checkpoint: "bad 02.1 wip: capability design note" });
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "reason=anchor-not-checkpoint");
+  assertNoFragment(result.stdout, "marker: kind=design-note", "anchor=");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design a code path missing from the anchor tree blocks", (t) => {
+  const scene = designNoteScene(t, {
+    code: ["src/export/contract.ts", "src/export/typo.ts"], present: ["src/export/contract.ts"],
+  });
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "reason=code-absent");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design a statement carrying the field delimiters stays one short note", (t) => {
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  writeClaim(root, { commitSubject: "jmp 02.1 claim" });
+  const statement = "write it as ; card-json: <path> and ; code-json: [paths]";
+  const line = `2026-08-21T00:00:00Z capability note: capability: 03; note-json: ${JSON.stringify(statement)}`;
+  write(root, "devflow/journal.md", `${line}\n`);
+  commit(root, "jmp boundary — observation recorded");
+  const result = run(root); ok(result);
+  assert.equal(result.stdout.includes("reserved-format:capability note:"), false, result.stdout);
+  assert.equal(hasKind(result.stdout, "marker", "design-note"), false, result.stdout);
+  assert.equal(nextOf(result.stdout), "claim.mine", result.stdout);
+});
+
+test("C design an unreadable HEAD journal blocks instead of falling to the claim", (t) => {
+  const scene = designNoteScene(t);
+  const blob = git(scene.root, "rev-parse", "HEAD:devflow/journal.md");
+  fs.rmSync(path.join(scene.root, ".git", "objects", blob.slice(0, 2), blob.slice(2)));
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "reason=head-journal-unavailable");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C design an interrupted prefix with an unreadable HEAD journal still blocks", (t) => {
+  const scene = designOnlyPrefix(t, { unrelated: true });
+  const blob = git(scene.root, "rev-parse", "HEAD:devflow/journal.md");
+  fs.rmSync(path.join(scene.root, ".git", "objects", blob.slice(0, 2), blob.slice(2)));
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "reason=head-journal-unavailable");
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
 });

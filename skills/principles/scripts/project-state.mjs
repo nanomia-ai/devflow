@@ -48,8 +48,9 @@ export const ZONE_DEFINITIONS = Object.freeze([
   ].map((name, index) => ({ name, present: 3 + index / 100, absent: name === "layer-opening" ? 7 : null })) },
   { zone: "marker", present: 4, absent: 8, kinds: [
     { name: "product-rerun", present: 4, absent: 2 },
-    { name: "capability-closure", present: 4.01, absent: null },
-    { name: "re-split", present: 4.02, absent: 8 },
+    { name: "design-note", present: 4.01, absent: null },
+    { name: "capability-closure", present: 4.02, absent: null },
+    { name: "re-split", present: 4.03, absent: 8 },
   ] },
   { zone: "setup", present: 5, absent: 5, kinds: [
     { name: "no-product", present: 5, absent: 1 },
@@ -766,6 +767,37 @@ async function baselineProjection(snapshot, capabilityFilter) {
   };
 }
 
+// A note statement may legally contain the literal text `; card-json: `, so the optional design
+// suffix is found where the JSON value actually ends, never by splitting on a delimiter the
+// value itself can hold.
+function jsonStringEnd(text, start) {
+  if (text[start] !== "\"") return -1;
+  for (let index = start + 1; index < text.length; index += 1) {
+    if (text[index] === "\\") { index += 1; continue; }
+    if (text[index] === "\"") return index + 1;
+  }
+  return -1;
+}
+
+function capabilityNoteFields(line, start) {
+  const noteEnd = jsonStringEnd(line, start);
+  const note = noteEnd < 0 ? { ok: false } : parseJsonValue(line.slice(start, noteEnd));
+  if (!note.ok || typeof note.value !== "string") return { valid: false, note: note.value };
+  const rest = line.slice(noteEnd);
+  if (rest === "") return { valid: true, note: note.value };
+  const cardHead = "; card-json: ";
+  const codeHead = "; code-json: ";
+  if (!rest.startsWith(cardHead)) return { valid: false, note: note.value };
+  const cardStart = noteEnd + cardHead.length;
+  const cardEnd = jsonStringEnd(line, cardStart);
+  if (cardEnd < 0 || !line.slice(cardEnd).startsWith(codeHead)) return { valid: false, note: note.value };
+  const card = parseJsonValue(line.slice(cardStart, cardEnd));
+  const code = parseJsonValue(line.slice(cardEnd + codeHead.length));
+  const valid = card.ok && typeof card.value === "string" && code.ok && Array.isArray(code.value)
+    && code.value.length > 0 && code.value.every((value) => typeof value === "string");
+  return { valid, note: note.value, card: card.value, code: code.value };
+}
+
 function parseJournalLine(line, lineNumber) {
   const out = { raw: line, line: lineNumber, kind: "other", valid: true };
   let match;
@@ -788,9 +820,13 @@ function parseJournalLine(line, lineNumber) {
   if ((match = new RegExp(`^${TIMESTAMP} product verification running: trigger: (?<trigger>requested|automatic); product: (?<product>[^;]+); verification: (?<verification>[^;]+); code: (?<code>[^;]+)$`).exec(line))) return { ...out, kind: "product-running", ...match.groups };
   if ((match = new RegExp(`^${TIMESTAMP} product verification result: trigger: (?<trigger>requested|automatic); product: (?<product>[^;]+); verification: (?<verification>[^;]+); code: (?<code>[^;]+); verdict: (?<verdict>pass|fail|unverified)$`).exec(line))) return { ...out, kind: "product-result", ...match.groups };
   if ((match = new RegExp(`^${TIMESTAMP} capability closing: folder: (?<folder>devflow/tree/[^;]+); head: (?<head>[0-9a-f]{40,64}); product: (?<product>[^;]+); verification: (?<verification>[^;]+); capability: (?<capability>[^;]+)$`).exec(line))) return { ...out, kind: "capability-closing", ...match.groups };
-  if ((match = new RegExp(`^${TIMESTAMP} capability note: capability: (?<capability>\\d+); note-json: (?<noteJson>.+)$`).exec(line))) {
-    const note = parseJsonValue(match.groups.noteJson);
-    return { ...out, kind: "capability-note", ...match.groups, note: note.value, valid: note.ok && typeof note.value === "string" };
+  // One kind, two forms: the bare observation another capability's closure harvests, and the
+  // design form a confirmed Intent or Invariant of the capability being worked on carries —
+  // the same statement plus the exact card and the exact code paths. No commit basis is
+  // written here: the first commit holding this exact line is the anchor, and that checkpoint
+  // is itself the card and code snapshot.
+  if ((match = new RegExp(`^${TIMESTAMP} capability note: capability: (?<capability>\\d+); note-json: `).exec(line))) {
+    return { ...out, kind: "capability-note", ...match.groups, ...capabilityNoteFields(line, match[0].length) };
   }
   if ((match = new RegExp(`^${TIMESTAMP} (?<role>audit|retrospective) requested: (?<target>\\d+|product)$`).exec(line))) return { ...out, kind: `${match.groups.role}-requested`, ...match.groups };
   if ((match = new RegExp(`^${TIMESTAMP} (?<state>evidence-wait|evidence-finalizing): card-json: (?<cardJson>.+); checkpoint: (?<checkpoint>${CARD_NUMBER} wip: [0-9a-f]{40,64}); check-json: (?<checkJson>.+)$`).exec(line))) {
@@ -1541,7 +1577,9 @@ function cardJudgment(snapshot, card) {
   return { approval, blockers, ready: approval.value === "effective" && card.depends.anomalies.length === 0 && blockers.length === 0 };
 }
 
-function classifyWorkingTransition(snapshot) {
+function classifyWorkingTransition(snapshot, designPrefix) {
+  // The design-only write owns its own route, so it is never also a generic output prefix.
+  if (designPrefix === "design-only") return null;
   const paths = snapshot.status.map((entry) => entry.path).filter((relative) => relative === "devflow/journal.md"
     || /(?:^|\/)verify\.md$/.test(relative) || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
   if (paths.length === 0) return null;
@@ -1624,6 +1662,117 @@ function boundaryFields(snapshot, card) {
   if (!carryState(card).present) missing.push("carry");
   if (snapshot.room && snapshot.handoff.stale) missing.push("handoff");
   return { missing };
+}
+
+// The anchor is read from the journal path alone, and only a status-zero, decodable, full
+// object ID is one. It must also be the canonical checkpoint whose tree holds this exact card
+// and every named code path, because that tree is the snapshot the writer rederives from.
+// Every other outcome is that exact reason, so a design note Git could not place still routes
+// ahead of the claim instead of disappearing into it.
+function designNoteAnchor(snapshot, line) {
+  const exactLine = `^${line.raw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`;
+  const found = gitRun(snapshot.root, ["log", "--reverse", "-G", exactLine, "--format=%H", "--", "devflow/journal.md"], { allowFailure: true });
+  if (found.status !== 0) return { reason: "anchor-unavailable" };
+  let candidates;
+  try {
+    candidates = decodeUtf8(found.stdout, "design note anchor").split("\n").filter(Boolean);
+  } catch {
+    return { reason: "anchor-undecodable" };
+  }
+  let first = null;
+  for (const candidate of candidates) {
+    if (!/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(candidate)) return { reason: "anchor-invalid" };
+    const blob = gitRun(snapshot.root, ["show", `${candidate}:devflow/journal.md`], { allowFailure: true });
+    if (blob.status !== 0) continue;
+    let lines;
+    try {
+      lines = normalizeFileText(decodeUtf8(blob.stdout, "design note anchor journal")).split("\n");
+    } catch {
+      return { reason: "anchor-undecodable" };
+    }
+    if (lines.includes(line.raw)) { first = candidate; break; }
+  }
+  if (first === null) return { reason: "anchor-missing" };
+  const number = cardIdentity(line.card)?.number ?? null;
+  const claimant = snapshot.cards.find((card) => card.path === line.card)?.claimant
+    ?? /\.wip-([a-z0-9]{2,8})(?=\.|$)/.exec(line.card ?? "")?.[1] ?? null;
+  const subject = gitLine(snapshot.root, ["log", "-1", "--format=%s", first], { allowFailure: true });
+  if (!number || !claimant || subject !== `${claimant} ${number} wip: capability design note`) return { reason: "anchor-not-checkpoint" };
+  const inTree = (relative) => gitRun(snapshot.root, ["cat-file", "-e", `${first}:${relative}`], { allowFailure: true }).status === 0;
+  const canonical = (relative) => relative.length > 0 && !relative.includes("\\")
+    && relative.split("/").every((part) => part !== "" && part !== "." && part !== "..");
+  if (!inTree(line.card)) return { reason: "anchor-card-absent" };
+  if (new Set(line.code).size !== line.code.length) return { reason: "code-duplicate" };
+  if (!line.code.every(canonical)) return { reason: "code-noncanonical" };
+  if (!line.code.every(inTree)) return { reason: "code-absent" };
+  return { anchor: first };
+}
+
+// One computation owns every design-note route: durability against HEAD's journal, the live
+// same-capability card, the anchor snapshot, and the interrupted design-only write whose line
+// is already deleted from the working tree. A committed design form never leaves this function
+// silently — it leaves as a route or as an exact blocking reason.
+function designNoteRoutes(snapshot) {
+  const project = (line, extra) => ({
+    marker: line.raw, capability: line.capability, note: line.note, card: line.card, code: line.code, ...extra,
+  });
+  const working = snapshot.journal.filter((item) => item.kind === "capability-note" && item.valid && item.card !== undefined);
+  const changed = snapshot.status.map((entry) => entry.path);
+  const journalChanged = changed.includes("devflow/journal.md");
+  const shown = gitRun(snapshot.root, ["show", "HEAD:devflow/journal.md"], { allowFailure: true });
+  if (shown.status !== 0) {
+    const listed = gitRun(snapshot.root, ["ls-tree", "--name-only", "HEAD", "--", "devflow/journal.md"], { allowFailure: true });
+    let headOwnsJournal = null;
+    if (listed.status === 0) {
+      try {
+        headOwnsJournal = decodeUtf8(listed.stdout, "HEAD journal tree entry").split("\n").includes("devflow/journal.md");
+      } catch {
+        headOwnsJournal = null;
+      }
+    }
+    if (headOwnsJournal === false) return { routes: [], prefix: null };
+    const routes = working.map((line) => project(line, { reason: "head-journal-unavailable" }));
+    if (routes.length === 0 && journalChanged) routes.push({ marker: "unresolved", reason: "head-journal-unavailable" });
+    return { routes, prefix: null };
+  }
+  let headLines;
+  try {
+    headLines = normalizeFileText(decodeUtf8(shown.stdout, "HEAD:devflow/journal.md")).split("\n");
+  } catch {
+    const routes = working.map((line) => project(line, { reason: "head-journal-undecodable" }));
+    if (routes.length === 0 && journalChanged) routes.push({ marker: "unresolved", reason: "head-journal-undecodable" });
+    return { routes, prefix: null };
+  }
+  const routes = [];
+  for (const line of working) {
+    if (!headLines.includes(line.raw)) continue;
+    const card = snapshot.cards.find((item) => item.path === line.card && !item.closedFolder && ["pending", "claimed"].includes(item.status));
+    if (!card) routes.push(project(line, { reason: "card-absent" }));
+    else if (Number(card.number.split(".")[0]) !== Number(line.capability)) routes.push(project(line, { reason: "capability-mismatch" }));
+    else routes.push(project(line, designNoteAnchor(snapshot, line)));
+  }
+  // The writer may have rederived the design zone and deleted the routed line without
+  // committing. That prefix is the design-only write, not a generic canonical-output prefix,
+  // and any other path in it is a mismatch this stops on.
+  let prefix = null;
+  for (const [index, raw] of headLines.entries()) {
+    const line = raw === "" ? null : parseJournalLine(raw, 0);
+    if (!line || line.kind !== "capability-note" || !line.valid || line.card === undefined) continue;
+    if (snapshot.journal.some((current) => current.raw === raw)) continue;
+    // The canon's design-only prefix: HEAD's journal with exactly this one occurrence removed.
+    const remainder = headLines.filter((_, position) => position !== index).join("\n");
+    const capability = String(Number(line.capability)).padStart(2, "0");
+    const targetZone = new RegExp(`^devflow/project/capabilities/${capability}-[^/]+(?:\\.md|/K-\\d{3}-[^/]+\\.md)$`);
+    const pathsAllowed = changed.includes("devflow/journal.md") && changed.every((relative) => relative === "devflow/journal.md"
+      || targetZone.test(relative));
+    if (!pathsAllowed || remainder !== (snapshot.journalText ?? "")) {
+      routes.push(project(line, { reason: "prefix-mismatch" }));
+      continue;
+    }
+    prefix = "design-only";
+    routes.push(project(line, { prefix, ...designNoteAnchor(snapshot, line) }));
+  }
+  return { routes, prefix };
 }
 
 function addedIn(snapshot, commit, relative) {
@@ -1832,6 +1981,7 @@ function evaluateZones(snapshot) {
     : [];
   const outsideDiff = snapshot.status.filter((item) => !item.path.startsWith("devflow/"));
   const chosen = firstMine(snapshot);
+  const design = designNoteRoutes(snapshot);
   const origins = originProjection(snapshot);
   const unattributed = snapshot.status.map((entry) => entry.path).filter((relative) => relative !== chosen?.path).sort(byteCompare);
   zones.git.summary = {
@@ -1856,7 +2006,7 @@ function evaluateZones(snapshot) {
   for (const item of verify.prepared) addEntry(zones, "transition", "prepared-route", {
     path: item.path, base: item.base, prefix: item.prefix, result: item.result, operationCount: item.operations.length,
   });
-  const interrupted = verify.prepared.length === 0 ? classifyWorkingTransition(snapshot) : null;
+  const interrupted = verify.prepared.length === 0 ? classifyWorkingTransition(snapshot, design.prefix) : null;
   if (interrupted) addEntry(zones, "transition", "interrupted", interrupted);
   for (const item of verify.sourceMigration) addEntry(zones, "transition", "source-id-migration", item);
   for (const line of snapshot.journal.filter((item) => item.kind === "layer-opening" && item.valid).sort((a, b) => a.timestamp.localeCompare(b.timestamp))) {
@@ -1892,6 +2042,7 @@ function evaluateZones(snapshot) {
   }
 
   for (const line of snapshot.journal.filter((item) => item.kind === "product-rerun")) addEntry(zones, "marker", "product-rerun", { marker: line.raw, timestamp: line.timestamp });
+  for (const entry of design.routes) addEntry(zones, "marker", "design-note", entry);
   for (const line of snapshot.journal.filter((item) => item.kind === "capability-closing" && gitFile(snapshot.root, "HEAD", "devflow/journal.md")?.includes(item.raw))) {
     addEntry(zones, "marker", "capability-closure", { marker: line.raw, folder: line.folder, head: line.head });
   }

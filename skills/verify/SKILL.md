@@ -265,7 +265,9 @@ section below).
    closing capability's verified zone under the canonical baseline predicates. Read the
    standard refresh set from HEAD once and replace from exactly one `## Verified state`
    heading through EOF. This capability's `capability note` input is the multiset of its
-   numbered lines collected from the journal blob at the marker's `head` — that blob is HEAD
+   numbered short-form lines collected from the journal blob at the marker's `head` — the
+   design form carrying `card-json` and `code-json` is arch and adopt's input, so it is
+   neither collected nor deleted. That blob is HEAD
    when the marker is first created, and an existing marker's `head` in prefix recovery. Do not change the design zone, `Capability number`, or
    `Design head` bytes. Write exact paths where this run's Standards gate stopped at another
    capability boundary as `Consumed paths`, the capability code scope as `Scope paths`, and

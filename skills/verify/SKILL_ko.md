@@ -221,8 +221,9 @@ Product revision·Verification revision·Code revision을 쓰고, verifier를 �
    `verification`·`capability`은 이번 판정의 세 revision이다. 마커를 만들기 전에 기준선 판정
    정본대로 폐쇄 능력의 검증 구역을 갱신한다. HEAD의 표준 갱신 집합을 한 번 읽고, 정확히 한
    `## Verified state` 제목부터 파일 끝까지 전면 교체한다. 이 능력의 `능력 관측` 입력은 마커
-   `head`가 가리키는 journal blob에서 그 번호의 줄을 다중집합으로 수집한 것이다 — 마커를 처음
-   만들 때 그 blob은 HEAD이고, 접두 복구에서는 기존 마커의 `head`다. 설계 구역·`Capability number`·
+   `head`가 가리키는 journal blob에서 그 번호의 짧은 형태 줄만 다중집합으로 수집한 것이다 —
+   `카드-json`·`코드-json`을 단 설계 형태는 arch·adopt의 입력이므로 수집하지도 지우지도 않는다.
+   마커를 처음 만들 때 그 blob은 HEAD이고, 접두 복구에서는 기존 마커의 `head`다. 설계 구역·`Capability number`·
    `Design head` 바이트는 바꾸지 않는다. 이번 표준 게이트에서 다른 능력 경계 앞에 멈춘 정확
    경로를 `Consumed paths`로, 능력 코드 범위를 `Scope paths`로 쓰고 두 집합의 합집합으로
    `Scope head`를 계산한다. 합집합이 비면 git 명령을 실행하지 않고 `Scope head: none`을 쓴다.

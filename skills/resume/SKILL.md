@@ -205,6 +205,7 @@ The row for the name `next:` produced is the next stage.
 | `transition.event-decision` | verify — present the recorded findings verbatim and record the decision |
 | `transition.failure-routing` | verify — without executing, route the one entry that line names |
 | `marker.product-rerun` | product |
+| `marker.design-note` | arch when Brownfield is `no`, adopt when `yes` — design only; pass that line's `capability`, `note`, `card`, `code`, and `anchor` through as they stand. When `reason` came instead of `anchor`, report that reason as it stands and start no design write. When `prefix=design-only` came, that writer's design-only write was interrupted — start no new one and send it back to finish that same commit. Rebuild no Layer 0 and recompute nothing from cards or history |
 | `marker.capability-closure` | verify — finish the interrupted capability closure |
 | `marker.re-split` | split — finish that marker's replacement-card plan |
 | `setup.no-product` | ask, "Must this work preserve implementation behavior that already exists in the repository?"; yes goes to adopt, no goes to product |

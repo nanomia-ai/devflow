@@ -1562,7 +1562,66 @@ test("an observation about another capability has a keyed line and a harvester",
   assert.match(verify, /A line appended\n   after the begin commit and another capability's line stay/);
   assert.match(verify, /retained\n   when that refresh was a baseline no-op/);
   assert.match(verify, /only this marker and those collected capability notes removed/);
-  assert.match(verify, /multiset of its\n   numbered lines collected from the journal blob at the marker's `head`/);
+  assert.match(verify, /multiset of its\n   numbered short-form lines collected from the journal blob at the marker's `head`/);
+});
+
+test("the capability design ascent has one producer, one route, and one design writer", () => {
+  const read = (...parts) => fs.readFileSync(path.join(root, "skills", ...parts), "utf8");
+  const principles = read("principles", "SKILL.md");
+  const baseline = read("principles", "baseline-predicates.md");
+  const resume = read("resume", "SKILL.md");
+  const work = read("work", "SKILL.md");
+
+  assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ capability note: capability: <NN>; note-json: <JSON string containing the whole confirmed statement>; card-json: <JSON string containing the whole task-card path>; code-json: <JSON array of the exact code paths>$/m,
+    "the design form is the same journal kind carrying statement, card, and code, and nothing more");
+  assert.doesNotMatch(principles, /capability note: capability: <NN>;[^\n]*head: </,
+    "no second supposed commit basis is written into the line");
+  assert.match(principles.replace(/\s+/g, " "), /no commit basis is written into the line — the `NN\.N wip:` checkpoint that first holds that exact line is both the revision anchor and the card and code snapshot of that moment, and the tool computes it\./,
+    "the anchor is derived, and that checkpoint is itself the card and code snapshot");
+  assert.match(principles, /\| The user confirms a statement belonging to the Intent or Invariants of the capability being worked on, with Layer 0 unchanged \| one canonical `capability note` design line[^|]*It is durable only once one `NN\.N wip:` checkpoint lands that line with the current card and the current code\./,
+    "the producer contract is one discovery→update row whose line becomes durable in one wip checkpoint");
+  assert.match(work.replace(/\s+/g, " "), /Upper-document feedback judgment — before the final task commit[^↓]*land that line with the current card and the current code in one `NN\.N wip: capability design note` checkpoint, and end this invocation\./,
+    "the producer branch sits in the pre-final feedback judgment and ends the invocation");
+  assert.match(principles, /Do not edit the capability document or a capsule directly — the tool routes that line and arch \(Brownfield `no`\) or adopt \(`yes`\) rederives the design zone \|/,
+    "the producer never writes the design zone itself");
+
+  assert.match(resume, /\| `marker\.design-note` \| arch when Brownfield is `no`, adopt when `yes` — design only; pass that line's `capability`, `note`, `card`, `code`, and `anchor` through as they stand\. When `reason` came instead of `anchor`, report that reason as it stands and start no design write\. When `prefix=design-only` came, that writer's design-only write was interrupted — start no new one and send it back to finish that same commit\. Rebuild no Layer 0 and recompute nothing from cards or history \|/,
+    "resume maps the one route to the one writer, passes the exact projection, and stops on a reason");
+
+  for (const skill of ["arch", "adopt"]) {
+    const text = read(skill, "SKILL.md").replace(/\s+/g, " ");
+    assert.match(text, /\*\*Design-only entry\.\*\* When the entry handed over a `marker\.design-note`, do not run/,
+      `${skill} must own a design-only branch`);
+    assert.match(text, /Rederive only the design zone of the one capability that line names, from the confirmed current Layer 0 and that exact statement\./,
+      `${skill} rederives one capability design zone from current inputs and the exact note`);
+    assert.match(text, /Put the statement in Intent or Invariants when it fits the capability-document budget, and move design-topic detail over that budget down through the (?:same-number capsule contract|capsule procedure above)\./,
+      `${skill} places the fact in the design zone and spills only over-budget detail`);
+    assert.match(text, /The `anchor` handed over is the exact snapshot basis of that `card` and `code`; recompute no other basis from history or cards, and never duplicate a capability fact into arch\.md to wake the writer — only a real Layer 0 fact takes the discovery→update table's existing route\./,
+      `${skill} treats the anchor as the snapshot basis and duplicates no capability fact into Layer 0`);
+    assert.match(text, /Delete the journal line byte-identical to that one in the same binding capability-document commit\./,
+      `${skill} consumes the byte-identical note in the same binding commit`);
+  }
+
+  assert.match(work, /Compatible means rerun the completion signal and stand one more\nclean review before final completion\./,
+    "a compatible card reruns the signal and stands one clean review");
+  assert.match(work, /Incompatible means walk the canonical Document Hierarchy\n`\.stale\.` and re-split pending path as it stands\. work writes no design byte and no capsule\./,
+    "an incompatible card takes the existing stale path and work writes no design byte");
+
+  const verify = read("verify", "SKILL.md");
+  assert.match(verify.replace(/\s+/g, " "), /This capability's `capability note` input is the multiset of its numbered short-form lines collected from the journal blob at the marker's `head` — the design form carrying `card-json` and `code-json` is arch and adopt's input, so it is neither collected nor deleted\./,
+    "verify harvests and deletes the short form only, never the design form");
+  assert.match(baseline.replace(/\s+/g, " "), /In a design-only entry, `devflow\/journal\.md` is the one exception only when its working bytes equal HEAD with exactly one byte-identical occurrence of the routed design line removed\./,
+    "the design-only prefix is defined by the canonical baseline contract");
+  assert.match(baseline, /What moves down into a capsule beyond this budget is only design-zone domain\n  knowledge, which arch and adopt own/,
+    "capsule spill belongs to the design zone alone");
+  assert.match(baseline, /verify writes the fixed verified-zone sections as it normally does, creates no\n  capsule and drops no verified fact to meet this cap, and reports whole-document overage\./,
+    "verify writes its normal sections, creates no capsule, and loses no verified fact");
+  assert.match(baseline, /Deleting the one `capability note`\n  design line a design-only entry consumes is the single exception that rides that commit; no\n  other journal change does\./,
+    "the writer boundary carries one narrow design-note consumption exception");
+  assert.match(baseline.replace(/\s+/g, " "), /In a design-only entry, `devflow\/journal\.md` is the one exception only when its working bytes equal HEAD with exactly one byte-identical occurrence of the routed design line removed\./,
+    "the interrupted writer prefix recognizes exactly the routed note deletion");
+  assert.match(baseline.replace(/\s+/g, " "), /for a design-only entry, recalculate that one design-line deletion before finishing the commit\. Any other journal change or mismatch is an integrity anomaly\./,
+    "prefix recovery regenerates the note consumption and rejects every other journal edit");
 });
 
 test("same-origin siblings are passed, not recomputed", () => {

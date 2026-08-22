@@ -242,7 +242,13 @@ Upper-document feedback judgment — before the final task commit, ask whether t
         an `NN.N wip: upper-document change` checkpoint, enter the canonical Document
         Hierarchy procedure, and leave this completion path. For a compatible update,
         write the exact document path, heading, and replacement text in the progress log
-        and continue
+        and continue.
+        When Layer 0 is unchanged and the user confirmed an Intent or Invariant of this
+        capability, edit neither the capability document nor a capsule — write the
+        `capability note` design line that discovery→update row names, land that line with
+        the current card and the current code in one `NN.N wip: capability design note`
+        checkpoint, and end this invocation. That checkpoint is the durable transition the
+        tool routes, and only arch and adopt write design bytes and capsules
   ↓
 Carry check — immediately before the final task commit, rerun the state tool. Continue
         only when the current card's `claim: kind=mine` line says `carry=present`. When it
@@ -348,6 +354,12 @@ the commit carries only its own paths, and changes the card work made to the sam
 land first as that card's wip checkpoint through the tweak lane's target-path check. A
 Git commit records a path's final content, so without that check the same file's card
 changes ride the tweak commit.
+
+Returning to the card from a design ascent — after arch or adopt consumed that `capability
+note` design line and rederived the capability design zone — judge this card and its code
+against the new design zone. Compatible means rerun the completion signal and stand one more
+clean review before final completion. Incompatible means walk the canonical Document Hierarchy
+`.stale.` and re-split pending path as it stands. work writes no design byte and no capsule.
 
 ## Review — one flow
 

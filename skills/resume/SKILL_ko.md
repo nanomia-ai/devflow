@@ -177,6 +177,7 @@ node를 실행할 수 없거나 플랫폼이 이 파일의 원본 경로를 주�
 | `transition.event-decision` | verify — 기록된 소견을 그대로 제시하고 결정을 기록 |
 | `transition.failure-routing` | verify — 그 줄이 지목한 항목 하나를 실행 없이 라우팅 |
 | `marker.product-rerun` | product |
+| `marker.design-note` | Brownfield가 `아니오`면 arch, `예`면 adopt — 설계 전용으로, 그 줄의 `capability`·`note`·`card`·`code`·`anchor`를 그대로 넘김. `anchor` 대신 `reason`이 왔으면 그 사유를 그대로 보고하고 설계 쓰기를 시작하지 않는다. `prefix=design-only`면 그 작성자의 설계 전용 쓰기가 중단된 것이므로 새로 시작하지 말고 같은 커밋을 마치게 한다. Layer 0을 다시 만들지 않고 카드나 이력에서 다시 계산하지 않는다 |
 | `marker.capability-closure` | verify — 중단된 능력 폐쇄를 마침 |
 | `marker.re-split` | split — 그 마커의 교체 카드 계획을 마침 |
 | `setup.no-product` | "이번 작업이 저장소에 이미 있는 구현 동작을 보존해야 합니까?"를 묻고, 예면 adopt, 아니면 product |

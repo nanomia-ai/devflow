@@ -216,6 +216,7 @@ YYYY-MM-DDTHH:MM:SSZ product 검증 실행: 발동: 요청 | 자동; product: <P
 YYYY-MM-DDTHH:MM:SSZ product 검증 결과: 발동: 요청 | 자동; product: <Product revision>; verification: <Verification revision>; code: <Code revision>; 판정: 통과 | 실패 | 미검증
 YYYY-MM-DDTHH:MM:SSZ 능력 닫기: 폴더: <상태 접미사를 제거한 devflow/tree/능력 폴더 경로>; head: <git rev-parse HEAD>; product: <Product revision>; verification: <Verification revision>; capability: <Capability revision>
 YYYY-MM-DDTHH:MM:SSZ 능력 관측: 능력: <NN>; 관측-json: <관측 전체를 담은 JSON 문자열>
+YYYY-MM-DDTHH:MM:SSZ 능력 관측: 능력: <NN>; 관측-json: <확정된 문장 전체를 담은 JSON 문자열>; 카드-json: <그 작업 카드 전체 경로를 담은 JSON 문자열>; 코드-json: <정확한 코드 경로들을 담은 JSON 배열>
 YYYY-MM-DDTHH:MM:SSZ 감리 요청: <능력 번호|product>
 YYYY-MM-DDTHH:MM:SSZ 회고 요청: <능력 번호|product>
 YYYY-MM-DDTHH:MM:SSZ 증거 대기: 카드-json: <작업 카드 전체 경로를 담은 JSON 문자열>; checkpoint: <NN.N wip: evidence-wait 커밋 hash>; 점검-json: <정확한 원격 결과 명령 또는 URL을 담은 JSON 문자열>
@@ -233,6 +234,11 @@ YYYY-MM-DDTHH:MM:SSZ 증거 마감: 카드-json: <작업 카드 전체 경로를
 착지할 때까지 유효하다. 현재 체크아웃에서 줄을 지웠어도 HEAD에 있고 삭제가 아직 커밋되지 않았으면
 소비자는 그 줄을 유효한 것으로 읽고 중단된 커밋을 먼저 끝낸다. 이 시작 커밋들은 작업
 커밋이 아니다.
+
+`능력 관측`은 형태가 둘이다. 짧은 형태는 지금 작업 중이 아닌 능력의 관측이고 그 능력의 다음
+폐쇄가 수확한다. `카드-json`·`코드-json`을 단 설계 형태는 지금 작업 중인 능력의 확정된 Intent
+또는 Invariant이며, 커밋 기준을 줄 안에 적지 않는다 — 그 정확한 줄을 처음 담은 `NN.N wip:`
+체크포인트가 개정 기준점이자 그때의 카드·코드 스냅샷이고, 도구가 그것을 계산한다.
 
 `product ⊃ arch ⊃ design·code-style ⊃ tree(카드)`. **하위는 상위를 어길 수 없다.**
 어겨야 한다면 그것은 상위의 결정이다:
@@ -311,6 +317,7 @@ split은 교체 카드의 계획 커밋이 착지할 때 마커를 지운다.
 | 새 용어가 필요해짐 | glossary.md 1줄 — 이 표를 걷는 현재 스킬이 즉시 착지 |
 | 작업이 예상보다 클 뿐 | 문서 변경 없음 — 카드를 폴더로 승격 (split의 승격 절차) |
 | 지금 작업 중이 아닌 다른 능력에 대해 코드에서 확인된 관측을 얻음 | 그 능력 번호를 담은 정본 `능력 관측` 줄 1줄을 journal.md에. 상대 능력의 문서를 직접 고치지 않는다 — 그 능력의 다음 폐쇄가 수확한다 |
+| 지금 작업 중인 능력의 Intent 또는 Invariant에 해당하는 문장을 사용자가 확정함 (Layer 0은 그대로) | 그 능력 번호·확정 문장·이 카드 경로·정확한 코드 경로들을 담은 정본 `능력 관측` 설계 형태 1줄을 journal.md에. 그 줄과 현재 카드·현재 코드를 담은 `NN.N wip:` 체크포인트 하나로 착지시켜야 영속이다. 능력 문서와 캡슐은 직접 고치지 않는다 — 도구가 그 줄을 라우팅하고 arch(Brownfield `아니오`) 또는 adopt(`예`)가 설계 구역을 다시 유도한다 |
 | 공용 계약이나 골조에 대해 코드에서 확인된 것 | 되돌리기 어려운 결정을 낳았으면 ADR (arch의 세 조건). 먼저 깨질 것이면 arch.md의 `위험`. 그 밖이면 어디에 착지할지(또는 폐기할지) 사람이 결정할 기명 미결 항목 1줄 — 아래 미결 항목 행의 의미론(해소되면 다른 행으로 착지 후 삭제)이 그 줄의 소비자다. 골조의 검증 구역에는 쓰지 않는다 — 검증하지 않은 것은 검증된 상태가 아니다 |
 | 작업 간 결정, 또는 사람이 결정해야 하는 열린 항목 | journal.md 1줄(기명). 열린 항목은 해소될 때 그 줄을 결정으로 바꾸거나 이 표의 다른 행으로 착지시킨 뒤 지운다 |
 

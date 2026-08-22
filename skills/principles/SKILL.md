@@ -261,6 +261,7 @@ YYYY-MM-DDTHH:MM:SSZ product verification running: trigger: requested | automati
 YYYY-MM-DDTHH:MM:SSZ product verification result: trigger: requested | automatic; product: <Product revision>; verification: <Verification revision>; code: <Code revision>; verdict: pass | fail | unverified
 YYYY-MM-DDTHH:MM:SSZ capability closing: folder: <devflow/tree/capability folder path with status suffixes removed>; head: <git rev-parse HEAD>; product: <Product revision>; verification: <Verification revision>; capability: <Capability revision>
 YYYY-MM-DDTHH:MM:SSZ capability note: capability: <NN>; note-json: <JSON string containing the whole observation>
+YYYY-MM-DDTHH:MM:SSZ capability note: capability: <NN>; note-json: <JSON string containing the whole confirmed statement>; card-json: <JSON string containing the whole task-card path>; code-json: <JSON array of the exact code paths>
 YYYY-MM-DDTHH:MM:SSZ audit requested: <capability number|product>
 YYYY-MM-DDTHH:MM:SSZ retrospective requested: <capability number|product>
 YYYY-MM-DDTHH:MM:SSZ evidence-wait: card-json: <JSON string containing the full task-card path>; checkpoint: <NN.N wip: evidence-wait commit hash>; check-json: <JSON string containing the exact remote-result command or URL>
@@ -280,6 +281,13 @@ change. The canonical baseline predicates govern a refresh no-op. Both remain ac
 next commit deletes them. If the working tree lacks one but HEAD contains it and its deletion
 is uncommitted, a consumer treats it as active and finishes the interrupted commit first.
 These begin commits are not task commits.
+
+`capability note` has two forms. The short form is an observation about a capability other
+than the one being worked on, and that capability's next closure harvests it. The design form,
+carrying `card-json` and `code-json`, is a confirmed Intent or Invariant of the capability
+being worked on, and no commit basis is written into the line — the `NN.N wip:` checkpoint
+that first holds that exact line is both the revision anchor and the card and code snapshot of
+that moment, and the tool computes it.
 
 `product ⊃ arch ⊃ design·code-style ⊃ tree (cards)`. **A lower layer may not violate an
 upper layer.** If it must, that is an upper-layer decision:
@@ -369,6 +377,7 @@ What you discovered → where to update:
 | A new term becomes necessary | one line in glossary.md — the current skill walking this table lands it immediately |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | An observation confirmed in code about a capability other than the one being worked on | one canonical `capability note` line in journal.md carrying that capability's number. Do not edit the other capability's document directly — its next closure harvests the line |
+| The user confirms a statement belonging to the Intent or Invariants of the capability being worked on, with Layer 0 unchanged | one canonical `capability note` design line in journal.md carrying that capability's number, the confirmed statement, this card's path, and the exact code paths. It is durable only once one `NN.N wip:` checkpoint lands that line with the current card and the current code. Do not edit the capability document or a capsule directly — the tool routes that line and arch (Brownfield `no`) or adopt (`yes`) rederives the design zone |
 | Something confirmed in code about a shared contract or the foundation | an ADR when it produced a decision hard to reverse (arch's three conditions); arch.md's `Risks` when it is something that breaks first; otherwise one attributed open-item line in journal.md — where it lands (or whether it is discarded) is a person's decision, and the open-item row below (resolve through another row, then delete) is that line's consumer. Never write it into the foundation's verified zone — what was not verified is not a verified state |
 | A cross-task decision, or an open item a person must decide | one attributed line in journal.md. When an open item resolves, that line becomes the decision or lands through another row of this table, and is then deleted |
 

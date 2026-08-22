@@ -86,8 +86,10 @@ Trust: design reflects confirmed Layer 0; verified state reflects the last passi
 - The total cap is about 185 lines. An
   over-cap write succeeds; its writer reports the section and actual row, node, or step
   count. Splitting a capability is a user decision about a product change, not an automatic
-  result. Domain knowledge beyond this budget is not cut — it moves down into knowledge
-  capsules.
+  result. What moves down into a capsule beyond this budget is only design-zone domain
+  knowledge, which arch and adopt own — it is not cut but lowered into the same-number
+  capsule. verify writes the fixed verified-zone sections as it normally does, creates no
+  capsule and drops no verified fact to meet this cap, and reports whole-document overage.
 - Purpose and ownership boundary must be readable in the first 4 lines, followed by the
   sections in the order above; in `Concept model`, order concepts from most central. Do not
   copy a contract body from code or another document; retain its exact location and only
@@ -450,16 +452,21 @@ follows the canonical Document Hierarchy.
   head. Derive every changed design zone in memory and present them as one batch; change no
   capability-document path before the user confirms that batch. After confirmation, a
   commit containing capability documents only, `arch — capabilities` or
-  `adopt — capabilities`, is the last commit of that run. When no bytes change, ask no
+  `adopt — capabilities`, is the last commit of that run. Deleting the one `capability note`
+  design line a design-only entry consumes is the single exception that rides that commit; no
+  other journal change does. When no bytes change, ask no
   confirmation question and make no commit. It is a binding decision
   on the integration branch.
 - An uncommitted diff from a post-confirmation interrupted write is a capability-design
   commit prefix only when it touches current and final expected capability-document paths
-  alone (a rename may delete the old same-numbered path and add the final path), preserves
-  each number-matched existing file's HEAD verified zone, gives each new file the initial
+  alone (a rename may delete the old same-numbered path and add the final path). In a
+  design-only entry, `devflow/journal.md` is the one exception only when its working bytes
+  equal HEAD with exactly one byte-identical occurrence of the routed design line removed.
+  It preserves each number-matched existing file's HEAD verified zone, gives each new file the initial
   scaffold below, and gives an exact v0.10 file the mechanical verified-zone transformation below. Use no
-  partial bytes as input; regenerate the whole expected set from HEAD and finish that
-  commit. Any mismatch is an integrity anomaly. A user-confirmed boundary reset is not
+  partial bytes as input; regenerate the whole expected set from HEAD and, for a design-only
+  entry, recalculate that one design-line deletion before finishing the commit. Any other
+  journal change or mismatch is an integrity anomaly. A user-confirmed boundary reset is not
   recovered as a prefix. When one is interrupted after confirmation and before its commit,
   report that diff as an integrity anomaly and let the next run confirm the reset again.
 - When a file is absent or the user confirms a boundary reset, arch or adopt creates both
