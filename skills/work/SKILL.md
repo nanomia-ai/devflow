@@ -580,8 +580,9 @@ context only:
 ```
 
 `Next single step` is mandatory and holds one tree path — the exact path named by the tool's
-first actionable tree route, which is that capability folder when verification is next, and it
-is not limited to a card or a waiting file. The mechanical next step is owned by the tool's
+first actionable tree route: a capability folder when capability verification is next, and
+`devflow/tree/verify.md` when a product verification transition names that record. It is not
+limited to a card or a waiting file. The mechanical next step is owned by the tool's
 routing order, so write that value as it stands, and write a different path only when this
 session heard a fresher preference from the user — that difference is all HANDOFF adds.
 Write `none` only when there is no actionable tree path at all.

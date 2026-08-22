@@ -8,6 +8,7 @@ import { TextDecoder } from "node:util";
 
 const OUTPUT_LIMIT = 24 * 1024;
 const COMPACT_FIELD_LIMIT = 96;
+const COMPACT_LOSSY_FIELDS = new Set(["line", "raw", "expected", "replacement", "progressLastPoint"]);
 const MAX_BUFFER = 64 * 1024 * 1024;
 const CARD_NUMBER = "[0-9]+[a-z]*(?:\\.[0-9]+[a-z]*)+";
 const FOLDER_NUMBER = "[0-9]+[a-z]*(?:\\.[0-9]+[a-z]*)*";
@@ -77,7 +78,7 @@ export const ZONE_DEFINITIONS = Object.freeze([
     "digest-behind", "needs-normalization", "approval-invalid", "approval-pending", "ready", "waiting-capability",
   ].map((name, index) => ({ name, present: 11 + index / 100, absent: null })) },
   { zone: "blocked", present: 12, absent: 22, kinds: [
-    "audits", "dependencies", "other-claims",
+    "channel", "audits", "dependencies", "other-claims",
   ].map((name, index) => ({ name, present: 12 + index / 100, absent: null })) },
   { zone: "product", present: 13, absent: 23, kinds: [
     "shape-or-revision", "fail", "unverified",
@@ -368,7 +369,7 @@ function treeIdentity(relative) {
 
 function handoffPathMatches(snapshot, nextStep) {
   const identity = treeIdentity(nextStep);
-  return [...snapshot.cards.map((card) => card.path), ...snapshot.waitingFiles, ...snapshot.directories]
+  return [...snapshot.cards.map((card) => card.path), ...snapshot.waitingFiles, ...snapshot.directories, ...snapshot.verifyTexts.keys()]
     .filter((relative) => treeIdentity(relative) === identity);
 }
 
@@ -1228,7 +1229,10 @@ function verifyProjection(snapshot) {
     const folder = relative === "devflow/tree/verify.md" ? null : relative.split("/").slice(0, 3).join("/");
     const folderInfo = folderIdentity(folder ?? "");
     const current = ["Product revision", "Verification revision", "Code revision", "Capability revision"].every((name) => recordFields.has(name));
-    const channelUnavailable = /^unverified: channel unavailable — .+; timeout=.+$/.test(recordFields.get("Executed") ?? "");
+    const executed = recordFields.get("Executed") ?? "";
+    const channelMatch = /^unverified: channel unavailable — (?<command>.+); timeout=(?<timeout>.+)$/.exec(executed);
+    const channelUnavailable = channelMatch !== null;
+    const channel = channelMatch ? { command: channelMatch.groups.command, timeout: channelMatch.groups.timeout } : null;
     const failureIds = [...(failure?.lines.join("\n") ?? "").matchAll(/source id:\s*(\d+)[^\n]*failure:/g)].map((match) => Number(match[1]));
     result.records.push({
       path: relative,
@@ -1236,6 +1240,7 @@ function verifyProjection(snapshot) {
       target: folderInfo ? Number(folderInfo.number) : "product",
       capabilityDone: folderInfo?.status === "done",
       channelUnavailable,
+      channel,
       failureMax: failureIds.length > 0 ? Math.max(...failureIds) : null,
       auditKeys: eventKeys(audit ?? { lines: [] }),
       retrospectiveKeys: eventKeys(retrospective ?? { lines: [] }),
@@ -1286,6 +1291,7 @@ function verifyProjection(snapshot) {
         verification: recordFields.get("Verification revision") ?? null,
         code: recordFields.get("Code revision") ?? null,
         channelUnavailable,
+        channel,
         current,
       };
     }
@@ -2016,10 +2022,10 @@ function evaluateZones(snapshot) {
     addEntry(zones, "transition", "layer-opening", { parent: line.parent, children: line.children, sourceJson: line.source, timestamp: line.timestamp });
   }
   for (const line of snapshot.journal.filter((item) => item.kind === "product-running")) addEntry(zones, "transition", "product-running", {
-    product: line.product, verification: line.verification, code: line.code, trigger: line.trigger,
+    path: "devflow/tree/verify.md", product: line.product, verification: line.verification, code: line.code, trigger: line.trigger,
   });
   for (const line of snapshot.journal.filter((item) => item.kind === "product-result")) addEntry(zones, "transition", "product-result", {
-    product: line.product, verification: line.verification, code: line.code, verdict: line.verdict, trigger: line.trigger,
+    path: "devflow/tree/verify.md", product: line.product, verification: line.verification, code: line.code, verdict: line.verdict, trigger: line.trigger,
   });
   for (const line of snapshot.journal.filter((item) => ["evidence-wait", "evidence-finalizing"].includes(item.kind) && item.card)) {
     const card = snapshot.cards.find((candidate) => candidate.path === line.card);
@@ -2189,6 +2195,9 @@ function evaluateZones(snapshot) {
   zones.ready.summary = readySummary;
 
   const blockedAudit = verify.eventPending.filter((item) => item.role === "Audit" && outsideDiff.length > 0);
+  for (const record of verify.records.filter((item) => item.channelUnavailable)) addEntry(zones, "blocked", "channel", {
+    path: record.path, target: record.target, command: record.channel.command, timeout: record.channel.timeout,
+  });
   if (blockedAudit.length > 0) addEntry(zones, "blocked", "audits", { candidates: blockedAudit.map((item) => item.path), blockingPaths: outsideDiff.map((item) => item.path), reasons: ["uncommitted-outside-devflow"] });
   if (pendingCards.length > 0 && pendingCards.every((card) => {
     const judgment = cardDetails.get(card.path);
@@ -2275,6 +2284,10 @@ function compactFieldString(values, omitted = new Set()) {
   for (const [key, value] of Object.entries(values)) {
     if (omitted.has(key) || value === undefined) continue;
     const rendered = typeof value === "string" ? value : JSON.stringify(value);
+    if (!COMPACT_LOSSY_FIELDS.has(key)) {
+      fields.push(`${key}=${scalar(value)}`);
+      continue;
+    }
     const bounded = boundedUtf8(rendered);
     if (bounded.truncated) {
       fields.push(`${key}=${JSON.stringify(bounded.value)}`, `${key}Truncated=1`);
@@ -2354,6 +2367,9 @@ function entryCapabilities(snapshot, entry) {
 }
 
 function projectedEntry(snapshot, zone, entry, selected) {
+  if (zone === "blocked" && entry.kind === "channel") {
+    return entry.target === selected ? entry : null;
+  }
   if (zone === "blocked" && entry.kind === "audits") {
     const candidates = (entry.candidates ?? []).filter((value) => {
       const capability = capabilityFromValue(snapshot, value);

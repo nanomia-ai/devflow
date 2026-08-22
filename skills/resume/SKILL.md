@@ -142,7 +142,9 @@ Pass that array on to work (or the next reader) as it stands: never recompute it
 the tree to fill it, and an empty array means there are no siblings. **Quote the
 fact line that carries that one step beside the next step** — the report then shows which
 line the judgment came from. Include the content of the `open-item:` lines a person must
-decide.
+decide. Also report every `blocked: kind=channel` line even when another route is first:
+its verify path is the durable result, and its exact command and timeout say what the person
+must restore or explicitly request without turning that wait into product work.
 
 The selection reason comes straight out of `selectionReason` — `your request`
 when the step came from a card the user named or from the session unit, `the last handoff`
@@ -236,6 +238,7 @@ The row for the name `next:` produced is the next stage.
 | `ready.approval-pending` | split — present the execution proposal and get approval |
 | `ready.ready` | work |
 | `ready.waiting-capability` | split — open one layer of that capability |
+| `blocked.channel` | report the exact target, verify path, command, and timeout, then wait. Do not retry automatically and create no card or failure route; a direct capability verification request or explicit product verification request opens the next run |
 | `blocked.audits` | verify — run no event and write no state; list those candidates in event-priority order and report each exact blocking path or branch state and reason |
 | `blocked.dependencies` | report the blocking card numbers and claimants; modify no code until a dependency closes |
 | `blocked.other-claims` | report the claimants and cards; wait until a claim is released or closes |

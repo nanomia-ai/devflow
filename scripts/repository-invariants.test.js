@@ -2773,6 +2773,7 @@ test("a screen verify channel is confirmed only by a read probe and an interacti
 // product layer was still walking the DD-68 ladder with it.
 test("a channel that could not be acquired is not product evidence at either layer", () => {
   const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   // the reason keeps its one home and its one form
   assert.equal(count(verify, /unverified: channel unavailable — /g), 1);
   assert.match(verify, /`unverified: channel unavailable — <the exact command that failed>; timeout=<observed value>`/);
@@ -2784,6 +2785,8 @@ test("a channel that could not be acquired is not product evidence at either lay
   assert.match(verify, /state suppresses automatic capability and product re-entry and automatic product Audit and Retrospective events/);
   assert.match(verify, /a direct capability verification request or an explicit product verification request starts a new run/);
   assert.doesNotMatch(verify, /reason is `channel unavailable`[\s\S]{0,300}`routing: pending`/);
+  assert.match(resume, /Also report every `blocked: kind=channel` line even when another route is first/);
+  assert.match(resume, /`blocked\.channel` \| report the exact target, verify path, command, and timeout, then wait/);
   // removing the special entry must not strand ordinary label-less failures
   assert.match(verify, /For `recurrence observation: 2` or higher[\s\S]{0,360}Otherwise, send only that failure or unverified entry through split's maintenance/);
 });

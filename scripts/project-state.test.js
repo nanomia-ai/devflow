@@ -631,12 +631,22 @@ test("E channel-unavailable results wait for an explicit verification request", 
   });
   const capability = run(capabilityRoot); ok(capability);
   assert.equal(hasKind(capability.stdout, "layer", "children-done"), false, capability.stdout);
+  assertFragment(capability.stdout, "blocked: kind=channel", "path=devflow/tree/02-capability/verify.md");
+  assertFragment(capability.stdout, "blocked: kind=channel", "target=2");
+  assertFragment(capability.stdout, "blocked: kind=channel", "command=\"browser attach\"");
+  assertFragment(capability.stdout, "blocked: kind=channel", "timeout=30s");
+  assert.equal(nextOf(capability.stdout), "blocked.channel", capability.stdout);
 
   const productRoot = completedRepo(t);
   rootVerify(productRoot, "unverified", { events: false, executed: reason });
   const product = run(productRoot); ok(product);
   assert.equal(hasKind(product.stdout, "product", "unverified"), false, product.stdout);
   assert.equal(hasKind(product.stdout, "event", "new"), false, product.stdout);
+  assertFragment(product.stdout, "blocked: kind=channel", "path=devflow/tree/verify.md");
+  assertFragment(product.stdout, "blocked: kind=channel", "target=product");
+  assertFragment(product.stdout, "blocked: kind=channel", "command=\"browser attach\"");
+  assertFragment(product.stdout, "blocked: kind=channel", "timeout=30s");
+  assert.equal(nextOf(product.stdout), "blocked.channel", product.stdout);
 
   write(productRoot, "devflow/journal.md", "2026-08-23T00:00:00Z product verification requested\n");
   commit(productRoot, "jmp boundary — product verification requested");
@@ -875,7 +885,7 @@ test("T2 priority structure has one canonical array position per zone", async ()
   const module = await registry();
   assert.deepEqual(module.ZONE_DEFINITIONS.map((item) => item.zone), ROUTE_ZONES);
   assert.equal(new Set(module.ZONE_DEFINITIONS.map((item) => item.zone)).size, 14);
-  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 55);
+  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 56);
 });
 
 test("T2 priority selector uses the canonical array for every i less than j", async () => {
@@ -1234,6 +1244,20 @@ test("T4 a HANDOFF path survives its capability opening into the same-identity f
   const statusForm = run(root); ok(statusForm);
   assert.equal(statusForm.stdout.includes("handoff-path-resolves-"), false, statusForm.stdout);
   assertFragment(statusForm.stdout, "handoff:", "stale=0 nextStep=devflow/tree/02-Alpha/");
+});
+
+test("T4 a HANDOFF may preserve the exact verify path named by a product transition", (t) => {
+  const root = completedRepo(t);
+  rootVerify(root, "pass", { events: false });
+  write(root, "devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step\ndevflow/tree/verify.md\n");
+  commit(root, "jmp boundary — product verify handoff");
+  const revisions = currentRevisions(root);
+  write(root, "devflow/journal.md",
+    `2026-08-23T00:00:00Z product verification result: trigger: automatic; product: ${revisions.productRevision}; verification: ${revisions.verificationRevision}; code: ${revisions.codeRevision}; verdict: pass\n`);
+  commit(root, "jmp boundary — product verification result");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "handoff:", "stale=0 nextStep=devflow/tree/verify.md");
+  assertFragment(result.stdout, "transition: kind=product-result", "path=devflow/tree/verify.md");
 });
 
 test("T4 a waiting file and its folder at once is an ambiguity, not a match", (t) => {
@@ -2507,6 +2531,28 @@ test("D7 every current candidate of one planning commit carries that origin and 
   assert.ok(sibling.includes(`siblings=[${JSON.stringify(scene.claimed)}]`), sibling);
   // the report stays coherent for the in-progress card, and is no longer the only projection
   assertFragment(result.stdout, "report:", origin);
+});
+
+test("D7 compact output never shortens the exact same-origin sibling paths", (t) => {
+  const root = makeRepo(t);
+  const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("one request with long sibling paths")}`;
+  write(root, "devflow/journal.md", `${request}\n`);
+  commit(root, "jmp boundary — long sibling request recorded");
+  const cards = [1, 2, 3].map((number) =>
+    `devflow/tree/02-capability/02.${number}-${"long-sibling-name-".repeat(3)}${number}.md`);
+  for (let index = 0; index < cards.length; index += 1) write(root, cards[index], cardText(`02.${index + 1}`));
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp split — long sibling request planned");
+  const open = Array.from({ length: 180 }, (_, index) =>
+    `2026-08-22T00:${String(index % 60).padStart(2, "0")}:00Z jmp: ${index}-${"diagnostic-prose-".repeat(8)}`);
+  write(root, "devflow/journal.md", `${open.join("\n")}\n`);
+  commit(root, "jmp boundary — compact output fixture");
+
+  const result = run(root); ok(result);
+  assert.match(result.stdout, /^state: .* form=compact$/m);
+  const line = candidateLine(result.stdout, "ready", cards[0]);
+  assert.ok(line.includes(`siblings=${JSON.stringify(cards.slice(1))}`), line);
+  assert.equal(line.includes("siblingsTruncated=1"), false, line);
 });
 
 test("D7 a current card from another origin is not a sibling", (t) => {
