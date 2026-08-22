@@ -330,6 +330,11 @@ function currentRevisions(root) {
   return { productRevision, verificationRevision, codeRevision };
 }
 
+function pathSetRevision(root, paths) {
+  const tree = execFileSync("git", ["ls-tree", "-r", "-z", "--full-tree", "HEAD", "--", ...paths], { cwd: root });
+  return execFileSync("git", ["hash-object", "--stdin"], { cwd: root, input: tree, encoding: "utf8" }).trim();
+}
+
 function rootVerify(root, verdict, { events = true } = {}) {
   const revisions = currentRevisions(root);
   write(root, "devflow/tree/verify.md", `# Verification · product
@@ -1120,6 +1125,25 @@ test("T4 selection reason uses canonical order when no HANDOFF points", (t) => {
   const result = run(makeRepo(t)); ok(result);
   assertFragment(result.stdout, "report:", "selectionReason=canonical-order");
   assertFragment(result.stdout, "handoff:", "date=none stale=0 nextStep=none");
+});
+
+test("T4 revisions project product verification code and the selected capability on one line", (t) => {
+  const root = makeRepo(t, { capabilities: ["Alpha"] });
+  const card = "devflow/tree/02-Alpha/02.1-fixture.done.md";
+  write(root, card, cardText("02.1"));
+  commit(root, "jmp 02.1 final");
+  const expected = currentRevisions(root);
+  const capability = pathSetRevision(root, [card]);
+
+  const product = run(root); ok(product);
+  assertFragment(product.stdout, "revisions:", `product=${expected.productRevision}`);
+  assertFragment(product.stdout, "revisions:", `verification=${expected.verificationRevision}`);
+  assertFragment(product.stdout, "revisions:", `code=${expected.codeRevision}`);
+  assertFragment(product.stdout, "revisions:", "capability=not-applicable");
+  assert.equal(product.stdout.split(/\r?\n/).filter((line) => line.startsWith("revisions:")).length, 1, product.stdout);
+
+  const narrowed = run(root, "--capability", "2"); ok(narrowed);
+  assertFragment(narrowed.stdout, "revisions:", `capability=${capability}`);
 });
 
 // Freshness is measured against the history this room claimed. With nothing claimed there is

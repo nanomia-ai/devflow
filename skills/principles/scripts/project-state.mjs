@@ -997,7 +997,7 @@ async function loadSnapshot(options) {
     worktrees: gitText(root, ["worktree", "list", "--porcelain"], { allowFailure: true }).split("\n").filter((line) => line.startsWith("worktree ")).length,
   };
   snapshot.handoff = parseHandoff(snapshot);
-  snapshot.revisions = await revisions(snapshot);
+  snapshot.revisions = await revisions(snapshot, options.capability);
   snapshot.baseline = await baselineProjection(snapshot, options.capability);
   return snapshot;
 }
@@ -2229,6 +2229,7 @@ function renderBody(snapshot, evaluated, form) {
   }
   body.push(`report: ${fieldsFor(evaluated.facts.report)}`);
   body.push(`handoff: ${fieldsFor(evaluated.facts.handoff)}`);
+  body.push(`revisions: ${fieldsFor(snapshot.revisions)}`);
   for (const line of evaluated.facts.openItems) body.push(form === "full" ? `open-item: ${line}` : compactFact("open-item", line));
   for (const line of evaluated.facts.existingRequests) body.push(form === "full" ? `existing-request: ${line}` : compactFact("existing-request", line));
   for (const line of evaluated.facts.findings) body.push(form === "full" ? `finding: ${line}` : compactFact("finding", line));
