@@ -2550,17 +2550,19 @@ test("D7 compact output never shortens the exact same-origin sibling paths", (t)
   commit(root, "jmp boundary — long sibling request recorded");
   const cards = [1, 2, 3].map((number) =>
     `devflow/tree/02-capability/02.${number}-${"long-sibling-name-".repeat(3)}${number}.md`);
-  for (let index = 0; index < cards.length; index += 1) write(root, cards[index], cardText(`02.${index + 1}`));
+  for (let index = 0; index < cards.length; index += 1) {
+    const progress = index === 0 ? `2026-08-22T00:00:00Z ${"x".repeat(26000)}` : undefined;
+    write(root, cards[index], cardText(`02.${index + 1}`, { progress }));
+  }
   write(root, "devflow/journal.md", "");
   commit(root, "jmp split — long sibling request planned");
-  const open = Array.from({ length: 180 }, (_, index) =>
-    `2026-08-22T00:${String(index % 60).padStart(2, "0")}:00Z jmp: ${index}-${"diagnostic-prose-".repeat(8)}`);
-  write(root, "devflow/journal.md", `${open.join("\n")}\n`);
+  const claimed = cards[0].replace(/\.md$/, ".wip-jmp.md");
+  git(root, "mv", cards[0], claimed);
   commit(root, "jmp boundary — compact output fixture");
 
   const result = run(root); ok(result);
   assert.match(result.stdout, /^state: .* form=compact$/m);
-  const line = candidateLine(result.stdout, "ready", cards[0]);
+  const line = candidateLine(result.stdout, "claim", claimed);
   assert.ok(line.includes(`siblings=${JSON.stringify(cards.slice(1))}`), line);
   assert.equal(line.includes("siblingsTruncated=1"), false, line);
 });
