@@ -8,7 +8,7 @@ import { TextDecoder } from "node:util";
 
 const OUTPUT_LIMIT = 24 * 1024;
 const COMPACT_FIELD_LIMIT = 96;
-const COMPACT_LOSSY_FIELDS = new Set(["line", "raw", "expected", "replacement", "progressLastPoint"]);
+const COMPACT_LOSSY_FIELDS = new Set(["progressLastPoint"]);
 const MAX_BUFFER = 64 * 1024 * 1024;
 const CARD_NUMBER = "[0-9]+[a-z]*(?:\\.[0-9]+[a-z]*)+";
 const FOLDER_NUMBER = "[0-9]+[a-z]*(?:\\.[0-9]+[a-z]*)*";
@@ -2303,11 +2303,6 @@ function compactFieldString(values, omitted = new Set()) {
   return fields.join(" ");
 }
 
-function compactFact(prefix, value) {
-  const bounded = boundedUtf8(value);
-  return `${prefix}: ${bounded.value}${bounded.truncated ? " [truncated]" : ""}`;
-}
-
 function zoneOrder(treePresent, zones) {
   return [...ZONE_DEFINITIONS].sort((left, right) => {
     if (treePresent) return left.present - right.present;
@@ -2493,9 +2488,9 @@ function renderBody(snapshot, evaluated, form) {
   body.push(`report: ${fieldsFor(evaluated.facts.report)}`);
   body.push(`handoff: ${fieldsFor(evaluated.facts.handoff)}`);
   body.push(`revisions: ${fieldsFor(snapshot.revisions)}`);
-  for (const line of evaluated.facts.openItems) body.push(form === "full" ? `open-item: ${line}` : compactFact("open-item", line));
-  for (const line of evaluated.facts.existingRequests) body.push(form === "full" ? `existing-request: ${line}` : compactFact("existing-request", line));
-  for (const line of evaluated.facts.findings) body.push(form === "full" ? `finding: ${line}` : compactFact("finding", line));
+  for (const line of evaluated.facts.openItems) body.push(`open-item: ${line}`);
+  for (const line of evaluated.facts.existingRequests) body.push(`existing-request: ${line}`);
+  for (const line of evaluated.facts.findings) body.push(`finding: ${line}`);
   body.push(`next: ${firstRoute(order, evaluated.zones, snapshot.treePresent)}`);
   return body;
 }

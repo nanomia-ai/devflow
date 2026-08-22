@@ -1342,15 +1342,13 @@ test("T6 missing tool source path stops and emits no guessed next", () => {
   assert.doesNotMatch(result.stdout, /^next:/m);
 });
 
-test("output budget compact emits every item, then refuses without dropping a subset", (t) => {
+test("output budget compact shortens only the non-routing progress hint, then refuses without dropping durable facts", (t) => {
   const compactRoot = makeRepo(t);
-  const rows = Array.from({ length: 180 }, (_, index) => `2026-08-20T00:${String(index % 60).padStart(2, "0")}:00Z jmp: ${index}-${"x".repeat(100)}`);
-  write(compactRoot, "devflow/journal.md", `${rows.join("\n")}\n`);
+  writeClaim(compactRoot, { progress: `2026-08-20T00:00:00Z ${"x".repeat(26000)}` });
   const compact = run(compactRoot); ok(compact);
   assert.match(compact.stdout, /^state: .* bytes=\d+\/24576 form=compact$/m);
   assert.equal(Buffer.byteLength(compact.stdout) <= 24 * 1024, true);
-  assert.equal(compact.stdout.split(/\r?\n/).filter((line) => line.startsWith("open-item:")).length, rows.length);
-  assert.match(compact.stdout, /^open-item: .+ \[truncated\]$/m);
+  assert.match(compact.stdout, /progressLastPointTruncated=1/);
 
   const refusedRoot = makeRepo(t);
   const refusedRows = Array.from({ length: 400 }, (_, index) => `2026-08-20T00:${String(index % 60).padStart(2, "0")}:00Z jmp: ${index}-${"x".repeat(100)}`);
@@ -1364,15 +1362,20 @@ test("output budget compact emits every item, then refuses without dropping a su
   assert.doesNotMatch(refused.stdout, /^next:/m);
 });
 
-test("compact integrity blocking keeps every repair item with explicit line truncation", (t) => {
+test("compact integrity blocking keeps each whole repair payload distinguishable", (t) => {
   const root = makeRepo(t);
-  const rows = Array.from({ length: 50 }, (_, index) =>
-    `2026-08-20T00:${String(index % 60).padStart(2, "0")}:00Z product verification running: malformed-${index}-${"x".repeat(400)}`);
+  writeClaim(root, { progress: `2026-08-20T00:00:00Z ${"x".repeat(26000)}` });
+  const shared = `2026-08-20T00:00:00Z product verification running: ${"same-prefix-".repeat(14)}`;
+  const rows = [`${shared}A`, `${shared}B`];
   write(root, "devflow/journal.md", `${rows.join("\n")}\n`);
   const result = run(root); ok(result);
   assert.match(result.stdout, /^state: .* form=compact$/m);
-  assert.equal(result.stdout.split(/\r?\n/).filter((line) => line.startsWith("integrity: kind=blocking")).length, rows.length);
-  assert.equal(result.stdout.split(/\r?\n/).filter((line) => line.startsWith("integrity: kind=blocking") && line.includes("lineTruncated=1")).length, rows.length);
+  const repairItems = result.stdout.split(/\r?\n/).filter((line) => line.startsWith("integrity: kind=blocking"));
+  assert.equal(repairItems.length, rows.length);
+  for (const row of rows) {
+    assert.ok(repairItems.some((line) => line.includes(`line=${JSON.stringify(row)}`)), `${row}\n${repairItems.join("\n")}`);
+  }
+  assert.doesNotMatch(result.stdout, /lineTruncated=1/);
   assert.equal(nextOf(result.stdout), "integrity.blocking");
 });
 
