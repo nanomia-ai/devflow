@@ -1145,6 +1145,29 @@ test("T4 revisions project product verification code and the selected capability
   assertFragment(narrowed.stdout, "revisions:", `capability=${capability}`);
 });
 
+test("D5 closure an empty verification input set hashes empty bytes instead of the repository", async (t) => {
+  const root = makeRepo(t, { arch: false, glossary: false, codeStyle: false, baseline: false });
+  const empty = execFileSync("git", ["hash-object", "--stdin"], {
+    cwd: root, input: Buffer.alloc(0), encoding: "utf8",
+  }).trim();
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "revisions:", `verification=${empty}`);
+
+  const { nativeBinaryHash } = await registry();
+  assert.equal(await nativeBinaryHash(root, "HEAD", []), empty);
+});
+
+test("D5 closure a failed revision source cannot become a successful empty hash", async (t) => {
+  const root = makeRepo(t);
+  const { nativeBinaryHash, revisionFromGit } = await registry();
+  assert.equal(await nativeBinaryHash(root, "refs/heads/does-not-exist", ["devflow/project/product.md"]), null);
+  const id = git(root, "rev-parse", "HEAD");
+  assert.equal(revisionFromGit({ status: 1, stdout: Buffer.from(`${id}\n`) }, "none"), "unresolved");
+  assert.equal(revisionFromGit({ status: 0, stdout: Buffer.from("not-an-object\n") }, "none"), "unresolved");
+  assert.equal(revisionFromGit({ status: 0, stdout: Buffer.alloc(0) }, "none"), "none");
+  assert.equal(revisionFromGit({ status: 0, stdout: Buffer.from(`${id}\n`) }, "none"), id);
+});
+
 // Freshness is measured against the history this room claimed. With nothing claimed there is
 // no such history, and `git log -- ` with no path is the whole repository, so the question
 // itself has to be skipped rather than asked wider.
@@ -2245,24 +2268,13 @@ test("S2 an old product verify without event sections emits each existing event 
   assert.equal(negative.stdout.split(/\r?\n/).filter((line) => line.startsWith("event: kind=new")).length, 0, negative.stdout);
 });
 
-test("S3 Windows cmd and shell-less Node binary pipes hash the same revision bytes", {
-  skip: process.platform !== "win32",
-}, (t) => {
+test("S3 binary revision hashing uses the exact ls-tree bytes without a shell pipeline", async (t) => {
   const root = makeRepo(t);
   const paths = ["devflow/project/arch.md", "devflow/project/code-style.md", "devflow/project/glossary.md"];
   const tree = execFileSync("git", ["ls-tree", "-r", "-z", "--full-tree", "HEAD", "--", ...paths], { cwd: root });
   const nodeHash = execFileSync("git", ["hash-object", "--stdin"], { cwd: root, input: tree, encoding: "utf8" }).trim();
-  const quote = (value) => `"${String(value).replace(/([\"^&|<>])/g, "^$1").replace(/%/g, "%%")}"`;
-  const command = ["git", "ls-tree", "-r", "-z", "--full-tree", "HEAD", "--", ...paths].map(quote).join(" ")
-    + " | " + ["git", "hash-object", "--stdin"].map(quote).join(" ");
-  const cmd = spawnSync(process.env.ComSpec || "cmd.exe", ["/d", "/s", "/c", `"${command}"`], {
-    cwd: root,
-    encoding: "utf8",
-    windowsHide: true,
-    windowsVerbatimArguments: true,
-  });
-  assert.equal(cmd.status, 0, cmd.stderr);
-  assert.equal(cmd.stdout.trim(), nodeHash);
+  const { nativeBinaryHash } = await registry();
+  assert.equal(await nativeBinaryHash(root, "HEAD", paths), nodeHash);
   const changedHash = execFileSync("git", ["hash-object", "--stdin"], {
     cwd: root, input: Buffer.concat([tree, Buffer.from([0])]), encoding: "utf8",
   }).trim();

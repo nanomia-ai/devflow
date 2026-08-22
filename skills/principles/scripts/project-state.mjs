@@ -2,7 +2,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { spawn, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { TextDecoder } from "node:util";
 
@@ -253,42 +253,39 @@ function gitNulList(root, args) {
   return decodeUtf8(bytes.stdout, `git ${args[0]} path list`).split("\0").filter(Boolean);
 }
 
-function cmdQuote(argument) {
-  return `"${String(argument).replace(/(["^&|<>])/g, "^$1").replace(/%/g, "%%")}"`;
+export async function nativeBinaryHash(root, revision, paths) {
+  const leftArgs = ["ls-tree", "-r", "-z", "--full-tree", revision, "--", ...paths];
+  let input = Buffer.alloc(0);
+  if (paths.length > 0) {
+    const listed = spawnSync("git", leftArgs, {
+      cwd: root, maxBuffer: MAX_BUFFER, windowsHide: true, stdio: ["ignore", "pipe", "ignore"],
+    });
+    if (listed.error || listed.status !== 0) return null;
+    input = listed.stdout;
+  }
+  const hashed = spawnSync("git", ["hash-object", "--stdin"], {
+    cwd: root, input, maxBuffer: MAX_BUFFER, windowsHide: true, stdio: ["pipe", "pipe", "ignore"],
+  });
+  if (hashed.error || hashed.status !== 0) return null;
+  let value;
+  try {
+    value = decodeUtf8(hashed.stdout, "binary revision hash").trim();
+  } catch {
+    return null;
+  }
+  return /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(value) ? value : null;
 }
 
-async function nativeBinaryHash(root, revision, paths) {
-  const leftArgs = ["ls-tree", "-r", "-z", "--full-tree", revision, "--", ...paths];
-  if (process.platform === "win32") {
-    const command = ["git", ...leftArgs].map(cmdQuote).join(" ")
-      + " | " + ["git", "hash-object", "--stdin"].map(cmdQuote).join(" ");
-    const run = spawnSync(process.env.ComSpec || "cmd.exe", ["/d", "/s", "/c", `"${command}"`], {
-      cwd: root,
-      maxBuffer: MAX_BUFFER,
-      windowsHide: true,
-      windowsVerbatimArguments: true,
-    });
-    if (run.error || run.status !== 0) return null;
-    return decodeUtf8(run.stdout, "binary revision hash").trim();
+export function revisionFromGit(run, emptyValue) {
+  if (run.status !== 0) return "unresolved";
+  let value;
+  try {
+    value = decodeUtf8(run.stdout, "revision object id").trim();
+  } catch {
+    return "unresolved";
   }
-  return await new Promise((resolve) => {
-    const left = spawn("git", leftArgs, { cwd: root, stdio: ["ignore", "pipe", "ignore"] });
-    const right = spawn("git", ["hash-object", "--stdin"], { cwd: root, stdio: ["pipe", "pipe", "ignore"] });
-    const chunks = [];
-    left.stdout.pipe(right.stdin);
-    right.stdout.on("data", (chunk) => chunks.push(chunk));
-    let leftStatus = null;
-    let rightStatus = null;
-    const finish = () => {
-      if (leftStatus === null || rightStatus === null) return;
-      if (leftStatus !== 0 || rightStatus !== 0) resolve(null);
-      else resolve(decodeUtf8(Buffer.concat(chunks), "binary revision hash").trim());
-    };
-    left.on("close", (status) => { leftStatus = status; finish(); });
-    right.on("close", (status) => { rightStatus = status; finish(); });
-    left.on("error", () => resolve(null));
-    right.on("error", () => resolve(null));
-  });
+  if (value === "") return emptyValue;
+  return /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(value) ? value : "unresolved";
 }
 
 function parseArguments(argv) {
@@ -910,12 +907,13 @@ function directTree(root) {
 
 async function revisions(snapshot, capabilityNumber) {
   const product = readFile(snapshot.root, "devflow/project/product.md") === null ? "none"
-    : gitLine(snapshot.root, ["hash-object", "devflow/project/product.md"], { allowFailure: true }) || "none";
+    : revisionFromGit(gitRun(snapshot.root, ["hash-object", "devflow/project/product.md"], { allowFailure: true }), "unresolved");
   const verificationPaths = [
     "devflow/project/arch.md", "devflow/project/code-style.md", "devflow/project/glossary.md",
   ].filter((relative) => gitPathExists(snapshot.root, "HEAD", relative));
   const verification = await nativeBinaryHash(snapshot.root, "HEAD", verificationPaths) ?? "unresolved";
-  const code = gitLine(snapshot.root, ["log", "-1", "--format=%H", "--", ".", ":(exclude)devflow/**"], { allowFailure: true }) || "none";
+  const code = revisionFromGit(gitRun(snapshot.root,
+    ["log", "-1", "--format=%H", "--", ".", ":(exclude)devflow/**"], { allowFailure: true }), "none");
   let capability = "not-applicable";
   if (capabilityNumber !== undefined) {
     const folders = snapshot.depth1Folders.filter((folder) => Number(folderIdentity(folder)?.number) === Number(capabilityNumber));
