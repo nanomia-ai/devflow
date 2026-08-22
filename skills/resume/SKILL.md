@@ -282,10 +282,19 @@ claim. An in-progress claim is never interrupted to digest.
    a claim, carry it on this claim commit (work's claim-commit rule)
 ```
 
-When the marker is unresolvable (a force push, say), report it and re-anchor with the
-user's confirmation — the default candidate is my last commit. Silent full re-digest is
-forbidden. A marker merge conflict (my two machines) keeps the descendant hash; an
-unrelated hash follows the re-anchor procedure.
+When the marker resolves to no commit here (`resolution=unresolved` — a force push or an
+abbreviation, say), or resolves to a commit that is not an ancestor of the integration
+history (`resolution=non-ancestor`), report it and re-anchor with the user's confirmation —
+the default candidate is the full object ID in the first record of
+`git log -z --format=%H%x00%an%x00%ae <integration branch>` (NUL-terminated triples, newest
+first) whose author name and author email each equal my room owner.md `git:` values exactly:
+string equality on both, never a regex, a substring, or `--author`, and `none` when no record
+matches. This branch's HEAD is not a candidate even when it is mine and newest — a marker
+outside the integration history makes the next entry demand the same re-anchor again. Neither
+one yields a digest range. Silent full re-digest is forbidden. `resolution=unavailable` is not
+a re-anchor — Git could not answer the history, so report the failed calculation and its
+`reason` and wait or call again with the marker untouched. A marker merge conflict (my two
+machines) keeps the descendant hash; an unrelated hash follows the re-anchor procedure.
 
 ## Exceptions
 

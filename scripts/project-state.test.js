@@ -820,6 +820,12 @@ function assertFragment(output, prefix, fragment) {
   assert.ok(line.includes(fragment), `missing ${fragment}\n${line}`);
 }
 
+function assertNoFragment(output, prefix, fragment) {
+  const line = lineWith(output, prefix);
+  assert.ok(line, `missing ${prefix}\n${output}`);
+  assert.ok(!line.includes(fragment), `unexpected ${fragment}\n${line}`);
+}
+
 test("T1 empty-zone contract prints every canonical zone in canonical order", async (t) => {
   const root = makeRepo(t);
   const result = run(root);
@@ -1726,23 +1732,59 @@ test("R5 digest lag is a ready fact and does not interrupt a current claim", (t)
   const card = writeClaim(root, { commitSubject: "jmp 02.1 claim" });
   const result = run(root); ok(result);
   assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker}`);
+  assertFragment(result.stdout, "ready: kind=digest-behind", "resolution=ancestor");
   assertFragment(result.stdout, "ready: kind=digest-behind", "behind=4");
   assertFragment(result.stdout, "ready: kind=digest-behind", "others=2");
   assertFragment(result.stdout, "claim: kind=mine", `path=${card}`);
   assert.equal(nextOf(result.stdout), "claim.mine", result.stdout);
 });
 
-test("R5 a digest marker outside integration reports unknown rather than inventing distance", (t) => {
+function otherCommit(root, subject) {
+  git(root, "config", "user.name", "Other");
+  git(root, "config", "user.email", "other@example.test");
+  write(root, `${subject.replace(/\W/g, "-")}.txt`, "other\n");
+  const hash = commit(root, subject);
+  git(root, "config", "user.name", "Jmp");
+  git(root, "config", "user.email", "jmp@example.test");
+  return hash;
+}
+
+// A marker that names no commit here is not a distance of zero and not a distance of
+// everything: with no anchor there is no range, so no history fact may be reported at all.
+for (const [label, makeMarker] of [
+  ["an invented object id", () => "deadbeef".repeat(5)],
+  ["an abbreviation of a real commit", (root) => git(root, "rev-parse", "--short=12", "HEAD")],
+  ["a hex string of no object-id length", () => "a".repeat(48)],
+  ["an empty marker", () => ""],
+]) {
+  test(`R5 an unresolvable digest marker (${label}) reports no distance and no history`, (t) => {
+    const root = makeRepo(t);
+    otherCommit(root, "other change");
+    const marker = makeMarker(root);
+    write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+    commit(root, "jmp boundary — unresolvable digest marker");
+    const result = run(root); ok(result);
+    assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker || "invalid"}`);
+    assertFragment(result.stdout, "ready: kind=digest-behind", "resolution=unresolved");
+    assertNoFragment(result.stdout, "ready: kind=digest-behind", "behind=");
+    assertNoFragment(result.stdout, "ready: kind=digest-behind", "others=");
+  });
+}
+
+test("R5 a digest marker that exists off the integration line is a non-ancestor fact", (t) => {
   const root = makeRepo(t);
   git(root, "checkout", "-qb", "side");
   write(root, "side.txt", "side\n");
   const marker = commit(root, "side-only");
-  git(root, "checkout", "main");
+  git(root, "checkout", "-q", "main");
+  otherCommit(root, "other change");
   write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
   commit(root, "jmp boundary — divergent digest marker");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker}`);
-  assertFragment(result.stdout, "ready: kind=digest-behind", "behind=unknown");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "resolution=non-ancestor");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "behind=");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "others=");
 });
 
 test("R5 a none digest marker counts from the first integration commit", (t) => {
@@ -1752,8 +1794,150 @@ test("R5 a none digest marker counts from the first integration commit", (t) => 
   const count = git(root, "rev-list", "--count", "HEAD");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "ready: kind=digest-behind", "marker=none");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "resolution=none");
   assertFragment(result.stdout, "ready: kind=digest-behind", `behind=${count}`);
   assertFragment(result.stdout, "ready: kind=digest-behind", "others=0");
+});
+
+// Removing one loose commit object in the middle of the integration history is the
+// deterministic seam for "Git could not answer": rev-parse and status still work, and every
+// history walk that has to cross that point exits with a status that is neither 0 nor 1.
+function breakHistoryWalk(root, hash) {
+  const object = path.join(root, ".git", "objects", hash.slice(0, 2), hash.slice(2));
+  assert.ok(fs.existsSync(object), `the seam needs a loose object at ${object}`);
+  fs.rmSync(object);
+}
+
+test("R5 a merge-base Git cannot answer is unavailable, not a non-ancestor verdict", (t) => {
+  const root = makeRepo(t);
+  const unwalkable = otherCommit(root, "other change");
+  write(root, "keep.txt", "keep\n");
+  const marker = commit(root, "jmp tip");
+  write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+  commit(root, "jmp boundary — digest marker");
+  breakHistoryWalk(root, unwalkable);
+  assert.equal(gitTry(root, "merge-base", "--is-ancestor", marker, "main").status, 128, "the seam must make Git decline, not answer 1");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker}`);
+  assertFragment(result.stdout, "ready: kind=digest-behind", "resolution=unavailable");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "reason=merge-base-unavailable");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "non-ancestor");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "behind=");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "others=");
+});
+
+test("R5 a history walk Git cannot run is unavailable, not a suppressed zero", (t) => {
+  const root = makeRepo(t);
+  const unwalkable = otherCommit(root, "other change");
+  write(root, "devflow/users/jmp/digest.md", "none\n");
+  commit(root, "jmp boundary — initial digest marker");
+  breakHistoryWalk(root, unwalkable);
+  assert.equal(gitTry(root, "rev-list", "--count", "main").status, 128, "the seam must make the count decline");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "ready: kind=digest-behind", "marker=none");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "resolution=unavailable");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "reason=history-unavailable");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "behind=");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "others=");
+});
+
+test("R5 a digest history that will not decode is unavailable, not a dead tool", (t) => {
+  const root = makeRepo(t);
+  const marker = git(root, "rev-parse", "HEAD");
+  write(root, "other.txt", "other\n");
+  git(root, "add", "-A");
+  // Git transcodes an identity it takes from config, so the undecodable author name goes in
+  // through plumbing, with fixed timestamps so the fixture is the same object every run.
+  const created = execFileSync("git", ["hash-object", "-t", "commit", "-w", "--stdin"], {
+    cwd: root,
+    encoding: "utf8",
+    input: Buffer.concat([
+      Buffer.from(`tree ${git(root, "write-tree")}\nparent ${marker}\nauthor `),
+      Buffer.from([0xff, 0xfe]),
+      Buffer.from(" Other <other@example.test> 1700000000 +0000\n"
+        + "committer Jmp <jmp@example.test> 1700000000 +0000\n\nother change\n"),
+    ]),
+  }).trim();
+  git(root, "update-ref", "refs/heads/main", created);
+  git(root, "reset", "-q", "--hard", "main");
+  write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+  commit(root, "jmp boundary — digest marker");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker}`);
+  assertFragment(result.stdout, "ready: kind=digest-behind", "resolution=unavailable");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "reason=history-undecodable");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "behind=");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "others=");
+});
+
+// A status-zero Git result is evidence only in Git's own grammar, and no repository can
+// print a malformed count on purpose — so the two grammars are exercised directly.
+test("R5 the digest count reads only a canonical non-negative decimal integer", async () => {
+  const { digestDistance } = await registry();
+  assert.equal(digestDistance("3\n"), 3, "what rev-list --count actually prints");
+  assert.equal(digestDistance("0\n"), 0);
+  for (const bad of ["", "   ", "\n", "3", " 3\n", "3 \n", "3\n\n", "-1\n", "1.5\n", "0x10\n", "007\n", "+1\n", "1 2\n", "1e3\n", "three\n"]) {
+    assert.equal(digestDistance(bad), null, `${JSON.stringify(bad)} is not a count`);
+  }
+});
+
+// Measured, not assumed: `git log -z --format=%an%x00%ae%x00%s` terminates every record with
+// NUL and adds nothing after the last one, so the only tail to remove is that final empty
+// field — and an empty range prints nothing at all.
+test("R5 the digest history reads exact triples closed by one trailing delimiter", async () => {
+  const { digestRecords } = await registry();
+  assert.deepEqual(digestRecords(""), [], "what an empty range actually prints");
+  assert.deepEqual(digestRecords("A\0a@x\0s\0"), [["A", "a@x", "s"]]);
+  assert.deepEqual(digestRecords("A\0a@x\0\0"), [["A", "a@x", ""]], "an empty subject is a field, not a gap");
+  assert.deepEqual(digestRecords("A\0a@x\0s\0B\0b@y\0\0"), [["A", "a@x", "s"], ["B", "b@y", ""]]);
+  for (const bad of ["A\0a@x\0s", "A\0a@x\0s\0B\0b@y\0", "A\0a@x\0s\0tail", "A\0a@x\0s\0\n"]) {
+    assert.equal(digestRecords(bad), null, `${JSON.stringify(bad)} is not a record set`);
+  }
+});
+
+test("R5 an empty-subject commit keeps the records aligned and counts as unseen history", (t) => {
+  const root = makeRepo(t);
+  const marker = git(root, "rev-parse", "HEAD");
+  write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+  commit(root, "jmp boundary — digest marker");
+  git(root, "commit", "-q", "--allow-empty", "-m", "jmp 02.1 wip: one");
+  // mine by name and email and with no id prefix to start, so it is one unseen commit — and
+  // the record whose empty subject used to be dropped, shifting every field after it
+  git(root, "commit", "-q", "--allow-empty", "--allow-empty-message", "-m", "");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker}`);
+  assertFragment(result.stdout, "ready: kind=digest-behind", "resolution=ancestor");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "behind=3");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "others=1");
+});
+
+// One seam cannot fail rev-list and log separately, so the rule that each command's own
+// status gates its own output is sealed against the deployed source instead.
+test("R5 digestLag parses no Git output before that command's status is checked", () => {
+  const body = /\nfunction digestLag\(snapshot\) \{\n([\s\S]*?)\n\}\n/.exec(fs.readFileSync(TOOL, "utf8"))?.[1];
+  assert.ok(body, "digestLag must be findable in the deployed tool");
+  for (const [command, guard] of [
+    ["merge-base", /ancestry !== 0 && ancestry !== 1/],
+    ["rev-list", /counted\.status !== 0/],
+    ["log", /raw\.status !== 0/],
+  ]) assert.match(body, guard, `${command}: its own status must gate its own output`);
+  assert.match(body, /catch \{\n\s+return unavailable\("history-undecodable"\)/,
+    "output that will not decode is a bounded fact, not a dead tool");
+  assert.match(body, /behind === null \|\| records === null\) return unavailable\("history-unreadable"\)/,
+    "output outside Git's grammar is a bounded fact, not a count");
+});
+
+test("R5 an unresolved integration ref is unavailable, not a count against local HEAD", (t) => {
+  const root = makeRepo(t);
+  write(root, "devflow/project/arch.md", arch().replace("integration: main", "integration: never-created"));
+  write(root, "devflow/users/jmp/digest.md", "none\n");
+  otherCommit(root, "other change");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "ready: kind=digest-behind", "marker=none");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "resolution=unavailable");
+  assertFragment(result.stdout, "ready: kind=digest-behind", "reason=integration-ref-unresolved");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "behind=");
+  assertNoFragment(result.stdout, "ready: kind=digest-behind", "others=");
 });
 
 test("R6 final-task boundary reports missing carry and claim exposes carry absence", (t) => {

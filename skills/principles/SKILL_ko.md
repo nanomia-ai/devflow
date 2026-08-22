@@ -39,7 +39,8 @@ id는 소문자 `[a-z0-9]{2,8}`. devflow가 쓰는 이름(project·tree·users·
 
 방 = `devflow/users/<id>/` = owner.md + HANDOFF.md + digest.md. owner.md는 두 줄이다 —
 `id: <id>`와 `git: <git user.name>, <git user.email>`. digest.md는 소화 마커 한 줄이며 값은
-commit hash 또는 `none`이다. 자기 방에만 쓴다. 방은 팀 전체가 읽는다 — 그 전제로 쓴다.
+Git이 출력한 축약하지 않은 전체 commit object ID 또는 `none`이다. 자기 방에만 쓴다. 방은 팀
+전체가 읽는다 — 그 전제로 쓴다.
 
 devflow는 Git 작업 트리에서만 돈다 — 점유·승인 신선도·통합·모든 되돌리기가 Git 위에 있다.
 작업 트리가 아닌 폴더에서 처음 도는 스킬은 `git init`을 제안하고, 사용자가 거부하면 멈춘다.

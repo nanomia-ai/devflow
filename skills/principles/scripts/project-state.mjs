@@ -1636,31 +1636,74 @@ function claimOrigin(snapshot, card) {
   return { origin: `journal:${request?.raw ?? matches[0].raw}` };
 }
 
+// A status-zero Git result is evidence only in Git's own grammar. `rev-list --count` prints
+// one canonical decimal integer, and `git log -z` terminates every record with NUL and prints
+// nothing after the last one — so the tail to remove is that final empty field, and an empty
+// range prints nothing at all. Output in any other shape is not a smaller number or a shorter
+// history; it is an answer this tool cannot read, and both parsers say so with null.
+export function digestDistance(text) {
+  const match = /^(0|[1-9][0-9]*)\n$/.exec(text);
+  return match ? Number(match[1]) : null;
+}
+
+export function digestRecords(text) {
+  const fields = text.split("\0");
+  if (fields.pop() !== "" || fields.length % 3 !== 0) return null;
+  const records = [];
+  for (let index = 0; index < fields.length; index += 3) records.push(fields.slice(index, index + 3));
+  return records;
+}
+
 function digestLag(snapshot) {
-  if (!snapshot.room || !snapshot.integration.hash) return null;
+  if (!snapshot.room) return null;
   const relative = `devflow/users/${snapshot.room.id}/digest.md`;
   const markerText = readFile(snapshot.root, relative);
   if (markerText === null) return null;
   const marker = markerText.trim();
-  const validHash = /^[0-9a-f]{40,64}$/.test(marker);
-  const isNone = marker === "none";
-  let behind = "unknown";
-  let range = snapshot.integration.ref;
-  if (isNone) {
-    behind = Number(gitLine(snapshot.root, ["rev-list", "--count", snapshot.integration.ref], { allowFailure: true }) || 0);
-  } else if (validHash && gitRun(snapshot.root, ["merge-base", "--is-ancestor", marker, snapshot.integration.ref], { allowFailure: true }).status === 0) {
-    range = `${marker}..${snapshot.integration.ref}`;
-    behind = Number(gitLine(snapshot.root, ["rev-list", "--count", range], { allowFailure: true }) || 0);
+  // Git failing to answer is not an answer about history.  An unresolved integration ref, a
+  // merge-base that neither proved nor disproved ancestry, a walk that could not run, and
+  // output that will not decode are all reported unavailable — never counted as zero, never
+  // hardened into a non-ancestor verdict, and never dropped by the suppression at the end.
+  const unavailable = (reason) => ({ marker: marker || "invalid", resolution: "unavailable", reason });
+  if (!snapshot.integration.hash) return unavailable("integration-ref-unresolved");
+  // The marker is a commit locator, so only the unabbreviated object ID Git itself prints
+  // resolves — an abbreviation, a ref name, or an invented hash names no commit here.  A
+  // marker that resolves to nothing yields no range, and a range is the only thing that may
+  // be counted: the integration ref alone would report the whole branch as unseen history.
+  const resolved = /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(marker)
+    && gitLine(snapshot.root, ["rev-parse", "--verify", "--quiet", `${marker}^{commit}`], { allowFailure: true }) === marker;
+  let range = null;
+  let resolution = "unresolved";
+  if (marker === "none") {
+    range = snapshot.integration.ref;
+    resolution = "none";
+  } else if (resolved) {
+    // `merge-base --is-ancestor` answers 0 for yes and 1 for no; any other status is Git
+    // declining to answer, and a decline is not a divergence.
+    const ancestry = gitRun(snapshot.root, ["merge-base", "--is-ancestor", marker, snapshot.integration.ref], { allowFailure: true }).status;
+    if (ancestry !== 0 && ancestry !== 1) return unavailable("merge-base-unavailable");
+    resolution = ancestry === 0 ? "ancestor" : "non-ancestor";
+    if (ancestry === 0) range = `${marker}..${snapshot.integration.ref}`;
   }
+  if (range === null) return { marker: marker || "invalid", resolution };
+  const counted = gitRun(snapshot.root, ["rev-list", "--count", range], { allowFailure: true });
   const raw = gitRun(snapshot.root, ["log", "-z", "--format=%an%x00%ae%x00%s", range], { allowFailure: true });
-  const values = raw.status === 0 ? decodeUtf8(raw.stdout, "digest history").split("\0").filter((value) => value !== "") : [];
+  if (counted.status !== 0 || raw.status !== 0) return unavailable("history-unavailable");
+  let behind;
+  let records;
+  try {
+    behind = digestDistance(decodeUtf8(counted.stdout, "digest distance"));
+    records = digestRecords(decodeUtf8(raw.stdout, "digest history"));
+  } catch {
+    return unavailable("history-undecodable");
+  }
+  if (behind === null || records === null) return unavailable("history-unreadable");
   let others = 0;
-  for (let index = 0; index + 2 < values.length; index += 3) {
-    const [name, email, subject] = values.slice(index, index + 3);
+  for (const [name, email, subject] of records) {
     if (name !== snapshot.room.name || email !== snapshot.room.email || !subject.startsWith(`${snapshot.room.id} `)) others += 1;
   }
   if (behind === 0 && others === 0) return null;
-  return { marker: isNone ? "none" : marker || "invalid", behind, others };
+  return { marker, resolution, behind, others };
 }
 
 function finalTaskCommit(snapshot, card) {

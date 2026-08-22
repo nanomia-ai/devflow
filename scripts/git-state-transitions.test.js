@@ -683,3 +683,81 @@ test("a signal result is current until a later commit changes this card's task d
   assert.notEqual(git("diff", "--name-only", `${anchor}..HEAD`, "--", ...codePaths), "",
     "the repair changed this card's task diff, so the recorded pass no longer speaks for the code");
 });
+
+// resume's re-anchor: a digest marker only means something inside the integration history, so
+// the default candidate is this room's newest commit reachable from the integration tip. The
+// task branch's HEAD is mine and it is newest and it still cannot be the candidate — a marker
+// outside integration comes back as `non-ancestor` on the next entry and asks for the same
+// re-anchor, which is the loop this rule removes.
+function ownsReAnchorCandidate() {
+  const resume = fs.readFileSync(path.join(repoRoot, "skills", "resume", "SKILL.md"), "utf8").replace(/\s+/g, " ");
+  assert.match(resume, /the default candidate is the full object ID in the first record of `git log -z --format=%H%x00%an%x00%ae <integration branch>` \(NUL-terminated triples, newest first\) whose author name and author email each equal my room owner\.md `git:` values exactly: string equality on both, never a regex, a substring, or `--author`, and `none` when no record matches/,
+    "resume must own the exact enumeration command and the exact-equality selection");
+  const resumeKo = fs.readFileSync(path.join(repoRoot, "skills", "resume", "SKILL_ko.md"), "utf8").replace(/\s+/g, " ");
+  assert.match(resumeKo, /`git log -z --format=%H%x00%an%x00%ae <[^>]+>`/,
+    "the Korean original must carry the same enumeration command");
+}
+
+// resume's procedure run exactly as it is written: enumerate the integration-reachable
+// commits as NUL-terminated (hash, name, email) triples, newest first, and take the first
+// record whose two identity fields are string-equal to both owner.md values.
+function reAnchorCandidate(git, integration, name, email) {
+  const fields = git("log", "-z", "--format=%H%x00%an%x00%ae", integration).split("\0");
+  assert.equal(fields.pop(), "", "every record is NUL-terminated");
+  assert.equal(fields.length % 3, 0, "the enumeration is exact triples");
+  for (let index = 0; index < fields.length; index += 3) {
+    if (fields[index + 1] === name && fields[index + 2] === email) return fields[index];
+  }
+  return "none";
+}
+
+test("the re-anchor default candidate is my newest integrated commit, never my unintegrated HEAD", (t) => {
+  const { git, gitTry } = makeRepo(t);
+  ownsReAnchorCandidate();
+
+  git("branch", "integration");
+  git("checkout", "-q", "integration");
+  git("commit", "-q", "--allow-empty", "-m", "a 02.1 claim");
+  const mineIntegrated = git("rev-parse", "HEAD");
+  git("commit", "-q", "--allow-empty", "--author=B <b@y>", "-m", "b 03.1 claim");
+  git("checkout", "-qb", "flow");
+  git("commit", "-q", "--allow-empty", "-m", "a 02.1 wip: not integrated yet");
+  const mineUnintegrated = git("rev-parse", "HEAD");
+
+  const candidate = reAnchorCandidate(git, "integration", "A", "a@x");
+  assert.equal(candidate, mineIntegrated, "the candidate is my newest commit reachable from the integration tip");
+  assert.notEqual(candidate, mineUnintegrated, "my newest commit overall is on the task branch and is not it");
+  assert.equal(candidate.length, git("rev-parse", "HEAD").length, "%H is the unabbreviated object ID the marker requires");
+  assert.equal(gitTry("merge-base", "--is-ancestor", candidate, "integration").status, 0,
+    "re-anchoring there terminates — the new marker is an ancestor of the integration tip");
+  assert.equal(gitTry("merge-base", "--is-ancestor", mineUnintegrated, "integration").status, 1,
+    "anchoring to my HEAD would be a non-ancestor again, which is the loop");
+  assert.equal(reAnchorCandidate(git, "integration", "C", "c@z"), "none",
+    "with no record matching both values the candidate is `none`, not a non-ancestor");
+});
+
+// Both halves of the identity are the test, and they are compared as strings: a teammate
+// sharing my email is not me, and `--author=<email>` is a regex whose dot would take a
+// commit that merely looks like mine.
+test("the re-anchor candidate matches both owner.md values exactly, so no near-identity wins", (t) => {
+  const { git } = makeRepo(t);
+  ownsReAnchorCandidate();
+  git("config", "user.name", "A");
+  git("config", "user.email", "a.b@x");
+
+  git("branch", "integration");
+  git("checkout", "-q", "integration");
+  git("commit", "-q", "--allow-empty", "-m", "a 02.1 claim");
+  const mine = git("rev-parse", "HEAD");
+  git("commit", "-q", "--allow-empty", "--author=A2 <a.b@x>", "-m", "a2 03.1 claim");
+  const sameEmail = git("rev-parse", "HEAD");
+  git("commit", "-q", "--allow-empty", "--author=A <axb@x>", "-m", "a 04.1 claim");
+  const regexLike = git("rev-parse", "HEAD");
+
+  const candidate = reAnchorCandidate(git, "integration", "A", "a.b@x");
+  assert.equal(candidate, mine, "the newest record equal on both name and email is mine");
+  assert.notEqual(candidate, sameEmail, "my email with another name is another person");
+  assert.notEqual(candidate, regexLike, "an email that only matches as a pattern is another person");
+  assert.equal(git("log", "-1", "--format=%H", "--author=a.b@x", "integration"), regexLike,
+    "the rejected --author form takes the pattern match, which is why it is not the source");
+});

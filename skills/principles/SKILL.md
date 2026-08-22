@@ -46,8 +46,8 @@ are forbidden; ids are never reused.
 
 Room = `devflow/users/<id>/` = owner.md + HANDOFF.md + digest.md. owner.md is two lines,
 `id: <id>` and `git: <git user.name>, <git user.email>`. digest.md is one line holding the
-digest marker, a commit hash or `none`. Write only in your own room. Rooms are readable by
-the whole team — write with that premise.
+digest marker, an unabbreviated full commit object ID output by Git or `none`. Write only in
+your own room. Rooms are readable by the whole team — write with that premise.
 
 devflow runs only in a Git work tree — claims, approval freshness, integration, and every
 undo live in Git. The first skill to run in a folder that is not one proposes `git init`
