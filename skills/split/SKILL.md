@@ -505,14 +505,22 @@ to `pending` and present the repaired whole card in a new execution proposal. La
 approval value and card repair together in the planning commit.
 
 **When the user changes the Destination of a card in progress, a clean review returns an
-objection about the card's contract, or work names one of the card-contract defects above in the
-progress log before a review and releases the card**, use the existing path: work checkpoints and releases
-the card, split rewrites its Destination, Why, Forbidden, and Completion signal — and for a
-card-contract defect reads the progress log as a handoff naming what is
-missing, establishes the replacement statement or path from its existing canonical owner
-under its own permitted reads, and repairs only the fields and the exact non-capsule
-`Read first` paths the card already carries — gets the execution proposal approved again and
-lands it in the planning commit, and the card is then claimed again. split writes no arch
+objection about the card's contract, work returns to split with a pending card and reports
+one of the card-contract preflight defects above, or work names that defect in the progress
+log before a review and releases a claimed card**, use the existing path: work checkpoints
+and releases a claimed card, and split rewrites its Destination, Why, Forbidden, and
+Completion signal. For a pending-card preflight defect, work's exact report in the current
+invocation is the handoff; for a released claimed card, the progress log is the handoff.
+For a card-contract defect, split reads that handoff as naming what is missing, establishes
+the replacement statement or path from its existing canonical owner under its own permitted
+reads, and repairs only the fields and the exact non-capsule `Read first` paths the card
+already carries. For a missing T-low basis defect only, split may add the minimal bounded
+concrete provider or consumer `Read first` path and the essential ordering or dataflow
+statement that preflight requires. It derives both from the canonical capability document
+or the committed provider or consumer owner under its permitted reads; it adds no unrelated
+path, widens no Destination, and duplicates no domain truth in the card. After the execution
+proposal is approved again and lands in the planning commit, work reruns the preflight and
+may claim or resume the card only when it passes. split writes no arch
 file, capability document, or other `Read first` file from the progress log, opens and infers
 no capsule, and when no legitimate existing non-capsule basis can go into the card's contract
 it stops and reports to the person instead of approving the same card again. No upper document changed, so this creates

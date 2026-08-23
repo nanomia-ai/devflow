@@ -1950,6 +1950,27 @@ test("T-low cards and task-specific signals carry bounded execution evidence", (
   assert.match(work, /These checks\s+do not split a composite card by capability/);
 });
 
+test("T-low missing-path repair converges from work through split back to work", () => {
+  const split = flat(fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8"));
+  const work = flat(fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8"));
+
+  // work produces the exact defect for either card state and hands the durable repair to split.
+  assert.match(work, /If a pending card fails the preflight, do not claim it: report the exact defect and return to split/);
+  assert.match(work, /If a claimed card fails it, write the exact defect in its progress log,[\s\S]*release the card, and return to split/);
+  assert.match(split, /For a pending-card preflight defect, work's exact report in the current invocation is the handoff; for a released claimed card, the progress log is the handoff/);
+
+  // split can add the missing durable input, but only from its bounded canonical basis.
+  assert.match(split, /For a missing T-low basis defect only, split may add the minimal bounded concrete provider or consumer `Read first` path and the essential ordering or dataflow statement that preflight requires/);
+  assert.match(split, /derives both from the canonical capability document or the committed provider or consumer owner under its permitted reads/);
+  assert.match(split, /adds no unrelated path, widens no Destination, and duplicates no domain truth in the card/);
+
+  // work consumes the repaired card under the same preflight instead of bypassing it.
+  assert.match(work, /After split's repaired planning commit lands, rerun the same preflight; claim or resume the card only when it passes/);
+  assert.match(split, /work reruns the preflight and may claim or resume the card only when it passes/);
+  assert.match(work, /do not split a composite card by capability/);
+  assert.doesNotMatch(`${split} ${work}`, /requires? one card per capability/);
+});
+
 test("resume asks which unit instead of guessing when several are open", () => {
   const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
   assert.match(resume, /When the conversation named no depth-1 unit and two or more units hold a candidate in that\s+zone, ask which unit to continue instead of proposing one/);
@@ -2712,8 +2733,9 @@ test("an objection about the card's contract routes to split, which owns only th
   assert.doesNotMatch(work, /new planning document|second planning layer/);
   // split carries the same limits on the route it already owns.
   const split = flat(fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8"));
-  assert.match(split, /a clean review returns an objection about the card's contract, or work names one of the card-contract defects above in the progress log before a review and releases the card/);
-  assert.match(split, /a card-contract defect reads the progress log as a handoff naming what is missing, establishes the replacement statement or path from its existing canonical owner under its own permitted reads, and repairs only the fields and the exact non-capsule `Read first` paths the card already carries/);
+  assert.match(split, /a clean review returns an objection about the card's contract, work returns to split with a pending card and reports one of the card-contract preflight defects above, or work names that defect in the progress log before a review and releases a claimed card/);
+  assert.match(split, /For a card-contract defect, split reads that handoff as naming what is missing, establishes the replacement statement or path from its existing canonical owner under its own permitted reads, and repairs only the fields and the exact non-capsule `Read first` paths the card already carries/);
+  assert.match(split, /For a missing T-low basis defect only, split may add the minimal bounded concrete provider or consumer `Read first` path/);
   assert.match(split, /writes no arch file, capability document, or other `Read first` file from the progress log, opens and infers no capsule, and when no legitimate existing non-capsule basis can go into the card's contract it stops and reports to the person/);
 });
 

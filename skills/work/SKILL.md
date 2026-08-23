@@ -117,7 +117,8 @@ remainder and the commit.
    a claimed card fails it, write the exact defect in its progress log, land a checkpoint for
    that log and any current card changes, release the card, and return to split. These checks
    do not split a composite card by capability, require every possible path, or move durable
-   knowledge away from its semantic owner.
+   knowledge away from its semantic owner. After split's repaired planning commit lands,
+   rerun the same preflight; claim or resume the card only when it passes.
    Before claiming, pull the integration branch and finish the digest (resume's
    digest procedure). The rename commit to `.wip-<my id>.` is the claim (message:
    `<id> 02.4 claim` — a digest.md marker a just-before-claim digest advanced rides this
@@ -462,7 +463,9 @@ Progress-excluded card plus the exact files it received cannot decide the questi
 needs fixing is the card, and the card is split's. Before releasing the claim, write the
 missing proposition and what this loop observed into the progress log, concretely — that is a
 handoff, not authority to change a document outside the card. split changes only what it
-already owns: the task card's fields and the exact `Read first` paths already in that card.
+already owns: the task card's fields and the exact `Read first` paths already in that card,
+plus a reported missing T-low basis through split's bounded repair rule. work adds no other
+`Read first` path.
 It establishes any replacement statement or path from the existing canonical owner under its
 own permitted reads. It writes no arch file, capability document, or other `Read first` file
 from the progress log, and it neither opens nor infers a capsule. When no legitimate existing
