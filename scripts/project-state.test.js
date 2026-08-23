@@ -3177,6 +3177,17 @@ test("C design a malformed owner-named open item stays a plain open item and sto
   assert.equal(nextOf(result.stdout), "ready.ready", result.stdout);
 });
 
+test("C design an open item attributed to no existing room stays plain and cannot route", (t) => {
+  const scene = designOpenItemScene(t, {
+    line: designOpenItem("03", "a person-owned line", "devflow/tree/02-capability/02.9-composite.done.md", { id: "ghost" }),
+  });
+  const result = run(scene.root); ok(result);
+  assert.equal(hasKind(result.stdout, "marker", "design-open-item"), false, result.stdout);
+  assertFragment(result.stdout, "integrity:", "blocking=0");
+  assert.ok(result.stdout.split(/\r?\n/).includes(`open-item: ${scene.line}`), result.stdout);
+  assert.equal(nextOf(result.stdout), "ready.ready", result.stdout);
+});
+
 test("C design an uncommitted owner-named open item is not a durable route", (t) => {
   const scene = designOpenItemScene(t, { commitLine: false });
   const result = run(scene.root); ok(result);

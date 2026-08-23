@@ -837,7 +837,7 @@ function capabilityNoteFields(line, start) {
 // ordinary named open item and stops nothing, so the writer of prose is never blocked. The
 // exact form is routable, because the owner the line names is the only writer that can land
 // the statement, and that owner is never derived from the card the confirmation happened on.
-const DESIGN_OPEN_ITEM = new RegExp(`^${TIMESTAMP} \\S+ design open item: capability: (?<capability>\\d+); statement-json: `);
+const DESIGN_OPEN_ITEM = new RegExp(`^${TIMESTAMP} (?<id>\\S+) design open item: capability: (?<capability>\\d+); statement-json: `);
 
 function designOpenItemFields(line) {
   const match = DESIGN_OPEN_ITEM.exec(line);
@@ -849,7 +849,7 @@ function designOpenItemFields(line) {
   if (!statement.ok || typeof statement.value !== "string" || !line.slice(statementEnd).startsWith(cardHead)) return {};
   const card = parseJsonValue(line.slice(statementEnd + cardHead.length));
   if (!card.ok || typeof card.value !== "string" || card.value === "") return {};
-  return { design: { capability: match.groups.capability, statement: statement.value, card: card.value } };
+  return { design: { id: match.groups.id, capability: match.groups.capability, statement: statement.value, card: card.value } };
 }
 
 function parseJournalLine(line, lineNumber) {
@@ -1872,7 +1872,8 @@ function designNoteRoutes(snapshot) {
   // The open item names its own owner and carries no code basis, so it takes no card judgment
   // and no anchor: the card is where the confirmation happened, not a snapshot to rederive from.
   const routable = (item) => (item.kind === "capability-note" && item.valid && item.card !== undefined)
-    || (item.kind === "attributed" && item.design !== undefined);
+    || (item.kind === "attributed" && item.design !== undefined
+      && snapshot.owners.some((owner) => owner.id === item.design.id));
   const project = (line, extra) => ({
     ...(line.design
       ? { form: "open-item", marker: line.raw, capability: line.design.capability, statement: line.design.statement, card: line.design.card }

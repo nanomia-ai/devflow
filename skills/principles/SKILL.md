@@ -300,8 +300,10 @@ YYYY-MM-DDTHH:MM:SSZ <id> design open item: capability: <NN>; statement-json: <J
 ```
 
 This is not a reserved headword — a line that opens this way and misses the form is still an
-ordinary named open item and stops no entry. Only a line in this exact form and present in
-HEAD is routed by the tool. `capability` is the owner the statement actually belongs to, never
+ordinary named open item and stops no entry. `<id>` must be one token exactly equal to an
+existing room's id; a line whose token names no existing room is likewise ordinary and
+unrouted. Only a line in this exact attributed form and present in HEAD is routed by the tool.
+`capability` is the owner the statement actually belongs to, never
 the number of the current card — one card carrying the work of several capabilities is not
 split to land it. `card-json` is where the confirmation happened, not a snapshot basis, so the
 line stands even after that card closes, and it carries neither code paths nor a commit basis.

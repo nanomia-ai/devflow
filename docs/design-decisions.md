@@ -996,7 +996,7 @@ scene appears where arch or adopt receives the line and still cannot land it in 
 
 ### DD-88 · A confirmed statement another capability owns is routed by one exact form, ahead of ready work, to that owner's design writer (v0.19.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active, partly corrected by DD-89 (v0.19.0)
 
 Observed problem: the path DD-86 opened never reached a consumer. The line is produced and the
 state tool emits it as an `open-item:` fact, but in a repository whose architecture already
@@ -1050,6 +1050,42 @@ computation of `skills/principles/scripts/project-state.mjs`, the routing table 
 Revisit when: one statement a person has not yet decided is observed holding ready work back for
 long, or the cost is measured of one session repeating the design-only entry per owner because a
 single card produced several confirmed statements with different owners.
+
+### DD-89 · A design open item routes only when its attribution names an existing room (v0.19.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active
+
+Observed problem: DD-88's exact-form recognizer accepted any non-space token in the `<id>`
+position. The journal canon gives an attributed line machine ownership only when that token is
+exactly one existing room id; every other line is a person's and must stay outside judgment.
+An exact-looking line attributed to `ghost` therefore became `marker.design-open-item`, outran
+ready work, entered arch or adopt as person-confirmed knowledge, and was deleted in the landing
+commit even though no room owned it.
+
+Wanted behavior: the route recognizes the exact syntax and the existing-room attribution
+together. A line that fails either boundary remains an ordinary journal line, changes no
+`next:`, and is never consumed by the design writer.
+
+Chosen boundary: the parser preserves the id token with the structured candidate, and the one
+design-route computation admits it only when that id exactly equals one id in the existing room
+set. It does not derive the semantic capability owner from the card, validate the card's current
+status, or split a composite card; all of DD-88's named-capability behavior remains unchanged.
+
+Why it is needed: without the room check, a person's line is silently deleted by a machine route.
+That is the line-ownership loss DD-88 explicitly rejected when it kept malformed lines outside
+entry judgment.
+
+Rejected alternatives: making the near-match blocking — it would let prose stop the repository
+and reverses the 0.18.8 line boundary. Treating every non-space id as attribution — that is the
+failed state. Using the card number as a fallback owner — DD-88 rejected it because a card may
+carry several capabilities and knowledge ownership is semantic.
+
+Impact coordinates: the exact design-open-item paragraph in
+`skills/principles/SKILL{,_ko}.md`, the parser and design-route computation in
+`skills/principles/scripts/project-state.mjs`, the C fixture in
+`scripts/project-state.test.js`, and matrix cell 3.21.
+Revisit when: an existing-room line is observed failing to route, or room identity itself moves
+out of `devflow/users/*/owner.md`.
 
 ### DD-56 · Reading is bounded to open work: a depth-1 folder carrying `.done` is read by name (v0.13.0)
 
