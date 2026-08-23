@@ -31,6 +31,20 @@ const RESERVED_JOURNAL_HEADS = [
   "evidence-finalizing:",
 ];
 
+// One recognizer owns every canon-fixed progress head. The canon says a progress line that
+// starts with the canonical timestamp followed by one of these heads stands in that format
+// exactly, so a line that carries a head and misses its format is a shape anomaly — not the
+// implementer's prose, which is what a silently unread machine line used to degrade into.
+const PROGRESS_HEADS = [
+  { head: "completion signal result:", kind: "signal",
+    form: /^completion signal result: head: (?<head>[0-9a-f]{40,64}); verdict: (?<verdict>pass|fail|unverified); detail-json: (?<detailJson>.+)$/ },
+  { head: "review result:", kind: "review",
+    form: /^review result: head: (?<head>[0-9a-f]{40,64}); verdict: (?<verdict>pass|objections|unverified); detail-json: (?<detailJson>.+)$/ },
+  { head: "carry:", kind: "carry", form: /^carry: (?<fact>.+)$/ },
+  { head: "remote evidence check:", kind: "remote-evidence",
+    form: /^remote evidence check: check-json: (?<checkJson>.+); verdict: (?<verdict>unrun|pass|fail|pending|inaccessible|no-verdict); detail-json: (?<detailJson>.+)$/ },
+];
+
 // One table owns both the printed zone order and every routable kind.  The absent-order
 // numbers are the twelve no-tree branches; setup changes position with its kind, exactly as
 // the canonical no-tree table does.  A later release can add or remove one row here without
@@ -1366,9 +1380,9 @@ function evidenceIntegrityReason(snapshot, line) {
   const changed = gitNulList(snapshot.root, ["diff-tree", "--root", "--no-commit-id", "--name-only", "-r", "-z", hash]);
   if (!changed.includes(line.card)) return "checkpoint-path";
   if (checkpointCard === null) return "checkpoint-card-missing";
-  const checks = [...checkpointCard.matchAll(/^.*remote evidence check: check-json:\s*(.+);\s*verdict:/gm)];
+  const checks = progressMachineLines(checkpointCard).filter((line) => line.kind === "remote-evidence" && line.valid);
   if (checks.length === 0) return "checkpoint-check-missing";
-  const parsed = parseJsonValue(checks.at(-1)[1]);
+  const parsed = parseJsonValue(checks.at(-1).checkJson);
   if (!parsed.ok || typeof parsed.value !== "string" || parsed.value !== line.check) return "checkpoint-check-json";
   return finalizingDone ? null : null;
 }
@@ -1690,22 +1704,74 @@ function firstMine(snapshot) {
   return snapshot.cards.find((card) => card.claimant === snapshot.room?.id && !card.closedFolder) ?? null;
 }
 
-function progressLines(card) {
-  if (!card?.text) return [];
-  return extractSection(card.text, "## Progress log")?.split("\n").filter((line) => line.trim()) ?? [];
+function progressLinesFromText(text) {
+  return extractSection(text ?? "", "## Progress log")?.split("\n").filter((line) => line.trim()) ?? [];
 }
 
+function progressLines(card) {
+  if (!card?.text) return [];
+  return progressLinesFromText(card.text);
+}
+
+function parseProgressLine(raw) {
+  const timestamped = new RegExp(`^${TIMESTAMP} (?<body>.+)$`).exec((raw ?? "").trim());
+  if (!timestamped) return null;
+  const { timestamp, body } = timestamped.groups;
+  const out = { raw: (raw ?? "").trim(), timestamp };
+  for (const candidate of PROGRESS_HEADS) {
+    const match = candidate.form.exec(body);
+    if (match) return { ...out, kind: candidate.kind, valid: true, ...match.groups };
+  }
+  const near = PROGRESS_HEADS.find((candidate) => body.includes(candidate.head));
+  return near ? { ...out, kind: near.kind, valid: false, reason: `progress-format:${near.head}` } : null;
+}
+
+function progressMachineLines(text) {
+  return progressLinesFromText(text).map(parseProgressLine).filter(Boolean);
+}
+
+// The carry line is bound to its position — the canon appends it immediately before the final
+// task commit — so only the last progress line can be it. The recognizer decides the format.
 function carryState(card) {
-  const last = progressLines(card).at(-1)?.trim() ?? "";
-  const match = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z carry: (.+)$/.exec(last);
-  return match ? { present: true, fact: match[1] } : { present: false, fact: null };
+  const last = parseProgressLine(progressLines(card).at(-1) ?? "");
+  return last?.kind === "carry" && last.valid ? { present: true, fact: last.fact } : { present: false, fact: null };
+}
+
+// Settled means anchored: the line is in the card as HEAD already holds it. Whether an
+// unanchored line is still fresh is work's own judgment over its own diff, not a fact on
+// disk, so the tool counts what a commit already carries and reports nothing further.
+function progressEvidence(snapshot, card) {
+  const machine = progressMachineLines(card?.text).filter((line) => line.valid);
+  const signal = machine.filter((line) => line.kind === "signal").at(-1);
+  const anchored = new Set(progressMachineLines(card ? gitFile(snapshot.root, snapshot.head, card.path) : null)
+    .filter((line) => line.valid).map((line) => line.raw));
+  const settled = machine.filter((line) => line.kind === "review" && anchored.has(line.raw));
+  return {
+    signal: signal?.verdict ?? "absent",
+    signalPresent: Boolean(signal) || machine.some((line) => line.kind === "remote-evidence"),
+    reviews: settled.length,
+    review: settled.at(-1)?.verdict ?? "absent",
+  };
 }
 
 function boundaryFields(snapshot, card) {
   const missing = [];
+  const evidence = progressEvidence(snapshot, card);
   if (!carryState(card).present) missing.push("carry");
+  if (!evidence.signalPresent) missing.push("signal");
+  if (card?.review === "required" && evidence.reviews === 0) missing.push("review");
   if (snapshot.room && snapshot.handoff.stale) missing.push("handoff");
   return { missing };
+}
+
+function progressShapeAnomalies(snapshot) {
+  const anomalies = [];
+  for (const card of snapshot.cards.filter((item) => !item.closedFolder && ["pending", "claimed"].includes(item.status))) {
+    for (const line of progressMachineLines(card.text).filter((item) => !item.valid)) {
+      anomalies.push({ path: card.path, zone: "progress-log", detail: line.reason });
+    }
+  }
+  return anomalies;
 }
 
 // The anchor is read from the journal path alone, and only a status-zero, decodable, full
@@ -2023,6 +2089,7 @@ function evaluateZones(snapshot) {
   const shapeAnomalies = [
     ...snapshot.product.anomalies,
     ...snapshot.baseline.anomalies.filter((item) => item.zone === "verified"),
+    ...progressShapeAnomalies(snapshot),
   ];
 
   const changedOnBranch = snapshot.integration.hash
@@ -2120,7 +2187,8 @@ function evaluateZones(snapshot) {
     if (card.claimant !== snapshot.room?.id) { claimSummary.others += 1; continue; }
     claimSummary.mine += 1;
     const judgment = cardDetails.get(card.path);
-    const common = { path: card.path, depends: card.depends.numbers.length === 0 ? "done" : judgment.blockers.length === 0 ? "done" : "blocked", approval: judgment.approval.value, blockers: judgment.blockers, carry: carryState(card).present ? "present" : "absent", ...origins.candidate(card) };
+    const evidence = progressEvidence(snapshot, card);
+    const common = { path: card.path, depends: card.depends.numbers.length === 0 ? "done" : judgment.blockers.length === 0 ? "done" : "blocked", approval: judgment.approval.value, blockers: judgment.blockers, carry: carryState(card).present ? "present" : "absent", signal: evidence.signal, reviews: evidence.reviews, review: evidence.review, ...origins.candidate(card) };
     if (card.depends.anomalies.length > 0 || card.depends.numbers.some((number) => snapshot.cards.filter((candidate) => candidate.number === number).length !== 1)) addEntry(zones, "claim", "depends-anomaly", { ...common, reasons: card.depends.anomalies });
     else if (card.legacy || card.approval === "pending" || !card.depends.canonical) addEntry(zones, "claim", "needs-reapproval", common);
     else if (judgment.blockers.length > 0) addEntry(zones, "claim", "blocked-by-prerequisite", common);

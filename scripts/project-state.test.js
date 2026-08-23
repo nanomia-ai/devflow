@@ -2175,27 +2175,120 @@ test("R6 final-task boundary reports missing carry and claim exposes carry absen
   const root = makeRepo(t);
   const card = writeClaim(root, { commitSubject: "jmp 02.1 fixture card", progress: "2026-08-20T00:00:00Z implementation complete" });
   const result = run(root); ok(result);
-  assertFragment(result.stdout, "transition: kind=finish-boundary", 'missing=["carry"]');
+  // A progress log holding only prose has no completion signal and no settled review
+  // either, so the boundary names all three passengers, not the carry line alone.
+  assertFragment(result.stdout, "transition: kind=finish-boundary", 'missing=["carry","signal","review"]');
   assertFragment(result.stdout, "claim: kind=mine", `path=${card}`);
   assertFragment(result.stdout, "claim: kind=mine", "carry=absent");
+  assertFragment(result.stdout, "claim: kind=mine", "signal=absent");
+  assertFragment(result.stdout, "claim: kind=mine", "reviews=0");
+  assertFragment(result.stdout, "claim: kind=mine", "review=absent");
 });
 
 test("R6 a final carry line makes boundary completeness explicit", (t) => {
   const root = makeRepo(t);
+  const head = "a".repeat(40);
   writeClaim(root, {
     commitSubject: "jmp 02.1 fixture card",
-    progress: "2026-08-20T00:00:00Z implementation complete\n2026-08-20T00:01:00Z carry: exact trap",
+    progress: [
+      "2026-08-20T00:00:00Z implementation complete",
+      `2026-08-20T00:00:10Z completion signal result: head: ${head}; verdict: pass; detail-json: ""`,
+      `2026-08-20T00:00:20Z review result: head: ${head}; verdict: pass; detail-json: ""`,
+      "2026-08-20T00:01:00Z carry: exact trap",
+    ].join("\n"),
   });
   const result = run(root); ok(result);
   assertFragment(result.stdout, "transition: kind=finish-boundary", "missing=[]");
   assertFragment(result.stdout, "claim: kind=mine", "carry=present");
+  assertFragment(result.stdout, "claim: kind=mine", "signal=pass");
+  assertFragment(result.stdout, "claim: kind=mine", "reviews=1");
+  assertFragment(result.stdout, "claim: kind=mine", "review=pass");
+});
+
+test("R7 one recognizer covers every canon-fixed progress head", (t) => {
+  const root = makeRepo(t);
+  const head = "b".repeat(40);
+  const card = writeClaim(root, {
+    commitSubject: "jmp 02.1 fixture card",
+    progress: [
+      `2026-08-20T00:00:10Z completion signal result: head: ${head}; verdict: fail; detail-json: "one case"`,
+      `2026-08-20T00:00:20Z review result: head: ${head}; verdict: objections; detail-json: "one"`,
+      `2026-08-20T00:00:30Z review result: head: ${head}; verdict: pass; detail-json: ""`,
+      `2026-08-20T00:00:40Z completion signal result: head: ${head}; verdict: pass; detail-json: ""`,
+      "2026-08-20T00:01:00Z carry: exact trap",
+    ].join("\n"),
+  });
+  const result = run(root); ok(result);
+  // The newest local verdict stands and every settled review counts, so work reads the
+  // count and the verdict instead of recounting the progress log.
+  assertFragment(result.stdout, "claim: kind=mine", `path=${card}`);
+  assertFragment(result.stdout, "claim: kind=mine", "signal=pass");
+  assertFragment(result.stdout, "claim: kind=mine", "reviews=2");
+  assertFragment(result.stdout, "claim: kind=mine", "review=pass");
+  assertFragment(result.stdout, "transition: kind=finish-boundary", "missing=[]");
+  assertFragment(result.stdout, "integrity:", "shape=0");
+});
+
+test("R7 a near-miss reserved progress head is a shape anomaly, not prose", (t) => {
+  const root = makeRepo(t);
+  const head = "c".repeat(40);
+  const card = writeClaim(root, {
+    commitSubject: "jmp 02.1 fixture card",
+    progress: [
+      `2026-08-20T00:00:10Z completion signal result: head: ${head}; verdict: pass; detail-json: ""`,
+      `2026-08-20T00:00:20Z x review result: head: ${head}; verdict: pass; detail-json: ""`,
+      `2026-08-20T00:00:30Z review result: head: ${head}; verdict: yes; detail-json: ""`,
+      "2026-08-20T00:00:40Z ordinary implementer prose about the filter",
+      "2026-08-20T00:01:00Z carry: exact trap",
+    ].join("\n"),
+  });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity:", "shape=2");
+  assertFragment(result.stdout, "integrity: kind=shape", `path=${card}`);
+  assertFragment(result.stdout, "integrity: kind=shape", "zone=progress-log");
+  assertFragment(result.stdout, "integrity: kind=shape", 'detail="progress-format:review result:"');
+  // Neither malformed line becomes evidence, so the review passenger is still missing —
+  // and the shape channel is advisory, so nothing about it blocks routing.
+  assertFragment(result.stdout, "claim: kind=mine", "reviews=0");
+  assertFragment(result.stdout, "claim: kind=mine", "review=absent");
+  assertFragment(result.stdout, "transition: kind=finish-boundary", 'missing=["review"]');
+  assertFragment(result.stdout, "integrity:", "blocking=0");
+});
+
+test("R7 the canon's progress heads and the tool's recognizer are one table", () => {
+  const block = /const PROGRESS_HEADS = \[\r?\n(?<body>[\s\S]*?)\r?\n\];/.exec(fs.readFileSync(TOOL, "utf8"));
+  assert.ok(block, "PROGRESS_HEADS block missing");
+  const parserHeads = [...new Set([...block.groups.body.matchAll(/head: "([^"]+)"/g)].map((match) => match[1]))].sort();
+  const canon = fs.readFileSync(path.resolve(__dirname, "../skills/principles/SKILL.md"), "utf8");
+  const canonHeads = [...new Set([...canon.matchAll(/^\s*YYYY-MM-DDTHH:MM:SSZ (completion signal result:|review result:|carry:|remote evidence check:)/gm)]
+    .map((match) => match[1]))].sort();
+  assert.deepEqual(parserHeads, ["carry:", "completion signal result:", "remote evidence check:", "review result:"]);
+  assert.deepEqual(canonHeads, parserHeads, "the canon's four progress formats and the recognizer's heads are the same set");
+  assert.match(canon, /A line carrying one of those four heads that does not\n  stand in its format is not prose/);
+});
+
+test("R7 an in-progress card before its review is not blocked by the missing evidence", (t) => {
+  const root = makeRepo(t);
+  writeClaim(root, { commitSubject: "jmp 02.1 wip: implementing", progress: "2026-08-20T00:00:00Z still implementing" });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "claim: kind=mine", "signal=absent");
+  assertFragment(result.stdout, "claim: kind=mine", "reviews=0");
+  assert.equal(nextOf(result.stdout), "claim.mine", result.stdout);
+  assertFragment(result.stdout, "integrity:", "blocking=0");
+  assertFragment(result.stdout, "integrity:", "shape=0");
 });
 
 test("R6 a stale HANDOFF remains a repairable boundary passenger", (t) => {
   const root = makeRepo(t);
+  const head = "a".repeat(40);
   const card = writeClaim(root, {
     commitSubject: "jmp 02.1 fixture card",
-    progress: "2026-08-20T00:00:00Z implementation complete\n2026-08-20T00:01:00Z carry: exact trap",
+    progress: [
+      "2026-08-20T00:00:00Z implementation complete",
+      `2026-08-20T00:00:10Z completion signal result: head: ${head}; verdict: pass; detail-json: ""`,
+      `2026-08-20T00:00:20Z review result: head: ${head}; verdict: pass; detail-json: ""`,
+      "2026-08-20T00:01:00Z carry: exact trap",
+    ].join("\n"),
   });
   write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step\n${card}\n`);
   const result = run(root); ok(result);

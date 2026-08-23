@@ -781,7 +781,10 @@ decision — a blockade does not block this lane.
   this list is their only home — `completion signal result:` and `review result:` below,
   `carry:` in the next bullet, and `remote evidence check:` in the remote-evidence bullet.
   A progress line that starts with the canonical timestamp followed by one of those four
-  heads stands in that format exactly. Every other progress line is the implementer's prose.
+  heads stands in that format exactly. A line carrying one of those four heads that does not
+  stand in its format is not prose — the state tool reports it as
+  `integrity: kind=shape zone=progress-log`, and the work holding that card repairs it.
+  Every other progress line is the implementer's prose.
   No machine format, no state-tool predicate, and no recorded result is ever derived from it
   — the four formats above are the whole machine surface, and nothing here adds a fifth.
   What such a line can still carry is a person's own authority: when a procedure asks for an
@@ -888,7 +891,11 @@ decision — a blockade does not block this lane.
   transition's `missing=` is empty. When `handoff` is missing, refresh the HANDOFF that
   can ride this commit and rerun the tool. When `carry` is missing, the already-landed
   final task commit omitted its carry line: report the exact card and do not close the
-  boundary, guess the lost fact, or invent a new after-the-fact record format. Message:
+  boundary, guess the lost fact, or invent a new after-the-fact record format. When `signal`
+  is missing, that card's progress log holds neither a completion-signal result nor a
+  remote-evidence check: report the exact card and do not close the boundary or write a
+  result after the fact. When `review` is missing, that card's `Review` is `required` and no
+  settled `review result:` line stands: report it and do not close the boundary. Message:
   `boundary — <what closed>`.
   HANDOFF never gets a dedicated commit — it only rides here.
   If a task boundary records a final task commit or checkpoint not yet on

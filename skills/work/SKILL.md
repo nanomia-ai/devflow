@@ -422,7 +422,11 @@ that line stands, and 3 is read after that settlement.
 ### 3. Reduce the settled events
 
 Read the settled review events after the boundary in commit order: the anchored
-`review result` lines, and a fresh unanchored `pass` from 2 as the latest of them. After a
+`review result` lines, and a fresh unanchored `pass` from 2 as the latest of them. The
+currently claimed card's `claim: kind=mine` line already carries `signal` (the newest
+completion-signal verdict), `reviews` (how many settled `review result:` lines stand), and
+`review` (the newest settled verdict). Read those and never recount the progress log —
+freshness and disposition stay this section's own judgment. After a
 valid disposition that pass is the one consuming result, so it finishes rather than
 authorizing another review. The conditions below do not overlap, so the one that holds is the
 next action.
