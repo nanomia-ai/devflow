@@ -729,6 +729,48 @@ A first entry after the tree and a direction change use DD-50's single record-fi
 
 When the build confirms a planned path, name, or command, the discovery→update table replaces exactly one line in design.md. When the direction of any of the six decisions changes, design confirmation runs again through the same record-first path. DR-12 recorded the reason table unification failed as “some wrong sides have no landing row in the table (design.md · an existing code-style line · a completion signal that runs but asserts the contradicted behavior).” This decision does not remove the existing document-hierarchy procedure for violations; it only adds design.md's missing landing row, so it does not re-propose the rejected design. It also does not add design.md to DD-43's freshness inputs.
 
+### DD-90 · A T-low card carries its bounded code basis and essential constraint, and a task-specific completion signal owns its named fixture (v0.19.0)
+
+Subject: The task tree and its cards | Introduced: v0.19.0 | State: active
+
+Observed problem: a low-tier backup or export card could be approved with only the upper
+documents that work reads automatically. The next executor then had no committed store or
+envelope consumer path and no statement that current state must be consumed before export, so
+it could implement against a plausible stale snapshot and still satisfy the card literally. A
+second responsibility gap let a completion signal name a task-specific fixture that no
+Destination owned; passing the command could create or depend on an undeclared artifact, and a
+later worker could delete it as out of scope without visibly changing the promised outcome.
+
+Chosen boundary: when T-low work consumes committed providers or current consumers, `Read
+first` names only the minimal bounded concrete paths that expose that contract and Destination
+or Forbidden carries any essential ordering or dataflow constraint. Truly greenfield or
+independent work uses one explicit N/A form. Every completion signal states its expected
+observation and what that observation proves; when it names a task-specific test or fixture
+path, Destination declares that exact path as a deliverable. A broad suite command that names
+no such path is exempt from path declaration, not from stating proof. work checks the contract
+before claim or resume and returns a deficient card to split through the existing repair path.
+
+Why it is needed: automatic baseline documents describe the domain but do not identify the
+current code edge a mechanical executor must consume. A command proves only the assertion its
+card names, and a task-specific fixture has no durable owner when it is present only inside the
+command. These are execution boundaries, not implementation directions. One composite card may
+still affect several capabilities; paths stay bounded rather than exhaustive, and knowledge
+promotion continues to land by semantic owner rather than card number.
+
+Rejected alternatives: every possible code path — unbounded and turns the card into a code map;
+one card per capability — regresses composite-card flexibility; copying provider truth into the
+card — duplicates its canonical owner; accepting automatic reads as the T-low basis — reproduces
+the observed missing consumer edge; declaring every test in a broad suite — noise with no
+additional responsibility; and prescribing the implementation method — conflicts with the
+card harness boundary.
+
+Impact coordinates: task-card construction and repair in `skills/split/SKILL{,_ko}.md`, claim,
+resume, and delegation preflight in `skills/work/SKILL{,_ko}.md`, the A17 matrix cells, and the
+repository invariant fixture. DD-24, DD-25, DD-50, DD-55, and DD-69 remain in force.
+Revisit when: a bounded path is shown unable to identify the consumed contract without an
+implementation recipe, or a task-specific fixture can acquire another durable owner without
+duplicating the completion contract.
+
 ### Rejected under this subject
 
 - **[DR-02 · v0.7.0]** **Card-promotion trigger inside work** — a door to silent scope expansion. (What was

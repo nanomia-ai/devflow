@@ -1646,8 +1646,8 @@ test("a person-confirmed statement owned by another capability has a durable nam
   // stays a named open item rather than a reserved headword, and the tool routes exactly it.
   assert.match(principles, /^YYYY-MM-DDTHH:MM:SSZ <id> design open item: capability: <NN>; statement-json: <JSON string containing the whole confirmed statement>; card-json: <JSON string containing the whole path of the task card the confirmation happened on>$/m,
     "the named open item has one exact form carrying the owner, the statement, and where it was confirmed");
-  assert.match(principles.replace(/\s+/g, " "), /This is not a reserved headword — a line that opens this way and misses the form is still an ordinary named open item and stops no entry\. Only a line in this exact form and present in HEAD is routed by the tool\./,
-    "a malformed line stays a person's prose instead of blocking entry");
+  assert.match(principles.replace(/\s+/g, " "), /This is not a reserved headword — a line that opens this way and misses the form is still an ordinary named open item and stops no entry\. `<id>` must be one token exactly equal to an existing room's id; a line whose token names no existing room is likewise ordinary and unrouted\. Only a line in this exact attributed form and present in HEAD is routed by the tool\./,
+    "a malformed line or nonexistent room id stays a person's prose instead of blocking or routing entry");
   assert.match(principles.replace(/\s+/g, " "), /`capability` is the owner the statement actually belongs to, never the number of the current card — one card carrying the work of several capabilities is not split to land it\./,
     "the owner is the named capability, and a composite card is never split to land the statement");
   assert.match(principles, /The tool routes that line as `marker\.design-open-item`, so neither a ready card nor a claim outruns it\./,
@@ -1930,6 +1930,24 @@ test("a completion signal is scoped so one flow cannot fail another's card", () 
   assert.match(split, /One working tree runs one build/);
   assert.match(work, /When this session left uncommitted changes on another card of mine, land them as that\s+card's `NN\.N wip:` checkpoint first/);
   assert.match(work, /uncommitted changes this session did not make\s+belong to another flow/);
+});
+
+test("T-low cards and task-specific signals carry bounded execution evidence", () => {
+  const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+
+  assert.match(split, /minimal bounded set of concrete relevant code paths/);
+  assert.match(split, /automatic(?:ally)? read capability document, Layer 0 baseline,[\s\S]*do not substitute for those paths/);
+  assert.match(split, /`T-low basis: N\/A — greenfield`[\s\S]*`T-low basis: N\/A — independent`/);
+  assert.match(split, /backup or export\s+card is not execution-ready[\s\S]*committed store or envelope consumer paths[\s\S]*consumes current state before\s+export/);
+  assert.match(split, /task-specific test or\s+fixture path[\s\S]*Destination`? declares that exact path as a deliverable/);
+  assert.match(split, /broad suite command[\s\S]*exempt from the path-declaration rule/);
+  assert.match(split, /expected observation[\s\S]*what that observation proves/);
+
+  assert.match(work, /Before claiming a pending card or resuming a claimed card, run this card-contract\s+preflight/);
+  assert.match(work, /pending\s+card fails the preflight, do not claim it/);
+  assert.match(work, /claimed card fails it,[\s\S]*checkpoint[\s\S]*release/);
+  assert.match(work, /These checks\s+do not split a composite card by capability/);
 });
 
 test("resume asks which unit instead of guessing when several are open", () => {
@@ -2689,13 +2707,13 @@ test("an objection about the card's contract routes to split, which owns only th
   assert.match(work, /establishes any replacement statement or path from the existing canonical owner under its own permitted reads/);
   assert.match(work, /writes no arch file, capability document, or other `Read first` file from the progress log, and it neither opens nor infers a capsule/);
   assert.match(work, /When no legitimate existing non-capsule basis can go into the card's contract, it does not approve the same card again/);
-  assert.match(work, /The same route carries the defect this loop finds itself before a review: an invalid exact `Read first` path named in the progress log is the same card-contract defect, and split repairs it under the same limits/);
+  assert.match(work, /The same route carries any card-contract preflight defect or defect this loop finds itself before a review, including an invalid exact `Read first` path named in the progress log; split repairs it under the same limits/);
   assert.match(work, /An approval that does land is a new boundary, so the objection count starts at zero/);
   assert.doesNotMatch(work, /new planning document|second planning layer/);
   // split carries the same limits on the route it already owns.
   const split = flat(fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8"));
-  assert.match(split, /a clean review returns an objection about the card's contract, or work names an invalid exact `Read first` path in the progress log before a review and releases the card/);
-  assert.match(split, /either card-contract defect reads the progress log as a handoff naming what is missing, establishes the replacement statement or path from its existing canonical owner under its own permitted reads, and repairs only the fields and the exact non-capsule `Read first` paths the card already carries/);
+  assert.match(split, /a clean review returns an objection about the card's contract, or work names one of the card-contract defects above in the progress log before a review and releases the card/);
+  assert.match(split, /a card-contract defect reads the progress log as a handoff naming what is missing, establishes the replacement statement or path from its existing canonical owner under its own permitted reads, and repairs only the fields and the exact non-capsule `Read first` paths the card already carries/);
   assert.match(split, /writes no arch file, capability document, or other `Read first` file from the progress log, opens and infers no capsule, and when no legitimate existing non-capsule basis can go into the card's contract it stops and reports to the person/);
 });
 

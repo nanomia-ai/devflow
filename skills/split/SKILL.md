@@ -461,6 +461,25 @@ delete trailing prose and replace the field with the canonical value. Ask the us
 unparseable replacement; never infer it. Put the confirmed correction in a planning
 commit without changing other fields or status. Release a claimed card first.
 
+For a `T-low` card that consumes committed providers or current consumers, `Read first`
+names the minimal bounded set of concrete relevant code paths that expose that contract.
+The automatically read capability document, Layer 0 baseline, dependency numbers, and
+broad directory names do not substitute for those paths. Put every essential ordering or
+dataflow constraint in `Destination` or `Forbidden`; do not list every possible path or
+turn the card into an implementation recipe. Only genuinely greenfield or independent
+work may use `Read first: none`, and then one `Forbidden` line is exactly
+`T-low basis: N/A — greenfield` or `T-low basis: N/A — independent`. A backup or export
+card is not execution-ready when it names only automatic baseline documents: it names the
+committed store or envelope consumer paths and states that it consumes current state before
+export. These requirements neither split a composite card by capability nor move durable
+knowledge away from its semantic owner.
+
+Every completion signal pairs its command or check with an expected observation and states
+what that observation proves about `Destination`. When it names a task-specific test or
+fixture path, `Destination` declares that exact path as a deliverable. A broad suite command
+that names no task-specific test or fixture is exempt from the path-declaration rule; it
+still states what passing proves. Do not enumerate an entire suite.
+
 When the card's target capability has a knowledge capsule folder, read only the header
 projection, never a capsule body: run
 `node <plugin root>/scripts/project-knowledge.mjs project --capability <capability number>`
@@ -486,10 +505,10 @@ to `pending` and present the repaired whole card in a new execution proposal. La
 approval value and card repair together in the planning commit.
 
 **When the user changes the Destination of a card in progress, a clean review returns an
-objection about the card's contract, or work names an invalid exact `Read first` path in the
+objection about the card's contract, or work names one of the card-contract defects above in the
 progress log before a review and releases the card**, use the existing path: work checkpoints and releases
-the card, split rewrites its Destination, Why, Forbidden, and Completion signal — and for an
-either card-contract defect reads the progress log as a handoff naming what is
+the card, split rewrites its Destination, Why, Forbidden, and Completion signal — and for a
+card-contract defect reads the progress log as a handoff naming what is
 missing, establishes the replacement statement or path from its existing canonical owner
 under its own permitted reads, and repairs only the fields and the exact non-capsule
 `Read first` paths the card already carries — gets the execution proposal approved again and
@@ -524,8 +543,9 @@ repository-wide signal fails on another flow's unfinished code and the failure l
 blames this card.
 
 **Never write the implementation method.** Destination, completion signal, and Forbidden
-are the entire harness. Only T-low cards additionally get ordering hints (see the harness
-dial in the canonical rules).
+are the entire harness. A T-low card's bounded code basis and essential ordering or dataflow
+constraint are execution boundaries, not an implementation recipe (see the harness dial in
+the canonical rules).
 
 ## Execution Proposal — this skill's final output and gate
 

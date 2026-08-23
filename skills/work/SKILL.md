@@ -105,6 +105,19 @@ remainder and the commit.
    confirms as this card's leftover (edits a tweak flip left behind, for instance) — once
    confirmed, take them over and treat them as changes this session made. Return to split to normalize a
    noncanonical `Depends`; report and stop on an integrity anomaly.
+   Before claiming a pending card or resuming a claimed card, run this card-contract
+   preflight. A `T-low` card that consumes committed providers or current consumers must
+   carry split's minimal bounded concrete code paths and essential ordering or dataflow
+   constraint; automatic baseline reads do not fill either gap. `Read first: none` is valid
+   only with split's exact greenfield or independent N/A line. A completion signal must state
+   its expected observation and what that observation proves, and every task-specific test or
+   fixture path it names must also be an exact `Destination` deliverable; a broad suite
+   command naming no such path is exempt only from that path-declaration rule. If a pending
+   card fails the preflight, do not claim it: report the exact defect and return to split. If
+   a claimed card fails it, write the exact defect in its progress log, land a checkpoint for
+   that log and any current card changes, release the card, and return to split. These checks
+   do not split a composite card by capability, require every possible path, or move durable
+   knowledge away from its semantic owner.
    Before claiming, pull the integration branch and finish the digest (resume's
    digest procedure). The rename commit to `.wip-<my id>.` is the claim (message:
    `<id> 02.4 claim` — a digest.md marker a just-before-claim digest advanced rides this
@@ -454,9 +467,9 @@ It establishes any replacement statement or path from the existing canonical own
 own permitted reads. It writes no arch file, capability document, or other `Read first` file
 from the progress log, and it neither opens nor infers a capsule. When no legitimate existing
 non-capsule basis can go into the card's contract, it does not approve the same card again:
-it stops and reports to the person. The same route carries the defect this loop finds itself
-before a review: an invalid exact `Read first` path named in the progress log is the same
-card-contract defect, and split repairs it under the same limits. That check runs when the
+it stops and reports to the person. The same route carries any card-contract preflight defect
+or defect this loop finds itself before a review, including an invalid exact `Read first`
+path named in the progress log; split repairs it under the same limits. That check runs when the
 review input is assembled, so a step 3 owes first — carrying out a disposition, making a
 repair, clearing an `unverified` reason — happens before it. An approval that does land
 is a new boundary, so the objection count starts at zero.
@@ -546,7 +559,8 @@ A delegated implementer stops and reports blocked — both exits belong to the m
   and verification freshness and reconfirmation projection. Give no other conversation
   backstory. After reading the card, the delegate opens
   its `Read first` paths exactly. Never put arch section names in `Read first`. For T-low
-  tier, first check the card's `Read first` is complete; reinforce it if not.
+  tier, the main session completes the card-contract preflight before delegation; a delegate
+  never silently reinforces a deficient card.
 - **The stage split is fixed: subagent = implement + run the completion signal + progress
   log. Main = review + commit + feedback + rename (plus the signal re-run triggered by
   its own fix).** Checkpoint commits are the main
