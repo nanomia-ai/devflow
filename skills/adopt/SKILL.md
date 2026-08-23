@@ -183,14 +183,19 @@ code details or flows into the capability documents again.
   the owner to decide. Deleting or moving the source is not part of this procedure — report
   only the material for that judgment.
 
-**Design-only entry.** When the entry handed over a `marker.design-note`, do not run the
+**Design-only entry.** When the entry handed over a `marker.design-note` or a
+`marker.design-open-item`, do not run the
 reverse derivation again. Rederive only the design zone of the one capability that line names,
 from the confirmed current Layer 0 and that exact statement. Put the statement in Intent or
 Invariants when it fits the capability-document budget, and move design-topic detail over that
 budget down through the capsule procedure above. The `anchor` handed over is the exact snapshot
 basis of that `card` and `code`; recompute no other basis from history or cards, and never
 duplicate a capability fact into arch.md to wake the writer — only a real Layer 0 fact takes
-the discovery→update table's existing route. Delete the journal line byte-identical to that one
+the discovery→update table's existing route. A `marker.design-open-item` carries no `anchor`
+and no `code`: the person-confirmed `statement` is itself the basis, its `card` is only where
+the confirmation happened, and the owner is the `capability` that line names — read no code
+from that card, and never move the statement to that card's capability. Delete the journal
+line byte-identical to that one
 in the same binding capability-document commit.
 
 On completion: if the new-adoption Layer 0 commit included `maintenance routing pending`, or

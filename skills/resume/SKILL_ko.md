@@ -197,6 +197,7 @@ timeout이 제품 작업으로 바꾸지 않은 채 사람이 복구하거나 �
 | `transition.failure-routing` | verify — 그 줄이 지목한 항목 하나를 실행 없이 라우팅 |
 | `marker.product-rerun` | product |
 | `marker.design-note` | 다음 순서에서 처음 맞는 경우 하나만 따른다. `prefix=design-only`이면 그 작성자의 설계 전용 쓰기가 중단된 것이므로 새로 시작하지 말고 같은 커밋을 마치게 한다. `reason`과 함께 `recovery=producer`가 왔으면 설계 쓰기를 시작하지 않고 정확한 줄과 사유를 work의 생산자 복구로 돌린다. `recovery=external`이면 아무것도 바꾸지 않고 정확한 사유를 보고한다. 그 밖에 `anchor`가 있으면 Brownfield가 `아니오`일 때 arch, `예`일 때 adopt로 설계만 보내고, 그 줄의 `capability`·`note`·`card`·`code`·`anchor`를 그대로 넘긴다. Layer 0을 다시 만들지 않고 카드나 이력에서 다시 계산하지 않는다 |
+| `marker.design-open-item` | 다음 순서에서 처음 맞는 경우 하나만 따른다. `prefix=design-only`이면 그 작성자의 착지가 중단된 것이므로 새로 시작하지 말고 같은 커밋을 마치게 한다. `reason`이 왔으면 아무것도 바꾸지 않고 정확한 사유를 보고한다. 그 밖이면 Brownfield가 `아니오`일 때 arch, `예`일 때 adopt로 설계만 보내고, 그 줄의 `capability`·`statement`·`card`를 그대로 넘긴다. 소유자는 그 줄이 이름 댄 `capability` 하나다 — 지금 카드의 번호로 다시 판정하지 않고, 그 `card`가 여러 능력을 담고 있어도 쪼개지 않으며, `card`는 확정이 일어난 자리일 뿐이라 이미 닫혔어도 그대로 넘긴다. Layer 0을 다시 만들지 않는다 |
 | `marker.capability-closure` | verify — 중단된 능력 폐쇄를 마침 |
 | `marker.re-split` | split — 그 마커의 교체 카드 계획을 마침 |
 | `setup.no-product` | "이번 작업이 저장소에 이미 있는 구현 동작을 보존해야 합니까?"를 묻고, 예면 adopt, 아니면 product |

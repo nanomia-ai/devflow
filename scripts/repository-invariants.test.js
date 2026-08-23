@@ -1636,12 +1636,22 @@ test("a person-confirmed statement owned by another capability has a durable nam
   // worked on, and the short form is a code-confirmed observation the other capability's next
   // closure harvests into its verified zone and then deletes. So the foreign owner gets the
   // route the tool already surfaces as `open-item:` — attributed, named, and never harvested.
-  assert.match(principles, /\| The user confirms a statement belonging to the Intent or Invariants of a capability other than the one being worked on \| one attributed open-item line in journal\.md carrying that capability's number, the confirmed statement, and this card's path\./,
+  assert.match(principles, /\| The user confirms a statement belonging to the Intent or Invariants of a capability other than the one being worked on \| one named open-item line in journal\.md in the exact `design open item` form above, carrying that capability's number, the confirmed statement, and this card's path\./,
     "the foreign-owner row names the intended owner and preserves where the statement came from");
   assert.match(principles, /Not a `capability note`[^|]*harvests into its verified zone and deletes it in the same sweep/,
     "the row says in place why neither keyed form may carry it");
   assert.match(principles, /stays until arch \(Brownfield `no`\) or adopt \(`yes`\), which owns that capability's design zone, lands the statement there and deletes the line in the same commit \|/,
     "it stays actionable until the design owner lands it");
+  // A fact nobody is routed to is the same silent loss. The line has one exact form, that form
+  // stays a named open item rather than a reserved headword, and the tool routes exactly it.
+  assert.match(principles, /^YYYY-MM-DDTHH:MM:SSZ <id> design open item: capability: <NN>; statement-json: <JSON string containing the whole confirmed statement>; card-json: <JSON string containing the whole path of the task card the confirmation happened on>$/m,
+    "the named open item has one exact form carrying the owner, the statement, and where it was confirmed");
+  assert.match(principles.replace(/\s+/g, " "), /This is not a reserved headword — a line that opens this way and misses the form is still an ordinary named open item and stops no entry\. Only a line in this exact form and present in HEAD is routed by the tool\./,
+    "a malformed line stays a person's prose instead of blocking entry");
+  assert.match(principles.replace(/\s+/g, " "), /`capability` is the owner the statement actually belongs to, never the number of the current card — one card carrying the work of several capabilities is not split to land it\./,
+    "the owner is the named capability, and a composite card is never split to land the statement");
+  assert.match(principles, /The tool routes that line as `marker\.design-open-item`, so neither a ready card nor a claim outruns it\./,
+    "the route stands ahead of ready work instead of waiting for someone to read a fact");
   // The design-form anchor does not move.
   assert.match(principles, /\| The user confirms a statement belonging to the Intent or Invariants of the capability being worked on, with Layer 0 unchanged \| one canonical `capability note` design line/,
     "the design form stays anchored to the capability being worked on");
@@ -1684,6 +1694,13 @@ test("the capability design ascent has one producer, one route, and one design w
   }
   assert.match(designRoute, /an `anchor` sends design only to arch when Brownfield is `no`, or adopt when `yes`/,
     "the final valid route still reaches exactly one design writer");
+
+  const ownerRoute = resume.split(/\r?\n/).find((line) => line.startsWith("| `marker.design-open-item` |"));
+  assert.ok(ownerRoute, "resume has one design-open-item route row");
+  assert.match(ownerRoute, /Otherwise send design only to arch when Brownfield is `no`, or adopt when `yes`; pass that line's `capability`, `statement`, and `card` through as they stand\./,
+    "the owner-named route reaches the same two design writers with the line's own payload");
+  assert.match(ownerRoute, /The owner is the one `capability` that line names — never judge it again from the current card's number, never split that `card` because it carries several capabilities, and pass the `card` through even when it has already closed/,
+    "the route follows the named owner, not the card the statement was confirmed on");
   assert.match(work.replace(/\s+/g, " "), /Producer recovery for a routed capability design note begins only when `marker\.design-note` carries `recovery=producer`/,
     "work alone owns recovery of its malformed design-note artifact");
   assert.match(work.replace(/\s+/g, " "), /remove the exact invalid line, and append a fresh-timestamp line only when the same user-confirmed statement and exact live card and code basis still stand/,
@@ -1693,8 +1710,10 @@ test("the capability design ascent has one producer, one route, and one design w
 
   for (const skill of ["arch", "adopt"]) {
     const text = read(skill, "SKILL.md").replace(/\s+/g, " ");
-    assert.match(text, /\*\*Design-only entry\.\*\* When the entry handed over a `marker\.design-note`, do not run/,
-      `${skill} must own a design-only branch`);
+    assert.match(text, /\*\*Design-only entry\.\*\* When the entry handed over a `marker\.design-note` or a `marker\.design-open-item`, do not run/,
+      `${skill} must own a design-only branch for both routed forms`);
+    assert.match(text, /A `marker\.design-open-item` carries no `anchor` and no `code`: the person-confirmed `statement` is itself the basis, its `card` is only where the confirmation happened, and the owner is the `capability` that line names — read no code from that card, and never move the statement to that card's capability\./,
+      `${skill} takes the confirmed statement as the basis and keeps the owner the line names`);
     assert.match(text, /Rederive only the design zone of the one capability that line names, from the confirmed current Layer 0 and that exact statement\./,
       `${skill} rederives one capability design zone from current inputs and the exact note`);
     assert.match(text, /Put the statement in Intent or Invariants when it fits the capability-document budget, and move design-topic detail over that budget down through the (?:same-number capsule contract|capsule procedure above)\./,
@@ -1719,8 +1738,8 @@ test("the capability design ascent has one producer, one route, and one design w
     "capsule spill belongs to the design zone alone");
   assert.match(baseline, /verify writes the fixed verified-zone sections as it normally does, creates no\n  capsule and drops no verified fact to meet this cap, and reports whole-document overage\./,
     "verify writes its normal sections, creates no capsule, and loses no verified fact");
-  assert.match(baseline, /Deleting the one `capability note`\n  design line a design-only entry consumes is the single exception that rides that commit; no\n  other journal change does\./,
-    "the writer boundary carries one narrow design-note consumption exception");
+  assert.match(baseline, /Deleting the one routed line a\n  design-only entry consumes — a `capability note` design line or a `design open item` line —\n  is the single exception that rides that commit; no\n  other journal change does\./,
+    "the writer boundary carries one narrow consumption exception for either routed form");
   assert.match(baseline.replace(/\s+/g, " "), /In a design-only entry, `devflow\/journal\.md` is the one exception only when its working bytes equal HEAD with exactly one byte-identical occurrence of the routed design line removed\./,
     "the interrupted writer prefix recognizes exactly the routed note deletion");
   assert.match(baseline.replace(/\s+/g, " "), /for a design-only entry, recalculate that one design-line deletion before finishing the commit\. Any other journal change or mismatch is an integrity anomaly\./,

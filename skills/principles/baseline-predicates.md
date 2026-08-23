@@ -452,8 +452,9 @@ follows the canonical Document Hierarchy.
   head. Derive every changed design zone in memory and present them as one batch; change no
   capability-document path before the user confirms that batch. After confirmation, a
   commit containing capability documents only, `arch — capabilities` or
-  `adopt — capabilities`, is the last commit of that run. Deleting the one `capability note`
-  design line a design-only entry consumes is the single exception that rides that commit; no
+  `adopt — capabilities`, is the last commit of that run. Deleting the one routed line a
+  design-only entry consumes — a `capability note` design line or a `design open item` line —
+  is the single exception that rides that commit; no
   other journal change does. When no bytes change, ask no
   confirmation question and make no commit. It is a binding decision
   on the integration branch.

@@ -64,8 +64,9 @@ export const ZONE_DEFINITIONS = Object.freeze([
   { zone: "marker", present: 4, absent: 8, kinds: [
     { name: "product-rerun", present: 4, absent: 2 },
     { name: "design-note", present: 4.01, absent: null },
-    { name: "capability-closure", present: 4.02, absent: null },
-    { name: "re-split", present: 4.03, absent: 8 },
+    { name: "design-open-item", present: 4.02, absent: null },
+    { name: "capability-closure", present: 4.03, absent: null },
+    { name: "re-split", present: 4.04, absent: 8 },
   ] },
   { zone: "setup", present: 5, absent: 5, kinds: [
     { name: "no-product", present: 5, absent: 1 },
@@ -831,6 +832,26 @@ function capabilityNoteFields(line, start) {
   return { valid, note: note.value, card: card.value, code: code.value };
 }
 
+// The named open item a user-confirmed Intent or Invariant of another capability is written
+// as. It is not a reserved head: a line that opens this way and misses the form stays an
+// ordinary named open item and stops nothing, so the writer of prose is never blocked. The
+// exact form is routable, because the owner the line names is the only writer that can land
+// the statement, and that owner is never derived from the card the confirmation happened on.
+const DESIGN_OPEN_ITEM = new RegExp(`^${TIMESTAMP} \\S+ design open item: capability: (?<capability>\\d+); statement-json: `);
+
+function designOpenItemFields(line) {
+  const match = DESIGN_OPEN_ITEM.exec(line);
+  if (!match) return {};
+  const statementEnd = jsonStringEnd(line, match[0].length);
+  if (statementEnd < 0) return {};
+  const statement = parseJsonValue(line.slice(match[0].length, statementEnd));
+  const cardHead = "; card-json: ";
+  if (!statement.ok || typeof statement.value !== "string" || !line.slice(statementEnd).startsWith(cardHead)) return {};
+  const card = parseJsonValue(line.slice(statementEnd + cardHead.length));
+  if (!card.ok || typeof card.value !== "string" || card.value === "") return {};
+  return { design: { capability: match.groups.capability, statement: statement.value, card: card.value } };
+}
+
 function parseJournalLine(line, lineNumber) {
   const out = { raw: line, line: lineNumber, kind: "other", valid: true };
   let match;
@@ -872,7 +893,7 @@ function parseJournalLine(line, lineNumber) {
   if (timestamped) {
     const reserved = RESERVED_JOURNAL_HEADS.find((head) => timestamped.groups.body.startsWith(head));
     if (reserved) return { ...out, kind: "invalid", valid: false, ...timestamped.groups, reason: `reserved-format:${reserved}` };
-    return { ...out, kind: "attributed", ...timestamped.groups };
+    return { ...out, kind: "attributed", ...timestamped.groups, ...designOpenItemFields(line) };
   }
   const body = line.replace(/^\s*(?:[-*+]\s+)?/, "");
   const reserved = RESERVED_JOURNAL_HEADS.find((head) => body.startsWith(head));
@@ -1838,21 +1859,28 @@ function designNoteAnchor(snapshot, line) {
   return { anchor: first };
 }
 
-// One computation owns every design-note route: durability against HEAD's journal, the live
-// same-capability card, the anchor snapshot, and the interrupted design-only write whose line
-// is already deleted from the working tree. A committed design form never leaves this function
-// silently — it leaves as a route or as an exact blocking reason.
+// One computation owns every route into a capability's design zone: durability against HEAD's
+// journal, the live same-capability card and anchor snapshot the design form needs, the named
+// owner an open item carries instead, and the interrupted design-only write whose line is
+// already deleted from the working tree. A committed line of either form never leaves this
+// function silently — it leaves as a route or as an exact blocking reason.
 function designNoteRoutes(snapshot) {
   const producerReasons = new Set([
     "card-absent", "capability-mismatch", "anchor-not-checkpoint", "anchor-card-absent",
     "code-duplicate", "code-noncanonical", "code-absent",
   ]);
+  // The open item names its own owner and carries no code basis, so it takes no card judgment
+  // and no anchor: the card is where the confirmation happened, not a snapshot to rederive from.
+  const routable = (item) => (item.kind === "capability-note" && item.valid && item.card !== undefined)
+    || (item.kind === "attributed" && item.design !== undefined);
   const project = (line, extra) => ({
-    marker: line.raw, capability: line.capability, note: line.note, card: line.card, code: line.code,
+    ...(line.design
+      ? { form: "open-item", marker: line.raw, capability: line.design.capability, statement: line.design.statement, card: line.design.card }
+      : { form: "note", marker: line.raw, capability: line.capability, note: line.note, card: line.card, code: line.code }),
     ...extra, ...(extra.reason ? { recovery: producerReasons.has(extra.reason) ? "producer" : "external" } : {}),
   });
-  const unresolved = (reason) => ({ marker: "unresolved", reason, recovery: "external" });
-  const working = snapshot.journal.filter((item) => item.kind === "capability-note" && item.valid && item.card !== undefined);
+  const unresolved = (reason) => ({ form: "note", marker: "unresolved", reason, recovery: "external" });
+  const working = snapshot.journal.filter(routable);
   const changed = snapshot.status.map((entry) => entry.path);
   const journalChanged = changed.includes("devflow/journal.md");
   const shown = gitRun(snapshot.root, ["show", "HEAD:devflow/journal.md"], { allowFailure: true });
@@ -1882,6 +1910,7 @@ function designNoteRoutes(snapshot) {
   const routes = [];
   for (const line of working) {
     if (!headLines.includes(line.raw)) continue;
+    if (line.design) { routes.push(project(line, {})); continue; }
     const card = snapshot.cards.find((item) => item.path === line.card && !item.closedFolder && ["pending", "claimed"].includes(item.status));
     if (!card) routes.push(project(line, { reason: "card-absent" }));
     else if (Number(card.number.split(".")[0]) !== Number(line.capability)) routes.push(project(line, { reason: "capability-mismatch" }));
@@ -1893,11 +1922,11 @@ function designNoteRoutes(snapshot) {
   let prefix = null;
   for (const [index, raw] of headLines.entries()) {
     const line = raw === "" ? null : parseJournalLine(raw, 0);
-    if (!line || line.kind !== "capability-note" || !line.valid || line.card === undefined) continue;
+    if (!line || !routable(line)) continue;
     if (snapshot.journal.some((current) => current.raw === raw)) continue;
     // The canon's design-only prefix: HEAD's journal with exactly this one occurrence removed.
     const remainder = headLines.filter((_, position) => position !== index).join("\n");
-    const capability = String(Number(line.capability)).padStart(2, "0");
+    const capability = String(Number(line.design ? line.design.capability : line.capability)).padStart(2, "0");
     const targetZone = new RegExp(`^devflow/project/capabilities/${capability}-[^/]+(?:\\.md|/K-\\d{3}-[^/]+\\.md)$`);
     const pathsAllowed = changed.includes("devflow/journal.md") && changed.every((relative) => relative === "devflow/journal.md"
       || targetZone.test(relative));
@@ -1906,7 +1935,7 @@ function designNoteRoutes(snapshot) {
       continue;
     }
     prefix = "design-only";
-    routes.push(project(line, { prefix, ...designNoteAnchor(snapshot, line) }));
+    routes.push(project(line, line.design ? { prefix } : { prefix, ...designNoteAnchor(snapshot, line) }));
   }
   return { routes, prefix };
 }
@@ -2179,7 +2208,7 @@ function evaluateZones(snapshot) {
   }
 
   for (const line of snapshot.journal.filter((item) => item.kind === "product-rerun")) addEntry(zones, "marker", "product-rerun", { marker: line.raw, timestamp: line.timestamp });
-  for (const entry of design.routes) addEntry(zones, "marker", "design-note", entry);
+  for (const { form, ...entry } of design.routes) addEntry(zones, "marker", form === "open-item" ? "design-open-item" : "design-note", entry);
   for (const line of snapshot.journal.filter((item) => item.kind === "capability-closing" && gitFile(snapshot.root, "HEAD", "devflow/journal.md")?.includes(item.raw))) {
     addEntry(zones, "marker", "capability-closure", { marker: line.raw, folder: line.folder, head: line.head });
   }

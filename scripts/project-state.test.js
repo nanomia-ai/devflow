@@ -885,7 +885,7 @@ test("T2 priority structure has one canonical array position per zone", async ()
   const module = await registry();
   assert.deepEqual(module.ZONE_DEFINITIONS.map((item) => item.zone), ROUTE_ZONES);
   assert.equal(new Set(module.ZONE_DEFINITIONS.map((item) => item.zone)).size, 14);
-  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 56);
+  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 57);
 });
 
 test("T2 priority selector uses the canonical array for every i less than j", async () => {
@@ -3115,4 +3115,94 @@ test("C design an undecodable HEAD journal classifies its unresolved route as ex
   assertFragment(result.stdout, "marker: kind=design-note", "reason=head-journal-undecodable");
   assertFragment(result.stdout, "marker: kind=design-note", "recovery=external");
   assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+// C follow-up: the user-confirmed Intent or Invariant whose semantic owner is a capability
+// other than the one being worked on is written as a named open item, and the tool surfaced it
+// as a fact only. In an already-architected repository with ready work, resume legally walked
+// past it to work, and the design-zone consumers opened for `marker.design-note` alone — so the
+// one statement that is never recomputed had no route to the owner it names. The card the
+// confirmation happened on may carry several owners: the route follows the named owner.
+function designOpenItem(capability, statement, card, { id = "jmp", timestamp = "2026-08-21T00:00:00Z" } = {}) {
+  return `${timestamp} ${id} design open item: capability: ${capability}; statement-json: ${JSON.stringify(statement)}; card-json: ${JSON.stringify(card)}`;
+}
+
+function designOpenItemScene(t, { capability = "03", line = null, card: named = null, commitLine = true } = {}) {
+  const root = makeRepo(t, { capabilities: ["capability", "neighbour"] });
+  const card = writePending(root);
+  write(root, "devflow/tree/03-neighbour.md", "neighbour\n");
+  commit(root, "jmp split — waiting capability 03");
+  const statement = "an export always carries the tenant id";
+  const raw = line ?? designOpenItem(capability, statement, named ?? card);
+  write(root, "devflow/journal.md", `${raw}\n`);
+  if (commitLine) commit(root, "jmp boundary — design open item recorded");
+  return { root, card, statement, line: raw };
+}
+
+test("C design an owner-named open item preempts ready work and carries its exact payload", async (t) => {
+  const scene = designOpenItemScene(t);
+  const before = snapshot(scene.root);
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-open-item", "capability=03");
+  assertFragment(result.stdout, "marker: kind=design-open-item", `statement=${JSON.stringify(scene.statement)}`);
+  assertFragment(result.stdout, "marker: kind=design-open-item", `card=${scene.card}`);
+  assertNoFragment(result.stdout, "marker: kind=design-open-item", "code=");
+  assertNoFragment(result.stdout, "marker: kind=design-open-item", "anchor=");
+  assert.equal(nextOf(result.stdout), "marker.design-open-item", result.stdout);
+  assert.ok(result.stdout.split(/\r?\n/).includes(`open-item: ${scene.line}`), result.stdout);
+  assertReadOnly(scene.root, before);
+  const module = await registry();
+  for (const later of ["ready.ready", "claim.mine", "layer.children-done", "marker.re-split"]) {
+    assert.equal(module.selectFirstRoute([later, "marker.design-open-item"]), "marker.design-open-item", later);
+  }
+});
+
+test("C design an owner-named open item routes by the owner it names, not by the card's number", (t) => {
+  const scene = designOpenItemScene(t, { card: "devflow/tree/02-capability/02.9-composite.done.md" });
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-open-item", "capability=03");
+  assertFragment(result.stdout, "marker: kind=design-open-item", "card=devflow/tree/02-capability/02.9-composite.done.md");
+  assertNoFragment(result.stdout, "marker: kind=design-open-item", "reason=");
+  assert.equal(nextOf(result.stdout), "marker.design-open-item", result.stdout);
+});
+
+test("C design a malformed owner-named open item stays a plain open item and stops nothing", (t) => {
+  const scene = designOpenItemScene(t, {
+    line: `2026-08-21T00:00:00Z jmp design open item: capability: 03; statement-json: "unterminated`,
+  });
+  const result = run(scene.root); ok(result);
+  assert.equal(hasKind(result.stdout, "marker", "design-open-item"), false, result.stdout);
+  assertFragment(result.stdout, "integrity:", "blocking=0");
+  assert.ok(result.stdout.split(/\r?\n/).includes(`open-item: ${scene.line}`), result.stdout);
+  assert.equal(nextOf(result.stdout), "ready.ready", result.stdout);
+});
+
+test("C design an uncommitted owner-named open item is not a durable route", (t) => {
+  const scene = designOpenItemScene(t, { commitLine: false });
+  const result = run(scene.root); ok(result);
+  assert.equal(hasKind(result.stdout, "marker", "design-open-item"), false, result.stdout);
+  assert.equal(nextOf(result.stdout), "ready.ready", result.stdout);
+});
+
+test("C design an interrupted owner-named landing routes back to its own writer", (t) => {
+  const scene = designOpenItemScene(t);
+  write(scene.root, "devflow/project/capabilities/03-neighbour.md",
+    `${read(scene.root, "devflow/project/capabilities/03-neighbour.md")}\n`);
+  write(scene.root, "devflow/journal.md", "");
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-open-item", "prefix=design-only");
+  assertFragment(result.stdout, "marker: kind=design-open-item", "capability=03");
+  assert.equal(hasKind(result.stdout, "transition", "interrupted"), false, result.stdout);
+  assert.equal(nextOf(result.stdout), "marker.design-open-item", result.stdout);
+});
+
+test("C design an owner-named landing touching another capability blocks", (t) => {
+  const scene = designOpenItemScene(t);
+  write(scene.root, "devflow/project/capabilities/02-capability.md",
+    `${read(scene.root, "devflow/project/capabilities/02-capability.md")}\n`);
+  write(scene.root, "devflow/journal.md", "");
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-open-item", "reason=prefix-mismatch");
+  assertFragment(result.stdout, "marker: kind=design-open-item", "recovery=external");
+  assert.equal(nextOf(result.stdout), "marker.design-open-item", result.stdout);
 });

@@ -291,6 +291,21 @@ being worked on, and no commit basis is written into the line — the `NN.N wip:
 that first holds that exact line is both the revision anchor and the card and code snapshot of
 that moment, and the tool computes it.
 
+When the semantic owner of a user-confirmed Intent or Invariant is a capability other than the
+one being worked on, that statement is neither form of `capability note` — it lives as a named
+open item. That open item has exactly one form:
+
+```text
+YYYY-MM-DDTHH:MM:SSZ <id> design open item: capability: <NN>; statement-json: <JSON string containing the whole confirmed statement>; card-json: <JSON string containing the whole path of the task card the confirmation happened on>
+```
+
+This is not a reserved headword — a line that opens this way and misses the form is still an
+ordinary named open item and stops no entry. Only a line in this exact form and present in
+HEAD is routed by the tool. `capability` is the owner the statement actually belongs to, never
+the number of the current card — one card carrying the work of several capabilities is not
+split to land it. `card-json` is where the confirmation happened, not a snapshot basis, so the
+line stands even after that card closes, and it carries neither code paths nor a commit basis.
+
 `product ⊃ arch ⊃ design·code-style ⊃ tree (cards)`. **A lower layer may not violate an
 upper layer.** If it must, that is an upper-layer decision:
 
@@ -383,7 +398,7 @@ What you discovered → where to update:
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | An observation confirmed in code about a capability other than the one being worked on | one canonical `capability note` line in journal.md carrying that capability's number. Do not edit the other capability's document directly — its next closure harvests the line |
 | The user confirms a statement belonging to the Intent or Invariants of the capability being worked on, with Layer 0 unchanged | one canonical `capability note` design line in journal.md carrying that capability's number, the confirmed statement, this card's path, and the exact code paths. It is durable only once one `NN.N wip:` checkpoint lands that line with the current card and the current code. Do not edit the capability document or a capsule directly — the tool routes that line and arch (Brownfield `no`) or adopt (`yes`) rederives the design zone |
-| The user confirms a statement belonging to the Intent or Invariants of a capability other than the one being worked on | one attributed open-item line in journal.md carrying that capability's number, the confirmed statement, and this card's path. Not a `capability note`: the design form's capability is the one being worked on, and the short form is a code-confirmed observation the other capability's next closure harvests into its verified zone and deletes it in the same sweep. A statement a person confirmed is neither. The line stays until arch (Brownfield `no`) or adopt (`yes`), which owns that capability's design zone, lands the statement there and deletes the line in the same commit |
+| The user confirms a statement belonging to the Intent or Invariants of a capability other than the one being worked on | one named open-item line in journal.md in the exact `design open item` form above, carrying that capability's number, the confirmed statement, and this card's path. Not a `capability note`: the design form's capability is the one being worked on, and the short form is a code-confirmed observation the other capability's next closure harvests into its verified zone and deletes it in the same sweep. A statement a person confirmed is neither. The tool routes that line as `marker.design-open-item`, so neither a ready card nor a claim outruns it. The line stays until arch (Brownfield `no`) or adopt (`yes`), which owns that capability's design zone, lands the statement there and deletes the line in the same commit |
 | Something confirmed in code about a shared contract or the foundation | an ADR when it produced a decision hard to reverse (arch's three conditions); arch.md's `Risks` when it is something that breaks first; otherwise one attributed open-item line in journal.md — where it lands (or whether it is discarded) is a person's decision, and the open-item row below (resolve through another row, then delete) is that line's consumer. Never write it into the foundation's verified zone — what was not verified is not a verified state |
 | A cross-task decision, or an open item a person must decide | one attributed line in journal.md. When an open item resolves, that line becomes the decision or lands through another row of this table, and is then deleted |
 

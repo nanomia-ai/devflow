@@ -314,14 +314,19 @@ current command output for those three paths.
   procedure under the same contract, and capsules ride the same commit as the canonical
   baseline predicates' design batch.
 
-**Design-only entry.** When the entry handed over a `marker.design-note`, do not run this
+**Design-only entry.** When the entry handed over a `marker.design-note` or a
+`marker.design-open-item`, do not run this
 section again. Rederive only the design zone of the one capability that line names, from the
 confirmed current Layer 0 and that exact statement. Put the statement in Intent or Invariants
 when it fits the capability-document budget, and move design-topic detail over that budget
 down through the same-number capsule contract. The `anchor` handed over is the exact snapshot
 basis of that `card` and `code`; recompute no other basis from history or cards, and never
 duplicate a capability fact into arch.md to wake the writer — only a real Layer 0 fact takes
-the discovery→update table's existing route. Delete the journal line byte-identical to that one
+the discovery→update table's existing route. A `marker.design-open-item` carries no `anchor`
+and no `code`: the person-confirmed `statement` is itself the basis, its `card` is only where
+the confirmation happened, and the owner is the `capability` that line names — read no code
+from that card, and never move the statement to that card's capability. Delete the journal
+line byte-identical to that one
 in the same binding capability-document commit.
 
 On completion: if `frontend: needed` — "design (optional) or split"; if `none` — "split."

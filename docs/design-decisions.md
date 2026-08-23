@@ -949,7 +949,7 @@ A maintenance card has no dependencies, so the knowledge chain broke there, and 
 
 ### DD-86 · A person-confirmed design statement whose semantic owner is another capability lives on one attributed open-item line that names that owner (v0.19.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active, partly corrected by DD-88 (v0.19.0)
 
 Observed problem: no row of the discovery→update table received the scene where, during card
 work, the user confirms an Intent or an Invariant whose semantic owner is a capability other
@@ -993,6 +993,63 @@ Impact coordinates: the discovery→update table and the canon-conflict report p
 the ground of this boundary), `scripts/repository-invariants.test.js`.
 Revisit when: these lines are observed piling up indefinitely without a person's decision, or a
 scene appears where arch or adopt receives the line and still cannot land it in the design zone.
+
+### DD-88 · A confirmed statement another capability owns is routed by one exact form, ahead of ready work, to that owner's design writer (v0.19.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active
+
+Observed problem: the path DD-86 opened never reached a consumer. The line is produced and the
+state tool emits it as an `open-item:` fact, but in a repository whose architecture already
+stands and that has a ready card, resume legally continues to work — an open item enters no
+routing zone, so it changes no `next:`. And the design-only entry of arch and adopt, the only
+consumer that can land the statement in a design zone, opens for `marker.design-note` alone.
+The result is the very loss DD-86 set out to repair: a statement a person confirmed once is
+visible as a fact and nobody takes it.
+
+Wanted behavior: one line of that exact form reaches the design writer of the capability it
+names, ahead of ready work. A card number still does not decide who owns a statement.
+
+Chosen boundary: create no new reserved headword and no new document layer. Inside the named
+open item there is one exact form (`<id> design open item: capability: <NN>; statement-json: …;
+card-json: …`), and only a line in that form and present in HEAD is routed by the tool, as the
+single kind `marker.design-open-item`. The marker zone stands ahead of claim and ready, so
+neither a ready card nor a claim outruns it. resume passes that line's `capability`,
+`statement`, and `card` through to arch (Brownfield `no`) or adopt (`yes`), and both
+consumers' design-only entry now receives `marker.design-note` and this kind alike. The owner
+is the capability the line names, not the card number — a card carrying the work of several
+capabilities is not split, and `card-json` is only where the confirmation happened, so the
+route stands even after that card closes. The landing ends by deleting the byte-identical line
+in the same binding capability-document commit, and that one deletion joins the writer-boundary
+exception of the canonical baseline predicates.
+
+The reason refuted: DD-86 recorded that "the consumer this line needs already existed; what was
+missing was the one row leading to it." That consumer was a person's decision — but to see the
+line a person has to read the resume report, and resume legally goes to work when there is ready
+work. The only consumer that can actually write a design zone is arch or adopt, and that door
+opened with a different key. What was missing was not a row in the table but the routing. This is
+one step earlier than the revisit condition DD-86 registered ("a scene where arch or adopt
+receives the line and still cannot land it in the design zone") — they never received it. Every
+other judgment of DD-86 stands: no new reserved headword, the design form's capability anchor,
+no short form, and deletion in the same commit.
+
+Rejected alternatives: routing every named open item — a free-prose line names no owner, so no
+consumer can act on it, and it would outrun ready work indefinitely until a person decides. A new
+reserved headword — DD-86's recorded rejection stands unchanged (it grows the parser, gate A, the
+canonical format block, and the consumer set at once). Splitting the card by owner — a card is an
+implementation boundary, not a knowledge owner, and this would change an approved work boundary
+to land knowledge. Making a malformed line stop entry — it reverses the line-level ownership
+0.18.8 settled, and a person's prose would block the repository again.
+
+Impact coordinates: the journal-format section and the discovery→update table of
+`skills/principles/SKILL{,_ko}.md`, the zone table, journal parser, and design-route
+computation of `skills/principles/scripts/project-state.mjs`, the routing table of
+`skills/resume/SKILL{,_ko}.md`, the design-only entry of `skills/arch/SKILL{,_ko}.md` and
+`skills/adopt/SKILL{,_ko}.md`, the writer and replacement boundary of
+`skills/principles/baseline-predicates{,_ko}.md`, `scripts/project-state.test.js`, and
+`scripts/repository-invariants.test.js`.
+Revisit when: one statement a person has not yet decided is observed holding ready work back for
+long, or the cost is measured of one session repeating the design-only entry per owner because a
+single card produced several confirmed statements with different owners.
 
 ### DD-56 · Reading is bounded to open work: a depth-1 folder carrying `.done` is read by name (v0.13.0)
 
