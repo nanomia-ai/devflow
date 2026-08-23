@@ -1747,8 +1747,14 @@ test("R2 a claim-done move still measures HANDOFF freshness against the claimed 
   const claimed = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
   write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step\n${claimed}\n`);
   commit(root, "jmp boundary — handoff before final task");
+  const head = "a".repeat(40);
   writeClaim(root, {
-    progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: exact trap",
+    progress: [
+      "2026-08-20T00:00:00Z implemented",
+      `2026-08-20T00:00:10Z completion signal result: head: ${head}; verdict: pass; detail-json: ""`,
+      `2026-08-20T00:00:20Z review result: head: ${head}; verdict: pass; detail-json: ""`,
+      "2026-08-20T00:01:00Z carry: exact trap",
+    ].join("\n"),
     commitSubject: "jmp 02.1 final task",
   });
   const done = claimed.replace(".wip-jmp.md", ".done.md");

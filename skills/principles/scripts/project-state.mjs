@@ -1758,10 +1758,12 @@ function carryState(card) {
 // Settled means anchored: the line is in the card as HEAD already holds it. Whether an
 // unanchored line is still fresh is work's own judgment over its own diff, not a fact on
 // disk, so the tool counts what a commit already carries and reports nothing further.
-function progressEvidence(snapshot, card) {
+function progressEvidence(snapshot, card, anchorPath = card?.path ?? null) {
   const machine = progressMachineLines(card?.text).filter((line) => line.valid);
   const signal = machine.filter((line) => line.kind === "signal").at(-1);
-  const anchored = new Set(progressMachineLines(card ? gitFile(snapshot.root, snapshot.head, card.path) : null)
+  // The anchor is read at the path HEAD still holds. A canonical claim→done move renames a
+  // byte-identical card, so its evidence is anchored under the claimed path, not the new one.
+  const anchored = new Set(progressMachineLines(anchorPath ? gitFile(snapshot.root, snapshot.head, anchorPath) : null)
     .filter((line) => line.valid).map((line) => line.raw));
   const settled = machine.filter((line) => line.kind === "review" && anchored.has(line.raw));
   return {
@@ -1772,9 +1774,9 @@ function progressEvidence(snapshot, card) {
   };
 }
 
-function boundaryFields(snapshot, card) {
+function boundaryFields(snapshot, card, anchorPath) {
   const missing = [];
-  const evidence = progressEvidence(snapshot, card);
+  const evidence = progressEvidence(snapshot, card, anchorPath ?? card?.path ?? null);
   if (!carryState(card).present) missing.push("carry");
   if (!evidence.signalPresent) missing.push("signal");
   if (card?.review === "required" && evidence.reviews === 0) missing.push("review");
@@ -2168,7 +2170,7 @@ function evaluateZones(snapshot) {
   for (const move of claimDoneMoves(snapshot)) {
     const card = snapshot.cards.find((item) => item.path === move.path)
       ?? parseCard(snapshot.root, move.path, false);
-    addEntry(zones, "transition", "finish-boundary", { ...move, ...boundaryFields(snapshot, card) });
+    addEntry(zones, "transition", "finish-boundary", { ...move, ...boundaryFields(snapshot, card, move.card) });
   }
   for (const item of verify.eventRouting) addEntry(zones, "transition", "event-routing", item);
   for (const item of verify.eventDecision) addEntry(zones, "transition", "event-decision", item);
