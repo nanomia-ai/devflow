@@ -363,8 +363,9 @@ user's decision; route an execution fact to the existing research card; or route
 fact to 2a.
 Keep this comparison only in the conversation and do not store it as state.
 
-When a new term is confirmed, immediately land it through the one-line `glossary.md` route
-in the canonical discovery→update table. After the four card fields first become unique and
+When an important new term is confirmed, use the evidence-bearing attributed `glossary term`
+journal route in the canonical discovery→update table. An observation alone never edits the
+glossary; have a person confirm the exact term, definition, affected capabilities, and source. After the four card fields first become unique and
 before writing the card bytes, run the planning evidence discipline's pre-commitment review
 once. Do not compare a candidate that changes Layer 0; route it to 2a.
 In grades 1 and 2b alike, at the same point land every settlement that outlives the card
@@ -385,8 +386,11 @@ into the new card's `Read first`. A card-local choice fully carried by the card'
    A card mapped from a stale boundary lands in the wrong capability. Shared foundations,
    cross-capability contracts, and the verify channel go to `01-foundation`; everything
    else goes to the matching product.md capability folder. For this mapping step only, read
-   the fixed first four lines of each candidate capability document and nothing else —
-   `Boundary: owns …; does not own …` is the mapping oracle. **When one request spans
+   the fixed first five lines of each candidate capability document and nothing else.
+   `Concepts:` is an exact-glossary-term candidate-discovery index; `Boundary: owns …; does
+   not own …` remains the ownership mapping oracle. If a shared term occurs in several
+   headers, keep all as candidates and infer no semantic owner from a tag or card number.
+   **When one request spans
    several locations, map all of them** — never pick one and drop the rest. When any part
    determines no location, or a mapped capability is retired in product.md or has `.stale`
    as its tree representation, ask the user before the begin commit and leave the original
@@ -446,6 +450,7 @@ Forbidden:         <3 lines max>
 Completion signal: <executable command/check — e.g., `pnpm test auth` passes + 201 via .http>
 Depends:           none | 02.1, 03.2
 Read first:        <exact file/document paths, one per line | none>
+Concepts:          <JSON array of exact glossary terms that materially aid discovery | omit>
 Tier:              T-mid | T-low   <!-- omitted = T-mid. For T-low, make Read first,
                                         Forbidden, and the completion signal complete -->
 Approval:          pending | YYYY-MM-DDTHH:MM:SSZ; parallel: <number+number|none>
@@ -454,6 +459,10 @@ Review:            required | waived
 ## Progress log
 <!-- work appends here while .wip. -->
 ```
+
+`Concepts:` uses only exact glossary terms that materially aid discovery. It is optional,
+copies no definitions, requires no exhaustive tagging, and may carry a shared term on a
+composite card without assigning semantic ownership to that card number.
 
 A new card writes only the canonical value shown above; the tool reads both it and the
 legacy form. When split next edits a pending legacy card,

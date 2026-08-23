@@ -221,6 +221,11 @@ complete product.md capability name, a standalone number token compared with uni
 as integers, and text identifying foundation or a standalone `01` each resolve to that
 depth-1 unit. A standalone task-card number resolving to exactly one card resolves to that card and
 its unit. A resolution set with exactly one member selects it. For candidate ordering, a
+canonical glossary.md term resolves through capability-header `Concepts:` to every matching
+unit. When several headers carry the term, return all of them and infer no semantic owner.
+When the exact canonical term has no header match, resolve it to its glossary definition and
+project-root context instead of a unit. This term route does not change name, number,
+foundation, or card recognition. For candidate ordering, a
 larger set selects the member the conversation mentioned last; every other consumer takes
 a larger set as selecting nothing.
 
@@ -307,6 +312,15 @@ unrouted. Only a line in this exact attributed form and present in HEAD is route
 the number of the current card — one card carrying the work of several capabilities is not
 split to land it. `card-json` is where the confirmation happened, not a snapshot basis, so the
 line stands even after that card closes, and it carries neither code paths nor a commit basis.
+
+Important project-term promotion has one definition-free transport form:
+
+```text
+YYYY-MM-DDTHH:MM:SSZ <id> glossary term: term-json: <JSON string>; definition-json: <JSON string>; capabilities-json: <JSON array of canonical capability numbers>; source-json: <JSON string containing one exact durable locator>
+```
+
+This is not a reserved headword. A malformed, uncommitted, or unknown-room line remains an
+ordinary attributed item. Only a person-confirmed exact term, definition, and affected-capability set enters this form; `[]` means project root. The tool routes only the exact line in HEAD, registered capability numbers, and a source resolving once as `marker.glossary-term`. The line is interruption-safe transport to the glossary writer, not authorization for an observation to rewrite canon.
 
 `product ⊃ arch ⊃ design·code-style ⊃ tree (cards)`. **A lower layer may not violate an
 upper layer.** If it must, that is an upper-layer decision:
@@ -396,7 +410,8 @@ What you discovered → where to update:
 | A verification means is newly created or changed | the means line of arch.md's verify_channel |
 | A file in arch.md's `Existing records` moved or no longer matches current code | replace or delete that exact path (+ `Read first` in pending or claimed cards carrying it) |
 | A decision recorded in an ADR is reversed or no longer applies | overwrite that ADR in place with the decision that now holds, and add one dropped-direction line — what was dropped, why, and what reopens it. The ADR keeps its path, so every reference naming it stays valid |
-| A new term becomes necessary | one line in glossary.md — the current skill walking this table lands it immediately |
+| Product or arch confirms an important new term | at that stage's normal boundary, land its canonical `term: definition` in glossary.md and have arch or adopt align the affected capability-header `Concepts:` values to that exact term |
+| Capability, card, or work evidence confirms an important new term | commit the exact attributed `glossary term` line above. `marker.glossary-term` routes to arch, or adopt in a brownfield. The writer lands the glossary definition in a binding commit while retaining the line, then in the next capability-design batch updates every known affected `Concepts:` line and Design head and deletes the line. The marker preempts normal work between commits. `capabilities-json: []` still receives the design-head refresh |
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | An observation confirmed in code about a capability other than the one being worked on | one canonical `capability note` line in journal.md carrying that capability's number. Do not edit the other capability's document directly — its next closure harvests the line |
 | The user confirms a statement belonging to the Intent or Invariants of the capability being worked on, with Layer 0 unchanged | one canonical `capability note` design line in journal.md carrying that capability's number, the confirmed statement, this card's path, and the exact code paths. It is durable only once one `NN.N wip:` checkpoint lands that line with the current card and the current code. Do not edit the capability document or a capsule directly — the tool routes that line and arch (Brownfield `no`) or adopt (`yes`) rederives the design zone |
@@ -434,6 +449,10 @@ processed from — disposition belongs to a person alone. The canonical baseline
 govern the initial empty verified
 scaffold, the exact byte boundary,
 the exact mechanical v0.10 migration, and the human-deletion exception.
+The one narrow delegation is the existing product-writer route for `marker.glossary-term`:
+arch, or adopt in a brownfield, consumes only that confirmed payload and updates the glossary
+definition and every known affected `Concepts:` through the two boundaries above. No other
+observation, progress-log line, or card tag may edit glossary.md directly.
 Fixed target ownership means ownership of rerunning the whole document; the current skill walking this table performs a one-line update named by the table.
 
 A document still being produced by a running product, arch, design, or adopt session is

@@ -5,6 +5,13 @@ description: Implementation. Takes one task card, codes it, keeps the progress l
 
 # work — Implementation
 
+A `Concepts:` term is a discovery tag, not a definition or semantic owner. The card field is optional.
+When implementation reveals an important project term, do not edit canon from an observation.
+Ask the user once to confirm the exact term, definition, affected-capability set, and durable
+evidence locator; then append the canonical attributed `glossary term` line to journal and
+land it in an `NN.N wip: glossary term` checkpoint before ending the call. An unconfirmed or
+malformed observation remains ordinary progress and is not routed.
+
 First read the canonical rules (`../principles/SKILL.md`). Then run
 `node ../principles/scripts/project-state.mjs state` and read its `claim:`, `ready:`, and
 `integrity:` lines. Those lines carry the card judgments this skill uses; take them as they

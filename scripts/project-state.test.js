@@ -18,7 +18,8 @@ const ROUTE_MAP = [
   ["transition", "remote-evidence"], ["transition", "finish-boundary"],
   ["transition", "event-routing"], ["transition", "event-decision"],
   ["transition", "failure-routing"],
-  ["marker", "product-rerun"], ["marker", "capability-closure"], ["marker", "re-split"],
+  ["marker", "product-rerun"], ["marker", "glossary-term"],
+  ["marker", "capability-closure"], ["marker", "re-split"],
   ["setup", "brownfield-field"], ["setup", "integration-config"], ["setup", "room-upgrade"],
   ["setup", "layer0-incomplete"],
   ["claim", "depends-anomaly"], ["claim", "needs-reapproval"],
@@ -118,6 +119,7 @@ function baseline(number, name, designHead, overrides = {}) {
   return `# ${nn} ${name}
 Purpose: fixture purpose
 Boundary: owns fixture; does not own none
+Concepts: ${overrides.concepts?.length ? JSON.stringify(overrides.concepts) : "none"}
 Trust: design reflects confirmed Layer 0; verified state reflects the last passing capability verification, or contains no evidence before one. Judge each zone by its metadata.
 ## Intent
 ${overrides.intent ?? "None."}
@@ -220,7 +222,7 @@ function makeRepo(t, options = {}) {
   git(root, "config", "user.email", "jmp@example.test");
   if (options.product !== false) write(root, "devflow/project/product.md", product(options.capabilities ?? []));
   if (options.arch !== false) write(root, "devflow/project/arch.md", arch(options));
-  if (options.glossary !== false) write(root, "devflow/project/glossary.md", "# Glossary\n\nNone.\n");
+  if (options.glossary !== false) write(root, "devflow/project/glossary.md", options.glossaryText ?? "# Glossary\n\nNone.\n");
   if (options.codeStyle !== false) write(root, "devflow/project/code-style.md", "# Code Style\n\nNone.\n");
   write(root, "devflow/users/jmp/owner.md", "id: jmp\ngit: Jmp, jmp@example.test\n");
   write(root, "devflow/users/jmp/HANDOFF.md", "");
@@ -3216,4 +3218,77 @@ test("C design an owner-named landing touching another capability blocks", (t) =
   assertFragment(result.stdout, "marker: kind=design-open-item", "reason=prefix-mismatch");
   assertFragment(result.stdout, "marker: kind=design-open-item", "recovery=external");
   assert.equal(nextOf(result.stdout), "marker.design-open-item", result.stdout);
+});
+
+function setCapabilityConcepts(root, relative, concepts) {
+  const text = read(root, relative);
+  write(root, relative, text.replace(/^Concepts: .*$/m, concepts.length > 0 ? `Concepts: ${JSON.stringify(concepts)}` : "Concepts: none"));
+}
+
+function glossaryTermLine({
+  term = "tag rename", definition = "renames one tag everywhere", capabilities = ["02", "03"],
+  source = "core:devflow/project/product.md#Capabilities", id = "jmp",
+} = {}) {
+  return `2026-08-23T00:00:00Z ${id} glossary term: term-json: ${JSON.stringify(term)}; definition-json: ${JSON.stringify(definition)}; capabilities-json: ${JSON.stringify(capabilities)}; source-json: ${JSON.stringify(source)}`;
+}
+
+test("G glossary exact term discovery returns one, many, or root without opening bodies", (t) => {
+  const root = makeRepo(t, {
+    capabilities: ["records", "review"],
+    glossaryText: "# Glossary\n\narchive: hides without deleting\ntag rename: renames one tag everywhere\nDecision Deck: the project-wide decision collection\n",
+  });
+  setCapabilityConcepts(root, "devflow/project/capabilities/02-records.md", ["archive", "tag rename"]);
+  setCapabilityConcepts(root, "devflow/project/capabilities/03-review.md", ["tag rename"]);
+  commit(root, "jmp arch — capability concepts");
+
+  const ordinary = run(root, "--term", "archive"); ok(ordinary);
+  assertFragment(ordinary.stdout, "term:", "canonical=1");
+  assertFragment(ordinary.stdout, "term:", "context=capability");
+  assertFragment(ordinary.stdout, "term:", 'capabilities=["02"]');
+  assertFragment(ordinary.stdout, "term:", 'paths=["devflow/project/capabilities/02-records.md"]');
+
+  const shared = run(root, "--term", "tag rename"); ok(shared);
+  assertFragment(shared.stdout, "term:", 'capabilities=["02","03"]');
+  assertFragment(shared.stdout, "term:", 'paths=["devflow/project/capabilities/02-records.md","devflow/project/capabilities/03-review.md"]');
+
+  const projectWide = run(root, "--term", "Decision Deck"); ok(projectWide);
+  assertFragment(projectWide.stdout, "term:", "context=root");
+  assertFragment(projectWide.stdout, "term:", "capabilities=[]");
+  assertFragment(projectWide.stdout, "term:", `definition=${JSON.stringify("the project-wide decision collection")}`);
+
+  const numberRoute = run(root, "--capability", "2"); ok(numberRoute);
+  assert.match(numberRoute.stdout, /^state: .* narrow=2(?:\s|$)/m);
+});
+
+test("G a committed confirmed glossary term preempts composite work with every named capability", async (t) => {
+  const root = makeRepo(t, { capabilities: ["records", "review"] });
+  const line = glossaryTermLine();
+  write(root, "devflow/journal.md", `${line}\n`);
+  commit(root, "jmp 02.1 wip: glossary term");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "marker: kind=glossary-term", `term=${JSON.stringify("tag rename")}`);
+  assertFragment(result.stdout, "marker: kind=glossary-term", `definition=${JSON.stringify("renames one tag everywhere")}`);
+  assertFragment(result.stdout, "marker: kind=glossary-term", 'capabilities=["02","03"]');
+  assertFragment(result.stdout, "marker: kind=glossary-term", "source=core:devflow/project/product.md#Capabilities");
+  assert.equal(nextOf(result.stdout), "marker.glossary-term", result.stdout);
+  const module = await registry();
+  for (const later of ["claim.mine", "ready.ready", "marker.design-note", "marker.re-split"]) {
+    assert.equal(module.selectFirstRoute([later, "marker.glossary-term"]), "marker.glossary-term", later);
+  }
+});
+
+test("G malformed, uncommitted, and ghost-attributed glossary term lines remain plain", (t) => {
+  const cases = [
+    { line: `2026-08-23T00:00:00Z jmp glossary term: term-json: "unterminated`, commitLine: true },
+    { line: glossaryTermLine(), commitLine: false },
+    { line: glossaryTermLine({ id: "ghost" }), commitLine: true },
+  ];
+  for (const item of cases) {
+    const root = makeRepo(t, { capabilities: ["records", "review"] });
+    write(root, "devflow/journal.md", `${item.line}\n`);
+    if (item.commitLine) commit(root, "jmp boundary — plain glossary observation");
+    const result = run(root); ok(result);
+    assert.equal(hasKind(result.stdout, "marker", "glossary-term"), false, result.stdout);
+    assert.ok(result.stdout.split(/\r?\n/).includes(`open-item: ${item.line}`), result.stdout);
+  }
 });

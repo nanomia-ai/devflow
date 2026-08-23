@@ -5,6 +5,11 @@ description: Existing-project adoption. In a repository that already has code, t
 
 # adopt — Existing-Project Adoption
 
+glossary.md is an always-read Layer 0 baseline. Align reverse-derived capability composition
+with exact canonical terms in capability-header `Concepts:`. On `marker.glossary-term`,
+consume only the tool payload, first land the glossary definition in a binding commit while
+retaining the marker, then in the next `adopt — capabilities` batch align the glossary definition and every known affected `Concepts:` line, refresh every Design head, and delete the marker. Never infer semantic ownership from a card number for a shared term or project-root `[]`.
+
 First read the canonical rules (`../principles/SKILL.md`) and the planning evidence discipline
 (`../principles/planning-evidence.md`). Read the canonical capability knowledge baseline
 predicates (`../principles/baseline-predicates.md`) under the capsule gate in the next paragraph.

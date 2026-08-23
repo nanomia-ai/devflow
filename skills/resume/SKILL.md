@@ -5,6 +5,10 @@ description: Resume and domain entry. Restores a new session from disk and conti
 
 # resume — Resume
 
+Immediately after the tool, always read all of `devflow/project/glossary.md` when it exists.
+It is the shared project-language baseline for product, capability, and task entry, not only
+a tag list.
+
 First run `node ../principles/scripts/project-state.mjs state`. The output is one sheet
 holding this repository's state in priority order, and an empty zone still prints its line.
 The closing `next:` names the first zone that is not empty and its kind; it is a summary
@@ -28,6 +32,11 @@ Purpose: read the next stage from the sheet the tool produced, report it, obtain
 and continue into that stage.
 
 ## Domain-Entry Questions
+
+When the conversation contains an exact canonical glossary term, preserve every existing
+name and number route and run `state --term <exact glossary term>`. For
+`context=capability`, return every capability path the term projection names; a shared term
+does not select one semantic owner. For `context=root`, return the glossary definition with project root context and invent no capability owner.
 
 When the user's request is to explain or enter a capability or domain rather than resume
 state, run this section before normal routing. The selected capability's confirmed reasons

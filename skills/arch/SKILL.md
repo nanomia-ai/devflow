@@ -5,6 +5,11 @@ description: Development planning. Takes product.md and decides components, stac
 
 # arch — Development Planning
 
+glossary.md is an always-read Layer 0 baseline. When capability composition changes, align
+capability-header `Concepts:` to exact canonical terms. On `marker.glossary-term`, consume
+only the tool payload, first land the glossary definition in a binding commit while retaining
+the marker, then in the next `arch — capabilities` batch align the glossary definition and every known affected `Concepts:` line, refresh every Design head, and delete the marker. Shared terms remain in several headers; `[]` is project-root context.
+
 First read the canonical rules (`../principles/SKILL.md`), the planning evidence discipline
 (`../principles/planning-evidence.md`), and all of `devflow/project/product.md`. Read the
 canonical capability knowledge baseline predicates (`../principles/baseline-predicates.md`)

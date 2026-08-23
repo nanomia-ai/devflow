@@ -5,6 +5,11 @@ description: Service-planning interview. Defines the problem, capability composi
 
 # product — Service Planning
 
+`devflow/project/glossary.md` is one durable project-language canon, not merely a tag list.
+product seeds every important term confirmed in the interview as one exact `term: definition`
+line and prevents synonyms from forking the same meaning. Definitions are not copied into
+capability documents or task cards.
+
 First read all of the canonical rules (`../principles/SKILL.md`) and the planning evidence
 discipline (`../principles/planning-evidence.md`). If present, read all of `devflow/journal.md`,
 `devflow/project/product.md`, and `devflow/project/glossary.md`.

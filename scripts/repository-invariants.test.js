@@ -731,6 +731,31 @@ test("glossary has a producer and deterministic recovery on both project types",
   assert.match(resume, /no makes product create only glossary\.md without changing the confirmed product\.md/);
 });
 
+test("glossary terms are canonical definitions with bounded capability and card discovery consumers", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
+  const product = fs.readFileSync(path.join(root, "skills", "product", "SKILL.md"), "utf8");
+  const arch = fs.readFileSync(path.join(root, "skills", "arch", "SKILL.md"), "utf8");
+  const adopt = fs.readFileSync(path.join(root, "skills", "adopt", "SKILL.md"), "utf8");
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+  const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(root, "skills", "work", "SKILL.md"), "utf8");
+  assert.match(product, /one durable project-language canon/);
+  assert.match(baseline, /Concepts: <JSON array of exact glossary terms \| none>/);
+  assert.match(baseline, /A term may occur in more than one capability header/);
+  assert.match(baseline, /Definitions live only in glossary\.md/);
+  assert.match(arch, /glossary definition and every known affected `Concepts:` line/);
+  assert.match(adopt, /glossary definition and every known affected `Concepts:` line/);
+  assert.match(resume, /state --term <exact glossary term>/);
+  assert.match(resume, /return every capability path the term projection names/);
+  assert.match(resume, /return the glossary definition with project root context/);
+  assert.match(split, /`Concepts:` uses only exact glossary terms that materially aid discovery/);
+  assert.match(work, /A `Concepts:` term is a discovery tag, not a definition or semantic owner/);
+  assert.match(principles, /glossary term: term-json:/);
+  assert.match(principles, /Only a person-confirmed exact term, definition, and affected-capability set enters this form/);
+  assert.match(principles, /marker\.glossary-term/);
+});
+
 test("explicit product verification and capability closure markers have resume consumers", () => {
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
   const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
@@ -841,7 +866,7 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.match(baseline, /`devflow\/project\/capabilities\/NN-<capability-name>\.md`/);
   assert.doesNotMatch(baseline, /capability-name-slug/);
   // The first-4-lines rule defers to the heading order above it, which starts at `## Intent`.
-  assert.match(baseline, /readable in the first 4 lines, followed by the\s+sections in the order above/);
+  assert.match(baseline, /readable in the first 5 lines, followed by the\s+sections in the order above/);
   assert.doesNotMatch(baseline, /followed immediately\s+by `Concept model`/);
   assert.match(baseline, /absent means no same-numbered baseline in HEAD/);
   assert.match(baseline, /Working-tree bytes with\s+no HEAD counterpart have nothing to preserve, so the creation replaces them/);
@@ -1825,8 +1850,8 @@ test("the resume report names its reason and the alternatives", () => {
 
 test("a mis-mapped card has a recall route and split maps from the boundary line", () => {
   const split = fs.readFileSync(path.join(root, "skills", "split", "SKILL.md"), "utf8");
-  assert.match(split, /read\n   the fixed first four lines of each candidate capability document and nothing else/);
-  assert.match(split, /`Boundary: owns …; does not own …` is the mapping oracle/);
+  assert.match(split, /read\n   the fixed first five lines of each candidate capability document and nothing else/);
+  assert.match(split, /`Boundary: owns …; does\s+not own …` remains the ownership mapping oracle/);
   assert.match(split, /leaves the original as a\n`\.stale\.` tombstone at the same path and number/);
   assert.match(split, /The tombstone keeps that number in the tree, so the\nnext minting does not reuse it/);
   assert.match(split, /\*\*Card recall\.\*\*/);

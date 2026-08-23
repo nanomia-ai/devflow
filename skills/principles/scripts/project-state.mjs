@@ -63,10 +63,11 @@ export const ZONE_DEFINITIONS = Object.freeze([
   ].map((name, index) => ({ name, present: 3 + index / 100, absent: name === "layer-opening" ? 7 : null })) },
   { zone: "marker", present: 4, absent: 8, kinds: [
     { name: "product-rerun", present: 4, absent: 2 },
-    { name: "design-note", present: 4.01, absent: null },
-    { name: "design-open-item", present: 4.02, absent: null },
-    { name: "capability-closure", present: 4.03, absent: null },
-    { name: "re-split", present: 4.04, absent: 8 },
+    { name: "glossary-term", present: 4.01, absent: null },
+    { name: "design-note", present: 4.02, absent: null },
+    { name: "design-open-item", present: 4.03, absent: null },
+    { name: "capability-closure", present: 4.04, absent: null },
+    { name: "re-split", present: 4.05, absent: 8 },
   ] },
   { zone: "setup", present: 5, absent: 5, kinds: [
     { name: "no-product", present: 5, absent: 1 },
@@ -312,15 +313,18 @@ function parseArguments(argv) {
   for (let index = 1; index < argv.length; index += 1) {
     const flag = argv[index];
     const value = argv[index + 1];
-    if (!["--root", "--capability"].includes(flag)) fail(`unknown option ${flag}`);
+    if (!["--root", "--capability", "--term"].includes(flag)) fail(`unknown option ${flag}`);
     if (value === undefined || value.startsWith("--")) fail(`${flag} requires a value`);
     index += 1;
     if (flag === "--root") options.root = value;
     if (flag === "--capability") options.capability = value;
+    if (flag === "--term") options.term = value;
   }
   if (options.capability !== undefined && !/^0*[1-9][0-9]*$/.test(options.capability)) {
     fail("--capability must be a positive integer");
   }
+  if (options.term !== undefined && options.term.trim() === "") fail("--term must be nonempty");
+  if (options.term !== undefined && options.capability !== undefined) fail("--term and --capability are mutually exclusive");
   const requested = path.resolve(options.root);
   if (!fs.existsSync(requested) || !fs.statSync(requested).isDirectory()) fail(`root is not a directory: ${requested}`);
   const resolved = gitRun(requested, ["rev-parse", "--show-toplevel"], { allowFailure: true });
@@ -604,9 +608,25 @@ function legacyV010(text, number) {
   return parseJsonArray(machineFields.get("Covered cards")) !== null && parseJsonArray(machineFields.get("Scope paths")) !== null;
 }
 
-function capabilityShape(text, relative, number) {
+function parseGlossary(text) {
+  const definitions = new Map();
   const anomalies = [];
-  if (text === null) return { boundaryCount: 0, shapeValid: false, anomalies, zone: null };
+  for (const [index, raw] of (text ?? "").split("\n").entries()) {
+    const line = raw.trim();
+    if (line === "" || line === "None." || line.startsWith("#")) continue;
+    const match = /^([^:]+):\s+(.+)$/.exec(line);
+    if (!match || match[1].trim() === "" || definitions.has(match[1].trim())) {
+      anomalies.push({ path: "devflow/project/glossary.md", zone: "glossary", detail: `term-line:${index + 1}` });
+      continue;
+    }
+    definitions.set(match[1].trim(), match[2].trim());
+  }
+  return { definitions, anomalies };
+}
+
+function capabilityShape(text, relative, number, glossaryDefinitions = new Map()) {
+  const anomalies = [];
+  if (text === null) return { boundaryCount: 0, shapeValid: false, anomalies, concepts: [], zone: null };
   const lines = text.split("\n");
   const boundaryCount = lines.filter((line) => line === "## Verified state").length;
   const actualHeadings = lines.filter((line) => /^(?:##|###) /.test(line));
@@ -615,8 +635,22 @@ function capabilityShape(text, relative, number) {
   const verifiedHeadings = boundaryIndex < 0 ? [] : actualHeadings.filter((heading) => lines.indexOf(heading) >= boundaryIndex);
   if (boundaryCount !== 1) anomalies.push({ path: relative, zone: "boundary", detail: `boundary-count:${boundaryCount}` });
   if (!/^# \d+ \S/.test(lines[0] ?? "")) anomalies.push({ path: relative, zone: "design", detail: "h1-format" });
-  if (!/^Purpose: \S/.test(lines[1] ?? "") || !/^Boundary: \S/.test(lines[2] ?? "") || !/^Trust: \S/.test(lines[3] ?? "")) {
-    anomalies.push({ path: relative, zone: "design", detail: "fixed-first-four-lines" });
+  if (!/^Purpose: \S/.test(lines[1] ?? "") || !/^Boundary: \S/.test(lines[2] ?? "")
+      || !/^Concepts: (?:none|\[.*\])$/.test(lines[3] ?? "") || !/^Trust: \S/.test(lines[4] ?? "")) {
+    anomalies.push({ path: relative, zone: "design", detail: "fixed-first-five-lines" });
+  }
+  let concepts = [];
+  if ((lines[3] ?? "") !== "Concepts: none") {
+    const parsed = parseJsonArray((lines[3] ?? "").replace(/^Concepts:\s*/, ""));
+    if (parsed === null || parsed.length === 0 || parsed.some((term) => typeof term !== "string" || term === "")) {
+      anomalies.push({ path: relative, zone: "design", detail: "concepts-json" });
+    } else {
+      concepts = parsed;
+      if (new Set(concepts).size !== concepts.length) anomalies.push({ path: relative, zone: "design", detail: "concepts-duplicate" });
+      for (const term of concepts.filter((value) => !glossaryDefinitions.has(value))) {
+        anomalies.push({ path: relative, zone: "design", detail: `concepts-not-in-glossary:${term}` });
+      }
+    }
   }
   const designFields = fields(extractSection(text, "## Design metadata") ?? "");
   if (designFields.size !== 2 || !designFields.has("Capability number") || !designFields.has("Design head")) {
@@ -645,6 +679,7 @@ function capabilityShape(text, relative, number) {
     boundaryCount,
     shapeValid: anomalies.length === 0,
     anomalies,
+    concepts,
     designFields,
     verificationFields,
   };
@@ -733,7 +768,7 @@ async function baselineProjection(snapshot, capabilityFilter) {
     const headText = gitFile(snapshot.root, snapshot.integration.ref, relative);
     const text = headText;
     const headExists = headText !== null;
-    const shape = capabilityShape(text, relative, item.number);
+    const shape = capabilityShape(text, relative, item.number, snapshot.glossary.definitions);
     const legacy = legacyV010(text, item.number);
     if (legacy) legacyCount += 1;
     if (shape.boundaryCount !== 1 && headExists && !legacy) boundaryState = "anomaly";
@@ -838,6 +873,7 @@ function capabilityNoteFields(line, start) {
 // exact form is routable, because the owner the line names is the only writer that can land
 // the statement, and that owner is never derived from the card the confirmation happened on.
 const DESIGN_OPEN_ITEM = new RegExp(`^${TIMESTAMP} (?<id>\\S+) design open item: capability: (?<capability>\\d+); statement-json: `);
+const GLOSSARY_TERM = new RegExp(`^${TIMESTAMP} (?<id>\\S+) glossary term: term-json: `);
 
 function designOpenItemFields(line) {
   const match = DESIGN_OPEN_ITEM.exec(line);
@@ -850,6 +886,42 @@ function designOpenItemFields(line) {
   const card = parseJsonValue(line.slice(statementEnd + cardHead.length));
   if (!card.ok || typeof card.value !== "string" || card.value === "") return {};
   return { design: { id: match.groups.id, capability: match.groups.capability, statement: statement.value, card: card.value } };
+}
+
+function glossaryTermFields(line) {
+  const match = GLOSSARY_TERM.exec(line);
+  if (!match) return {};
+  const termEnd = jsonStringEnd(line, match[0].length);
+  if (termEnd < 0) return {};
+  const term = parseJsonValue(line.slice(match[0].length, termEnd));
+  const definitionHead = "; definition-json: ";
+  if (!term.ok || typeof term.value !== "string" || term.value === "" || !line.slice(termEnd).startsWith(definitionHead)) return {};
+  const definitionStart = termEnd + definitionHead.length;
+  const definitionEnd = jsonStringEnd(line, definitionStart);
+  if (definitionEnd < 0) return {};
+  const definition = parseJsonValue(line.slice(definitionStart, definitionEnd));
+  const capabilitiesHead = "; capabilities-json: ";
+  if (!definition.ok || typeof definition.value !== "string" || definition.value === ""
+      || !line.slice(definitionEnd).startsWith(capabilitiesHead)) return {};
+  const capabilitiesStart = definitionEnd + capabilitiesHead.length;
+  const sourceHead = "; source-json: ";
+  const sourceStart = line.lastIndexOf(sourceHead);
+  if (sourceStart < capabilitiesStart) return {};
+  const capabilities = parseJsonValue(line.slice(capabilitiesStart, sourceStart));
+  const source = parseJsonValue(line.slice(sourceStart + sourceHead.length));
+  const values = capabilities.value;
+  const canonical = capabilities.ok && Array.isArray(values)
+    && values.every((value) => typeof value === "string" && String(Number(value)).padStart(2, "0") === value)
+    && new Set(values).size === values.length
+    && values.every((value, index) => index === 0 || Number(values[index - 1]) < Number(value));
+  if (!canonical || !source.ok || typeof source.value !== "string" || source.value === "") return {};
+  return { glossaryTerm: {
+    id: match.groups.id,
+    term: term.value,
+    definition: definition.value,
+    capabilities: values,
+    source: source.value,
+  } };
 }
 
 function parseJournalLine(line, lineNumber) {
@@ -893,7 +965,7 @@ function parseJournalLine(line, lineNumber) {
   if (timestamped) {
     const reserved = RESERVED_JOURNAL_HEADS.find((head) => timestamped.groups.body.startsWith(head));
     if (reserved) return { ...out, kind: "invalid", valid: false, ...timestamped.groups, reason: `reserved-format:${reserved}` };
-    return { ...out, kind: "attributed", ...timestamped.groups, ...designOpenItemFields(line) };
+    return { ...out, kind: "attributed", ...timestamped.groups, ...designOpenItemFields(line), ...glossaryTermFields(line) };
   }
   const body = line.replace(/^\s*(?:[-*+]\s+)?/, "");
   const reserved = RESERVED_JOURNAL_HEADS.find((head) => body.startsWith(head));
@@ -1056,6 +1128,7 @@ async function loadSnapshot(options) {
   const owners = parseOwners(root);
   const room = currentRoom(root, owners);
   const integration = resolveIntegration(root, archText, head, branch);
+  const glossaryText = gitFile(root, integration.ref, "devflow/project/glossary.md");
   const status = parseStatus(root);
   const journalText = readFile(root, "devflow/journal.md");
   const journal = parseJournal(journalText);
@@ -1071,6 +1144,8 @@ async function loadSnapshot(options) {
     integration,
     productText,
     product: parseProduct(productText),
+    glossaryText,
+    glossary: parseGlossary(glossaryText),
     archText,
     archFields: fields(archText),
     treePresent: fs.existsSync(path.join(root, "devflow", "tree")) && fs.statSync(path.join(root, "devflow", "tree")).isDirectory(),
@@ -1666,8 +1741,8 @@ function addedJournalEntries(snapshot) {
 }
 
 function classifyWorkingTransition(snapshot, designPrefix) {
-  // The design-only write owns its own route, so it is never also a generic output prefix.
-  if (designPrefix === "design-only") return null;
+  // A bounded writer prefix owns its own route, so it is never also a generic output prefix.
+  if (["design-only", "glossary-only"].includes(designPrefix)) return null;
   const paths = snapshot.status.map((entry) => entry.path).filter((relative) => relative === "devflow/journal.md"
     || /(?:^|\/)verify\.md$/.test(relative) || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
   if (paths.length === 0) return null;
@@ -1941,6 +2016,65 @@ function designNoteRoutes(snapshot) {
   return { routes, prefix };
 }
 
+function glossaryTermRoutes(snapshot, verify) {
+  const owned = (line) => line.kind === "attributed" && line.glossaryTerm !== undefined
+    && snapshot.owners.some((owner) => owner.id === line.glossaryTerm.id);
+  const expected = new Set(snapshot.baseline.expected.map((item) => String(item.number).padStart(2, "0")));
+  const project = (line, extra = {}) => {
+    const term = line.glossaryTerm;
+    let reason = extra.reason;
+    if (!reason && locatorResolutionCount(snapshot, verify, term.source) !== 1) reason = "source-unresolved";
+    if (!reason && term.capabilities.some((number) => !expected.has(number))) reason = "capability-unregistered";
+    return {
+      marker: line.raw,
+      term: term.term,
+      definition: term.definition,
+      capabilities: term.capabilities,
+      source: term.source,
+      ...(reason ? { reason } : {}),
+      ...(extra.prefix ? { prefix: extra.prefix } : {}),
+    };
+  };
+  const headText = gitFile(snapshot.root, "HEAD", "devflow/journal.md");
+  if (headText === null) return { routes: [], prefix: null };
+  const headLines = headText.split("\n");
+  const routes = snapshot.journal.filter(owned).filter((line) => headLines.includes(line.raw)).map((line) => project(line));
+  let prefix = null;
+  const changed = snapshot.status.map((entry) => entry.path);
+  for (const [index, raw] of headLines.entries()) {
+    const line = raw === "" ? null : parseJournalLine(raw, 0);
+    if (!line || !owned(line) || snapshot.journal.some((item) => item.raw === raw)) continue;
+    const remainder = headLines.filter((_, position) => position !== index).join("\n");
+    const allowed = changed.includes("devflow/journal.md") && changed.every((relative) => relative === "devflow/journal.md"
+      || relative === "devflow/project/glossary.md" || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
+    if (!allowed || remainder !== (snapshot.journalText ?? "")) {
+      routes.push(project(line, { reason: "prefix-mismatch" }));
+      continue;
+    }
+    prefix = "glossary-only";
+    routes.push(project(line, { prefix }));
+  }
+  return { routes, prefix };
+}
+
+function glossaryTermProjection(snapshot) {
+  const term = snapshot.options.term;
+  if (term === undefined) return null;
+  const definition = snapshot.glossary.definitions.get(term);
+  if (definition === undefined) return { canonical: 0, term, context: "none", capabilities: [], paths: [] };
+  const matches = snapshot.baseline.records
+    .filter((record) => record.headExists && record.shape.concepts.includes(term))
+    .sort((left, right) => left.capability - right.capability);
+  return {
+    canonical: 1,
+    term,
+    definition,
+    context: matches.length > 0 ? "capability" : "root",
+    capabilities: matches.map((record) => String(record.capability).padStart(2, "0")),
+    paths: matches.map((record) => record.relative),
+  };
+}
+
 function addedIn(snapshot, commit, relative) {
   const present = (revision) => gitRun(snapshot.root, ["cat-file", "-e", `${revision}:${relative}`], { allowFailure: true }).status === 0;
   return present(commit) && !present(`${commit}^`);
@@ -2138,7 +2272,8 @@ function evaluateZones(snapshot) {
   const nonblocking = integrityItems.filter((item) => !item.blocking);
   const shapeAnomalies = [
     ...snapshot.product.anomalies,
-    ...snapshot.baseline.anomalies.filter((item) => item.zone === "verified"),
+    ...snapshot.glossary.anomalies,
+    ...snapshot.baseline.anomalies.filter((item) => item.zone === "verified" || item.detail.startsWith("concepts-")),
     ...progressShapeAnomalies(snapshot),
   ];
 
@@ -2149,6 +2284,7 @@ function evaluateZones(snapshot) {
   const outsideDiff = snapshot.status.filter((item) => !item.path.startsWith("devflow/"));
   const chosen = firstMine(snapshot);
   const design = designNoteRoutes(snapshot);
+  const glossary = glossaryTermRoutes(snapshot, verify);
   const origins = originProjection(snapshot);
   const unattributed = snapshot.status.map((entry) => entry.path).filter((relative) => relative !== chosen?.path).sort(byteCompare);
   zones.git.summary = {
@@ -2173,7 +2309,7 @@ function evaluateZones(snapshot) {
   for (const item of verify.prepared) addEntry(zones, "transition", "prepared-route", {
     path: item.path, base: item.base, prefix: item.prefix, result: item.result, operationCount: item.operations.length,
   });
-  const interrupted = verify.prepared.length === 0 ? classifyWorkingTransition(snapshot, design.prefix) : null;
+  const interrupted = verify.prepared.length === 0 ? classifyWorkingTransition(snapshot, design.prefix ?? glossary.prefix) : null;
   if (interrupted) addEntry(zones, "transition", "interrupted", interrupted);
   for (const item of verify.sourceMigration) addEntry(zones, "transition", "source-id-migration", item);
   for (const line of snapshot.journal.filter((item) => item.kind === "layer-opening" && item.valid).sort((a, b) => a.timestamp.localeCompare(b.timestamp))) {
@@ -2209,6 +2345,7 @@ function evaluateZones(snapshot) {
   }
 
   for (const line of snapshot.journal.filter((item) => item.kind === "product-rerun")) addEntry(zones, "marker", "product-rerun", { marker: line.raw, timestamp: line.timestamp });
+  for (const entry of glossary.routes) addEntry(zones, "marker", "glossary-term", entry);
   for (const { form, ...entry } of design.routes) addEntry(zones, "marker", form === "open-item" ? "design-open-item" : "design-note", entry);
   for (const line of snapshot.journal.filter((item) => item.kind === "capability-closing" && gitFile(snapshot.root, "HEAD", "devflow/journal.md")?.includes(item.raw))) {
     addEntry(zones, "marker", "capability-closure", { marker: line.raw, folder: line.folder, head: line.head });
@@ -2410,6 +2547,7 @@ function evaluateZones(snapshot) {
     openItems,
     existingRequests: requests.map((line) => line.raw),
     findings: verify.findings,
+    term: glossaryTermProjection(snapshot),
   };
   return { zones, facts, verify, integrityItems, changedOnBranch };
 }
@@ -2642,6 +2780,7 @@ function renderBody(snapshot, evaluated, form) {
   body.push(`report: ${fieldsFor(evaluated.facts.report)}`);
   body.push(`handoff: ${fieldsFor(evaluated.facts.handoff)}`);
   body.push(`revisions: ${fieldsFor(snapshot.revisions)}`);
+  if (evaluated.facts.term !== null) body.push(`term: ${fieldsFor(evaluated.facts.term)}`);
   for (const line of evaluated.facts.openItems) body.push(`open-item: ${line}`);
   for (const line of evaluated.facts.existingRequests) body.push(`existing-request: ${line}`);
   for (const line of evaluated.facts.findings) body.push(`finding: ${line}`);
@@ -2650,7 +2789,7 @@ function renderBody(snapshot, evaluated, form) {
 }
 
 function stateLine(snapshot, evaluated, form, bytes, narrow) {
-  const anomalies = evaluated.integrityItems.length + snapshot.product.anomalies.length + snapshot.baseline.anomalies.length;
+  const anomalies = evaluated.integrityItems.length + snapshot.product.anomalies.length + snapshot.glossary.anomalies.length + snapshot.baseline.anomalies.length;
   const head = snapshot.head === "none" ? "none" : snapshot.head.slice(0, 8);
   const integration = snapshot.integration.hash ? `${snapshot.integration.branch}@${snapshot.integration.hash.slice(0, 8)}` : `${snapshot.integration.branch}@unknown`;
   return `state: schema=1 root=${scalar(snapshot.root)} head=${head} integration=${integration} networkNeeded=${snapshot.integration.networkNeeded ? 1 : 0} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${anomalies} narrow=${narrow} bytes=${bytes}/${OUTPUT_LIMIT} form=${form}`;
@@ -2677,8 +2816,8 @@ export async function calculateState(options) {
   if (rendered.bytes <= OUTPUT_LIMIT) return { ...rendered, status: 0, form: "full", snapshot, evaluated };
   rendered = render(snapshot, projected.evaluated, "compact", projected.narrow);
   if (rendered.bytes <= OUTPUT_LIMIT) return { ...rendered, status: 0, form: "compact", snapshot, evaluated };
-  const anomalies = evaluated.integrityItems.length + snapshot.product.anomalies.length + snapshot.baseline.anomalies.length;
-  const advice = snapshot.options.capability === undefined ? "; narrow --capability <n>" : "";
+  const anomalies = evaluated.integrityItems.length + snapshot.product.anomalies.length + snapshot.glossary.anomalies.length + snapshot.baseline.anomalies.length;
+  const advice = snapshot.options.capability === undefined && snapshot.options.term === undefined ? "; narrow --capability <n> or --term <exact>" : "";
   const output = `state: schema=1 root=${scalar(snapshot.root)} head=${snapshot.head.slice(0, 8)} integration=${snapshot.integration.branch}@${snapshot.integration.hash?.slice(0, 8) ?? "unknown"} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${anomalies} narrow=${projected.narrow} bytes=0/${OUTPUT_LIMIT} form=compact emitted=0\nblocked: output budget exceeded${advice}\n`;
   return { output, bytes: Buffer.byteLength(output), status: 3, form: "refused", snapshot, evaluated };
 }

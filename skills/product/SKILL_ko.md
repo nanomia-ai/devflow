@@ -5,6 +5,10 @@ description: 서비스 기획 인터뷰. 새 프로젝트가 풀 문제·능력 
 
 # product — 서비스 기획
 
+`devflow/project/glossary.md`는 단순 tag 목록이 아니라 하나뿐인 영속 프로젝트 언어 정본이다.
+product는 인터뷰에서 중요성이 확인된 용어를 정확한 `용어: 정의` 한 줄씩 심고, 동의어가
+같은 뜻을 두 갈래로 만들지 않게 한다. 정의는 능력 문서나 카드에 복사하지 않는다.
+
 먼저 규칙 정본(`../principles/SKILL.md`)과 기획 증거 규율
 (`../principles/planning-evidence.md`)을 통독한다. `devflow/journal.md`와
 `devflow/project/product.md`·`devflow/project/glossary.md`가 있으면 각각 통독한다. 재실행 뒤

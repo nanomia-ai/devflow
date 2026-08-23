@@ -5,6 +5,12 @@ description: 구현. 작업 카드 하나를 잡아 코딩하고, 진행 로그�
 
 # work — 구현
 
+카드의 선택 `개념`/`Concepts:`는 glossary.md의 정확한 발견 tag일 뿐 정의나 의미 소유자가
+아니다. 구현 중 새 중요 프로젝트 용어가 드러나면 관측을 정본에 바로 쓰지 않는다. 사용자에게
+정확한 용어·정의·영향 능력 집합·영속 근거 locator를 한 번 확인받고, 규칙 정본의 정확한
+`glossary term` 줄을 journal에 append해 `NN.N wip: glossary term` 체크포인트로 커밋한 뒤
+호출을 끝낸다. 확인되지 않았거나 malformed인 관측은 보통 진행 기록으로 남고 라우팅되지 않는다.
+
 먼저 규칙 정본(`../principles/SKILL.md`)을 읽는다. 이어
 `node ../principles/scripts/project-state.mjs state`를 실행해 `claim:`·`ready:`·`integrity:`
 줄을 읽는다. 이 스킬이 쓰는 카드 판정은 그 줄이 낸 값을 그대로 쓴다.

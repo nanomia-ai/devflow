@@ -37,7 +37,7 @@
 
 | # | 절 | 구역 | 형식 | 상한 | 제외 |
 |---|---|---|---|---|---|
-| 1 | H1 · 목적 · 경계 · 신뢰 안내 | 설계 | 고정 4줄: `# <번호> <이름>` · 목적 · 경계 · 신뢰 | 4줄 | 상대 표현(`최신`, `현재 가장`) |
+| 1 | H1 · 목적 · 경계 · 개념 색인 · 신뢰 안내 | 설계 | 고정 5줄: `# <번호> <이름>` · 목적 · 경계 · 개념 · 신뢰 | 5줄 | 상대 표현(`최신`, `현재 가장`) · 용어 정의 |
 | 2 | Intent 총론 | 설계 | 자유 산문: 무엇을 만들려 했나 · 형태를 정한 이유와 버린 방향 · 실패에서 배운 것 | 소프트 | 코드 세부·연대기·카드 상태 |
 | 3 | 개념 모델 | 설계 | 표: 개념 / 사용자가 얻는 것 / 식별자 / 관계 | 소프트 | 코드 필드·타입·시그니처 |
 | 4 | 불변식 | 설계 | 번호 목록, 거짓임을 확인할 수 있는 진술 | 소프트 | 다른 능력에도 그대로 참인 규약 |
@@ -55,24 +55,30 @@
 | 15 | 검증 메타데이터 | 검증 | 아래 다섯 `key: value` 필드, 파일 맨 끝 | 5필드 | 그 밖의 필드 |
 
 상한 열의 `소프트`는 절별 행 수치를 계약으로 두지 않는다는 뜻이다 — 총 상한과 초과 보고가
-지배하고, 하드인 것은 형식 계약(고정 4줄·경계 1줄·2필드·5필드)뿐이다. Intent 총론은 이
+지배하고, 하드인 것은 형식 계약(고정 5줄·경계 1줄·2필드·5필드)뿐이다. Intent 총론은 이
 능력을 관통하는 의도의 무조건 도달 지점이다 — 캡슐은 필요할 때만 열리므로, 어떤 카드에서도
 도달해야 하는 판정 기준·버린 방향·실패에서 배운 것은 여기에만 산다.
 
 배포 형식의 절 제목은 정확히 `## Intent`, `## Concept model`, `## Invariants`, `## Non-goals`,
 `## Binding ADRs`, `## Design metadata`, `## Verified state`, `### Main flow`,
 `### Lifecycle`, `### Current behavior`, `### Entrypoints`, `### Consumed contracts`,
-`### Traps`, `### Verify`, `### Verification metadata` 순이다. H1 아래 세 줄의 key는
-`Purpose`, `Boundary`, `Trust`다.
+`### Traps`, `### Verify`, `### Verification metadata` 순이다. H1 아래 네 줄의 key는
+`Purpose`, `Boundary`, `Concepts`, `Trust`다.
 
-첫 4줄의 배포 형식은 정확히 다음과 같다.
+첫 5줄의 배포 형식은 정확히 다음과 같다.
 
 ```text
 # <NN> <product.md의 능력 이름>
 Purpose: <왜 존재하고 무엇을 구현하는지, 한 줄>
 Boundary: owns <소유 범위>; does not own <이웃 능력 번호와 이름 또는 none>
+Concepts: <glossary.md의 정확한 용어 JSON 배열 | none>
 Trust: design reflects confirmed Layer 0; verified state reflects the last passing capability verification, or contains no evidence before one. Judge each zone by its metadata.
 ```
+
+`Concepts:`는 한 줄짜리 유계 발견 색인이다. 이 능력을 찾는 데 실질적으로 도움이 되는
+glossary.md 정본 용어만 쓰며 전수 태깅하지 않는다. 같은 용어가 여러 능력 머리에 나올 수 있다.
+능력과 무관한 프로젝트 전체 용어는 어느 머리에도 없어도 된다. 정의는 glossary.md에만 살고,
+이 줄은 정의나 의미 소유권을 만들지 않는다. 해당 도메인 용어가 없으면 정직하게 `none`을 쓴다.
 
 - 총 상한은 약 185줄이다. 상한 초과는 쓰기를 막지 않고 작성자가
   초과 절과 행·노드·단계 수를 보고한다. 능력 분할은 자동 결과가 아니라 product 변경에 대한
@@ -80,7 +86,7 @@ Trust: design reflects confirmed Layer 0; verified state reflects the last passi
   지식뿐이다 — 잘라내지 않고 같은 번호 캡슐로 내린다. verify는 검증 구역의 고정 절을 평소대로
   쓰고, 이 상한을 맞추려고 캡슐을 만들거나 검증된 사실을 버리지 않으며 문서 전체의 초과를
   보고한다.
-- 첫 4줄에서 목적·소유 경계를 읽을 수 있어야 하고, 그 뒤로는 위 순서대로 절이 이어진다.
+- 첫 5줄에서 목적·소유 경계·발견 개념을 읽을 수 있어야 하고, 그 뒤로는 위 순서대로 절이 이어진다.
   `Concept model`에서는 개념을 중심적인 것부터 쓴다. 코드나 다른 문서에 있는 계약 본문은
   옮겨 적지 않고 정확한 위치와 이 능력에 고유한 불변식만 남긴다.
 - 수록할 근거 있는 내용이 없는 절에는 정확히 `None.`을 쓴다. 근거가 없으면 발명하지 않는다.
@@ -92,7 +98,7 @@ Trust: design reflects confirmed Layer 0; verified state reflects the last passi
   재현 조건을 쓴다.
 - `external` 행은 비구속 증거다. work이 URL을 자동으로 열지 않고 구속 결정을 뒤집지 못하며
   삭제 결정은 사람만 내린다. 나머지 기준선도 사람은 완결된 본문 행·항목·다이어그램 노드만 삭제하고 추가는
-  작성 스킬에 맡긴다. H1과 첫 3개 필드, 고정 절 제목, 다이어그램 울타리·방향 선언, 메타데이터
+  작성 스킬에 맡긴다. H1과 첫 4개 필드, 고정 절 제목, 다이어그램 울타리·방향 선언, 메타데이터
   필드는 삭제 예외의 대상이 아니다.
   절에서 수록 가능한 마지막 본문 항목에는 이 예외를 쓰지 않는다. 그 구역 작성자에게 라우팅해
   절 본문을 `None.`으로 치환한다.

@@ -455,6 +455,47 @@ Revisit when: a clean Claude or Codex entry actually fails to consume a complete
 raised the 24 KiB warning. Or when an entry path that cannot call the projection is actually
 observed — what is restored then is not the table but **a callable path**.
 
+### DD-91 · glossary is the project-language canon, capability-header concepts are definition-free many-to-many discovery consumers, and confirmed terms promote through the existing journal to the design writer (v0.19.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active
+
+Observed problem: real-use projects had glossary definitions but no header index from those
+terms to capability documents. A new session had to open every body to locate an ordinary
+term, could mistake one composite card number for a shared term's semantic owner, and had no
+interruption-safe path for an important term confirmed during implementation to reach the
+glossary writer before synonyms forked.
+
+Chosen boundary: glossary.md is the one durable project-language canon and owns each
+`term: definition`. A capability's fixed header adds one `Concepts:` line containing either
+a JSON array of exact glossary terms or `none`. It copies no definitions; one term may occur
+in several capability headers, and a project-wide term may occur in none. resume's exact-term
+query returns every matching capability path, or the glossary definition with project-root
+context when no capability maps it. Number, full-name, foundation, and card recognition stay.
+An optional card `Concepts:` line is only a definition-free discovery aid; its number implies
+no semantic ownership.
+
+When capability, card, or work evidence confirms that a term is important, a person confirms
+the exact term, definition, affected-capability set, and evidence locator before one attributed
+`glossary term` journal line is committed. Malformed, uncommitted, and unknown-author lines
+remain ordinary items. `marker.glossary-term` preempts normal work and sends the payload to the
+existing product-owned glossary writer: arch, or adopt for a brownfield. The writer lands the
+glossary definition while retaining the marker, then in the same design batch updates every
+known affected `Concepts:` line and Design head and deletes the marker. The marker blocks other
+work between commits, making the sequence one interruption-safe logical transition; an
+observation cannot silently rewrite canon. Product and arch discoveries may land directly at
+their normal stage boundary.
+
+Rejected alternatives: copying definitions into capability documents or cards creates two
+homes for one fact. One term per capability, or one capability per term, lies about composite
+work. A new glossary skill or free note layer duplicates product ownership and the journal's
+transport role. Automatic candidate promotion turns observation into decision.
+
+Affected coordinates: canonical recognition, journal form, discovery→update and ownership in
+the principles; the capability fixed header in baseline predicates; product, arch, adopt,
+resume, split, and work pairs; project-state and focused invariant tests.
+Revisit when: a real-use exact-term lookup misses a relevant capability, over-tagging misleads
+entry, or the marker fails to guard glossary/header consistency across an interrupted writer.
+
 ### Rejected under this subject
 
 - **[DR-03 · v0.7.0]** **Journal injection by the hook** — duplicates what resume reads.
@@ -949,7 +990,7 @@ DD-53 made several sessions in one working folder safe, but an outside actor ass
 
 ### DD-28 · Durable knowledge is connected through bounded consumers of existing records, not through a new document layer (v0.9.21)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.9.21 | State: active, partly corrected by DD-76 (v0.18.1)
+Subject: The knowledge layer and capability documents | Introduced: v0.9.21 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0)
 
 glossary and journal were produced but arch, design, work, verify, and delegated implementers did not read them; conclusions completed after two dependent cards opened together also could not reach the next implementer. The repaired read set is completely enumerated by name: glossary and journal when present, plus only the cards directly named in `Depends`. For brownfields, adopt indexes only exact per-capability paths to existing handoff and specification files under arch.md `Existing records`. The index is neither a read instruction nor canon; work opens only a path that split rechecked against current code and placed in the card's `Read first`. "Related records" and whole-capability-folder reading remain forbidden. Layer 0 completeness includes glossary; when only it is missing, resume sends a brownfield to adopt and a greenfield to product without rewriting another confirmed document. This does not force a second domain-handoff layer in the style of jgnote; it closes reachability within the existing canon, tree, and short-record hierarchy. The retrospective likewise receives exactly one event-specific input set, so capability and whole-project scopes cannot merge. This index differs from the observation-cache registration field rejected in v0.9.18: `Existing records` substantively avoids all three rejection reasons — a rule consumes it (split rechecks each path and puts it in a card's `Read first`), it indexes brownfield existing records instead of restating the outside-records standing declaration, and its only home is arch.md (see that entry in the rejection lineage)
 
@@ -967,13 +1008,13 @@ Grounds are three measurements: across jgnote's 12 existing handoffs the chronol
 
 ### DD-43 · Capability documents physically separate a design zone born with Layer 0 from a verified zone refreshed at closure, and are always on (v0.11.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1)
+Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0)
 
 The owner's operating intent is that a new MVP, a brownfield, and a mid-project join all obtain domain boundaries and concepts before the first card and reach them by number without card wiring. arch, or adopt in a brownfield, replaces the design zone; verify replaces the verified zone. They own disjoint byte ranges separated by the fixed `## Verified state` boundary. This decomposes rather than overturns v0.10.0's one-writer grounds: the two writing moments are serial, no byte is shared, design declares trust through `Design head`, and verification through `Scope head` and `Covered cards`. One seven-field machine block would overlap the two owners again, so the two design-metadata fields sit before the boundary and the five verification-metadata fields after it. The switch is removed because the adopted shape is not a 1,100–1,700-line relay-note second handoff layer: it is capped near 185 lines per capability, forbids chronology, and costs O(1) reads per card; even a small project gets the same lifecycle from a six-section design zone. Design freshness uses only the actual sources product.md, arch.md, and glossary.md. Including code-style.md or design.md would make every capability hypothetical with no failure path that changes its design zone — an over-harness. The exact v0.10 predecessor is separated from damage reset: design is re-derived from current Layer 0 and verified bodies plus compatible metadata migrate mechanically, but its old `Scope head` did not include consumed paths and therefore does not carry forward; verified statements remain hypotheses until the next capability closure
 
 ### DD-44 · Domain reachability is owned by the depth-1 number rule and resume's domain-entry branch, not by card fields (v0.11.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1)
+Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0)
 
 If split copies a baseline and ADRs into every card, the path lives in two places and requires a research-card exception. work uses the claimed card's depth-1 number to read one document and only the exact ADRs named by that document. A baseline path left in a v0.10 card's `Read first` is treated only as legacy wiring and deferred to that number rule. resume normally reads only file names and a shape projection, but when the user asks to explain a capability it opens one document by number or name and answers with both freshness states. It opens the entire expected set only when the user explicitly requests that full set. Foundation is reached by the same `01` number rule. Relationships live on the consuming side as exact paths in `Consumed paths`; provider closure, retirement, and split project only bounded metadata plus the Consumed-contract path/number columns and report consumers with their actual current freshness. That column projection detects an unchanged path reassigned to another capability without opening other prose. With no observed failure, this does not automatically expand into execution, card creation, or cross-capability regression
 
@@ -985,7 +1026,7 @@ An independent literal execution opened four paths. Requiring the prefix test to
 
 ### DD-48 · Knowledge that used to die in HANDOFF now lands on two keyed lines (v0.12.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.12.0 | State: active, partly corrected by DD-86 (v0.19.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.12.0 | State: active, partly corrected by DD-86 (v0.19.0), DD-91 (v0.19.0)
 
 A maintenance card has no dependencies, so the knowledge chain broke there, and HANDOFF's `Just learned` and `Traps` were overwritten at the next boundary — reliably lost. Inside one capability the carrier is the card's `carry:` line: only the residue with nowhere else to land, one to three lines per card, and a reader takes only the lines written since that capability last passed verification, so the set is bounded. About another capability it is journal's `capability note`, which that capability's next closure harvests and deletes in the same sweep, giving it a defined lifetime. Reading whole progress logs was rejected as unachievable — hundreds of lines per card, and before a first closure every card in the capability qualifies. The carry line rides the final task commit so the canonical claim→done move stays byte-identical, and neither reviewer nor verifier receives the set — their ignorance is the asset. HANDOFF keeps only the next single step and open decisions, and that pointer becomes mandatory
 

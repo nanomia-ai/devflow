@@ -5,6 +5,12 @@ description: 기존 프로젝트 도입. 이미 코드가 있는 저장소에서
 
 # adopt — 기존 프로젝트 도입
 
+glossary.md는 항상 읽는 Layer 0 기준선이며, 역산한 능력 구성과 능력 문서 머리의 `Concepts:`를
+정확한 정본 용어로 맞춘다. `marker.glossary-term`이면 도구 payload만 소비해 먼저 glossary
+정의를 구속 커밋하고 마커를 남긴다. 다음 `adopt — capabilities` 배치에서 glossary definition
+and every known affected `Concepts:` line을 함께 맞추고 모든 Design head를 갱신한 뒤 마커를
+지운다. 공유 용어나 프로젝트 루트 `[]`에서 카드 번호를 의미 소유자로 추론하지 않는다.
+
 먼저 규칙 정본(`../principles/SKILL.md`)·기획 증거 규율
 (`../principles/planning-evidence.md`)을 읽는다. 능력 지식 기준선 판정 정본
 (`../principles/baseline-predicates.md`)은 바로 다음 문단의 캡슐 관문에 따라 읽는다. 존재하면
