@@ -646,9 +646,54 @@ Two halves of the same problem: what happens to work already in flight. Placing 
 
 ### DD-54 · One request that spans several capabilities keeps one source and one marker per parent (v0.13.0)
 
-Subject: The task tree and its cards | Introduced: v0.13.0 | State: active
+Subject: The task tree and its cards | Introduced: v0.13.0 | State: active, partly corrected by DD-87 (v0.19.0)
 
 Mapping was written in the singular ("go to the matching capability folder"), with no definition for a request that determines three locations. A literal reader picks one and the rest vanish silently, journal line included, so nothing can recover them - the loss the owner guards against most. A client's fix list handled in one session is ordinary practice. Sharing one exact source locator across the parents' markers gives the bundle an identity with no new batch id, so resume recovers them together; one execution proposal and one approval keep a twenty-item list from needing several; and an ambiguous or retired unit asks before the begin commit instead of planning half and losing the rest
+
+### DD-87 · One request across several owners lands in as many passes as it needs behind one approval boundary, and the markers still standing carry the remaining targets and consumer reads (v0.19.0)
+
+Subject: The task tree and its cards | Introduced: v0.19.0 | State: active
+
+Observed problem: split says both "open one layer at a time" and "the bundle gets one planning
+commit." For a twenty-item request across five capabilities those two cannot both be true, and a
+literal reader was left with three ways out — break the one-layer discipline, plan one owner and
+silently drop the rest, or run out of context before the commit and leave the next session to
+retrace the request through the code. The state projection carried the same hole: a card from the
+pass that deleted the request line reported that request as its `origin`, while a card from a pass
+where the request still stood reported its own layer-opening marker. One request was reported to a
+person as two.
+
+Wanted behavior: one request keeps one source identity and one planning boundary however many
+owners it reaches. The approval is one for the whole bundle; the landing divides into as many
+passes as the work needs.
+
+Chosen boundary: create no bundle identifier and no new state. When a pass fits every parent, land
+them in one planning commit; when it does not, land only the parents that pass finished and delete
+only their markers. The markers still standing are the exact remaining targets — parent, already
+minted child numbers, and the same source — and the request line leaves with the last of them, so
+the `request` zone keeps its own place until then. The cards already written keep the bounded
+`Read first` that pass grounded them on, and the state tool projects `readFirst` and the
+same-origin sibling set on every candidate. And `origin` is now the identity of the input that
+card's creation commit deleted — the durable source locator the marker names, not whichever marker
+line happened to be in that pass's diff.
+
+Why it is needed: with the remaining targets and the consumer reads absent from disk, the next pass
+scans the tree and recomputes the mapping. That recomputation can quietly land a different answer,
+and the failure DD-54 closed — planning half and losing the rest — returns through the session
+boundary instead. And an origin that differs per owner tells a person that one request is two.
+
+Rejected alternatives: an approval per parent — DD-54's recorded reason rejected exactly that
+(several approvals for a twenty-item list). A new bundle identifier — the shared source locator is
+already the identity, so there is nothing for new state to add. Keeping the one-planning-commit
+rule as it stood — that keeps the side that collides head-on with "open one layer at a time," and
+that collision is the observed failure.
+
+Impact coordinates: layer opening and maintenance routing in `skills/split/SKILL{,_ko}.md`, the
+`transition.layer-opening` row of `skills/resume/SKILL{,_ko}.md`, `cardOrigin` and `parseReadFirst`
+in `skills/principles/scripts/project-state.mjs`, the D8 fixtures of
+`scripts/project-state.test.js`. DD-54.
+Revisit when: a bundle split across passes is observed leaving one parent unfinished forever, or
+the `readFirst` projection is observed diverging from what a card actually has to read.
 
 ### DD-55 · Items that do not change the precondition-to-outcome transition ride one card (v0.13.0)
 

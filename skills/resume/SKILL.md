@@ -219,7 +219,7 @@ The row for the name `next:` produced is the next stage.
 | `transition.prepared-route` | verify — compare and apply its payload, then finish the completed state and specified route commit without committing the prepared object again |
 | `transition.interrupted` | verify — without repeating execution, first finish the missing output and that state or routing commit |
 | `transition.source-id-migration` | verify — first finish the canonical source-id migration commit |
-| `transition.layer-opening` | split — take that marker together with every marker carrying the same `source-json` as one bundle, and finish the interrupted planning commit from its durable source and minted numbers |
+| `transition.layer-opening` | split — take that marker together with every marker carrying the same `source-json` as one bundle, and finish the interrupted planning commit from its durable source and minted numbers. The markers still standing are the remaining parents and their minted numbers, and the bundle's cards already written carry `origin`, `siblings`, and `readFirst` on their own `claim:` and `ready:` lines — pass those through and rediscover nothing |
 | `transition.product-running` | verify — rerun the recorded flight |
 | `transition.product-result` | verify — finish the stored result's failure routing, events, and report |
 | `transition.remote-evidence` | work — take that remote-evidence transition first; report the exact card path work's precondition 2 selects and the next action of that branch |

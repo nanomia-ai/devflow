@@ -443,6 +443,7 @@ function parseCard(root, relative, closedFolder = false) {
       depends: { canonical: true, numbers: [], anomalies: [] },
       approval: null,
       review: null,
+      readFirst: [],
       planReason: null,
       legacy: false,
       closedFolder: true,
@@ -463,9 +464,26 @@ function parseCard(root, relative, closedFolder = false) {
     depends,
     approval: cardFields.get("Approval") ?? null,
     review: cardFields.get("Review") ?? null,
+    readFirst: parseReadFirst(slice.plan),
     legacy,
     closedFolder: false,
   };
+}
+
+// `Read first` is the one card field the canon writes one path per line, so the projection has
+// to take its continuation lines too: a consumer given only the first path opens the wrong set,
+// and the whole point of the field is that it replaces searching.
+function parseReadFirst(plan) {
+  const lines = (plan ?? "").split("\n");
+  const start = lines.findIndex((line) => /^Read first:/.test(line));
+  if (start < 0) return [];
+  const values = [lines[start].replace(/^Read first:\s*/, "")];
+  for (let cursor = start + 1; cursor < lines.length; cursor += 1) {
+    const line = lines[cursor];
+    if (line.trim() === "" || /^#/.test(line) || /^[A-Za-z][A-Za-z ]*:/.test(line)) break;
+    values.push(line);
+  }
+  return values.map((value) => value.trim()).filter((value) => value !== "" && value !== "none");
 }
 
 function parseOwners(root) {
@@ -1963,12 +1981,12 @@ function cardOrigin(snapshot, card, shallow) {
   const identities = new Set(matches.map(({ raw, parsed }) => parsed.kind === "maintenance-request"
     ? `journal:${raw}` : parsed.source));
   if (identities.size !== 1) return { origin: "unknown", originReason: "multiple-matches" };
-  const request = matches.find(({ parsed }) => parsed.kind === "maintenance-request");
-  // The identity is what groups cards, and it is the one thing a same-source bundle already
-  // agrees on: two markers of one source, or one deleted request, name the same subject even
-  // when the raw line the origin quotes differs. `none` and `unknown` carry no identity, so
-  // cards that merely share an absence are never grouped.
-  return { origin: `journal:${request?.raw ?? matches[0].raw}`, identity: [...identities][0] };
+  // The identity is what groups cards, and it is also what a reader is owed: one request that
+  // reaches several natural owners lands its parents in as many passes as it needs, and a
+  // pass that did not happen to delete the request line must not quote its own marker as a
+  // second origin for the same subject. `none` and `unknown` carry no identity, so cards that
+  // merely share an absence are never grouped.
+  return { origin: [...identities][0], identity: [...identities][0] };
 }
 
 // The request a card came from is also the partition it belongs to: the other current cards
@@ -2188,7 +2206,7 @@ function evaluateZones(snapshot) {
     claimSummary.mine += 1;
     const judgment = cardDetails.get(card.path);
     const evidence = progressEvidence(snapshot, card);
-    const common = { path: card.path, depends: card.depends.numbers.length === 0 ? "done" : judgment.blockers.length === 0 ? "done" : "blocked", approval: judgment.approval.value, blockers: judgment.blockers, carry: carryState(card).present ? "present" : "absent", signal: evidence.signal, reviews: evidence.reviews, review: evidence.review, ...origins.candidate(card) };
+    const common = { path: card.path, depends: card.depends.numbers.length === 0 ? "done" : judgment.blockers.length === 0 ? "done" : "blocked", approval: judgment.approval.value, blockers: judgment.blockers, carry: carryState(card).present ? "present" : "absent", signal: evidence.signal, reviews: evidence.reviews, review: evidence.review, readFirst: card.readFirst, ...origins.candidate(card) };
     if (card.depends.anomalies.length > 0 || card.depends.numbers.some((number) => snapshot.cards.filter((candidate) => candidate.number === number).length !== 1)) addEntry(zones, "claim", "depends-anomaly", { ...common, reasons: card.depends.anomalies });
     else if (card.legacy || card.approval === "pending" || !card.depends.canonical) addEntry(zones, "claim", "needs-reapproval", common);
     else if (judgment.blockers.length > 0) addEntry(zones, "claim", "blocked-by-prerequisite", common);
@@ -2294,7 +2312,7 @@ function evaluateZones(snapshot) {
   if (digest) addEntry(zones, "ready", "digest-behind", digest);
   for (const card of pendingCards) {
     const judgment = cardDetails.get(card.path);
-    const detail = { file: card.path, cards: [card.number], depends: card.depends.numbers, approval: judgment.approval.value, ready: judgment.ready, blockers: judgment.blockers, ...origins.candidate(card) };
+    const detail = { file: card.path, cards: [card.number], depends: card.depends.numbers, approval: judgment.approval.value, ready: judgment.ready, blockers: judgment.blockers, readFirst: card.readFirst, ...origins.candidate(card) };
     if (card.legacy || !card.depends.canonical) addEntry(zones, "ready", "needs-normalization", { ...detail, missingFields: [!card.fields.has("Approval") ? "Approval" : null, !card.fields.has("Review") ? "Review" : null].filter(Boolean), invalidity: card.depends.anomalies });
     else if (card.approval !== "pending" && judgment.approval.value !== "effective") addEntry(zones, "ready", "approval-invalid", { ...detail, invalidity: judgment.approval.reasons });
     else if (card.approval === "pending") addEntry(zones, "ready", "approval-pending", detail);

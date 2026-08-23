@@ -190,7 +190,7 @@ Docs head: none
 `;
 }
 
-function cardText(number, { depends = "none", approval = "2026-01-01T00:00:00Z; parallel: none", review = "required", progress = "2026-01-02T00:00:00Z implemented exact fixture", omit = [] } = {}) {
+function cardText(number, { depends = "none", approval = "2026-01-01T00:00:00Z; parallel: none", review = "required", progress = "2026-01-02T00:00:00Z implemented exact fixture", readFirst = "none", omit = [] } = {}) {
   const rows = [
     `# ${number} fixture card`,
     "Coordinates: Fixture ▸ foundation",
@@ -199,7 +199,7 @@ function cardText(number, { depends = "none", approval = "2026-01-01T00:00:00Z; 
     "Why: fixture needs it",
     "Forbidden: none",
     `Depends: ${depends}`,
-    "Read first: none",
+    `Read first: ${Array.isArray(readFirst) ? readFirst.join("\n") : readFirst}`,
     "Completion signal: node --test",
     `Approval: ${approval}`,
     `Review: ${review}`,
@@ -2350,7 +2350,7 @@ function claimFromMarkerOnlyBundle(t, sourceSetup) {
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
   commit(root, "jmp 02.1 claim");
-  return { root, firstMarker };
+  return { root, firstMarker, source };
 }
 
 const MARKER_ONLY_ORIGIN_SCENES = [
@@ -2369,9 +2369,12 @@ const MARKER_ONLY_ORIGIN_SCENES = [
 
 for (const [name, sourceSetup] of MARKER_ONLY_ORIGIN_SCENES) {
   test(`Phase 5B E1 two marker-only lines sharing one ${name} are one origin bundle`, (t) => {
-    const { root, firstMarker } = claimFromMarkerOnlyBundle(t, sourceSetup);
+    const { root, source } = claimFromMarkerOnlyBundle(t, sourceSetup);
     const result = run(root); ok(result);
-    assertFragment(result.stdout, "report:", `origin=${JSON.stringify(`journal:${firstMarker}`)}`);
+    // The origin a marker produces is the durable source it names, not the marker line that
+    // happened to be in this pass's diff — otherwise the same request has as many origins as
+    // it had planning passes.
+    assertFragment(result.stdout, "report:", `origin=${scalarField(source)}`);
     assert.doesNotMatch(result.stdout, /originReason=/);
   });
 }
@@ -2429,7 +2432,7 @@ test("Phase 5B E1 a single deleted layer marker keeps its exact legacy origin", 
   git(root, "mv", pending, claimed);
   commit(root, "jmp 02.1 claim");
   const result = run(root); ok(result);
-  assertFragment(result.stdout, "report:", `origin=${JSON.stringify(`journal:${marker}`)}`);
+  assertFragment(result.stdout, "report:", "origin=core:devflow/project/product.md#Capabilities");
 });
 
 test("Phase 5B E1 shallow history remains explicitly unknown", (t) => {
@@ -2637,6 +2640,11 @@ test("D1 a clean committed card with two Progress log headings is invalid, not r
 // D7: the request a card came from is also the partition it belongs to. One planning commit
 // consumes one canonical input and creates several cards; the reader of any one of them needs
 // the exact paths of the others that are still current, and nothing wider.
+// The tool prints a bare string only when it holds no whitespace, `=`, or `;`.
+function scalarField(value) {
+  return /^[^\s=;]+$/.test(value) ? value : JSON.stringify(value);
+}
+
 function candidateLine(output, zone, relative) {
   const key = zone === "claim" ? `path=${relative} ` : `file=${relative} `;
   const line = output.split(/\r?\n/).find((item) => item.startsWith(`${zone}: kind=`) && item.includes(key));
@@ -2720,6 +2728,77 @@ test("D7 a current card from another origin is not a sibling", (t) => {
   for (const line of [candidateLine(result.stdout, "claim", scene.claimed), candidateLine(result.stdout, "ready", scene.pending)]) {
     assert.equal(line.includes(scene.foreign), false, line);
   }
+});
+
+// D8: one request, several natural owners. Its markers share one source, its parents may take
+// more than one pass to land, and every card of it still has to name the same request, the
+// exact siblings across owners, and the exact reads it was grounded on.
+function multiOwnerBundle(t, { finishSecondOwner = true } = {}) {
+  const root = makeRepo(t, { capabilities: ["capability", "second"] });
+  const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("one request, two owners")}`;
+  const source = `journal:${request}`;
+  const first = `2026-08-20T00:01:00Z layer opening: parent: devflow/tree/02-capability; children: 02.1; source-json: ${JSON.stringify(source)}`;
+  const second = `2026-08-20T00:01:01Z layer opening: parent: devflow/tree/03-second; children: 03.1; source-json: ${JSON.stringify(source)}`;
+  write(root, "devflow/journal.md", `${request}\n${first}\n${second}\n`);
+  commit(root, "jmp split — begin devflow/tree/02-capability+devflow/tree/03-second");
+
+  const owned = "devflow/tree/02-capability/02.1-filter.md";
+  write(root, owned, cardText("02.1", { readFirst: ["src/filter/date.ts", "src/filter/range.ts"] }));
+  write(root, "devflow/journal.md", `${request}\n${second}\n`);
+  commit(root, "jmp split — first owner planned");
+
+  const sibling = "devflow/tree/03-second/03.1-export.md";
+  if (finishSecondOwner) {
+    write(root, sibling, cardText("03.1", { readFirst: "src/export/contract.ts" }));
+    write(root, "devflow/journal.md", "");
+    commit(root, "jmp split — second owner planned");
+  }
+
+  const claimed = owned.replace(".md", ".wip-jmp.md");
+  git(root, "mv", owned, claimed);
+  commit(root, "jmp 02.1 claim");
+  return { root, request, source, second, claimed, sibling };
+}
+
+test("D8 a same-source multi-owner bundle keeps one request origin across its passes", (t) => {
+  const scene = multiOwnerBundle(t);
+  const result = run(scene.root); ok(result);
+  const mine = candidateLine(result.stdout, "claim", scene.claimed);
+  const other = candidateLine(result.stdout, "ready", scene.sibling);
+  const origin = `origin=${JSON.stringify(scene.source)}`;
+  // One request, two owners, two planning passes — and one origin string, or resume tells the
+  // person that one request is two.
+  assert.ok(mine.includes(origin), mine);
+  assert.ok(other.includes(origin), other);
+  assert.ok(mine.includes(`siblings=[${JSON.stringify(scene.sibling)}]`), mine);
+  assert.ok(other.includes(`siblings=[${JSON.stringify(scene.claimed)}]`), other);
+  assertFragment(result.stdout, "report:", origin);
+  assertFragment(result.stdout, "report:", "selectionReason=canonical-order");
+});
+
+test("D8 every candidate of that bundle projects its own exact Read first", (t) => {
+  const scene = multiOwnerBundle(t);
+  const result = run(scene.root); ok(result);
+  const mine = candidateLine(result.stdout, "claim", scene.claimed);
+  const other = candidateLine(result.stdout, "ready", scene.sibling);
+  assert.ok(mine.includes('readFirst=["src/filter/date.ts","src/filter/range.ts"]'), mine);
+  assert.ok(other.includes('readFirst=["src/export/contract.ts"]'), other);
+});
+
+test("D8 an unfinished pass leaves the remaining owner's exact target and reads on disk", (t) => {
+  const scene = multiOwnerBundle(t, { finishSecondOwner: false });
+  const result = run(scene.root); ok(result);
+  // The remaining owner is named exactly, with its minted numbers and the same source, so the
+  // next pass continues without scanning the tree or recomputing the mapping.
+  assertFragment(result.stdout, "transition: kind=layer-opening", "parent=devflow/tree/03-second");
+  assertFragment(result.stdout, "transition: kind=layer-opening", "children=03.1");
+  assertFragment(result.stdout, "transition: kind=layer-opening", `sourceJson=${JSON.stringify(scene.source)}`);
+  assert.equal(nextOf(result.stdout), "transition.layer-opening", result.stdout);
+  // request.existing keeps its own place in the priority table while that marker stands.
+  assert.equal(hasKind(result.stdout, "request", "existing"), true, result.stdout);
+  const mine = candidateLine(result.stdout, "claim", scene.claimed);
+  assert.ok(mine.includes(`origin=${JSON.stringify(scene.source)}`), mine);
+  assert.ok(mine.includes('readFirst=["src/filter/date.ts","src/filter/range.ts"]'), mine);
 });
 
 test("D7 a closed card from the same origin is not a current sibling", (t) => {

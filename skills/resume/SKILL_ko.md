@@ -187,7 +187,7 @@ timeout이 제품 작업으로 바꾸지 않은 채 사람이 복구하거나 �
 | `transition.prepared-route` | verify — payload를 대조·적용하고 준비 객체를 다시 커밋하지 않은 채 완료 상태와 지정 라우팅 커밋을 끝냄 |
 | `transition.interrupted` | verify — 실행을 반복하지 않고 빠진 출력과 해당 상태 또는 라우팅 커밋을 먼저 마침 |
 | `transition.source-id-migration` | verify — 규칙 정본의 출처 id 이관 커밋을 먼저 마침 |
-| `transition.layer-opening` | split — 그 마커와 같은 `출처-json`을 가진 마커 전부를 한 묶음으로, 그 영속 출처와 발급 번호로 중단된 계획 커밋을 마침 |
+| `transition.layer-opening` | split — 그 마커와 같은 `출처-json`을 가진 마커 전부를 한 묶음으로, 그 영속 출처와 발급 번호로 중단된 계획 커밋을 마침. 남아 있는 마커가 곧 잔여 부모와 그 부모의 발급 번호이고, 그 묶음에서 이미 쓴 카드는 자기 `claim:`·`ready:` 줄에 `origin`·`siblings`·`readFirst`를 싣는다 — 그대로 넘기고 다시 찾아내지 않는다 |
 | `transition.product-running` | verify — 기록된 실행을 다시 수행함 |
 | `transition.product-result` | verify — 저장된 결과의 실패 라우팅·사건·보고를 마침 |
 | `transition.remote-evidence` | work — 그 원격 증거 전이를 먼저 처리함. 보고에는 work의 전제조건 2가 고르는 정확한 카드 경로와 그 분기의 다음 행동을 적음 |

@@ -115,9 +115,17 @@ The begin commit then lands on integration as the binding decision that mints th
 When a valid layer-opening marker exists in the working tree or HEAD, open no new layer.
 Process the earliest timestamp first, breaking a tie by journal line order, and take with it
 every marker carrying the same `source-json` — that bundle gets one execution proposal and
-one planning commit, never one per parent. That planning commit deletes every marker of
-the bundle and, when the journal request line its `source-json` names still remains,
-that line too. Decode `source-json` by
+one approval, never one per parent. When this pass fits every parent, land them in one
+planning commit, and that commit deletes every marker of the bundle and, when the journal
+request line its `source-json` names still remains, that line too. When it does not fit
+them, land only the parents this pass finished and delete only their markers: the markers
+still standing are the exact remaining targets — each with its parent, its already-minted
+`children`, and the same `source-json` — and the request line leaves with the last of them.
+The cards already written keep the bounded `Read first` this pass grounded them on, and the
+state tool projects both as `readFirst` and `siblings`, so the next pass and every reader of
+one card continue from those facts and never rescan the tree or remap the request. The
+approval already given covers the whole bundle; do not ask for it again per parent.
+Decode `source-json` by
 the canonical format and open that source, combining it with the upper documents read at
 this skill's start. For a maintenance or re-split source, also recheck only the current
 code and existing records enumerated by step 2 below. A missing or non-unique source is an
@@ -312,7 +320,9 @@ canonical format or cannot be decoded, report an integrity anomaly. Do not read 
 create a card or folder, or delete the line before canonical item-12 recovery finishes.
 
 Delete the request line and every layer-opening marker of that request in the same planning
-commit that lands the cards, approvals, and required folder rename. A request spanning
+commit that lands the cards, approvals, and required folder rename. When the bundle does not
+fit one pass, the layer-opening rule above applies: each parent's marker leaves with that
+parent's planning commit, and the request line leaves with the last one. A request spanning
 several units still gets one execution proposal and one approval — approving unit by unit
 would need several approvals for one twenty-item fix list.
 If the user cancels while the line is
