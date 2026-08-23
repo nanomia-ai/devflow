@@ -106,9 +106,9 @@ recording commit first, the tweak commits after. Those edits' approval is the tw
 declaration (the conversational request is the approval); report-then-approval applies
 only to planning the recorded items.
 
-## What the tool does not produce — the three things opened directly
+## What the tool does not produce — the four things opened directly
 
-The sheet carries every disk and Git fact. Only three things are opened on top of it.
+The sheet carries every disk and Git fact. Only four things are opened on top of it.
 
 1. **The one claimed card this invocation continues** is read in full and its progress log's
    last entry is compared against the uncommitted changes. That one is settled at once when
@@ -119,6 +119,27 @@ The sheet carries every disk and Git fact. Only three things are opened on top o
    it to a card. For others' claims, the `claim:` line's path and claimant are enough.
 2. **The canonical range the matched row names**, opened only inside that branch.
 3. **Capsules** — only in domain-entry step 3.
+4. **Product purpose and core invariants** — opened only when this invocation's request
+   explicitly asks for the product's purpose or a capability's core invariants. When
+   `next:` is `git.open-operation` or `integrity.blocking`, this item is suppressed and
+   opens no file of its own: take that row's own source-opening branch, and still give the
+   reporting this sheet requires unconditionally, every `blocked: kind=channel` line
+   included. `integrity.shape` is not blocking and does not suppress it. When the `setup:`
+   zone is not empty, follow domain entry step 1's missing-only rule and open no capability
+   body. Otherwise open product.md's confirmed identity paragraph, the complete
+   `## Intent` and `## Invariants` of two capability documents — foundation, and the one
+   numbered for the unit this report's next step names — as one set with the duplicate
+   dropped when those are the same document, and that next card's `Read first` paths —
+   nothing else. When the next step names no unit, the set is foundation alone beside that
+   identity paragraph. Each document in the set goes through domain entry step 1's same body
+   gate on its own; when that gate refuses one, report its exact path and reason and still
+   open the other. Foundation stays in the set even when the next step is elsewhere, because
+   that is where a durable invariant most often lives. Report every invariant those
+   documents carry as it stands: invent none, omit none, and never fold that section into
+   fewer items than it holds. The state report still leads and this is appended to it; a
+   request naming neither purpose nor invariants opens none of it, and this branch never
+   widens past those two into the full expected set, which stays domain entry's explicit
+   request.
 
 ## Report, Then Approval
 

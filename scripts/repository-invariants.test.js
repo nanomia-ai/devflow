@@ -878,6 +878,66 @@ test("capability knowledge has one executable canon and bounded consumers", () =
   assert.doesNotMatch(active, /capability_baseline/);
 });
 
+// A disk-only resume recovered the next card and dropped a durable capability invariant,
+// because asking for purpose and core invariants is still a state request: domain entry never
+// opens and normal routing had no read or report edge for it. The edge lives in the
+// bounded-open list so the read set stays enumerated, and it stays conditional so an ordinary
+// resume does not turn into the full expected set.
+//
+// Resolving that edge to the next step's capability alone was still short. A clean resume that
+// selected capability 02 dropped an invariant owned by 01, and the run that looked correct only
+// looked so because its next card happened to sit in foundation. Foundation and the next-step
+// capability are therefore both in the set, de-duplicated when they are one document — and the
+// set stops there, because widening to every capability is what domain entry already owns.
+//
+// The blocking rows outrank the whole item. `git.open-operation` says to read only the Git gate
+// and `integrity.blocking` forbids every route, so an item that opened three documents anyway
+// was a literal conflict with its own zone table, not a judgment call. A non-empty `setup:`
+// defers to the missing-only rule that already exists rather than reading a body that is not
+// standing yet. `integrity.shape` is explicitly not blocking and must keep letting this through.
+//
+// Saying a blocking row is "the whole response" overshot in the other direction: the report
+// section already requires every `blocked: kind=channel` line unconditionally, "even when
+// another route is first", and a whole-response clause silently cancels it. What a blocking row
+// suppresses is this item's file opens, not the reporting the sheet already owes — so the
+// suppression is scoped to reads, and the mandatory report survives it.
+test("a resume asked for purpose or core invariants reports them whole without becoming domain entry", () => {
+  const resume = fs.readFileSync(path.join(root, "skills", "resume", "SKILL.md"), "utf8");
+
+  assert.match(resume, /^## What the tool does not produce — the four things opened directly$/m);
+  assert.match(resume, /Only four things are opened on top of it\./);
+  assert.match(resume, /only when this invocation's request\s+explicitly asks for the product's purpose or a capability's core invariants/);
+  assert.match(resume, /complete\s+`## Intent` and `## Invariants`/);
+  assert.match(resume, /`Read first` paths —\s+nothing else/);
+  // A blocking row suppresses this item's reads only, and routes through that row's own branch.
+  assert.match(resume, /`next:` is `git\.open-operation` or `integrity\.blocking`, this item is suppressed and\s+opens no file of its own: take that row's own source-opening branch/);
+  // The mandatory reporting the sheet already owes is not cancelled by that suppression, and
+  // the blocked-channel line is the one the report section calls unconditional.
+  assert.match(resume, /still give the\s+reporting this sheet requires unconditionally, every `blocked: kind=channel` line\s+included/);
+  assert.doesNotMatch(resume, /the whole response/);
+  assert.match(resume, /Also report every `blocked: kind=channel` line even when another route is first/);
+  assert.match(resume, /`integrity\.shape` is not blocking and does not suppress it/);
+  assert.match(resume, /When the `setup:`\s+zone is not empty, follow domain entry step 1's missing-only rule and open no capability\s+body/);
+  // Two documents, not one: the owner of a durable invariant and the unit being resumed are
+  // routinely different, which is exactly how the first repair still omitted one.
+  assert.match(resume, /two capability documents — foundation, and the one\s+numbered for the unit this report's next step names/);
+  assert.match(resume, /as one set with the duplicate\s+dropped when those are the same document/);
+  assert.match(resume, /Foundation stays in the set even when the next step is elsewhere/);
+  // With no unit named there is still exactly one valid document, so the branch degrades
+  // instead of guessing a capability or falling silent.
+  assert.match(resume, /When the next step names no unit, the set is foundation alone beside that\s+identity paragraph/);
+  // The read set is enumerated and reuses the body gate that already exists per document, so
+  // this branch adds no second shape rule and cannot read an anomalous document as fact.
+  assert.match(resume, /Each document in the set goes through domain entry step 1's same body\s+gate on its own/);
+  assert.match(resume, /when that gate refuses one, report its exact path and reason and still\s+open the other/);
+  // Omission is the defect this repair exists for; a summarized invariant is an omission.
+  assert.match(resume, /invent none, omit none, and never fold that section into\s+fewer items than it holds/);
+  assert.match(resume, /The state report still leads and this is appended to it/);
+  assert.match(resume, /this branch never\s+widens past those two into the full expected set, which stays domain entry's explicit\s+request/);
+  // The `_ko` original is not quoted here — a deploy artifact carries no Korean line. The
+  // pair-shape test above already fails when the fourth item lands in only one language.
+});
+
 test("domain knowledge capsules are bounded, provenance-marked, and reachable only by exact path", () => {
   const baseline = fs.readFileSync(path.join(root, "skills", "principles", "baseline-predicates.md"), "utf8");
   const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
