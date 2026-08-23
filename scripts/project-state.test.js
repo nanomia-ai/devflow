@@ -899,7 +899,7 @@ test("T2 priority structure has one canonical array position per zone", async ()
 
 test("T2 priority selector uses the canonical array for every i less than j", async () => {
   const module = await registry();
-  const representatives = module.ZONE_DEFINITIONS.map((zone) => `${zone.zone}.${zone.kinds.find((kind) => kind.routing !== false && kind.present !== null).name}`);
+  const representatives = module.ZONE_DEFINITIONS.map((zone) => `${zone.zone}.${zone.kinds.find((kind) => kind.routing !== false && kind.present !== null && kind.present >= zone.present).name}`);
   for (let i = 0; i < representatives.length; i += 1) {
     for (let j = i + 1; j < representatives.length; j += 1) {
       assert.equal(module.selectFirstRoute([representatives[j], representatives[i]]), representatives[i], `${i}<${j}`);

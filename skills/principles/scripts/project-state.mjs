@@ -94,8 +94,11 @@ export const ZONE_DEFINITIONS = Object.freeze([
     "digest-behind", "needs-normalization", "approval-invalid", "approval-pending", "ready", "waiting-capability",
   ].map((name, index) => ({ name, present: 11 + index / 100, absent: null })) },
   { zone: "blocked", present: 12, absent: 22, kinds: [
-    "channel", "audits", "dependencies", "other-claims",
-  ].map((name, index) => ({ name, present: 12 + index / 100, absent: null })) },
+    // An unavailable verify channel waits ahead of structural layer work; an explicit
+    // product verification request at event priority 9 still reopens it.
+    { name: "channel", present: 9.99, absent: null },
+    ...["audits", "dependencies", "other-claims"].map((name, index) => ({ name, present: 12.01 + index / 100, absent: null })),
+  ] },
   { zone: "product", present: 13, absent: 23, kinds: [
     "shape-or-revision", "fail", "unverified",
   ].map((name, index) => ({ name, present: 13 + index / 100, absent: null })) },
@@ -2607,10 +2610,9 @@ function compactFieldString(values, omitted = new Set()) {
 
 function zoneOrder(treePresent, zones) {
   return [...ZONE_DEFINITIONS].sort((left, right) => {
-    if (treePresent) return left.present - right.present;
     const rank = (definition) => {
-      const actual = zones[definition.zone].entries.filter((entry) => entry.kind).map((entry) => ROUTE_RANK.get(`${definition.zone}.${entry.kind}`)?.absent).filter((value) => value !== null && value !== undefined);
-      return actual.length > 0 ? Math.min(...actual) : definition.absent;
+      const actual = zones[definition.zone].entries.filter((entry) => entry.kind).map((entry) => ROUTE_RANK.get(`${definition.zone}.${entry.kind}`)?.[treePresent ? "present" : "absent"]).filter((value) => value !== null && value !== undefined);
+      return actual.length > 0 ? Math.min(...actual) : treePresent ? definition.present : definition.absent;
     };
     return rank(left) - rank(right);
   });
