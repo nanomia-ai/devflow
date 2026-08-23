@@ -396,9 +396,16 @@ function completedRepo(t, verdict = null) {
 }
 
 function mappingScene(t, number) {
-  if (number === 49) return makeRepo(t, { product: false, baseline: false, tree: false });
-  if (number === 50) return makeRepo(t, { arch: false, baseline: false, tree: false });
-  if (number === 52) return makeRepo(t, { brownfield: "no", tree: false });
+  if (number === 14) {
+    const glossaryRoot = makeRepo(t, { capabilities: ["records", "review"] });
+    write(glossaryRoot, "devflow/journal.md", `${glossaryTermLine()}\n`);
+    commit(glossaryRoot, "jmp 02.1 wip: glossary term");
+    return glossaryRoot;
+  }
+  const sceneNumber = number > 14 ? number - 1 : number;
+  if (sceneNumber === 49) return makeRepo(t, { product: false, baseline: false, tree: false });
+  if (sceneNumber === 50) return makeRepo(t, { arch: false, baseline: false, tree: false });
+  if (sceneNumber === 52) return makeRepo(t, { brownfield: "no", tree: false });
   let root = makeRepo(t);
   const journal = (line, subject = "jmp boundary — journal") => {
     write(root, "devflow/journal.md", `${line}\n`);
@@ -408,7 +415,7 @@ function mappingScene(t, number) {
     write(root, "devflow/tree/02-capability/verify.md", text);
     commit(root, subject);
   };
-  switch (number) {
+  switch (sceneNumber) {
     case 1: {
       git(root, "checkout", "-qb", "side");
       write(root, "seed.txt", "side\n");
@@ -820,10 +827,10 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
 for (let index = 0; index < ROUTE_MAP.length; index += 1) {
   const number = index + 1;
   test(`T1 mapping ${String(number).padStart(2, "0")} has the exact zone, kind, values, and derived next`, async (t) => {
-    if (number === 54) {
+    if (number === 55) {
       const module = await registry();
       assert.equal(module.ZONE_DEFINITIONS.flatMap((zone) => zone.kinds).some((kind) => kind.name === "design-entry"), false);
-      const root = mappingScene(t, 52);
+      const root = mappingScene(t, 53);
       const result = run(root);
       ok(result);
       assert.ok(hasKind(result.stdout, "layer", "no-tree"));
@@ -834,8 +841,8 @@ for (let index = 0; index < ROUTE_MAP.length; index += 1) {
     const result = run(root);
     ok(result);
     if (number === 3) t.diagnostic(`measurement interrupted-transition stdout-bytes=${Buffer.byteLength(result.stdout)}`);
-    if (number === 24) t.diagnostic(`measurement ordinary-claim stdout-bytes=${Buffer.byteLength(result.stdout)}`);
-    if (number === 23) {
+    if (number === 25) t.diagnostic(`measurement ordinary-claim stdout-bytes=${Buffer.byteLength(result.stdout)}`);
+    if (number === 24) {
       assert.match(result.stdout, /^existing-request: 2026-08-20T00:00:00Z maintenance routing pending: request-json: "fix A=B; preserve C"$/m);
       assert.equal(nextOf(result.stdout), "request.existing");
     } else {
@@ -887,7 +894,7 @@ test("T2 priority structure has one canonical array position per zone", async ()
   const module = await registry();
   assert.deepEqual(module.ZONE_DEFINITIONS.map((item) => item.zone), ROUTE_ZONES);
   assert.equal(new Set(module.ZONE_DEFINITIONS.map((item) => item.zone)).size, 14);
-  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 57);
+  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 58);
 });
 
 test("T2 priority selector uses the canonical array for every i less than j", async () => {
@@ -1359,7 +1366,7 @@ test("output budget compact shortens only the non-routing progress hint, then re
   assert.equal(refused.status, 3, refused.stderr);
   assert.equal(refused.stderr, "");
   assert.match(refused.stdout, /form=compact emitted=0/);
-  assert.match(refused.stdout, /^blocked: output budget exceeded; narrow --capability <n>$/m);
+  assert.match(refused.stdout, /^blocked: output budget exceeded; narrow --capability <n> or --term <exact>$/m);
   assert.doesNotMatch(refused.stdout, /--card/);
   assert.doesNotMatch(refused.stdout, /^next:/m);
 });
@@ -3275,6 +3282,20 @@ test("G a committed confirmed glossary term preempts composite work with every n
   for (const later of ["claim.mine", "ready.ready", "marker.design-note", "marker.re-split"]) {
     assert.equal(module.selectFirstRoute([later, "marker.glossary-term"]), "marker.glossary-term", later);
   }
+});
+
+test("G an undecodable HEAD journal keeps a working glossary transition blocked by its owner", (t) => {
+  const root = makeRepo(t, { capabilities: ["records", "review"] });
+  const line = glossaryTermLine();
+  fs.writeFileSync(path.join(root, "devflow", "journal.md"), Buffer.concat([
+    Buffer.from(`${line}\n`, "utf8"),
+    Buffer.from([0xff]),
+  ]));
+  commit(root, "jmp fixture — undecodable glossary journal");
+  write(root, "devflow/journal.md", `${line}\n`);
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "marker: kind=glossary-term", "reason=head-journal-undecodable");
+  assert.equal(nextOf(result.stdout), "marker.glossary-term", result.stdout);
 });
 
 test("G malformed, uncommitted, and ghost-attributed glossary term lines remain plain", (t) => {

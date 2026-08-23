@@ -2035,10 +2035,20 @@ function glossaryTermRoutes(snapshot, verify) {
       ...(extra.prefix ? { prefix: extra.prefix } : {}),
     };
   };
-  const headText = gitFile(snapshot.root, "HEAD", "devflow/journal.md");
-  if (headText === null) return { routes: [], prefix: null };
+  const working = snapshot.journal.filter(owned);
+  const shown = gitRun(snapshot.root, ["show", "HEAD:devflow/journal.md"], { allowFailure: true });
+  if (shown.status !== 0) return { routes: [], prefix: null };
+  let headText;
+  try {
+    headText = normalizeFileText(decodeUtf8(shown.stdout, "HEAD:devflow/journal.md"));
+  } catch {
+    return {
+      routes: working.map((line) => project(line, { reason: "head-journal-undecodable" })),
+      prefix: null,
+    };
+  }
   const headLines = headText.split("\n");
-  const routes = snapshot.journal.filter(owned).filter((line) => headLines.includes(line.raw)).map((line) => project(line));
+  const routes = working.filter((line) => headLines.includes(line.raw)).map((line) => project(line));
   let prefix = null;
   const changed = snapshot.status.map((entry) => entry.path);
   for (const [index, raw] of headLines.entries()) {
