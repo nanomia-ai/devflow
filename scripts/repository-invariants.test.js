@@ -1629,6 +1629,31 @@ test("an observation about another capability has a keyed line and a harvester",
   assert.match(verify, /multiset of its\n   numbered short-form lines collected from the journal blob at the marker's `head`/);
 });
 
+test("a person-confirmed statement owned by another capability has a durable named route", () => {
+  const principles = fs.readFileSync(path.join(root, "skills", "principles", "SKILL.md"), "utf8");
+  const verify = fs.readFileSync(path.join(root, "skills", "verify", "SKILL.md"), "utf8");
+  // Neither existing keyed line carries it: the design form's capability is the one being
+  // worked on, and the short form is a code-confirmed observation the other capability's next
+  // closure harvests into its verified zone and then deletes. So the foreign owner gets the
+  // route the tool already surfaces as `open-item:` — attributed, named, and never harvested.
+  assert.match(principles, /\| The user confirms a statement belonging to the Intent or Invariants of a capability other than the one being worked on \| one attributed open-item line in journal\.md carrying that capability's number, the confirmed statement, and this card's path\./,
+    "the foreign-owner row names the intended owner and preserves where the statement came from");
+  assert.match(principles, /Not a `capability note`[^|]*harvests into its verified zone and deletes it in the same sweep/,
+    "the row says in place why neither keyed form may carry it");
+  assert.match(principles, /stays until arch \(Brownfield `no`\) or adopt \(`yes`\), which owns that capability's design zone, lands the statement there and deletes the line in the same commit \|/,
+    "it stays actionable until the design owner lands it");
+  // The design-form anchor does not move.
+  assert.match(principles, /\| The user confirms a statement belonging to the Intent or Invariants of the capability being worked on, with Layer 0 unchanged \| one canonical `capability note` design line/,
+    "the design form stays anchored to the capability being worked on");
+  // A canon-conflict report made while a card is claimed outlives the progress log.
+  assert.match(principles.replace(/\s+/g, " "), /Report both source texts, their coordinates, the side you take, and why, then proceed with that choice\./);
+  assert.match(principles.replace(/\s+/g, " "), /the progress log is no consumer's input and does not survive the boundary\. Land the same report as one attributed open-item line in journal\.md as well\./,
+    "the conflict report takes the same durable downstream route instead of dying in the progress log");
+  // Both sweep classifiers keep it — the product layer and the capability closure.
+  assert.equal(count(verify, /[Rr]etain an attributed open-item line a person must decide/g), 2,
+    "verified-zone harvest and deletion do not consume the route");
+});
+
 test("the capability design ascent has one producer, one route, and one design writer", () => {
   const read = (...parts) => fs.readFileSync(path.join(root, "skills", ...parts), "utf8");
   const principles = read("principles", "SKILL.md");

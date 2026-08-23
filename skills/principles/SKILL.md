@@ -331,6 +331,9 @@ When two canon rules both apply in one place and point to different actions, tha
 defect in this canon, not a contradiction between documents. Report both source texts,
 their coordinates, the side you take, and why, then proceed with that choice. A side taken
 without that report leaves the next session free to take the opposite with no one noticing.
+When that report is made while a card is claimed, it does not live in the progress log alone —
+the progress log is no consumer's input and does not survive the boundary. Land the same
+report as one attributed open-item line in journal.md as well.
 
 A document states only the present. When the same concept is updated, overwrite the place
 that concept lives — the concept, not the file. Then whoever reads next takes what they
@@ -380,6 +383,7 @@ What you discovered → where to update:
 | The task is merely bigger than expected | no document change — promote the card to a folder (split's promotion procedure) |
 | An observation confirmed in code about a capability other than the one being worked on | one canonical `capability note` line in journal.md carrying that capability's number. Do not edit the other capability's document directly — its next closure harvests the line |
 | The user confirms a statement belonging to the Intent or Invariants of the capability being worked on, with Layer 0 unchanged | one canonical `capability note` design line in journal.md carrying that capability's number, the confirmed statement, this card's path, and the exact code paths. It is durable only once one `NN.N wip:` checkpoint lands that line with the current card and the current code. Do not edit the capability document or a capsule directly — the tool routes that line and arch (Brownfield `no`) or adopt (`yes`) rederives the design zone |
+| The user confirms a statement belonging to the Intent or Invariants of a capability other than the one being worked on | one attributed open-item line in journal.md carrying that capability's number, the confirmed statement, and this card's path. Not a `capability note`: the design form's capability is the one being worked on, and the short form is a code-confirmed observation the other capability's next closure harvests into its verified zone and deletes it in the same sweep. A statement a person confirmed is neither. The line stays until arch (Brownfield `no`) or adopt (`yes`), which owns that capability's design zone, lands the statement there and deletes the line in the same commit |
 | Something confirmed in code about a shared contract or the foundation | an ADR when it produced a decision hard to reverse (arch's three conditions); arch.md's `Risks` when it is something that breaks first; otherwise one attributed open-item line in journal.md — where it lands (or whether it is discarded) is a person's decision, and the open-item row below (resolve through another row, then delete) is that line's consumer. Never write it into the foundation's verified zone — what was not verified is not a verified state |
 | A cross-task decision, or an open item a person must decide | one attributed line in journal.md. When an open item resolves, that line becomes the decision or lands through another row of this table, and is then deleted |
 

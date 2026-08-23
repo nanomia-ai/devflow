@@ -898,9 +898,56 @@ An independent literal execution opened four paths. Requiring the prefix test to
 
 ### DD-48 · Knowledge that used to die in HANDOFF now lands on two keyed lines (v0.12.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.12.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.12.0 | State: active, partly corrected by DD-86 (v0.19.0)
 
 A maintenance card has no dependencies, so the knowledge chain broke there, and HANDOFF's `Just learned` and `Traps` were overwritten at the next boundary — reliably lost. Inside one capability the carrier is the card's `carry:` line: only the residue with nowhere else to land, one to three lines per card, and a reader takes only the lines written since that capability last passed verification, so the set is bounded. About another capability it is journal's `capability note`, which that capability's next closure harvests and deletes in the same sweep, giving it a defined lifetime. Reading whole progress logs was rejected as unachievable — hundreds of lines per card, and before a first closure every card in the capability qualifies. The carry line rides the final task commit so the canonical claim→done move stays byte-identical, and neither reviewer nor verifier receives the set — their ignorance is the asset. HANDOFF keeps only the next single step and open decisions, and that pointer becomes mandatory
+
+### DD-86 · A person-confirmed design statement whose semantic owner is another capability lives on one attributed open-item line that names that owner (v0.19.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active
+
+Observed problem: no row of the discovery→update table received the scene where, during card
+work, the user confirms an Intent or an Invariant whose semantic owner is a capability other
+than the one being worked on. The `capability` of the `capability note` design form is by
+definition the capability being worked on, and the short form is a code-confirmed observation
+that capability's next closure harvests into its verified zone and deletes in the same sweep.
+Putting a person-confirmed design statement on the short form turns its provenance into an
+observation and it disappears with the harvest; putting it on the design form fixes the owner
+wrongly to the current capability. The only remaining choice was silent loss. The canon-conflict
+report DD-82 requires also stayed in the progress log alone during card work, and the progress
+log is no consumer's input and does not survive the boundary.
+
+Wanted behavior: a statement a person confirmed goes to the capability, domain, or root owner it
+actually belongs to. A card number does not decide who owns a statement.
+
+Chosen boundary: create no new reserved headword and no new document layer. The attributed
+open-item line that already exists is the route — the state tool already emits it as
+`open-item:`, and verify's two classifiers already exempt it from harvest and deletion with
+"retain an attributed open-item line a person must decide." The line carries the intended
+owner's capability number, the confirmed statement, and the card path where the confirmation
+happened, and it stays until arch (Brownfield `no`) or adopt (`yes`), which owns that
+capability's design zone, lands the statement and deletes the line in the same commit. DD-82's
+conflict report writes the same line. The design form's capability anchor is left untouched.
+
+Why it is needed: this loss is silent. A statement a person confirmed once is never recomputed,
+so having no row to land on is itself permanent loss, and the next session does not even know
+what went missing. The consumer this line needs already existed; what was missing was the one
+row leading to it.
+
+Rejected alternatives: allowing the design form's `capability` to name another number — that
+form's revision basis is "the `NN.N wip:` checkpoint that first holds the line is that moment's
+card and code snapshot," and another capability's code paths are not in that snapshot, so the
+basis itself becomes false. A new reserved headword — it grows the parser, gate A, the canonical
+format block, and the consumer set at once, while the consumer this line needs (a person's
+decision) already exists. Writing it on the short form and letting closure move it into the
+design zone — closure writes only the verified zone, so what was not verified becomes a verified
+state. Leaving it in the progress log — that is the very loss this decision repairs.
+
+Impact coordinates: the discovery→update table and the canon-conflict report paragraph of
+`skills/principles/SKILL{,_ko}.md`, the two classifiers of `skills/verify/SKILL.md` (unchanged,
+the ground of this boundary), `scripts/repository-invariants.test.js`.
+Revisit when: these lines are observed piling up indefinitely without a person's decision, or a
+scene appears where arch or adopt receives the line and still cannot land it in the design zone.
 
 ### DD-56 · Reading is bounded to open work: a depth-1 folder carrying `.done` is read by name (v0.13.0)
 
