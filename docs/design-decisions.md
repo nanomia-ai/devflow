@@ -455,47 +455,6 @@ Revisit when: a clean Claude or Codex entry actually fails to consume a complete
 raised the 24 KiB warning. Or when an entry path that cannot call the projection is actually
 observed — what is restored then is not the table but **a callable path**.
 
-### DD-91 · glossary is the project-language canon, capability-header concepts are definition-free many-to-many discovery consumers, and confirmed terms promote through the existing journal to the design writer (v0.19.0)
-
-Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active
-
-Observed problem: real-use projects had glossary definitions but no header index from those
-terms to capability documents. A new session had to open every body to locate an ordinary
-term, could mistake one composite card number for a shared term's semantic owner, and had no
-interruption-safe path for an important term confirmed during implementation to reach the
-glossary writer before synonyms forked.
-
-Chosen boundary: glossary.md is the one durable project-language canon and owns each
-`term: definition`. A capability's fixed header adds one `Concepts:` line containing either
-a JSON array of exact glossary terms or `none`. It copies no definitions; one term may occur
-in several capability headers, and a project-wide term may occur in none. resume's exact-term
-query returns every matching capability path, or the glossary definition with project-root
-context when no capability maps it. Number, full-name, foundation, and card recognition stay.
-An optional card `Concepts:` line is only a definition-free discovery aid; its number implies
-no semantic ownership.
-
-When capability, card, or work evidence confirms that a term is important, a person confirms
-the exact term, definition, affected-capability set, and evidence locator before one attributed
-`glossary term` journal line is committed. Malformed, uncommitted, and unknown-author lines
-remain ordinary items. `marker.glossary-term` preempts normal work and sends the payload to the
-existing product-owned glossary writer: arch, or adopt for a brownfield. The writer lands the
-glossary definition while retaining the marker, then in the same design batch updates every
-known affected `Concepts:` line and Design head and deletes the marker. The marker blocks other
-work between commits, making the sequence one interruption-safe logical transition; an
-observation cannot silently rewrite canon. Product and arch discoveries may land directly at
-their normal stage boundary.
-
-Rejected alternatives: copying definitions into capability documents or cards creates two
-homes for one fact. One term per capability, or one capability per term, lies about composite
-work. A new glossary skill or free note layer duplicates product ownership and the journal's
-transport role. Automatic candidate promotion turns observation into decision.
-
-Affected coordinates: canonical recognition, journal form, discovery→update and ownership in
-the principles; the capability fixed header in baseline predicates; product, arch, adopt,
-resume, split, and work pairs; project-state and focused invariant tests.
-Revisit when: a real-use exact-term lookup misses a relevant capability, over-tagging misleads
-entry, or the marker fails to guard glossary/header consistency across an interrupted writer.
-
 ### Rejected under this subject
 
 - **[DR-03 · v0.7.0]** **Journal injection by the hook** — duplicates what resume reads.
@@ -1501,6 +1460,47 @@ of `skills/verify/SKILL{,_ko}.md`, the capsule-opening condition in
 Revisit when: a scene is actually observed where a capsule-less project needs a rule from the
 capsule contract. Or when a first writer is observed being blocked out of the capsule range by
 this condition. Or when measurement finds a second range that cuts the same way.
+
+### DD-91 · glossary is the project-language canon, capability-header concepts are definition-free many-to-many discovery consumers, and confirmed terms promote through the existing journal to the design writer (v0.19.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active
+
+Observed problem: real-use projects had glossary definitions but no header index from those
+terms to capability documents. A new session had to open every body to locate an ordinary
+term, could mistake one composite card number for a shared term's semantic owner, and had no
+interruption-safe path for an important term confirmed during implementation to reach the
+glossary writer before synonyms forked.
+
+Chosen boundary: glossary.md is the one durable project-language canon and owns each
+`term: definition`. A capability's fixed header adds one `Concepts:` line containing either
+a JSON array of exact glossary terms or `none`. It copies no definitions; one term may occur
+in several capability headers, and a project-wide term may occur in none. resume's exact-term
+query returns every matching capability path, or the glossary definition with project-root
+context when no capability maps it. Number, full-name, foundation, and card recognition stay.
+An optional card `Concepts:` line is only a definition-free discovery aid; its number implies
+no semantic ownership.
+
+When capability, card, or work evidence confirms that a term is important, a person confirms
+the exact term, definition, affected-capability set, and evidence locator before one attributed
+`glossary term` journal line is committed. Malformed, uncommitted, and unknown-author lines
+remain ordinary items. `marker.glossary-term` preempts normal work and sends the payload to the
+existing product-owned glossary writer: arch, or adopt for a brownfield. The writer lands the
+glossary definition while retaining the marker, then in the same design batch updates every
+known affected `Concepts:` line and Design head and deletes the marker. The marker blocks other
+work between commits, making the sequence one interruption-safe logical transition; an
+observation cannot silently rewrite canon. Product and arch discoveries may land directly at
+their normal stage boundary.
+
+Rejected alternatives: copying definitions into capability documents or cards creates two
+homes for one fact. One term per capability, or one capability per term, lies about composite
+work. A new glossary skill or free note layer duplicates product ownership and the journal's
+transport role. Automatic candidate promotion turns observation into decision.
+
+Affected coordinates: canonical recognition, journal form, discovery→update and ownership in
+the principles; the capability fixed header in baseline predicates; product, arch, adopt,
+resume, split, and work pairs; project-state and focused invariant tests.
+Revisit when: a real-use exact-term lookup misses a relevant capability, over-tagging misleads
+entry, or the marker fails to guard glossary/header consistency across an interrupted writer.
 
 ### Rejected under this subject
 
