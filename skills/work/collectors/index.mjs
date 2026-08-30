@@ -2,6 +2,7 @@ import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { unknown } from "../scripts/skill-rails/dsl.mjs";
 
 const packageRoot = realpathSync(fileURLToPath(new URL("..", import.meta.url)));
 const migrationRoot = realpathSync(resolve(packageRoot, ".."));
@@ -35,18 +36,39 @@ function normalizeRelative(value) {
   return value.replaceAll("\\", "/");
 }
 
+function isDone(path) {
+  return typeof path === "string" && /\.done\.md$/.test(path);
+}
+
+function target(context) {
+  return typeof context?.targetPath === "string" && context.targetPath.length > 0
+    ? context.targetPath
+    : unknown();
+}
+
 function cardRecord(context) {
   const projectRoot = suppliedRoot(context);
-  const supplied = context?.cardPath;
+  const supplied = target(context);
   if (!projectRoot || typeof supplied !== "string" || supplied.length === 0) return null;
-  const candidate = isAbsolute(supplied) ? resolve(supplied) : resolve(projectRoot, ...normalizeRelative(supplied).split("/"));
+  if (isAbsolute(supplied) || supplied.includes("\\")) return null;
+  const parts = supplied.split("/");
+  if (parts.some(part => part === "" || part === "." || part === "..")) return null;
+  const candidate = resolve(projectRoot, ...parts);
   const lexical = relative(projectRoot, candidate);
   if (lexical === "" || lexical === ".." || lexical.startsWith(`..${sep}`) || isAbsolute(lexical) || !existsSync(candidate)) return null;
   let physical;
-  try { physical = realpathSync(candidate); } catch { return null; }
+  try {
+    physical = realpathSync(candidate);
+  } catch {
+    return null;
+  }
   const contained = relative(projectRoot, physical);
   if (contained === ".." || contained.startsWith(`..${sep}`) || isAbsolute(contained)) return null;
-  return { projectRoot, absolute: physical, path: normalizeRelative(contained), text: readFileSync(physical, "utf8").replace(/\r\n/g, "\n") };
+  try {
+    return { projectRoot, absolute: physical, path: normalizeRelative(contained), text: readFileSync(physical, "utf8").replace(/\r\n/g, "\n") };
+  } catch {
+    return null;
+  }
 }
 
 function field(text, name) {
@@ -63,9 +85,10 @@ function exactProgress(text, head, pattern) {
 
 function cardEntry(state, card) {
   if (!state || !card) return null;
-  return state.zones.claim?.entries?.find(entry => entry.path === card.path)
-    ?? state.zones.ready?.entries?.find(entry => entry.path === card.path)
-    ?? state.zones.complete?.entries?.find(entry => entry.path === card.path)
+  const selected = entry => normalizeRelative(entry?.path ?? entry?.file ?? "") === card.path;
+  return state.zones.claim?.entries?.find(selected)
+    ?? state.zones.ready?.entries?.find(selected)
+    ?? state.zones.complete?.entries?.find(selected)
     ?? null;
 }
 
@@ -102,7 +125,7 @@ async function route(context) { return (await snapshot(context))?.route?.id ?? "
 async function phase(context) {
   const card = cardRecord(context); const state = await snapshot(context);
   if (!card || !state) return "invalid";
-  if (/\.done\.[^/]+\.md$/.test(card.path)) return "done";
+  if (isDone(card.path)) return "done";
   const entry = cardEntry(state, card);
   if (entry?.kind === "mine") return "claimed";
   if (entry?.kind === "ready") return "ready";
@@ -118,14 +141,16 @@ function contract(context) {
   return ["required", "waived", "not-applicable"].includes(field(card.text, "Review")) ? "valid" : "invalid";
 }
 
-function basis(context) {
+async function basis(context) {
   const card = cardRecord(context);
   if (!card) return "invalid";
-  const value = field(card.text, "Read first");
-  if (value === undefined) return "invalid";
-  if (value === "none") return "complete";
-  const paths = value.split(/\s*,\s*/).filter(Boolean);
-  if (paths.length === 0) return "invalid";
+  if (isDone(card.path)) return "complete";
+  const state = await snapshot(context);
+  if (!state) return "invalid";
+  const entry = cardEntry(state, card);
+  if (!entry || !Array.isArray(entry.readFirst)) return "invalid";
+  const paths = entry.readFirst;
+  if (paths.length === 0) return "complete";
   for (const item of paths) {
     if (item.startsWith("/") || item.includes("\\") || item.split("/").some(part => part === "" || part === "." || part === "..")) return "invalid";
     if (/^devflow\/project\/capabilities\/[^/]+\.md$/.test(item)) return "invalid";
@@ -206,14 +231,14 @@ async function knowledgeMarker(context) {
 async function taskCommit(context) {
   const card = cardRecord(context); const state = await snapshot(context);
   if (!card || !state) return "invalid";
-  if (/\.done\.[^/]+\.md$/.test(card.path) || finishEntry(state, card) || remoteEntry(state, card)?.state === "evidence-finalizing") return "present";
+  if (isDone(card.path) || finishEntry(state, card) || remoteEntry(state, card)?.state === "evidence-finalizing") return "present";
   return "absent";
 }
 
 async function integration(context) {
   const card = cardRecord(context); const state = await snapshot(context);
   if (!card || !state) return "invalid";
-  if (!finishEntry(state, card) && !/\.done\.[^/]+\.md$/.test(card.path)) return "pending";
+  if (!finishEntry(state, card) && !isDone(card.path)) return "pending";
   const taskHash = git(card.projectRoot, ["log", "-1", "--format=%H", "--", card.path]);
   const integrationHash = state.metadata.integration?.hash;
   if (!taskHash || !integrationHash) return "blocked";
@@ -232,7 +257,7 @@ async function handoff(context) {
 async function boundary(context) {
   const card = cardRecord(context); const state = await snapshot(context);
   if (!card || !state) return "invalid";
-  if (/\.done\.[^/]+\.md$/.test(card.path)) return "complete";
+  if (isDone(card.path)) return "complete";
   const entry = finishEntry(state, card);
   if (!entry) return "pending";
   if (!Array.isArray(entry.missing)) return "invalid";
@@ -240,6 +265,7 @@ async function boundary(context) {
 }
 
 export const collectors = Object.freeze({
+  "work/card.target": target,
   "work/state.kernel": kernel,
   "work/state.route": async context => {
     const value = await route(context);

@@ -34,7 +34,7 @@ export const TEMPLATES = {
   product: { file: "templates/product.md", fields: { identity: "block", capabilities: "list", boundary: "block", screens: "list", interface: "block", success: "list", questions: "list" }, sections: [] },
   architecture: { file: "templates/architecture.md", fields: { components: "list", stack: "list", codeStructure: "block", data: "block", existingRecords: "block", brownfield: "line", verification: "block" }, sections: [] },
   codeStyle: { file: "templates/code-style.md", fields: { values: "list", choices: "list", boundaries: "list" }, sections: [] },
-  capabilityDesign: { file: "templates/capability-design.md", fields: { number: "line", name: "line", purpose: "line", boundary: "line", concepts: "line", intent: "block", invariants: "list", nonGoals: "list", adrs: "list", designHead: "line" }, sections: [] },
+  capabilityDesign: { file: "templates/capability-design.md", fields: { number: "line", name: "line", purpose: "line", boundary: "line", concepts: "line", intent: "block", conceptRows: "generated", invariants: "list", nonGoals: "list", adrs: "list", designHead: "line" }, sections: [] },
   knowledgeNode: { file: "templates/knowledge-node.md", fields: { title: "line", openWhen: "line", about: "line", body: "block", sourceBasis: "generated" }, sections: [] },
   result: { file: "templates/result.md", fields: { summary: "block", next: "line" }, sections: [] }
 };

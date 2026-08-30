@@ -30,7 +30,6 @@ Trust: design reflects confirmed Layer 0; verified state reflects the last passi
 
 Capability number: {{number}}
 Design head: {{designHead}}
-Design written at: {{designWrittenAt}}
 
 ## Verified state
 

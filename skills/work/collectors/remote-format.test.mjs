@@ -20,7 +20,7 @@ async function observed(line) {
     await mkdir(tree, { recursive: true });
     const card = join(tree, "00.1-format.wip-jmp.md");
     await writeFile(card, `# card\n\n## Progress\n${line}\n`, "utf8");
-    return await collectors["work/remote.state"]({ projectRoot: root, cardPath: "devflow/tree/00.1-format.wip-jmp.md" });
+    return await collectors["work/remote.state"]({ projectRoot: root, targetPath: "devflow/tree/00.1-format.wip-jmp.md" });
   } finally {
     await rm(root, { recursive: true, force: true });
   }

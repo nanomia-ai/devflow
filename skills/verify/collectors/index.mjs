@@ -1,6 +1,7 @@
 import { realpathSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { unknown } from "../scripts/skill-rails/dsl.mjs";
 
 // Verification consumes only the canonical state projection. It never reparses
 // verification records, journals, cards, dependencies, or rendered output.
@@ -107,7 +108,7 @@ export const collectors = Object.freeze({
   "verify/principles.transition": async (context) => transition(await stateFor(context)),
   "verify/principles.channel": async (context) => {
     const state = await stateFor(context);
-    return !state ? "UNKNOWN" : entries(state, "blocked", "channel").length ? "unavailable" : "available";
+    return !state ? unknown() : entries(state, "blocked", "channel").length ? "unavailable" : "available";
   },
   "verify/principles.residual-landing": async (context) => residual(await stateFor(context)),
   "verify/principles.pending-event": async (context) => pendingEvent(await stateFor(context)),

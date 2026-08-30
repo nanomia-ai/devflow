@@ -6,6 +6,12 @@ Carry one approved card through implementation, current execution evidence, clea
 integration, durable feedback, and its observed boundary without replacing principles,
 split, verify, or a semantic owner.
 
+## guard: card-target-required
+
+Supply the already selected project-relative card through the public `--target` stage option.
+The target is an ordinary Decision fact; its absence is unknown evidence, not an invalid card,
+permission to choose among claims, or a route back to split.
+
 ## guard: state-kernel-unavailable
 
 Stop when the sibling principles package does not return the structured

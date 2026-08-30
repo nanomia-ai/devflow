@@ -2679,7 +2679,7 @@ function evaluateZones(snapshot) {
     const matches = snapshot.baselineFiles.filter((relative) => Number(/^(\d+)-/.exec(path.posix.basename(relative))?.[1]) === item.number);
     const relative = matches.length === 1 ? matches[0] : item.path;
     const text = gitFile(snapshot.root, snapshot.integration.ref, relative);
-    const shape = capabilityShape(text, relative, item.number);
+    const shape = capabilityShape(text, relative, item.number, snapshot.glossary.definitions);
     if (legacyV010(text, item.number)) addEntry(zones, "baseline", "legacy-v010", { paths: [relative], stage: snapshot.archFields.get("Brownfield") === "yes" ? "adopt" : "arch" });
     else if (text === null || (shape.boundaryCount === 1 && shape.anomalies.some((anomaly) => anomaly.zone === "design"))
       || (shape.boundaryCount === 1 && !snapshot.baseline.records.find((record) => record.capability === item.number)?.designFresh)) {

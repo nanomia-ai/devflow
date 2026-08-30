@@ -31,6 +31,19 @@ limitations, and still-unverified release gates are in `docs/rounds/v0.20.0/repo
 That report now carries the final Phase-3 evidence: 442 passing wildcard tests, the DD-92/DD-93
 Korean Codex fallback-header correction, independent bounded review, and the remaining
 unverified release gates; it does not claim production readiness.
+The Phase-4 root-repair addendum preserves that evidence and records the causal `targetPath`
+boundary, fixture `UNKNOWN` versus live `unknown()`, the `guard-pending`/L14 repair, exactly
+three Work/Resume/Verify consumers, and all-nine regeneration at runtime 0.3.0 and validator
+0.4.0. Focused evidence is 22/22 collectors/seams, 17/17 K state-consumers, 258/258 eval
+fixtures over 1,800 repeats, 20/20 mutation checks, 19/19 repository invariants, and zero
+runtime byte mismatches. At HEAD `dedf24a65c2767ff86079cb91e2719bc20a9f973`, the final root
+suite ran once with exit 0: tests 444, suites 0, pass 444, fail/cancelled/skipped/todo 0,
+duration_ms 1332167.6359; the earlier 604-second standalone wrapper timeout is unproven,
+superseded by that full suite, and is not a test failure. Opus leads and Sol's dispositions,
+including safely blocking unsupported comma-single-line `Read first`, accepted Fable
+terminology debt for guard-pending/event naming, exact upstream parity, and DD-93's
+upstream-owned generated mechanics, are recorded without a new decision; Phase-4 AFTER
+scenarios and operational gates remain unverified, and no production-readiness claim is made.
 
 ## 0.18.9 — 2026-08-21 — the first real run found two walls, and two gates now stand where they were
 

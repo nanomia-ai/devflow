@@ -72,3 +72,70 @@ Git이 current facts를 소유한다는 경계를 유지하면서 별도 대형 
 만들지 않는 부록이다.
 
 이 문서 정정 자체가 만든/삭제한/이동한 경로: 없음.
+
+## Phase 4 root repair — 최종 집중 증거
+
+앞선 Phase 3 증거와 한계는 위에 그대로 보존한다. 이번 부록은 `HEAD`
+`dedf24a65c2767ff86079cb91e2719bc20a9f973`에서 수행된 Phase 4 root repair의 원인,
+집중 증거, 독립 판정, 그리고 아직 실사용으로 닫히지 않은 경계를 기록한다.
+
+### 원인과 수리 경계
+
+원인은 대상 card를 고르는 공개 입력과 runtime collector가 서로 다른 입력을 보던
+경로였다. `stage --target <portable project-relative path>`의 `targetPath`가 API에서
+snapshot·collector·trace로 전달되고 Resume 재실행 명령에도 보존되지 않으면, Work는
+동시에 존재하는 card 중 어느 것을 판정할지 결정할 수 없고 누락을 `invalid-card`로
+오인할 수 있다. `targetPath`는 project root 아래의 portable 상대 경로로 정규화하고
+absolute path·parent traversal·경계를 넘는 symlink/junction을 거부한다. `targetPath`는
+Decision의 domain field가 아니며, tracing이 켜진 때 `decision_emitted.data.targetPath`와
+재실행 명령에만 보존된다.
+
+Fixture의 `UNKNOWN`과 live `unknown()`은 같은 값으로 취급하지 않는다. Fixture는
+문자열 `UNKNOWN`을 쓰거나 항목을 생략하고, private sentinel인 live `unknown()`을
+주입할 수 없다. 반대로 live collector는 관측을 얻지 못한 때에만 `unknown()`을
+반환한다. 이 경계를 소비하는 곳은 정확히 세 곳, Work의 `card.target`, Resume의
+`state.brownfield`, Verify의 `principles.channel`이다.
+
+`guard-pending:<id>` coverage를 `L14`가 `guard:<id>`와 함께 인정하도록 고쳤다.
+pending guard/event 명칭은 coverage의 사실을 보일 뿐 다른 action을 선택하지 않는다.
+아홉 P2 패키지(adopt·arch·design·principles·product·resume·split·verify·work)는
+모두 regeneration했고, runtime `0.3.0` 및 validator `0.4.0`을 사용한다.
+
+### 집중 실행 증거
+
+| 항목 | 결과 |
+|---|---|
+| collectors/seams | 22/22 |
+| K state-consumers | 17/17 |
+| eval fixtures (1,800회 반복) | 258/258 |
+| mutation checks | 20/20 |
+| repository invariants | 19/19 |
+| runtime byte mismatches | 0 |
+
+최종 root suite는 위 `HEAD`에서 정확히 한 번 실행되어 exit 0이었다: tests 444,
+suites 0, pass 444, fail/cancelled/skipped/todo 0, `duration_ms 1332167.6359`.
+이 수치는 문서 변경 전 추적 modified paths 119개와 문서 변경 후의 그 기존 경로들이
+동일하다는 확인과 함께 읽는다. 앞서 standalone wrapper가 604초에서 timeout 난
+사건은 `unproven`으로 분류하며, 최종 full suite가 그것을 대체한다. 따라서 그 timeout은
+test failure로 세지 않는다.
+
+### Opus lead와 Sol disposition
+
+- Opus가 이끈 판정에 대한 Sol disposition은 위 causal `targetPath`, Fixture `UNKNOWN` 대
+  live `unknown()`, `guard-pending`/`L14`, 세 consumer 경계와 all-nine regeneration을
+  분리해 확인하는 것으로 정리됐다.
+- comma-single-line `Read first`는 지원하지 않으며 안전하게 BLOCK한다. 이는 compatibility
+  defect가 아니다.
+- `guard-pending`/event naming은 잘못된 action을 만들지 않는다. Fable 아래에서 이를
+  accepted terminology debt로 남긴다.
+- exact upstream parity는 입증됐다. DD-93이 generated mechanics를 upstream-owned로
+  유지하므로 새 decision은 만들지 않는다.
+
+### Phase 4 AFTER와 운영 경계
+
+Phase 4 AFTER의 same-condition Codex/Claude scenarios, recursive-K use quality, latency,
+session-start, handoff/resume, install, Gate B는 모두 `unverified`다. 이 기록은
+production readiness를 주장하지 않는다.
+
+이번 작업은 install·commit·merge·push·cleanup을 하지 않았다. 이 부록은 보고 기록만
+갱신했으며, 위의 두 문서 밖 경로를 만들거나 삭제하거나 이동하지 않았다.

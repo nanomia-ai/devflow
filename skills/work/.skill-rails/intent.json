@@ -15,7 +15,7 @@
     "Capability or product verification; verify owns it."
   ],
   "inputs": [
-    "A context-supplied repository root and exact active card path.",
+    "A context-supplied repository root and the public --target path for the exact selected card.",
     "The context-bound sibling principles calculateState schema-2 result.",
     "The selected card, exact declared inputs, current progress evidence, and bounded semantic judgments."
   ],
@@ -61,7 +61,7 @@
     "Choose one exact permitted closed-history basis and one named long-lived research owner."
   ],
   "deterministic_helpers": [
-    "The collector imports sibling principles calculateState directly and projects only its structured schema-2 facts plus exact current-card and Git evidence.",
+    "The collector imports sibling principles calculateState directly, consumes the runtime-normalized targetPath as an ordinary fact, and projects only structured schema-2 facts plus exact current-card and Git evidence.",
     "Skill Rails validates guard, table, stage, effect order, formats, templates, fixtures, mutation coverage, determinism, and generated hashes.",
     "Local contract tests reject CLI parsing, process.cwd, raw journal state duplication, semantic-owner inference, tiny-work branches, and effect-free NEXT plans."
   ]

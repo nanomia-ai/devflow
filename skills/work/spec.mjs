@@ -3,6 +3,7 @@ import { line, progressLine } from "./scripts/skill-rails/dsl.mjs";
 export const SPEC = { version: "5", id: "work", profile: "single", imports: [] };
 
 export const OBSERVATIONS = {
+  "card.target": { collector: "work/card.target", domain: "path" },
   "state.kernel": { collector: "work/state.kernel", domain: ["available", "unavailable"] },
   "state.route": { collector: "work/state.route", domain: ["claim.mine", "ready.ready", "transition.remote-evidence", "transition.finish-boundary", "marker.knowledge-landing", "other", "unavailable"] },
   "card.phase": { collector: "work/card.phase", domain: ["ready", "claimed", "done", "invalid"] },
@@ -63,6 +64,7 @@ export const OWNERSHIP = {
 };
 
 export const GUARDS = [
+  { id: "card-target-required", reads: ["card.target"], acceptsUnknown: [], when: s => !s.card.target, then: "BLOCK", body: "guard: card-target-required" },
   { id: "state-kernel-unavailable", reads: ["state.kernel"], acceptsUnknown: [], when: s => s.state.kernel === "unavailable", then: "BLOCK", body: "guard: state-kernel-unavailable" },
   { id: "premature-knowledge-marker", reads: ["knowledge.marker", "research.checkpoint"], acceptsUnknown: [], when: s => s.knowledge.marker === "current-source" && s.research.checkpoint !== "committed", then: "BLOCK", body: "guard: premature-knowledge-marker" },
   { id: "knowledge-landing-before-closure", reads: ["knowledge.marker", "research.checkpoint"], acceptsUnknown: [], when: s => s.knowledge.marker === "current-source" && s.research.checkpoint === "committed", then: "ROUTE:resume", body: "guard: knowledge-landing-before-closure" },

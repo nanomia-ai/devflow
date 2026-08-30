@@ -1,6 +1,7 @@
 import { realpathSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { unknown } from "../scripts/skill-rails/dsl.mjs";
 
 // Resume is the only stateful entry after principles classification.  The text
 // command is deliberately not an input: it is a compatibility projection, while
@@ -32,7 +33,7 @@ async function stateFor(context) {
 function route(state) { return state?.route?.id ?? "unrecognized"; }
 function brownfield(state) {
   const value = state?.metadata?.brownfield;
-  return value === "yes" || value === "no" ? value : "UNKNOWN";
+  return value === "yes" || value === "no" ? value : unknown();
 }
 
 export const collectors = Object.freeze({

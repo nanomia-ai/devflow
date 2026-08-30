@@ -72,7 +72,7 @@ export const TEMPLATES = {
   capabilityDesign: { file: "templates/capability-design.md", fields: {
     number: "line", name: "line", purpose: "line", boundary: "line", concepts: "line", intent: "block",
     conceptRows: "generated", invariants: "list", nonGoals: "list", bindingAdrs: "list",
-    designHead: "line", designWrittenAt: "line"
+    designHead: "line"
   }, sections: [] },
   knowledgeNode: { file: "templates/knowledge-node.md", fields: {
     title: "line", openWhen: "line", about: "line", body: "block", sourceBasis: "generated"

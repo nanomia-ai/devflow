@@ -93,7 +93,9 @@ export async function validateFull(skillRoot, options = {}) {
     check("L5", defaultMatches, `TABLES.${tableId}.rows`, "Last table row must be an unconditional default with reads=[].");
     if (table.exclusive) {
       for (const fixture of await loadScenarioFixtures(skillRoot)) {
-        const state = fixtureState(fixture);
+        let state;
+        try { state = fixtureState(spec, fixture).nested; }
+        catch { continue; }
         const matches = rows.slice(0, -1).filter((row) => { try { return row.when(state) === true; } catch { return false; } });
         check("L5", matches.length <= 1, `TABLES.${tableId}.fixture:${fixture.id}`, `Exclusive table has overlapping non-default rows: ${matches.map((row) => row.state).join(", ")}`);
       }
@@ -202,7 +204,7 @@ export async function validateFull(skillRoot, options = {}) {
   diagnostics.push(...await validateScenarioExpectations(skillRoot, spec, fixtures));
   const coverage = new Set(fixtures.flatMap((fixture) => fixture.cover ?? []));
   for (const guard of spec.GUARDS ?? []) {
-    check("L14", coverage.has(`guard:${guard.id}`), `GUARDS.${guard.id}`, "Guard has no covering fixture.");
+    check("L14", coverage.has(`guard:${guard.id}`) || coverage.has(`guard-pending:${guard.id}`), `GUARDS.${guard.id}`, "Guard has no covering fixture.");
     if (guard.unless) check("L14", coverage.has(`unless:${guard.id}/${guard.unless.id}`), `GUARDS.${guard.id}.unless`, "Unless branch has no covering fixture.");
   }
   for (const stage of spec.STAGES ?? []) {

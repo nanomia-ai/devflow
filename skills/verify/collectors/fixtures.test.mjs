@@ -6,6 +6,7 @@ import { join } from "node:path";
 import test from "node:test";
 import { calculateState } from "../../principles/scripts/project-state.mjs";
 import { collectors } from "./index.mjs";
+import { unknown as unknownValue } from "../scripts/skill-rails/dsl.mjs";
 
 async function repository() {
   const root = await mkdtemp(join(tmpdir(), "verify-collector-"));
@@ -31,7 +32,7 @@ test("collectors consume the canonical projection and zones at an explicit proje
 test("an absent explicit root fails closed without a CLI or record fallback", async () => {
   const context = { projectRoot: join(tmpdir(), "missing-verify-collector-root") };
   assert.equal(await collectors["verify/principles.verification-layer"](context), "invalid");
-  assert.equal(await collectors["verify/principles.channel"](context), "UNKNOWN");
+  assert.deepEqual(await collectors["verify/principles.channel"](context), unknownValue());
 });
 
 test("collector reads exact canonical record state without invented execution grammar", async () => {

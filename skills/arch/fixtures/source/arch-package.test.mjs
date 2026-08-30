@@ -226,6 +226,7 @@ test("templates retain exact Layer 0 and capability design-zone contracts", () =
   for (const required of ["## Intent", "## Concept model", "## Invariants", "## Non-goals", "## Binding ADRs", "## Design metadata", "Capability number: {{number}}", "Design head: {{designHead}}", "## Verified state", "### Main flow", "### Lifecycle", "### Current behavior", "### Entrypoints", "### Consumed contracts", "### Traps", "### Verify", "### Verification metadata", "Verified at: none", "Covered cards: []", "Scope paths: []", "Consumed paths: []", "Scope head: none"]) {
     assert.ok(capabilityText.includes(required), required);
   }
+  assert.equal(capabilityText.includes("Design written at:"), false);
 });
 
 test("ledger resolves all 158 atoms to portable behavioral evidence", () => {

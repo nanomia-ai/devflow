@@ -34,7 +34,6 @@ export async function collectObservations(spec, registry, context, supplied = {}
       try { value = await collector(context); }
       catch (error) { value = unknown("collector-error", { field, message: error.message }); }
     }
-    if (value === "UNKNOWN") value = UNKNOWN;
     const validation = validateDomainValue(declaration.domain, value);
     if (!validation.ok) fail("L3", `Collector or input returned a value outside ${field}'s domain.`, { pointer: `OBSERVATIONS.${field}`, details: { value } });
     if (isUnknown(value)) unknowns.push({ field, reason: value.reason, details: value.details ?? null });
@@ -48,7 +47,10 @@ export function normalizeFixtureObservations(spec, input) {
   const flat = {};
   const unknowns = [];
   for (const [field, declaration] of Object.entries(spec.OBSERVATIONS ?? {})) {
-    let value = Object.hasOwn(flattened, field) ? flattened[field] : unknown("fixture-missing", field);
+    const supplied = Object.hasOwn(flattened, field);
+    const raw = supplied ? flattened[field] : null;
+    if (supplied && raw !== "UNKNOWN" && isUnknown(raw)) fail("L3", "Fixture values may not contain the private UNKNOWN sentinel; use the literal string UNKNOWN or omit the field.", { pointer: `fixture.s.${field}` });
+    let value = supplied ? raw : unknown("fixture-missing", field);
     if (value === "UNKNOWN") value = UNKNOWN;
     const validation = validateDomainValue(declaration.domain, value);
     if (!validation.ok) fail("L3", `Fixture value is outside ${field}'s domain.`, { pointer: `fixture.s.${field}`, details: { value } });

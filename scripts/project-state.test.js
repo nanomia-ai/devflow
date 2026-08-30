@@ -3307,6 +3307,76 @@ test("G glossary exact term discovery returns one, many, or root without opening
   assert.match(numberRoute.stdout, /^state: .* narrow=2(?:\s|$)/m);
 });
 
+test("G routing baseline accepts glossary-defined concepts and rejects undefined concepts", async (t) => {
+  const relative = "devflow/project/capabilities/02-records.md";
+  const root = makeRepo(t, {
+    capabilities: ["records"],
+    glossaryText: "# Glossary\n\narchive: hides records without deleting them\n",
+  });
+  setCapabilityConcepts(root, relative, ["archive"]);
+  commit(root, "jmp arch ??defined capability concept");
+
+  const module = await registry();
+  let state = await module.calculateState({ root });
+  assert.equal(state.zones.baseline.entries.some((entry) => entry.kind === "design-refresh" && entry.paths?.includes(relative)), false);
+
+  setCapabilityConcepts(root, relative, ["missing concept"]);
+  commit(root, "jmp arch ??undefined capability concept");
+  state = await module.calculateState({ root });
+  const refresh = state.zones.baseline.entries.find((entry) => entry.kind === "design-refresh" && entry.paths?.includes(relative));
+  assert.ok(refresh);
+  assert.ok(refresh.reasons.includes("concepts-not-in-glossary:missing concept"), JSON.stringify(refresh));
+});
+
+test("arch and adopt shipped capability templates round-trip through capabilityShape", async (t) => {
+  const rendererPath = path.resolve(__dirname, "../skills/arch/scripts/skill-rails/templates.mjs");
+  const { renderTemplate } = await import(pathToFileURL(rendererPath).href);
+  const stateModule = await registry();
+  const packages = [
+    {
+      id: "arch",
+      trust: "confirmed Layer 0",
+      fields: { bindingAdrs: "None." },
+    },
+    {
+      id: "adopt",
+      trust: "traced brownfield code and existing records",
+      fields: { adrs: "None." },
+    },
+  ];
+
+  for (const item of packages) {
+    const root = makeRepo(t, { brownfield: item.id === "adopt" ? "yes" : "no" });
+    const designHead = git(root, "log", "-1", "--format=%H", "--", "devflow/project/product.md", "devflow/project/arch.md", "devflow/project/glossary.md");
+    const specPath = path.resolve(__dirname, `../skills/${item.id}/spec.mjs`);
+    const templatePath = path.resolve(__dirname, `../skills/${item.id}/templates/capability-design.md`);
+    const spec = await import(`${pathToFileURL(specPath).href}?roundtrip=${item.id}`);
+    const template = fs.readFileSync(templatePath, "utf8");
+    const rendered = renderTemplate(template, spec.TEMPLATES.capabilityDesign, {
+      number: "01",
+      name: "foundation",
+      purpose: "Give fixture users a dependable foundation.",
+      boundary: "Owns fixture foundations; does not own later capabilities.",
+      concepts: "none",
+      intent: "Preserve the confirmed product boundary in one capability.",
+      conceptRows: "| foundation | dependable fixture behavior | foundation | none |",
+      invariants: "- The foundation remains observable.",
+      nonGoals: "- Later capabilities remain outside this boundary.",
+      designHead,
+      ...item.fields,
+    });
+    assert.match(rendered, new RegExp(`^Trust: .*${item.trust}`, "m"));
+    assert.equal(rendered.includes("Design written at:"), false);
+    write(root, "devflow/project/capabilities/01-foundation.md", rendered);
+    commit(root, `jmp ${item.id} ??capability template roundtrip`);
+
+    const state = await stateModule.calculateState({ root });
+    const record = state.compatibility.snapshot.baseline.records.find(({ capability }) => capability === 1);
+    assert.ok(record, item.id);
+    assert.equal(record.shape.shapeValid, true, `${item.id}: ${JSON.stringify(record.shape.anomalies)}`);
+  }
+});
+
 test("G a committed confirmed glossary term preempts composite work with every named capability", async (t) => {
   const root = makeRepo(t, { capabilities: ["records", "review"] });
   const line = glossaryTermLine();
