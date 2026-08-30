@@ -1,0 +1,6 @@
+[
+  {"id":"escaped-delimiters","values":{"check-json":"https://ci.example/run/1; verdict: fail","verdict":"pending","detail-json":"owner said \"wait; detail-json: later\""},"ok":true},
+  {"id":"check-json-must-be-string","line":"2026-08-30T00:00:00Z remote evidence check: check-json: {\"run\":1}; verdict: pending; detail-json: \"waiting\"","ok":false},
+  {"id":"unterminated-check-json","line":"2026-08-30T00:00:00Z remote evidence check: check-json: \"broken; verdict: pending; detail-json: \"waiting\"","ok":false},
+  {"id":"trailing-detail-garbage","line":"2026-08-30T00:00:00Z remote evidence check: check-json: \"run-1\"; verdict: pending; detail-json: \"waiting\" trailing","ok":false}
+]

@@ -21,14 +21,11 @@ the default onboarding set. Open them only after an exact coordinate requires th
 
 ## 2. Dual language and document integrity
 
-**Design in Korean and deploy in English.** `_ko.md` is the design original the owner reviews;
-the English pair is the deploy artifact consumed by AI.
+**Design owner-facing documents and the Codex adapter in Korean, and deploy them in English.**
+Each `_ko.md` declared below is the design original the owner reviews; its English pair is the
+deploy artifact consumed by AI. These are the only surviving declared pairs.
 
 ```
-skills/<name>/SKILL_ko.md ↔ SKILL.md
-skills/principles/{state-predicates,verification-predicates,baseline-predicates,planning-evidence,coordinator}_ko.md ↔ same-name .md
-skills/work/reviewer_ko.md ↔ reviewer.md
-skills/verify/{verifier,auditor,retrospector}_ko.md ↔ same-name .md
 codex/AGENTS-devflow_ko.md ↔ AGENTS-devflow.md
 docs/{design,design-decisions,design-backlog,maintenance-protocol}_ko.md ↔ same-name .md
 docs/rounds/v0.10.0/proposal_ko.md ↔ proposal.md
@@ -36,12 +33,17 @@ docs/rounds/v0.11.0/report_ko.md ↔ report.md
 docs/rounds/v0.9.21/report_ko.md ↔ report.md
 ```
 
-English-only files are `AGENTS.md`, `CHANGELOG.md`, and `CLAUDE.md`. In this repository,
-`CLAUDE.md` stays the one line `@AGENTS.md`. Role contracts are companion files briefed
-verbatim to a clean context, not registered agents. Do not mix predicate companions with
-role contracts.
+P2 runtime skills are the deliberate exception. English `spec.mjs` and `body.md` are executable
+authored canon; `SKILL.md` and `.generated.json` are the generated deploy artifact and receipt.
+Korean atoms under `references/legacy-atoms/` preserve migration provenance only and are neither
+a live pair nor an editing source.
 
-The modification order is fixed.
+English-only authored files are `AGENTS.md`, `CHANGELOG.md`, `CLAUDE.md`, and P2 `spec.mjs` and
+`body.md`. In this repository, `CLAUDE.md` stays the one line `@AGENTS.md`. Role contracts are
+companion files briefed verbatim to a clean context, not registered agents. Do not mix predicate
+companions with role contracts.
+
+The modification order for declared Korean/English pairs is fixed.
 
 1. Change the `_ko` original first and get owner review.
 2. Translate its English pair using the fixed terms in §9. Coin no second English name.
@@ -49,12 +51,14 @@ The modification order is fixed.
    percentages, and versions that carry meaning.
 4. If a deploy artifact changed, finish the install, CHANGELOG, and version procedure in §7.
 
-External contributors may change English first, but a maintainer back-syncs the Korean
-original before the next release. Korean lives only in `_ko.md`, the two Korean-only standing
-instruments, unpaired round records, and the terminology table in the Korean original of this
-document. English deploy artifacts contain not one Korean line, and there is no exception.
-`node --test "scripts/*.test.js"` owns the zero-Korean and
-ko/en structural checks.
+External contributors may change a declared pair's English side first, but a maintainer
+back-syncs the Korean original before the next release. Active Korean authoring lives only in
+`_ko.md`, the two Korean-only standing instruments, unpaired round records, and the terminology
+table in the Korean original of this document. P2 migration provenance may preserve source Korean
+under `references/legacy-atoms/`, but it is not runtime guidance. English deploy guidance contains
+no Korean. `node --test "scripts/*.test.js"` owns structural and machine-figure parity for the
+declared pairs above and the zero-Korean check for English deploy guidance; it explicitly exempts
+legacy atoms only as migration provenance.
 
 ## 3. Landing design intent and records
 

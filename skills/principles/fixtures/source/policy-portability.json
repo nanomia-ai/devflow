@@ -1,0 +1,51 @@
+{
+  "schema": "principles/policy-portability-fixture/1",
+  "readFirstPaths": [
+    "references/purpose.md",
+    "references/enter-resume-contract.md",
+    "references/shared-authoring-policy.md",
+    "references/knowledge-structure-policy.md",
+    "references/knowledge-evidence-policy.md",
+    "references/planning-evidence-policy.md",
+    "references/coordinator-policy.md"
+  ],
+  "maxReadFirstEntries": 7,
+  "maxReadFirstReferenceBytes": 8192,
+  "forbiddenRuntimeClaims": [
+    "external shared-policy owner",
+    "external bilingual",
+    "skills/principles/",
+    "baseline-predicates_ko.md",
+    "planning-evidence_ko.md",
+    "state-predicates_ko.md",
+    "verification-predicates_ko.md",
+    "coordinator_ko.md"
+  ],
+  "requiredLocalOwners": {
+    "references/authoring/prompt-principles.md": ["## The 7 Prompt Principles"],
+    "references/state/identity-and-rooms.md": ["## Identity and Rooms"],
+    "references/state/journal-grammar.md": ["### Exact journal formats"],
+    "references/state/journal-and-routing.md": ["# Journal routing and source-resolution lifecycle"],
+    "references/state/document-change-routing.md": ["# Document change routing"],
+    "references/state/core-document-ownership.md": ["### Core document ownership"],
+    "references/state/integrity-check.md": ["## Integrity Check"],
+    "references/delivery/model-and-failure.md": ["## Model Tiers", "## Failure Ladder (applies to every retry)"],
+    "references/delivery/status-and-tweak.md": ["## Status Notation", "## The Tweak Lane"],
+    "references/delivery/commit-and-verification.md": ["## Commit Discipline", "## The Verification Iron Rule"],
+    "references/knowledge/baseline-contract.md": ["## Identity and expected set", "## Document contract and zone boundary"],
+    "references/knowledge/capsules-and-provenance.md": ["## Domain knowledge capsules", "### Provenance marks — unmarked is the default", "### Two worked capsules"],
+    "references/knowledge/opening-and-freshness.md": ["### Opening budget — a hard cap", "## Metadata and freshness"],
+    "references/knowledge/writers-and-migration.md": ["## Writers and replacement boundaries", "## v0.10 Baseline Migration"],
+    "references/knowledge/inputs-and-entry.md": ["## Creation and refresh inputs", "## Automatic entry and role inputs"],
+    "references/knowledge/relations-and-lifecycle.md": ["## Relations and consumer projection", "## Lifecycle and recovery", "## Capability-closing begin commit", "## Accepted limits"],
+    "references/planning/evidence-discipline.md": ["# Planning evidence discipline", "## Pre-commitment Review"],
+    "references/state/task-card-predicates.md": ["# Canonical State Predicates", "## Task-card predicates"],
+    "references/verification/revision-predicates.md": ["# Canonical Verification Predicates", "## Verification revision predicates"],
+    "references/verification/event-predicates.md": ["## Verification event predicates"],
+    "references/coordination/coordinator-contract.md": ["# Coordinator contract"]
+  },
+  "portableScriptHashes": {
+    "scripts/project-state.mjs": "sha256:18162fb9819240f74ad3080418308679990f2bdaa292dc1c67ae491480002d23",
+    "scripts/project-knowledge.mjs": "sha256:6670e874e65f69d1e342b107d90d16e97a500b827ad9cae90c8567984c908687"
+  }
+}

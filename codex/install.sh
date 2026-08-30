@@ -58,7 +58,7 @@ fi
 
 echo ""
 if [ "$plugin_installed" -eq 1 ]; then
-  echo "Done. Codex invokes the devflow skills itself - type a trigger such as 'resume devflow state'."
+  echo "Done. After user intent exists, Codex invokes devflow:principles first and follows its route."
   echo "The native plugin delivers SessionStart. Enable [features] hooks = true in Codex config."
   echo ""
   echo "Next, and only you can do it: open /hooks in a Codex session and confirm the devflow"
@@ -71,5 +71,5 @@ if [ "$plugin_installed" -eq 1 ]; then
   echo ""
   echo "Only when hooks are disabled or unsupported, add codex/AGENTS-devflow.md to the project's AGENTS.md."
 else
-  echo "Done - with no plugin, ask the model to run the devflow resume skill explicitly."
+  echo "Done - with no plugin, ask the model to run devflow:principles after user intent exists."
 fi

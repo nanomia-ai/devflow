@@ -1,0 +1,20 @@
+{
+  "name": "product",
+  "description": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing devflow/project/product.md. Use when starting a new project, planning a service, defining a product, or deciding MVP scope.",
+  "problem": "Preserve the behavior of immutable repository sources `skills/product/SKILL.md` and `skills/product/SKILL_ko.md`, identified by their recorded source hashes, without silently changing their obligations.",
+  "use_cases": [],
+  "near_misses": [],
+  "inputs": [],
+  "outputs": [],
+  "irreversible_boundaries": [],
+  "state_dependent_behaviors": [
+    "Durable pre-product research records one origin and routes through split; it never creates or routes directly to implementation work."
+  ],
+  "exact_formats": [],
+  "external_dependencies": [],
+  "completion_evidence": [],
+  "judgment_points": [
+    "Research interruption and re-entry preserve the same split-owned origin and 00-project card."
+  ],
+  "deterministic_helpers": []
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "id": "canonical-pending-card-is-parseable-but-not-routable",
+    "path": "devflow/tree/00-project/00.1-auth-research.md",
+    "source": "# 00.1 Research: auth constraints\n\nOrigin: journal:2026-08-30T00:00:01Z maintenance routing pending: request-json: \\"research auth\\"\nCard address: 00.1-auth-research\nDestination: durable auth findings\nCompletion signal: confirmed conclusion\nDepends: none\nRead first:\nnone\nAffected knowledge owners:\nnone\nApproval: pending\nReview: not-applicable\n",
+    "expect": { "parseCard": true, "approval": "pending", "routeWork": false }
+  },
+  {
+    "id": "canonical-effective-exact-card-is-routable",
+    "path": "devflow/tree/00-project/00.1-auth-research.md",
+    "source": "# 00.1 Research: auth constraints\n\nOrigin: journal:2026-08-30T00:00:01Z maintenance routing pending: request-json: \\"research auth\\"\nCard address: 00.1-auth-research\nDestination: durable auth findings\nCompletion signal: confirmed conclusion\nDepends: none\nRead first:\nnone\nAffected knowledge owners:\nnone\nApproval: 2026-08-30T00:05:00Z; parallel: none\nReview: not-applicable\n",
+    "projectState": { "origin": "journal:2026-08-30T00:00:01Z maintenance routing pending: request-json: \\"research auth\\"", "approval": "effective" },
+    "expect": { "parseCard": true, "routeWork": true }
+  },
+  {
+    "id": "unrelated-effective-card-does-not-bind",
+    "path": "devflow/tree/00-project/00.2-payments-research.md",
+    "source": "# 00.2 Research: payments constraints\n\nOrigin: journal:older request\nCard address: 00.2-payments-research\nDestination: durable payments findings\nCompletion signal: confirmed conclusion\nDepends: none\nRead first:\nnone\nAffected knowledge owners:\nnone\nApproval: 2026-08-29T00:05:00Z; parallel: none\nReview: not-applicable\n",
+    "projectState": { "origin": "journal:older request", "approval": "effective" },
+    "currentOrigin": "journal:new request",
+    "expect": { "parseCard": true, "bind": false, "routeWork": false }
+  },
+  {
+    "id": "retired-special-shape-is-not-a-card",
+    "path": "devflow/tree/00-project/auth/research.md",
+    "source": "# Project Research: auth\n\nOrigin: journal:request\nApproval: pending\n",
+    "expect": { "parseCard": false, "routeWork": false }
+  }
+]

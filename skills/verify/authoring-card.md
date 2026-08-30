@@ -1,0 +1,16 @@
+# authoring card -- verify
+
+Purpose: Execute capability and product acceptance criteria through the declared verify channel, persist only the canonical verification record, and route non-passes or closure boundaries to their owners.
+Failure scene: A stale, partial, out-of-scope, or unexecuted result is mistaken for a current pass and prematurely closes a capability or product boundary.
+Observations: Canonical zones, transition, channel availability, residual knowledge landing, pending event, exact revision freshness, and the selected record's verdict and execution field are collected at an explicit root; verifier reply, closure judgments, and closed-history basis remain explicit inputs, but none can replace observed record currency and execution evidence.
+Terminals: BLOCK for unavailable state or broad/ambiguous history; WAIT for verifier, audit, or retrospective dispatch; ROUTE for recovery, repair, owner landing, and closure; DONE only after the canonical route reports no remaining stage.
+Guards: Refuse stale record reuse, unavailable channels, residual knowledge markers, and any closed-history read other than an exact named card, non-pass repair lineage, or current K/Trap Source basis.
+Stages: Finish each prepared or interrupted transition once; assemble and dispatch the clean verifier bundle; record every actual fail/unverified/pass result before closure; apply capability or product closure gates; then select one canonical audit or retrospective event.
+Effects: READ bounded artifacts, DISPATCH the clean verifier/auditor/retrospector, WRITE the declared verify record through its template, COMMIT only principles-owned transition formats, REPORT an exact route, and ROUTE or WAIT.
+Passengers: Existing failure history, audit, retrospective, regression labels, and current cross-owner evidence are preserved as inputs; none changes the verifier verdict.
+Artifacts: product, arch, code-style, glossary, verify record, baseline set, canonical journal, declared verifier bundle, and complete package-local verifier/auditor/retrospector contracts; each reader is listed in `ARTIFACTS` or its declared role contract.
+Templates: verifierBundle for actual runnable criteria; record for a complete verification result; route for bounded failure, event, and owner handoff reporting.
+Ownership: principles owns project-state, reserved record/journal grammar, revisions, and transitions; verify owns only verify.md; arch/adopt owns knowledge landing and closure; split owns repair cards.
+Consumer consumption sets: `recover` consumes transition plus record; `dispatch-verifier` consumes product/arch/code-style/glossary plus channel; `result-routing` consumes external execution result plus record; closure consumes baseline and residual marker; event routing consumes only canonical event state.
+Consumer closure check: for every static project artifact a selected stage or stopping guard requires, declare one canonical `ARTIFACTS` entry and its stage/guard `readers`; put required grammar in a structured format/template or selected guidance. This card and collector source are authoring inputs, not consumer disclosure surfaces.
+Deferred: none.

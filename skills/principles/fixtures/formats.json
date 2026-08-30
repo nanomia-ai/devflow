@@ -1,0 +1,132 @@
+[
+  {
+    "id": "golden-maintenanceRoutingPending",
+    "format": "maintenanceRoutingPending",
+    "values": {
+      "request-json": {
+        "kind": "maintenance"
+      }
+    },
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z maintenance routing pending: request-json: {\"kind\":\"maintenance\"}"
+  },
+  {
+    "id": "golden-productReRunPending",
+    "format": "productReRunPending",
+    "values": {
+      "statement-json": {
+        "reason": "changed"
+      }
+    },
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z product re-run pending: statement-json: {\"reason\":\"changed\"}"
+  },
+  {
+    "id": "golden-productVerificationRequested",
+    "format": "productVerificationRequested",
+    "values": {},
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z product verification requested"
+  },
+  {
+    "id": "golden-productVerificationRunning",
+    "format": "productVerificationRunning",
+    "values": {
+      "trigger": "requested",
+      "product": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "verification": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "code": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z product verification running: trigger: requested; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; code: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+    "id": "golden-productVerificationResult",
+    "format": "productVerificationResult",
+    "values": {
+      "trigger": "requested",
+      "product": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "verification": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "code": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "verdict": "pass"
+    },
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z product verification result: trigger: requested; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; code: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass"
+  },
+  {
+    "id": "golden-capabilityClosing",
+    "format": "capabilityClosing",
+    "values": {
+      "folder": "devflow/tree/01",
+      "head": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "product": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "verification": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "capability": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z capability closing: folder: devflow/tree/01; head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; capability: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  {
+    "id": "golden-capabilityNote",
+    "format": "capabilityNote",
+    "values": {
+      "capability": 1,
+      "note-json": "sample"
+    },
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z capability note: capability: 1; note-json: \"sample\""
+  },
+  {
+    "id": "golden-knowledgeLandingPending",
+    "format": "knowledgeLandingPending",
+    "values": {
+      "owner": "devflow/project/arch.md",
+      "writer": "arch",
+      "source-json": "devflow/tree/00-project/00.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z knowledge landing pending: owner: devflow/project/arch.md; writer: arch; source-json: \"devflow/tree/00-project/00.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\""
+  },
+  {
+    "id": "golden-completionSignalResult",
+    "format": "completionSignalResult",
+    "values": {
+      "head": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "verdict": "pass",
+      "detail-json": "command; \"test\""
+    },
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z completion signal result: head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass; detail-json: \"command; \\\"test\\\"\""
+  },
+  {
+    "id": "golden-reviewResult",
+    "format": "reviewResult",
+    "values": {
+      "head": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "verdict": "pass",
+      "detail-json": "review; clean"
+    },
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z review result: head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass; detail-json: \"review; clean\""
+  }
+]

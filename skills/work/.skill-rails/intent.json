@@ -1,0 +1,68 @@
+{
+  "name": "work",
+  "description": "Implementation. Takes one task card, codes it, keeps the progress log on disk, runs the completion signal, and commits. Use when starting to code, continuing work, or beginning implementation.",
+  "problem": "Preserve the behavior and evidence boundaries of repository-relative skills/work without silently changing its obligations or duplicating the principles state kernel.",
+  "use_cases": [
+    "Claim or resume one approved card and carry its implementation through current completion evidence and clean review.",
+    "Recover anchored failure, objection, remote-evidence, integration, handoff, and finish-boundary transitions after interruption.",
+    "Promote one durable research synthesis to each named long-lived owner through an exact canonical knowledge marker.",
+    "Open closed history only from one exact current basis and close only after every observed passenger and source marker clears."
+  ],
+  "near_misses": [
+    "A passing tweak; principles completes it and never invokes work.",
+    "Planning or repairing the card contract; split owns it.",
+    "Writing current promoted knowledge; arch or adopt owns it.",
+    "Capability or product verification; verify owns it."
+  ],
+  "inputs": [
+    "A context-supplied repository root and exact active card path.",
+    "The context-bound sibling principles calculateState schema-2 result.",
+    "The selected card, exact declared inputs, current progress evidence, and bounded semantic judgments."
+  ],
+  "outputs": [
+    "One fail-closed Decision with the next ordered work effect plan.",
+    "Canonical progress, marker, commit, handoff, feedback, and status effects owned by work.",
+    "A route to split, resume, arch/adopt through resume, or verify when that owner is next."
+  ],
+  "irreversible_boundaries": [
+    "Publishing the claim, task, knowledge-marker, integration, or boundary commit.",
+    "Applying compatible upper-document feedback or the byte-identical claim-to-done move.",
+    "Treating a research conclusion, clean review, remote result, or completion signal as durable evidence.",
+    "Declaring completion while a source marker or required boundary passenger remains."
+  ],
+  "state_dependent_behaviors": [
+    "Structured sibling state selects claim, remote recovery, finish boundary, or another canonical route without CLI parsing or local journal state.",
+    "Completion and review non-pass results anchor before repair; the third code objection requires the person's adjacent disposition and one later non-pass spends it.",
+    "Research promotion requires a committed synthesis checkpoint and emits one independent arch/adopt owner marker at a time.",
+    "Closed history is bounded to an exact named card, non-pass repair lineage, or current K/Trap Source basis.",
+    "Finalization orders feedback judgment, carry, task commit, integration, feedback landing, done rename, handoff, and boundary."
+  ],
+  "exact_formats": [
+    "Canonical completion signal result, review result, remote evidence check, and carry Progress lines.",
+    "Canonical knowledge landing pending marker with owner, writer arch|adopt, and source-json containing exact card path@fullhash.",
+    "Canonical HANDOFF Next single step and reviewer pass/four-line objection result.",
+    "Canonical claim, checkpoint, task, integration, and boundary commit subjects and status suffixes."
+  ],
+  "external_dependencies": [
+    "Git for shared truth, full commit IDs, checkpoints, ancestry, and card identity.",
+    "The sibling principles package for calculateState schema devflow/project-state/2.",
+    "Split, resume, arch/adopt, verify, the clean reviewer role, and the person at their owned boundaries."
+  ],
+  "completion_evidence": [
+    "Every legacy atom has resolving forward and reverse provenance with zero review-required or DEFERRED entries.",
+    "Happy implementation, C2 marker timing, C5 exact history, C6 multi-owner blocking, review repair, remote recovery, integration, handoff, and unsafe-closure scenarios execute.",
+    "Collector, role, fixture, semantic audit, official lint/build/eval, and portability checks report their actual evidence.",
+    "A done current card, complete structured boundary, integrated task commit, and no marker from that source are all observed."
+  ],
+  "judgment_points": [
+    "Choose the next implementation or repair point without widening the card.",
+    "Reduce the anchored clean-review lineage and identify the person's disposition boundary.",
+    "Classify upper feedback and name its existing semantic owner.",
+    "Choose one exact permitted closed-history basis and one named long-lived research owner."
+  ],
+  "deterministic_helpers": [
+    "The collector imports sibling principles calculateState directly and projects only its structured schema-2 facts plus exact current-card and Git evidence.",
+    "Skill Rails validates guard, table, stage, effect order, formats, templates, fixtures, mutation coverage, determinism, and generated hashes.",
+    "Local contract tests reject CLI parsing, process.cwd, raw journal state duplication, semantic-owner inference, tiny-work branches, and effect-free NEXT plans."
+  ]
+}

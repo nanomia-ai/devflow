@@ -1,0 +1,34 @@
+{
+  "schema": "skill-rails/semantic-diff/1",
+  "spec_hash": {
+    "before": "sha256:b6615f7b43076f55d1d0d795199991c80abcf4d7a7d5cc56c50bbc5895794c8f",
+    "after": "sha256:b6615f7b43076f55d1d0d795199991c80abcf4d7a7d5cc56c50bbc5895794c8f"
+  },
+  "changed": false,
+  "any_changed": false,
+  "source_changes": {
+    "behavior_source": false,
+    "observation_source": false,
+    "context": false
+  },
+  "artifact_receipts": [],
+  "groups": {
+    "observations": [],
+    "guards": [],
+    "stages": [],
+    "tables": [],
+    "formats": [],
+    "templates": [],
+    "template_content": [],
+    "body": [],
+    "references": [],
+    "ownership": [],
+    "artifacts": [],
+    "roles": [],
+    "declarations": [],
+    "deferred": []
+  },
+  "change_id": "repair-planning-audit-design",
+  "intent": "Regenerate the obligation ledger from the repaired observable maintenance and research lineage.",
+  "impact": {}
+}

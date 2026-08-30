@@ -330,11 +330,16 @@ const repoRoot = path.resolve(__dirname, "..");
 // The fixtures below write the canon's exact formats, so they only mean something while the
 // canon still owns them. `head:` is what lets a result name the base it actually ran against.
 function ownsResultFormats() {
-  const principles = fs.readFileSync(path.join(repoRoot, "skills", "principles", "SKILL.md"), "utf8");
-  assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ completion signal result: head: <[^>]+>; verdict: pass \| fail \| unverified; detail-json: <short JSON string>/,
-    "principles must own the completion signal result format, with head:, before a reader can join it");
-  assert.match(principles, /YYYY-MM-DDTHH:MM:SSZ review result: head: <[^>]+>; verdict: pass \| objections \| unverified; detail-json: <short JSON string>/,
-    "principles must own the review result format, with head:, before a reader can join it");
+  const spec = fs.readFileSync(path.join(repoRoot, "skills", "principles", "spec.mjs"), "utf8");
+  const guidance = fs.readFileSync(path.join(repoRoot, "skills", "principles", "references", "delivery", "commit-and-verification.md"), "utf8");
+  assert.match(spec, /completionSignalResult:\s*progressLine\("completion signal result", \{ head: "hex40", verdict: \["pass", "fail", "unverified"\], "detail-json": "json" \}\)/,
+    "principles spec must own the structured completion signal result format before a reader can join it");
+  assert.match(spec, /reviewResult:\s*progressLine\("review result", \{ head: "hex40", verdict: \["pass", "objections", "unverified"\], "detail-json": "json" \}\)/,
+    "principles spec must own the structured review result format before a reader can join it");
+  assert.match(guidance, /YYYY-MM-DDTHH:MM:SSZ completion signal result: head: <[^>]+>; verdict: pass \| fail \| unverified; detail-json: <short JSON string>/,
+    "principles consumer guidance must expose the completion signal result format, with head:, before a reader can join it");
+  assert.match(guidance, /YYYY-MM-DDTHH:MM:SSZ review result: head: <[^>]+>; verdict: pass \| objections \| unverified; detail-json: <short JSON string>/,
+    "principles consumer guidance must expose the review result format, with head:, before a reader can join it");
 }
 
 const HEAD_OF = /^\S+ (?:completion signal|review) result: head: ([0-9a-f]{40,64});/;
@@ -557,7 +562,7 @@ test("a third objection anchored alone cannot be joined by a later disposition c
   ownsResultFormats();
   // The row this fixture exists for: work must fail that state closed rather than write a
   // disposition into a later commit and call it bound.
-  const work = fs.readFileSync(path.join(repoRoot, "skills", "work", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(repoRoot, "skills", "work", "body.md"), "utf8");
   assert.match(work.replace(/\s+/g, " "),
     /no valid disposition, and the latest result objects to the code and is the third or later/,
     "work must carry the row a third objection anchored with no valid disposition lands in");
@@ -605,12 +610,12 @@ test("a third objection anchored alone cannot be joined by a later disposition c
 test("the first result after a disposition is its consumer, and a later result does not take that place", (t) => {
   const { root, git, write } = makeRepo(t);
   ownsResultFormats();
-  const work = fs.readFileSync(path.join(repoRoot, "skills", "work", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(repoRoot, "skills", "work", "body.md"), "utf8");
   assert.match(work.replace(/\s+/g, " "),
-    /a valid disposition with exactly one settled `review result` after it, and it is `pass`/,
+    /[Aa] valid disposition with exactly one settled `review result` after it, and it is `pass`/,
     "work must decide by how many results followed the disposition, not by the newest line");
   assert.match(work.replace(/\s+/g, " "),
-    /a valid disposition with two or more settled `review result` lines after it/);
+    /[Aa] valid disposition with two or more settled `review result` lines after it/);
 
   const card = "devflow/tree/02-x/02.1-card.wip-a.md";
   write(card, "# 02.1 card\nReview: required\n\n## Progress log\n");
@@ -654,7 +659,7 @@ test("the first result after a disposition is its consumer, and a later result d
 test("a signal result is current until a later commit changes this card's task diff", (t) => {
   const { root, git, write } = makeRepo(t);
   ownsResultFormats();
-  const work = fs.readFileSync(path.join(repoRoot, "skills", "work", "SKILL.md"), "utf8");
+  const work = fs.readFileSync(path.join(repoRoot, "skills", "work", "body.md"), "utf8");
   assert.match(work.replace(/\s+/g, " "),
     /Current means both fresh and a verdict: its completion inputs and this card's task diff are unchanged since it ran, and the line carries one of the three verdicts/,
     "work must fix what makes a recorded signal current");
@@ -690,12 +695,12 @@ test("a signal result is current until a later commit changes this card's task d
 // outside integration comes back as `non-ancestor` on the next entry and asks for the same
 // re-anchor, which is the loop this rule removes.
 function ownsReAnchorCandidate() {
-  const resume = fs.readFileSync(path.join(repoRoot, "skills", "resume", "SKILL.md"), "utf8").replace(/\s+/g, " ");
-  assert.match(resume, /the default candidate is the full object ID in the first record of `git log -z --format=%H%x00%an%x00%ae <integration branch>` \(NUL-terminated triples, newest first\) whose author name and author email each equal my room owner\.md `git:` values exactly: string equality on both, never a regex, a substring, or `--author`, and `none` when no record matches/,
-    "resume must own the exact enumeration command and the exact-equality selection");
-  const resumeKo = fs.readFileSync(path.join(repoRoot, "skills", "resume", "SKILL_ko.md"), "utf8").replace(/\s+/g, " ");
-  assert.match(resumeKo, /`git log -z --format=%H%x00%an%x00%ae <[^>]+>`/,
-    "the Korean original must carry the same enumeration command");
+  const resumeSpec = fs.readFileSync(path.join(repoRoot, "skills", "resume", "spec.mjs"), "utf8").replace(/\s+/g, " ");
+  assert.match(resumeSpec, /\{ body: "why: transition-recovery", path: "references\/transition-recovery\.md" \}/,
+    "resume must place transition recovery on the mandatory read-first path");
+  const resume = fs.readFileSync(path.join(repoRoot, "skills", "resume", "references", "transition-recovery.md"), "utf8").replace(/\s+/g, " ");
+  assert.match(resume, /[Tt]he default candidate is the full object ID in the first record of `git log -z --format=%H%x00%an%x00%ae <integration branch>` \(NUL-terminated triples, newest first\) whose author name and author email each equal my room owner\.md `git:` values exactly: string equality on both, never a regex, a substring, or `--author`, and `none` when no record matches/,
+    "resume's mandatory transition-recovery guidance must own the exact enumeration command and exact-equality selection");
 }
 
 // resume's procedure run exactly as it is written: enumerate the integration-reachable

@@ -1,0 +1,73 @@
+{
+  "name": "principles",
+  "description": "Canonical devflow mechanics and evidence boundaries used by every devflow skill; use before any devflow stage or when routing, recovery, ownership, knowledge landing, commits, or verification are in question.",
+  "problem": "Keep devflow flexible for people while making mechanical state, recovery, evidence, ownership, and completion decisions deterministic for AI. Prevent prose drift, silent loss, duplicate authority, unbounded reading, and a check-passing workflow that no longer serves the user's development outcome.",
+  "use_cases": [
+    "Route a new or resumed devflow session from current Git and project state.",
+    "Preserve and resume research, planning, implementation, verification, and multi-owner landing across sessions.",
+    "Choose bounded knowledge and work paths for a small change, one domain, a deep subtopic, or a project-wide change.",
+    "Validate exact journal, progress, canonical knowledge-capsule, commit, claim, and verification evidence boundaries."
+  ],
+  "near_misses": [
+    "A request that does not use devflow and does not touch a devflow project.",
+    "A request to manage Git worktrees; devflow observes worktrees but does not create or manage them.",
+    "A request to turn every judgment into a parser rule or to create a second knowledge canon."
+  ],
+  "inputs": [
+    "Raw project and Git observations collected from the current project without mutation.",
+    "The invoked devflow stage, explicit user choices, and named role results.",
+    "Canonical Layer 0 documents, capability owners, recursive K headers, active work cards, journal markers, and exact source locators."
+  ],
+  "outputs": [
+    "One fail-closed current Decision: route, ask, wait, block, or ordered effects.",
+    "A bounded consumption set that opens only the active work and the nearest current-knowledge owner path needed now.",
+    "Evidence requirements for durable landing, reentry, commits, verification, and knowledge closure."
+  ],
+  "irreversible_boundaries": [
+    "User confirmation of product, architecture, design, capability, or other binding decisions.",
+    "A commit that publishes a task, Layer 0, knowledge refresh, verification, or closure boundary.",
+    "Deleting, retiring, renaming, moving, or replacing a canonical owner, work card, knowledge capsule, marker, or source locator.",
+    "Claiming pass, completion, migration parity, or knowledge closure without the declared durable evidence."
+  ],
+  "state_dependent_behaviors": [
+    "The first non-empty route in the canonical state priority wins; UNKNOWN never becomes absence or success.",
+    "Active-work resume and new-work orientation are distinct views over the same disk state.",
+    "A passing tweak adds no devflow artifact; uncertainty or durable knowledge exits the tweak lane.",
+    "Pre-product multi-session research uses the reserved 00-project work scope but cannot own implementation or masquerade as a capability.",
+    "Current knowledge uses only the canonical capability-capsule artifacts projected by project-knowledge; the package introduces no second node schema.",
+    "Knowledge landing uses the externally state-owned knowledgeLandingPending family; arch, or adopt in brownfield, is its canonical writer.",
+    "Multi-owner closure follows the canonical state and knowledge owners without a parallel landing family.",
+    "Closed history is opened only by an exact named card, repair lineage, or a current capsule or Trap source basis."
+  ],
+  "exact_formats": [
+    "Canonical journal and Progress machine lines, commit subjects, claim and readiness lines, and status suffixes.",
+    "Capability design and verified-zone boundaries and their metadata.",
+    "Recursive K header, stable K identity, same-stem parent-child address, source basis, direct consumer, and use-when fields.",
+    "The project-state zone and route result schema and the project-knowledge projection, validation, and selection schema."
+  ],
+  "external_dependencies": [
+    "Git for shared truth, immutable history, containing revisions, and exact path identity.",
+    "Node.js for read-only project-state, project-knowledge, and Skill Rails runtimes.",
+    "The user for semantic ownership, ambiguous nearest-owner choices, binding confirmation, and genuine value judgments.",
+    "Stage-local devflow packages for product, adopt, arch, design, resume, split, work, and verify judgment and effects."
+  ],
+  "completion_evidence": [
+    "Every old source atom has forward and reverse provenance to a current spec, judgment body, template, collector, fixture, or preserved compatibility source.",
+    "Old behavior parity and the C1-C6 redesign scenarios pass with critical omissions and false confirmations equal to zero.",
+    "State and knowledge collectors remain read-only; policy, order, formats, ownership, and completion live in the P2 spec.",
+    "A fresh AI can resume active work or orient to new work without broad search and can place new knowledge at the correct owner.",
+    "Tiny, deep-domain, crosscut, interrupted, multi-owner, and large-corpus scenarios preserve human usability and bounded AI reading."
+  ],
+  "judgment_points": [
+    "Choose semantic owner and whether a fact is current knowledge, active work, closed history, or external source.",
+    "Decide whether complexity has produced an independent frontier or consumer that warrants a child card or canonical capsule.",
+    "Judge research sufficiency, synthesis quality, rejected alternatives, and whether a result actually advances the user's intended outcome.",
+    "When repeated fixes stop converging, reconsider the owning structure or ask the user instead of adding exceptions."
+  ],
+  "deterministic_helpers": [
+    "project-state observes disk and Git, validates exact shapes, and projects complete route candidates without mutating the project.",
+    "project-knowledge projects canonical capsule headers, validates address integrity and source coordinates, and enforces opening budgets.",
+    "Skill Rails evaluates guards, route priority, stage and effect order, evidence alignment, and deterministic generated artifacts.",
+    "Repository tests compare legacy and migrated behavior, source provenance, platform delivery, and real-use fixtures."
+  ]
+}

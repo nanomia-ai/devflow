@@ -56,6 +56,25 @@ function writeCapsule(root, value = header(), content = body(), number = "006", 
   return target;
 }
 
+function writeOwnerCapsule(root, owner, { parents = [], number = "006", value = header(), content = body() } = {}) {
+  if (!fs.existsSync(path.join(root, "docs", "source.md"))) writeSource(root);
+  const project = path.join(root, "devflow", "project");
+  const base = owner === "capability" ? path.join(project, "capabilities", "02-property") : path.join(project, owner);
+  const entrance = owner === "capability" ? path.join(project, "capabilities", "02-property.md") : path.join(project, `${owner}.md`);
+  fs.mkdirSync(base, { recursive: true });
+  fs.writeFileSync(entrance, `# ${owner}\n`, "utf8");
+  let directory = base;
+  for (const parent of parents) {
+    const topic = parent.slice("K-000-".length);
+    fs.writeFileSync(path.join(directory, `${parent}.md`), `${body("", header({ topic }))}\n`, "utf8");
+    directory = path.join(directory, parent);
+    fs.mkdirSync(directory, { recursive: true });
+  }
+  const target = path.join(directory, `K-${number}-${value.topic}.md`);
+  fs.writeFileSync(target, `${content}\n`, "utf8");
+  return target;
+}
+
 function run(root, command, ...args) {
   return spawnSync(process.execPath, [tool, command, ...args, "--root", root], {
     cwd: root,
@@ -519,6 +538,134 @@ test("one capability's projection survives another capability's malformed capsul
   const global = run(root, "validate");
   assert.equal(global.status, 1);
   assert.match(global.stderr, /09-shipping[\s\S]*coordinate exceeds/);
+});
+
+// A1-A13: the recursive-K oracle keeps the old capability entrance while closing the new
+// owner roots to product, arch, design, and capability documents.
+test("A1 legacy flat capability capsules remain byte-compatible", (t) => {
+  const root = fixture(t);
+  writeCapsule(root);
+  const result = run(root, "project", "--capability", "2");
+  assertOk(result);
+  assert.match(result.stdout, /project: capsules=1 bodies=0/);
+});
+
+test("A2 recursive K folders accept depths one through three", (t) => {
+  const root = fixture(t);
+  writeOwnerCapsule(root, "product", { parents: ["K-001-root", "K-002-branch"], number: "003" });
+  const result = run(root, "validate");
+  assertOk(result);
+  assert.match(result.stdout, /valid=3/);
+});
+
+test("A3 --under projects, disputes, and validates direct children only", (t) => {
+  const root = fixture(t);
+  const leaf = writeOwnerCapsule(root, "product", { parents: ["K-001-root"], number: "002" });
+  const owner = "devflow/project/product.md";
+  const node = "devflow/project/product/K-001-root.md";
+  for (const command of ["project", "disputes", "validate"]) {
+    const top = run(root, command, "--under", owner);
+    assertOk(top);
+    assert.match(top.stdout, /(?:capsules|valid)=1/, command);
+    assert.doesNotMatch(top.stdout, new RegExp(leaf.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")), command);
+    const child = run(root, command, "--under", node);
+    assertOk(child);
+    assert.match(child.stdout, /(?:capsules|valid)=1/, command);
+  }
+});
+
+test("A4 K numbers are reusable across the four closed owners", (t) => {
+  const root = fixture(t);
+  for (const owner of ["product", "arch", "design", "capability"]) writeOwnerCapsule(root, owner, { number: "001" });
+  assertOk(run(root, "validate"));
+});
+
+test("A5 duplicate K numbers in one owner subtree are rejected", (t) => {
+  const root = fixture(t);
+  writeOwnerCapsule(root, "product", { number: "001" });
+  writeOwnerCapsule(root, "product", { parents: ["K-002-parent"], number: "001" });
+  const result = run(root, "validate");
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /duplicate capsule number/);
+});
+
+test("A6 a K folder without its same-stem parent is invalid", (t) => {
+  const root = fixture(t);
+  fs.mkdirSync(path.join(root, "devflow", "project", "product", "K-001-orphan"), { recursive: true });
+  fs.writeFileSync(path.join(root, "devflow", "project", "product.md"), "# product\n", "utf8");
+  const result = run(root, "validate");
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /same-stem parent .* is missing/);
+});
+
+test("A7 select retains an exact moved nested --path", (t) => {
+  const root = fixture(t);
+  const target = writeOwnerCapsule(root, "design", { parents: ["K-001-parent"], number: "002" });
+  const relative = path.relative(root, target).split(path.sep).join("/");
+  const result = run(root, "select", "--path", relative);
+  assertOk(result);
+  assert.match(result.stdout, new RegExp(`^body: ${relative.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m"));
+});
+
+test("A8 recursive capsules still reject dangling source coordinates", (t) => {
+  const root = fixture(t);
+  const broken = body().replace("docs/source.md:1-2", "missing.md:1");
+  writeOwnerCapsule(root, "arch", { parents: ["K-001-parent"], content: broken });
+  const result = run(root, "validate");
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /coordinate path does not exist/);
+});
+
+test("A9 recursive capsules retain the header grammar", (t) => {
+  const root = fixture(t);
+  writeOwnerCapsule(root, "design", { parents: ["K-001-parent"], content: "# malformed\n" });
+  const result = run(root, "validate");
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /capsule header format anomaly/);
+});
+
+test("A10 presence sees an arch-only artifact across HEAD and the working tree", (t) => {
+  const root = repo(t);
+  fs.writeFileSync(path.join(root, "seed.txt"), "seed\n", "utf8");
+  commit(root, "seed");
+  writeOwnerCapsule(root, "arch");
+  assert.equal(presenceOf(root).value, "present");
+  commit(root, "arch capsule");
+  fs.rmSync(path.join(root, "devflow", "project", "arch"), { recursive: true, force: true });
+  assert.equal(presenceOf(root).value, "present");
+});
+
+test("A11 nested exact selections retain opening budgets", (t) => {
+  const root = fixture(t);
+  const paths = ["001", "002", "003"].map((number) => writeOwnerCapsule(root, "product", {
+    parents: ["K-010-parent"], number, value: header({ topic: `nested-${number}` }),
+    content: body(Array.from({ length: 74 }, (_, line) => `nested ${number}-${line}`).join("\n")),
+  }));
+  const result = run(root, "select", ...paths.map((item) => ["--path", path.relative(root, item).split(path.sep).join("/")]).flat());
+  assert.equal(result.status, 3);
+  assert.match(result.stdout, /opened=0/);
+});
+
+test("A12 one owner can hold one hundred direct children through the compact index", (t) => {
+  const root = fixture(t);
+  for (let index = 1; index <= 100; index += 1) {
+    const number = String(index).padStart(3, "0");
+    writeOwnerCapsule(root, "product", { number, value: header({ topic: `direct-${number}`, about: `direct ${number} `.repeat(4).trim() }) });
+  }
+  const result = run(root, "project", "--under", "devflow/project/product.md");
+  assertOk(result);
+  assert.match(result.stdout, /capsules=100 bodies=0 form=compact/);
+});
+
+test("A13 direct --under leaves an untouched nested sibling corpus bounded", (t) => {
+  const root = fixture(t);
+  writeOwnerCapsule(root, "product", { number: "001" });
+  const broken = writeOwnerCapsule(root, "product", { parents: ["K-002-sibling"], number: "003" });
+  fs.writeFileSync(broken, "# malformed\n", "utf8");
+  assertOk(run(root, "project", "--under", "devflow/project/product.md"));
+  const global = run(root, "validate");
+  assert.equal(global.status, 1);
+  assert.match(global.stderr, /capsule header format anomaly/);
 });
 
 // --- presence: the one predicate an entry skill may gate a canon section on -------------

@@ -1,0 +1,4 @@
+[
+  { "id": "flow-evidence", "format": "flowEvidence", "values": { "candidate": "api", "entry": "src/server.js", "path": "src/service.js", "outcome": "HTTP response observed" }, "context": { "timestamp": "2026-08-30T00:00:00.000Z" }, "expect": "2026-08-30T00:00:00.000Z representative flow: candidate: api; entry: src/server.js; path: src/service.js; outcome: HTTP response observed" },
+  { "id": "existing-record", "format": "existingRecord", "values": { "capability": "orders", "path": "docs/orders.md", "ownership": "single" }, "context": { "timestamp": "2026-08-30T00:00:00.000Z" }, "expect": "2026-08-30T00:00:00.000Z existing record: capability: orders; path: docs/orders.md; ownership: single" }
+]

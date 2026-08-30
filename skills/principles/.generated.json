@@ -1,0 +1,402 @@
+{
+  "schema": "skill-rails/build-manifest/1",
+  "skill_id": "principles",
+  "profile": "p2",
+  "built_at": null,
+  "build_id": "sha256:6e8bd7c8d8a9061305a512853625e461893fd6d51b15de8d45e48d2c56a512c9",
+  "spec_hash": "sha256:7cc52ccc4e10601982dc640f419d805212722bb695900833f6a6073889b6d65d",
+  "dsl_hash": "sha256:e8d77b180b886db5cf0474682c7ea2dfea19065561a015878c70efe1441694e6",
+  "runtime_hash": "sha256:d9ca1b6511f424860cd2ef890cedb43be1977807231563a887b67dc594b263c4",
+  "validator_hash": "sha256:d62ca188df5b0686de5dfb82eb53a60001d611800ed85be855ebf702f8a6158a",
+  "content_hash": "sha256:b9d7b20eaf10ee304de034e699b9d1768aab42e111ddcd580a994a1a94b2bb3c",
+  "content": {
+    "SKILL.md": "sha256:155fb1e4d17dc561c8897a33f058b47dd3cc48ee060fa6d2b6de4245a35fa3d0",
+    "body.md": "sha256:63d19e7c3f04be0c50c2fb0c5276e11ad2d032ddeb4e35f9a9ba34110b36c514",
+    "collectors/index.mjs": "sha256:acced743a3f53dae4562ebb2f8324aee4ef7d907e309b88d0334de49a2a21162",
+    "fixtures/formats.json": "sha256:434798d22027f3c0f1215783d8953ee0af36ae5dfc0d74b9a3cceba328d864bb",
+    "fixtures/lint/manifest.json": "sha256:7e63b4b60f9d85b72a2fb1e7040a3a28cffe59246ceedf69f0aee2290d826eed",
+    "fixtures/scenarios.json": "sha256:a192f52c1319b9bee181d004dfc05c6858e756e55bd0dfe908d264ec886d2e46",
+    "fixtures/source/collector-c1-c6.json": "sha256:6a0a4ca70430ff00453342bc32c585dbb7eaaa62a0fe0e311261b0011b148b86",
+    "fixtures/source/collector-c1-c6.test.mjs": "sha256:b9ca2a0dfd82d4338430874f2b36a5997faa5b1b96c166167bbbe4a8827221aa",
+    "fixtures/source/policy-portability.json": "sha256:8c4153731b3d454c56bd566a9e8523df3688eb38af93b302683237521139851b",
+    "references/authoring/prompt-principles.md": "sha256:43e72bc2be9c95b940eb70e44d6794ffcba14e597d1444805ef2bfedb3531192",
+    "references/coordination/coordinator-contract.md": "sha256:742ecdf1f9e7e3fd4fdcbc3e74a52a25c1338beff4270e3ad4f2aa095dd4fd2a",
+    "references/coordinator-policy.md": "sha256:b8631fab9224b291379337daa49fda91bb18ce626121be3e37c8c466571b64a6",
+    "references/delivery/commit-and-verification.md": "sha256:8fd7fbc8721e35a3437bbd2f24f0f5a6681dc790e1c94b5a035c928f04851261",
+    "references/delivery/model-and-failure.md": "sha256:53c18a78e1954dad0ee27e2598ea9599af912af0a1751d310f96e0bf3e69ef41",
+    "references/delivery/status-and-tweak.md": "sha256:20399bc467ce7f0186223113b9c7dfd168357a58df2e1dd16d026a7520ae9c7b",
+    "references/enter-resume-contract.md": "sha256:787f5ba66513d55e7b427b38e6c2a07d2cfe4108dd43503062358c8f71b3354b",
+    "references/knowledge-evidence-policy.md": "sha256:28908dfa5d4184e52afaa15c20164c38b1ad0940797ff2586ce723f0a5a8a614",
+    "references/knowledge-structure-policy.md": "sha256:556738f6d1c58489b644a5b3386a9176c81bc9ed3b6a4b6cea20d5566d68faf3",
+    "references/knowledge/baseline-contract.md": "sha256:7d23c63629bbfb136f46d97ab53eeefdb84b7da466b0a168cf65698bd01f908c",
+    "references/knowledge/capsules-and-provenance.md": "sha256:e0d88760d78d0226bb806eeccc2b9f75537e6ef1de41d8249bae0c8fe1620c4a",
+    "references/knowledge/inputs-and-entry.md": "sha256:41bee9319dfeee01c96711f466aa93e8b7b6566c464a9ec57e34ac4b7bffcc5b",
+    "references/knowledge/opening-and-freshness.md": "sha256:f38ca28049a90f8424a1799471708f0e4ed3b7b025d1f51ac8effc5b3a9a6e37",
+    "references/knowledge/relations-and-lifecycle.md": "sha256:0b8ce60349b87ba8952bee9148086f29fffb1e4bc8475d5e27d03a607be7c4e9",
+    "references/knowledge/writers-and-migration.md": "sha256:09a7c4e6937709079457bdc81eb607d8d0d4f6ec2d9191e2da392a8f5c467e4c",
+    "references/planning-evidence-policy.md": "sha256:9a10f55b541c1e3d7e504ef54f76c23005e4132864f6a25108b9ffe9bc046fb2",
+    "references/planning/evidence-discipline.md": "sha256:3229316fc898045037f4bd5e3cbe417627f7f810ba91ad8be828aa3125585322",
+    "references/policy-index.md": "sha256:1ebeea67df0d9a7e03f8b0b36b0c55a314a08edfe31c6a11a7f82ca6b0e55515",
+    "references/purpose.md": "sha256:fe431160146ab8b7daf56c73c225833026f3c0ae33f5286270486ec0fd5c860e",
+    "references/shared-authoring-policy.md": "sha256:471987163263c21c84f60154f28777fedcaefe77b1abe670f491d4c42b8a58c4",
+    "references/state/core-document-ownership.md": "sha256:13f7a02d8297606d9ddac42c363a46bdc595aa2882953e6a714d94d10bd13361",
+    "references/state/document-change-routing.md": "sha256:d91c23a7f38c64955dba27df88d6bc4e6fdceb6533c8146f61c61d36d04c8744",
+    "references/state/identity-and-rooms.md": "sha256:e2f49b592ef15aa673a99e111e36f4680b0130de9e2de424d9781393dd5e1161",
+    "references/state/integrity-check.md": "sha256:03ddb2caa0694755a81d1ce875c4aa9b378c5d42ae1e10d066315788e3c9d55a",
+    "references/state/journal-and-routing.md": "sha256:ec391def6e23d320595567e5de860a1edf76f2219f47ca2d5ab520a178d1fbac",
+    "references/state/journal-grammar.md": "sha256:ce069d0bb0c2c0635c375be00763819e02c1185b92068bb4af38a639ed52a898",
+    "references/state/task-card-predicates.md": "sha256:67a6d49e13e5e53489b59fb10fd86ecaf3e3bd29f596bf1847c5501422e9a756",
+    "references/verification/event-predicates.md": "sha256:e911f48763a4c932996b67971bc1698c076d2bd9b9015a21b24be08b6384742d",
+    "references/verification/revision-predicates.md": "sha256:3f529b4165131f1abd3d74f395ea1385b1907de457092b9c221797d7474c09d0",
+    "templates/action-result.md": "sha256:9962616d4ce6a7797a21217f5c4373279af04f27c79a312d5d252ecc1d247a32",
+    "templates/canonical-journal-progress-grammar.md": "sha256:e393cdff34fbf00fc63d7f9964edea62279e1babe6c052334cef57529f8f7099",
+    "templates/role-result.md": "sha256:11360d8d75f60f14ece5a88adff1f25c2c94cfc235375c44db16b37c10854e83",
+    ".skill-rails/intent.json": "sha256:ccb7709601f4290a36d24c8eb2e030c5d58cd72aac77afa3c884b5be167dada4",
+    ".skill-rails/profile-decision.json": "sha256:1c27d1059f3f56d761b02dcfc1c21c0e40b925275573e62c64a20c6d97a989c0",
+    ".skill-rails/eval-cases.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    ".skill-rails/obligation-ledger.json": "sha256:032eac5219c6657da9ba18b26194ecc41b884fb0fface8d6b5155b88c8e8f5af"
+  },
+  "runtime_files": [
+    "align.mjs",
+    "alignment.mjs",
+    "api.mjs",
+    "ast-policy.mjs",
+    "authoring-ledger.mjs",
+    "body.mjs",
+    "cli.mjs",
+    "collectors.mjs",
+    "constants.mjs",
+    "diagnostics.mjs",
+    "domains.mjs",
+    "dsl.mjs",
+    "evaluator.mjs",
+    "format-checks.mjs",
+    "guide.mjs",
+    "hash.mjs",
+    "lint.mjs",
+    "loader.mjs",
+    "manifest.mjs",
+    "path-policy.mjs",
+    "run.mjs",
+    "scenario-checks.mjs",
+    "snapshot.mjs",
+    "templates.mjs",
+    "trace-core.mjs",
+    "trace-store.mjs",
+    "trace.mjs",
+    "validator.mjs",
+    "vendor/ACORN-LICENSE",
+    "vendor/ACORN-WALK-LICENSE",
+    "vendor/acorn-walk.mjs",
+    "vendor/acorn.mjs"
+  ],
+  "validator_version": "0.3.0",
+  "runtime_version": "0.2.0",
+  "minimum_node_major": 20,
+  "generated_files": {
+    ".gitattributes": "sha256:705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "SKILL.md": "sha256:155fb1e4d17dc561c8897a33f058b47dd3cc48ee060fa6d2b6de4245a35fa3d0",
+    "agents/openai.yaml": "sha256:f26ef356d2aec4cc224ce0b9a128b0f92858830015153df7b1c1fa8c4ae345a6",
+    "schemas/decision.schema.json": "sha256:d475892037887713a110b9a3f9bd3207c033c53b9013cc4f2c3ea2e3bc15d353",
+    "schemas/trace-event.schema.json": "sha256:8e59643b838b1da7a49220981f010767e1eff63248a9916b68138c736b615631",
+    "scripts/skill-rails/align.mjs": "sha256:71dff5642e9cd0fa0fae651c5e249cf572d240b68f44d85f9875e81ba42c673a",
+    "scripts/skill-rails/alignment.mjs": "sha256:1c50f5c27da56e71a0610ff896fc24e993a6956218c886bb7cd93246aefcd269",
+    "scripts/skill-rails/api.mjs": "sha256:f8967b171ca538ff32a418d82a53687ac4ea8a52b3c882adb90180e2f6e35164",
+    "scripts/skill-rails/ast-policy.mjs": "sha256:48c4f7e62a8b475858bf9645adaf03d61c321b6daf3418df714549909d6beab0",
+    "scripts/skill-rails/authoring-ledger.mjs": "sha256:0c74cd9a4ea364160899e084cf44bd85657bfad0a3c38dfec259afbb9c9d2e19",
+    "scripts/skill-rails/body.mjs": "sha256:bbc1aad36940bfd690043d7a3c499f6e14eb0ef2b9f590cfacef1085db6d679c",
+    "scripts/skill-rails/cli.mjs": "sha256:e86f8d1f30a1e738fce75b52c5a5e0a0539646d702ee5fb8ec1c4ff83a6070fb",
+    "scripts/skill-rails/collectors.mjs": "sha256:197a8a4effb8fcdeca8a38802db6938b2471261485ff8920225e88902d065028",
+    "scripts/skill-rails/constants.mjs": "sha256:a9c51bcb8e393e65c0afa7a61a4d59abef3126c45573446f7994e5c4bffc049f",
+    "scripts/skill-rails/diagnostics.mjs": "sha256:f16aea5478acb2efb559da5a44bc7d66212c5e61e336b8803eacf5bfb30debe6",
+    "scripts/skill-rails/domains.mjs": "sha256:667d9aab6f54ce8c573d2ec0930c3cc646787fd1b71df4d78346432ea674d94f",
+    "scripts/skill-rails/dsl.mjs": "sha256:e8d77b180b886db5cf0474682c7ea2dfea19065561a015878c70efe1441694e6",
+    "scripts/skill-rails/evaluator.mjs": "sha256:828f15ca46b031c8fb43221ae2b8800b9b1862670bf3fb1fdde5045f1b550055",
+    "scripts/skill-rails/format-checks.mjs": "sha256:0cb3fdb6d10252ca87cc90238e7fe0d86b3c12afd2d74450a1a648a9d129cbe8",
+    "scripts/skill-rails/guide.mjs": "sha256:09a6163d44ab1c17854dfcf3a1f3a41b39e1fa81145fd790dbd55acb2c19dcd6",
+    "scripts/skill-rails/hash.mjs": "sha256:0bf625859470d72aa005efd49d60c09778afc1d1acc45f00a1ce9feeaa06c412",
+    "scripts/skill-rails/lint.mjs": "sha256:71dff5642e9cd0fa0fae651c5e249cf572d240b68f44d85f9875e81ba42c673a",
+    "scripts/skill-rails/loader.mjs": "sha256:62dd7050fa2ef5bd5ddaf698ad8eed91b8ae96868f6ceb113388132fd234def7",
+    "scripts/skill-rails/manifest.mjs": "sha256:9f09278de302de2744b9c4b8215237354e0807be271b3fa9edcb46d0f96407fd",
+    "scripts/skill-rails/path-policy.mjs": "sha256:98d5a620833683fcd924324a843cffb1e71e1260eab87ba21429a0e3c46feb02",
+    "scripts/skill-rails/run.mjs": "sha256:71dff5642e9cd0fa0fae651c5e249cf572d240b68f44d85f9875e81ba42c673a",
+    "scripts/skill-rails/scenario-checks.mjs": "sha256:b41b739ed3b5136106cee15aa50583a7f74404e61b684a521de07fb8a49c9247",
+    "scripts/skill-rails/snapshot.mjs": "sha256:dd3d475361a2c9b7b4009b8810225a95132e5758409ac00d43d365a3b001cac8",
+    "scripts/skill-rails/templates.mjs": "sha256:b21d356d0477f835bd87568657de513f4dd7cd44aa1458dccc71d0aadcc9504b",
+    "scripts/skill-rails/trace-core.mjs": "sha256:ce4a34da9bccd600c171359b40605acad5ee2e2c7744989a8a96321bf8085ff3",
+    "scripts/skill-rails/trace-store.mjs": "sha256:f5af4e06730f600561ccc7608f4020d2ebe1956d903491bf7f555dc1bff0a9eb",
+    "scripts/skill-rails/trace.mjs": "sha256:71dff5642e9cd0fa0fae651c5e249cf572d240b68f44d85f9875e81ba42c673a",
+    "scripts/skill-rails/validator.mjs": "sha256:261eed7c2c423e1386ba0bd8bfe8b0a1fde769c494a5e557dfb8882a375c17c7",
+    "scripts/skill-rails/vendor/ACORN-LICENSE": "sha256:76a876cf886ff9be2a8b5e2e86514fed06223c8c9f0c1e9ee9606e93841e00b7",
+    "scripts/skill-rails/vendor/ACORN-WALK-LICENSE": "sha256:c2d8184ea9becd063aa40be243e8c6ec2c4f72828fdfe4b0752664ef73e96ed3",
+    "scripts/skill-rails/vendor/acorn-walk.mjs": "sha256:24bc7ea73dcc319360090f4849746b7493bf234f951ea99ae0b89105981b1b42",
+    "scripts/skill-rails/vendor/acorn.mjs": "sha256:953573b8fdab71599749ea5f2b33d3e760c2116178f9423ee7458dbe39d59453"
+  },
+  "evidence": {
+    "lint": "L-full:pass",
+    "mutations": {
+      "passed": 20,
+      "total": 20,
+      "survivors": [],
+      "results": [
+        {
+          "id": "negative-L0",
+          "expected_code": "L0",
+          "operation": "extra-export",
+          "killed": true,
+          "observed_codes": [
+            "L0"
+          ]
+        },
+        {
+          "id": "negative-L1",
+          "expected_code": "L1",
+          "operation": "ambient-authority",
+          "killed": true,
+          "observed_codes": [
+            "L1"
+          ]
+        },
+        {
+          "id": "negative-L2",
+          "expected_code": "L2",
+          "operation": "observation-source",
+          "killed": true,
+          "observed_codes": [
+            "L2",
+            "L3"
+          ]
+        },
+        {
+          "id": "negative-L3",
+          "expected_code": "L3",
+          "operation": "invalid-domain",
+          "killed": true,
+          "observed_codes": [
+            "L3",
+            "L4"
+          ]
+        },
+        {
+          "id": "negative-L4",
+          "expected_code": "L4",
+          "operation": "reads-mismatch",
+          "killed": true,
+          "observed_codes": [
+            "L4"
+          ]
+        },
+        {
+          "id": "negative-L5",
+          "expected_code": "L5",
+          "operation": "table-default",
+          "killed": true,
+          "observed_codes": [
+            "L5"
+          ]
+        },
+        {
+          "id": "negative-L6",
+          "expected_code": "L6",
+          "operation": "stage-contract",
+          "killed": true,
+          "observed_codes": [
+            "L6"
+          ]
+        },
+        {
+          "id": "negative-L7",
+          "expected_code": "L7",
+          "operation": "body-section",
+          "killed": true,
+          "observed_codes": [
+            "L14",
+            "L16",
+            "L7"
+          ]
+        },
+        {
+          "id": "negative-L8",
+          "expected_code": "L8",
+          "operation": "body-duplicate-procedure",
+          "killed": true,
+          "observed_codes": [
+            "L8"
+          ]
+        },
+        {
+          "id": "negative-L9",
+          "expected_code": "L9",
+          "operation": "stage-signature",
+          "killed": true,
+          "observed_codes": [
+            "L9"
+          ]
+        },
+        {
+          "id": "negative-L10",
+          "expected_code": "L10",
+          "operation": "artifact-readers",
+          "killed": true,
+          "observed_codes": [
+            "L10"
+          ]
+        },
+        {
+          "id": "negative-L11",
+          "expected_code": "L11",
+          "operation": "template-placeholder",
+          "killed": true,
+          "observed_codes": [
+            "L11"
+          ]
+        },
+        {
+          "id": "negative-L12",
+          "expected_code": "L12",
+          "operation": "role-state-effect",
+          "killed": true,
+          "observed_codes": [
+            "L12"
+          ]
+        },
+        {
+          "id": "negative-L13",
+          "expected_code": "L13",
+          "operation": "language-parity",
+          "killed": true,
+          "observed_codes": [
+            "L13"
+          ]
+        },
+        {
+          "id": "negative-L14",
+          "expected_code": "L14",
+          "operation": "fixture-coverage",
+          "killed": true,
+          "observed_codes": [
+            "L14"
+          ]
+        },
+        {
+          "id": "negative-L15",
+          "expected_code": "L15",
+          "operation": "format-domain",
+          "killed": true,
+          "observed_codes": [
+            "L15"
+          ]
+        },
+        {
+          "id": "negative-L16",
+          "expected_code": "L16",
+          "operation": "deferred-shape",
+          "killed": true,
+          "observed_codes": [
+            "L16"
+          ]
+        },
+        {
+          "id": "negative-L17",
+          "expected_code": "L17",
+          "operation": "mutation-manifest",
+          "killed": true,
+          "observed_codes": [
+            "L17"
+          ]
+        },
+        {
+          "id": "negative-L18",
+          "expected_code": "L18",
+          "operation": "unsafe-bypass",
+          "killed": true,
+          "observed_codes": [
+            "L14",
+            "L18"
+          ]
+        },
+        {
+          "id": "negative-L15-format-golden",
+          "expected_code": "L15",
+          "operation": "format-golden",
+          "killed": true,
+          "observed_codes": [
+            "L15"
+          ]
+        }
+      ]
+    },
+    "fixtures": {
+      "passed": 10,
+      "total": 10,
+      "deterministic_repeats": 200,
+      "mismatches": 0,
+      "predicate_evaluations": 2000,
+      "predicate_evaluation_limit_ms": 50,
+      "predicate_performance": {
+        "status": "pass",
+        "limit_ms": 50
+      }
+    },
+    "formats": {
+      "passed": 10,
+      "total": 10,
+      "results": [
+        {
+          "id": "maintenanceRoutingPending",
+          "round_trips": 256,
+          "crlf_rejected": false
+        },
+        {
+          "id": "productReRunPending",
+          "round_trips": 256,
+          "crlf_rejected": false
+        },
+        {
+          "id": "productVerificationRequested",
+          "round_trips": 256,
+          "crlf_rejected": false
+        },
+        {
+          "id": "productVerificationRunning",
+          "round_trips": 256,
+          "crlf_rejected": true
+        },
+        {
+          "id": "productVerificationResult",
+          "round_trips": 256,
+          "crlf_rejected": true
+        },
+        {
+          "id": "capabilityClosing",
+          "round_trips": 256,
+          "crlf_rejected": true
+        },
+        {
+          "id": "capabilityNote",
+          "round_trips": 256,
+          "crlf_rejected": false
+        },
+        {
+          "id": "knowledgeLandingPending",
+          "round_trips": 256,
+          "crlf_rejected": true
+        },
+        {
+          "id": "completionSignalResult",
+          "round_trips": 256,
+          "crlf_rejected": true
+        },
+        {
+          "id": "reviewResult",
+          "round_trips": 256,
+          "crlf_rejected": true
+        }
+      ]
+    },
+    "isolated_import": true,
+    "build_timestamp": null
+  },
+  "origin": null,
+  "manual_edit_policy": "canonical-source-only"
+}

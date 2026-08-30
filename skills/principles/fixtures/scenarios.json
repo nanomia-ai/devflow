@@ -1,0 +1,228 @@
+[
+  {
+    "id": "entry-pure-tweak-zero-state-artifacts",
+    "s": {
+      "authoring.readiness": "ready",
+      "request.partition": "pure-tweak",
+      "tweak.gate": "all-no",
+      "tweak.preflight": "pass",
+      "tweak.check": "pass"
+    },
+    "expect": {
+      "stage": "classify",
+      "row": "tweak",
+      "status": "DONE",
+      "effects": [
+        "RUN",
+        "READ",
+        "RUN",
+        "RUN",
+        "RUN",
+        "COMMIT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "stage:classify",
+      "row:entryPartition/tweak",
+      "branch:entryPartition/tweak"
+    ]
+  },
+  {
+    "id": "entry-policy-read-only",
+    "s": {
+      "authoring.readiness": "ready",
+      "request.partition": "policy-read-only",
+      "tweak.gate": "not-applicable",
+      "tweak.preflight": "not-run",
+      "tweak.check": "not-run"
+    },
+    "expect": {
+      "stage": "classify",
+      "row": "policy-read-only",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "row:entryPartition/policy-read-only",
+      "branch:entryPartition/policy-read-only"
+    ]
+  },
+  {
+    "id": "entry-stateful-routes-once",
+    "s": {
+      "authoring.readiness": "ready",
+      "request.partition": "stateful",
+      "tweak.gate": "not-applicable",
+      "tweak.preflight": "not-run",
+      "tweak.check": "not-run"
+    },
+    "expect": {
+      "stage": "classify",
+      "row": "normal-stateful",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "row:entryPartition/normal-stateful",
+      "branch:entryPartition/normal-stateful"
+    ]
+  },
+  {
+    "id": "entry-project-read-only-routes-once",
+    "s": {
+      "authoring.readiness": "ready",
+      "request.partition": "project-read-only",
+      "tweak.gate": "not-applicable",
+      "tweak.preflight": "not-run",
+      "tweak.check": "not-run"
+    },
+    "expect": {
+      "stage": "classify",
+      "row": "normal-project-read-only",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "row:entryPartition/normal-project-read-only",
+      "branch:entryPartition/normal-project-read-only"
+    ]
+  },
+  {
+    "id": "entry-mixed-retains-items",
+    "s": {
+      "authoring.readiness": "ready",
+      "request.partition": "mixed",
+      "tweak.gate": "not-applicable",
+      "tweak.preflight": "not-run",
+      "tweak.check": "not-run"
+    },
+    "expect": {
+      "stage": "classify",
+      "row": "normal-mixed",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "row:entryPartition/normal-mixed",
+      "branch:entryPartition/normal-mixed"
+    ]
+  },
+  {
+    "id": "entry-uncertain-routes-once",
+    "s": {
+      "authoring.readiness": "ready",
+      "request.partition": "uncertain",
+      "tweak.gate": "uncertain",
+      "tweak.preflight": "not-run",
+      "tweak.check": "not-run"
+    },
+    "expect": {
+      "stage": "classify",
+      "row": "normal-default",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "row:entryPartition/normal-default",
+      "branch:entryPartition/normal-default"
+    ]
+  },
+  {
+    "id": "entry-tweak-gate-falls-back",
+    "s": {
+      "authoring.readiness": "ready",
+      "request.partition": "pure-tweak",
+      "tweak.gate": "not-all-no",
+      "tweak.preflight": "not-run",
+      "tweak.check": "not-run"
+    },
+    "expect": {
+      "stage": "classify",
+      "row": "normal-gate",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "row:entryPartition/normal-gate",
+      "branch:entryPartition/normal-gate"
+    ]
+  },
+  {
+    "id": "entry-tweak-preflight-falls-back",
+    "s": {
+      "authoring.readiness": "ready",
+      "request.partition": "pure-tweak",
+      "tweak.gate": "all-no",
+      "tweak.preflight": "fail",
+      "tweak.check": "not-run"
+    },
+    "expect": {
+      "stage": "classify",
+      "row": "normal-preflight",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "row:entryPartition/normal-preflight",
+      "branch:entryPartition/normal-preflight"
+    ]
+  },
+  {
+    "id": "entry-tweak-check-falls-back",
+    "s": {
+      "authoring.readiness": "ready",
+      "request.partition": "pure-tweak",
+      "tweak.gate": "all-no",
+      "tweak.preflight": "pass",
+      "tweak.check": "fail"
+    },
+    "expect": {
+      "stage": "classify",
+      "row": "normal-check",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "row:entryPartition/normal-check",
+      "branch:entryPartition/normal-check"
+    ]
+  },
+  {
+    "id": "guard-authoring-not-ready",
+    "s": {
+      "authoring.readiness": "not-ready",
+      "request.partition": "stateful",
+      "tweak.gate": "not-applicable",
+      "tweak.preflight": "not-run",
+      "tweak.check": "not-run"
+    },
+    "expect": {
+      "stage": null,
+      "row": null,
+      "status": "BLOCK",
+      "guard": "authoring-not-ready",
+      "effects": []
+    },
+    "cover": [
+      "guard:authoring-not-ready"
+    ]
+  }
+]

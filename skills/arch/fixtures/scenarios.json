@@ -1,0 +1,2429 @@
+[
+  {
+    "id": "kernel-unavailable",
+    "s": {
+      "state.kernel": "unavailable",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "guard": "state-kernel-unavailable",
+      "status": "BLOCK",
+      "effects": []
+    },
+    "cover": [
+      "guard:state-kernel-unavailable"
+    ]
+  },
+  {
+    "id": "layer0-state-unknown",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "unknown",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "guard": "layer0-state-unknown",
+      "status": "BLOCK",
+      "effects": []
+    },
+    "cover": [
+      "guard:layer0-state-unknown"
+    ]
+  },
+  {
+    "id": "worktree-state-unknown",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "unknown",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "guard": "worktree-state-unknown",
+      "status": "ASK",
+      "effects": []
+    },
+    "cover": [
+      "guard:worktree-state-unknown"
+    ]
+  },
+  {
+    "id": "invalid-source-json",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "integrity.blocking",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "guard": "canonical-integrity-block",
+      "status": "BLOCK",
+      "effects": []
+    },
+    "cover": [
+      "guard:canonical-integrity-block"
+    ]
+  },
+  {
+    "id": "invalid-writer",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "integrity.blocking",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "guard": "canonical-integrity-block",
+      "status": "BLOCK",
+      "effects": []
+    },
+    "cover": [
+      "guard:canonical-integrity-block"
+    ]
+  },
+  {
+    "id": "open-git-operation",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "git.open-operation",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "guard": "open-git-operation",
+      "status": "ASK",
+      "effects": []
+    },
+    "cover": [
+      "guard:open-git-operation"
+    ]
+  },
+  {
+    "id": "missing-product-new-project",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "guard": "product-required",
+      "status": "ROUTE",
+      "effects": []
+    },
+    "cover": [
+      "guard:product-required"
+    ]
+  },
+  {
+    "id": "missing-product-existing-code",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.brownfield": "no",
+      "state.code": "present",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "guard": "adoption-required",
+      "status": "ROUTE",
+      "effects": []
+    },
+    "cover": [
+      "guard:adoption-required"
+    ]
+  },
+  {
+    "id": "brownfield-refresh-routes-adopt",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "baseline.design-refresh",
+      "state.brownfield": "yes",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "guard": "brownfield-capability-writer",
+      "status": "ROUTE",
+      "effects": []
+    },
+    "cover": [
+      "guard:brownfield-capability-writer"
+    ]
+  },
+  {
+    "id": "state-owned-elsewhere",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "owned-elsewhere",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "guard": "state-owned-elsewhere",
+      "status": "ROUTE",
+      "effects": []
+    },
+    "cover": [
+      "guard:state-owned-elsewhere"
+    ]
+  },
+  {
+    "id": "glossary-definition",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.glossary-term",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "glossary-term",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:glossary-term",
+      "branch:glossary-term/definition"
+    ]
+  },
+  {
+    "id": "glossary-capability-alignment",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.glossary-term",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "align-capabilities",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "glossary-term",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:glossary-term",
+      "branch:glossary-term/align-capabilities"
+    ]
+  },
+  {
+    "id": "design-marker-binding",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.design-note",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "design-marker",
+      "status": "ROUTE",
+      "effects": [
+        "READ",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:design-marker"
+    ]
+  },
+  {
+    "id": "compact-owner-landing",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.knowledge-landing",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}]",
+      "marker.knowledgeCount": 1
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "knowledge-landing",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:knowledge-landing",
+      "branch:knowledge-landing/compact"
+    ]
+  },
+  {
+    "id": "recursive-k-landing",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.knowledge-landing",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
+      "marker.knowledgeCount": 1
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "recursive",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "knowledge-landing",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:knowledge-landing",
+      "branch:knowledge-landing/recursive"
+    ]
+  },
+  {
+    "id": "multi-owner-partial-compact",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.knowledge-landing",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
+      "marker.knowledgeCount": 2
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "partial-compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "knowledge-landing",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:knowledge-landing",
+      "branch:knowledge-landing/partial-compact"
+    ]
+  },
+  {
+    "id": "multi-owner-partial-recursive",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.knowledge-landing",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"},{\"owner\":\"devflow/project/capabilities/02-billing.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/09-card.md@cccccccccccccccccccccccccccccccccccccccc\"}]",
+      "marker.knowledgeCount": 2
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "partial-recursive",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "knowledge-landing",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:knowledge-landing",
+      "branch:knowledge-landing/partial-recursive"
+    ]
+  },
+  {
+    "id": "multi-owner-mixed-landing",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.knowledge-landing",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
+      "marker.knowledgeCount": 2
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "multi-mixed",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "knowledge-landing",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "WRITE",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:knowledge-landing",
+      "branch:knowledge-landing/multi-mixed"
+    ]
+  },
+  {
+    "id": "repair-layer0-ask",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.integration-config",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "repair-layer0-fields",
+      "status": "ASK",
+      "effects": [
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:repair-layer0-fields",
+      "branch:repair-layer0-fields/ask"
+    ]
+  },
+  {
+    "id": "repair-layer0-commit",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.integration-config",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "commit"
+    },
+    "expect": {
+      "stage": "repair-layer0-fields",
+      "status": "ROUTE",
+      "effects": [
+        "WRITE",
+        "COMMIT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:repair-layer0-fields",
+      "branch:repair-layer0-fields/commit"
+    ]
+  },
+  {
+    "id": "read-product-glossary-inputs",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "needed",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "read-inputs",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "READ",
+        "READ",
+        "READ",
+        "READ",
+        "READ",
+        "READ",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:read-inputs",
+      "branch:read-inputs/needed"
+    ]
+  },
+  {
+    "id": "refresh-product-contradiction",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "refresh",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "product-contradiction",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "refresh-check",
+      "status": "ROUTE",
+      "effects": [
+        "REPORT",
+        "ROUTE:product"
+      ]
+    },
+    "cover": [
+      "stage:refresh-check",
+      "branch:refresh-check/product-contradiction"
+    ]
+  },
+  {
+    "id": "refresh-capability-only-change",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "refresh",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "capability-only",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "refresh-check",
+      "status": "ROUTE",
+      "effects": [
+        "REPORT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:refresh-check",
+      "branch:refresh-check/capability-only"
+    ]
+  },
+  {
+    "id": "derive-components",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "derive",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "component-derivation",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:component-derivation",
+      "branch:component-derivation/derive"
+    ]
+  },
+  {
+    "id": "confirm-component-proposal",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "proposed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "component-derivation",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:component-derivation",
+      "branch:component-derivation/proposed"
+    ]
+  },
+  {
+    "id": "candidate-research-route",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "needed",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "candidate-research",
+      "status": "ROUTE",
+      "effects": [
+        "REPORT",
+        "ROUTE:split"
+      ]
+    },
+    "cover": [
+      "stage:candidate-research",
+      "branch:candidate-research/needed"
+    ]
+  },
+  {
+    "id": "candidate-research-active",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "active",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "candidate-research",
+      "status": "ROUTE",
+      "effects": [
+        "REPORT",
+        "ROUTE:work"
+      ]
+    },
+    "cover": [
+      "stage:candidate-research",
+      "branch:candidate-research/active"
+    ]
+  },
+  {
+    "id": "candidate-research-blocked",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "blocked",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "candidate-research",
+      "status": "WAIT",
+      "effects": [
+        "REPORT",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:candidate-research",
+      "branch:candidate-research/blocked"
+    ]
+  },
+  {
+    "id": "candidate-research-conflicted",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "conflicted",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "candidate-research",
+      "status": "BLOCK",
+      "effects": [
+        "REPORT",
+        "BLOCK"
+      ]
+    },
+    "cover": [
+      "stage:candidate-research",
+      "branch:candidate-research/conflicted"
+    ]
+  },
+  {
+    "id": "candidate-research-unavailable",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "unavailable",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "candidate-research",
+      "status": "BLOCK",
+      "effects": [
+        "REPORT",
+        "BLOCK"
+      ]
+    },
+    "cover": [
+      "stage:candidate-research",
+      "branch:candidate-research/unavailable"
+    ]
+  },
+  {
+    "id": "stack-proposal",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "propose",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "stack-and-derived",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:stack-and-derived",
+      "branch:stack-and-derived/propose"
+    ]
+  },
+  {
+    "id": "stack-choice-required",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "needs-choice",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "stack-and-derived",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:stack-and-derived",
+      "branch:stack-and-derived/needs-choice"
+    ]
+  },
+  {
+    "id": "structure-capability-first",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "three-plus-capabilities",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "code-structure",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:code-structure",
+      "branch:code-structure/three-plus-capabilities",
+      "row:structureChoice/recommend-a",
+      "branch:structureChoice/recommend-a"
+    ]
+  },
+  {
+    "id": "structure-screen-first",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "screen-heavy",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "code-structure",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:code-structure",
+      "branch:code-structure/screen-heavy",
+      "row:structureChoice/recommend-b",
+      "branch:structureChoice/recommend-b"
+    ]
+  },
+  {
+    "id": "structure-flat",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "under-twenty-files",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "code-structure",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:code-structure",
+      "branch:code-structure/under-twenty-files",
+      "row:structureChoice/recommend-c",
+      "branch:structureChoice/recommend-c"
+    ]
+  },
+  {
+    "id": "verification-channel-select",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "select",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "verify-channel",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:verify-channel",
+      "branch:verify-channel/select"
+    ]
+  },
+  {
+    "id": "verification-channel-probe",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "probe",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "verify-channel",
+      "status": "WAIT",
+      "effects": [
+        "DISPATCH",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:verify-channel",
+      "branch:verify-channel/probe"
+    ]
+  },
+  {
+    "id": "verification-channel-unavailable",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "unavailable",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "verify-channel",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:verify-channel",
+      "branch:verify-channel/unavailable"
+    ]
+  },
+  {
+    "id": "proposal-draft",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "draft",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "proposal",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:proposal",
+      "branch:proposal/draft"
+    ]
+  },
+  {
+    "id": "interrupted-proposal",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "interrupted",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "proposal",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:proposal",
+      "branch:proposal/interrupted"
+    ]
+  },
+  {
+    "id": "architecture-approval-request",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "approval",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:approval",
+      "branch:approval/ask",
+      "row:approvalBoundary/ask",
+      "branch:approvalBoundary/ask"
+    ]
+  },
+  {
+    "id": "approval-refusal",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "refuse",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "approval",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "stage:approval",
+      "branch:approval/refuse",
+      "row:approvalBoundary/refuse",
+      "branch:approvalBoundary/refuse"
+    ]
+  },
+  {
+    "id": "initial-architecture-creation",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "approve",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "approval",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:approval",
+      "branch:approval/approve",
+      "row:approvalBoundary/approve-initial",
+      "branch:approvalBoundary/approve-initial"
+    ]
+  },
+  {
+    "id": "refresh-architecture-commit",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "refresh",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "approve",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "approval",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:approval",
+      "branch:approval/approve",
+      "row:approvalBoundary/approve-refresh",
+      "branch:approvalBoundary/approve-refresh"
+    ]
+  },
+  {
+    "id": "capability-capacity-warning",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "capability-only",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "warned"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "capability-capacity",
+      "status": "ROUTE",
+      "effects": [
+        "REPORT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:capability-capacity",
+      "branch:capability-capacity/warned"
+    ]
+  },
+  {
+    "id": "capability-docs-approval-request",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "capability-only",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "capability-design",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:capability-design",
+      "branch:capability-design/ask",
+      "row:capabilityRoute/ask",
+      "branch:capabilityRoute/ask"
+    ]
+  },
+  {
+    "id": "capability-docs-route-design",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "capability-only",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "approve",
+      "route.after": "design",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "capability-design",
+      "status": "ROUTE",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "ROUTE:design"
+      ]
+    },
+    "cover": [
+      "stage:capability-design",
+      "branch:capability-design/approve",
+      "row:capabilityRoute/approve-design",
+      "branch:capabilityRoute/approve-design"
+    ]
+  },
+  {
+    "id": "capability-docs-route-resume",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "capability-only",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "approve",
+      "route.after": "resume",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "capability-design",
+      "status": "ROUTE",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:capability-design",
+      "branch:capability-design/approve",
+      "row:capabilityRoute/approve-resume",
+      "branch:capabilityRoute/approve-resume"
+    ]
+  },
+  {
+    "id": "route-after-commit-split",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.layer0-incomplete",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "capability-only",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "approve",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "capability-design",
+      "status": "ROUTE",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "ROUTE:split"
+      ]
+    },
+    "cover": [
+      "stage:capability-design",
+      "branch:capability-design/approve",
+      "row:capabilityRoute/approve-split",
+      "branch:capabilityRoute/approve-split"
+    ]
+  },
+  {
+    "id": "already-current",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "complete.product-pass",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "current",
+      "state.capabilities": "current",
+      "state.expected": 0,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0
+    },
+    "judged": {
+      "request.kind": "none",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": null,
+      "status": "DONE",
+      "effects": []
+    },
+    "cover": []
+  }
+]

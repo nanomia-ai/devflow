@@ -69,7 +69,7 @@ if ($pluginInstalled) {
 
 Write-Host ""
 if ($pluginInstalled) {
-    Write-Host "Done. Codex invokes the devflow skills itself - type a trigger such as 'resume devflow state'."
+    Write-Host "Done. After user intent exists, Codex invokes devflow:principles first and follows its route."
     Write-Host "The native plugin delivers SessionStart. Enable [features] hooks = true in Codex config."
     Write-Host ""
     Write-Host "Next, and only you can do it: open /hooks in a Codex session and confirm the devflow"
@@ -82,5 +82,5 @@ if ($pluginInstalled) {
     Write-Host ""
     Write-Host "Only when hooks are disabled or unsupported, add codex/AGENTS-devflow.md to the project's AGENTS.md."
 } else {
-    Write-Host "Done - with no plugin, ask the model to run the devflow resume skill explicitly."
+    Write-Host "Done - with no plugin, ask the model to run devflow:principles after user intent exists."
 }

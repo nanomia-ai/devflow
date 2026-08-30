@@ -1,0 +1,20 @@
+{
+  "name": "adopt",
+  "description": "Existing-project adoption. In a repository that already has code, traces one representative flow per capability candidate and reverse-derives Layer 0 and capability design zones. Use for adopting an existing project, reverse-deriving codebase documents, or creating and repairing capability documents in a brownfield.",
+  "problem": "Preserve the behavior of the immutable repository source at skills/adopt without silently changing its obligations.",
+  "use_cases": [],
+  "near_misses": [],
+  "inputs": [],
+  "outputs": [],
+  "irreversible_boundaries": [],
+  "state_dependent_behaviors": [
+    "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review."
+  ],
+  "exact_formats": [],
+  "external_dependencies": [],
+  "completion_evidence": [],
+  "judgment_points": [
+    "Every source atom remains review-required until explicitly disposed."
+  ],
+  "deterministic_helpers": []
+}

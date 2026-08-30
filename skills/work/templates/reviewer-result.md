@@ -1,0 +1,4 @@
+{{verdict}}
+{{objections}}
+{{evidence}}
+{{speculative}}

@@ -1,8 +1,7 @@
 # Maintaining devflow — read this before changing anything
 
-**Stop.** This repository is prompt text that AI sessions execute literally. A vague word,
-conflicting concept, missing read edge, or unbounded rule becomes a defect in every project
-that uses devflow. A cheap edit here can be an expensive behavioral change.
+**Stop.** AI sessions execute this repository literally. Vague or conflicting words, missing
+read edges, and unbounded rules become defects in every project using devflow.
 
 ## Entry gate
 
@@ -26,8 +25,7 @@ that uses devflow. A cheap edit here can be an expensive behavioral change.
 
 ## What opens what
 
-Detailed procedure lives in `docs/maintenance-protocol.md`; read it by exact section, not
-whole by default.
+Read only the exact `docs/maintenance-protocol.md` sections named below.
 
 | When this is true | Open this |
 |---|---|
@@ -65,9 +63,9 @@ evidence stands in their place.
 - **Round records are immutable moments.** Edit one only when the owner asks to revise that
   exact role. Outside the versioned-implementation report fixed by maintenance protocol §5,
   a new request, handoff, plan, report, or audit is not implied by another.
-- **Design in Korean, deploy in English.** Edit `_ko` first, translate with the fixed terms,
-  and verify structure and figures 1:1. External English-first work is back-synced before
-  release.
+- **Follow each declared language direction.** Owner-facing docs and the Codex adapter use
+  `_ko`-first paired review. P2 runtime skills author English `spec.mjs` and `body.md`;
+  generated `SKILL.md` and Korean legacy atoms are not live pairs.
 - **Report before judgment calls are applied.** Clear literal conflicts may be fixed
   directly, but list them separately. Fixes receive their own re-audit.
 - **Deploy changes ship complete.** A change under `skills/`, `codex/`, `hooks/`, `scripts/`,

@@ -1,0 +1,801 @@
+[
+  {
+    "id": "prepared-route-is-recovered-before-execution",
+    "s": {
+      "projection.transition": "prepared-route",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "ready",
+      "verifier.verdict": "pending",      "result.record": "missing",
+      "closure.capability": "not-applicable",
+      "closure.product": "continue",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "recover",
+      "status": "ROUTE",
+      "effects": [
+        "READ",
+        "RUN",
+        "COMMIT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:recover",
+      "row:recovery/prepared-route",
+      "branch:recovery/prepared-route"
+    ]
+  },
+  {
+    "id": "partial-record-is-not-committed-as-evidence",
+    "s": {
+      "projection.transition": "partial-write",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "ready",
+      "verifier.verdict": "pending",      "result.record": "missing",
+      "closure.capability": "blocked",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "recover",
+      "status": "ROUTE",
+      "effects": [
+        "READ",
+        "REPORT",
+        "ROUTE:verify"
+      ]
+    },
+    "cover": [
+      "stage:recover",
+      "row:recovery/partial-write",
+      "branch:recovery/partial-write"
+    ]
+  },
+  {
+    "id": "channel-unavailable-record-uses-no-repair-root",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "unavailable",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "ready",
+      "verifier.verdict": "unverified",      "result.record": "missing",
+      "closure.capability": "blocked",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": null,
+      "status": "ROUTE",
+      "effects": []
+    },
+    "cover": [
+      "guard:channel-unavailable"
+    ]
+  },
+  {
+    "id": "residual-owner-marker-refuses-capability-close",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "owner-marker",
+      "verification.layer": "capability",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",      "result.record": "current",
+      "closure.capability": "ready",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": null,
+      "status": "ROUTE",
+      "effects": []
+    },
+    "cover": [
+      "guard:residual-owner-marker"
+    ]
+  },
+  {
+    "id": "fresh-capability-fail-records-actual-scene",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "fail",      "result.record": "missing",
+      "record.execution": "missing",
+      "closure.capability": "blocked",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "result-routing",
+      "status": "ROUTE",
+      "effects": [
+        "WRITE",
+        "COMMIT",
+        "ROUTE:split"
+      ]
+    },
+    "cover": [
+      "stage:result-routing",
+      "row:result/fail",
+      "branch:result/fail"
+    ]
+  },
+  {
+    "id": "fresh-capability-pass-records-before-closure",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",      "result.record": "missing",
+      "record.execution": "missing",
+      "closure.capability": "ready",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "result-routing",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:result-routing",
+      "row:result/pass-record",
+      "branch:result/pass-record"
+    ]
+  },
+  {
+    "id": "current-capability-pass-enters-closure",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",
+      "result.record": "current",
+      "record.execution": "current",
+      "closure.capability": "ready",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "capability-closure",
+      "status": "ROUTE",
+      "effects": [
+        "READ",
+        "WRITE",
+        "COMMIT",
+        "ROUTE:arch"
+      ]
+    },
+    "cover": [
+      "stage:capability-closure",
+      "row:capability/ready",
+      "branch:capability/ready"
+    ]
+  },
+  {
+    "id": "audit-event-is-dispatched-after-result",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",      "result.record": "current",
+      "record.execution": "current",
+      "closure.capability": "not-applicable",
+      "closure.product": "stop",
+      "event.pending": "audit"
+    },
+    "expect": {
+      "stage": "event-routing",
+      "status": "WAIT",
+      "effects": [
+        "DISPATCH",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:event-routing",
+      "row:event/audit",
+      "branch:event/audit"
+    ]
+  },
+  {
+    "id": "closed-capability-is-terminal",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",      "result.record": "current",
+      "record.execution": "current",
+      "closure.capability": "closed",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": null,
+      "status": "DONE",
+      "effects": []
+    },
+    "cover": []
+  },
+  {
+    "id": "product-stop-terminal",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",      "result.record": "current",
+      "record.execution": "current",
+      "closure.capability": "not-applicable",
+      "closure.product": "stop",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": null,
+      "status": "DONE",
+      "effects": []
+    },
+    "cover": []
+  },
+  {
+    "id": "stale-result-is-refused-before-stage-selection",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "stale",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "ready",
+      "verifier.verdict": "pending",      "result.record": "missing",
+      "closure.capability": "not-applicable",
+      "closure.product": "continue",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": null,
+      "status": "ROUTE",
+      "guard": "refuse-stale-result",
+      "effects": []
+    },
+    "cover": [
+      "guard:refuse-stale-result"
+    ]
+  },
+  {
+    "id": "interrupted-result-is-recovered-before-dispatch",
+    "s": {
+      "projection.transition": "interrupted-result",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "ready",
+      "verifier.verdict": "pending",      "result.record": "missing",
+      "closure.capability": "not-applicable",
+      "closure.product": "continue",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "recover",
+      "status": "ROUTE",
+      "effects": [
+        "READ",
+        "RUN",
+        "COMMIT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:recover",
+      "row:recovery/interrupted-result",
+      "branch:recovery/interrupted-result"
+    ]
+  },
+  {
+    "id": "fresh-verifier-is-dispatched-before-any-result-route",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "ready",
+      "verifier.verdict": "pending",      "result.record": "missing",
+      "closure.capability": "not-applicable",
+      "closure.product": "continue",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "dispatch-verifier",
+      "status": "WAIT",
+      "effects": [
+        "READ",
+        "READ",
+        "READ",
+        "READ",
+        "DISPATCH",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:dispatch-verifier",
+      "row:dispatch/ready",
+      "branch:dispatch/ready"
+    ]
+  },
+  {
+    "id": "pending-result-waits-without-writing-a-record",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pending",      "result.record": "missing",
+      "record.execution": "missing",
+      "closure.capability": "not-applicable",
+      "closure.product": "continue",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "result-routing",
+      "status": "WAIT",
+      "effects": [
+        "REPORT",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:result-routing",
+      "row:result/pending",
+      "branch:result/pending"
+    ]
+  },
+  {
+    "id": "available-unverified-result-routes-to-repair",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "unverified",      "result.record": "missing",
+      "record.execution": "missing",
+      "closure.capability": "not-applicable",
+      "closure.product": "continue",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "result-routing",
+      "status": "ROUTE",
+      "effects": [
+        "WRITE",
+        "COMMIT",
+        "ROUTE:split"
+      ]
+    },
+    "cover": [
+      "stage:result-routing",
+      "row:result/unverified",
+      "branch:result/unverified"
+    ]
+  },
+  {
+    "id": "capability-not-applicable-is-routed-to-split",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",      "result.record": "current",
+      "record.execution": "current",
+      "closure.capability": "not-applicable",
+      "closure.product": "continue",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "capability-closure",
+      "status": "ROUTE",
+      "effects": [
+        "REPORT",
+        "ROUTE:split"
+      ]
+    },
+    "cover": [
+      "stage:capability-closure",
+      "row:capability/not-applicable",
+      "branch:capability/not-applicable"
+    ]
+  },
+  {
+    "id": "blocked-capability-closure-records-and-routes-to-split",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",      "result.record": "current",
+      "record.execution": "current",
+      "closure.capability": "blocked",
+      "closure.product": "continue",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "capability-closure",
+      "status": "ROUTE",
+      "effects": [
+        "WRITE",
+        "COMMIT",
+        "ROUTE:split"
+      ]
+    },
+    "cover": [
+      "stage:capability-closure",
+      "row:capability/blocked",
+      "branch:capability/blocked"
+    ]
+  },
+  {
+    "id": "product-not-applicable-returns-to-product-owner",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",      "result.record": "current",
+      "record.execution": "current",
+      "closure.capability": "not-applicable",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "product-stop",
+      "status": "ROUTE",
+      "effects": [
+        "REPORT",
+        "ROUTE:product"
+      ]
+    },
+    "cover": [
+      "stage:product-stop",
+      "row:product/not-applicable",
+      "branch:product/not-applicable"
+    ]
+  },
+  {
+    "id": "product-continue-records-and-returns-to-product-owner",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",      "result.record": "current",
+      "record.execution": "current",
+      "closure.capability": "not-applicable",
+      "closure.product": "continue",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "product-stop",
+      "status": "ROUTE",
+      "effects": [
+        "WRITE",
+        "COMMIT",
+        "ROUTE:product"
+      ]
+    },
+    "cover": [
+      "stage:product-stop",
+      "row:product/continue",
+      "branch:product/continue"
+    ]
+  },
+  {
+    "id": "retrospective-event-is-dispatched-after-terminal-product-closure",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",      "result.record": "current",
+      "record.execution": "current",
+      "closure.capability": "not-applicable",
+      "closure.product": "stop",
+      "event.pending": "retrospective"
+    },
+    "expect": {
+      "stage": "event-routing",
+      "status": "WAIT",
+      "effects": [
+        "DISPATCH",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:event-routing",
+      "row:event/retrospective",
+      "branch:event/retrospective"
+    ]
+  },
+  {
+    "id": "unavailable-schema2-kernel-blocks-before-verification",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "invalid",
+      "result.record": "missing",
+      "record.execution": "missing",
+      "event.pending": "none"
+    },
+    "decided": {
+      "verifier.dispatch": "ready",
+      "verifier.verdict": "pending",
+      "closure.capability": "not-applicable",
+      "closure.product": "not-applicable",
+      "history.basis": "none"
+    },
+    "expect": {
+      "stage": null,
+      "status": "BLOCK",
+      "guard": "state-kernel-unavailable",
+      "effects": []
+    },
+    "cover": [
+      "guard:state-kernel-unavailable"
+    ]
+  },
+  {
+    "id": "broad-closed-history-is-refused",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "result.record": "missing",
+      "record.execution": "missing",
+      "event.pending": "none"
+    },
+    "decided": {
+      "verifier.dispatch": "ready",
+      "verifier.verdict": "pending",
+      "closure.capability": "not-applicable",
+      "closure.product": "not-applicable",
+      "history.basis": "broad"
+    },
+    "expect": {
+      "stage": null,
+      "status": "BLOCK",
+      "guard": "closed-history-refusal",
+      "effects": []
+    },
+    "cover": [
+      "guard:closed-history-refusal"
+    ]
+  },
+  {
+    "id": "scope-mismatch-is-unverified-not-a-pass",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "unverified",      "result.record": "missing",
+      "record.execution": "missing",
+      "closure.capability": "not-applicable",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "result-routing",
+      "status": "ROUTE",
+      "effects": [
+        "WRITE",
+        "COMMIT",
+        "ROUTE:split"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "pass-with-missing-collected-evidence-waits-before-closure",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",
+      "result.record": "current",
+      "record.execution": "missing",
+      "closure.capability": "ready",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "result-routing",
+      "status": "WAIT",
+      "effects": ["REPORT", "WAIT"]
+    },
+    "cover": ["stage:result-routing", "row:result/await-execution-evidence", "branch:result/await-execution-evidence"]
+  },
+  {
+    "id": "pass-with-stale-collected-evidence-waits-before-product-stop",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",
+      "result.record": "stale",
+      "record.execution": "missing",
+      "closure.capability": "not-applicable",
+      "closure.product": "stop",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "result-routing",
+      "status": "WAIT",
+      "effects": ["REPORT", "WAIT"]
+    },
+    "cover": ["stage:result-routing", "row:result/await-execution-evidence", "branch:result/await-execution-evidence"]
+  },
+  {
+    "id": "pass-with-mismatched-collected-evidence-fails-closed",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",
+      "result.record": "mismatched",
+      "record.execution": "missing",
+      "closure.capability": "closed",
+      "closure.product": "not-applicable",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "result-routing",
+      "status": "WAIT",
+      "effects": ["REPORT", "WAIT"]
+    },
+    "cover": ["stage:result-routing", "row:result/await-execution-evidence", "branch:result/await-execution-evidence"]
+  },
+  {
+    "id": "counterfeit-stale-pass-cannot-close-from-model-decisions",
+    "s": {
+      "projection.transition": "none",
+      "history.basis": "none",
+      "projection.channel": "available",
+      "projection.freshness": "stale",
+      "landing.residual": "none",
+      "verification.layer": "product",
+      "verifier.dispatch": "returned",
+      "verifier.verdict": "pass",
+      "result.record": "stale",
+      "record.execution": "missing",
+      "closure.capability": "not-applicable",
+      "closure.product": "stop",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": null,
+      "status": "ROUTE",
+      "guard": "refuse-stale-result",
+      "effects": []
+    },
+    "cover": []
+  },
+  {
+    "id": "exact-named-history-basis-stays-bounded",
+    "s": {
+      "projection.transition": "none",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "result.record": "missing",
+      "record.execution": "missing",
+      "event.pending": "none"
+    },
+    "decided": {
+      "history.basis": "named-card",
+      "verifier.dispatch": "ready",
+      "verifier.verdict": "pending",
+      "closure.capability": "not-applicable",
+      "closure.product": "not-applicable"
+    },
+    "expect": {
+      "stage": "dispatch-verifier",
+      "status": "WAIT",
+      "effects": [
+        "READ",
+        "READ",
+        "READ",
+        "READ",
+        "DISPATCH",
+        "WAIT"
+      ]
+    },
+    "cover": []
+  }
+]

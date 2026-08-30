@@ -1,18 +1,18 @@
 <!-- FALLBACK ONLY. The Codex plugin delivers a native SessionStart hook (requires
-[features] hooks = true in ~/.codex/config.toml) that detects devflow and routes to the
-shared resume procedure, as in Claude Code. Add this block to a project's AGENTS.md only where hooks are
+[features] hooks = true in ~/.codex/config.toml) that gives shared principles guidance,
+as in Claude Code. Add this block to a project's AGENTS.md only where hooks are
 unavailable (flag off, or older Codex). Not needed in Claude Code either. -->
 
 ## devflow
 
-This project is managed with devflow. At session start, if a model-invocable resume skill
-is available, invoke it and follow it exactly — unless you were handed a devflow role
-contract, in which case do not invoke resume and follow only that contract. Do not modify
-code until resume reports the state and the user approves.
+This project is managed with devflow. After the user states their intent, invoke the
+model-invocable `devflow:principles` skill to classify the request and follow its route.
+If you were handed a devflow role contract, follow that contract directly; do not re-enter
+through principles. Do not modify code before the selected route and any required approval.
 
 Before dispatching another agent to perform a devflow stage in this project, read and
 follow devflow's `coordinator` role contract.
 
-If no model-invocable resume skill is available, do not modify code. Ask the user to
+If no model-invocable principles skill is available, do not modify code. Ask the user to
 install or enable the devflow plugin. Never assume that the model can invoke a slash
 command itself.

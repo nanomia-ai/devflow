@@ -1,0 +1,745 @@
+[
+  {
+    "id": "domain-orientation-bounded",
+    "s": {
+      "state.canonicalNext": "ready.ready",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "domain-orientation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "stage:scope-entry",
+      "branch:scope-entry/domain-orientation",
+      "row:canonicalNext/DONE:orientation",
+      "branch:canonicalNext/DONE:orientation"
+    ]
+  },
+  {
+    "id": "handoff-active-reentry",
+    "s": {
+      "state.canonicalNext": "claim.mine",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "handoff-continuation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:work"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ROUTE:work",
+      "branch:canonicalNext/ROUTE:work"
+    ]
+  },
+  {
+    "id": "design-recovery-producer-routes-work",
+    "s": {
+      "state.canonicalNext": "marker.design-note",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "recovery-action",
+      "status": "ROUTE",
+      "effects": [
+        "READ",
+        "READ",
+        "ROUTE:arch"
+      ]
+    },
+    "cover": [
+      "stage:recovery-action",
+      "row:recovery/route-arch",
+      "branch:recovery/route-arch"
+    ]
+  },
+  {
+    "id": "design-recovery-external-reports-only",
+    "s": {
+      "state.canonicalNext": "marker.design-note",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "recovery-action",
+      "status": "ROUTE",
+      "effects": [
+        "READ",
+        "READ",
+        "ROUTE:arch"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "recovery-routes-arch",
+    "s": {
+      "state.canonicalNext": "baseline.boundary",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "recovery-action",
+      "status": "WAIT",
+      "effects": [
+        "READ",
+        "READ",
+        "COMMIT",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "row:recovery/finish-baseline-boundary",
+      "branch:recovery/finish-baseline-boundary"
+    ]
+  },
+  {
+    "id": "recovery-routes-adopt",
+    "s": {
+      "state.canonicalNext": "marker.design-note",
+      "state.brownfield": "yes"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "recovery-action",
+      "status": "ROUTE",
+      "effects": [
+        "READ",
+        "READ",
+        "ROUTE:adopt"
+      ]
+    },
+    "cover": [
+      "row:recovery/route-adopt",
+      "branch:recovery/route-adopt"
+    ]
+  },
+  {
+    "id": "folder-boundary-commits-before-wait",
+    "s": {
+      "state.canonicalNext": "layer.folder-boundary",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "recovery-action",
+      "status": "WAIT",
+      "effects": [
+        "READ",
+        "READ",
+        "COMMIT",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "row:recovery/commit-folder-boundary",
+      "branch:recovery/commit-folder-boundary"
+    ]
+  },
+  {
+    "id": "digest-commits-before-wait",
+    "s": {
+      "state.canonicalNext": "ready.digest-behind",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "recovery-action",
+      "status": "WAIT",
+      "effects": [
+        "READ",
+        "READ",
+        "COMMIT",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "row:recovery/commit-digest",
+      "branch:recovery/commit-digest"
+    ]
+  },
+  {
+    "id": "transition-family-verifies",
+    "s": {
+      "state.canonicalNext": "transition.prepared-route",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:verify"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ROUTE:verify",
+      "branch:canonicalNext/ROUTE:verify"
+    ]
+  },
+  {
+    "id": "claim-and-layer-family-splits",
+    "s": {
+      "state.canonicalNext": "claim.needs-reapproval",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:split"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ROUTE:split",
+      "branch:canonicalNext/ROUTE:split"
+    ]
+  },
+  {
+    "id": "git-and-setup-ask",
+    "s": {
+      "state.canonicalNext": "git.open-operation",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ASK",
+      "effects": [
+        "ASK"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ASK:setup",
+      "branch:canonicalNext/ASK:setup"
+    ]
+  },
+  {
+    "id": "glossary-term-asks-owner",
+    "s": {
+      "state.canonicalNext": "marker.glossary-term",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ASK",
+      "effects": [
+        "ASK"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ASK:owner-mapping",
+      "branch:canonicalNext/ASK:owner-mapping"
+    ]
+  },
+  {
+    "id": "recovery-action-has-no-none-branch",
+    "s": {
+      "state.canonicalNext": "marker.design-open-item",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "recovery-action",
+      "status": "ROUTE",
+      "effects": [
+        "READ",
+        "READ",
+        "ROUTE:arch"
+      ]
+    },
+    "cover": [
+      "stage:recovery-action"
+    ]
+  },
+  {
+    "id": "brownfield-baseline-adopts",
+    "s": {
+      "state.canonicalNext": "baseline.legacy-v010",
+      "state.brownfield": "yes"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:adopt"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ROUTE:adopt",
+      "branch:canonicalNext/ROUTE:adopt"
+    ]
+  },
+  {
+    "id": "greenfield-baseline-arches",
+    "s": {
+      "state.canonicalNext": "baseline.legacy-v010",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:arch"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ROUTE:arch",
+      "branch:canonicalNext/ROUTE:arch"
+    ]
+  },
+  {
+    "id": "product-marker-routes-product",
+    "s": {
+      "state.canonicalNext": "marker.product-rerun",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:product"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ROUTE:product",
+      "branch:canonicalNext/ROUTE:product"
+    ]
+  },
+  {
+    "id": "blocked-channel-reports-and-waits",
+    "s": {
+      "state.canonicalNext": "blocked.channel",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "WAIT",
+      "effects": [
+        "REPORT",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/WAIT:blocked",
+      "branch:canonicalNext/WAIT:blocked"
+    ]
+  },
+  {
+    "id": "completion-reports-and-done",
+    "s": {
+      "state.canonicalNext": "complete.adoption",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/DONE:complete",
+      "branch:canonicalNext/DONE:complete"
+    ]
+  },
+  {
+    "id": "unrecognized-fails-closed",
+    "s": {
+      "state.canonicalNext": "unrecognized",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "BLOCK",
+      "effects": []
+    },
+    "cover": [
+      "row:canonicalNext/BLOCK:unrecognized",
+      "branch:canonicalNext/BLOCK:unrecognized"
+    ]
+  },
+  {
+    "id": "handoff-unrecognized-guard",
+    "s": {
+      "state.canonicalNext": "unrecognized",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "handoff-continuation"
+    },
+    "expect": {
+      "stage": null,
+      "status": "BLOCK",
+      "effects": []
+    },
+    "cover": [
+      "guard:unrecognized-state"
+    ]
+  },
+  {
+    "id": "ordinary-ready-routes-work",
+    "s": {
+      "state.canonicalNext": "ready.ready",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:work"
+      ]
+    },
+    "cover": [
+      "stage:scope-entry",
+      "row:canonicalNext/ROUTE:work",
+      "branch:canonicalNext/ROUTE:work"
+    ]
+  },
+  {
+    "id": "domain-entry-questions",
+    "s": {
+      "state.canonicalNext": "ready.ready",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "domain-orientation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "tweak-entry",
+    "s": {
+      "state.canonicalNext": "claim.mine",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "handoff-continuation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:work"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "direct-reads",
+    "s": {
+      "state.canonicalNext": "claim.mine",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "handoff-continuation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:work"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "report-approval",
+    "s": {
+      "state.canonicalNext": "claim.mine",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "handoff-continuation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:work"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "routing-introduction",
+    "s": {
+      "state.canonicalNext": "transition.prepared-route",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:verify"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "defer-policy",
+    "s": {
+      "state.canonicalNext": "transition.prepared-route",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:verify"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "digest-policy",
+    "s": {
+      "state.canonicalNext": "ready.digest-behind",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "recovery-action",
+      "status": "WAIT",
+      "effects": [
+        "READ",
+        "READ",
+        "COMMIT",
+        "WAIT"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "exceptions",
+    "s": {
+      "state.canonicalNext": "claim.mine",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "handoff-continuation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:work"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "split-planning-routes",
+    "s": {
+      "state.canonicalNext": "claim.needs-reapproval",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:split"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "event-routing-verifies",
+    "s": {
+      "state.canonicalNext": "transition.prepared-route",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:verify"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "product-verification",
+    "s": {
+      "state.canonicalNext": "transition.prepared-route",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:verify"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "integrity-blocking-asks",
+    "s": {
+      "state.canonicalNext": "integrity.blocking",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ASK",
+      "effects": [
+        "ASK"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ASK:integrity",
+      "branch:canonicalNext/ASK:integrity"
+    ]
+  },
+  {
+    "id": "integrity-shape-advisory",
+    "s": {
+      "state.canonicalNext": "integrity.shape",
+      "state.brownfield": "no"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/DONE:advisory",
+      "branch:canonicalNext/DONE:advisory"
+    ]
+  },
+  {
+    "id": "fresh-project-asks-preservation-before-product",
+    "s": { "state.canonicalNext": "setup.no-product", "state.brownfield": "no" },
+    "judged": { "intent.scope": "ordinary" },
+    "expect": { "stage": "scope-entry", "status": "ASK", "effects": ["ASK"] },
+    "cover": []
+  },
+  {
+    "id": "project-research-precedes-missing-product",
+    "s": { "state.canonicalNext": "ready.ready", "state.brownfield": "no" },
+    "judged": { "intent.scope": "ordinary" },
+    "expect": { "stage": "scope-entry", "status": "ROUTE", "effects": ["ROUTE:work"] },
+    "cover": []
+  },
+  {
+    "id": "active-claim-continues-work",
+    "s": { "state.canonicalNext": "claim.mine", "state.brownfield": "no" },
+    "judged": { "intent.scope": "handoff-continuation" },
+    "expect": { "stage": "scope-entry", "status": "ROUTE", "effects": ["ROUTE:work"] },
+    "cover": []
+  },
+  {
+    "id": "interrupted-transition-routes-verify-without-rerun",
+    "s": { "state.canonicalNext": "transition.interrupted", "state.brownfield": "no" },
+    "judged": { "intent.scope": "ordinary" },
+    "expect": { "stage": "scope-entry", "status": "ROUTE", "effects": ["ROUTE:verify"] },
+    "cover": []
+  },
+  {
+    "id": "domain-orientation-stays-read-only",
+    "s": { "state.canonicalNext": "claim.mine", "state.brownfield": "no" },
+    "judged": { "intent.scope": "domain-orientation" },
+    "expect": { "stage": "scope-entry", "status": "DONE", "effects": ["REPORT", "DONE"] },
+    "cover": []
+  },
+  {
+    "id": "partial-knowledge-landing-keeps-owner-active",
+    "s": { "state.canonicalNext": "marker.knowledge-landing", "state.brownfield": "no" },
+    "judged": { "intent.scope": "ordinary" },
+    "expect": { "stage": "scope-entry", "status": "ROUTE", "effects": ["ROUTE:arch"] },
+    "cover": []
+  }
+]

@@ -22,63 +22,100 @@ function makeProject(t, files, { git = false } = {}) {
   return root;
 }
 
-function runHook(root, startDirectory = root) {
-  const run = spawnSync(process.execPath, [hook], {
-    cwd: startDirectory,
-    encoding: "utf8",
-    input: JSON.stringify({ hook_event_name: "SessionStart", cwd: startDirectory }),
-  });
-  assert.equal(run.status, 0, run.stderr);
-  if (!run.stdout) return "";
-  return JSON.parse(run.stdout).hookSpecificOutput.additionalContext;
+function makeProbe(t) {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), "devflow-hook-probe-"));
+  const probe = path.join(directory, "probe.js");
+  fs.writeFileSync(probe, `
+"use strict";
+const fs = require("node:fs");
+const childProcess = require("node:child_process");
+const events = [];
+const readFileSync = fs.readFileSync;
+const writeFileSync = fs.writeFileSync;
+const spawnSync = childProcess.spawnSync;
+fs.readFileSync = function tracedRead(target, ...rest) {
+  events.push({ type: "read", target: String(target) });
+  return readFileSync.call(this, target, ...rest);
+};
+childProcess.spawnSync = function tracedSpawn(command, args, options) {
+  events.push({ type: "spawn", command, args, cwd: options && options.cwd });
+  return spawnSync.call(this, command, args, options);
+};
+process.on("exit", () => writeFileSync(process.env.DEVFLOW_HOOK_TRACE, JSON.stringify(events), "utf8"));
+`);
+  t.after(() => fs.rmSync(directory, { recursive: true, force: true }));
+  return probe;
 }
 
-test("a repository without devflow state produces no hook output", (t) => {
+function runHook(root, startDirectory = root, { input, probe } = {}) {
+  const trace = probe && path.join(path.dirname(probe), "trace.json");
+  const args = probe ? ["--require", probe, hook] : [hook];
+  const run = spawnSync(process.execPath, args, {
+    cwd: startDirectory,
+    encoding: "utf8",
+    input,
+    env: trace ? { ...process.env, DEVFLOW_HOOK_TRACE: trace } : process.env,
+  });
+  assert.equal(run.status, 0, run.stderr);
+  const payload = run.stdout ? JSON.parse(run.stdout) : null;
+  return {
+    payload,
+    context: payload ? payload.hookSpecificOutput.additionalContext : "",
+    events: trace ? JSON.parse(fs.readFileSync(trace, "utf8")) : [],
+  };
+}
+
+function sessionInput(directory) {
+  return JSON.stringify({ hook_event_name: "SessionStart", cwd: directory });
+}
+
+test("a Git checkout receives one delayed principles instruction", (t) => {
   const root = makeProject(t, { "NOTES.md": "# Fixture\n" }, { git: true });
-  assert.equal(runHook(root), "");
+  const { payload, context } = runHook(root, root, { input: sessionInput(root) });
+  assert.equal(payload.hookSpecificOutput.hookEventName, "SessionStart");
+  assert.equal(context.split("\n").length, 2);
+  assert.match(context, /After the user states their intent/);
+  assert.match(context, /devflow:principles/);
+  assert.doesNotMatch(context, /run (?:the )?devflow resume|project-state/i);
 });
 
-test("Layer 0 or tree state activates resume without choosing a stage", (t) => {
-  const roots = [
-    makeProject(t, { "devflow/project/glossary.md": "term: definition\n" }),
-    makeProject(t, { "devflow/tree/02-domain/02.1-task.md": "# Task\n" }),
-  ];
-  for (const root of roots) {
-    const context = runHook(root);
-    assert.match(context, /Run the devflow resume skill/);
-    assert.match(context, /coordinator role contract at .*coordinator\.md/);
-    assert.match(context, /unless you were handed a devflow role contract/);
-    assert.equal(context.split("\n").length, 3);
-    assert.doesNotMatch(context, /next (?:stage|card) is/i);
-  }
+test("a role contract bypasses entry classification", (t) => {
+  const root = makeProject(t, {}, { git: true });
+  const { context } = runHook(root, root, { input: sessionInput(root) });
+  assert.match(context, /role contract.*follow that contract directly/i);
+  assert.match(context, /do not re-enter through principles/i);
 });
 
-test("the hook finds the checkout from any depth below its root", (t) => {
+test("a subdirectory start resolves the checkout root without project reads", (t) => {
   const root = makeProject(t, {
-    "devflow/tree/02-domain/02.1-task.md": "# Task\n",
+    "devflow/project/product.md": "SECRET PROJECT\n",
+    "devflow/tree/02-domain/02.1-secret-task.wip-ab.md": "SECRET TASK\n",
+    "devflow/journal.md": "SECRET JOURNAL\n",
     "src/deep/deeper/note.txt": "x\n",
   }, { git: true });
-  for (const relative of [".", "src", path.join("src", "deep", "deeper")]) {
-    const context = runHook(root, path.join(root, relative));
-    assert.match(context, /Run the devflow resume skill/, `start directory: ${relative}`);
-  }
+  const startDirectory = path.join(root, "src", "deep", "deeper");
+  const probe = makeProbe(t);
+  const { context, events } = runHook(root, startDirectory, {
+    input: sessionInput(startDirectory),
+    probe,
+  });
+
+  assert.match(context, /devflow:principles/);
+  assert.doesNotMatch(context, /SECRET|devflow[\\/](?:project|tree)|session-start\.js/i);
+  assert.deepEqual(events, [
+    { type: "read", target: hook },
+    { type: "read", target: "0" },
+    { type: "spawn", command: "git", args: ["rev-parse", "--show-toplevel"], cwd: startDirectory },
+  ]);
+  assert.doesNotMatch(JSON.stringify(events), /project-state|resume/i);
 });
 
-test("a sibling checkout without devflow stays silent from any depth", (t) => {
-  const root = makeProject(t, { "src/deep/note.txt": "x\n" }, { git: true });
-  for (const relative of [".", "src", path.join("src", "deep")]) {
-    assert.equal(runHook(root, path.join(root, relative)), "", `start directory: ${relative}`);
-  }
-});
+test("malformed or missing stdin falls back safely, while non-Git directories stay silent", (t) => {
+  const gitRoot = makeProject(t, {}, { git: true });
+  assert.match(runHook(gitRoot, gitRoot, { input: "{not-json" }).context, /devflow:principles/);
+  assert.match(runHook(gitRoot, gitRoot).context, /devflow:principles/);
 
-test("the hook never injects local identity, task, or HANDOFF content", (t) => {
-  const root = makeProject(t, {
-    "devflow/project/product.md": "# Secret identity\n",
-    "devflow/tree/02-domain/02.1-secret-task.wip-ab.md": "# Secret task\n",
-    "devflow/users/ab/owner.md": "id: ab\ngit: Alice\n",
-    "devflow/users/ab/HANDOFF.md": "SECRET HANDOFF\n",
-  }, { git: true });
-  const context = runHook(root);
-  assert.doesNotMatch(context, /Secret|Alice|my id|HANDOFF|\.wip/);
-  assert.doesNotMatch(context, /integration|approval|classify/i);
+  const nonGitRoot = makeProject(t, { "NOTES.md": "# Fixture\n" });
+  assert.equal(runHook(nonGitRoot, nonGitRoot, { input: "{not-json" }).context, "");
+  assert.equal(runHook(nonGitRoot, nonGitRoot).context, "");
 });

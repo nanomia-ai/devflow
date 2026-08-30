@@ -1,0 +1,48 @@
+{
+  "schema": "skill-rails/semantic-diff/1",
+  "spec_hash": {
+    "before": "sha256:ad15bd71806434db63a028cc1380ed4c29d0eeae36efdf006717fd21f8e7adce",
+    "after": "sha256:ad15bd71806434db63a028cc1380ed4c29d0eeae36efdf006717fd21f8e7adce"
+  },
+  "changed": false,
+  "any_changed": true,
+  "source_changes": {
+    "behavior_source": false,
+    "observation_source": false,
+    "context": true
+  },
+  "artifact_receipts": [],
+  "groups": {
+    "observations": [],
+    "guards": [],
+    "stages": [],
+    "tables": [],
+    "formats": [],
+    "templates": [],
+    "template_content": [],
+    "body": [
+      {
+        "id": "stage: review-reduction",
+        "change": "modified",
+        "before": "sha256:8e329c86ef53d0986723705fd34a696f58129cc819db977d5bdbd37d3cff2909",
+        "after": "sha256:fecc1709e38bb389e5cf6ec79c6df26c144edf79f095a5b95526de22bc7dbadc"
+      }
+    ],
+    "references": [],
+    "ownership": [],
+    "artifacts": [],
+    "roles": [],
+    "declarations": [],
+    "deferred": []
+  },
+  "change_id": "restore-review-reduction-consumption",
+  "intent": "Restore the migrated review-reduction judgment conditions on the body section selected by the current Work Decision, without adding a new review state or rule.",
+  "impact": {
+    "body": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
+}

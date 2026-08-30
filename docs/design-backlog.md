@@ -231,6 +231,12 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   before doing anything. 0.18.3 cut between −5,438 B (resume) and −197 B (product) per entry,
   which does not change the order of magnitude. The cause is measured: 69% is universal and the
   rest is coupled to it. **An angle other than splitting is needed.**
+- **knowledge-landing history-walk latency** (v0.20.0 Phase 3) — the current package walks Git
+  history to recover named provenance, but no real-use timing ledger exists yet. In the first
+  Phase 4 real-use run, execute cold knowledge-landing 3 times and record median elapsed time and
+  the number of unique revisions opened. Reopen only if that median exceeds generate+build time
+  for the same package, or opened revisions exceed 2 times the named provenance-candidate commits.
+  Before that threshold is measured, propose no cache, index, or bypass path.
 
 ## Observations already settled — lineage
 
@@ -293,6 +299,12 @@ The items below were carried out and left the watch list. Re-proposals consult t
   confirmed no skill called `--facet`). The observation that carried the question, "a capability
   that overruns even the compact index", stays on the watch list because the index and its 24 KiB
   cap are unchanged; only that sentence was rewritten to the remaining filters.
+
+## Observations settled in v0.20.0
+
+- The observation that principles could recompute state or a hook could inject it, creating a second judge beside resume, moved to DD-92. The hook now gives delayed guidance only and resume alone owns state.
+- The observation that a capability-number knowledge shape cannot express research, recursive knowledge, and multi-owner landing moved to DD-92. Its result is research-only `00`, same-stem owner-adjacent recursive `K`, and atomic C1–C6 JSON-marker consumption.
+- The observation that an authored package needs a durable behavior source, provenance, and build evidence moved to DD-92. A P2 package keeps `spec.mjs` and portable provenance inside the package.
 
 ## On hold — candidates for coming versions
 

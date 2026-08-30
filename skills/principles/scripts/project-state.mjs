@@ -10,6 +10,7 @@ const OUTPUT_LIMIT = 24 * 1024;
 const COMPACT_FIELD_LIMIT = 96;
 const COMPACT_LOSSY_FIELDS = new Set(["progressLastPoint"]);
 const MAX_BUFFER = 64 * 1024 * 1024;
+const VERIFY_REVISION_CACHE = new WeakMap();
 const CARD_NUMBER = "[0-9]+[a-z]*(?:\\.[0-9]+[a-z]*)+";
 const FOLDER_NUMBER = "[0-9]+[a-z]*(?:\\.[0-9]+[a-z]*)*";
 const CARD_NUMBER_RE = new RegExp(`^${CARD_NUMBER}$`);
@@ -29,6 +30,7 @@ const RESERVED_JOURNAL_HEADS = [
   "retrospective requested:",
   "evidence-wait:",
   "evidence-finalizing:",
+  "knowledge landing pending:",
 ];
 
 // One recognizer owns every canon-fixed progress head. The canon says a progress line that
@@ -66,8 +68,9 @@ export const ZONE_DEFINITIONS = Object.freeze([
     { name: "glossary-term", present: 4.01, absent: null },
     { name: "design-note", present: 4.02, absent: null },
     { name: "design-open-item", present: 4.03, absent: null },
-    { name: "capability-closure", present: 4.04, absent: null },
-    { name: "re-split", present: 4.05, absent: 8 },
+    { name: "knowledge-landing", present: 4.04, absent: 4 },
+    { name: "capability-closure", present: 4.05, absent: null },
+    { name: "re-split", present: 4.06, absent: 8 },
   ] },
   { zone: "setup", present: 5, absent: 5, kinds: [
     { name: "no-product", present: 5, absent: 1 },
@@ -927,6 +930,29 @@ function glossaryTermFields(line) {
   } };
 }
 
+const KNOWLEDGE_OWNER = /^(?:devflow\/project\/(?:product|arch|design)\.md|devflow\/project\/capabilities\/[0-9]+-[^/]+\.md)$/;
+const KNOWLEDGE_SOURCE = new RegExp(`^(?<card>devflow/tree/[^@\\r\\n]+\\.md)@(?<hash>[0-9a-f]{40,64})$`);
+const KNOWLEDGE_LANDING_BYTES = Buffer.from("knowledge landing pending:", "utf8");
+
+function knowledgeLandingFields(line, start) {
+  const match = /^(?<owner>[^;]+); writer: (?<writer>arch|adopt); source-json: (?<sourceJson>[^\r\n]+)$/.exec(line.slice(start));
+  if (!match) return { valid: false, reason: "knowledge-landing-format" };
+  const decoded = parseJsonValue(match.groups.sourceJson);
+  if (!decoded.ok || typeof decoded.value !== "string") {
+    return { ...match.groups, valid: false, reason: "knowledge-source-json" };
+  }
+  const sourceValue = decoded.value;
+  const source = KNOWLEDGE_SOURCE.exec(sourceValue);
+  return {
+    ...match.groups,
+    source: sourceValue,
+    sourceCard: source?.groups.card ?? null,
+    sourceHash: source?.groups.hash ?? null,
+    valid: KNOWLEDGE_OWNER.test(match.groups.owner) && source !== null,
+    reason: KNOWLEDGE_OWNER.test(match.groups.owner) ? (source === null ? "knowledge-source-format" : null) : "knowledge-owner",
+  };
+}
+
 function parseJournalLine(line, lineNumber) {
   const out = { raw: line, line: lineNumber, kind: "other", valid: true };
   let match;
@@ -964,6 +990,9 @@ function parseJournalLine(line, lineNumber) {
     return { ...out, kind: match.groups.state, ...match.groups, card: card.value, check: check.value,
       valid: card.ok && check.ok && typeof card.value === "string" && typeof check.value === "string" };
   }
+  if ((match = new RegExp(`^${TIMESTAMP} knowledge landing pending: owner: `).exec(line))) {
+    return { ...out, kind: "knowledge-landing", ...match.groups, ...knowledgeLandingFields(line, match[0].length) };
+  }
   const timestamped = new RegExp(`^${TIMESTAMP} (?<body>.+)$`).exec(line);
   if (timestamped) {
     const reserved = RESERVED_JOURNAL_HEADS.find((head) => timestamped.groups.body.startsWith(head));
@@ -979,6 +1008,195 @@ function parseJournal(text) {
   if (text === null || text === "") return [];
   return text.split("\n").map((line, index) => ({ line, index: index + 1 })).filter((item) => item.line !== "")
     .map((item) => parseJournalLine(item.line, item.index)).filter(Boolean);
+}
+
+function knowledgeOwnerExists(snapshot, owner) {
+  return readFile(snapshot.root, owner) !== null || gitPathExists(snapshot.root, "HEAD", owner);
+}
+
+function committedKnowledgeSource(snapshot, line) {
+  if (!line.sourceCard || !line.sourceHash || cardIdentity(line.sourceCard) === null) return false;
+  const resolved = gitLine(snapshot.root, ["rev-parse", "--verify", `${line.sourceHash}^{commit}`], { allowFailure: true });
+  return resolved === line.sourceHash && gitPathExists(snapshot.root, line.sourceHash, line.sourceCard);
+}
+
+function knowledgeOwnerDirectory(owner) {
+  return owner.endsWith(".md") ? owner.slice(0, -3) : owner;
+}
+
+function removedKnowledgeLandings(beforeText, afterText) {
+  const before = parseJournal(beforeText).filter((line) => line.kind === "knowledge-landing" && line.valid);
+  const after = parseJournal(afterText).filter((line) => line.kind === "knowledge-landing" && line.valid);
+  const remaining = new Map();
+  for (const line of after) remaining.set(line.raw, (remaining.get(line.raw) ?? 0) + 1);
+  return before.filter((line) => {
+    const count = remaining.get(line.raw) ?? 0;
+    if (count === 0) return true;
+    remaining.set(line.raw, count - 1);
+    return false;
+  });
+}
+
+function knowledgeJournalAt(root, ref) {
+  const listed = gitRun(root, ["ls-tree", "-z", "--name-only", ref, "--", "devflow/journal.md"], { allowFailure: true });
+  if (listed.status !== 0) return { state: "failure", text: null };
+  let paths;
+  try {
+    paths = decodeUtf8(listed.stdout, `${ref}:devflow/journal.md tree entry`).split("\0").filter(Boolean);
+  } catch {
+    return { state: "failure", text: null };
+  }
+  if (!paths.includes("devflow/journal.md")) return { state: "absent", text: "" };
+  const shown = gitRun(root, ["show", `${ref}:devflow/journal.md`], { allowFailure: true });
+  if (shown.status !== 0) return { state: "failure", text: null };
+  if (!shown.stdout.includes(KNOWLEDGE_LANDING_BYTES)) return { state: "present", text: "" };
+  try {
+    return { state: "present", text: normalizeFileText(decodeUtf8(shown.stdout, `${ref}:devflow/journal.md`)) };
+  } catch {
+    return { state: "undecodable", text: null };
+  }
+}
+
+function textLineCount(text) {
+  if (text.length === 0) return 0;
+  const normalized = normalizeFileText(text);
+  return normalized.endsWith("\n") ? normalized.slice(0, -1).split("\n").length : normalized.split("\n").length;
+}
+
+function exactSourceBasis(root, text, line) {
+  if (text === null) return false;
+  const lines = normalizeFileText(text).split("\n");
+  if (lines.at(-1) === "") lines.pop();
+  const final = /^Source basis: (?<json>.+)$/.exec(lines.at(-1) ?? "");
+  if (!final) return false;
+  const decoded = parseJsonValue(final.groups.json);
+  if (!decoded.ok || !Array.isArray(decoded.value) || decoded.value.length === 0
+      || decoded.value.some((item) => typeof item !== "string")) return false;
+
+  const sourcePrefix = `${line.sourceCard}@${line.sourceHash}:`;
+  const cited = gitRun(root, ["show", `${line.sourceHash}:${line.sourceCard}`], { allowFailure: true });
+  if (cited.status !== 0) return false;
+  let sourceLines;
+  try {
+    sourceLines = textLineCount(decodeUtf8(cited.stdout, `${line.sourceCard}@${line.sourceHash}`));
+  } catch {
+    return false;
+  }
+  return decoded.value.some((item) => {
+    if (!item.startsWith(sourcePrefix)) return false;
+    const range = /^(?<start>[1-9][0-9]*)-(?<end>[1-9][0-9]*)$/.exec(item.slice(sourcePrefix.length));
+    if (!range) return false;
+    const start = Number(range.groups.start);
+    const end = Number(range.groups.end);
+    return Number.isSafeInteger(start) && Number.isSafeInteger(end) && start <= end && end <= sourceLines;
+  });
+}
+
+function knowledgeLandingState(snapshot) {
+  const current = snapshot.journal.filter((line) => line.kind === "knowledge-landing");
+  const issues = [];
+  const accepted = [];
+  const pairs = new Set();
+  const expectedWriter = snapshot.archFields.get("Brownfield") === "yes" ? "adopt" : "arch";
+  for (const line of current) {
+    const pair = `${line.owner}\0${line.source}`;
+    let reason = !line.valid ? line.reason : null;
+    if (!reason && !knowledgeOwnerExists(snapshot, line.owner)) reason = "knowledge-owner-unresolved";
+    if (!reason && line.writer !== expectedWriter) reason = "knowledge-writer";
+    if (!reason && !committedKnowledgeSource(snapshot, line)) reason = "knowledge-source-unresolved";
+    if (!reason && pairs.has(pair)) reason = "knowledge-owner-source-duplicate";
+    if (reason) issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", line: line.line, reason });
+    else { pairs.add(pair); accepted.push(line); }
+  }
+
+  const validateConsumption = (line, changed, ref, commit = null) => {
+    const ownerChanged = changed.has(line.owner);
+    const directory = `${knowledgeOwnerDirectory(line.owner)}/`;
+    const kChanged = [...changed].filter((relative) => relative.startsWith(directory) && /(?:^|\/)K-[0-9]{3}-[^/]+\.md$/.test(relative));
+    if (!ownerChanged && kChanged.length === 0) {
+      issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", line: line.line, commit, reason: "knowledge-marker-unauthorized-deletion" });
+      return;
+    }
+    for (const relative of kChanged) {
+      const text = ref === null ? readFile(snapshot.root, relative) : gitFile(snapshot.root, ref, relative);
+      if (!exactSourceBasis(snapshot.root, text, line)) {
+        issues.push({ item: "knowledge-landing", blocking: true, path: relative, commit, reason: "knowledge-source-basis" });
+      }
+    }
+  };
+
+  const headJournal = knowledgeJournalAt(snapshot.root, "HEAD");
+  const workingChanged = new Set(snapshot.status.map((item) => item.path));
+  const effectiveLifecycles = new Set(current.filter((line) => line.valid).map((line) => line.raw));
+  if (["failure", "undecodable"].includes(headJournal.state)) {
+    issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", reason: "knowledge-head-undecodable" });
+  } else {
+    for (const line of removedKnowledgeLandings(headJournal.text, snapshot.journalText ?? "")) {
+      validateConsumption(line, workingChanged, null);
+      effectiveLifecycles.add(line.raw);
+    }
+  }
+
+  const history = gitRun(snapshot.root,
+    ["log", "--text", "--no-textconv", "--format=%H", "-G", "knowledge landing pending:", "--", "devflow/journal.md"],
+    { allowFailure: true });
+  let journalCommits = null;
+  if (history.status === 0) {
+    try {
+      journalCommits = normalizeFileText(decodeUtf8(history.stdout, "knowledge landing history")).split("\n").filter(Boolean);
+      if (journalCommits.some((commit) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit))) journalCommits = null;
+    } catch {
+      journalCommits = null;
+    }
+  }
+  if (journalCommits === null) {
+    issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", reason: "knowledge-history-undecodable" });
+    return { accepted, issues };
+  }
+  for (const commit of journalCommits) {
+    const ancestry = gitRun(snapshot.root, ["rev-list", "--parents", "-n", "1", commit], { allowFailure: true });
+    let lineage = null;
+    if (ancestry.status === 0) {
+      try {
+        lineage = decodeUtf8(ancestry.stdout, "knowledge landing ancestry").trim().split(/\s+/).filter(Boolean);
+      } catch {
+        lineage = null;
+      }
+    }
+    if (!lineage || lineage[0] !== commit || lineage.some((hash) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(hash))) {
+      issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", commit, reason: "knowledge-history-undecodable" });
+      continue;
+    }
+    if (lineage.length === 1) continue;
+    const parent = lineage[1];
+    const before = knowledgeJournalAt(snapshot.root, parent);
+    const after = knowledgeJournalAt(snapshot.root, commit);
+    if ([before.state, after.state].some((state) => ["failure", "undecodable"].includes(state))) {
+      issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", commit, reason: "knowledge-history-undecodable" });
+      continue;
+    }
+    const removed = removedKnowledgeLandings(before.text, after.text);
+    if (removed.length === 0) continue;
+    const changedRun = gitRun(snapshot.root, ["diff", "--name-only", "-z", parent, commit, "--"], { allowFailure: true });
+    let changed = null;
+    if (changedRun.status === 0) {
+      try {
+        changed = new Set(decodeUtf8(changedRun.stdout, "knowledge landing changed paths").split("\0").filter(Boolean));
+      } catch {
+        changed = null;
+      }
+    }
+    if (changed === null) {
+      issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", commit, reason: "knowledge-history-undecodable" });
+      continue;
+    }
+    for (const line of removed) {
+      if (effectiveLifecycles.has(line.raw)) continue;
+      validateConsumption(line, changed, commit, commit);
+      effectiveLifecycles.add(line.raw);
+    }
+  }
+  return { accepted, issues };
 }
 
 function parseHandoff(snapshot) {
@@ -1077,15 +1295,7 @@ function directTree(root) {
   };
 }
 
-async function revisions(snapshot, capabilityNumber) {
-  const product = readFile(snapshot.root, "devflow/project/product.md") === null ? "none"
-    : revisionFromGit(gitRun(snapshot.root, ["hash-object", "devflow/project/product.md"], { allowFailure: true }), "unresolved");
-  const verificationPaths = [
-    "devflow/project/arch.md", "devflow/project/code-style.md", "devflow/project/glossary.md",
-  ].filter((relative) => gitPathExists(snapshot.root, "HEAD", relative));
-  const verification = await nativeBinaryHash(snapshot.root, "HEAD", verificationPaths) ?? "unresolved";
-  const code = revisionFromGit(gitRun(snapshot.root,
-    ["log", "-1", "--format=%H", "--", ".", ":(exclude)devflow/**"], { allowFailure: true }), "none");
+async function capabilityRevision(snapshot, capabilityNumber) {
   let capability = "not-applicable";
   if (capabilityNumber !== undefined) {
     const folders = snapshot.depth1Folders.filter((folder) => Number(folderIdentity(folder)?.number) === Number(capabilityNumber));
@@ -1112,6 +1322,19 @@ async function revisions(snapshot, capabilityNumber) {
         : await nativeBinaryHash(snapshot.root, "HEAD", paths) ?? "unresolved";
     }
   }
+  return capability;
+}
+
+async function revisions(snapshot, capabilityNumber) {
+  const product = readFile(snapshot.root, "devflow/project/product.md") === null ? "none"
+    : revisionFromGit(gitRun(snapshot.root, ["hash-object", "devflow/project/product.md"], { allowFailure: true }), "unresolved");
+  const verificationPaths = [
+    "devflow/project/arch.md", "devflow/project/code-style.md", "devflow/project/glossary.md",
+  ].filter((relative) => gitPathExists(snapshot.root, "HEAD", relative));
+  const verification = await nativeBinaryHash(snapshot.root, "HEAD", verificationPaths) ?? "unresolved";
+  const code = revisionFromGit(gitRun(snapshot.root,
+    ["log", "-1", "--format=%H", "--", ".", ":(exclude)devflow/**"], { allowFailure: true }), "none");
+  const capability = await capabilityRevision(snapshot, capabilityNumber);
   return { product, verification, code, capability };
 }
 
@@ -1171,6 +1394,18 @@ async function loadSnapshot(options) {
   };
   snapshot.handoff = parseHandoff(snapshot);
   snapshot.revisions = await revisions(snapshot, options.capability);
+  const verifyRevisions = new Map([
+    ["product", { ...snapshot.revisions, capability: "not-applicable" }],
+  ]);
+  const verifyTargets = new Set(snapshot.verifyFiles.map(verificationTarget).filter(Number.isInteger));
+  for (const target of verifyTargets) {
+    const capability = Number(options.capability) === target
+      ? snapshot.revisions.capability
+      : await capabilityRevision(snapshot, target);
+    const current = { ...snapshot.revisions, capability };
+    verifyRevisions.set(target, current);
+  }
+  VERIFY_REVISION_CACHE.set(snapshot, verifyRevisions);
   snapshot.baseline = await baselineProjection(snapshot, options.capability);
   return snapshot;
 }
@@ -1344,6 +1579,13 @@ function validatePreparedObject(snapshot, relative, raw, lineNumber) {
   return { ok: true, object, lineNumber, prefix: prefix.prefix, basePath: prefix.baseRelative };
 }
 
+function verificationTarget(relative) {
+  if (relative === "devflow/tree/verify.md") return "product";
+  const folder = relative.split("/").slice(0, 3).join("/");
+  const folderInfo = folderIdentity(folder);
+  return folderInfo ? Number(folderInfo.number) : null;
+}
+
 function verifyProjection(snapshot) {
   const result = {
     prepared: [],
@@ -1364,9 +1606,19 @@ function verifyProjection(snapshot) {
     const audit = parts.find((part) => part.name === "Audit");
     const retrospective = parts.find((part) => part.name === "Retrospective");
     const recordFields = fields(text);
-    const folder = relative === "devflow/tree/verify.md" ? null : relative.split("/").slice(0, 3).join("/");
+    const target = verificationTarget(relative);
+    const folder = target === "product" ? null : relative.split("/").slice(0, 3).join("/");
     const folderInfo = folderIdentity(folder ?? "");
-    const current = ["Product revision", "Verification revision", "Code revision", "Capability revision"].every((name) => recordFields.has(name));
+    const expected = VERIFY_REVISION_CACHE.get(snapshot)?.get(target);
+    const revisionPairs = [
+      ["Product revision", "product"],
+      ["Verification revision", "verification"],
+      ["Code revision", "code"],
+      ["Capability revision", "capability"],
+    ];
+    const current = expected !== undefined
+      && Object.values(expected).every((value) => value !== "unresolved")
+      && revisionPairs.every(([field, key]) => recordFields.get(field) === expected[key]);
     const executed = recordFields.get("Executed") ?? "";
     const channelMatch = /^unverified: channel unavailable — (?<command>.+); timeout=(?<timeout>.+)$/.exec(executed);
     const channelUnavailable = channelMatch !== null;
@@ -1375,7 +1627,9 @@ function verifyProjection(snapshot) {
     result.records.push({
       path: relative,
       current,
-      target: folderInfo ? Number(folderInfo.number) : "product",
+      executed,
+      verdict: recordFields.get("Verdict") ?? null,
+      target,
       capabilityDone: folderInfo?.status === "done",
       channelUnavailable,
       channel,
@@ -1428,6 +1682,7 @@ function verifyProjection(snapshot) {
         product: recordFields.get("Product revision") ?? null,
         verification: recordFields.get("Verification revision") ?? null,
         code: recordFields.get("Code revision") ?? null,
+        executed,
         channelUnavailable,
         channel,
         current,
@@ -1837,7 +2092,17 @@ function parseProgressLine(raw) {
   const out = { raw: (raw ?? "").trim(), timestamp };
   for (const candidate of PROGRESS_HEADS) {
     const match = candidate.form.exec(body);
-    if (match) return { ...out, kind: candidate.kind, valid: true, ...match.groups };
+    if (match) {
+      const groups = match.groups ?? {};
+      const jsonStringFields = ["checkJson", "detailJson"].filter((field) => field in groups);
+      const malformed = jsonStringFields.find((field) => {
+        const parsed = parseJsonValue(groups[field]);
+        return !parsed.ok || typeof parsed.value !== "string";
+      });
+      return malformed
+        ? { ...out, kind: candidate.kind, valid: false, reason: `progress-format:${candidate.head}` }
+        : { ...out, kind: candidate.kind, valid: true, ...groups };
+    }
   }
   const near = PROGRESS_HEADS.find((candidate) => body.includes(candidate.head));
   return near ? { ...out, kind: near.kind, valid: false, reason: `progress-format:${near.head}` } : null;
@@ -2006,7 +2271,7 @@ function designNoteRoutes(snapshot) {
     // The canon's design-only prefix: HEAD's journal with exactly this one occurrence removed.
     const remainder = headLines.filter((_, position) => position !== index).join("\n");
     const capability = String(Number(line.design ? line.design.capability : line.capability)).padStart(2, "0");
-    const targetZone = new RegExp(`^devflow/project/capabilities/${capability}-[^/]+(?:\\.md|/K-\\d{3}-[^/]+\\.md)$`);
+    const targetZone = new RegExp(`^devflow/project/capabilities/${capability}-[^/]+(?:\\.md|(?:/K-\\d{3}-[^/]+)+\\.md)$`);
     const pathsAllowed = changed.includes("devflow/journal.md") && changed.every((relative) => relative === "devflow/journal.md"
       || targetZone.test(relative));
     if (!pathsAllowed || remainder !== (snapshot.journalText ?? "")) {
@@ -2280,7 +2545,17 @@ function finalTaskCommit(snapshot, card) {
 function evaluateZones(snapshot) {
   const zones = zoneBag();
   const verify = verifyProjection(snapshot);
-  const integrityItems = integrity(snapshot, verify);
+  const landings = knowledgeLandingState(snapshot);
+  const projectResearchIssues = snapshot.cards
+    .filter((card) => card.path.startsWith("devflow/tree/00-project/")
+      && !new RegExp(`^# ${card.number.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} Research: \\S`).test(card.text ?? ""))
+    .map((card) => ({
+      item: "project-research-card",
+      blocking: true,
+      path: card.path,
+      reason: "00-project-research-only",
+    }));
+  const integrityItems = [...integrity(snapshot, verify), ...projectResearchIssues, ...landings.issues];
   const blocking = integrityItems.filter((item) => item.blocking);
   const nonblocking = integrityItems.filter((item) => !item.blocking);
   const shapeAnomalies = [
@@ -2358,6 +2633,9 @@ function evaluateZones(snapshot) {
   }
 
   for (const line of snapshot.journal.filter((item) => item.kind === "product-rerun")) addEntry(zones, "marker", "product-rerun", { marker: line.raw, timestamp: line.timestamp });
+  for (const line of landings.accepted) addEntry(zones, "marker", "knowledge-landing", {
+    owner: line.owner, writer: line.writer, source: line.source, timestamp: line.timestamp,
+  });
   for (const entry of glossary.routes) addEntry(zones, "marker", "glossary-term", entry);
   for (const { form, ...entry } of design.routes) addEntry(zones, "marker", form === "open-item" ? "design-open-item" : "design-note", entry);
   for (const line of snapshot.journal.filter((item) => item.kind === "capability-closing" && gitFile(snapshot.root, "HEAD", "devflow/journal.md")?.includes(item.raw))) {
@@ -2417,9 +2695,10 @@ function evaluateZones(snapshot) {
   const pendingEvents = verify.eventPending.filter((item) => !(item.role === "Audit" && outsideDiff.length > 0));
   const newEvents = [];
   const rootRecord = verify.records.find((record) => record.target === "product");
-  if (verify.root?.verdict && !verify.root.channelUnavailable && rootRecord?.current && !rootRecord.auditKeys.has("product")) newEvents.push({ role: "Audit", target: "product", key: "product" });
-  if (verify.root?.verdict && !verify.root.channelUnavailable && rootRecord?.current && !rootRecord.retrospectiveKeys.has("product")) newEvents.push({ role: "Retrospective", target: "product", key: "product" });
-  for (const record of verify.records.filter((item) => item.target !== "product" && item.current && item.capabilityDone)) {
+  const executionObserved = (record) => (record?.executed ?? "").trim().length > 0;
+  if (verify.root?.current && verify.root.verdict && executionObserved(verify.root) && !verify.root.channelUnavailable && !rootRecord.auditKeys.has("product")) newEvents.push({ role: "Audit", target: "product", key: "product" });
+  if (verify.root?.current && verify.root.verdict && executionObserved(verify.root) && !verify.root.channelUnavailable && !rootRecord.retrospectiveKeys.has("product")) newEvents.push({ role: "Retrospective", target: "product", key: "product" });
+  for (const record of verify.records.filter((item) => item.target !== "product" && item.current && item.verdict && executionObserved(item) && !item.channelUnavailable && item.capabilityDone)) {
     if (record.failureMax !== null) {
       const key = `post-failure through ${record.failureMax}`;
       if (!record.auditKeys.has(key)) newEvents.push({ role: "Audit", target: record.target, key });
@@ -2519,17 +2798,19 @@ function evaluateZones(snapshot) {
 
   const projectComplete = productPreconditions(snapshot);
   const rootVerify = verify.root;
-  const revisionsMatch = rootVerify && rootVerify.product === snapshot.revisions.product && rootVerify.verification === snapshot.revisions.verification && rootVerify.code === snapshot.revisions.code;
   if (projectComplete) {
-    if (!rootVerify || !revisionsMatch || rootVerify.verdict === null || outsideDiff.length > 0) addEntry(zones, "product", "shape-or-revision", {
-      reasons: [!rootVerify ? "record-missing" : null, rootVerify && !revisionsMatch ? "revision" : null, rootVerify && !rootVerify.verdict ? "verdict" : null, outsideDiff.length > 0 ? "uncommitted-outside-devflow" : null].filter(Boolean),
+    if (!rootVerify || !rootVerify.current || rootVerify.verdict === null || outsideDiff.length > 0) addEntry(zones, "product", "shape-or-revision", {
+      reasons: [!rootVerify ? "record-missing" : null, rootVerify && !rootVerify.current ? "revision" : null, rootVerify && !rootVerify.verdict ? "verdict" : null, outsideDiff.length > 0 ? "uncommitted-outside-devflow" : null].filter(Boolean),
       product: snapshot.revisions.product,
       verification: snapshot.revisions.verification,
       code: snapshot.revisions.code,
     });
     else if (rootVerify.verdict === "fail") addEntry(zones, "product", "fail", { reasons: ["recorded-fail"] });
     else if (rootVerify.verdict === "unverified" && !rootVerify.channelUnavailable) addEntry(zones, "product", "unverified", { reasons: ["recorded-unverified"] });
-    else if (rootVerify.verdict === "pass" && newEvents.length === 0) addEntry(zones, "complete", "product-pass", { awaitingDecisionCount: verify.eventDecision.length });
+    else if (rootVerify.verdict === "pass" && !executionObserved(rootVerify)) addEntry(zones, "product", "shape-or-revision", {
+      reasons: ["execution-evidence"], product: snapshot.revisions.product, verification: snapshot.revisions.verification, code: snapshot.revisions.code,
+    });
+    else if (rootVerify.current && rootVerify.verdict === "pass" && executionObserved(rootVerify) && !rootVerify.channelUnavailable && newEvents.length === 0) addEntry(zones, "complete", "product-pass", { awaitingDecisionCount: verify.eventDecision.length });
   }
   if (snapshot.archFields.get("Brownfield") === "yes" && snapshot.cards.every((card) => ["done", "stale"].includes(card.status))
       && snapshot.waitingFiles.length === 0 && requests.length === 0 && zones.transition.entries.length === 0 && zones.marker.entries.length === 0) {
@@ -2611,7 +2892,10 @@ function compactFieldString(values, omitted = new Set()) {
 function zoneOrder(treePresent, zones) {
   return [...ZONE_DEFINITIONS].sort((left, right) => {
     const rank = (definition) => {
-      const actual = zones[definition.zone].entries.filter((entry) => entry.kind).map((entry) => ROUTE_RANK.get(`${definition.zone}.${entry.kind}`)?.[treePresent ? "present" : "absent"]).filter((value) => value !== null && value !== undefined);
+      const actual = zones[definition.zone].entries.filter((entry) => entry.kind).map((entry) => {
+        if (["claim", "ready"].includes(definition.zone) && String(entry.path ?? entry.file ?? entry.card ?? "").startsWith("devflow/tree/00-project/")) return 4.5;
+        return ROUTE_RANK.get(`${definition.zone}.${entry.kind}`)?.[treePresent ? "present" : "absent"];
+      }).filter((value) => value !== null && value !== undefined);
       return actual.length > 0 ? Math.min(...actual) : treePresent ? definition.present : definition.absent;
     };
     return rank(left) - rank(right);
@@ -2824,19 +3108,39 @@ export async function calculateState(options) {
   const snapshot = await loadSnapshot(options);
   const evaluated = evaluateZones(snapshot);
   const projected = renderProjection(snapshot, evaluated);
-  let rendered = render(snapshot, projected.evaluated, "full", projected.narrow);
-  if (rendered.bytes <= OUTPUT_LIMIT) return { ...rendered, status: 0, form: "full", snapshot, evaluated };
-  rendered = render(snapshot, projected.evaluated, "compact", projected.narrow);
-  if (rendered.bytes <= OUTPUT_LIMIT) return { ...rendered, status: 0, form: "compact", snapshot, evaluated };
+  const routeId = firstRoute(zoneOrder(snapshot.treePresent, projected.evaluated.zones), projected.evaluated.zones, snapshot.treePresent);
+  const [zone, kind] = routeId === "none" ? [null, null] : routeId.split(".");
+  const brownfieldField = snapshot.archFields.get("Brownfield");
+  const brownfield = brownfieldField === "yes" || brownfieldField === "no" ? brownfieldField : "unknown";
+  return {
+    schema: "devflow/project-state/2",
+    route: { id: routeId, zone, kind },
+    zones: projected.evaluated.zones,
+    facts: projected.evaluated.facts,
+    metadata: {
+      root: snapshot.root, head: snapshot.head, integration: snapshot.integration,
+      tree: snapshot.treePresent ? "present" : "absent", narrow: projected.narrow, brownfield,
+    },
+    compatibility: { snapshot, evaluated, projected: projected.evaluated },
+  };
+}
+
+function renderCompatibility(state) {
+  const { snapshot } = state.compatibility;
+  const evaluated = state.compatibility.projected;
+  let rendered = render(snapshot, evaluated, "full", state.metadata.narrow);
+  if (rendered.bytes <= OUTPUT_LIMIT) return { ...rendered, status: 0, form: "full" };
+  rendered = render(snapshot, evaluated, "compact", state.metadata.narrow);
+  if (rendered.bytes <= OUTPUT_LIMIT) return { ...rendered, status: 0, form: "compact" };
   const anomalies = evaluated.integrityItems.length + snapshot.product.anomalies.length + snapshot.glossary.anomalies.length + snapshot.baseline.anomalies.length;
   const advice = snapshot.options.capability === undefined && snapshot.options.term === undefined ? "; narrow --capability <n> or --term <exact>" : "";
-  const output = `state: schema=1 root=${scalar(snapshot.root)} head=${snapshot.head.slice(0, 8)} integration=${snapshot.integration.branch}@${snapshot.integration.hash?.slice(0, 8) ?? "unknown"} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${anomalies} narrow=${projected.narrow} bytes=0/${OUTPUT_LIMIT} form=compact emitted=0\nblocked: output budget exceeded${advice}\n`;
-  return { output, bytes: Buffer.byteLength(output), status: 3, form: "refused", snapshot, evaluated };
+  const output = `state: schema=1 root=${scalar(snapshot.root)} head=${snapshot.head.slice(0, 8)} integration=${snapshot.integration.branch}@${snapshot.integration.hash?.slice(0, 8) ?? "unknown"} tree=${snapshot.treePresent ? "present" : "absent"} anomalies=${anomalies} narrow=${state.metadata.narrow} bytes=0/${OUTPUT_LIMIT} form=compact emitted=0\nblocked: output budget exceeded${advice}\n`;
+  return { output, bytes: Buffer.byteLength(output), status: 3, form: "refused" };
 }
 
 async function main() {
   const options = parseArguments(process.argv.slice(2));
-  const result = await calculateState(options);
+  const result = renderCompatibility(await calculateState(options));
   process.stdout.write(result.output);
   process.exitCode = result.status;
 }

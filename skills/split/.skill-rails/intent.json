@@ -1,0 +1,20 @@
+{
+  "name": "split",
+  "description": "Task splitting. Opens the task tree (devflow/tree/) one layer at a time, creates task cards, and gets the execution proposal (order, parallelism, model tiers) approved by the user. Use for breaking down work, task decomposition, or planning what to do next.",
+  "problem": "Preserve the behavior of immutable repository sources `skills/split/SKILL.md` and `skills/split/SKILL_ko.md`, identified by their recorded source hashes, without silently changing their obligations.",
+  "use_cases": [],
+  "near_misses": [],
+  "inputs": [],
+  "outputs": [],
+  "irreversible_boundaries": [],
+  "state_dependent_behaviors": [
+    "00-project materializes only canonical Research cards; all other scopes materialize task cards with one identity and progress-log contract."
+  ],
+  "exact_formats": [],
+  "external_dependencies": [],
+  "completion_evidence": [],
+  "judgment_points": [
+    "A noncanonical 00-project heading, task-card spoof, or missing/duplicate progress boundary is rejected rather than treated as executable work."
+  ],
+  "deterministic_helpers": []
+}

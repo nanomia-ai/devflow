@@ -1,0 +1,1776 @@
+{
+  "schema": "skill-rails/obligation-ledger/2",
+  "intent_hash": "sha256:b4e6323432c8e2bddfd663f57221a96b49eb62c0e860847ada958716e5611c8c",
+  "profile": "p2",
+  "atoms": [
+    {
+      "id": "description-001",
+      "source": "intent.description",
+      "text": "Design planning (optional stage). Decides the UI approach, source, token and component strategies, decomposition axis, and review surface, and creates devflow/project/design.md. Use for design systems, UI style, or component-library decisions.",
+      "candidate_class": "trigger",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/record-first",
+        "body:stage: record-first",
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ]
+    },
+    {
+      "id": "problem-001",
+      "source": "intent.problem",
+      "text": "Preserve the behavior of immutable repository sources `skills/design/SKILL.md` and `skills/design/SKILL_ko.md`, identified by their recorded source hashes, without silently changing their obligations.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:why: purpose",
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "body:why: purpose"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-001",
+      "source": "intent.state_dependent_behaviors[0]",
+      "text": "A maintenance direction records its origin through split before ordinary design planning; durable research resumes through that same origin/card.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/record-first",
+        "spec:STAGES/research",
+        "body:stage: record-first",
+        "body:stage: research"
+      ],
+      "evidence": [
+        "fixture:recorded-maintenance-resumes-through-split",
+        "fixture:interrupted-design-research"
+      ]
+    },
+    {
+      "id": "judgment-points-001",
+      "source": "intent.judgment_points[0]",
+      "text": "Record-first routing precedes design planning, and research never routes directly from a judged state to work.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: record-first",
+        "body:stage: research"
+      ],
+      "evidence": [
+        "fixture:recorded-maintenance-resumes-through-split",
+        "fixture:interrupted-design-research"
+      ]
+    },
+    {
+      "id": "migration-a0001",
+      "source": "migration:SKILL.md:1-4",
+      "text": "---\r\nname: design\r\ndescription: Design planning (optional stage). Decides the UI approach, source, token and component strategies, decomposition axis, and review surface, and creates devflow/project/design.md. Use for design systems, UI style, or component-library decisions.\r\n---",
+      "candidate_class": "declaration",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:54ca2eeaded99d0436b75f5f9ad10f4d91a1a7b8d4695d4562c5af7eae8a3dd0",
+      "source_kind": "frontmatter",
+      "context": [],
+      "confidence": 0.82,
+      "rationale": "Frontmatter metadata may constrain invocation, tools, compatibility, or other host behavior and needs review."
+    },
+    {
+      "id": "migration-a0002",
+      "source": "migration:SKILL.md:6-6",
+      "text": "# design — Design Planning (optional)",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:8eefbbde91f5da9153a3d5f7512fa2337f914e457160076fa1829c4ac934670f",
+      "source_kind": "heading",
+      "context": [],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0003",
+      "source": "migration:SKILL.md:8-10",
+      "text": "First read the canonical rules (`../principles/SKILL.md`), `devflow/project/product.md`,\r\nand all of `devflow/project/arch.md`. If present, read all of\r\n`devflow/project/design.md`, `devflow/project/glossary.md`, and `devflow/journal.md`.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:fa0828a2f4d7171b6c45bf0a132c05ed49fe905005fc4cd9062567494daccf19",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0004",
+      "source": "migration:SKILL.md:12-15",
+      "text": "**Gate:** if arch.md says `frontend: none`, this skill does not run — say so and end.\r\nEven with `needed`, the user may skip it or return later. If design was not explicitly requested,\r\nask \"shall we plan the design, or continue with the current or default style?\" Skipping is not a state;\r\ncreate no file, marker, or commit, and continue to split.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:ffe9e05948cfc542256d5d837e3b5864e9195cc6166b4ee8db315c07ed7f2fcc",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0005",
+      "source": "migration:SKILL.md:17-22",
+      "text": "When the tree already exists, recording comes first for design's first run or a direction-change\r\nrequest. If no unresolved `maintenance routing pending` line corresponds to the request, do not\r\nchange design.md; send it through split's maintenance routing so the line and the\r\n`<id> boundary — request recorded` commit land first. Proceed after split returns it through 2a\r\nor when the same unresolved line exists. design does not delete that line — after confirmation and\r\nthe commit, split consumes it when planning build cards from the same source.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:2fc0b8720683b973cdf69987e71b20284f5d2ebdd934ac041b332adf43f5b629",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0006",
+      "source": "migration:SKILL.md:24-27",
+      "text": "Write a confirmed decision's reason and its discarded alternatives beside the design.md\r\nfield that owns that decision. A reproducible observation goes beside the field that owns\r\nthat value — the number, the execution conditions under which it is true, and\r\nthe command that measures it again, in one block.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:4f1ad6394d704cd6773895125e96c5b678404a4b9b1e89a499946ae6b6cfccfc",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0007",
+      "source": "migration:SKILL.md:29-31",
+      "text": "Purpose: decide the direction and boundary of the UI build and record them in\r\n`devflow/project/design.md`. This stage does not build token, theme, component, or preview code.\r\nThe real artifacts belong to the cards split opens after reading this document.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:8bc95d3735ba7776d554ed09c61a296d6bd2a0541c442d993d2b1373853eec6b",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0008",
+      "source": "migration:SKILL.md:33-33",
+      "text": "## Procedure",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:5da93bd3e25731d2786cd3c17c54b84047ba82401bc69b04138a3a1a9b0c0402",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0009",
+      "source": "migration:SKILL.md:35-35",
+      "text": "### 1. Six Decisions",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:2cd0fbfb3b35b371f7c42df1a7c669644d88e1ba4f1dc89a26e1a1a9d95a1bfa",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0010",
+      "source": "migration:SKILL.md:37-37",
+      "text": "Ask in one batch at a time, with a recommendation, only for decisions that are not yet unique.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:974434c188b29ad234d7d52a83e632cbd07099856203e3f60cb735620f08d65c",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0011",
+      "source": "migration:SKILL.md:39-39",
+      "text": "| Field | What to decide |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:c0524f1670f26129360955b54a915a9f173614096496245e7a303fda3951434f",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0012",
+      "source": "migration:SKILL.md:41-41",
+      "text": "| Approach | How to implement the design direction through approaches such as handoff transfer, library + styling, custom development, or a mix |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:733c11b26a053fac84a7cb09377889b5d54d33b60c9e21b17a7f477bbd43401d",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0013",
+      "source": "migration:SKILL.md:42-42",
+      "text": "| Design source | Which external artifact, library default, or repository asset is canonical for which scope, and which side to update on conflict |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:151a70a9a5fb6b8e733d2b2529054fbe8e11c246838c1f5b2bc73d289ac57dcc",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0014",
+      "source": "migration:SKILL.md:43-43",
+      "text": "| Token strategy | What to tokenize, the source→code conversion and synchronization direction, and the planned Destination |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:8f4c096db869d62e132df2c7d6c25b4485229fdfb93d5a52fc2a2a53a202db48",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0015",
+      "source": "migration:SKILL.md:44-44",
+      "text": "| Component strategy | The boundary and shared scope of reuse, theme customization, wrappers, and custom development |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:dc8aa620527f7fcf5095c88fc6f949958ae5e07ddd2a248308b9608f43918375",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0016",
+      "source": "migration:SKILL.md:45-45",
+      "text": "| Decomposition axis | One sentence defining the boundary by which split divides task cards |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:12e2afe142d38130d87ddd115fdf54544b24721bb21d09e149a319ef0aad64d0",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0017",
+      "source": "migration:SKILL.md:46-46",
+      "text": "| Review surface | What the owner will inspect in the build result and the planned way to run it |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:d481cb0c1048be022966d7238ca31bf6390ec11b6f8c85fcd2de90d666e2bce7",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0018",
+      "source": "migration:SKILL.md:48-53",
+      "text": "The approaches above are open examples, not a closed list. The six fields are free-form sentences;\r\n**`not used` or `none`, with the reason, is also a valid value**. Do not ask again when\r\nproduct, arch, an existing design, glossary, or an exact source named by the user already answers\r\nthe question. design does not search the whole repository or become a new consumer of the planning\r\nevidence discipline. When more implementation facts are needed, split's bounded comparison or a\r\nresearch card produces the answer.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:79959dd4fefbdb546ab5a4fcd09dadc10871c8022f648e8dfbe3ef61c55a6e02",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0019",
+      "source": "migration:SKILL.md:55-56",
+      "text": "If applying the decomposition axis still cannot settle one `Destination` from the source, do not\r\nguess. Ask the user only for that Destination through split's existing mapping question.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:6e114e821a7d18c70256d3165e0bf41adfc83832556fa8daf6dc35561e321a4d",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0020",
+      "source": "migration:SKILL.md:58-58",
+      "text": "### 2. Output",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:c25fc80583d5197dee80eaa5b4fde5e3cab1ab611d35aeac030fd0ee05f5300a",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "1. Six Decisions",
+          "source_span": "35-35"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0021",
+      "source": "migration:SKILL.md:60-60",
+      "text": "Derive the `devflow/project/design.md` bundle to be confirmed in memory in this form.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:39f6d85f0746791f95eb48015d6b0b145478d6a501fdf9886f2b45cff1c986fb",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "2. Output",
+          "source_span": "58-58"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0022",
+      "source": "migration:SKILL.md:62-76",
+      "text": "```markdown\r\n# Design\r\n\r\nApproach: <free-form sentence>\r\nDesign source: <exact external artifact, existing path, or none + authority direction by scope>\r\nToken strategy: <canon, conversion/synchronization direction, planned path, or not used + reason>\r\nComponent strategy: <reuse, theme/wrapper, custom-development boundary, or not used + reason>\r\nDecomposition axis: <one sentence that sets card boundaries>\r\nReview surface: <result to inspect and planned way to run it, or none + reason>\r\n\r\n## Build scope\r\n| Item | Disposition | Source or planned Destination | How to check |\r\n|---|---|---|---|\r\n| <scope> | <free sentence such as reuse, theme, custom, transfer, or defer> | <exact reference> | <review surface> |\r\n```",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:6502cd1ff2299d2ea23f17a9badd9d2e42966ffa29ac22e5eec6029ee05a30bd",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "2. Output",
+          "source_span": "58-58"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0023",
+      "source": "migration:SKILL.md:78-78",
+      "text": "`Disposition` is a decision sentence, not a progress-state token. Do not write card progress in design.md.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:eb3474be36c8e27f87ed0abbe8ea123d3e7070a2a056dd5e05a640f96414668b",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "2. Output",
+          "source_span": "58-58"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0024",
+      "source": "migration:SKILL.md:80-80",
+      "text": "### 3. Confirm, Land, and Build",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:397f771f3c77d5e53b3b0b483b6e4042c108dd96b8cc7ff851c72759762b287b",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "2. Output",
+          "source_span": "58-58"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0025",
+      "source": "migration:SKILL.md:82-85",
+      "text": "Completion requires that the six fields and build scope are unique for the current scope and that\r\nthe user has confirmed the whole document. Do not change a core path before confirmation. Once\r\nconfirmed, land only design.md in the canonical rules' existing Layer 0 commit\r\n`design — design.md`. Code output or running a preview is not a completion condition of this stage.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:6833ddc4774f58f8282bc2a3740f7e1c937778a51e90adc4f5073a968b2d6a6b",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "3. Confirm, Land, and Build",
+          "source_span": "80-80"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0026",
+      "source": "migration:SKILL.md:87-91",
+      "text": "split is next. It applies the build scope and decomposition axis through the existing source mapping,\r\none-layer opening, and size judgment, creates cards, and gets the execution proposal approved. A shared\r\nbuild that several capabilities depend on is a foundation-card candidate, while a build for one capability\r\nis a card candidate in that capability; existing rules decide placement. Keep compatible existing cards,\r\nand send only cards that cannot stay true with the new direction through the existing `.stale.` and re-split procedure.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:166db48ff7033b0e3810dd3e841d7397e7f2f78a68b856165ae5255820912bc2",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "3. Confirm, Land, and Build",
+          "source_span": "80-80"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0027",
+      "source": "migration:SKILL.md:93-96",
+      "text": "When build results confirm a planned path, name, or command, replace only the exact one line in design.md\r\nthrough the canonical discovery→update row. When the direction of any of the six decisions changes, re-run\r\ndesign through the record-first path above. The owner confirms the direction document here, then approves\r\nthe actual cards, order, and completion signals in split's execution proposal.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:0ceb3c1f5e9c0c676b01521c570a40499132d13feab5c19f9a89a83730937422",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — Design Planning (optional)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure",
+          "source_span": "33-33"
+        },
+        {
+          "level": 3,
+          "text": "3. Confirm, Land, and Build",
+          "source_span": "80-80"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0028",
+      "source": "migration:SKILL_ko.md:1-4",
+      "text": "---\r\nname: design\r\ndescription: 디자인 기획(선택 단계). UI의 접근 방식·원천·토큰 및 컴포넌트 전략·분해 축·검토 표면을 정해 devflow/project/design.md를 만든다. 디자인 시스템, UI 스타일, 컴포넌트 라이브러리 결정 시 사용.\r\n---",
+      "candidate_class": "declaration",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:72a6c32b0fc7370a1a3e32d091baacd55c5f5a0037a89ea16ce1e5660537f792",
+      "source_kind": "frontmatter",
+      "context": [],
+      "confidence": 0.82,
+      "rationale": "Frontmatter metadata may constrain invocation, tools, compatibility, or other host behavior and needs review."
+    },
+    {
+      "id": "migration-a0029",
+      "source": "migration:SKILL_ko.md:6-6",
+      "text": "# design — 디자인 기획 (선택)",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:8ce1d0dac0b92e2d32d78931a0221e3dcb087fc07198725b802da94628836376",
+      "source_kind": "heading",
+      "context": [],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0030",
+      "source": "migration:SKILL_ko.md:8-10",
+      "text": "먼저 규칙 정본(`../principles/SKILL.md`)와 `devflow/project/product.md`,\r\n`devflow/project/arch.md`를 통독한다. 존재하면 `devflow/project/design.md`·\r\n`devflow/project/glossary.md`와 `devflow/journal.md`를 각각 통독한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:dfa793b1065e001f57805c8faf08ab2408a6fabc32b44f7b8d5e87333bd5d3e2",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0031",
+      "source": "migration:SKILL_ko.md:12-15",
+      "text": "**게이트:** `arch.md`의 `frontend: none`이면 실행하지 않는다 — 그렇게 답하고 끝낸다.\r\n`needed`여도 사용자는 건너뛰거나 나중에 돌아올 수 있다. 명시적으로 design을 요청하지 않았다면\r\n\"디자인 기획을 할까요, 현재 또는 기본 스타일로 갈까요?\"라고 묻는다. 건너뛰기는 상태가 아니며\r\n파일·마커·커밋을 만들지 않고 split을 계속한다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:af05b34b18138f06992a93c2112110eeacc9b6aec6f4185529031a92ea111b81",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0032",
+      "source": "migration:SKILL_ko.md:17-21",
+      "text": "트리가 이미 있을 때 design 최초 실행이나 방향 변경을 요청받으면 기록이 먼저다. 그 요청에 대응하는\r\n미해소 `유지보수 라우팅 대기` 줄이 없으면 design.md를 바꾸지 않고 split의 유지보수 라우팅으로\r\n보내 줄과 `<id> boundary — request recorded` 커밋부터 남긴다. split이 2a로 돌려보냈거나 같은\r\n미해소 줄이 있으면 진행한다. design은 그 줄을 지우지 않는다 — 확인·커밋 뒤 split이 같은 출처로\r\n구축 카드를 계획할 때 소비한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:42745457a679bf0fa88d2368b1e84c545c35db8f2421a81b34d1417fa554809d",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0033",
+      "source": "migration:SKILL_ko.md:23-25",
+      "text": "확인된 결정의 이유와 버린 대안은 design.md에서 그 결정을 소유한 필드 옆에 함께 쓴다.\r\n재현 가능한 관측은 그 값을 소유한 필드 옆에 — 숫자와, 그 숫자가 참인 실행\r\n조건과, 다시 재는 명령을 한 블록에.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:33c57ffa8a6274dcc9a61e577e2911b6cc166efa5957c830b52b8a2da5dd55d4",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0034",
+      "source": "migration:SKILL_ko.md:27-28",
+      "text": "목적: UI 구축의 방향과 경계를 결정해 `devflow/project/design.md`에 기록한다. 이 단계는\r\n토큰·테마·컴포넌트·프리뷰 코드를 만들지 않는다. 실물은 이 문서를 읽고 split이 여는 카드가 소유한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:1115f784bf4c2694f9e0ae0b916f7696e3e41d7b473beec989dcf1fe1a3b77ac",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0035",
+      "source": "migration:SKILL_ko.md:30-30",
+      "text": "## 절차",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:afb199c5cf710cffd9a19ed2a1ae6f2c966141f07285f04409d1f0f96805c1a4",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0036",
+      "source": "migration:SKILL_ko.md:32-32",
+      "text": "### 1. 여섯 결정",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:7d97fa92e5689f9bb94e5a1c90501e1d7cccae33400d072b797c1ee1676ad7a6",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0037",
+      "source": "migration:SKILL_ko.md:34-34",
+      "text": "아직 유일하지 않은 결정만 추천과 함께 한 묶음씩 묻는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:671b600217b56ae311825663f8c722ed17ed0711faecb2ee1f5e7d5bc920563b",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0038",
+      "source": "migration:SKILL_ko.md:36-36",
+      "text": "| 필드 | 결정할 것 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:b0c2401c586a9bd84c367d2685217ce1486c166217a9d7cfeea60dc99f3f1b7d",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0039",
+      "source": "migration:SKILL_ko.md:38-38",
+      "text": "| 접근 방식 | 어떤 디자인 방향을 핸드오프 이식·라이브러리+스타일·자체 개발·혼합 등의 방식으로 구현할지 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:5cfd3ea4261463e98d69244e354b8c2a46dd6f52f3e38508b5d0671642e58fc6",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0040",
+      "source": "migration:SKILL_ko.md:39-39",
+      "text": "| 디자인 원천 | 외부 산출물·라이브러리 기본값·저장소 자산 중 무엇이 어느 범위의 정본이며 충돌 때 어느 쪽을 갱신할지 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:440f474a5d46ec059bd1e91f1e64b2ed1e490cb148c11ea513b60944a4de174c",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0041",
+      "source": "migration:SKILL_ko.md:40-40",
+      "text": "| 토큰 전략 | 무엇을 토큰화하고 원천→코드 변환·동기화 방향과 예정 목적지를 어떻게 둘지 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:8024e6dd658779d8463599b67daee4ce998038f5e5b3cc52a8c360d7fe853758",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0042",
+      "source": "migration:SKILL_ko.md:41-41",
+      "text": "| 컴포넌트 전략 | 재사용·테마 커스터마이징·래퍼·자체 구현의 경계와 공유 범위 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:1c50c0b9bc0c8b52e6f3ac6cf301deca8fdb21894a32ca597952fa62a7f96b8d",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0043",
+      "source": "migration:SKILL_ko.md:42-42",
+      "text": "| 분해 축 | split이 작업 카드를 나눌 경계 한 문장 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:44a0794bcf0db9d3b6e3059b76e46fc63d2b6995ef586d1d5599eefbbb239dfe",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0044",
+      "source": "migration:SKILL_ko.md:43-43",
+      "text": "| 검토 표면 | 소유자가 구축 결과를 볼 대상과 예정 실행 방법 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:7bebce2d9559620f1dd8c6ccaf25901ae95b73935cf48a0024013ed4444cf40d",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0045",
+      "source": "migration:SKILL_ko.md:45-48",
+      "text": "위 방식들은 열린 예시이지 닫힌 목록이 아니다. 여섯 필드는 자유 문장이며 **`안 함` 또는 `없음`과\r\n그 이유도 유효한 값**이다. 이미 product·arch·기존 design·glossary나 사용자가 지목한 정확한\r\n원천에 답이 있으면 되묻지 않는다. design은 저장소 전체를 조사하거나 기획 증거 규율의 새 소비자가\r\n되지 않는다. 구현 사실이 더 필요하면 split의 유계 대조나 조사 카드가 답을 만든다.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:f5ec9e1a46c031f3c4165fed46c5f127e3294c7b2e1501d027bdc652452fdd13",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0046",
+      "source": "migration:SKILL_ko.md:50-51",
+      "text": "분해 축을 적용해도 `목적지` 하나를 출처로 확정할 수 없으면 추측하지 않는다. split의 기존 매핑\r\n질문으로 사용자에게 그 목적지만 묻는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:715ce1a0fde5d354307f303eb6e8985ab5251270a0ecd20a4d253dd6942a814e",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0047",
+      "source": "migration:SKILL_ko.md:53-53",
+      "text": "### 2. 산출",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:514742651f8f7309d94357dc37f16cc127075215712ee222c15ac0838e6ae00d",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "1. 여섯 결정",
+          "source_span": "32-32"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0048",
+      "source": "migration:SKILL_ko.md:55-55",
+      "text": "확인받을 `devflow/project/design.md` 묶음을 메모리에서 다음 형식으로 만든다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:0754a3c46f483495f6917a89f58aca692d41d8e4c494e8bdd408218fcfc05d77",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "2. 산출",
+          "source_span": "53-53"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0049",
+      "source": "migration:SKILL_ko.md:57-71",
+      "text": "```markdown\r\n# 디자인\r\n\r\n접근 방식: <자유 문장>\r\n디자인 원천: <정확한 외부 산출물·기존 경로·없음 + 범위별 권위 방향>\r\n토큰 전략: <정본·변환/동기화 방향·예정 경로 또는 안 함 + 이유>\r\n컴포넌트 전략: <재사용·테마/래퍼·자체 구현 경계 또는 안 함 + 이유>\r\n분해 축: <카드 경계를 정하는 한 문장>\r\n검토 표면: <볼 결과와 예정 실행 방법 또는 없음 + 이유>\r\n\r\n## 구축 범위\r\n| 항목 | 처분 | 원천 또는 예정 목적지 | 확인 방법 |\r\n|---|---|---|---|\r\n| <범위> | <재사용·테마·자체·이식·지연 등의 자유 문장> | <정확한 참조> | <검토 표면> |\r\n```",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:7b575ee68d426327ef18792c409d78a8a62a403d127a83fc3ba756fa0d6fea05",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "2. 산출",
+          "source_span": "53-53"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0050",
+      "source": "migration:SKILL_ko.md:73-73",
+      "text": "`처분`은 진행 상태 토큰이 아니라 결정 문장이다. 카드 진행률은 design.md에 쓰지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:3651b4b4ad6cc0b0cda0ca2eee56aa8637c705db90a8fe5af38d5806e2891c4d",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "2. 산출",
+          "source_span": "53-53"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0051",
+      "source": "migration:SKILL_ko.md:75-75",
+      "text": "### 3. 확인·착지·구축",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ],
+      "source_hash": "sha256:74c4176af93d5bce9fa402102e47eef786f6d669403465d2859e57418e51e4bc",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "2. 산출",
+          "source_span": "53-53"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0052",
+      "source": "migration:SKILL_ko.md:77-79",
+      "text": "완료 조건은 여섯 필드와 구축 범위가 현재 범위에서 유일하고, 사용자가 문서 전체를 확인한 것이다.\r\n확인 전에는 코어 경로를 바꾸지 않는다. 확인하면 design.md만 규칙 정본의 기존 Layer 0 커밋\r\n`design — design.md`로 착지시킨다. 코드 산출물이나 프리뷰 실행은 이 단계의 완료 조건이 아니다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-ledger.md"
+      ],
+      "evidence": [
+        "file:references/legacy-ledger.md"
+      ],
+      "source_hash": "sha256:2dfd9543dcf9bf3fdfd50eceec97d673c87ee98b78d733233659fd4be361f028",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "3. 확인·착지·구축",
+          "source_span": "75-75"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0053",
+      "source": "migration:SKILL_ko.md:81-84",
+      "text": "다음은 split이다. split은 구축 범위와 분해 축을 기존 출처 매핑·한 층 열기·크기 판정에 적용해\r\n카드를 만들고 실행 제안을 승인받는다. 여러 능력의 전제인 공유 구축은 골조 카드 후보이고 능력\r\n하나의 구축은 그 능력 카드 후보이지만, 배치는 기존 규칙이 결정한다. 호환되는 기존 카드는\r\n유지하고 새 방향과 함께 참일 수 없는 카드만 기존 `.stale.`·재분할 절차를 따른다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-source.md"
+      ],
+      "evidence": [
+        "file:references/legacy-source.md"
+      ],
+      "source_hash": "sha256:63d24ccb1a1adf92e50738e04a0bf692b42b314e060a8b4a134e758edf7fa6f3",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "3. 확인·착지·구축",
+          "source_span": "75-75"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0054",
+      "source": "migration:SKILL_ko.md:86-88",
+      "text": "구축 결과가 예정 경로·이름·명령을 확정하면 규칙 정본의 발견→갱신 행으로 design.md의 정확한\r\n한 줄만 교체한다. 여섯 결정의 방향이 바뀌면 위 기록-먼저 경로로 design을 다시 실행한다.\r\n소유자는 여기서 방향 문서를 확인하고, split의 실행 제안에서 실제 카드·순서·완료 신호를 승인한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/ownership.md"
+      ],
+      "evidence": [
+        "file:references/ownership.md"
+      ],
+      "source_hash": "sha256:1c1bf1fb92a347b8fd18bb38ed384be1dfc2fc1171a2e37e5a1b562b4ebb9dbb",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "design — 디자인 기획 (선택)",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차",
+          "source_span": "30-30"
+        },
+        {
+          "level": 3,
+          "text": "3. 확인·착지·구축",
+          "source_span": "75-75"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    }
+  ],
+  "migration": {
+    "source_root": "skills/design",
+    "source_files": [
+      "SKILL.md",
+      "SKILL_ko.md"
+    ],
+    "atom_count": 54
+  }
+}

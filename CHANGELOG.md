@@ -15,6 +15,23 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.20.0 — 2026-08-30 — one state owner, orthogonal trees, and authored portable packages
+
+The release makes the accepted redesign explicit: principles entry is state-free and reaches
+resume by one route; `scripts/session-start.js` supplies delayed guidance without judging or
+injecting state, while the shared hook wiring is unchanged. Knowledge and work now have
+orthogonal trees: pre-product research persists under `00-project`, named card/source evidence
+and exact provenance stay durable, conclusions land with their semantic owners, only arch or
+adopt writes `K`, and multi-owner landings preserve every owner atomically. P2 Skill Rails
+packages use English `spec.mjs` and `body.md` as executable authored canon, generate `SKILL.md`
+with a receipt, and retain Korean legacy atoms only as migration provenance alongside portable
+generation, build, and evaluation evidence. The deploy artifacts changed under `skills/`,
+`scripts/`, `codex/`, and both plugin manifests; the detailed evidence,
+limitations, and still-unverified release gates are in `docs/rounds/v0.20.0/report_ko.md`.
+That report now carries the final Phase-3 evidence: 442 passing wildcard tests, the DD-92/DD-93
+Korean Codex fallback-header correction, independent bounded review, and the remaining
+unverified release gates; it does not claim production readiness.
+
 ## 0.18.9 — 2026-08-21 — the first real run found two walls, and two gates now stand where they were
 
 0.18.8 shipped and the first real-use test ran: two sessions, the same request, the same user

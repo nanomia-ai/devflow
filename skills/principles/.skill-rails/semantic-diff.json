@@ -1,0 +1,2158 @@
+{
+  "schema": "skill-rails/semantic-diff/1",
+  "spec_hash": {
+    "before": "sha256:199f23016c3807071a308710b9ae2f34076ba395be5211108b2e0bf320f6e0d9",
+    "after": "sha256:e4e5871328f49b96f8998049c4fe01a7c27f01796280419ba8882bf01624566e"
+  },
+  "changed": true,
+  "any_changed": true,
+  "source_changes": {
+    "behavior_source": true,
+    "observation_source": true,
+    "context": true
+  },
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:199f23016c3807071a308710b9ae2f34076ba395be5211108b2e0bf320f6e0d9",
+      "after_hash": "sha256:e4e5871328f49b96f8998049c4fe01a7c27f01796280419ba8882bf01624566e",
+      "source": "behavior_source"
+    },
+    {
+      "kind": "collector",
+      "path": "collectors/index.mjs",
+      "before_hash": "sha256:1ec3ac5db512ca00f85a6139d01e20450b76a9bfa59d6415d88d83e6efdf2da7",
+      "after_hash": "sha256:b9bbba1a6f8e8e8c2e1a767243242d278879ede1ba6f5d91e6d46c7b29e802c5",
+      "source": "observation_source"
+    }
+  ],
+  "groups": {
+    "observations": [
+      {
+        "id": "route.integrityKnowledgeShape",
+        "change": "removed",
+        "before": {
+          "collector": "state.route-integrity.knowledge-shape",
+          "domain": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      {
+        "id": "route.integrityResearchScope",
+        "change": "removed",
+        "before": {
+          "collector": "state.route-integrity.research-scope",
+          "domain": [
+            "yes",
+            "no"
+          ]
+        }
+      },
+      {
+        "id": "route.transitionResidualLanding",
+        "change": "removed",
+        "before": {
+          "collector": "state.route-transition.residual-landing",
+          "domain": [
+            "yes",
+            "no"
+          ]
+        }
+      }
+    ],
+    "guards": [],
+    "stages": [
+      {
+        "id": "route",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "entry.newWork"
+          ],
+          "needs": [],
+          "table": "routePriority",
+          "branches": [
+            "new:git.open-operation",
+            "new:BLOCK:integrity-blocking",
+            "new:BLOCK:research-scope",
+            "new:BLOCK:knowledge-shape",
+            "new:BLOCK:knowledge-writer",
+            "new:BLOCK:compatibility-unavailable",
+            "new:setup.no-product",
+            "new:marker.product-rerun",
+            "new:marker.knowledge-landing",
+            "new:ASK:owner-mapping",
+            "new:setup.layer0-incomplete",
+            "new:setup.brownfield-field",
+            "new:setup.integration-config",
+            "new:setup.room-upgrade",
+            "new:baseline.legacy-v010",
+            "new:baseline.design-refresh",
+            "new:baseline.boundary",
+            "new:transition.layer-opening",
+            "new:transition.residual-landing",
+            "new:marker.re-split",
+            "new:request.existing",
+            "new:event.product-requested",
+            "new:complete.adoption",
+            "new:layer.no-tree",
+            "new:BLOCK:closed-history",
+            "git.open-operation",
+            "BLOCK:integrity-blocking",
+            "BLOCK:research-scope",
+            "BLOCK:knowledge-shape",
+            "BLOCK:knowledge-writer",
+            "BLOCK:compatibility-unavailable",
+            "transition.prepared-route",
+            "transition.interrupted",
+            "transition.source-id-migration",
+            "transition.layer-opening",
+            "transition.product-running",
+            "transition.product-result",
+            "transition.remote-evidence",
+            "transition.finish-boundary",
+            "transition.event-routing",
+            "transition.event-decision",
+            "transition.failure-routing",
+            "transition.residual-landing",
+            "marker.product-rerun",
+            "marker.glossary-term",
+            "marker.design-note",
+            "marker.design-open-item",
+            "marker.capability-closure",
+            "marker.knowledge-landing",
+            "ASK:owner-mapping",
+            "marker.re-split",
+            "setup.no-product",
+            "setup.layer0-incomplete",
+            "setup.brownfield-field",
+            "setup.integration-config",
+            "setup.room-upgrade",
+            "claim.depends-anomaly",
+            "claim.needs-reapproval",
+            "claim.blocked-by-prerequisite",
+            "claim.mine",
+            "baseline.legacy-v010",
+            "baseline.design-refresh",
+            "baseline.boundary",
+            "request.existing",
+            "event.product-requested",
+            "event.pending",
+            "event.new",
+            "blocked.channel",
+            "layer.empty-folder",
+            "layer.folder-boundary",
+            "layer.children-done",
+            "layer.correspondence-gap",
+            "layer.no-foundation",
+            "layer.no-tree",
+            "ready.digest-behind",
+            "ready.needs-normalization",
+            "ready.approval-invalid",
+            "ready.approval-pending",
+            "ready.ready",
+            "ready.waiting-capability",
+            "BLOCK:closed-history",
+            "blocked.audits",
+            "blocked.dependencies",
+            "blocked.other-claims",
+            "product.shape-or-revision",
+            "product.fail",
+            "product.unverified",
+            "complete.product-pass",
+            "complete.adoption",
+            "BLOCK:no-route"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ASK:owner-mapping": [
+                "ASK"
+              ],
+              "baseline.boundary": [
+                "ROUTE:resume"
+              ],
+              "baseline.design-refresh": [
+                "ROUTE:resume"
+              ],
+              "baseline.legacy-v010": [
+                "ROUTE:resume"
+              ],
+              "BLOCK:closed-history": [
+                "BLOCK"
+              ],
+              "BLOCK:compatibility-unavailable": [
+                "BLOCK"
+              ],
+              "BLOCK:integrity-blocking": [
+                "BLOCK"
+              ],
+              "BLOCK:knowledge-shape": [
+                "BLOCK"
+              ],
+              "BLOCK:knowledge-writer": [
+                "BLOCK"
+              ],
+              "BLOCK:no-route": [
+                "BLOCK"
+              ],
+              "BLOCK:research-scope": [
+                "BLOCK"
+              ],
+              "blocked.audits": [
+                "ROUTE:resume"
+              ],
+              "blocked.channel": [
+                "ROUTE:resume"
+              ],
+              "blocked.dependencies": [
+                "ROUTE:resume"
+              ],
+              "blocked.other-claims": [
+                "ROUTE:resume"
+              ],
+              "claim.blocked-by-prerequisite": [
+                "ROUTE:resume"
+              ],
+              "claim.depends-anomaly": [
+                "ROUTE:resume"
+              ],
+              "claim.mine": [
+                "ROUTE:work"
+              ],
+              "claim.needs-reapproval": [
+                "ROUTE:resume"
+              ],
+              "complete.adoption": [
+                "DONE"
+              ],
+              "complete.product-pass": [
+                "DONE"
+              ],
+              "event.new": [
+                "ROUTE:verify"
+              ],
+              "event.pending": [
+                "ROUTE:verify"
+              ],
+              "event.product-requested": [
+                "ROUTE:verify"
+              ],
+              "git.open-operation": [
+                "ROUTE:resume"
+              ],
+              "layer.children-done": [
+                "ROUTE:resume"
+              ],
+              "layer.correspondence-gap": [
+                "ROUTE:resume"
+              ],
+              "layer.empty-folder": [
+                "ROUTE:resume"
+              ],
+              "layer.folder-boundary": [
+                "ROUTE:resume"
+              ],
+              "layer.no-foundation": [
+                "ROUTE:resume"
+              ],
+              "layer.no-tree": [
+                "ROUTE:resume"
+              ],
+              "marker.capability-closure": [
+                "ROUTE:resume"
+              ],
+              "marker.design-note": [
+                "ROUTE:resume"
+              ],
+              "marker.design-open-item": [
+                "ROUTE:resume"
+              ],
+              "marker.glossary-term": [
+                "ROUTE:resume"
+              ],
+              "marker.knowledge-landing": [
+                "ROUTE:resume"
+              ],
+              "marker.product-rerun": [
+                "ROUTE:resume"
+              ],
+              "marker.re-split": [
+                "ROUTE:resume"
+              ],
+              "new:ASK:owner-mapping": [
+                "ASK"
+              ],
+              "new:baseline.boundary": [
+                "ROUTE:resume"
+              ],
+              "new:baseline.design-refresh": [
+                "ROUTE:resume"
+              ],
+              "new:baseline.legacy-v010": [
+                "ROUTE:resume"
+              ],
+              "new:BLOCK:closed-history": [
+                "BLOCK"
+              ],
+              "new:BLOCK:compatibility-unavailable": [
+                "BLOCK"
+              ],
+              "new:BLOCK:integrity-blocking": [
+                "BLOCK"
+              ],
+              "new:BLOCK:knowledge-shape": [
+                "BLOCK"
+              ],
+              "new:BLOCK:knowledge-writer": [
+                "BLOCK"
+              ],
+              "new:BLOCK:research-scope": [
+                "BLOCK"
+              ],
+              "new:complete.adoption": [
+                "DONE"
+              ],
+              "new:event.product-requested": [
+                "ROUTE:verify"
+              ],
+              "new:git.open-operation": [
+                "ROUTE:resume"
+              ],
+              "new:layer.no-tree": [
+                "ROUTE:resume"
+              ],
+              "new:marker.knowledge-landing": [
+                "ROUTE:resume"
+              ],
+              "new:marker.product-rerun": [
+                "ROUTE:resume"
+              ],
+              "new:marker.re-split": [
+                "ROUTE:resume"
+              ],
+              "new:request.existing": [
+                "ROUTE:split"
+              ],
+              "new:setup.brownfield-field": [
+                "ROUTE:resume"
+              ],
+              "new:setup.integration-config": [
+                "ROUTE:resume"
+              ],
+              "new:setup.layer0-incomplete": [
+                "ROUTE:resume"
+              ],
+              "new:setup.no-product": [
+                "ROUTE:product"
+              ],
+              "new:setup.room-upgrade": [
+                "ROUTE:resume"
+              ],
+              "new:transition.layer-opening": [
+                "ROUTE:resume"
+              ],
+              "new:transition.residual-landing": [
+                "ROUTE:resume"
+              ],
+              "product.fail": [
+                "ROUTE:verify"
+              ],
+              "product.shape-or-revision": [
+                "ROUTE:verify"
+              ],
+              "product.unverified": [
+                "ROUTE:verify"
+              ],
+              "ready.approval-invalid": [
+                "ROUTE:split"
+              ],
+              "ready.approval-pending": [
+                "ROUTE:split"
+              ],
+              "ready.digest-behind": [
+                "ROUTE:resume"
+              ],
+              "ready.needs-normalization": [
+                "ROUTE:split"
+              ],
+              "ready.ready": [
+                "ROUTE:work"
+              ],
+              "ready.waiting-capability": [
+                "ROUTE:split"
+              ],
+              "request.existing": [
+                "ROUTE:split"
+              ],
+              "setup.brownfield-field": [
+                "ROUTE:resume"
+              ],
+              "setup.integration-config": [
+                "ROUTE:resume"
+              ],
+              "setup.layer0-incomplete": [
+                "ROUTE:resume"
+              ],
+              "setup.no-product": [
+                "ROUTE:product"
+              ],
+              "setup.room-upgrade": [
+                "ROUTE:resume"
+              ],
+              "transition.event-decision": [
+                "ROUTE:resume"
+              ],
+              "transition.event-routing": [
+                "ROUTE:resume"
+              ],
+              "transition.failure-routing": [
+                "ROUTE:resume"
+              ],
+              "transition.finish-boundary": [
+                "ROUTE:resume"
+              ],
+              "transition.interrupted": [
+                "ROUTE:resume"
+              ],
+              "transition.layer-opening": [
+                "ROUTE:resume"
+              ],
+              "transition.prepared-route": [
+                "ROUTE:resume"
+              ],
+              "transition.product-result": [
+                "ROUTE:resume"
+              ],
+              "transition.product-running": [
+                "ROUTE:resume"
+              ],
+              "transition.remote-evidence": [
+                "ROUTE:resume"
+              ],
+              "transition.residual-landing": [
+                "ROUTE:resume"
+              ],
+              "transition.source-id-migration": [
+                "ROUTE:resume"
+              ]
+            }
+          },
+          "body": "stage: route",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "entry.newWork"
+          ],
+          "needs": [],
+          "table": "routePriority",
+          "branches": [
+            "new:git.open-operation",
+            "new:BLOCK:integrity-blocking",
+            "new:BLOCK:knowledge-writer",
+            "new:BLOCK:compatibility-unavailable",
+            "new:setup.no-product",
+            "new:marker.product-rerun",
+            "new:marker.knowledge-landing",
+            "new:ASK:owner-mapping",
+            "new:setup.layer0-incomplete",
+            "new:setup.brownfield-field",
+            "new:setup.integration-config",
+            "new:setup.room-upgrade",
+            "new:baseline.legacy-v010",
+            "new:baseline.design-refresh",
+            "new:baseline.boundary",
+            "new:transition.layer-opening",
+            "new:marker.re-split",
+            "new:request.existing",
+            "new:event.product-requested",
+            "new:complete.adoption",
+            "new:layer.no-tree",
+            "new:BLOCK:closed-history",
+            "git.open-operation",
+            "BLOCK:integrity-blocking",
+            "BLOCK:knowledge-writer",
+            "BLOCK:compatibility-unavailable",
+            "transition.prepared-route",
+            "transition.interrupted",
+            "transition.source-id-migration",
+            "transition.layer-opening",
+            "transition.product-running",
+            "transition.product-result",
+            "transition.remote-evidence",
+            "transition.finish-boundary",
+            "transition.event-routing",
+            "transition.event-decision",
+            "transition.failure-routing",
+            "marker.product-rerun",
+            "marker.glossary-term",
+            "marker.design-note",
+            "marker.design-open-item",
+            "marker.capability-closure",
+            "marker.knowledge-landing",
+            "ASK:owner-mapping",
+            "marker.re-split",
+            "setup.no-product",
+            "setup.layer0-incomplete",
+            "setup.brownfield-field",
+            "setup.integration-config",
+            "setup.room-upgrade",
+            "claim.depends-anomaly",
+            "claim.needs-reapproval",
+            "claim.blocked-by-prerequisite",
+            "claim.mine",
+            "baseline.legacy-v010",
+            "baseline.design-refresh",
+            "baseline.boundary",
+            "request.existing",
+            "event.product-requested",
+            "event.pending",
+            "event.new",
+            "blocked.channel",
+            "layer.empty-folder",
+            "layer.folder-boundary",
+            "layer.children-done",
+            "layer.correspondence-gap",
+            "layer.no-foundation",
+            "layer.no-tree",
+            "ready.digest-behind",
+            "ready.needs-normalization",
+            "ready.approval-invalid",
+            "ready.approval-pending",
+            "ready.ready",
+            "ready.waiting-capability",
+            "BLOCK:closed-history",
+            "blocked.audits",
+            "blocked.dependencies",
+            "blocked.other-claims",
+            "product.shape-or-revision",
+            "product.fail",
+            "product.unverified",
+            "complete.product-pass",
+            "complete.adoption",
+            "BLOCK:no-route"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ASK:owner-mapping": [
+                "ASK"
+              ],
+              "baseline.boundary": [
+                "ROUTE:resume"
+              ],
+              "baseline.design-refresh": [
+                "ROUTE:resume"
+              ],
+              "baseline.legacy-v010": [
+                "ROUTE:resume"
+              ],
+              "BLOCK:closed-history": [
+                "BLOCK"
+              ],
+              "BLOCK:compatibility-unavailable": [
+                "BLOCK"
+              ],
+              "BLOCK:integrity-blocking": [
+                "BLOCK"
+              ],
+              "BLOCK:knowledge-writer": [
+                "BLOCK"
+              ],
+              "BLOCK:no-route": [
+                "BLOCK"
+              ],
+              "blocked.audits": [
+                "ROUTE:resume"
+              ],
+              "blocked.channel": [
+                "ROUTE:resume"
+              ],
+              "blocked.dependencies": [
+                "ROUTE:resume"
+              ],
+              "blocked.other-claims": [
+                "ROUTE:resume"
+              ],
+              "claim.blocked-by-prerequisite": [
+                "ROUTE:resume"
+              ],
+              "claim.depends-anomaly": [
+                "ROUTE:resume"
+              ],
+              "claim.mine": [
+                "ROUTE:work"
+              ],
+              "claim.needs-reapproval": [
+                "ROUTE:resume"
+              ],
+              "complete.adoption": [
+                "DONE"
+              ],
+              "complete.product-pass": [
+                "DONE"
+              ],
+              "event.new": [
+                "ROUTE:verify"
+              ],
+              "event.pending": [
+                "ROUTE:verify"
+              ],
+              "event.product-requested": [
+                "ROUTE:verify"
+              ],
+              "git.open-operation": [
+                "ROUTE:resume"
+              ],
+              "layer.children-done": [
+                "ROUTE:resume"
+              ],
+              "layer.correspondence-gap": [
+                "ROUTE:resume"
+              ],
+              "layer.empty-folder": [
+                "ROUTE:resume"
+              ],
+              "layer.folder-boundary": [
+                "ROUTE:resume"
+              ],
+              "layer.no-foundation": [
+                "ROUTE:resume"
+              ],
+              "layer.no-tree": [
+                "ROUTE:resume"
+              ],
+              "marker.capability-closure": [
+                "ROUTE:resume"
+              ],
+              "marker.design-note": [
+                "ROUTE:resume"
+              ],
+              "marker.design-open-item": [
+                "ROUTE:resume"
+              ],
+              "marker.glossary-term": [
+                "ROUTE:resume"
+              ],
+              "marker.knowledge-landing": [
+                "ROUTE:resume"
+              ],
+              "marker.product-rerun": [
+                "ROUTE:resume"
+              ],
+              "marker.re-split": [
+                "ROUTE:resume"
+              ],
+              "new:ASK:owner-mapping": [
+                "ASK"
+              ],
+              "new:baseline.boundary": [
+                "ROUTE:resume"
+              ],
+              "new:baseline.design-refresh": [
+                "ROUTE:resume"
+              ],
+              "new:baseline.legacy-v010": [
+                "ROUTE:resume"
+              ],
+              "new:BLOCK:closed-history": [
+                "BLOCK"
+              ],
+              "new:BLOCK:compatibility-unavailable": [
+                "BLOCK"
+              ],
+              "new:BLOCK:integrity-blocking": [
+                "BLOCK"
+              ],
+              "new:BLOCK:knowledge-writer": [
+                "BLOCK"
+              ],
+              "new:complete.adoption": [
+                "DONE"
+              ],
+              "new:event.product-requested": [
+                "ROUTE:verify"
+              ],
+              "new:git.open-operation": [
+                "ROUTE:resume"
+              ],
+              "new:layer.no-tree": [
+                "ROUTE:resume"
+              ],
+              "new:marker.knowledge-landing": [
+                "ROUTE:resume"
+              ],
+              "new:marker.product-rerun": [
+                "ROUTE:resume"
+              ],
+              "new:marker.re-split": [
+                "ROUTE:resume"
+              ],
+              "new:request.existing": [
+                "ROUTE:split"
+              ],
+              "new:setup.brownfield-field": [
+                "ROUTE:resume"
+              ],
+              "new:setup.integration-config": [
+                "ROUTE:resume"
+              ],
+              "new:setup.layer0-incomplete": [
+                "ROUTE:resume"
+              ],
+              "new:setup.no-product": [
+                "ROUTE:product"
+              ],
+              "new:setup.room-upgrade": [
+                "ROUTE:resume"
+              ],
+              "new:transition.layer-opening": [
+                "ROUTE:resume"
+              ],
+              "product.fail": [
+                "ROUTE:verify"
+              ],
+              "product.shape-or-revision": [
+                "ROUTE:verify"
+              ],
+              "product.unverified": [
+                "ROUTE:verify"
+              ],
+              "ready.approval-invalid": [
+                "ROUTE:split"
+              ],
+              "ready.approval-pending": [
+                "ROUTE:split"
+              ],
+              "ready.digest-behind": [
+                "ROUTE:resume"
+              ],
+              "ready.needs-normalization": [
+                "ROUTE:split"
+              ],
+              "ready.ready": [
+                "ROUTE:work"
+              ],
+              "ready.waiting-capability": [
+                "ROUTE:split"
+              ],
+              "request.existing": [
+                "ROUTE:split"
+              ],
+              "setup.brownfield-field": [
+                "ROUTE:resume"
+              ],
+              "setup.integration-config": [
+                "ROUTE:resume"
+              ],
+              "setup.layer0-incomplete": [
+                "ROUTE:resume"
+              ],
+              "setup.no-product": [
+                "ROUTE:product"
+              ],
+              "setup.room-upgrade": [
+                "ROUTE:resume"
+              ],
+              "transition.event-decision": [
+                "ROUTE:resume"
+              ],
+              "transition.event-routing": [
+                "ROUTE:resume"
+              ],
+              "transition.failure-routing": [
+                "ROUTE:resume"
+              ],
+              "transition.finish-boundary": [
+                "ROUTE:resume"
+              ],
+              "transition.interrupted": [
+                "ROUTE:resume"
+              ],
+              "transition.layer-opening": [
+                "ROUTE:resume"
+              ],
+              "transition.prepared-route": [
+                "ROUTE:resume"
+              ],
+              "transition.product-result": [
+                "ROUTE:resume"
+              ],
+              "transition.product-running": [
+                "ROUTE:resume"
+              ],
+              "transition.remote-evidence": [
+                "ROUTE:resume"
+              ],
+              "transition.source-id-migration": [
+                "ROUTE:resume"
+              ]
+            }
+          },
+          "body": "stage: route",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "routePriority",
+        "change": "modified",
+        "before": {
+          "exclusive": false,
+          "rows": [
+            {
+              "state": "new:git.open-operation",
+              "reads": [
+                "entry.newWork",
+                "route.gitOpenOperation"
+              ]
+            },
+            {
+              "state": "new:BLOCK:integrity-blocking",
+              "reads": [
+                "entry.newWork",
+                "route.integrityBlocking"
+              ]
+            },
+            {
+              "state": "new:BLOCK:research-scope",
+              "reads": [
+                "entry.newWork",
+                "route.integrityResearchScope"
+              ]
+            },
+            {
+              "state": "new:BLOCK:knowledge-shape",
+              "reads": [
+                "entry.newWork",
+                "route.integrityKnowledgeShape"
+              ]
+            },
+            {
+              "state": "new:BLOCK:knowledge-writer",
+              "reads": [
+                "entry.newWork",
+                "route.integrityKnowledgeWriter"
+              ]
+            },
+            {
+              "state": "new:BLOCK:compatibility-unavailable",
+              "reads": [
+                "entry.newWork",
+                "route.integrityCompatibilityUnavailable"
+              ]
+            },
+            {
+              "state": "new:setup.no-product",
+              "reads": [
+                "entry.newWork",
+                "route.setupNoProduct"
+              ]
+            },
+            {
+              "state": "new:marker.product-rerun",
+              "reads": [
+                "entry.newWork",
+                "route.markerProductRerun"
+              ]
+            },
+            {
+              "state": "new:marker.knowledge-landing",
+              "reads": [
+                "entry.newWork",
+                "route.markerKnowledgeLanding"
+              ]
+            },
+            {
+              "state": "new:ASK:owner-mapping",
+              "reads": [
+                "entry.newWork",
+                "route.markerOwnerMapping"
+              ]
+            },
+            {
+              "state": "new:setup.layer0-incomplete",
+              "reads": [
+                "entry.newWork",
+                "route.setupLayer0Incomplete"
+              ]
+            },
+            {
+              "state": "new:setup.brownfield-field",
+              "reads": [
+                "entry.newWork",
+                "route.setupBrownfieldField"
+              ]
+            },
+            {
+              "state": "new:setup.integration-config",
+              "reads": [
+                "entry.newWork",
+                "route.setupIntegrationConfig"
+              ]
+            },
+            {
+              "state": "new:setup.room-upgrade",
+              "reads": [
+                "entry.newWork",
+                "route.setupRoomUpgrade"
+              ]
+            },
+            {
+              "state": "new:baseline.legacy-v010",
+              "reads": [
+                "entry.newWork",
+                "route.baselineLegacyV010"
+              ]
+            },
+            {
+              "state": "new:baseline.design-refresh",
+              "reads": [
+                "entry.newWork",
+                "route.baselineDesignRefresh"
+              ]
+            },
+            {
+              "state": "new:baseline.boundary",
+              "reads": [
+                "entry.newWork",
+                "route.baselineBoundary"
+              ]
+            },
+            {
+              "state": "new:transition.layer-opening",
+              "reads": [
+                "entry.newWork",
+                "route.transitionLayerOpening"
+              ]
+            },
+            {
+              "state": "new:transition.residual-landing",
+              "reads": [
+                "entry.newWork",
+                "route.transitionResidualLanding"
+              ]
+            },
+            {
+              "state": "new:marker.re-split",
+              "reads": [
+                "entry.newWork",
+                "route.markerReSplit"
+              ]
+            },
+            {
+              "state": "new:request.existing",
+              "reads": [
+                "entry.newWork",
+                "route.requestExisting"
+              ]
+            },
+            {
+              "state": "new:event.product-requested",
+              "reads": [
+                "entry.newWork",
+                "route.eventProductRequested"
+              ]
+            },
+            {
+              "state": "new:complete.adoption",
+              "reads": [
+                "entry.newWork",
+                "route.completeAdoption"
+              ]
+            },
+            {
+              "state": "new:layer.no-tree",
+              "reads": [
+                "entry.newWork",
+                "route.layerNoTree"
+              ]
+            },
+            {
+              "state": "new:BLOCK:closed-history",
+              "reads": [
+                "entry.newWork",
+                "route.blockedClosedHistory"
+              ]
+            },
+            {
+              "state": "git.open-operation",
+              "reads": [
+                "entry.newWork",
+                "route.gitOpenOperation"
+              ]
+            },
+            {
+              "state": "BLOCK:integrity-blocking",
+              "reads": [
+                "entry.newWork",
+                "route.integrityBlocking"
+              ]
+            },
+            {
+              "state": "BLOCK:research-scope",
+              "reads": [
+                "entry.newWork",
+                "route.integrityResearchScope"
+              ]
+            },
+            {
+              "state": "BLOCK:knowledge-shape",
+              "reads": [
+                "entry.newWork",
+                "route.integrityKnowledgeShape"
+              ]
+            },
+            {
+              "state": "BLOCK:knowledge-writer",
+              "reads": [
+                "entry.newWork",
+                "route.integrityKnowledgeWriter"
+              ]
+            },
+            {
+              "state": "BLOCK:compatibility-unavailable",
+              "reads": [
+                "entry.newWork",
+                "route.integrityCompatibilityUnavailable"
+              ]
+            },
+            {
+              "state": "transition.prepared-route",
+              "reads": [
+                "entry.newWork",
+                "route.transitionPreparedRoute"
+              ]
+            },
+            {
+              "state": "transition.interrupted",
+              "reads": [
+                "entry.newWork",
+                "route.transitionInterrupted"
+              ]
+            },
+            {
+              "state": "transition.source-id-migration",
+              "reads": [
+                "entry.newWork",
+                "route.transitionSourceIdMigration"
+              ]
+            },
+            {
+              "state": "transition.layer-opening",
+              "reads": [
+                "entry.newWork",
+                "route.transitionLayerOpening"
+              ]
+            },
+            {
+              "state": "transition.product-running",
+              "reads": [
+                "entry.newWork",
+                "route.transitionProductRunning"
+              ]
+            },
+            {
+              "state": "transition.product-result",
+              "reads": [
+                "entry.newWork",
+                "route.transitionProductResult"
+              ]
+            },
+            {
+              "state": "transition.remote-evidence",
+              "reads": [
+                "entry.newWork",
+                "route.transitionRemoteEvidence"
+              ]
+            },
+            {
+              "state": "transition.finish-boundary",
+              "reads": [
+                "entry.newWork",
+                "route.transitionFinishBoundary"
+              ]
+            },
+            {
+              "state": "transition.event-routing",
+              "reads": [
+                "entry.newWork",
+                "route.transitionEventRouting"
+              ]
+            },
+            {
+              "state": "transition.event-decision",
+              "reads": [
+                "entry.newWork",
+                "route.transitionEventDecision"
+              ]
+            },
+            {
+              "state": "transition.failure-routing",
+              "reads": [
+                "entry.newWork",
+                "route.transitionFailureRouting"
+              ]
+            },
+            {
+              "state": "transition.residual-landing",
+              "reads": [
+                "entry.newWork",
+                "route.transitionResidualLanding"
+              ]
+            },
+            {
+              "state": "marker.product-rerun",
+              "reads": [
+                "entry.newWork",
+                "route.markerProductRerun"
+              ]
+            },
+            {
+              "state": "marker.glossary-term",
+              "reads": [
+                "entry.newWork",
+                "route.markerGlossaryTerm"
+              ]
+            },
+            {
+              "state": "marker.design-note",
+              "reads": [
+                "entry.newWork",
+                "route.markerDesignNote"
+              ]
+            },
+            {
+              "state": "marker.design-open-item",
+              "reads": [
+                "entry.newWork",
+                "route.markerDesignOpenItem"
+              ]
+            },
+            {
+              "state": "marker.capability-closure",
+              "reads": [
+                "entry.newWork",
+                "route.markerCapabilityClosure"
+              ]
+            },
+            {
+              "state": "marker.knowledge-landing",
+              "reads": [
+                "entry.newWork",
+                "route.markerKnowledgeLanding"
+              ]
+            },
+            {
+              "state": "ASK:owner-mapping",
+              "reads": [
+                "entry.newWork",
+                "route.markerOwnerMapping"
+              ]
+            },
+            {
+              "state": "marker.re-split",
+              "reads": [
+                "entry.newWork",
+                "route.markerReSplit"
+              ]
+            },
+            {
+              "state": "setup.no-product",
+              "reads": [
+                "entry.newWork",
+                "route.setupNoProduct"
+              ]
+            },
+            {
+              "state": "setup.layer0-incomplete",
+              "reads": [
+                "entry.newWork",
+                "route.setupLayer0Incomplete"
+              ]
+            },
+            {
+              "state": "setup.brownfield-field",
+              "reads": [
+                "entry.newWork",
+                "route.setupBrownfieldField"
+              ]
+            },
+            {
+              "state": "setup.integration-config",
+              "reads": [
+                "entry.newWork",
+                "route.setupIntegrationConfig"
+              ]
+            },
+            {
+              "state": "setup.room-upgrade",
+              "reads": [
+                "entry.newWork",
+                "route.setupRoomUpgrade"
+              ]
+            },
+            {
+              "state": "claim.depends-anomaly",
+              "reads": [
+                "entry.newWork",
+                "route.claimDependsAnomaly"
+              ]
+            },
+            {
+              "state": "claim.needs-reapproval",
+              "reads": [
+                "entry.newWork",
+                "route.claimNeedsReapproval"
+              ]
+            },
+            {
+              "state": "claim.blocked-by-prerequisite",
+              "reads": [
+                "entry.newWork",
+                "route.claimBlockedByPrerequisite"
+              ]
+            },
+            {
+              "state": "claim.mine",
+              "reads": [
+                "entry.newWork",
+                "route.claimMine"
+              ]
+            },
+            {
+              "state": "baseline.legacy-v010",
+              "reads": [
+                "entry.newWork",
+                "route.baselineLegacyV010"
+              ]
+            },
+            {
+              "state": "baseline.design-refresh",
+              "reads": [
+                "entry.newWork",
+                "route.baselineDesignRefresh"
+              ]
+            },
+            {
+              "state": "baseline.boundary",
+              "reads": [
+                "entry.newWork",
+                "route.baselineBoundary"
+              ]
+            },
+            {
+              "state": "request.existing",
+              "reads": [
+                "entry.newWork",
+                "route.requestExisting"
+              ]
+            },
+            {
+              "state": "event.product-requested",
+              "reads": [
+                "entry.newWork",
+                "route.eventProductRequested"
+              ]
+            },
+            {
+              "state": "event.pending",
+              "reads": [
+                "entry.newWork",
+                "route.eventPending"
+              ]
+            },
+            {
+              "state": "event.new",
+              "reads": [
+                "entry.newWork",
+                "route.eventNew"
+              ]
+            },
+            {
+              "state": "blocked.channel",
+              "reads": [
+                "entry.newWork",
+                "route.blockedChannel"
+              ]
+            },
+            {
+              "state": "layer.empty-folder",
+              "reads": [
+                "entry.newWork",
+                "route.layerEmptyFolder"
+              ]
+            },
+            {
+              "state": "layer.folder-boundary",
+              "reads": [
+                "entry.newWork",
+                "route.layerFolderBoundary"
+              ]
+            },
+            {
+              "state": "layer.children-done",
+              "reads": [
+                "entry.newWork",
+                "route.layerChildrenDone"
+              ]
+            },
+            {
+              "state": "layer.correspondence-gap",
+              "reads": [
+                "entry.newWork",
+                "route.layerCorrespondenceGap"
+              ]
+            },
+            {
+              "state": "layer.no-foundation",
+              "reads": [
+                "entry.newWork",
+                "route.layerNoFoundation"
+              ]
+            },
+            {
+              "state": "layer.no-tree",
+              "reads": [
+                "entry.newWork",
+                "route.layerNoTree"
+              ]
+            },
+            {
+              "state": "ready.digest-behind",
+              "reads": [
+                "entry.newWork",
+                "route.readyDigestBehind"
+              ]
+            },
+            {
+              "state": "ready.needs-normalization",
+              "reads": [
+                "entry.newWork",
+                "route.readyNeedsNormalization"
+              ]
+            },
+            {
+              "state": "ready.approval-invalid",
+              "reads": [
+                "entry.newWork",
+                "route.readyApprovalInvalid"
+              ]
+            },
+            {
+              "state": "ready.approval-pending",
+              "reads": [
+                "entry.newWork",
+                "route.readyApprovalPending"
+              ]
+            },
+            {
+              "state": "ready.ready",
+              "reads": [
+                "entry.newWork",
+                "route.readyReady"
+              ]
+            },
+            {
+              "state": "ready.waiting-capability",
+              "reads": [
+                "entry.newWork",
+                "route.readyWaitingCapability"
+              ]
+            },
+            {
+              "state": "BLOCK:closed-history",
+              "reads": [
+                "entry.newWork",
+                "route.blockedClosedHistory"
+              ]
+            },
+            {
+              "state": "blocked.audits",
+              "reads": [
+                "entry.newWork",
+                "route.blockedAudits"
+              ]
+            },
+            {
+              "state": "blocked.dependencies",
+              "reads": [
+                "entry.newWork",
+                "route.blockedDependencies"
+              ]
+            },
+            {
+              "state": "blocked.other-claims",
+              "reads": [
+                "entry.newWork",
+                "route.blockedOtherClaims"
+              ]
+            },
+            {
+              "state": "product.shape-or-revision",
+              "reads": [
+                "entry.newWork",
+                "route.productShapeOrRevision"
+              ]
+            },
+            {
+              "state": "product.fail",
+              "reads": [
+                "entry.newWork",
+                "route.productFail"
+              ]
+            },
+            {
+              "state": "product.unverified",
+              "reads": [
+                "entry.newWork",
+                "route.productUnverified"
+              ]
+            },
+            {
+              "state": "complete.product-pass",
+              "reads": [
+                "entry.newWork",
+                "route.completeProductPass"
+              ]
+            },
+            {
+              "state": "complete.adoption",
+              "reads": [
+                "entry.newWork",
+                "route.completeAdoption"
+              ]
+            },
+            {
+              "state": "BLOCK:no-route",
+              "reads": []
+            }
+          ]
+        },
+        "after": {
+          "exclusive": false,
+          "rows": [
+            {
+              "state": "new:git.open-operation",
+              "reads": [
+                "entry.newWork",
+                "route.gitOpenOperation"
+              ]
+            },
+            {
+              "state": "new:BLOCK:integrity-blocking",
+              "reads": [
+                "entry.newWork",
+                "route.integrityBlocking"
+              ]
+            },
+            {
+              "state": "new:BLOCK:knowledge-writer",
+              "reads": [
+                "entry.newWork",
+                "route.integrityKnowledgeWriter"
+              ]
+            },
+            {
+              "state": "new:BLOCK:compatibility-unavailable",
+              "reads": [
+                "entry.newWork",
+                "route.integrityCompatibilityUnavailable"
+              ]
+            },
+            {
+              "state": "new:setup.no-product",
+              "reads": [
+                "entry.newWork",
+                "route.setupNoProduct"
+              ]
+            },
+            {
+              "state": "new:marker.product-rerun",
+              "reads": [
+                "entry.newWork",
+                "route.markerProductRerun"
+              ]
+            },
+            {
+              "state": "new:marker.knowledge-landing",
+              "reads": [
+                "entry.newWork",
+                "route.markerKnowledgeLanding"
+              ]
+            },
+            {
+              "state": "new:ASK:owner-mapping",
+              "reads": [
+                "entry.newWork",
+                "route.markerOwnerMapping"
+              ]
+            },
+            {
+              "state": "new:setup.layer0-incomplete",
+              "reads": [
+                "entry.newWork",
+                "route.setupLayer0Incomplete"
+              ]
+            },
+            {
+              "state": "new:setup.brownfield-field",
+              "reads": [
+                "entry.newWork",
+                "route.setupBrownfieldField"
+              ]
+            },
+            {
+              "state": "new:setup.integration-config",
+              "reads": [
+                "entry.newWork",
+                "route.setupIntegrationConfig"
+              ]
+            },
+            {
+              "state": "new:setup.room-upgrade",
+              "reads": [
+                "entry.newWork",
+                "route.setupRoomUpgrade"
+              ]
+            },
+            {
+              "state": "new:baseline.legacy-v010",
+              "reads": [
+                "entry.newWork",
+                "route.baselineLegacyV010"
+              ]
+            },
+            {
+              "state": "new:baseline.design-refresh",
+              "reads": [
+                "entry.newWork",
+                "route.baselineDesignRefresh"
+              ]
+            },
+            {
+              "state": "new:baseline.boundary",
+              "reads": [
+                "entry.newWork",
+                "route.baselineBoundary"
+              ]
+            },
+            {
+              "state": "new:transition.layer-opening",
+              "reads": [
+                "entry.newWork",
+                "route.transitionLayerOpening"
+              ]
+            },
+            {
+              "state": "new:marker.re-split",
+              "reads": [
+                "entry.newWork",
+                "route.markerReSplit"
+              ]
+            },
+            {
+              "state": "new:request.existing",
+              "reads": [
+                "entry.newWork",
+                "route.requestExisting"
+              ]
+            },
+            {
+              "state": "new:event.product-requested",
+              "reads": [
+                "entry.newWork",
+                "route.eventProductRequested"
+              ]
+            },
+            {
+              "state": "new:complete.adoption",
+              "reads": [
+                "entry.newWork",
+                "route.completeAdoption"
+              ]
+            },
+            {
+              "state": "new:layer.no-tree",
+              "reads": [
+                "entry.newWork",
+                "route.layerNoTree"
+              ]
+            },
+            {
+              "state": "new:BLOCK:closed-history",
+              "reads": [
+                "entry.newWork",
+                "route.blockedClosedHistory"
+              ]
+            },
+            {
+              "state": "git.open-operation",
+              "reads": [
+                "entry.newWork",
+                "route.gitOpenOperation"
+              ]
+            },
+            {
+              "state": "BLOCK:integrity-blocking",
+              "reads": [
+                "entry.newWork",
+                "route.integrityBlocking"
+              ]
+            },
+            {
+              "state": "BLOCK:knowledge-writer",
+              "reads": [
+                "entry.newWork",
+                "route.integrityKnowledgeWriter"
+              ]
+            },
+            {
+              "state": "BLOCK:compatibility-unavailable",
+              "reads": [
+                "entry.newWork",
+                "route.integrityCompatibilityUnavailable"
+              ]
+            },
+            {
+              "state": "transition.prepared-route",
+              "reads": [
+                "entry.newWork",
+                "route.transitionPreparedRoute"
+              ]
+            },
+            {
+              "state": "transition.interrupted",
+              "reads": [
+                "entry.newWork",
+                "route.transitionInterrupted"
+              ]
+            },
+            {
+              "state": "transition.source-id-migration",
+              "reads": [
+                "entry.newWork",
+                "route.transitionSourceIdMigration"
+              ]
+            },
+            {
+              "state": "transition.layer-opening",
+              "reads": [
+                "entry.newWork",
+                "route.transitionLayerOpening"
+              ]
+            },
+            {
+              "state": "transition.product-running",
+              "reads": [
+                "entry.newWork",
+                "route.transitionProductRunning"
+              ]
+            },
+            {
+              "state": "transition.product-result",
+              "reads": [
+                "entry.newWork",
+                "route.transitionProductResult"
+              ]
+            },
+            {
+              "state": "transition.remote-evidence",
+              "reads": [
+                "entry.newWork",
+                "route.transitionRemoteEvidence"
+              ]
+            },
+            {
+              "state": "transition.finish-boundary",
+              "reads": [
+                "entry.newWork",
+                "route.transitionFinishBoundary"
+              ]
+            },
+            {
+              "state": "transition.event-routing",
+              "reads": [
+                "entry.newWork",
+                "route.transitionEventRouting"
+              ]
+            },
+            {
+              "state": "transition.event-decision",
+              "reads": [
+                "entry.newWork",
+                "route.transitionEventDecision"
+              ]
+            },
+            {
+              "state": "transition.failure-routing",
+              "reads": [
+                "entry.newWork",
+                "route.transitionFailureRouting"
+              ]
+            },
+            {
+              "state": "marker.product-rerun",
+              "reads": [
+                "entry.newWork",
+                "route.markerProductRerun"
+              ]
+            },
+            {
+              "state": "marker.glossary-term",
+              "reads": [
+                "entry.newWork",
+                "route.markerGlossaryTerm"
+              ]
+            },
+            {
+              "state": "marker.design-note",
+              "reads": [
+                "entry.newWork",
+                "route.markerDesignNote"
+              ]
+            },
+            {
+              "state": "marker.design-open-item",
+              "reads": [
+                "entry.newWork",
+                "route.markerDesignOpenItem"
+              ]
+            },
+            {
+              "state": "marker.capability-closure",
+              "reads": [
+                "entry.newWork",
+                "route.markerCapabilityClosure"
+              ]
+            },
+            {
+              "state": "marker.knowledge-landing",
+              "reads": [
+                "entry.newWork",
+                "route.markerKnowledgeLanding"
+              ]
+            },
+            {
+              "state": "ASK:owner-mapping",
+              "reads": [
+                "entry.newWork",
+                "route.markerOwnerMapping"
+              ]
+            },
+            {
+              "state": "marker.re-split",
+              "reads": [
+                "entry.newWork",
+                "route.markerReSplit"
+              ]
+            },
+            {
+              "state": "setup.no-product",
+              "reads": [
+                "entry.newWork",
+                "route.setupNoProduct"
+              ]
+            },
+            {
+              "state": "setup.layer0-incomplete",
+              "reads": [
+                "entry.newWork",
+                "route.setupLayer0Incomplete"
+              ]
+            },
+            {
+              "state": "setup.brownfield-field",
+              "reads": [
+                "entry.newWork",
+                "route.setupBrownfieldField"
+              ]
+            },
+            {
+              "state": "setup.integration-config",
+              "reads": [
+                "entry.newWork",
+                "route.setupIntegrationConfig"
+              ]
+            },
+            {
+              "state": "setup.room-upgrade",
+              "reads": [
+                "entry.newWork",
+                "route.setupRoomUpgrade"
+              ]
+            },
+            {
+              "state": "claim.depends-anomaly",
+              "reads": [
+                "entry.newWork",
+                "route.claimDependsAnomaly"
+              ]
+            },
+            {
+              "state": "claim.needs-reapproval",
+              "reads": [
+                "entry.newWork",
+                "route.claimNeedsReapproval"
+              ]
+            },
+            {
+              "state": "claim.blocked-by-prerequisite",
+              "reads": [
+                "entry.newWork",
+                "route.claimBlockedByPrerequisite"
+              ]
+            },
+            {
+              "state": "claim.mine",
+              "reads": [
+                "entry.newWork",
+                "route.claimMine"
+              ]
+            },
+            {
+              "state": "baseline.legacy-v010",
+              "reads": [
+                "entry.newWork",
+                "route.baselineLegacyV010"
+              ]
+            },
+            {
+              "state": "baseline.design-refresh",
+              "reads": [
+                "entry.newWork",
+                "route.baselineDesignRefresh"
+              ]
+            },
+            {
+              "state": "baseline.boundary",
+              "reads": [
+                "entry.newWork",
+                "route.baselineBoundary"
+              ]
+            },
+            {
+              "state": "request.existing",
+              "reads": [
+                "entry.newWork",
+                "route.requestExisting"
+              ]
+            },
+            {
+              "state": "event.product-requested",
+              "reads": [
+                "entry.newWork",
+                "route.eventProductRequested"
+              ]
+            },
+            {
+              "state": "event.pending",
+              "reads": [
+                "entry.newWork",
+                "route.eventPending"
+              ]
+            },
+            {
+              "state": "event.new",
+              "reads": [
+                "entry.newWork",
+                "route.eventNew"
+              ]
+            },
+            {
+              "state": "blocked.channel",
+              "reads": [
+                "entry.newWork",
+                "route.blockedChannel"
+              ]
+            },
+            {
+              "state": "layer.empty-folder",
+              "reads": [
+                "entry.newWork",
+                "route.layerEmptyFolder"
+              ]
+            },
+            {
+              "state": "layer.folder-boundary",
+              "reads": [
+                "entry.newWork",
+                "route.layerFolderBoundary"
+              ]
+            },
+            {
+              "state": "layer.children-done",
+              "reads": [
+                "entry.newWork",
+                "route.layerChildrenDone"
+              ]
+            },
+            {
+              "state": "layer.correspondence-gap",
+              "reads": [
+                "entry.newWork",
+                "route.layerCorrespondenceGap"
+              ]
+            },
+            {
+              "state": "layer.no-foundation",
+              "reads": [
+                "entry.newWork",
+                "route.layerNoFoundation"
+              ]
+            },
+            {
+              "state": "layer.no-tree",
+              "reads": [
+                "entry.newWork",
+                "route.layerNoTree"
+              ]
+            },
+            {
+              "state": "ready.digest-behind",
+              "reads": [
+                "entry.newWork",
+                "route.readyDigestBehind"
+              ]
+            },
+            {
+              "state": "ready.needs-normalization",
+              "reads": [
+                "entry.newWork",
+                "route.readyNeedsNormalization"
+              ]
+            },
+            {
+              "state": "ready.approval-invalid",
+              "reads": [
+                "entry.newWork",
+                "route.readyApprovalInvalid"
+              ]
+            },
+            {
+              "state": "ready.approval-pending",
+              "reads": [
+                "entry.newWork",
+                "route.readyApprovalPending"
+              ]
+            },
+            {
+              "state": "ready.ready",
+              "reads": [
+                "entry.newWork",
+                "route.readyReady"
+              ]
+            },
+            {
+              "state": "ready.waiting-capability",
+              "reads": [
+                "entry.newWork",
+                "route.readyWaitingCapability"
+              ]
+            },
+            {
+              "state": "BLOCK:closed-history",
+              "reads": [
+                "entry.newWork",
+                "route.blockedClosedHistory"
+              ]
+            },
+            {
+              "state": "blocked.audits",
+              "reads": [
+                "entry.newWork",
+                "route.blockedAudits"
+              ]
+            },
+            {
+              "state": "blocked.dependencies",
+              "reads": [
+                "entry.newWork",
+                "route.blockedDependencies"
+              ]
+            },
+            {
+              "state": "blocked.other-claims",
+              "reads": [
+                "entry.newWork",
+                "route.blockedOtherClaims"
+              ]
+            },
+            {
+              "state": "product.shape-or-revision",
+              "reads": [
+                "entry.newWork",
+                "route.productShapeOrRevision"
+              ]
+            },
+            {
+              "state": "product.fail",
+              "reads": [
+                "entry.newWork",
+                "route.productFail"
+              ]
+            },
+            {
+              "state": "product.unverified",
+              "reads": [
+                "entry.newWork",
+                "route.productUnverified"
+              ]
+            },
+            {
+              "state": "complete.product-pass",
+              "reads": [
+                "entry.newWork",
+                "route.completeProductPass"
+              ]
+            },
+            {
+              "state": "complete.adoption",
+              "reads": [
+                "entry.newWork",
+                "route.completeAdoption"
+              ]
+            },
+            {
+              "state": "BLOCK:no-route",
+              "reads": []
+            }
+          ]
+        }
+      }
+    ],
+    "formats": [
+      {
+        "id": "researchScope",
+        "change": "removed",
+        "before": {
+          "kind": "line",
+          "head": "research scope",
+          "fields": {
+            "scope": "path",
+            "owner": "text"
+          }
+        }
+      },
+      {
+        "id": "residualLanding",
+        "change": "removed",
+        "before": {
+          "kind": "line",
+          "head": "residual landing",
+          "fields": {
+            "owner": "path",
+            "source": {
+              "kind": [
+                "review",
+                "task"
+              ],
+              "ref": "path"
+            },
+            "reads": "json"
+          }
+        }
+      }
+    ],
+    "templates": [
+      {
+        "id": "knowledgeNode",
+        "change": "removed",
+        "before": {
+          "file": "templates/knowledge-node.md",
+          "fields": {
+            "title": "line",
+            "identity": "line",
+            "owner": "line",
+            "consumer": "line",
+            "useWhen": "line",
+            "sourceBasis": "block",
+            "body": "block"
+          },
+          "sections": []
+        }
+      },
+      {
+        "id": "residualLanding",
+        "change": "removed",
+        "before": {
+          "file": "templates/residual-landing.md",
+          "fields": {
+            "owner": "line",
+            "source": "block",
+            "reads": "block"
+          },
+          "sections": []
+        }
+      }
+    ],
+    "template_content": [
+      {
+        "id": "knowledgeNode",
+        "change": "removed",
+        "before": "sha256:1454647d0352d47953365c388d212e986282d0561bddfea19655921bfc166832"
+      },
+      {
+        "id": "residualLanding",
+        "change": "removed",
+        "before": "sha256:8282e9fc987d73ba1b45802719ec05101ce28b3218262f06dc43380d4c10fa83"
+      }
+    ],
+    "body": [],
+    "references": [],
+    "ownership": [],
+    "artifacts": [],
+    "roles": [],
+    "declarations": [],
+    "deferred": []
+  },
+  "change_id": "canonical-state-owners",
+  "intent": "Remove staged research, residual-landing, and alternative K state while routing canonical project-state and retaining only external knowledgeLandingPending state.",
+  "impact": {
+    "observations": {
+      "total": 3,
+      "added": 0,
+      "removed": 3,
+      "modified": 0
+    },
+    "stages": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "tables": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "formats": {
+      "total": 2,
+      "added": 0,
+      "removed": 2,
+      "modified": 0
+    },
+    "templates": {
+      "total": 2,
+      "added": 0,
+      "removed": 2,
+      "modified": 0
+    },
+    "template_content": {
+      "total": 2,
+      "added": 0,
+      "removed": 2,
+      "modified": 0
+    }
+  }
+}

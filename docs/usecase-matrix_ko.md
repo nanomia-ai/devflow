@@ -392,6 +392,8 @@ AI의 읽기 집합 밖이 되면서 처치의 거처가 devflow 밖으로 나�
 
 ---
 
+v0.20.0 재판정(DD-92): A1은 상태 없는 원칙 안내 뒤 resume 하나로 들어간다. SessionStart는 지연 안내만 하고 상태·다음 단계·파일 본문을 판정하거나 주입하지 않는다.
+
 ### 3.17 H47·H48×A1·A2·A3 — 확정과 실측의 착지 [8판 신규 · 10판 규격 교체]
 
 **[예정 — v0.18.2가 규격을 교체, 재측정 전]** (2026-08-20 재판정) — 8판이 판정한 기제는
@@ -490,6 +492,8 @@ DD-80이 없앤 두 번째 거처다. 그래서 강등이 아니라 정지이며
 카드의 `origin`·`siblings`가 다시 계산되지 않으며, (c) 승인이 다시 요구되지 않는지.
 **미검증**: 실사용 프로젝트에서 스무 항목짜리 요청을 실제로 굴린 적은 없다 — 이 칸은 텍스트와
 fixture 대조다.
+
+v0.20.0 재판정(DD-92): 이 셀의 다중 소유 패스는 대상 목록을 추측하지 않는다. C1 product 전 research는 `00-project` 아래에서 지속적으로 남고, C2 card/source evidence는 이름 붙은 source evidence로 남으며, C3 conclusion은 가장 가까운 semantic owner 또는 정확한 crosscut owner에 착지하고, C4 `K`는 arch 또는 adopt만 쓰며, C5 closed history는 정확히 이름 붙은 provenance로만 열고, C6 multi-owner conclusion은 모든 owner를 보존해 원자적으로 착지한다. 정확한 JSON marker shape은 principles FORMAT 하나가 소유하고 work template과 project-state parser는 seam test가 묶는 실행 투영이며, field는 이 셀에 중복하지 않는다. 지식은 작업 트리와 직교한 같은 stem 인접 재귀 `K`로만 열며 수동/중앙 색인은 없고 자식 0도 유효하다.
 
 ### 3.21 H47×A1·A3 — 복합 카드에서 확정된 다른 능력의 문장 [12판 신규 · §3.17의 세분]
 

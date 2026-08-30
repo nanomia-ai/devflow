@@ -1,0 +1,4970 @@
+{
+  "schema": "skill-rails/obligation-ledger/2",
+  "intent_hash": "sha256:754d88cb15dfc7d6d0b854edc8c25b013b978dcf2c7b7a7cb893e1f2c05b09a4",
+  "profile": "p2",
+  "atoms": [
+    {
+      "id": "description-001",
+      "source": "intent.description",
+      "text": "Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, then writes capability design zones. Use for stack selection, architecture design, or creating and repairing capability documents in a new project.",
+      "candidate_class": "trigger",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:SKILL.md"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ]
+    },
+    {
+      "id": "problem-001",
+      "source": "intent.problem",
+      "text": "Preserve the behavior of the immutable repository source at skills/arch without silently changing its obligations.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/migrationEvidence"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-001",
+      "source": "intent.state_dependent_behaviors[0]",
+      "text": "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/workflowOrder"
+      ],
+      "evidence": [
+        "fixture:interrupted-proposal"
+      ]
+    },
+    {
+      "id": "judgment-points-001",
+      "source": "intent.judgment_points[0]",
+      "text": "Every source atom remains review-required until explicitly disposed.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:why: purpose"
+      ],
+      "evidence": [
+        "fixture:architecture-approval-request"
+      ]
+    },
+    {
+      "id": "migration-a0001",
+      "source": "migration:SKILL.md:1-4",
+      "text": "---\r\nname: arch\r\ndescription: Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, then writes capability design zones. Use for stack selection, architecture design, or creating and repairing capability documents in a new project.\r\n---",
+      "candidate_class": "declaration",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:SKILL.md"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:6ebdae633a9320b040cc77f1b4db5a4f1a943e652bd5bea24203aa44c238cca4",
+      "source_kind": "frontmatter",
+      "context": [],
+      "confidence": 0.82,
+      "rationale": "Frontmatter metadata may constrain invocation, tools, compatibility, or other host behavior and needs review."
+    },
+    {
+      "id": "migration-a0002",
+      "source": "migration:SKILL.md:6-6",
+      "text": "# arch — Development Planning",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:SKILL.md"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:6c323da00aae13e379eecf760c64102fcfaad9e496ac6e23f780473a83b44c2e",
+      "source_kind": "heading",
+      "context": [],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0003",
+      "source": "migration:SKILL.md:8-11",
+      "text": "glossary.md is an always-read Layer 0 baseline. When capability composition changes, align\r\ncapability-header `Concepts:` to exact canonical terms. On `marker.glossary-term`, consume\r\nonly the tool payload, first land the glossary definition in a binding commit while retaining\r\nthe marker, then in the next `arch — capabilities` batch align the glossary definition and every known affected `Concepts:` line, refresh every Design head, and delete the marker. Shared terms remain in several headers; `[]` is project-root context.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/glossary-term"
+      ],
+      "evidence": [
+        "fixture:glossary-capability-alignment"
+      ],
+      "source_hash": "sha256:d3268efe9180ffbea9aa97761f9ea291dbe61c0979fcb364a0d422a68939efa6",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0004",
+      "source": "migration:SKILL.md:13-19",
+      "text": "First read the canonical rules (`../principles/SKILL.md`), the planning evidence discipline\r\n(`../principles/planning-evidence.md`), and all of `devflow/project/product.md`. Read the\r\ncanonical capability knowledge baseline predicates (`../principles/baseline-predicates.md`)\r\nunder the capsule gate in the next paragraph.\r\nIf present, read all of `devflow/project/arch.md`,\r\n`devflow/project/code-style.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each legacy `ADR-NNN.md` directly under\r\n`devflow/project/decisions/`.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/read-inputs"
+      ],
+      "evidence": [
+        "fixture:read-product-glossary-inputs"
+      ],
+      "source_hash": "sha256:83d2f46c92ed6c0cea2f8c7e5940db3f1bad62877defb8bc4b60daa77d04b6b7",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0005",
+      "source": "migration:SKILL.md:21-27",
+      "text": "Read the baseline predicates with the range from `## Domain knowledge capsules` up to but\r\nnot including `## Metadata and freshness` left out. When this run actually processes a source\r\ndocument the user named into capsules, or the capability document it derives is about to\r\nexceed that canon's total cap, open and write from that range in full first. Whether capsules\r\nexist on disk right now is not part of this judgment — the first capsule is always born in a\r\nproject that has none. When either side is unclear, or the two headings cannot be found, read\r\nall of it.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/read-inputs"
+      ],
+      "evidence": [
+        "fixture:read-product-glossary-inputs"
+      ],
+      "source_hash": "sha256:ae1cc020df413c369a98fe25de9da5a134f3a827e89ccff42c3eba97287e98d0",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0006",
+      "source": "migration:SKILL.md:29-31",
+      "text": "If `product.md` is missing: with no code either, direct the user to the product stage\r\nfirst; with existing code, to adopt (existing-project adoption — it produces\r\nproduct.md too, by reverse-derivation).",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/read-inputs"
+      ],
+      "evidence": [
+        "fixture:read-product-glossary-inputs"
+      ],
+      "source_hash": "sha256:991b524289c9c2da185f5d2ae77dd478dc0f26caa4362807822039ab7988f5b5",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0007",
+      "source": "migration:SKILL.md:33-36",
+      "text": "Run `node ../principles/scripts/project-state.mjs state --capability <capability number>`\r\nfor each capability document in scope. Its `baseline:` lines carry the expected set, path\r\nstate, boundary, shape, freshness, and `legacy v0.10` judgments; take them as they stand.\r\nRead the baseline predicates for what earns a place in a body.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/repair-layer0-fields"
+      ],
+      "evidence": [
+        "fixture:repair-layer0-commit"
+      ],
+      "source_hash": "sha256:373b18551702339e19c12d2d50e75fff0ed112ce494a78eda74652203f17c2cd",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0008",
+      "source": "migration:SKILL.md:38-41",
+      "text": "If resume routed here because Layer 0 is complete and only capability documents are\r\nmissing or need repair, do not run steps 1–5 or modify arch.md or\r\ncode-style.md. Keep the confirmed documents unchanged and run only `Capability documents`\r\nbelow.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/repair-layer0-fields"
+      ],
+      "evidence": [
+        "fixture:repair-layer0-commit"
+      ],
+      "source_hash": "sha256:d4943759175dc60429bd16b890fe077bd9647137cc93099a3d98f168db11d12e",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0009",
+      "source": "migration:SKILL.md:43-45",
+      "text": "If resume routed here to complete one missing arch.md field — `Brownfield`, or `integration`\r\nand `merge` — do not run steps 1–5 either. Ask only that one question, add only that field\r\nor those two lines, land the canonical Layer 0 commit, and change nothing else.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/repair-layer0-fields"
+      ],
+      "evidence": [
+        "fixture:repair-layer0-commit"
+      ],
+      "source_hash": "sha256:1ea114fb3099cc6690f96a47e5ec5d5f4fc1f16f618210b04b801ab8494a4280",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0010",
+      "source": "migration:SKILL.md:47-48",
+      "text": "Purpose: translate the service plan into a development plan, producing\r\n`devflow/project/arch.md`.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/repair-layer0-fields"
+      ],
+      "evidence": [
+        "fixture:repair-layer0-commit"
+      ],
+      "source_hash": "sha256:83c6ea663419e4be61d0c874f7e1be39c097d08c791e42ff7939de06fdd8e325",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0011",
+      "source": "migration:SKILL.md:50-50",
+      "text": "## Procedure — in exactly this order",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/repair-layer0-fields"
+      ],
+      "evidence": [
+        "fixture:repair-layer0-commit"
+      ],
+      "source_hash": "sha256:465e0a1e140308a556aed6f6f497e10f9bc3c088cede14835550c1af0cab6819",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0012",
+      "source": "migration:SKILL.md:52-52",
+      "text": "### 1. Component derivation — I judge first, you only confirm",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:f87603aed65effbdf798f8ca4afe02499a9288b142a4664195057573ca6d731e",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0013",
+      "source": "migration:SKILL.md:53-54",
+      "text": "From the capability list in product.md, derive the needed components, each with a\r\none-line reason.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:bf9f6130e1ad56f83e72f427a9de6912043df458a084ccb4c132786e14ee168f",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "1. Component derivation — I judge first, you only confirm",
+          "source_span": "52-52"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0014",
+      "source": "migration:SKILL.md:56-61",
+      "text": "```\r\n✔ backend API    (①②③ all need server state)\r\n✔ DB             (registration data must persist)\r\n✘ queue/worker   (no async work — revisit when ⑤settlement arrives)\r\nCorrect?\r\n```",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:9fef6018111b45b37dc4aed3ac3c2193639c5df5ad64824ede05b66df96e336b",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "1. Component derivation — I judge first, you only confirm",
+          "source_span": "52-52"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0015",
+      "source": "migration:SKILL.md:63-69",
+      "text": "After deriving the components and before presenting stack candidates, use the planning\r\nevidence discipline to confirm candidate-survival facts. Among current repository\r\nconstraints, supported platforms, pinned versions, licenses, and deployment environments,\r\nsettle only facts whose possible result would remove a candidate or change a recommended\r\ndefault or verifiability. The main session confirms one exact coordinate; answer-only\r\nmulti-path or multi-source comparison uses the discipline's isolated-research branch.\r\nThe main session owns raw-source understanding needed for a structural choice.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:bba9bedd4adb15eb5733c8d3ae7d021b5829d7fd65cd07abc30e2b8b308ba682",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "1. Component derivation — I judge first, you only confirm",
+          "source_span": "52-52"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0016",
+      "source": "migration:SKILL.md:71-71",
+      "text": "Separate the following two before confirmation.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:561a766925b337a3713e0e77a59d3ce3acf634d4fdbc02d80e79ea523c8d829d",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "1. Component derivation — I judge first, you only confirm",
+          "source_span": "52-52"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0017",
+      "source": "migration:SKILL.md:73-75",
+      "text": "- A fact is `blocking` when leaving it unsettled makes a candidate's availability or\r\n  completion verification undecidable. Do not present that candidate as an option or bind\r\n  the choice before it is `settled`.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:82e1807b9ed4addbb82661c275c3dd0c5b4cd2bba837cbbac6d4abed95f30681",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "1. Component derivation — I judge first, you only confirm",
+          "source_span": "52-52"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0018",
+      "source": "migration:SKILL.md:76-78",
+      "text": "- A value is `Provisional` when a safe default permits progress and its later result would\r\n  change only optimization. It must carry the table's source, safe default, and `settling\r\n  card`; never push a blocking fact into Provisional.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:53abd114ca04058e0d056fc824ae029123e501e5f49fc48f319f4a2e5c9df143",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "1. Component derivation — I judge first, you only confirm",
+          "source_span": "52-52"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0019",
+      "source": "migration:SKILL.md:79-82",
+      "text": "- When equally authoritative sources conflict or allowed means cannot confirm the fact,\r\n  report through the planning evidence discipline's `conflicted` or `unavailable` boundary\r\n  and stop the dependent choice.\r\n",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:07090ceb4c505fa60ab96084c22fca13ebeb07ae1148ed1fb0dcc2e97215b4a2",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "1. Component derivation — I judge first, you only confirm",
+          "source_span": "52-52"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0020",
+      "source": "migration:SKILL.md:83-83",
+      "text": "### 2. Stack questions — in one batch",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/stack-and-derived"
+      ],
+      "evidence": [
+        "fixture:stack-proposal"
+      ],
+      "source_hash": "sha256:85e1ece0c6ea52209a4e58ab642b973947e579a031ff5c285008bda0c254d4ad",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "1. Component derivation — I judge first, you only confirm",
+          "source_span": "52-52"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0021",
+      "source": "migration:SKILL.md:84-87",
+      "text": "For each component whose survival facts are confirmed, give 2–3 candidates + my\r\nrecommendation + a one-line reason. Do not use a comparison table for a stack question;\r\nstate the default. That prohibition applies only to this question format and does not bar\r\nthe conditional design comparison below.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/stack-and-derived"
+      ],
+      "evidence": [
+        "fixture:stack-proposal"
+      ],
+      "source_hash": "sha256:fc6c496617e4e9ed055fa5ae212804acaf8dcd9779dcefaaa71ce227efcc1cde",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "2. Stack questions — in one batch",
+          "source_span": "83-83"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0022",
+      "source": "migration:SKILL.md:89-93",
+      "text": "Only when a choice is hard to reverse, its boundary is non-obvious, and current evidence\r\nexplains a real trade-off, compare one counter-design with the current design. When those\r\nconditions do not hold, create no candidate, question, or output. If current evidence\r\ncannot distinguish the two, ask with success criteria and user priorities; a differently\r\nworded version of the same design is not a candidate.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/stack-and-derived"
+      ],
+      "evidence": [
+        "fixture:stack-proposal"
+      ],
+      "source_hash": "sha256:f547a2997aa38a404921e9f652739923cecc448578d52f85cb7915bb13b76fe1",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "2. Stack questions — in one batch",
+          "source_span": "83-83"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0023",
+      "source": "migration:SKILL.md:94-94",
+      "text": "### 3. Derived questions — decisions that only exist once the stack is chosen",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/stack-and-derived"
+      ],
+      "evidence": [
+        "fixture:stack-proposal"
+      ],
+      "source_hash": "sha256:1e3fb8376abea7ba07534752541709508d647eb361acbff2c73aad7303f26826",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "2. Stack questions — in one batch",
+          "source_span": "83-83"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0024",
+      "source": "migration:SKILL.md:95-99",
+      "text": "Find the decisions that fork because of the chosen stack and ask them as one batch —\r\nper decision, same format as step 2.\r\n(e.g., choosing Next.js → server/client boundary, data-fetching location, auth storage)\r\nThese cannot be pre-listed — create them on the spot from the stack.\r\n**The decisions made here become the \"Project choices\" section of code-style.md.**",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/stack-and-derived"
+      ],
+      "evidence": [
+        "fixture:stack-proposal"
+      ],
+      "source_hash": "sha256:146ec85445125dc5ccec0b8bfc83f1a995009a765ea70feaa8e48ef5a3361089",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "3. Derived questions — decisions that only exist once the stack is chosen",
+          "source_span": "94-94"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0025",
+      "source": "migration:SKILL.md:101-101",
+      "text": "### 4. Code structure decision",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:74ad2af93128fc0c7276dc86406702230f7b1592cefad1959cd98d72ed5a3b15",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "3. Derived questions — decisions that only exist once the stack is chosen",
+          "source_span": "94-94"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0026",
+      "source": "migration:SKILL.md:102-102",
+      "text": "The criterion is what AI operates well with. Where that differs from human preference:",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:67d501d8d60dd5778e1ea8a38531850cdfdcf9aae8f70fd49c3893320c6c52b3",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "4. Code structure decision",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0027",
+      "source": "migration:SKILL.md:104-104",
+      "text": "- File names unique and searchable (`user-repository.ts`; don't multiply `index.ts`)",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:fcf5b6d2863ff6c897883539e6d117f42b05d4073bf29681a68bc8a86b938dd3",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "4. Code structure decision",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0028",
+      "source": "migration:SKILL.md:105-105",
+      "text": "- No implicit wiring — what is not written in code does not exist for AI",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:5cd2415b9bf428fb8a3d4f9b30a83545a1759d2ac7487787decc8245eb217970",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "4. Code structure decision",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0029",
+      "source": "migration:SKILL.md:106-106",
+      "text": "- Folder depth ≤ 3, files ≈ 400 lines or fewer",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:c8896bcb5e3ded6d6d6f32948830c06fb7c27e5481a08467aed59750201db6bb",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "4. Code structure decision",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0030",
+      "source": "migration:SKILL.md:107-108",
+      "text": "- Contracts (types/schemas) in one file per module boundary\r\n",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:dd6ea65d4d5c003c56d436906d0870734210435189af33d8001d56b995199bb1",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "4. Code structure decision",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0031",
+      "source": "migration:SKILL.md:109-110",
+      "text": "The A/B/C table under Output is the canonical registry of structure choices and their\r\nconditions. Select one for the scale.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:95ced8084e5a441d4808eba3fcb2616f38df2758ca48009f45a106acd07ebfcf",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "4. Code structure decision",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0032",
+      "source": "migration:SKILL.md:112-112",
+      "text": "**Folder name = capability name from product.md.** Documents and code use the same words.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:5aaa76cc09c66cae778ccede31c84424d2a3f6f7752586e12de6bf1abc21f4da",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "4. Code structure decision",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0033",
+      "source": "migration:SKILL.md:114-114",
+      "text": "### 5. Verify-channel decision — a pass-gate",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/verify-channel"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:d1ea038a474eb28f0a4f9c490391416a4ddf617bbc6fa105efecb99c6aa5b772",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "4. Code structure decision",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0034",
+      "source": "migration:SKILL.md:115-115",
+      "text": "This skill does not finish until it is decided.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/verify-channel"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:24dc7fc9cdbf08f7dc9bbe16f8921d4e74c0ddb8846ea5b9e12ef763a4097de4",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0035",
+      "source": "migration:SKILL.md:117-121",
+      "text": "Do not judge a channel decided from its name or an installation sentence. Confirm that the\r\ncommands or tools below can actually run in the current environment. Use an allowed safe\r\nexecution; when writing, cost, or authority is required, request exact permission or route\r\nto Provisional according to whether the planning evidence discipline classifies it as\r\nblocking. Do not bind an unconfirmed blocking channel in arch.md.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/verify-channel"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:e9094ae49fd27283e670b6b47e5c3fb95f99edbaba9dd316d3a5cba9ea38a95e",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0036",
+      "source": "migration:SKILL.md:123-130",
+      "text": "Confirm the channel the verifier will drive by actually running it once in a clean context —\r\nthe same way verify briefs one with `verifier.md`, using the smallest command and its exit\r\ncode. **The command you confirm with and the command you write into arch.md are the same\r\nstring** — run one of the commands you will record, verbatim, and record that same command.\r\nConfirming through a different selector or a different surface of the same tool is not\r\nconfirmation. A channel that runs only in this session is not decided: guide connection of\r\none that runs in a clean context, or stop as the `If missing` column below says. When the platform\r\ncannot start a clean context, report that fact and let the user decide.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/verify-channel"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:585e50f1304d119f8bd4ca528989086641dcb5d0cd52f0bca1fd3298757b3f6a",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0037",
+      "source": "migration:SKILL.md:132-132",
+      "text": "| Type | Channel | If missing |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:85c9f1a262985a2530d8871ba1d61c624b5c02aecf8229f2be8259b5e631aac9",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0038",
+      "source": "migration:SKILL.md:134-134",
+      "text": "| Has a frontend | **A browser-control tool that can inspect rendered output and interact with it is required** (one provided by the active platform) | Guide connection of an available tool, then stop. UI verification you cannot see is guesswork |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:7ba12cd5c6bdd697068e4c957741b00f79196f1692c344f2ab52f44ff2bb58ad",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0039",
+      "source": "migration:SKILL.md:135-135",
+      "text": "| Non-web with a screen (desktop app · TUI) | A tool that reads the screen/accessibility tree or real output + an operating-procedure document (process safety included) | Guide installation of an available tool, then stop until it can actually run — same reason. If the operating-procedure document is missing, create it as the first task |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:fce17ecdebc24934ccc626f482050e8fa2f66cafdba5cc073749cad72c8d755c",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0040",
+      "source": "migration:SKILL.md:136-136",
+      "text": "| Web backend | Real HTTP calls (`.http` file / curl scripts) | Create it as the first task |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:64f8c4b5f091c04682bd57ce5577bcd386d05a1192e08a4482497e35185a82be",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0041",
+      "source": "migration:SKILL.md:137-137",
+      "text": "| CLI / daemon | Run command + expected output (+ health check, log location) | Create it as the first task |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:15e744972c669a28aa22413dadd2442479e630df646540bba0fa517bce092b08",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0042",
+      "source": "migration:SKILL.md:138-138",
+      "text": "| Library | Test runner | Create it as the first task |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:26a7ba9421f8a96fdc9825dc6a9c9e9cfcea32f8901d2dd2ee36168c0dc88753",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0043",
+      "source": "migration:SKILL.md:140-141",
+      "text": "Git check: if not a repository, propose `git init` and stop when the user declines. All\r\nrecovery and undo in this system depends on git.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:c5f17e24f209d06c2ddc0065e396cadb3ca63a081de2dceb272d3fe997de8d2e",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0044",
+      "source": "migration:SKILL.md:143-146",
+      "text": "Immediately before binding a hard-to-reverse choice such as stack, code structure, data,\r\nor verify channel, run the planning evidence discipline's pre-commitment review once. Do\r\nnot compare a candidate that changes product's Problem, Capabilities, Boundary, or Success\r\ncriteria; route it back to product. Do not review again a batch the user reselected.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:70c3fe2178a4fb52eaeb6b110ae72b8403bb15af052c209c1f842d8bea35c4d5",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0045",
+      "source": "migration:SKILL.md:148-148",
+      "text": "## Output — devflow/project/arch.md",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:c96a42b5803e7aacb29296e0103324dac56279f91645b28ef7f1b08dda774249",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "50-50"
+        },
+        {
+          "level": 3,
+          "text": "5. Verify-channel decision — a pass-gate",
+          "source_span": "114-114"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0046",
+      "source": "migration:SKILL.md:150-150",
+      "text": "The `Code structure` value must use one of these choices.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:e59d37521fe144aafc343a085260373555a9d861dcbe160a3c35f28e9ac64c43",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0047",
+      "source": "migration:SKILL.md:152-152",
+      "text": "| | Structure | When |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:308d04349e60770c4e7e4fb70b85064ac7885e09493c7efabb001ce4b5cdc104",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0048",
+      "source": "migration:SKILL.md:154-154",
+      "text": "| A | Domain-vertical modules — route·service·repo·test all inside `src/<capability>/` | Default recommendation. 3+ capabilities |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:447f465a4a833182b589faac74c5810d0dbb4fc08ee1e57e4efb224cffc8a343",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0049",
+      "source": "migration:SKILL.md:155-155",
+      "text": "| B | Feature-Sliced | Screen-heavy frontends |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:5529d1c3478bf9f579f0330c30f9f5d3725f49b71e8093839c7dd131d56ee3ee",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0050",
+      "source": "migration:SKILL.md:156-156",
+      "text": "| C | Flat — just files under `src/` | Under 20 files. A would be overkill here |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:a3643031e125ce8ab5d6bc78a3d03242a5799bed49bac458410c5e5b716a523f",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0051",
+      "source": "migration:SKILL.md:158-178",
+      "text": "```markdown\r\n# Architecture\r\n\r\nBrownfield: no\r\n\r\n## Components       <!-- ✔/✘ + 1-line reason. resting on an external contract fact, the exact source on the same line -->\r\n## Stack            <!-- item: choice — 1-line reason. resting on an external contract fact, the exact source on the same line -->\r\n## Code structure   <!-- A/B/C + folder sketch. folder name = capability name -->\r\n## Data             <!-- core entities only -->\r\n## Existing records <!-- Brownfield only. each line: <capability name|shared>: <exact path>. omit if empty -->\r\n## Provisional      <!-- values you are guessing. see below. omit the section if empty -->\r\n## Risks            <!-- 3 things that break first + how to check each -->\r\n## Out of scope     <!-- what this architecture does not carry -->\r\n\r\nfrontend: none | needed\r\nverify_channel:\r\n  work server: <run command + port>     # verification always happens here\r\n  means: <exact commands the verifier drives> — confirmed in a clean context by running one of them verbatim: `<that same command>` exit <code>; read probe: `<the exact command run>` → <the actual rendered element read, with its value>; interaction probe: `<the exact command run>` → <the change it caused>\r\nintegration: <branch>                   # where minting, closure, and binding decisions land. The current branch when one person works alone\r\nmerge: merge-commit | rebase            # Squash forbidden — it erodes NN.N history\r\n```",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:66b401bb8384873d4ebafad91d82c08d6bd4b9816301f241f2a68269cc0f8ec5",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0052",
+      "source": "migration:SKILL.md:180-189",
+      "text": "`means` is confirmed only by a record of the channel actually running. Help output, a\r\ncapability listing, the binary existing, and an attach that\r\nexits 0 are none of them confirmation — all four come out the same way while the channel\r\nnever reached the screen. When `frontend: needed`, a clean context must\r\n**read one actually rendered element** and\r\n**succeed at one real interaction** through the chosen channel before arch writes it down as\r\nconfirmed. Write both probes' exact commands and observed outcomes on that line verbatim —\r\nthe element read down to its value, the interaction down to the change it caused. Failing\r\neither one leaves the channel unconfirmed, and an unconfirmed channel gets no value written:\r\nreport to the user what did not work.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:ARTIFACTS/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:ca9bad2411431afa44c23e02997eb99d22c61409836228711b36ae9d61251cce",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0053",
+      "source": "migration:SKILL.md:191-195",
+      "text": "`Brownfield` records whether implementation code existed before devflow entered this\r\nrepository. arch writes `no` for a new project; adopt writes `yes` when deriving from\r\nexisting code. This value selects how the first tree is created; it is not implementation\r\nprogress. When an existing arch.md lacks only the `Brownfield` field, ask that one\r\nquestion, add only the field, and change nothing else.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:ARTIFACTS/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:78562839ee20ea87ed8f6e69bb39e60c410e863745aad7a06e598f5c9f68f0ab",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0054",
+      "source": "migration:SKILL.md:197-204",
+      "text": "The default proposal for `integration` forks on how many worktrees `git worktree list`\r\nreports. With one, it is the current branch and there is no extra question. With two or\r\nmore, propose **a branch no worktree has checked out** — Git refuses to update a branch\r\nanother worktree has checked out, so when one folder holds integration, every claim,\r\nminting, and closure has to be done in that folder and running several worktrees loses its\r\npoint. When no such branch exists, show the exact command that creates one\r\n(`git branch <name> <current integration>`) and let the user run it — devflow creates\r\nneither a branch nor a worktree. The canonical rules govern what that value then means.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:ARTIFACTS/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:ebb2af84eed6f139e67ebd950f7f2045b68f12f72fe02e46c40dbb8b08ff5a5e",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0055",
+      "source": "migration:SKILL.md:206-210",
+      "text": "`Existing records` is only a locator index for handoff and specification files that\r\nadopt checked against code. Each line contains a product.md capability name or `shared`,\r\na colon, and one exact file path. The same name may repeat on multiple lines. A path here\r\nis not a read instruction and does not make the file canonical. work opens it only after\r\nsplit rechecks it for the change scope and puts it in the card's `Read first`.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:ARTIFACTS/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:fcae22a904193e4dd183c5484a50fc850615f470488a3bbe737318426391ba9c",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0056",
+      "source": "migration:SKILL.md:212-212",
+      "text": "### Provisional — the architecture you do not know yet",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:ae28e7ee9357a24d40ec5031439b31db41b171533c9c8b1b6d37add0008c7a5e",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0057",
+      "source": "migration:SKILL.md:214-216",
+      "text": "Buffer sizes, timeouts, whether a backpressure protocol is needed at all — some things\r\ncannot be settled by thinking. The moment a guess is written in the same sentence form\r\nas a decision, the architecture document starts lying.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:199e8f92aa96baacf8ab9f1eee81cc0a98d0a27d86c2565fc05fca271c8c2b7c",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        },
+        {
+          "level": 3,
+          "text": "Provisional — the architecture you do not know yet",
+          "source_span": "212-212"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0058",
+      "source": "migration:SKILL.md:218-225",
+      "text": "**Every value you are guessing goes in this table, and every row names the card that\r\nwill settle it.** No settling card means you do not intend to find out — then it is not\r\nprovisional, it is a decision, and it belongs in the sections above. This table is not a\r\nprogress record; it is a list of the unknown.\r\nIf the settling card's number is not known yet (no tree, or its layer not yet opened),\r\nwrite 'unminted' in the Settled-by cell — split, when opening the layer that settles\r\nthat row, creates the card and replaces the cell with its number (that row of the\r\ndiscovery→update table).",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:2558cfd792e4e82e86a7e65d6af0fb67545fddc66e48aaa207d63912f654eaff",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        },
+        {
+          "level": 3,
+          "text": "Provisional — the architecture you do not know yet",
+          "source_span": "212-212"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0059",
+      "source": "migration:SKILL.md:227-231",
+      "text": "```markdown\r\n| Item | Provisional value | Where it came from | Settled by |\r\n|---|---|---|---|\r\n| stream batch size | 64 KiB | copied from <reference> | 01.3 |\r\n```",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:c64177ad9178d15be35eb44b3cf90c33a587c57f93bf39acf4e46dea2c94251e",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        },
+        {
+          "level": 3,
+          "text": "Provisional — the architecture you do not know yet",
+          "source_span": "212-212"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0060",
+      "source": "migration:SKILL.md:233-237",
+      "text": "The contract: when the settling card closes, work's upper-document feedback step checks\r\nthis table, and the row is **replaced** by the measured result — promoted into a\r\ndecision, or deleted as unnecessary. A row that outlives its own settling card is a bug\r\nin the process, not a detail. Where a provisional value also appears elsewhere in the\r\nbody, mark it provisional there too.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:8f92b9912dcce5855f4358084424408003c44cd681d03d275511a0114d515c46",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        },
+        {
+          "level": 3,
+          "text": "Provisional — the architecture you do not know yet",
+          "source_span": "212-212"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0061",
+      "source": "migration:SKILL.md:239-241",
+      "text": "An ADR (Architecture Decision Record — one page per decision: context, options,\r\ndecision, consequences) goes into `devflow/project/decisions/ADR-NNN.md` **only when all\r\nthree conditions hold**:",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:5e71ea8b1bfcf14b4f5b69aae0a1919974119efe6dbf41e8fccd54981c685ce8",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        },
+        {
+          "level": 3,
+          "text": "Provisional — the architecture you do not know yet",
+          "source_span": "212-212"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0062",
+      "source": "migration:SKILL.md:243-246",
+      "text": "```\r\n① hard to reverse  ② non-obvious enough that a future reader would wonder  ③ real alternatives were examined\r\n(e.g., JWT instead of sessions for auth = passes / library A instead of B = fails)\r\n```",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:7ffed2cbe5fc4fa4f307d0a343dc44f8c1f93e71f463810d1de3440e9947268c",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        },
+        {
+          "level": 3,
+          "text": "Provisional — the architecture you do not know yet",
+          "source_span": "212-212"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0063",
+      "source": "migration:SKILL.md:248-251",
+      "text": "A decision below the three conditions makes no ADR — write the choice and its ground on one\r\nline in the arch.md section where that decision lives, and leave each discarded alternative\r\nas a ✘ line in the same section. When the ground is a number, attach the execution\r\nconditions under which it is true and the command that measures it again on the same line.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:74f1b325a1a96b8c92a083d031ec5796786ec6a1c68a1510332fafc6e626dceb",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        },
+        {
+          "level": 3,
+          "text": "Provisional — the architecture you do not know yet",
+          "source_span": "212-212"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0064",
+      "source": "migration:SKILL.md:253-253",
+      "text": "## Output 2 — devflow/project/code-style.md",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/codeStyle"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:c035689e7b1331d373e4b8e1852ab81f141c23a88fd4581287877409cdd29fa0",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output — devflow/project/arch.md",
+          "source_span": "148-148"
+        },
+        {
+          "level": 3,
+          "text": "Provisional — the architecture you do not know yet",
+          "source_span": "212-212"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0065",
+      "source": "migration:SKILL.md:255-257",
+      "text": "Where the project-specific decisions created by the selected stack get written down. **Every entry\r\nstates \"what we prioritize\" — never \"do it this way.\"** The implementer decides the\r\nmethod. Cap: 1 page.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/codeStyle"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:ff0f8f4a4ae6f85dace6dbc039c7bfea1013070505928eaaf1a10d7334d1bebe",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output 2 — devflow/project/code-style.md",
+          "source_span": "253-253"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0066",
+      "source": "migration:SKILL.md:259-281",
+      "text": "```markdown\r\n# Code Style\r\n\r\n## Values                        <!-- present these 7 as defaults; curate to fit the project -->\r\n- Few deep modules > many shallow helpers.\r\n  A good module is one whose deletion scatters complexity onto its callers\r\n- Return results > mutate state. Prefer code where the same input yields the same output\r\n- Explicit beats magic. A connection not written in code does not exist\r\n- Tests verify public-interface behavior like a spec. Never mock internals\r\n- Never swallow errors. Handle them or throw them upward\r\n- Delete dead code. Commented-out code is remembered by git\r\n- Comments say \"why\" only. The code says \"what\"\r\n\r\n## Project choices               <!-- only decisions the model cannot know -->\r\n- (e.g.) validation: zod / errors: Result type, no throw / HTTP: shared/http.ts only / time: UTC\r\n\r\n## Trust boundary\r\n- Posture: strict | standard | minimal    <!-- the project's nature sets the dial -->\r\n- Boundary list: <points where external input enters>. Input crossing a boundary is\r\n  treated as hostile\r\n\r\n## Non-goals                     <!-- this project's 2–3 YAGNI declarations -->\r\n```",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/codeStyle"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:b883051ab7d38a0f5f249afbe0c86d0a523bab4a2ab9273dbc2d0a9ec11b883e",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output 2 — devflow/project/code-style.md",
+          "source_span": "253-253"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0067",
+      "source": "migration:SKILL.md:283-290",
+      "text": "Before taking confirmation on arch.md, enumerate together the decisions in it that meet\r\nall three ADR conditions and those whose ground is not yet in the document, and\r\nconfirm with the user, one by one, whether each is kept. At this point also take the\r\ndevelopment choices product left as attributed journal lines and land each beside the\r\nconclusion it belongs to in arch.md — confirming the\r\ntechnical choices product handed over is arch's ownership. A decision that is\r\nenumerated but that the user chooses not to keep stays as it is; the enumeration is not skipped.\r\nAfter it lands there is no route back to that conversation.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/codeStyle"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:04fef2885976214ab313980bce6ce331420e6be7b36fce8e42d7cd8eb068ad97",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output 2 — devflow/project/code-style.md",
+          "source_span": "253-253"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0068",
+      "source": "migration:SKILL.md:292-293",
+      "text": "Immediately after the user confirms arch.md or code-style.md, land it in the canonical\r\nLayer 0 commit.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/codeStyle"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:1f350fb61e66241515caa9d22b09aaf6a19c7ef202113dadc564da9c76ccbdb3",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output 2 — devflow/project/code-style.md",
+          "source_span": "253-253"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0069",
+      "source": "migration:SKILL.md:295-295",
+      "text": "## Capability documents — final output after Layer 0",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:a3cdff43c194c58a78132d092018b60de5d2a70104d29711a460cd2a46fa5d02",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Output 2 — devflow/project/code-style.md",
+          "source_span": "253-253"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0070",
+      "source": "migration:SKILL.md:297-299",
+      "text": "When confirmed arch.md says `Brownfield: yes`, do not run this section. Route to adopt's\r\ncapability-document-only branch; adopt owns the last commit of that run, and give the\r\ncompletion guidance below only after it finishes.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:f47faf5a4327c833e64b8011aec3cf19dfcd87cd7f60ee4221b5be3d38cd2533",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after Layer 0",
+          "source_span": "295-295"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0071",
+      "source": "migration:SKILL.md:301-305",
+      "text": "This section is the biggest single output in the tree. Before starting it, state the size of\r\nthe expected set as a document count. When the harness warns about context, do not start it —\r\nend this run at the confirmed Layer 0 commit, say that this run is not arch's completion, tell\r\nthe user that with no card claimed the next session enters through resume and runs only this\r\nsection, and give none of the completion guidance below.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:03fbaabfeacae66db33390c0a876a5e4912a933f58547f75e8bf50cb030318f1",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after Layer 0",
+          "source_span": "295-295"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0072",
+      "source": "migration:SKILL.md:307-309",
+      "text": "After confirmed product.md, arch.md, and glossary.md have all landed in HEAD, run the\r\ncanonical baseline predicates' design-writer procedure. Calculate `Design head` from the\r\ncurrent command output for those three paths.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:78ecbcdb91ba2eae1cd7ee63dbe9bd1531028979cbec9e564ecacb0bbf8b46d3",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after Layer 0",
+          "source_span": "295-295"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0073",
+      "source": "migration:SKILL.md:311-313",
+      "text": "- The expected set is `01-foundation.md` plus one document for every non-retired\r\n  capability in product.md. Assign numbers by the canonical baseline predicates'\r\n  disk-first rule.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:4c7aa93d26c883937f1e252dd969f1829aa9f387c7abb9b63d21de038aef56e0",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after Layer 0",
+          "source_span": "295-295"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0074",
+      "source": "migration:SKILL.md:314-316",
+      "text": "- Derive only purpose, boundary, Intent overview, Concept model, invariants, non-goals, and\r\n  the binding ADRs cited by current statements, organized per capability. Do not put planned\r\n  flows, entry points, code fields, code-style.md content, or design.md content in the design zone.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:7f091defed3463b292d8c011af7423bd3a4ddc5393dd67057855df020aff0b9c",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after Layer 0",
+          "source_span": "295-295"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0075",
+      "source": "migration:SKILL.md:317-321",
+      "text": "- Domain knowledge overflowing the capability-document budget moves down into the canonical\r\n  baseline predicates' knowledge capsules. Processing a source document uses adopt's capsule\r\n  procedure under the same contract, and capsules ride the same commit as the canonical\r\n  baseline predicates' design batch.\r\n",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:6e24c941dd7eee2fc8123ed8a32588d6704b20f15e4c3a3098b660d909aa9ad8",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after Layer 0",
+          "source_span": "295-295"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0076",
+      "source": "migration:SKILL.md:322-335",
+      "text": "**Design-only entry.** When the entry handed over a `marker.design-note` or a\r\n`marker.design-open-item`, do not run this\r\nsection again. Rederive only the design zone of the one capability that line names, from the\r\nconfirmed current Layer 0 and that exact statement. Put the statement in Intent or Invariants\r\nwhen it fits the capability-document budget, and move design-topic detail over that budget\r\ndown through the same-number capsule contract. The `anchor` handed over is the exact snapshot\r\nbasis of that `card` and `code`; recompute no other basis from history or cards, and never\r\nduplicate a capability fact into arch.md to wake the writer — only a real Layer 0 fact takes\r\nthe discovery→update table's existing route. A `marker.design-open-item` carries no `anchor`\r\nand no `code`: the person-confirmed `statement` is itself the basis, its `card` is only where\r\nthe confirmation happened, and the owner is the `capability` that line names — read no code\r\nfrom that card, and never move the statement to that card's capability. Delete the journal\r\nline byte-identical to that one\r\nin the same binding capability-document commit.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:dfbfd6e2361001ff63d904dc8cc5f7fd7b6a9558ad251d1c8a2a4e298c2be38d",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after Layer 0",
+          "source_span": "295-295"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0077",
+      "source": "migration:SKILL.md:337-337",
+      "text": "On completion: if `frontend: needed` — \"design (optional) or split\"; if `none` — \"split.\"",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:caddbe3b2020141eec03376e989b3838feff11703c1eaaa4601671c454f7864f",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — Development Planning",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after Layer 0",
+          "source_span": "295-295"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0078",
+      "source": "migration:SKILL_ko.md:1-4",
+      "text": "---\r\nname: arch\r\ndescription: 개발 기획. product.md를 받아 구성요소·스택·코드 구조·검증 창구를 결정하고 능력 설계 구역을 만든다. 스택 선택, 아키텍처 설계, 새 프로젝트의 능력 문서 생성·복구 시 사용.\r\n---",
+      "candidate_class": "declaration",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:SKILL.md"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:64a903a71f6fad068db183d5be068be89b70cba1dc426af7f4f6f7f32fa78db6",
+      "source_kind": "frontmatter",
+      "context": [],
+      "confidence": 0.82,
+      "rationale": "Frontmatter metadata may constrain invocation, tools, compatibility, or other host behavior and needs review."
+    },
+    {
+      "id": "migration-a0079",
+      "source": "migration:SKILL_ko.md:6-6",
+      "text": "# arch — 개발 기획",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:SKILL.md"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:5fe01275924abdfb0b2b3abd953b186d8f48739a7e8594cb3809bd1678ff9c7a",
+      "source_kind": "heading",
+      "context": [],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0080",
+      "source": "migration:SKILL_ko.md:8-12",
+      "text": "glossary.md는 항상 읽는 Layer 0 기준선이며, 능력 구성이 바뀌면 능력 문서 머리의\r\n`Concepts:`를 정확한 정본 용어로 맞춘다. `marker.glossary-term`이면 도구 payload만 소비해\r\n먼저 glossary 정의를 구속 커밋하고 마커를 남긴다. 다음 `arch — capabilities` 배치에서\r\nglossary definition and every known affected `Concepts:` line을 함께 맞추고 모든 Design head를\r\n갱신한 뒤 마커를 지운다. 공유 용어는 여러 머리에 남고 `[]`는 프로젝트 루트 문맥이다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/glossary-term"
+      ],
+      "evidence": [
+        "fixture:glossary-capability-alignment"
+      ],
+      "source_hash": "sha256:d0621f29c74ab464b941a3c3d7cc40923148901498f041d978e4197a93b1f099",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0081",
+      "source": "migration:SKILL_ko.md:14-20",
+      "text": "먼저 규칙 정본(`../principles/SKILL.md`)·기획 증거 규율\r\n(`../principles/planning-evidence.md`)·`devflow/project/product.md`를 통독한다. 능력 지식\r\n기준선 판정 정본(`../principles/baseline-predicates.md`)은 바로 다음 문단의 캡슐 관문에 따라\r\n읽는다. 존재하면\r\n`devflow/project/arch.md`·`devflow/project/code-style.md`·`devflow/project/glossary.md`,\r\n`devflow/journal.md`, 그리고\r\n`devflow/project/decisions/` 바로 아래의 legacy `ADR-NNN.md`를 각각 통독한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/read-inputs"
+      ],
+      "evidence": [
+        "fixture:read-product-glossary-inputs"
+      ],
+      "source_hash": "sha256:645a7f85a13372a0c204472189c5eb0da45505e13088b712f06a5a9669abc8b7",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0082",
+      "source": "migration:SKILL_ko.md:22-27",
+      "text": "기준선 판정 정본은\r\n`## 도메인 지식 캡슐`부터 `## 메타데이터와 신선도` 직전까지를 빼고 읽는다. 이번 실행이\r\n사용자가 지목한 원문 문서를 실제로 캡슐로 가공하거나, 도출한 능력 문서가 그 정본의 총 상한을\r\n넘길 참이면 그 구역 전문을 먼저 열고 쓴다. 캡슐이 지금 디스크에 있는지 없는지는 이 판정에\r\n쓰지 않는다 — 첫 캡슐은 언제나 캡슐이 없는 프로젝트에서 태어난다. 어느 쪽인지 불확실하거나\r\n그 두 제목을 찾지 못하면 전문을 읽는다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/read-inputs"
+      ],
+      "evidence": [
+        "fixture:read-product-glossary-inputs"
+      ],
+      "source_hash": "sha256:d8f6e920c6f20d23654422701a6a4f522c324037e398189fa19c18b1449f4c1e",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0083",
+      "source": "migration:SKILL_ko.md:29-30",
+      "text": "`product.md`가 없으면: 코드도 없으면 product 단계를, 기존 코드가 있으면\r\nadopt(기존 프로젝트 도입 — product.md까지 역산으로 함께 만든다)를 먼저 안내한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/read-inputs"
+      ],
+      "evidence": [
+        "fixture:read-product-glossary-inputs"
+      ],
+      "source_hash": "sha256:009f8032c9d95dec58dac2f967ecd43fe4b89eaa526b562067d996a1f8d97bec",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0084",
+      "source": "migration:SKILL_ko.md:32-35",
+      "text": "대상 능력 문서마다\r\n`node ../principles/scripts/project-state.mjs state --capability <능력 번호>`를 실행한다.\r\n그 `baseline:` 줄이 기대 집합·경로 상태·경계·형태·신선도·`legacy v0.10` 판정을 내고, 그 값을\r\n그대로 쓴다. 기준선 판정 정본에서는 무엇이 본문에 들어갈 자격이 있는지를 읽는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/repair-layer0-fields"
+      ],
+      "evidence": [
+        "fixture:repair-layer0-commit"
+      ],
+      "source_hash": "sha256:d3a0cf32bc3d4b3eaa1b76fc6918b04d3022d5ff65869dfed9ea185e96bcdd28",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0085",
+      "source": "migration:SKILL_ko.md:37-37",
+      "text": "목적: 서비스 기획을 개발 계획으로 번역해 `devflow/project/arch.md`를 만든다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/repair-layer0-fields"
+      ],
+      "evidence": [
+        "fixture:repair-layer0-commit"
+      ],
+      "source_hash": "sha256:2fed59c2139f247e5c1f1560eb317e9c84ea39405f7d5340d64f6687518e7653",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0086",
+      "source": "migration:SKILL_ko.md:39-41",
+      "text": "resume이 Layer 0는 완성됐고 능력 문서만 없거나 수리가 필요하다고 라우팅했다면\r\n아래 1~5단계와 arch.md·code-style.md 수정을 실행하지 않는다. 확정 문서를 그대로 두고\r\n`능력 문서` 절만 실행한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/repair-layer0-fields"
+      ],
+      "evidence": [
+        "fixture:repair-layer0-commit"
+      ],
+      "source_hash": "sha256:2197609dd5cc0e321a8e77349f3323ab4a11c676bb14a4f3f163ae8e33ab591b",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0087",
+      "source": "migration:SKILL_ko.md:43-45",
+      "text": "arch.md에 빠진 필드 하나 — `브라운필드`, 또는 `integration`과 `merge` — 를 채우러 resume이\r\n여기로 보냈다면 역시 1~5단계를 실행하지 않는다. 그 한 가지만 묻고 그 필드 또는 두 줄만 더해\r\n정본 Layer 0 커밋으로 착지시키며 다른 것은 바꾸지 않는다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/repair-layer0-fields"
+      ],
+      "evidence": [
+        "fixture:repair-layer0-commit"
+      ],
+      "source_hash": "sha256:64512fe2906e0ec306c8d65d44df8021dc58c816a3d5aa7931bf1e234e0bc6e2",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0088",
+      "source": "migration:SKILL_ko.md:47-47",
+      "text": "## 절차 — 이 순서 그대로",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/repair-layer0-fields"
+      ],
+      "evidence": [
+        "fixture:repair-layer0-commit"
+      ],
+      "source_hash": "sha256:49372b6c1c8e6c50cb459064ef110937b911cb85f37ee415e2492f4fa3c2d421",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0089",
+      "source": "migration:SKILL_ko.md:49-49",
+      "text": "### 1. 구성요소 도출 — 내가 먼저 판단해 확인만 받는다",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:e03bf278de493b73e7bc56cbe53fa95cf89d88295c7e04d571edf083e6007596",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0090",
+      "source": "migration:SKILL_ko.md:50-50",
+      "text": "product.md의 능력 목록에서 필요한 구성요소를 도출해 근거 1줄씩 붙여 제시한다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:0d1d80e1ad43fb91ba1fcef3625ef807c283a3b31225434d7b400ee14af2691d",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "1. 구성요소 도출 — 내가 먼저 판단해 확인만 받는다",
+          "source_span": "49-49"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0091",
+      "source": "migration:SKILL_ko.md:52-57",
+      "text": "```\r\n✔ 백엔드 API    (①②③ 전부 서버 상태 필요)\r\n✔ DB           (등록 데이터 영속)\r\n✘ 큐/워커       (비동기 작업 없음 — ⑤정산 들어오면 그때)\r\n맞나요?\r\n```",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:15cdebd4b4fba36733ae361f8631322bfff5b5c116d237547f9951ce915d9ef8",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "1. 구성요소 도출 — 내가 먼저 판단해 확인만 받는다",
+          "source_span": "49-49"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0092",
+      "source": "migration:SKILL_ko.md:59-63",
+      "text": "구성요소를 도출한 뒤 stack 후보를 제시하기 전에 기획 증거 규율로 후보 생존 사실을 확인한다.\r\n현재 저장소 제약·지원 플랫폼·고정 버전·라이선스·배포 환경 중 가능한 결과 하나가 후보를\r\n제거하거나 추천 기본값·검증 가능성을 바꿀 사실만 닫는다. 정확한 한 좌표는 메인이 확인하고,\r\n답만 필요한 다중 경로·출처 대조는 그 규율의 격리 조사 분기를 쓴다. 구조 선택에 필요한 원자료\r\n이해는 메인이 소유한다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:f389a89a694a6d6723b8abc5a0ca888fb9ceb513447b3d9c72848a05d8bc0bb9",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "1. 구성요소 도출 — 내가 먼저 판단해 확인만 받는다",
+          "source_span": "49-49"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0093",
+      "source": "migration:SKILL_ko.md:65-65",
+      "text": "확인 전에는 다음 둘을 나눈다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:2d9bd5ac799f22ba52784167274cb5e652028dd5cd33dfd779c7ef2f9ac63bb0",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "1. 구성요소 도출 — 내가 먼저 판단해 확인만 받는다",
+          "source_span": "49-49"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0094",
+      "source": "migration:SKILL_ko.md:67-68",
+      "text": "- 닫히지 않으면 후보의 사용 가능성이나 완료 검증을 결정할 수 없는 사실은 `차단`이다.\r\n  `settled` 전에는 그 후보를 선택지로 올리거나 선택을 구속하지 않는다.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:287e26dbf4146864a9e50cab1d0d730be015ad8046dbe0d4b9f305b4fe4741d7",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "1. 구성요소 도출 — 내가 먼저 판단해 확인만 받는다",
+          "source_span": "49-49"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0095",
+      "source": "migration:SKILL_ko.md:69-70",
+      "text": "- 안전한 기본값으로 진행할 수 있고 나중 결과가 최적화만 바꾸는 값은 `잠정값`이다. 아래 표의\r\n  출처·안전한 기본값·`해소 카드`를 가져야 하며 차단 사실을 잠정값으로 밀지 않는다.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:f73f6d0c6b57213764f789433f6ad0ad447901199a5b46c00ebc27063b0b7bd3",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "1. 구성요소 도출 — 내가 먼저 판단해 확인만 받는다",
+          "source_span": "49-49"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0096",
+      "source": "migration:SKILL_ko.md:71-73",
+      "text": "- 같은 권위가 충돌하거나 허용된 수단으로 확인할 수 없으면 기획 증거 규율의\r\n  `conflicted`·`unavailable` 경계로 보고하고 의존 선택을 멈춘다.\r\n",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/component-derivation"
+      ],
+      "evidence": [
+        "fixture:derive-components"
+      ],
+      "source_hash": "sha256:e0dee938bbd66f61c871c2deca728c223bbcbd76dfabf1f169a14dad127cfd5a",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "1. 구성요소 도출 — 내가 먼저 판단해 확인만 받는다",
+          "source_span": "49-49"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0097",
+      "source": "migration:SKILL_ko.md:74-74",
+      "text": "### 2. 스택 질문 — 묶음으로",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/stack-and-derived"
+      ],
+      "evidence": [
+        "fixture:stack-proposal"
+      ],
+      "source_hash": "sha256:d9d89f32495f0eae97888de7eb5f868dc1ec9a4479df6372114db10ac3663811",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "1. 구성요소 도출 — 내가 먼저 판단해 확인만 받는다",
+          "source_span": "49-49"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0098",
+      "source": "migration:SKILL_ko.md:75-77",
+      "text": "생존 사실이 확인된 구성요소별 후보 2~3개 + 내 추천 + 근거 1줄. stack 질문은 비교표를 쓰지\r\n않고 기본값을 명시한다. 비교표 금지는 이 질문 형식에만 적용되며 아래 조건부 설계 비교를\r\n막지 않는다.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/stack-and-derived"
+      ],
+      "evidence": [
+        "fixture:stack-proposal"
+      ],
+      "source_hash": "sha256:11efb904eb6d5655ee738c41f7076bce919d7e7b0e2b5d0bc1bca16444a0cad3",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "2. 스택 질문 — 묶음으로",
+          "source_span": "74-74"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0099",
+      "source": "migration:SKILL_ko.md:79-82",
+      "text": "되돌리기 어렵고 경계가 비자명하며 현재 증거로 설명되는 실제 trade-off가 있을 때만\r\ncounter-design 하나를 현재 안과 비교한다. 이 조건을 충족하지 않으면 후보·질문·출력을 만들지\r\n않는다. 현재 증거로 둘을 가를 수 없으면 성공 판정과 사용자 우선순위를 붙여 묻고, 표현만 다른\r\n안은 후보로 세지 않는다.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/stack-and-derived"
+      ],
+      "evidence": [
+        "fixture:stack-proposal"
+      ],
+      "source_hash": "sha256:fcac2ad57265f8c650546598baf15e44fcc0b8a19ef849f52dcaceda684971d3",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "2. 스택 질문 — 묶음으로",
+          "source_span": "74-74"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0100",
+      "source": "migration:SKILL_ko.md:84-84",
+      "text": "### 3. 파생 질문 — 스택이 정해져야 비로소 생기는 결정들",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/stack-and-derived"
+      ],
+      "evidence": [
+        "fixture:stack-proposal"
+      ],
+      "source_hash": "sha256:0aa2ee671e138c5f45a38e65aee8b57ba7727a0fc1e27021d7d2895af536d208",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "2. 스택 질문 — 묶음으로",
+          "source_span": "74-74"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0101",
+      "source": "migration:SKILL_ko.md:85-89",
+      "text": "선택된 스택 때문에 갈리는 결정을 찾아 한 묶음으로 묻는다 — 결정마다 형식은\r\n2단계와 같다.\r\n(예: Next.js 선택 → 서버/클라이언트 경계, 데이터 페칭 위치, 인증 저장소)\r\n미리 정해둘 수 없다 — 스택을 보고 그 자리에서 만든다.\r\n**여기서 나온 결정들이 code-style.md의 \"이 프로젝트의 선택\" 절이 된다.**",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/stack-and-derived"
+      ],
+      "evidence": [
+        "fixture:stack-proposal"
+      ],
+      "source_hash": "sha256:4292ececef8888cbee64e9458de69b1b96a3a24e02a2b8a4aaa9595a79c43b5a",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "3. 파생 질문 — 스택이 정해져야 비로소 생기는 결정들",
+          "source_span": "84-84"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0102",
+      "source": "migration:SKILL_ko.md:91-91",
+      "text": "### 4. 코드 구조 결정",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:574a9a24dba04d8d1f99b8fa43ae694f0475a23170538254ae8977d3cc00842c",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "3. 파생 질문 — 스택이 정해져야 비로소 생기는 결정들",
+          "source_span": "84-84"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0103",
+      "source": "migration:SKILL_ko.md:92-92",
+      "text": "AI가 운용하기 좋은 구조가 기준이다. 사람 기준과 다른 지점:",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:b21f521ebfc47135dfe45f39b8f07398615f13d69533fcb8ed887ea69d865b3a",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "4. 코드 구조 결정",
+          "source_span": "91-91"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0104",
+      "source": "migration:SKILL_ko.md:94-94",
+      "text": "- 파일명은 유일하고 검색 가능하게 (`user-repository.ts`, `index.ts` 남발 금지)",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:27e07126f1812a76ef5d7ecd55e32dc8c52979bec3f53b13e34ee894e513385b",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "4. 코드 구조 결정",
+          "source_span": "91-91"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0105",
+      "source": "migration:SKILL_ko.md:95-95",
+      "text": "- 암묵 연결 금지 — 코드에 안 적힌 것은 AI가 모른다",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:cd52c9b762d9d1ee52d792ecef2c1196fa0a24420eb41bdf33d267e240aaec0e",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "4. 코드 구조 결정",
+          "source_span": "91-91"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0106",
+      "source": "migration:SKILL_ko.md:96-96",
+      "text": "- 폴더 깊이 3단계 이하, 파일 ~400줄 이하",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:f46a574953afd0f2ef68fcdb3a5732bdbe57032c7d2301c2189e10b7b03bc235",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "4. 코드 구조 결정",
+          "source_span": "91-91"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0107",
+      "source": "migration:SKILL_ko.md:97-98",
+      "text": "- 모듈 경계마다 계약(타입·스키마)은 한 파일에\r\n",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:92487d5f696d43181e809b28d6d7c6da734d4e1de44130f6202fbff0ef107503",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "4. 코드 구조 결정",
+          "source_span": "91-91"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0108",
+      "source": "migration:SKILL_ko.md:99-99",
+      "text": "구조 선택지와 사용 조건은 아래 산출의 A/B/C 표가 정본이다. 규모에 맞는 하나를 고른다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:86528fe28a7733a1da7e9f054d2e2a245f737e2ee85ee93c802def701fff8074",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "4. 코드 구조 결정",
+          "source_span": "91-91"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0109",
+      "source": "migration:SKILL_ko.md:101-101",
+      "text": "**폴더 이름 = product.md의 능력 이름.** 문서와 코드가 같은 단어를 쓴다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/structureChoice/recommend-a"
+      ],
+      "evidence": [
+        "fixture:structure-capability-first"
+      ],
+      "source_hash": "sha256:a140cfcce3d624e0f7de8188539f70b57ecd7377faeeed3dfd5a2e0f9c178a39",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "4. 코드 구조 결정",
+          "source_span": "91-91"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0110",
+      "source": "migration:SKILL_ko.md:103-103",
+      "text": "### 5. 검증 창구 결정 — 통과 게이트",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/verify-channel"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:f5d2494529dec1a3c9516dedf15777d0a54a163083ee4af25e552a913f3f6f44",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "4. 코드 구조 결정",
+          "source_span": "91-91"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0111",
+      "source": "migration:SKILL_ko.md:104-104",
+      "text": "정해지기 전에는 이 스킬이 끝나지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/verify-channel"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:5806ac522e29b31721128ea15b419ced45c2416ed5980f703af8b654c9cd8db2",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0112",
+      "source": "migration:SKILL_ko.md:106-109",
+      "text": "창구의 이름이나 설치 문장만으로 정해졌다고 판정하지 않는다. 현재 환경에서 아래 명령·도구가\r\n실제로 실행 가능한지 확인한다. 허용된 안전 실행으로 확인하고, 쓰기·비용·권한이 필요하면\r\n기획 증거 규율의 차단 여부에 따라 정확한 허가를 요청하거나 잠정값으로 보낸다. 실행 가능성이\r\n확인되지 않은 차단 창구는 arch.md에 구속하지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/verify-channel"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:38f3501a66606e0cc32b851cbb4d5359829efb8135930c085dda3e9638d5b8d7",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0113",
+      "source": "migration:SKILL_ko.md:111-117",
+      "text": "검증자가 몰 창구는 깨끗한 컨텍스트에서 실제로 한 번 돌려 확인한다 — verify가 `verifier.md`로\r\n브리핑하는 것과 같은 방식으로, 가장 작은 명령 하나와 그 종료 코드로. **확인에 쓴 명령과\r\narch.md에 적는 명령은 같은 문자열이다** — 적을 명령 중 하나를 글자 그대로 돌려 확인하고 그\r\n명령을 그대로 적는다. 같은 도구의 다른 선택자나 다른 표면으로 확인한 것은 확인이 아니다.\r\n이 세션에서만 도는 창구는 정해진 것이 아니다: 깨끗한 컨텍스트에서 도는 창구로 안내하거나\r\n아래 「없으면」 열대로 중단한다.\r\n깨끗한 컨텍스트를 띄울 수 없는 플랫폼이면 그 사실을 보고하고 사용자가 정한다.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/verify-channel"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:fb10d7bb90941c90df8de9b83db52725b98763426a6bdd4d5f658b78f904bdb3",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0114",
+      "source": "migration:SKILL_ko.md:119-119",
+      "text": "| 유형 | 창구 | 없으면 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:e43efa51c3a8725bce731d3a08ff25801f28171c3366e36f83e464b258bc8777",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0115",
+      "source": "migration:SKILL_ko.md:121-121",
+      "text": "| 프론트엔드 있음 | **렌더링 결과를 읽고 조작할 수 있는 브라우저 조작 도구 필수** (현재 플랫폼이 제공한 것) | 사용 가능한 도구 연결을 안내한 뒤 중단. 눈으로 못 보는 UI 검증은 추측이다 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:ff97d7a3fb21dcddb097bbdf57549562dd29887dfa5c28bf680bb7693b6e5e35",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0116",
+      "source": "migration:SKILL_ko.md:122-122",
+      "text": "| 화면 있는 비웹 (데스크톱 앱·TUI) | 화면·접근성 트리/실출력을 읽는 도구 + 실행 절차 문서 (프로세스 안전 포함) | 사용 가능한 도구 설치를 안내하고 실제로 실행할 수 있을 때까지 중단한다 — 같은 이유다. 실행 절차 문서가 없으면 첫 작업으로 만든다 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:cca0033e3612c429d043e6f02407198e82cd043b61e512d96dbb7a5bb4b2a97d",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0117",
+      "source": "migration:SKILL_ko.md:123-123",
+      "text": "| 웹 백엔드 | HTTP 실호출 수단 (`.http` 파일 / curl 스크립트) | 첫 작업으로 만든다 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:f40147efbe19f55130d53cb54cd3e3342df48da63e8d68b717a169eb9c7fc264",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0118",
+      "source": "migration:SKILL_ko.md:124-124",
+      "text": "| CLI / 데몬 | 실행 명령 + 기대 출력 (+ 헬스 체크·로그 위치) | 첫 작업으로 만든다 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:03965c5ee35202568c679bf4b7444e8fadd44ee167046d399871d4fd46565574",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0119",
+      "source": "migration:SKILL_ko.md:125-125",
+      "text": "| 라이브러리 | 테스트 러너 | 첫 작업으로 만든다 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:f7474fc99f55606127da756ee459cd62f5954f66b145272cae8dbda910b87a51",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0120",
+      "source": "migration:SKILL_ko.md:127-128",
+      "text": "git 확인: 리포가 아니면 `git init`을 제안하고 거부하면 멈춘다. 이 체계의 복구·되돌리기 전부가\r\ngit에 의존한다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:6463247da5409f1000432a5fb42a6701337c3f101db7809b83daa1c1446bb54d",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0121",
+      "source": "migration:SKILL_ko.md:130-132",
+      "text": "stack·코드 구조·데이터·검증 창구처럼 되돌리기 어려운 선택을 구속하기 직전에 기획 증거 규율의\r\n구속 전 재검토를 한 번 실행한다. product의 문제·능력·경계·성공 판정을 바꾸는 후보는 비교하지\r\n않고 product로 돌려보낸다. 사용자가 재선택한 같은 묶음은 다시 재검토하지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:role: channel-verifier"
+      ],
+      "evidence": [
+        "fixture:verification-channel-probe"
+      ],
+      "source_hash": "sha256:93c23191d0ce397d6ddbfaaf22d90dc0751cb20b3c365f7cf41fdbddcc5f072c",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0122",
+      "source": "migration:SKILL_ko.md:134-134",
+      "text": "## 산출 — devflow/project/arch.md",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:18bef411509e286a20ea8f4a715b5ee1e36be0fb5b016a0823e1b2141b4326f9",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "47-47"
+        },
+        {
+          "level": 3,
+          "text": "5. 검증 창구 결정 — 통과 게이트",
+          "source_span": "103-103"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0123",
+      "source": "migration:SKILL_ko.md:136-136",
+      "text": "`코드 구조` 값은 아래 셋 중 하나를 쓴다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:78b997a37f5510bd65ccd9fa6a59634269a32817f5320c73bb56d8ac1fe9942e",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0124",
+      "source": "migration:SKILL_ko.md:138-138",
+      "text": "| | 구조 | 언제 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:6cf080c978a89c9e13182363d4dfd0b646c00c060171399c4073997966899edf",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0125",
+      "source": "migration:SKILL_ko.md:140-140",
+      "text": "| A | 도메인 수직 모듈 — `src/<능력>/` 안에 route·service·repo·test 전부 | 기본 추천. 능력 3개 이상 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:35e8d9c83bec4193e3476de460031ada8b4c104a6ba52b1ff085d575c07d2c0c",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0126",
+      "source": "migration:SKILL_ko.md:141-141",
+      "text": "| B | Feature-Sliced | 화면 많은 프론트엔드 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:f905a752d5e119077b72cf6cf19642c88e3e0ba658cee32bc4983c8a6e16df89",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0127",
+      "source": "migration:SKILL_ko.md:142-142",
+      "text": "| C | 평면 — `src/` 아래 파일만 | 20파일 미만. 여기서 A는 과잉이다 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:b241c1a7c0c815bf7bcad2ec7854de0390c413229ce8932cf8f23f50a5466194",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.62,
+      "rationale": "A table row is a structured source unit; its rule, format, or example role still needs review."
+    },
+    {
+      "id": "migration-a0128",
+      "source": "migration:SKILL_ko.md:144-164",
+      "text": "```markdown\r\n# 아키텍처\r\n\r\n브라운필드: 아니오\r\n\r\n## 구성요소        <!-- ✔/✘ + 근거 1줄. 외부 계약 사실에 기대면 정확한 출처를 같은 줄에 -->\r\n## 스택            <!-- 항목: 선택 — 근거 1줄. 외부 계약 사실에 기대면 정확한 출처를 같은 줄에 -->\r\n## 코드 구조       <!-- A/B/C + 폴더 스케치. 폴더명 = 능력명 -->\r\n## 데이터          <!-- 핵심 엔티티만 -->\r\n## 기존 기록       <!-- 브라운필드 전용. 각 줄 <능력명|shared>: <정확한 경로>. 없으면 절 생략 -->\r\n## 잠정값          <!-- 추측으로 적은 값. 아래 절 참조. 없으면 절 생략 -->\r\n## 리스크          <!-- 가장 먼저 깨질 곳 3개 + 확인 방법 -->\r\n## 비범위          <!-- 이번 아키텍처가 감당하지 않는 것 -->\r\n\r\nfrontend: none | needed\r\nverify_channel:\r\n  작업 서버: <실행 명령 + 포트>     # 검증은 반드시 여기서\r\n  확인 수단: <검증자가 모는 정확한 명령들> — 깨끗한 컨텍스트에서 그중 하나를 글자 그대로 돌려 확인함: `<그 명령 그대로>` exit <코드>; 읽기 프로브: `<실행한 정확한 명령>` → <읽어 낸 실제 화면 요소와 그 값>; 상호작용 프로브: `<실행한 정확한 명령>` → <일으킨 실제 변화>\r\nintegration: <통합 브랜치>          # 발급·폐쇄·구속 결정이 착지하는 곳. 혼자 쓰면 지금 쓰는 브랜치\r\nmerge: merge-commit | rebase        # squash 금지 — NN.N 이력이 침식된다\r\n```",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:dc5a2837fa03ffa133ae31199675c2a374122b814329429d9c2988f36905a1df",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0129",
+      "source": "migration:SKILL_ko.md:166-172",
+      "text": "`확인 수단`의 확인은 창구가 실제로 도는 것을 본 기록이다. 도움말 출력·능력 목록·실행 파일\r\n존재·exit 0으로 끝난 attach는 어느 것도 확인이 아니다 — 넷 다 창구가 화면에 닿지 못한 채로도\r\n똑같이 나온다. `frontend: needed`이면 깨끗한 컨텍스트가 고른 창구로 **실제로 그려진 요소\r\n하나를 읽고** **실제 상호작용 하나를 성공**시킨 뒤에야 arch가 확인으로 적는다. 두 프로브의\r\n정확한 명령과 관측한 결과 — 읽은 요소는 그 값까지, 상호작용은 그것이 일으킨 변화까지 — 를 그\r\n줄에 글자 그대로 적는다. 둘 중 하나라도 못 하면 그 창구는 미확인이고, 미확인 창구에는 값을\r\n적지 않은 채 무엇이 안 됐는지 사용자에게 보고한다.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:ARTIFACTS/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:3c3eafec1f6571a2d99631bc4efb8df1458dc2fcf95181ef118f34ada5a1c972",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0130",
+      "source": "migration:SKILL_ko.md:174-177",
+      "text": "`브라운필드`는 이 저장소에 devflow보다 먼저 구현 코드가 있었는지를 기록한다. arch로 새\r\n프로젝트를 설계하면 `아니오`, adopt가 기존 코드에서 역산하면 `예`다. 이 값은 트리의 최초\r\n생성 방식을 고르는 입력이며, 구현 진행률이 아니다. 기존 arch.md에 `브라운필드` 필드만\r\n없으면 그 한 가지만 묻고 필드만 더하며 다른 것은 바꾸지 않는다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:ARTIFACTS/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:28d0157c9cec4dafb897a49cb292ce35fd3d6dce1c0f017e57fdeced70a43cb0",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0131",
+      "source": "migration:SKILL_ko.md:179-185",
+      "text": "`integration`의 기본 제안은 `git worktree list`가 보고하는 워크트리 수로 갈린다. 하나면 현재\r\n브랜치이고 추가 질문은 없다. 둘 이상이면 **어떤 워크트리도 체크아웃하지 않은 브랜치**를 기본으로\r\n제안한다 — Git은 다른 워크트리가 체크아웃한 브랜치를 갱신하지 않으므로, 통합을 한 폴더가 쥐고\r\n있으면 모든 점유·발급·폐쇄를 그 폴더에 가서 해야 하고 워크트리를 여러 개 깐 의미가 사라진다.\r\n그런 브랜치가 없으면 만들 정확한 명령(`git branch <이름> <현재 통합>`)을 보여 주고 사용자가\r\n실행한다 — devflow는 브랜치도 워크트리도 만들지 않는다. 그 값이 무엇을 뜻하는지는 규칙 정본이\r\n지배한다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:ARTIFACTS/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:75825a947f4ed37b3971a0ccef773fcf7cc1da301df475808abb8ebe3921f15c",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0132",
+      "source": "migration:SKILL_ko.md:187-191",
+      "text": "`기존 기록`은 adopt가 코드와 대조한 기존 핸드오프·사양 문서의 위치만 찾게 하는 색인이다.\r\n각 줄은 product.md의 능력 이름 또는 `shared`, 콜론, 정확한 파일 경로 하나만 갖는다. 같은\r\n이름을 여러 줄에 반복할 수 있다. 이 절의 경로는 읽기 지시가 아니며 문서에 정본 지위를\r\n주지 않는다. split이 변경 범위에 맞는 경로를 다시 대조해 카드의 `읽을 것`에 넣었을 때만\r\nwork가 연다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:ARTIFACTS/architecture"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:b1167848d6404b70a772f7d4bb8b8ce420464ba310c869891820ad8c58451e19",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0133",
+      "source": "migration:SKILL_ko.md:193-193",
+      "text": "### 잠정값 — 아직 모르는 아키텍처",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:ca6f4e7d844bae34f426695b83e153e0e8f0572e2bfcbc0afe7a53f9327a0833",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0134",
+      "source": "migration:SKILL_ko.md:195-196",
+      "text": "버퍼 크기, 타임아웃, 역압 프로토콜의 필요 여부 같은 것들은 생각만으로 확정되지 않는다.\r\n추측을 결정과 같은 문장으로 적는 순간 아키텍처 문서는 거짓말을 시작한다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:31dba53a63b60c60e182b5b02095d3a59acc9e01e47f7080de6739c940bae18f",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        },
+        {
+          "level": 3,
+          "text": "잠정값 — 아직 모르는 아키텍처",
+          "source_span": "193-193"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0135",
+      "source": "migration:SKILL_ko.md:198-203",
+      "text": "**추측으로 적는 값은 전부 이 표에 넣고, 모든 행에 그것을 해소할 카드 번호를 단다.**\r\n해소 카드가 없다면 알아낼 생각이 없다는 뜻이고 — 그러면 잠정이 아니라 결정이므로\r\n위 절에 적는다. 이 표는 진행 기록이 아니라 미지(未知)의 목록이다.\r\n해소할 카드의 번호를 아직 모르면(트리가 없거나 그 층이 아직 안 열렸으면) 해소 카드\r\n칸에 '미발급'이라 적는다 — split이 그 행을 해소할 층을 열 때 카드를 만들고 번호로\r\n교체한다 (발견→갱신 표의 그 행).",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:afbcdf8cefa0e23b585c49d3b477601d7f934c4982bb7ea4e5289094ec3b1935",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        },
+        {
+          "level": 3,
+          "text": "잠정값 — 아직 모르는 아키텍처",
+          "source_span": "193-193"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0136",
+      "source": "migration:SKILL_ko.md:205-209",
+      "text": "```markdown\r\n| 항목 | 잠정값 | 출처 | 해소 카드 |\r\n|---|---|---|---|\r\n| 스트림 batch 크기 | 64 KiB | <참조>에서 차용 | 01.3 |\r\n```",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:7f5f57dc1ca638b8e6ececab4f43c876cbdef83bfe2958189f398956ca1d3610",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        },
+        {
+          "level": 3,
+          "text": "잠정값 — 아직 모르는 아키텍처",
+          "source_span": "193-193"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0137",
+      "source": "migration:SKILL_ko.md:211-214",
+      "text": "계약: 해소 카드가 닫힐 때 work의 환류 단계가 이 표를 확인하고, 행은 실측 결과로\r\n**교체**된다 — 결정으로 승격되거나, 불필요로 판명되어 삭제된다. 자기 해소 카드보다\r\n오래 살아남는 행은 세부사항이 아니라 절차의 버그다. 잠정값이 본문 다른 곳에도\r\n등장하면 그 자리에 잠정임을 표시한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:c219b0e14d5787de8141fbff1462fcc8ea30f964cd860fa5d31b9e1db7f38716",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        },
+        {
+          "level": 3,
+          "text": "잠정값 — 아직 모르는 아키텍처",
+          "source_span": "193-193"
+        }
+      ],
+      "confidence": 0.7,
+      "rationale": "Ordered language may encode a stage or evidence transition."
+    },
+    {
+      "id": "migration-a0138",
+      "source": "migration:SKILL_ko.md:216-217",
+      "text": "ADR(Architecture Decision Record — 결정 하나당 맥락·선택지·결정·결과 한 장)은\r\n**세 조건을 모두 충족할 때만** `devflow/project/decisions/ADR-NNN.md`에 남긴다:",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:f7c32d5ed989457a37b7d0dbf64842d2c4708378de3c2ae849518bb6411c7d32",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        },
+        {
+          "level": 3,
+          "text": "잠정값 — 아직 모르는 아키텍처",
+          "source_span": "193-193"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0139",
+      "source": "migration:SKILL_ko.md:219-222",
+      "text": "```\r\n① 되돌리기 어렵다  ② 나중에 보면 의아할 만큼 비자명하다  ③ 실제로 대안을 검토했다\r\n(예: 인증을 세션 대신 JWT로 = 통과 / 라이브러리 A 대신 B = 탈락)\r\n```",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:5911029811c733dc51dce12c983fccc1f80dfee2ada1d219ca2f7f6c423a5972",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        },
+        {
+          "level": 3,
+          "text": "잠정값 — 아직 모르는 아키텍처",
+          "source_span": "193-193"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0140",
+      "source": "migration:SKILL_ko.md:224-226",
+      "text": "세 조건에 못 미치는 결정은 ADR을 만들지 않는다 — 그 결정이 사는 arch.md 절에 선택과 근거를\r\n한 줄로 함께 쓰고, 버린 대안은 같은 절의 ✘ 줄로 남긴다. 근거가 숫자면 그 숫자가 참인 실행\r\n조건과 다시 재는 명령을 같은 줄에 붙인다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/legacySchemas"
+      ],
+      "evidence": [
+        "fixture:refresh-architecture-commit"
+      ],
+      "source_hash": "sha256:2648c7d1a66e45a3625edf6cafae4548cb6bfe534955fefddee48b8a0e32ba1f",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        },
+        {
+          "level": 3,
+          "text": "잠정값 — 아직 모르는 아키텍처",
+          "source_span": "193-193"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0141",
+      "source": "migration:SKILL_ko.md:228-228",
+      "text": "## 산출 2 — devflow/project/code-style.md",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/codeStyle"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:9489e32d21df03e1c67137754817e7925380c2e09f67b4388f604fc40d94c7c3",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 — devflow/project/arch.md",
+          "source_span": "134-134"
+        },
+        {
+          "level": 3,
+          "text": "잠정값 — 아직 모르는 아키텍처",
+          "source_span": "193-193"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0142",
+      "source": "migration:SKILL_ko.md:230-231",
+      "text": "선택한 스택 때문에 생긴 이 프로젝트 고유의 결정들을 받아 적는 곳. **모든 항목은 \"무엇을 우선하는가\"로 쓴다 —\r\n\"이렇게 하라\"로 쓰지 않는다.** 방법은 구현자가 정한다. 상한 1페이지.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/codeStyle"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:7ccbe67d6dba8ace43e075870f104ec7c778d605b63d7529389bc907a216c2a8",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 2 — devflow/project/code-style.md",
+          "source_span": "228-228"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0143",
+      "source": "migration:SKILL_ko.md:233-254",
+      "text": "```markdown\r\n# 코드 스타일\r\n\r\n## 지향                          <!-- 아래 7줄을 기본 제시하고 프로젝트 성격에 맞게 취사 -->\r\n- 적은 수의 깊은 모듈 > 많은 얕은 헬퍼.\r\n  지웠을 때 복잡성이 호출자로 흩어지는 모듈이 좋은 모듈이다\r\n- 결과를 반환한다 > 상태를 바꾼다. 같은 입력이면 같은 출력인 코드를 우선한다\r\n- 명시가 마법을 이긴다. 코드에 적히지 않은 연결은 없는 것이다\r\n- 테스트는 공개 인터페이스의 행동을 사양처럼 검증한다. 내부 구현을 모킹하지 않는다\r\n- 오류를 삼키지 않는다. 처리하거나 위로 던진다\r\n- 죽은 코드는 지운다. 주석 처리된 코드는 git이 기억한다\r\n- 주석은 \"왜\"만 적는다. \"무엇\"은 코드가 말한다\r\n\r\n## 이 프로젝트의 선택             <!-- 모델이 알 수 없는 이 프로젝트의 결정만 -->\r\n- (예) 검증: zod / 에러: Result 타입, throw 금지 / HTTP: shared/http.ts만 / 시간: UTC\r\n\r\n## 신뢰 경계\r\n- 자세: 엄격 | 표준 | 최소       <!-- 프로젝트 성격이 다이얼을 정한다 -->\r\n- 경계 목록: <외부 입력이 들어오는 지점들>. 경계를 넘는 입력은 적대적으로 간주한다\r\n\r\n## 하지 않는 것                   <!-- 이 프로젝트의 YAGNI 선언 2~3개 -->\r\n```",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/codeStyle"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:17815a7f476fe4e348b6fcc3c3f83704c0b55fbad4e6b39030046449f9edbc68",
+      "source_kind": "fenced-code",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 2 — devflow/project/code-style.md",
+          "source_span": "228-228"
+        }
+      ],
+      "confidence": 0.74,
+      "rationale": "Prohibitive language may encode a guard, but scope still needs review."
+    },
+    {
+      "id": "migration-a0144",
+      "source": "migration:SKILL_ko.md:256-260",
+      "text": "arch.md 확인을 받기 전에, 이 문서가 내린 결정 중 ADR 세 조건을 모두 만족하는 것과 근거가\r\n아직 문서에 없는 것을 함께 열거하고 각각 남길지 사용자와 확인한다. 이 자리에서 product가\r\n남긴 기명 journal 줄의 개발 선택도 수용해 arch.md의 그 결론 옆으로 착지시킨다 — product가\r\n물려준 기술 선택의 확정은 arch 소유다. 열거하고서 남기지 않기로 한 결정은 그대로 두되 열거는\r\n건너뛰지 않는다. 착지한 뒤에는 그 대화로 돌아가는 경로가 없다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/codeStyle"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:e906ffef2ce425b6f8e77077efaf4cb3802767aee3ae0e7ae46ff2090942f4a0",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 2 — devflow/project/code-style.md",
+          "source_span": "228-228"
+        }
+      ],
+      "confidence": 0.55,
+      "rationale": "Conditional prose requires a human decision between guard, table, and judgment."
+    },
+    {
+      "id": "migration-a0145",
+      "source": "migration:SKILL_ko.md:262-262",
+      "text": "사용자가 arch.md 또는 code-style.md를 확인한 즉시 규칙 정본의 Layer 0 커밋으로 착지시킨다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/codeStyle"
+      ],
+      "evidence": [
+        "fixture:initial-architecture-creation"
+      ],
+      "source_hash": "sha256:b7ada256c794fd2839b64af9cb46a5cf77f25d2794c03d8370ff497c59fa216b",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 2 — devflow/project/code-style.md",
+          "source_span": "228-228"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0146",
+      "source": "migration:SKILL_ko.md:264-264",
+      "text": "## 능력 문서 — Layer 0 뒤 마지막 출력",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:8cf7fbfb460a8ee6cbdfc018e83a761b3ae5578f586613a5699b32dcb0401673",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "산출 2 — devflow/project/code-style.md",
+          "source_span": "228-228"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0147",
+      "source": "migration:SKILL_ko.md:266-267",
+      "text": "확정된 arch.md가 `브라운필드: 예`이면 이 절을 실행하지 않고 adopt의 능력 문서 전용 분기로\r\n보낸다. adopt가 그 실행의 마지막 커밋을 소유하며, 아래 완료 안내도 그 뒤에 한다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:4239b9f5bbc97ad255d0f49cf03d9a256527a3456960012b95b72379c2e015aa",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — Layer 0 뒤 마지막 출력",
+          "source_span": "264-264"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0148",
+      "source": "migration:SKILL_ko.md:269-272",
+      "text": "이 절은 트리에서 가장 큰 단일 산출물이다. 시작하기 전에 기대 집합의 크기를 문서 장수로 말한다.\r\n하네스가 컨텍스트를 경고했다면 시작하지 말고 확정된 Layer 0 커밋에서 이 실행을 끝낸다. 그때 이\r\n실행이 arch의 완료가 아님을 말하고, 점유한 카드가 없는 상태에서 다음 세션이 resume으로 들어와 이\r\n절만 실행하면 된다고 안내한 뒤, 아래 완료 안내는 하지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:893d1e8fd9a1ab2eb3719928ff7134fc8cd1483391cbe0b46531f90df53eb213",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — Layer 0 뒤 마지막 출력",
+          "source_span": "264-264"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0149",
+      "source": "migration:SKILL_ko.md:274-275",
+      "text": "확정된 product.md·arch.md·glossary.md가 모두 HEAD에 착지한 뒤 기준선 판정 정본의 설계 작성자\r\n절차를 실행한다. `Design head`는 이 세 경로의 현재 명령 출력으로 계산한다.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:d12670e01425a04b00224384465f22b10442962808522e2aa245446007491b58",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — Layer 0 뒤 마지막 출력",
+          "source_span": "264-264"
+        }
+      ],
+      "confidence": 0.67,
+      "rationale": "Shape language may belong in a format or template."
+    },
+    {
+      "id": "migration-a0150",
+      "source": "migration:SKILL_ko.md:277-278",
+      "text": "- `01-foundation.md`와 product.md의 모든 비은퇴 능력 문서를 기대 집합으로 삼는다. 번호는\r\n  기준선 판정 정본의 디스크 우선 규칙으로 정한다.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:a5787a7e6df8d889d47887616818722a1db400e7316de6af5946f6b34af4d688",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — Layer 0 뒤 마지막 출력",
+          "source_span": "264-264"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0151",
+      "source": "migration:SKILL_ko.md:279-280",
+      "text": "- 목적·경계·Intent 총론·개념 모델·불변식·하지 않기로 한 것과 현재 진술이 인용하는 구속 ADR만\r\n  능력 단위로 도출한다. planned flow·진입점·코드 필드·code-style.md·design.md 내용은 설계 구역에 넣지 않는다.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:20f07d82ca7d1d1923a42375c50edf030e057831463926b3920e19e3349a70da",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — Layer 0 뒤 마지막 출력",
+          "source_span": "264-264"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0152",
+      "source": "migration:SKILL_ko.md:281-284",
+      "text": "- 능력 문서 예산을 넘치는 도메인 지식은 기준선 판정 정본의 지식 캡슐로 내린다. 원문 문서의\r\n  가공은 adopt의 캡슐 가공 절차를 같은 계약으로 쓰고, 캡슐은 기준선 판정 정본의 설계 확인 묶음과 같은\r\n  커밋에 동승한다.\r\n",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:bdb39fbdf83bb0e30f21ee8a2179586b408ecf4c34151571469f8805f16c87ec",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — Layer 0 뒤 마지막 출력",
+          "source_span": "264-264"
+        }
+      ],
+      "confidence": 0.58,
+      "rationale": "List or example-like text may be a fixture rather than a rule."
+    },
+    {
+      "id": "migration-a0153",
+      "source": "migration:SKILL_ko.md:285-296",
+      "text": "**설계 전용 진입.** 진입이 `marker.design-note` 또는 `marker.design-open-item`을 넘겨 왔으면\r\n이 절 전체를 다시 돌지 않는다.\r\n그 줄이 이름 댄 능력 하나의 설계 구역만, 확정된 현재 Layer 0과 그 정확한 문장에서 다시\r\n유도한다. 문장이 능력 문서 예산 안에 들면 Intent 또는 Invariants에 넣고, 예산을 넘치는 설계\r\n주제 상세는 같은 번호 캡슐 계약으로 내린다. 넘겨받은 `anchor`가 그 `card`·`code`의 정확한\r\n스냅샷 기준이며, 이력이나 카드에서 다른 기준을 다시 계산하지 않고 능력 사실을 arch.md에 복제해\r\n작성자를 깨우지도 않는다 — 진짜 Layer 0 사실만 발견→갱신 표의 기존 경로로 간다.\r\n`marker.design-open-item`은 `anchor`도 `code`도 싣지 않는다 — 사람이 확정한 `statement`\r\n자체가 기준이고, 그 `card`는 확정이 일어난 자리일 뿐이며, 소유자는 그 줄이 이름 댄\r\n`capability`다. 그 카드에서 코드를 읽지 말고 문장을 그 카드의 능력으로 옮기지도 않는다.\r\n그 줄과 바이트가\r\n같은 journal 줄은 같은 구속 능력 문서 커밋에서 지운다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:623b57cd71b229cc38fc3b55529773378dceffd1f699d4f729bbd84ca0fb6e87",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — Layer 0 뒤 마지막 출력",
+          "source_span": "264-264"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    },
+    {
+      "id": "migration-a0154",
+      "source": "migration:SKILL_ko.md:298-298",
+      "text": "완료 후: `frontend: needed`면 \"design(선택) 또는 split\", `none`이면 \"split\" 안내.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:capability-docs-route-design"
+      ],
+      "source_hash": "sha256:d1c570c20ce9d9099163fbbf7f36e10be55a31ef9fb9d8ead515b305b5aaad57",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "arch — 개발 기획",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — Layer 0 뒤 마지막 출력",
+          "source_span": "264-264"
+        }
+      ],
+      "confidence": 0.51,
+      "rationale": "No deterministic structure is safe to infer from this prose alone."
+    }
+  ],
+  "migration": {
+    "source_root": "skills/arch",
+    "source_files": [
+      "SKILL.md",
+      "SKILL_ko.md"
+    ],
+    "atom_count": 154,
+    "evidence_root": "fixtures/scenarios.json",
+    "locator_base": ".skill-rails-migration/arch"
+  },
+  "source_root": "skills/arch"
+}

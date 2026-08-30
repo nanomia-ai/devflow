@@ -20,7 +20,7 @@ Blocks skill-name collisions at the source + groups autocompletion. The original
 
 ### DD-03 · Canonical rules live inside skills/principles/
 
-Subject: Identity, packaging, platforms | Introduced: origin | State: active
+Subject: Identity, packaging, platforms | Introduced: origin | State: active, partly corrected by DD-92 (v0.20.0)
 
 Under the skills.sh standard (installers that copy only skills/), the canon travels along
 
@@ -50,9 +50,30 @@ PowerShell 5.1 parses BOM-less files as ANSI → Korean script corruption (actua
 
 ### DD-16 · Design in Korean, deploy in English (dual language)
 
-Subject: Identity, packaging, platforms | Introduced: origin | State: active
+Subject: Identity, packaging, platforms | Introduced: origin | State: active, partly corrected by DD-93 (v0.20.0)
 
 Korean is the language the user can review; English is what AI understands best at the lowest token cost. Procedure and terminology: `docs/maintenance-protocol.md` §2 and §9
+
+### DD-93 · P2 runtime skills are generated from English `spec.mjs` and `body.md`, while Korean legacy atoms preserve only migration provenance (v0.20.0)
+
+Subject: Identity, packaging, platforms | Introduced: v0.20.0 | State: active
+
+Observed conflict: applying DD-16's Korean design-original rule to P2 runtime packages creates
+a second Korean behavior source that the generator does not read, while DD-92's description of
+`spec.mjs` as the sole behavior source omits the prose obligations owned by `body.md`.
+
+Chosen boundary and refutation: declared Korean/English pairs in owner-reviewed documents and
+the Codex adapter remain Korean-first and receive 1:1 review. Only P2 runtime skills use English
+`spec.mjs` and `body.md` as executable authored canon; `SKILL.md` and `.generated.json` are their
+generated projection and receipt. Korean atoms under `references/legacy-atoms/` preserve migration
+provenance, not a live pair or behavior source. DD-16's owner-review reason therefore remains valid
+for the surviving declared pairs but does not justify a second home for P2 behavior consumed only
+from English sources.
+
+Affected coordinates: DD-16, DD-92, the document map, the `AGENTS.md` language boundary,
+maintenance protocol §2, and P2 package `spec.mjs`, `body.md`, generated `SKILL.md`, and legacy
+provenance. Revisit when the owner must directly review runtime wording or the generator starts
+consuming a Korean source or legacy atom as behavior input.
 
 ### DD-18 · The Codex install leads with the native plugin channel (marketplace add + plugin add); generated slash prompts stay as the explicit channel; the hook stays separately registered in ~/.codex/hooks.json (v0.9.9)
 
@@ -62,7 +83,7 @@ Probed live: Codex consumes Claude-format marketplaces directly and model-invoke
 
 ### DD-29 · Platform adapters only connect to the shared skill; they do not duplicate its procedure (v0.9.21)
 
-Subject: Identity, packaging, platforms | Introduced: v0.9.21 | State: active
+Subject: Identity, packaging, platforms | Introduced: v0.9.21 | State: active, partly corrected by DD-92 (v0.20.0)
 
 Claude and Codex share the same semantic rules in SKILL.md and the role contracts. The Codex fallback AGENTS copied only part of resume, omitting journal, freshness, and integrity checks; the hook separately decided the next Layer 0 stage; and the local installer registered both the plugin hook and the old global hook. The fallback and hook now only route to shared resume. The hook injects no file content, HANDOFF, or next-stage classification. The installer removes the exact old registration only after the native plugin succeeds, preserving a working predecessor when replacement fails. A malformed `owner.md` keeps multi mode active, but a valid resolved room stays writable; only a session whose identity remains unresolved fails read-only. These are transport repairs to one contract, not platform-specific policies
 
@@ -74,7 +95,7 @@ Probed live (2026-08-11), refuting v0.9.9's recorded ground ("plugin-delivered h
 
 ### DD-57 · The flat Codex prompt channel is removed; the plugin cache carries the companions (v0.13.0)
 
-Subject: Identity, packaging, platforms | Introduced: v0.13.0 | State: active
+Subject: Identity, packaging, platforms | Introduced: v0.13.0 | State: active, partly corrected by DD-92 (v0.20.0)
 
 Probed live (2026-08-13): Codex installs a plugin into `~/.codex/plugins/cache/<marketplace>/<plugin>/<version>/`, the whole repository, and the model reads its skill from that absolute path - so `../principles/SKILL.md` resolves there exactly as it does in Claude. The recorded reason for embedding ("the Codex prompt folder is flat, relative references are unreliable") was true of `~/.codex/prompts/` and does not reach the plugin. The eight prompts held 50-120 KB each, embedding the whole rulebook, and two installers each carried their own embedding logic, so every rule change had to be applied twice. Removing generation alone would leave earlier files callable, so cleanup deletes the exact eight names for one release, keyed to the generated marker, and a file a user wrote under one of those names survives
 
@@ -455,6 +476,20 @@ Revisit when: a clean Claude or Codex entry actually fails to consume a complete
 raised the 24 KiB warning. Or when an entry path that cannot call the projection is actually
 observed — what is restored then is not the table but **a callable path**.
 
+### DD-92 · Principles entry is state-free, resume owns state, and knowledge/work trees and P2 packages keep separate boundaries (v0.20.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.20.0 | State: active, partly corrected by DD-93 (v0.20.0)
+
+Observed problem: if the rulebook recomputes entry state or a hook injects it, it can disagree with resume; if one capability-number structure represents both knowledge and work, research and multi-owner knowledge can disappear. A manual index or central registry makes a second home for new facts, while missing package provenance makes it impossible to verify what a deploy artifact executes.
+
+Chosen boundary: principles entry is state-free and offers one route to resume. SessionStart provides delayed principles guidance only; it neither judges state or next stage nor injects file bodies. Knowledge and work are orthogonal trees: research-only cards live only under `00`, and knowledge expands only through owner-adjacent recursive `K` directories under the same stem; no central/manual index exists and zero `K` children is valid. Six behavioral constraints preserve this boundary: C1 pre-product research survives durably under `00-project`; C2 card/source evidence remains named source evidence; C3 conclusions land at the nearest semantic owner or the exact crosscut owners; C4 only arch or adopt writes `K`; C5 closed history opens only through exact named provenance; and C6 multi-owner conclusions preserve every owner and land atomically. One principles FORMAT owns the exact JSON marker shape; the work template and project-state parser are executable projections bound by a seam test, and this decision does not duplicate the fields. A P2 Skill Rails package keeps English-authored `spec.mjs` and `body.md` as its executable authored canon, generates `SKILL.md` from them, and retains portable provenance plus generation, build, and evaluation evidence inside the package.
+
+Refutation: DD-29's reason about a partial adapter dropping journal, freshness, and integrity does not apply because delayed guidance copies no procedure and only points to resume. DD-44's number-reach/card-field-duplication reason does not apply because knowledge and work are separate trees and `00`/`K` are path ownership, not card fields. DD-76 and DR-17/DR-25's bounded same-number/no-unbounded-link reasons remain satisfied by same-stem adjacency, exact consumers, bounded opening at each recursion, and valid zero children. DD-78 and DR-03's hook-judgment/journal-injection reasons remain because the hook neither judges nor injects; DD-57's plugin-cache-companion reason is strengthened because portable P2 provenance makes that carriage inspectable.
+
+Affected coordinates: DD-03, DD-25, DD-28, DD-43, DD-44, DD-76, DD-29, DD-57, DD-54, DD-87; the principles/resume/hook/knowledge writers and package deploy artifacts; and the multi-owner, knowledge, and entry matrix cells. DD-05, DD-11, and DD-83 remain affirmed within their existing boundaries: one SessionStart hook, report-only correction, and one read-only state computation.
+
+Revisit when delayed guidance causes an action different from resume, a C1–C6 behavioral constraint fails, a recursive K opens without an exact consumer, or a P2 package loses its spec, provenance, or build evidence in real use.
+
 ### Rejected under this subject
 
 - **[DR-03 · v0.7.0]** **Journal injection by the hook** — duplicates what resume reads.
@@ -622,7 +657,7 @@ If auto-correction misjudges, it accelerates contamination
 
 ### DD-25 · Ready-card semantics, per-card execution-proposal approval, and resume routing are decided from disk state (v0.9.21)
 
-Subject: The task tree and its cards | Introduced: v0.9.21 | State: active, partly corrected by DD-80 (v0.18.7)
+Subject: The task tree and its cards | Introduced: v0.9.21 | State: active, partly corrected by DD-80 (v0.18.7), DD-92 (v0.20.0)
 
 Two independent literal executions cross-confirmed deterministic session-boundary failures: a card with completed `Depends` remained forever unclaimable under the words "dependency-free"; ending a session after adopt but before split produced an adopt↔resume loop; resume called only work even at split and verify boundaries; and ordinary execution-proposal approval left no disk trace, so the next session could not distinguish before from after approval. Ready means `Depends` is `none`, or exactly one `.done.` card exists for every comma-delimited number. New cards use one dependency format. Only a card missing `Approval` or `Review` is legacy; its leading numbers are parsed mechanically and normalized when next planned, while the user decides an unparseable member. `state-predicates` owns task-card judgments once; `verification-predicates` owns revision and event judgments once. The former enters Claude and Codex input for split, work, verify, and resume; the latter only for verify and resume. Approval, parallel group, and review policy live in each card and land in a planning commit; the claim suffix alone owns assignment. Approval is effective only when the same authority path exists and both index and working tree equal solo HEAD or the fetched multi integration branch under Git-normalized comparison. An out-of-scope prerequisite changes the new card, the original card's `Depends`, approval, and release in one planning commit. The resume table covers partial trees, retired capabilities, blocked dependencies, and a completed product. The arithmetic conflict that forbade a two-card split was removed too
 
@@ -646,13 +681,13 @@ Two halves of the same problem: what happens to work already in flight. Placing 
 
 ### DD-54 · One request that spans several capabilities keeps one source and one marker per parent (v0.13.0)
 
-Subject: The task tree and its cards | Introduced: v0.13.0 | State: active, partly corrected by DD-87 (v0.19.0)
+Subject: The task tree and its cards | Introduced: v0.13.0 | State: active, partly corrected by DD-87 (v0.19.0), DD-92 (v0.20.0)
 
 Mapping was written in the singular ("go to the matching capability folder"), with no definition for a request that determines three locations. A literal reader picks one and the rest vanish silently, journal line included, so nothing can recover them - the loss the owner guards against most. A client's fix list handled in one session is ordinary practice. Sharing one exact source locator across the parents' markers gives the bundle an identity with no new batch id, so resume recovers them together; one execution proposal and one approval keep a twenty-item list from needing several; and an ambiguous or retired unit asks before the begin commit instead of planning half and losing the rest
 
 ### DD-87 · One request across several owners lands in as many passes as it needs behind one approval boundary, and the markers still standing carry the remaining targets and consumer reads (v0.19.0)
 
-Subject: The task tree and its cards | Introduced: v0.19.0 | State: active
+Subject: The task tree and its cards | Introduced: v0.19.0 | State: active, partly corrected by DD-92 (v0.20.0)
 
 Observed problem: split says both "open one layer at a time" and "the bundle gets one planning
 commit." For a twenty-item request across five capabilities those two cannot both be true, and a
@@ -949,7 +984,7 @@ DD-53 made several sessions in one working folder safe, but an outside actor ass
 
 ### DD-28 · Durable knowledge is connected through bounded consumers of existing records, not through a new document layer (v0.9.21)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.9.21 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.9.21 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0), DD-92 (v0.20.0)
 
 glossary and journal were produced but arch, design, work, verify, and delegated implementers did not read them; conclusions completed after two dependent cards opened together also could not reach the next implementer. The repaired read set is completely enumerated by name: glossary and journal when present, plus only the cards directly named in `Depends`. For brownfields, adopt indexes only exact per-capability paths to existing handoff and specification files under arch.md `Existing records`. The index is neither a read instruction nor canon; work opens only a path that split rechecked against current code and placed in the card's `Read first`. "Related records" and whole-capability-folder reading remain forbidden. Layer 0 completeness includes glossary; when only it is missing, resume sends a brownfield to adopt and a greenfield to product without rewriting another confirmed document. This does not force a second domain-handoff layer in the style of jgnote; it closes reachability within the existing canon, tree, and short-record hierarchy. The retrospective likewise receives exactly one event-specific input set, so capability and whole-project scopes cannot merge. This index differs from the observation-cache registration field rejected in v0.9.18: `Existing records` substantively avoids all three rejection reasons — a rule consumes it (split rechecks each path and puts it in a card's `Read first`), it indexes brownfield existing records instead of restating the outside-records standing declaration, and its only home is arch.md (see that entry in the rejection lineage)
 
@@ -967,13 +1002,13 @@ Grounds are three measurements: across jgnote's 12 existing handoffs the chronol
 
 ### DD-43 · Capability documents physically separate a design zone born with Layer 0 from a verified zone refreshed at closure, and are always on (v0.11.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0), DD-92 (v0.20.0)
 
 The owner's operating intent is that a new MVP, a brownfield, and a mid-project join all obtain domain boundaries and concepts before the first card and reach them by number without card wiring. arch, or adopt in a brownfield, replaces the design zone; verify replaces the verified zone. They own disjoint byte ranges separated by the fixed `## Verified state` boundary. This decomposes rather than overturns v0.10.0's one-writer grounds: the two writing moments are serial, no byte is shared, design declares trust through `Design head`, and verification through `Scope head` and `Covered cards`. One seven-field machine block would overlap the two owners again, so the two design-metadata fields sit before the boundary and the five verification-metadata fields after it. The switch is removed because the adopted shape is not a 1,100–1,700-line relay-note second handoff layer: it is capped near 185 lines per capability, forbids chronology, and costs O(1) reads per card; even a small project gets the same lifecycle from a six-section design zone. Design freshness uses only the actual sources product.md, arch.md, and glossary.md. Including code-style.md or design.md would make every capability hypothetical with no failure path that changes its design zone — an over-harness. The exact v0.10 predecessor is separated from damage reset: design is re-derived from current Layer 0 and verified bodies plus compatible metadata migrate mechanically, but its old `Scope head` did not include consumed paths and therefore does not carry forward; verified statements remain hypotheses until the next capability closure
 
 ### DD-44 · Domain reachability is owned by the depth-1 number rule and resume's domain-entry branch, not by card fields (v0.11.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0), DD-92 (v0.20.0)
 
 If split copies a baseline and ADRs into every card, the path lives in two places and requires a research-card exception. work uses the claimed card's depth-1 number to read one document and only the exact ADRs named by that document. A baseline path left in a v0.10 card's `Read first` is treated only as legacy wiring and deferred to that number rule. resume normally reads only file names and a shape projection, but when the user asks to explain a capability it opens one document by number or name and answers with both freshness states. It opens the entire expected set only when the user explicitly requests that full set. Foundation is reached by the same `01` number rule. Relationships live on the consuming side as exact paths in `Consumed paths`; provider closure, retirement, and split project only bounded metadata plus the Consumed-contract path/number columns and report consumers with their actual current freshness. That column projection detects an unchanged path reassigned to another capability without opening other prose. With no observed failure, this does not automatically expand into execution, card creation, or cross-capability regression
 
@@ -1265,7 +1300,7 @@ produces a loss or double-plan that these rules do not classify.
 
 ### DD-76 · Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute (v0.18.1)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2)
+Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2), DD-92 (v0.20.0)
 
 Observed problem: one capability's domain source in a real brownfield (jgnote property) ran
 to 3,699 lines — pressed as summary into a 185-line capability document, knowledge is lost;

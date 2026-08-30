@@ -1,0 +1,24 @@
+[
+  {
+    "id": "golden-architecture-decision",
+    "format": "architectureDecision",
+    "values": {
+      "area": "stack",
+      "status": "confirmed",
+      "decision": "Use PostgreSQL because transactional consistency is binding."
+    },
+    "context": { "timestamp": "2026-08-30T00:00:00.000Z" },
+    "expect": "2026-08-30T00:00:00.000Z architecture decision: area: stack; status: confirmed; decision: Use PostgreSQL because transactional consistency is binding."
+  },
+  {
+    "id": "golden-verify-channel-evidence",
+    "format": "verifyChannelEvidence",
+    "values": {
+      "exit": 0,
+      "verdict": "pass",
+      "evidence": "Read and interaction probes completed through the selected channel."
+    },
+    "context": { "timestamp": "2026-08-30T00:00:00.000Z" },
+    "expect": "2026-08-30T00:00:00.000Z verify channel evidence: exit: 0; verdict: pass; evidence: Read and interaction probes completed through the selected channel."
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "name": "arch",
+  "description": "Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, then writes capability design zones. Use for stack selection, architecture design, or creating and repairing capability documents in a new project.",
+  "problem": "Preserve the behavior of the immutable repository source at skills/arch without silently changing its obligations.",
+  "use_cases": [],
+  "near_misses": [],
+  "inputs": [],
+  "outputs": [],
+  "irreversible_boundaries": [],
+  "state_dependent_behaviors": [
+    "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review."
+  ],
+  "exact_formats": [],
+  "external_dependencies": [],
+  "completion_evidence": [],
+  "judgment_points": [
+    "Every source atom remains review-required until explicitly disposed."
+  ],
+  "deterministic_helpers": []
+}

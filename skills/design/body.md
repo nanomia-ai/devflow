@@ -1,0 +1,69 @@
+# Design
+
+## why: purpose
+
+Design optionally settles the current UI direction without turning a stage into a once-only phase. It keeps the six planning decisions coherent: approach, canonical source, token strategy, component strategy, decomposition axis, and review surface.
+
+Its migration provenance is the immutable repository sources `skills/design/SKILL.md` and `skills/design/SKILL_ko.md`, identified by their recorded source hashes.
+
+## why: ownership
+
+The design writer owns one current design document. It never writes recursive capability knowledge; when an approved design exposes durable subtopic knowledge, the later capability writer receives one landing request and decides the appropriate design zone.
+
+## why: legacy
+
+Keep reasons and discarded alternatives beside their owning decision, and keep reproducible observations with their measurement conditions. Flexible design judgment belongs here and in the declared references, while routing and state effects remain in the specification.
+
+## guard: raw-state-unavailable
+
+Do not replace a current design when canonical file state, maintenance state, or durable research card state cannot be observed.
+
+## guard: product-required
+
+Product identity and scope are required before a design direction can be interpreted.
+
+## guard: arch-required
+
+Architecture provides the UI boundary that makes the optional design decision meaningful.
+
+## guard: existing-design-research
+
+An observed pending or effective `00-project` research card is internally matched to its exact durable origin and path, then returns to split without another record or a route to work.
+
+## guard: existing-maintenance-origin
+
+Current maintenance state means the request already has a durable identity. Return to split so it consumes that identity once instead of recording a duplicate.
+
+## guard: source-choice-required
+
+A design source is a scope-specific authority, not a repository-wide default. A stale source or unresolved conflict needs a choice before a proposal can be trusted.
+
+## stage: input
+
+Judgment: entry.action is one of skip.
+
+Why: A project with no UI does not acquire a design-state artifact merely by passing this entry point.
+
+## stage: record-first
+
+Judgment: request.kind describes only the requested design delta. When maintenance state is current, route through split without recording another. With no current state, record it through split before ordinary design planning. The record is the durable identity of the request; design neither manufactures nor consumes it.
+
+Why: an interrupted design change must resume the same request and let split consume it with the matching build cards.
+
+## stage: research
+
+Judgment: research.state is one of none, needed, blocked, settled. The collector exposes only pending/effective state after internally verifying the exact durable origin and `00-project` card path; an existing card returns to split without a new record. Durable research records an exact origin only when no card exists, then split materializes the card rather than routing directly to work.
+
+Why: Research that must survive interruption is split-owned work. An interrupted design entry returns to that work rather than inventing a design fact.
+
+## stage: proposal
+
+Judgment: proposal.completeness is one of needs-choice, ready.
+
+Why: The six decisions may stay compact for a small project, but every decision relevant to the requested scope must be unique before approval.
+
+## stage: confirmation
+
+Judgment: approval.action is one of ask, commit, reject.
+
+Why: A report is provisional. Rejection preserves the current owner; explicit approval makes the new design current and routes the next build planning exactly once.

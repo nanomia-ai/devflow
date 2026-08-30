@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-// devflow SessionStart hook: activates resume without interpreting checkout state.
+// devflow SessionStart observes only the checkout boundary. Request classification belongs
+// to principles after the user has supplied intent; resume owns no hook-time work.
 "use strict";
 
 const fs = require("node:fs");
-const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
 // The session may start in any subfolder of the checkout, so the folder the hook happens
@@ -27,23 +27,16 @@ function sessionDirectory() {
 
 function checkoutRoot(directory) {
   const run = spawnSync("git", ["rev-parse", "--show-toplevel"], { cwd: directory, encoding: "utf8" });
-  if (run.status !== 0 || !run.stdout) return directory;
-  return run.stdout.trim() || directory;
+  if (run.status !== 0 || !run.stdout) return null;
+  return run.stdout.trim() || null;
 }
 
 const root = checkoutRoot(sessionDirectory());
-const projectDir = path.join(root, "devflow", "project");
-const treeDir = path.join(root, "devflow", "tree");
-const coordinatorContract = path.join(__dirname, "..", "skills", "principles", "coordinator.md");
-const projectStateExists = ["product.md", "arch.md", "code-style.md", "design.md", "glossary.md"]
-  .some((name) => fs.existsSync(path.join(projectDir, name)));
-
-if (!fs.existsSync(treeDir) && !projectStateExists) process.exit(0);
+if (!root) process.exit(0);
 
 const additionalContext = [
-  "[devflow] Durable project state exists in this checkout.",
-  "Run the devflow resume skill before any other devflow stage — unless you were handed a devflow role contract, in which case follow only that contract.",
-  `If you dispatch another agent to perform a devflow stage in this checkout, read the coordinator role contract at ${coordinatorContract} before the first dispatch.`,
+  "[devflow] After the user states their intent, run devflow:principles to classify the request and follow its route.",
+  "If you were handed a devflow role contract, follow that contract directly; do not re-enter through principles.",
 ].join("\n");
 
 process.stdout.write(JSON.stringify({

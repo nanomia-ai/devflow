@@ -48,7 +48,7 @@ points to from their actual sources.
 
 | Component | Why it exists and what it owns | Input → next consumer | Design lineage |
 |---|---|---|---|
-| `principles` | canon of common rules, state transitions, and commit discipline that outranks every stage | every entry skill and role contract reads it | DD-03 · DD-29 · DD-57 |
+| `principles` | owns common rules and commit discipline; it does not judge state and routes only to resume | every entry skill and role contract → resume | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 |
 | `product` | confirms the problem, identity, capabilities, boundary, and success criteria with the owner | request → arch and design, or the adopt boundary | origin · DD-33 · DD-67 |
 | `arch` | confirms components, stack, code structure, data, verify channel, and capability design zones | product → split, work, and verify | DD-42 · DD-43 · DD-69 |
 | `design` | optionally confirms UI approach, source, token/component strategies, decomposition axis, and review surface | product and arch → arch capability design and split | DD-69 |
@@ -56,15 +56,18 @@ points to from their actual sources.
 | `split` | owns implementation boundaries by opening one task-tree layer and approving an execution proposal | Layer 0, records, and current code → work | DD-25 · DD-50 · DD-67 |
 | `work` | carries one card's code, progress log, completion signal, and upper-document feedback to completion | approved card, canon, and baseline → verify or the next card | DD-09 · DD-48 · DD-56 |
 | `verify` | executes capability and product verdicts and owns survival paths for failure, audit, and retrospective events | closed code, signals, and baseline → repair through split or closure | DD-21–DD-24 · DD-30 · DD-36 · DD-68 |
-| `resume` | checks disk integrity, recovers interrupted transitions, and routes the next stage | Git, tree, journal, and verify projection → the applicable entry skill | DD-11 · DD-25 · DD-26 · DD-44 |
-| predicate companions | fix the shared baseline judgment in one place; state and verification judgments moved to the state tool | only named consumers read them; each stage owns its procedure | DD-28 · DD-42 · DD-56 · DD-80 |
+| `resume` | solely reads structured disk state, recovers interrupted transitions, and routes the next stage | Git, work and knowledge trees, journal, and verify projection → the applicable entry skill | DD-11 · DD-25 · DD-26 · DD-44 · DD-92 |
+| predicate companions | fix the shared baseline judgment in one place; state and verification judgments moved to the state tool | only named consumers read them; each stage owns its procedure | DD-28 · DD-42 · DD-56 · DD-80 · DD-92 |
 | state tool | owns the entry, predicate, and integrity computation, read-only and repairing nothing | disk and Git → fourteen zones and a derived `next:` line; one call, six consumers | DD-11 · DD-25 · DD-39 · DD-80 |
 | role contracts | brief reviewer, verifier, auditor, and retrospector verbatim into clean contexts | an entry-skill event → an independently constrained judgment | DD-19 · DD-21–DD-23 |
 | `coordinator` role contract | dispatches and supervises workers above devflow without creating a stage or state | orchestrator → existing entry skills | DD-70 |
 
-The grouped rows name `state-predicates.md`, `verification-predicates.md`,
-`baseline-predicates.md`, `planning-evidence.md`, `reviewer.md`, `verifier.md`, `auditor.md`,
-`retrospector.md`, and `coordinator.md`. Their actual consumers and role boundaries are
+The grouped rows name `references/state/task-card-predicates.md`,
+`references/verification/revision-predicates.md`, `references/verification/event-predicates.md`,
+`references/knowledge/baseline-contract.md`, `references/planning/evidence-discipline.md`,
+`work/references/reviewer-role.md`, `verify/references/verifier-role.md`,
+`verify/references/auditor-role.md`, `verify/references/retrospector-role.md`, and
+`references/coordination/coordinator-contract.md`. Their actual consumers and role boundaries are
 judged from source and repository checks.
 
 ## Document map — what lives where, and when it is read
@@ -82,9 +85,11 @@ judged from source and repository checks.
 | `docs/blueprints/` | snapshot — versioned blueprints kept per release (the target-project file system, among others). An existing snapshot is never edited | when a baseline is needed to compare a structure against, or roll it back to |
 | `CHANGELOG.md` | history — what shipped in which version, 0.10.0 onward. Deploy changes only | when tracing when a shipped behavior changed |
 | `docs/changelog-archive.md` | history — shipped changes before 0.10.0 | when tracing something older than 0.10.0 |
-| `skills/principles/SKILL.md` | canonical rules — what the runtime executes | every session devflow runs in |
-| `skills/principles/planning-evidence.md` | canonical companion — planning evidence discipline | on entry for product, arch, and adopt; boundedly when split judges the maintenance planning depth grade |
-| `skills/principles/coordinator.md` | role contract — duties of the `coordinator` that dispatches other executors above devflow | before the first dispatch |
+| `skills/<name>/spec.mjs` · `body.md` | P2 executable authored canon — English structured behavior and prose body | when authoring, generating, or evaluating a P2 skill |
+| `skills/<name>/SKILL.md` · `.generated.json` | generated deploy artifact and receipt — the runtime entry built from authored canon and its generation identity | at devflow runtime and during build or release verification |
+| `skills/<name>/references/**` | exact-consumer companions and migration provenance — runtime references open by named path; `legacy-atoms/` preserves migration lineage and is not authored canon | when `spec.mjs` or `body.md` names the exact consumer; legacy atoms when migration provenance is inspected |
+| `skills/principles/references/planning/evidence-discipline.md` | runtime companion — planning evidence discipline | on entry for product, arch, and adopt; boundedly when split judges the maintenance planning depth grade |
+| `skills/principles/references/coordination/coordinator-contract.md` | role contract — duties of the `coordinator` that dispatches other executors above devflow | before the first dispatch |
 
 The two standing instruments are opened by the session changing this repository **itself**,
 not briefed in by the owner. What makes a session open them is fixed by the wiring table in

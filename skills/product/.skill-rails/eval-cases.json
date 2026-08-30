@@ -1,0 +1,8 @@
+[
+  {
+    "id": "capability-row-meaning",
+    "kind": "template-contract",
+    "input": "A generated capability row",
+    "expect": "C<number> <name> — User outcome: <outcome> — Needed for success: <reason>; stable numbering follows append-only position, and acceptance signals remain in Success criteria."
+  }
+]

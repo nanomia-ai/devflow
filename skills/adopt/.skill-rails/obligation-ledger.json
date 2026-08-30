@@ -1,0 +1,2279 @@
+{
+  "schema": "skill-rails/obligation-ledger/2",
+  "intent_hash": "sha256:4b4c83f59c23310bb488db5fd6d15c075d57c8e189f4171ef60a98171665b53d",
+  "profile": "p2",
+  "atoms": [
+    {
+      "id": "description-001",
+      "source": "intent.description",
+      "text": "Existing-project adoption. In a repository that already has code, traces one representative flow per capability candidate and reverse-derives Layer 0 and capability design zones. Use for adopting an existing project, reverse-deriving codebase documents, or creating and repairing capability documents in a brownfield.",
+      "candidate_class": "trigger",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:SKILL.md",
+        "file:agents/openai.yaml",
+        "spec:STAGES/entry"
+      ],
+      "evidence": [
+        "file:agents/openai.yaml",
+        "fixture:trace-needed",
+        "fixture:entry-initial"
+      ]
+    },
+    {
+      "id": "problem-001",
+      "source": "intent.problem",
+      "text": "Preserve the behavior of the immutable repository source at skills/adopt without silently changing its obligations.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:why: purpose",
+        "file:references/purpose.md",
+        "spec:STAGES/entry"
+      ],
+      "evidence": [
+        "body:why: purpose",
+        "fixture:trace-needed",
+        "fixture:entry-initial"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-001",
+      "source": "intent.state_dependent_behaviors[0]",
+      "text": "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/intent-01.md",
+        "spec:STAGES/entry"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/intent-01.md",
+        "fixture:trace-needed",
+        "fixture:entry-initial"
+      ]
+    },
+    {
+      "id": "judgment-points-001",
+      "source": "intent.judgment_points[0]",
+      "text": "Every source atom remains review-required until explicitly disposed.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/intent-01.md",
+        "spec:STAGES/entry"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/intent-01.md",
+        "fixture:proposal-draft",
+        "fixture:entry-initial"
+      ]
+    },
+    {
+      "id": "migration-a0001",
+      "source": "migration:SKILL.md:1-4",
+      "text": "---\r\nname: adopt\r\ndescription: Existing-project adoption. In a repository that already has code, traces one representative flow per capability candidate and reverse-derives Layer 0 and capability design zones. Use for adopting an existing project, reverse-deriving codebase documents, or creating and repairing capability documents in a brownfield.\r\n---",
+      "candidate_class": "declaration",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-01.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-01.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:403c767c3ecc21f2ef0078dbca5116f9e88712797653cea87a8910822fe6c5c1",
+      "source_kind": "frontmatter",
+      "context": [],
+      "confidence": 0.82
+    },
+    {
+      "id": "migration-a0002",
+      "source": "migration:SKILL.md:6-6",
+      "text": "# adopt — Existing-Project Adoption",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-01.md",
+        "spec:STAGES/capability-design"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-01.md",
+        "fixture:capability-split"
+      ],
+      "source_hash": "sha256:e4041e9b5b39184fe9cb7c587d9b26507579625738918ac27921187e25db40a8",
+      "source_kind": "heading",
+      "context": [],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0003",
+      "source": "migration:SKILL.md:8-11",
+      "text": "glossary.md is an always-read Layer 0 baseline. Align reverse-derived capability composition\r\nwith exact canonical terms in capability-header `Concepts:`. On `marker.glossary-term`,\r\nconsume only the tool payload, first land the glossary definition in a binding commit while\r\nretaining the marker, then in the next `adopt — capabilities` batch align the glossary definition and every known affected `Concepts:` line, refresh every Design head, and delete the marker. Never infer semantic ownership from a card number for a shared term or project-root `[]`.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-01.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-01.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:718423bfb1578839c2be125810bffb41b027110ee6448aa9a216d4dd1501e7b5",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.74
+    },
+    {
+      "id": "migration-a0004",
+      "source": "migration:SKILL.md:13-19",
+      "text": "First read the canonical rules (`../principles/SKILL.md`) and the planning evidence discipline\r\n(`../principles/planning-evidence.md`). Read the canonical capability knowledge baseline\r\npredicates (`../principles/baseline-predicates.md`) under the capsule gate in the next paragraph.\r\nIf present, read all of\r\n`devflow/project/product.md`, `devflow/project/arch.md`, `devflow/project/code-style.md`,\r\n`devflow/project/design.md`, `devflow/project/glossary.md`, `devflow/journal.md`, and each\r\nlegacy `ADR-NNN.md` directly under `devflow/project/decisions/`.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-01.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-01.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:53c7ba10fb2281fc49656f47c0477a348a49316e551c193f448bc89d8016de5e",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0005",
+      "source": "migration:SKILL.md:21-27",
+      "text": "Read the baseline predicates with the range from `## Domain knowledge capsules` up to but\r\nnot including `## Metadata and freshness` left out. When this run actually processes a source\r\ndocument the user named into capsules, or the capability document it derives is about to\r\nexceed that canon's total cap, open and write from that range in full first. Whether capsules\r\nexist on disk right now is not part of this judgment — the first capsule is always born in a\r\nproject that has none. When either side is unclear, or the two headings cannot be found, read\r\nall of it.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-01.md",
+        "spec:STAGES/capability-design"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-01.md",
+        "fixture:capability-split"
+      ],
+      "source_hash": "sha256:ae1cc020df413c369a98fe25de9da5a134f3a827e89ccff42c3eba97287e98d0",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55
+    },
+    {
+      "id": "migration-a0006",
+      "source": "migration:SKILL.md:29-32",
+      "text": "Run `node ../principles/scripts/project-state.mjs state --capability <capability number>`\r\nfor each capability document in scope. Its `baseline:` lines carry the expected set, path\r\nstate, boundary, shape, freshness, and `legacy v0.10` judgments; take them as they stand.\r\nRead the baseline predicates for what earns a place in a body.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-01.md",
+        "spec:STAGES/capability-design"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-01.md",
+        "fixture:capability-split"
+      ],
+      "source_hash": "sha256:373b18551702339e19c12d2d50e75fff0ed112ce494a78eda74652203f17c2cd",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0007",
+      "source": "migration:SKILL.md:34-37",
+      "text": "Purpose: give a **brownfield** (a project that already has code, joined mid-way) its\r\nLayer 0 documents (product.md · arch.md · code-style.md · glossary.md) by\r\nreverse-derivation, inherited from then on. Do not interview. Reverse-derive.\r\nThis procedure IS the \"understanding stage\" — split does not run without it.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-01.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-01.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:9b9b509842f97823ef9e047f9af64ca3fe21ccba29d05da80e9c3cc2d4a37d99",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0008",
+      "source": "migration:SKILL.md:39-43",
+      "text": "The output-format reference is bounded. From `../product/SKILL.md`, read from\r\n`Output — devflow/project/product.md` up to but not including `Gates`. From\r\n`../arch/SKILL.md`, read `Verify-channel decision` and from `Output — devflow/project/arch.md` up to but not\r\nincluding `Capability documents — final output after Layer 0`. Do not read or execute interview or procedure text outside those\r\nranges.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-01.md",
+        "spec:STAGES/capability-design"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-01.md",
+        "fixture:capability-split"
+      ],
+      "source_hash": "sha256:eb7a8b402d9582c41c83adac76f28b8d61ce7f17dd2e042105fb12c39e1a7360",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0009",
+      "source": "migration:SKILL.md:45-45",
+      "text": "When it applies:",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/capability-design"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:capability-split"
+      ],
+      "source_hash": "sha256:511bd46dc76e87f79871bae7896bdfcd8d59e6b0b49be7f6b9dcf79015073a8d",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55
+    },
+    {
+      "id": "migration-a0010",
+      "source": "migration:SKILL.md:47-47",
+      "text": "- No code — then this is not the skill; that is product.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:9e31307961888592280daf3731077493512ba2d8d8005d2305ccbf126ed9387a",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0011",
+      "source": "migration:SKILL.md:48-54",
+      "text": "- `devflow/project/` has product.md, code-style.md, glossary.md, and arch.md with its\r\n  `Brownfield` field, and every\r\n  expected file under the canonical baseline predicates has a valid design zone and current\r\n  `Design head` — nothing to do; continuing is resume's job. When Layer 0 is complete and\r\n  only capability documents are missing or need repair, skip steps\r\n  1–5 and run only `Capability documents` below. If the confirmed identity paragraph,\r\n  capabilities, Boundary, or success criteria must change, re-run product.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:b38539eb70678b358cb74d0e7ee8f4da41c5d976962dabc09369fb0f019aad16",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55
+    },
+    {
+      "id": "migration-a0012",
+      "source": "migration:SKILL.md:55-58",
+      "text": "- Only some documents exist — respect what exists as upper documents and reverse-derive\r\n  only what is missing. If code contradicts an existing devflow document, do not overwrite\r\n  it; report and confirm the change through the canonical Document Hierarchy procedure.\r\n",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:c74a5f7c91ab68e46b9c418285aecb66b105a4095d60cf6d2acd2678d65240a2",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55
+    },
+    {
+      "id": "migration-a0013",
+      "source": "migration:SKILL.md:59-63",
+      "text": "When only glossary.md is missing, do not repeat steps 1–5 below. Copy verbatim the domain\r\nterms used in product.md's Capabilities and Screens & access points, arch.md's Components\r\nand Data, and code-style.md's Project choices. Ask one confirmation batch only for terms\r\nwhose meaning those three documents do not fix, create only glossary.md, and modify no\r\nother document.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:5cf4f7c74dc75b751effba10419368c87abc06120c0e597a0503b2cfb3652ef5",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55
+    },
+    {
+      "id": "migration-a0014",
+      "source": "migration:SKILL.md:65-65",
+      "text": "## Evidence Authority and Confirmation Batch",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:6db4db02980632fac372d2430c1a15d365e116f3690351dbbb6d3d422a9a51cd",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0015",
+      "source": "migration:SKILL.md:67-67",
+      "text": "The three authorities do not substitute for one another.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:aeb43fef01a070ea6d50276a3550cc27d4592231a10b90ed22ecf6dcc072376f",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0016",
+      "source": "migration:SKILL.md:69-71",
+      "text": "- Current implementation is answered by code and current execution results. Code is truer\r\n  than documents outside devflow; treat existing README, docs, and planning documents as\r\n  claims and adopt them only after checking them against code.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/capability-design"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:capability-split"
+      ],
+      "source_hash": "sha256:c4a5bf001e122e9ab253f299760a4d09149f74a06dc156c9bfa69f40cbf95ab5",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0017",
+      "source": "migration:SKILL.md:72-74",
+      "text": "- External contracts and possibilities are answered by official documentation,\r\n  specifications, source, and primary APIs for the version the repository pins. First find\r\n  the version in a manifest, lockfile, or config, then fix that version and lookup time.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:448a0942ae0cfd8e21adb9b8a42cc56b6d1aea8c1675c9d17f3a7d5ea7528646",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0018",
+      "source": "migration:SKILL.md:75-78",
+      "text": "- Future direction, the trade-off between preservation and improvement, and user experience\r\n  are decided by the owner. Do not promote current behavior or current external\r\n  documentation into that decision.\r\n",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/entry"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:entry-initial"
+      ],
+      "source_hash": "sha256:a113670bac0c96a1daf112d78adca24bc5f1f2e4a86d1f2d002a1eeba04c166c",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.58
+    },
+    {
+      "id": "migration-a0019",
+      "source": "migration:SKILL.md:79-83",
+      "text": "Mark an external fact whose version cannot be confirmed as `version unconfirmed`. Do not\r\nuse current documentation to prove the currently pinned version's contract or close a\r\nversion-unconfirmed fact as a safe default. For a blocking fact, stop at the planning\r\nevidence discipline's `unavailable` boundary; for a follow-up fact, leave only the owning\r\nstage and the impact that would change.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-02.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-02.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:863ff2c9e992886e4ab50896de2b94b696b57c360dd30f7db9fbf98856f058ac",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0020",
+      "source": "migration:SKILL.md:85-86",
+      "text": "While comparing candidates, maintain the following internal evidence table only in the\r\nconversation. Do not store it in a file, journal, or capability document.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-03.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-03.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:9cdab205bf295ca3212c5f9342f18f977c1b64238b1d94db5c60dbf24f687b15",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0021",
+      "source": "migration:SKILL.md:88-88",
+      "text": "| Candidate | Observation | Source/version | Interpretation | Remaining owner decision |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-03.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-03.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:0b490ae447cc99c0271f1ae5b7f7cf2bf4a2ef3895759f6c267dad3a41380569",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.62
+    },
+    {
+      "id": "migration-a0022",
+      "source": "migration:SKILL.md:91-94",
+      "text": "The main session confirms one exact coordinate or one capped query. For answer-only comparison across\r\nmultiple paths or external sources, use the planning evidence discipline's isolated-research branch, but\r\nthe main session directly follows and understands representative-flow code, document structure, and domain\r\ncontext. A researcher returns only bounded sub-facts such as locations, usages, and pinned versions.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-03.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-03.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:bdb0a6ea01f36b85697bbed05a29b0d7f5148733c02463d6d8da0718fa7fcd61",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.67
+    },
+    {
+      "id": "migration-a0023",
+      "source": "migration:SKILL.md:96-99",
+      "text": "In a confirmation batch, separate `Observation` (code and the pinned-version contract),\r\n`Interpretation` (what those facts mean for the current boundary), and `Decision preview`\r\n(the future direction for the owner to confirm). Do not turn a current fact into future intent\r\nor present an interpretation as an observation.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-03.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-03.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:3ee645149535f90292ef8a23e4e420c3dd61afea88d0f8cc12797c94d3dcab1a",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0024",
+      "source": "migration:SKILL.md:101-103",
+      "text": "Only when preserving current behavior and following the target direction produce actually different\r\noutcomes, compare one alternative through the planning evidence discipline's pre-commitment review\r\nbefore confirmation. With no substantive candidate, create no additional output, question, or research.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-03.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-03.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:f6796d5662394b65ee8f9a207335db184ed2ed9bd71113ed69d308e7c238df04",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0025",
+      "source": "migration:SKILL.md:105-114",
+      "text": "Commit history is supporting evidence. Only when current\r\ncode and a document conflict, read the newest commit that touched the exact conflicting\r\npath and the immediately preceding such commit. Do not scan repository-wide history.\r\nThe initial existing-document read set is the repository-root README files, files whose\r\nexact paths the user or repository instructions name, and the file-path listing under\r\nroot directories whose lowercased names are `docs` or `specs`, or documentation roots named by repository\r\ninstructions. Except for a root README or an exactly named file, do not open the body of\r\na document unless this test passes: lowercase both the document filename stem and a\r\ncode-derived candidate name, remove every non-letter and non-digit, and require either\r\nnormalized string to contain the other. A test with either normalized string empty fails.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-03.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-03.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:b1b7b2c446136507a064a1baced13c04dd85441450a91dd7e1b88efd20662504",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.67
+    },
+    {
+      "id": "migration-a0026",
+      "source": "migration:SKILL.md:116-116",
+      "text": "## Procedure — in exactly this order",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-03.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-03.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:465e0a1e140308a556aed6f6f497e10f9bc3c088cede14835550c1af0cab6819",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Evidence Authority and Confirmation Batch",
+          "source_span": "65-65"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0027",
+      "source": "migration:SKILL.md:118-126",
+      "text": "1. **Enumerate capability candidates and trace their flows.** First list code-derived\r\n   candidates from external entry points and top-level code modules, then open documents\r\n   that pass the filename test above. Add a candidate from an opened feature list or path\r\n   name when it connects to a code flow; otherwise put it in the confirmation-question\r\n   batch. Existing documents remain claims at this point. For each\r\n   candidate, follow one representative execution from an external entry point to the end.\r\n   Merge two candidates only when they have the same externally observable responsibility\r\n   and the same code flow; put any candidate whose boundary remains unconfirmed into the\r\n   confirmation-question batch.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-03.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-03.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:ededfa736c6ea13b5cc3f2ca15703116f56041846daddf0b8e005a3093fb69e0",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "116-116"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0028",
+      "source": "migration:SKILL.md:127-139",
+      "text": "2. From code, existing documents, and commit history, reverse-derive `product.md` **in\r\n   the product skill's output format**. What code can answer (the identity paragraph,\r\n   the capability list through number, name, and user outcome, Boundary's MVP scope — what\r\n   is already built is the answer, screens & access points, interface) is filled by\r\n   derivation; what code cannot answer (Boundary's \"will-not-build\" · success criteria\r\n   and why each capability's user outcome is needed for them · whatever the derived\r\n   identity paragraph missed of Problem and Approach) is asked of the owner. No full\r\n   interview — the single batch of confirmation questions serves both\r\n   correcting anything mis-derived and filling those fields. Success criteria are the\r\n   exception: the owner must answer, and each must be verifiable as written. Ask again when\r\n   one is not; step 3 does not begin until this condition passes. Only the other unanswered items are left in\r\n   'Open questions,' never invented.\r\n   Start `glossary.md` from the terms the code actually uses — the code's words are canonical.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-04.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-04.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:1be96941c59f9b27cf00215819af751cd971d6c26dc297f240fb2b38bf568a3f",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "116-116"
+        }
+      ],
+      "confidence": 0.74
+    },
+    {
+      "id": "migration-a0029",
+      "source": "migration:SKILL.md:140-151",
+      "text": "3. Reverse-derive `arch.md` **in the arch skill's output format**, write\r\n   `Brownfield: yes`, present it as a draft, and get user confirmation. If an existing\r\n   arch.md lacks only this field, add the field without re-deriving its other content.\r\n   Inherited forever after. The verify channel\r\n   applies arch's \"Verify-channel decision\" section as-is, gate included — this skill\r\n   does not finish until it is decided. The git check (propose `git init` if not a\r\n   repository) belongs to that same section.\r\n   When at least one statement in an existing handoff or specification file matches code\r\n   traced in step 1, write `capability name: exact path` under arch.md's `Existing records`\r\n   when exactly one candidate flow uses the step, contract, or state described by that\r\n   statement. When two or more candidate flows use it, write `shared` instead of a name. Put one path on each line; the\r\n   same name may repeat. Record paths only; do not copy the contents.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-04.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-04.md",
+        "fixture:trace-needed",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:afc8112d494a2be5a8525d3cf32da1a4c64ccd836fe5fa84b78a58ed833b8762",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "116-116"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0030",
+      "source": "migration:SKILL.md:152-154",
+      "text": "4. **Reverse-derive code-style.md as well, in the arch skill's \"Output 2\" format.**\r\n   What the code already does is canonical — do not impose the format's default\r\n   Values and split the style in two.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-04.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-04.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:f8bd43dbf343e171a2cbde096665a7458f35e795460f6f81992f93daae0590ca",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "116-116"
+        }
+      ],
+      "confidence": 0.67
+    },
+    {
+      "id": "migration-a0031",
+      "source": "migration:SKILL.md:155-159",
+      "text": "5. **Never backfill the tree with already-finished code.** `devflow/tree/` starts from\r\n   work done after adoption — filling it with `.done.` cards for existing features is\r\n   waste. Opening the tree is split's job — capability folder names must be the same\r\n   words as the reverse-derived capability list, so new work accumulates in the right place.\r\n",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-04.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-04.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:29e5023ad03faecc931da6460c042cd41169800e447b27662dda4a357e9c4009",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "116-116"
+        }
+      ],
+      "confidence": 0.74
+    },
+    {
+      "id": "migration-a0032",
+      "source": "migration:SKILL.md:160-164",
+      "text": "In a new adoption, when the user has already requested a post-adoption change, first append\r\nsplit's exact `maintenance routing pending` line to journal and land it with the confirmed\r\nadoption documents in the canonical Layer 0 commit. With no request, put only the adoption\r\ndocuments in that commit. An existing project's capability-document-only branch makes no\r\nnew Layer 0 commit here.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-04.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-04.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:6da4b584d114a34a98a4d071a9316fc9537c58a5f4ebdbe00ef5bb15b7eb23d2",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "116-116"
+        }
+      ],
+      "confidence": 0.67
+    },
+    {
+      "id": "migration-a0033",
+      "source": "migration:SKILL.md:166-166",
+      "text": "## Capability documents — final output after the adoption commit",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-05.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-05.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:738338908de3004734bb754d643697448fadc050348292dc2ce6f64f051502f2",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Procedure — in exactly this order",
+          "source_span": "116-116"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0034",
+      "source": "migration:SKILL.md:168-171",
+      "text": "After confirmed product.md, arch.md, and glossary.md have landed in HEAD, run the canonical\r\nbaseline predicates' brownfield design-writer procedure. Representative flows traced during\r\na new adoption are already evidence for reverse-deriving product.md and arch.md; do not copy\r\ncode details or flows into the capability documents again.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-05.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-05.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:7ad4bdc4d14d96f4d1a69efb42ee06db5c24ebb884ec744445bdc94e7ae4c9a3",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after the adoption commit",
+          "source_span": "166-166"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0035",
+      "source": "migration:SKILL.md:173-175",
+      "text": "- Derive purpose, boundary, Intent overview, Concept model, invariants, non-goals, and\r\n  binding ADRs for `01-foundation.md` and every non-retired capability from Layer 0,\r\n  organized per capability.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-05.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-05.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:21f67b6ecb058277c763f6df3dfaa734870a7394c51e32dd67fabd11e7d324e1",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after the adoption commit",
+          "source_span": "166-166"
+        }
+      ],
+      "confidence": 0.58
+    },
+    {
+      "id": "migration-a0036",
+      "source": "migration:SKILL.md:176-190",
+      "text": "- **Capsule processing.** When existing domain documents the user named overflow the\r\n  capability-document budget, process them into the canonical baseline predicates' knowledge\r\n  capsules. The order is five steps: ① inventory the source (headings and line ranges) at the\r\n  revision the user specified ② cut it into topics and check them against code ③ intent that\r\n  runs through the capability goes to the capability document's Intent overview and topic\r\n  knowledge into capsules — provenance marks, dispute preservation, and `Source basis` follow\r\n  the canonical contract exactly, and differing statements inside the source are kept as a\r\n  dispute rather than resolved to one side ④ a clean session's refutation round — omissions\r\n  and inventions of key intent, boundaries, and traps must be zero, it includes a provenance\r\n  sampling check that finds three unmarked sentences per capsule at their source coordinates,\r\n  and a capsule that fails does not land ⑤ land with the same confirmation and the same commit\r\n  as the canonical baseline predicates' design batch. Report the dispute list in the confirmation batch as items for\r\n  the owner to decide. Deleting or moving the source is not part of this procedure — report\r\n  only the material for that judgment.\r\n",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-05.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-05.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:55a6d28649d37b196ceaf87de96de303441fbfc454980d0372d361838f718361",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after the adoption commit",
+          "source_span": "166-166"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0037",
+      "source": "migration:SKILL.md:191-204",
+      "text": "**Design-only entry.** When the entry handed over a `marker.design-note` or a\r\n`marker.design-open-item`, do not run the\r\nreverse derivation again. Rederive only the design zone of the one capability that line names,\r\nfrom the confirmed current Layer 0 and that exact statement. Put the statement in Intent or\r\nInvariants when it fits the capability-document budget, and move design-topic detail over that\r\nbudget down through the capsule procedure above. The `anchor` handed over is the exact snapshot\r\nbasis of that `card` and `code`; recompute no other basis from history or cards, and never\r\nduplicate a capability fact into arch.md to wake the writer — only a real Layer 0 fact takes\r\nthe discovery→update table's existing route. A `marker.design-open-item` carries no `anchor`\r\nand no `code`: the person-confirmed `statement` is itself the basis, its `card` is only where\r\nthe confirmation happened, and the owner is the `capability` that line names — read no code\r\nfrom that card, and never move the statement to that card's capability. Delete the journal\r\nline byte-identical to that one\r\nin the same binding capability-document commit.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-05.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-05.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:63c6afc263a26830a2664f83e68c38be8f575a4a3fcbb5b7bef3e3f13ac4787c",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after the adoption commit",
+          "source_span": "166-166"
+        }
+      ],
+      "confidence": 0.74
+    },
+    {
+      "id": "migration-a0038",
+      "source": "migration:SKILL.md:206-212",
+      "text": "On completion: if the new-adoption Layer 0 commit included `maintenance routing pending`, or\r\nthe current conversation contains an existing-project change request, say \"next is split.\"\r\nsplit first makes a capability-document-only branch's request durable through its own\r\nmaintenance procedure. If no change was requested, say \"adoption complete — waiting for a\r\nnew change request.\" Even with a frontend, the existing screens\r\nare the de-facto design canon — recommend design (optional) only when a new screen\r\nsystem is being built.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill-06.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill-06.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:f7b6983ac8898465d83d2cca38d55ebea0722b6ebbb07fee8fbfc7bdb9dec782",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — Existing-Project Adoption",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "Capability documents — final output after the adoption commit",
+          "source_span": "166-166"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0039",
+      "source": "migration:SKILL_ko.md:1-4",
+      "text": "---\r\nname: adopt\r\ndescription: 기존 프로젝트 도입. 이미 코드가 있는 저장소에서 능력 후보별 대표 흐름을 추적해 Layer 0와 능력 설계 구역을 역산한다. 기존 프로젝트 도입, 코드베이스 문서 역산, 브라운필드 능력 문서 생성·복구 시 사용.\r\n---",
+      "candidate_class": "declaration",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "spec:STAGES/entry"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "fixture:entry-initial"
+      ],
+      "source_hash": "sha256:a50b4e4b3620f31084fa04612f7c2a7b4c9500ad81aabdbfaed87d01c35346c5",
+      "source_kind": "frontmatter",
+      "context": [],
+      "confidence": 0.82
+    },
+    {
+      "id": "migration-a0040",
+      "source": "migration:SKILL_ko.md:6-6",
+      "text": "# adopt — 기존 프로젝트 도입",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:0214e6a6b1c4fc13b769cac7dded0f763eaba3d4fb69251b3611e53df07e30ea",
+      "source_kind": "heading",
+      "context": [],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0041",
+      "source": "migration:SKILL_ko.md:8-12",
+      "text": "glossary.md는 항상 읽는 Layer 0 기준선이며, 역산한 능력 구성과 능력 문서 머리의 `Concepts:`를\r\n정확한 정본 용어로 맞춘다. `marker.glossary-term`이면 도구 payload만 소비해 먼저 glossary\r\n정의를 구속 커밋하고 마커를 남긴다. 다음 `adopt — capabilities` 배치에서 glossary definition\r\nand every known affected `Concepts:` line을 함께 맞추고 모든 Design head를 갱신한 뒤 마커를\r\n지운다. 공유 용어나 프로젝트 루트 `[]`에서 카드 번호를 의미 소유자로 추론하지 않는다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:47d9cc6c6ae9dff149f3114e1282fb6158bf94b46ac35ae98b1221240333210d",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0042",
+      "source": "migration:SKILL_ko.md:14-20",
+      "text": "먼저 규칙 정본(`../principles/SKILL.md`)·기획 증거 규율\r\n(`../principles/planning-evidence.md`)을 읽는다. 능력 지식 기준선 판정 정본\r\n(`../principles/baseline-predicates.md`)은 바로 다음 문단의 캡슐 관문에 따라 읽는다. 존재하면\r\n`devflow/project/product.md`·\r\n`devflow/project/arch.md`·`devflow/project/code-style.md`·`devflow/project/design.md`·\r\n`devflow/project/glossary.md`, `devflow/journal.md`, 그리고\r\n`devflow/project/decisions/` 바로 아래의 legacy `ADR-NNN.md`를 각각 통독한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:b183f84c8602e0a98316a6126502712de4cfacd88b266c9981eb4dbe0a4f4108",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0043",
+      "source": "migration:SKILL_ko.md:22-27",
+      "text": "기준선 판정 정본은\r\n`## 도메인 지식 캡슐`부터 `## 메타데이터와 신선도` 직전까지를 빼고 읽는다. 이번 실행이\r\n사용자가 지목한 원문 문서를 실제로 캡슐로 가공하거나, 도출한 능력 문서가 그 정본의 총 상한을\r\n넘길 참이면 그 구역 전문을 먼저 열고 쓴다. 캡슐이 지금 디스크에 있는지 없는지는 이 판정에\r\n쓰지 않는다 — 첫 캡슐은 언제나 캡슐이 없는 프로젝트에서 태어난다. 어느 쪽인지 불확실하거나\r\n그 두 제목을 찾지 못하면 전문을 읽는다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:d8f6e920c6f20d23654422701a6a4f522c324037e398189fa19c18b1449f4c1e",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0044",
+      "source": "migration:SKILL_ko.md:29-32",
+      "text": "대상 능력 문서마다\r\n`node ../principles/scripts/project-state.mjs state --capability <능력 번호>`를 실행한다.\r\n그 `baseline:` 줄이 기대 집합·경로 상태·경계·형태·신선도·`legacy v0.10` 판정을 내고, 그 값을\r\n그대로 쓴다. 기준선 판정 정본에서는 무엇이 본문에 들어갈 자격이 있는지를 읽는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "spec:STAGES/capability-design"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "fixture:capability-split"
+      ],
+      "source_hash": "sha256:d3a0cf32bc3d4b3eaa1b76fc6918b04d3022d5ff65869dfed9ea185e96bcdd28",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0045",
+      "source": "migration:SKILL_ko.md:34-36",
+      "text": "목적: **브라운필드(이미 코드가 있는 프로젝트에 중간 참여)**에 Layer 0 문서\r\n(product.md·arch.md·code-style.md·glossary.md)를 역산으로 만들어 상속시킨다.\r\n인터뷰하지 않는다. 역산한다. 이 절차가 곧 \"이해 단계\"다 — split은 이것 없이 돌지 않는다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:104fb8b416ecc0c90bfc6dcc2ea12bad3a729dbe71dbf9fd9ddaed3e74a84ec2",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0046",
+      "source": "migration:SKILL_ko.md:38-41",
+      "text": "산출 형식 참조는 유계다. `../product/SKILL.md`에서는 `산출 — devflow/project/product.md` 절부터\r\n`게이트` 전까지, `../arch/SKILL.md`에서는 `검증 창구 결정` 절과 `산출 — devflow/project/arch.md`부터\r\n`능력 문서 — Layer 0 뒤 마지막 출력` 전까지 읽는다. 두 스킬에서 이 범위 밖의 인터뷰·절차는\r\n읽거나 실행하지 않는다.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-01.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:66863022c041b4182f196397bb553f27b3833bac762842ea769c7c6b155efad3",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.67
+    },
+    {
+      "id": "migration-a0047",
+      "source": "migration:SKILL_ko.md:43-43",
+      "text": "적용 조건:",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:f1bb99fe35eb48f3921e0041556007a33dd3f8fdffe7110b5251fb92e8915758",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.55
+    },
+    {
+      "id": "migration-a0048",
+      "source": "migration:SKILL_ko.md:45-45",
+      "text": "- 코드가 없으면 이 스킬이 아니라 product다.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:9d29c8c6fb5f18684c26e03600e6868717b2d1695076a8bba1b6432337006ff0",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.58
+    },
+    {
+      "id": "migration-a0049",
+      "source": "migration:SKILL_ko.md:46-50",
+      "text": "- `devflow/project/`에 product.md·code-style.md·glossary.md와 `브라운필드` 필드가 있는\r\n  arch.md가 모두 있고, 기준선 판정 정본의 기대 파일마다 유효한 설계 구역과 현재\r\n  `Design head`가 있으면 일이 없다 — 이어하기는 resume이다. Layer 0는 완성됐고 능력 문서만\r\n  없거나 수리가 필요하면 1~5단계를 다시 실행하지 않고 아래 `능력 문서` 절만\r\n  실행한다. 확정된 정체성 문단·능력·경계·성공 판정을 바꿔야 하면 product를 재실행한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:a00b87acfeeee0f4a2d692b66291982b3498c7d65a6a78f56eabbc2db2f3c371",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0050",
+      "source": "migration:SKILL_ko.md:51-53",
+      "text": "- 일부 문서만 있으면 있는 것을 상위 문서로 존중하고 없는 것만 역산한다. 기존 devflow 문서와\r\n  코드가 모순되면 덮어쓰지 않고 규칙 정본의 문서 계층 절차로 보고·확인한다.\r\n",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:88bf1b2cd28ecab7c304326596df0f930ea1e325e5207ba8d710dbd41a077321",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.58
+    },
+    {
+      "id": "migration-a0051",
+      "source": "migration:SKILL_ko.md:54-57",
+      "text": "glossary.md만 없으면 아래 1~5단계를 다시 실행하지 않는다. product.md의 능력·화면·창구,\r\narch.md의 구성요소·데이터, code-style.md의 이 프로젝트의 선택에 쓰인 도메인 용어를 원문\r\n그대로 옮긴다. 기존 세 문서가 뜻을 확정하지 않은 용어만 확인 질문 한 묶음으로 물어\r\nglossary.md만 만들고 다른 문서는 바꾸지 않는다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:b690590cd518407dbb98647c9cd6a242e27c36812e9b313b97a00665680ffccd",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0052",
+      "source": "migration:SKILL_ko.md:59-59",
+      "text": "## 증거 권위와 확인 묶음",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:e124b170b3ebcd6c89b64bb4760df3dd8a37baadc38c838f5d1281e98b1e9ca6",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0053",
+      "source": "migration:SKILL_ko.md:61-61",
+      "text": "세 권위는 서로 대신하지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/entry"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:entry-initial"
+      ],
+      "source_hash": "sha256:8722ed2df50368d344c55b1ea36f9c36842b8642371c827043cfe02ee3bfe908",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0054",
+      "source": "migration:SKILL_ko.md:63-64",
+      "text": "- 현재 구현은 코드와 현재 실행 결과가 답한다. devflow 밖 문서보다 코드가 진실이며, 기존\r\n  README·docs·기획 문서는 주장으로 취급해 코드와 대조한 뒤 채택한다.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:a98ed2f489bc80b9d2e26714dcd4d45a04579a2ea3c74dad53bb86e60f6f1c29",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.58
+    },
+    {
+      "id": "migration-a0055",
+      "source": "migration:SKILL_ko.md:65-66",
+      "text": "- 외부 계약과 가능성은 저장소가 고정한 버전의 공식 문서·명세·소스·1차 API가 답한다. 먼저\r\n  manifest·lockfile·config에서 버전을 찾고 그 버전과 조회 시점을 고정한다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:f221bd5f936710c856bb571a7700e2bffb5ab0d3fe8b9dae97f9b22988846e44",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0056",
+      "source": "migration:SKILL_ko.md:67-69",
+      "text": "- 미래 방향·보존과 개선의 trade-off·사용자 경험은 소유자가 결정한다. 현재 동작이나 최신\r\n  외부 문서를 그 결정으로 승격하지 않는다.\r\n",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/proposal"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:proposal-draft"
+      ],
+      "source_hash": "sha256:b65a84bf85e240d1a7379ac4fd9f63e21c740480c0e827bfe20df6cadeacd548",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.58
+    },
+    {
+      "id": "migration-a0057",
+      "source": "migration:SKILL_ko.md:70-72",
+      "text": "버전을 확인하지 못한 외부 사실은 `버전 미확인`으로 표시한다. 최신 문서로 현재 고정 버전의\r\n계약을 증명하거나, 버전 미확인을 안전한 기본값인 것처럼 닫지 않는다. 차단 사실이면 기획 증거\r\n규율의 `unavailable` 경계로 멈추고, 후속이면 기존 소유 단계와 바뀔 영향만 남긴다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:8526e14f51537084ee86b98d689323dd3df307cee1372be1dccfd3abfb876556",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0058",
+      "source": "migration:SKILL_ko.md:74-75",
+      "text": "후보를 대조하는 동안 아래 내부 증거표를 대화 안에서만 유지한다. 파일·journal·능력 문서에\r\n저장하지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/capability-design"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:capability-split"
+      ],
+      "source_hash": "sha256:990a439c95d6ff7b5623a17f347c2823a5f0602066ecb99b5f0d94693e238899",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0059",
+      "source": "migration:SKILL_ko.md:77-77",
+      "text": "| 후보 | 관찰 | 출처·버전 | 해석 | 남은 소유자 결정 |",
+      "candidate_class": "table row",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:8734fdb20c1e6257637b150add0ebbe1137f5e6c8ff43fe08d74d403d4fbf29f",
+      "source_kind": "table-row",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.62
+    },
+    {
+      "id": "migration-a0060",
+      "source": "migration:SKILL_ko.md:80-82",
+      "text": "정확한 한 좌표나 상한이 있는 조회 한 번은 메인이 확인한다. 답만 필요한 다중 경로·외부 출처\r\n대조는 기획 증거 규율의 격리 조사 분기를 쓰되, 대표 흐름의 코드·문서 구조·도메인 맥락은 메인이\r\n직접 따라가고 이해한다. 조사자는 위치·사용처·고정 버전처럼 유계한 하위 사실만 반환한다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "spec:STAGES/entry"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-02.md",
+        "fixture:entry-initial"
+      ],
+      "source_hash": "sha256:ff60a48f20190dbd7def89476868be7f33faebc968bdfd46b917190d83aaf500",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0061",
+      "source": "migration:SKILL_ko.md:84-86",
+      "text": "확인 묶음에는 `관찰`·`해석`·`결정 preview`를 나눠 제시한다. 관찰은 코드와 고정 버전 계약,\r\n해석은 그 사실이 현재 경계에 뜻하는 바, 결정 preview는 소유자가 확인할 미래 방향이다. 현재\r\n사실을 미래 의도로 바꾸거나 해석을 관찰처럼 제시하지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "spec:STAGES/inspect-and-trace"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "fixture:trace-needed"
+      ],
+      "source_hash": "sha256:5b1195a38cbbf67b71c97cdc0ef2d3cb56586d7799bbba06d818f906908d73e4",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0062",
+      "source": "migration:SKILL_ko.md:88-89",
+      "text": "현재 동작 보존과 목표 방향이 실제 다른 결과를 낼 때만 확인 전에 기획 증거 규율의 구속 전\r\n재검토로 대안 하나를 비교한다. 실질 후보가 없으면 출력·질문·조사를 더 만들지 않는다.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:198455fd5aa8326f30553b2b66e1b4ea6d525ef52ba5d6f14e728c7afe05ca2b",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.67
+    },
+    {
+      "id": "migration-a0063",
+      "source": "migration:SKILL_ko.md:91-99",
+      "text": "커밋 이력은 보조 증거다.\r\n현재 코드와 문서가 충돌한 경우에만, 충돌한 정확한 경로를 건드린 최신 커밋과 바로 앞의 해당\r\n커밋까지 본다. 저장소 전체 이력을 훑지 않는다.\r\n기존 문서의 최초 읽기 집합은 저장소 루트의 README 파일, 사용자나 저장소 지침이 정확한\r\n경로로 지목한 파일, 이름을 소문자로 바꾸면 `docs`·`specs`인 루트 디렉터리와 지침이 지목한\r\n문서 루트의 파일 경로 목록이다.\r\n루트 README와 정확히 지목된 파일을 제외하고, 문서 파일명 본체와 코드에서 나온 후보 이름을\r\n각각 소문자로 바꾸고 글자·숫자 아닌 문자를 지웠을 때 어느 한쪽이 다른 쪽을 포함하지 않으면\r\n그 문서 본문은 열지 않는다. 정규화 결과가 빈 문자열인 쪽이 있으면 통과하지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "spec:STAGES/proposal"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "fixture:proposal-draft"
+      ],
+      "source_hash": "sha256:8875c9c625b1becb6fcfe59b318318674f1da72b22d286d533015ff55a7a1d44",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.55
+    },
+    {
+      "id": "migration-a0064",
+      "source": "migration:SKILL_ko.md:101-101",
+      "text": "## 절차 — 이 순서 그대로",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:49372b6c1c8e6c50cb459064ef110937b911cb85f37ee415e2492f4fa3c2d421",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "증거 권위와 확인 묶음",
+          "source_span": "59-59"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0065",
+      "source": "migration:SKILL_ko.md:103-108",
+      "text": "1. **능력 후보와 흐름 추적.** 외부 진입점·최상위 코드 모듈에서 코드 후보를 먼저 열거하고,\r\n   위 파일명 규칙을 통과한 문서를 연다. 그 문서의 기능 목록과 경로 이름에서 나온 후보는\r\n   코드 흐름과 연결되면 추가하고, 연결되지 않으면 확인 질문 묶음에 남긴다. 기존 문서는 아직 주장으로만 취급한다.\r\n   후보마다 외부 진입점에서 대표 실행 하나를 끝까지 따라가며 경계를 확인한다. 두 후보가\r\n   같은 외부 관찰 책임과 같은 코드 흐름을 가질 때만 합치고, 경계를 확정하지 못한 후보는\r\n   확인 질문 묶음에 남긴다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "spec:STAGES/capability-design"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "fixture:capability-split"
+      ],
+      "source_hash": "sha256:b1988a468e21baa23fd8983eae3a559409464dbdfad085a6b5f195249faf8240",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0066",
+      "source": "migration:SKILL_ko.md:109-119",
+      "text": "2. 코드·기존 문서·커밋 이력에서 `product.md`를 **product 스킬의 산출 형식 그대로** 역산한다.\r\n   코드가 답할 수 있는 것(정체성 문단, 번호·이름·사용자 결과까지의 능력 목록, 경계의 MVP\r\n   범위 — 이미 만들어진 것이 그 답이다, 화면·창구, interface)은 역산으로 채우고,\r\n   코드가 답할 수 없는 것(경계의 \"안 만들 것\" · 성공 판정과 능력별 사용자 결과가 그 성공\r\n   판정에 필요한 이유 · 역산된 정체성 문단이 놓친 문제와 해결 방식)은 소유자에게 묻는다.\r\n   전체 인터뷰는 하지 않는다 — 확인 질문 한 묶음이 틀리게 역산한 것의 교정과 이\r\n   보완을 겸한다. 성공 판정은 예외다: 소유자가 답해야 하며, `product.md`의 성공 판정이\r\n   적힌 그대로 검증 가능해야 한다. 검증 가능하지 않으면 다시 묻고, 이 조건을 통과하기 전에는\r\n   3단계로 가지 않는다. 그 밖의 무응답만\r\n   지어내지 말고 '열린 질문'에 남긴다.\r\n   `glossary.md`도 코드가 실제로 쓰는 용어로 시작한다 — 코드의 단어가 정본이다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:7819860ce39a35c634a4c65ac457ec5c5742a182da19dedfc294ab0d41a8646d",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0067",
+      "source": "migration:SKILL_ko.md:120-128",
+      "text": "3. `arch.md`를 **arch 스킬의 산출 형식 그대로** 역산하고 `브라운필드: 예`를 기록해 초안으로\r\n   제시한 뒤 사용자 확인을 받는다. 기존 arch.md에 이 필드만 없으면 다른 내용을 재역산하지\r\n   않고 필드만 추가한다. 검증 창구는 arch의 \"검증 창구 결정\" 절을 게이트째 그대로\r\n   적용한다 — 정해지기 전에는 이 스킬이 끝나지 않는다. git 확인(리포가 아니면\r\n   `git init` 제안)도 같은 절의 것이다.\r\n   기존 핸드오프·사양 파일의 서술 하나 이상이 1단계에서 추적한 코드와 맞으면, 그 서술의\r\n   단계·계약·상태를 쓰는 후보 흐름이 하나일 때 arch.md의 `기존 기록`에\r\n   `그 능력 이름: 정확한 경로`로 적는다. 둘 이상이면 이름 대신 `shared`를 쓴다.\r\n   한 줄에는 경로 하나만 쓰고 같은 이름을 반복할 수 있다. 경로만 적고 내용을 복사하지 않는다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-03.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:be84bd36e6eca4ff8e5688fc3395694b5037f1298c9e98fdb2496248e5ec0962",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0068",
+      "source": "migration:SKILL_ko.md:129-130",
+      "text": "4. **code-style.md도 arch 스킬의 \"산출 2\" 형식 그대로 역산한다.** 코드가 이미 하고\r\n   있는 방식이 정본이다 — 형식의 기본 지향을 강요해 스타일을 두 쪽 내지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:1898eac03121a8f362e28859d718d027730d2e98ab2acdfebb972566c74dec99",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0069",
+      "source": "migration:SKILL_ko.md:131-135",
+      "text": "5. **기존 완성 코드를 트리에 소급 기록하지 않는다.** `devflow/tree/`는 도입 이후의\r\n   작업부터 시작한다 — 이미 있는 기능을 `.done.` 카드로 채우는 것은 낭비다.\r\n   트리를 여는 것은 split이다 — 능력 폴더 이름이 역산된 능력 목록과 같은 단어가\r\n   되게 하여, 새 작업이 제자리에 쌓이게 한다.\r\n",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:8b467c76b39e5a82eae1bff4fda2e44f4e2adbbd0e94665cc1c9f669ac36c1fe",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0070",
+      "source": "migration:SKILL_ko.md:136-139",
+      "text": "새 도입에서 사용자가 도입 뒤 처리할 변경을 이미 요청했다면 split의 정확한 `유지보수 라우팅\r\n대기` 줄을 먼저 journal에 쓰고, 사용자가 확인한 도입 문서와 함께 규칙 정본의 Layer 0 커밋으로\r\n착지시킨다. 요청이 없으면 도입 문서만 그 커밋에 둔다. 아래 능력 문서 전용 분기만 실행하는\r\n기존 프로젝트에서는 이 시점에 Layer 0 커밋을 다시 만들지 않는다.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "spec:STAGES/proposal"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "fixture:proposal-draft"
+      ],
+      "source_hash": "sha256:09dbbcbf8cd3e47151ac0241fd9bc41db53258b09ed2a0c43437d29009feee83",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0071",
+      "source": "migration:SKILL_ko.md:141-141",
+      "text": "## 능력 문서 — 도입 커밋 뒤 마지막 출력",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "spec:STAGES/approval"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "fixture:approval-approve"
+      ],
+      "source_hash": "sha256:e1454e2d46d323c2e83c39cfa599964436ee1e99f67ac6baec7a5aa2d26a0769",
+      "source_kind": "heading",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "절차 — 이 순서 그대로",
+          "source_span": "101-101"
+        }
+      ],
+      "confidence": 0.67
+    },
+    {
+      "id": "migration-a0072",
+      "source": "migration:SKILL_ko.md:143-145",
+      "text": "확정된 product.md·arch.md·glossary.md가 HEAD에 착지한 뒤 기준선 판정 정본의 브라운필드 설계\r\n작성자 절차를 실행한다. 새 도입에서 이미 추적한 대표 흐름은 product.md·arch.md를 역산한\r\n근거이며, 능력 문서에 코드 세부나 흐름을 다시 복사하지 않는다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "spec:STAGES/derive-layer-zero"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "fixture:derive-needed"
+      ],
+      "source_hash": "sha256:f33f014641dcb8a20b5bfcc7c2da23132008be812c1f604ae77188209f9c14a8",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — 도입 커밋 뒤 마지막 출력",
+          "source_span": "141-141"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0073",
+      "source": "migration:SKILL_ko.md:147-148",
+      "text": "- `01-foundation.md`와 모든 비은퇴 능력의 목적·경계·Intent 총론·개념 모델·불변식·하지 않기로\r\n  한 것·구속 ADR을 Layer 0에서 능력 단위로 도출한다.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:4a2a54cfa176e233eff3d40ea5e68f4677dce28d9f1f77a5069d1517479399b0",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — 도입 커밋 뒤 마지막 출력",
+          "source_span": "141-141"
+        }
+      ],
+      "confidence": 0.58
+    },
+    {
+      "id": "migration-a0074",
+      "source": "migration:SKILL_ko.md:149-158",
+      "text": "- **캡슐 가공.** 사용자가 지목한 기존 도메인 문서가 능력 문서 예산을 넘치면 기준선 판정\r\n  정본의 지식 캡슐로 가공한다. 순서는 다섯이다: ①사용자가 지정한 revision에서 원문\r\n  인벤토리(제목·줄 범위) ②주제 단위로 자르고 코드와 대조 ③관통 의도는 능력 문서 Intent\r\n  총론으로, 주제 지식은 캡슐로 — 출처 표기·다툼 보존·Source basis는 정본 계약 그대로이며,\r\n  원문 안의 서로 다른 서술은 한쪽을 고르지 않고 dispute로 남긴다 ④깨끗한 세션의 반증\r\n  문답 — 중요 의도·경계·함정의 누락과 창작이 0이어야 하고, 캡슐마다 무표 문장 3개를 원문\r\n  좌표에서 실제로 찾는 출처 표본 검사를 포함하며, 실패한 캡슐은 착지하지 않는다 ⑤기준선 판정 정본의 설계\r\n  확인 묶음과 같은 확인·같은 커밋으로 착지. dispute 목록은 확인 묶음에서 소유자 결정거리로\r\n  함께 보고한다. 원문의 삭제·이동은 이 절차에 없다 — 판단 재료만 보고한다.\r\n",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:eca3421ec75e8424e4acb3b9daedfe1295efbf786e0c5e8008c50d20cc074ff2",
+      "source_kind": "list-item",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — 도입 커밋 뒤 마지막 출력",
+          "source_span": "141-141"
+        }
+      ],
+      "confidence": 0.7
+    },
+    {
+      "id": "migration-a0075",
+      "source": "migration:SKILL_ko.md:159-170",
+      "text": "**설계 전용 진입.** 진입이 `marker.design-note` 또는 `marker.design-open-item`을 넘겨 왔으면\r\n역산 전체를 다시 돌지 않는다.\r\n그 줄이 이름 댄 능력 하나의 설계 구역만, 확정된 현재 Layer 0과 그 정확한 문장에서 다시\r\n유도한다. 문장이 능력 문서 예산 안에 들면 Intent 또는 Invariants에 넣고, 예산을 넘치는 설계\r\n주제 상세는 위 캡슐 가공 계약으로 내린다. 넘겨받은 `anchor`가 그 `card`·`code`의 정확한\r\n스냅샷 기준이며, 이력이나 카드에서 다른 기준을 다시 계산하지 않고 능력 사실을 arch.md에 복제해\r\n작성자를 깨우지도 않는다 — 진짜 Layer 0 사실만 발견→갱신 표의 기존 경로로 간다.\r\n`marker.design-open-item`은 `anchor`도 `code`도 싣지 않는다 — 사람이 확정한 `statement`\r\n자체가 기준이고, 그 `card`는 확정이 일어난 자리일 뿐이며, 소유자는 그 줄이 이름 댄\r\n`capability`다. 그 카드에서 코드를 읽지 말고 문장을 그 카드의 능력으로 옮기지도 않는다.\r\n그 줄과 바이트가\r\n같은 journal 줄은 같은 구속 능력 문서 커밋에서 지운다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-04.md",
+        "fixture:landing-compact"
+      ],
+      "source_hash": "sha256:a5c6d4d4589aa72821c06a6619fe12d164ea932c06539636f7f4e39941311217",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — 도입 커밋 뒤 마지막 출력",
+          "source_span": "141-141"
+        }
+      ],
+      "confidence": 0.51
+    },
+    {
+      "id": "migration-a0076",
+      "source": "migration:SKILL_ko.md:172-177",
+      "text": "완료 후: 새 도입의 Layer 0 커밋에 `유지보수 라우팅 대기` 줄을 넣었거나 현재 대화에 기존\r\n프로젝트의 변경 요청이 있으면 \"다음은 split\" 한 줄 안내한다. 능력 문서 전용 분기의 요청은\r\nsplit이 자기 유지보수 절차에서 처음 영속화한다. 요청이 없으면 \"도입 완료 — 새 변경 요청을\r\n기다림\"이라고 안내한다. frontend가\r\n있어도 기존 화면이 사실상의 디자인\r\n정본이다 — design(선택)은 화면 체계를 새로 세울 때만 권한다.",
+      "candidate_class": "ambiguous/review-required",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "file:references/legacy-atoms/skill_ko-05.md",
+        "spec:STAGES/proposal"
+      ],
+      "evidence": [
+        "file:references/legacy-atoms/skill_ko-05.md",
+        "fixture:proposal-draft"
+      ],
+      "source_hash": "sha256:dd158e950c987488105554b94c44267364ec01196d44bcb28d6ce44f70b85a7a",
+      "source_kind": "paragraph",
+      "context": [
+        {
+          "level": 1,
+          "text": "adopt — 기존 프로젝트 도입",
+          "source_span": "6-6"
+        },
+        {
+          "level": 2,
+          "text": "능력 문서 — 도입 커밋 뒤 마지막 출력",
+          "source_span": "141-141"
+        }
+      ],
+      "confidence": 0.51
+    }
+  ],
+  "migration": {
+    "source_root": "skills/adopt",
+    "source_files": [
+      "SKILL.md",
+      "SKILL_ko.md"
+    ],
+    "atom_count": 76
+  },
+  "source_root": "skills/adopt"
+}

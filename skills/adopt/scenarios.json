@@ -1,0 +1,1176 @@
+[
+  {
+    "id": "kernel-unavailable",
+    "s": {
+      "state.kernel": "unavailable",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "guard": "state-kernel-unavailable",
+      "status": "BLOCK"
+    },
+    "cover": [
+      "guard:state-kernel-unavailable"
+    ]
+  },
+  {
+    "id": "integrity-block",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "integrity.blocking",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "guard": "canonical-integrity-block",
+      "status": "BLOCK"
+    },
+    "cover": [
+      "guard:canonical-integrity-block"
+    ]
+  },
+  {
+    "id": "git-operation",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "git.open-operation",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "guard": "open-git-operation",
+      "status": "ASK"
+    },
+    "cover": [
+      "guard:open-git-operation"
+    ]
+  },
+  {
+    "id": "no-code",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "none",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "guard": "no-code-routes-product",
+      "status": "ROUTE"
+    },
+    "cover": [
+      "guard:no-code-routes-product"
+    ]
+  },
+  {
+    "id": "unknown-code",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "unknown",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "guard": "unknown-code-evidence",
+      "status": "BLOCK"
+    },
+    "cover": [
+      "guard:unknown-code-evidence"
+    ]
+  },
+  {
+    "id": "greenfield-baseline",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "baseline.design-refresh",
+      "state.code": "present",
+      "state.brownfield": "no",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "guard": "not-brownfield-writer",
+      "status": "ROUTE"
+    },
+    "cover": [
+      "guard:not-brownfield-writer"
+    ]
+  },
+  {
+    "id": "elsewhere",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "owned-elsewhere",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "guard": "state-owned-elsewhere",
+      "status": "ROUTE"
+    },
+    "cover": [
+      "guard:state-owned-elsewhere"
+    ]
+  },
+  {
+    "id": "landing-compact",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.knowledge-landing",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "present",
+      "marker.count": 1
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "knowledge-landing",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:knowledge-landing",
+      "branch:knowledge-landing/compact"
+    ]
+  },
+  {
+    "id": "landing-recursive",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.knowledge-landing",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "present",
+      "marker.count": 1
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "recursive"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "knowledge-landing",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:knowledge-landing/recursive"
+    ]
+  },
+  {
+    "id": "landing-partial-compact",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.knowledge-landing",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "present",
+      "marker.count": 2
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "partial-compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "knowledge-landing",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:knowledge-landing/partial-compact"
+    ]
+  },
+  {
+    "id": "landing-partial-recursive",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.knowledge-landing",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "present",
+      "marker.count": 2
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "partial-recursive"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "knowledge-landing",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:knowledge-landing/partial-recursive"
+    ]
+  },
+  {
+    "id": "entry-initial",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "initial",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "entry",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "READ",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:entry",
+      "branch:entry/initial"
+    ]
+  },
+  {
+    "id": "entry-partial",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "partial",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "entry",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "READ",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:entry/partial"
+    ]
+  },
+  {
+    "id": "entry-glossary",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "glossary-only",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "entry",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:entry/glossary-only"
+    ]
+  },
+  {
+    "id": "entry-capability",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "capability-only",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "entry",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:entry/capability-only"
+    ]
+  },
+  {
+    "id": "entry-design",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "design-only",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "entry",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "READ",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:entry/design-only"
+    ]
+  },
+  {
+    "id": "trace-needed",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "needed",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "inspect-and-trace",
+      "status": "NEXT",
+      "effects": [
+        "RUN",
+        "RUN",
+        "REPORT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:inspect-and-trace",
+      "branch:inspect-and-trace/needed"
+    ]
+  },
+  {
+    "id": "trace-missing",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "missing",
+      "evidence.flow": "missing",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "evidence-missing",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "inspect-and-trace",
+      "status": "BLOCK",
+      "effects": [
+        "REPORT",
+        "BLOCK"
+      ]
+    },
+    "cover": [
+      "branch:inspect-and-trace/evidence-missing"
+    ]
+  },
+  {
+    "id": "derive-needed",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "needed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "derive-layer-zero",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "REPORT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:derive-layer-zero",
+      "branch:derive-layer-zero/needed"
+    ]
+  },
+  {
+    "id": "derive-draft",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "draft",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "derive-layer-zero",
+      "status": "NEXT",
+      "effects": [
+        "REPORT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:derive-layer-zero/draft"
+    ]
+  },
+  {
+    "id": "derive-conflict",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "contradiction",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "derive-layer-zero",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "branch:derive-layer-zero/contradiction"
+    ]
+  },
+  {
+    "id": "proposal-draft",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "draft",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "proposal",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:proposal",
+      "branch:proposal/draft"
+    ]
+  },
+  {
+    "id": "proposal-interrupted",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "interrupted",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "proposal",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "branch:proposal/interrupted"
+    ]
+  },
+  {
+    "id": "approval-ask",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "approval",
+      "row": "ask",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:approval",
+      "branch:approval/ask",
+      "row:approval/ask",
+      "branch:approval/ask"
+    ]
+  },
+  {
+    "id": "approval-refuse",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "refuse",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "approval",
+      "row": "refuse",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "branch:approval/refuse",
+      "row:approval/refuse",
+      "branch:approval/refuse"
+    ]
+  },
+  {
+    "id": "approval-approve",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "approve",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "approval",
+      "row": "approve",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:approval/approve",
+      "row:approval/approve",
+      "branch:approval/approve"
+    ]
+  },
+  {
+    "id": "capability-ask",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "approval",
+      "row": "ask",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:capability-design",
+      "branch:capability-design/ask",
+      "row:capabilityRoute/ask",
+      "branch:capabilityRoute/ask"
+    ]
+  },
+  {
+    "id": "capability-design",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "approve",
+      "capability.action": "approve",
+      "route.after": "design"
+    },
+    "expect": {
+      "stage": "approval",
+      "row": "approve",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:capability-design/design",
+      "row:capabilityRoute/design",
+      "branch:capabilityRoute/design"
+    ]
+  },
+  {
+    "id": "capability-resume",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "approve",
+      "capability.action": "approve",
+      "route.after": "resume"
+    },
+    "expect": {
+      "stage": "approval",
+      "row": "approve",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:capability-design/resume",
+      "row:capabilityRoute/resume",
+      "branch:capabilityRoute/resume"
+    ]
+  },
+  {
+    "id": "capability-split",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0
+    },
+    "judged": {
+      "entry.mode": "none",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact"
+    },
+    "decided": {
+      "approval.action": "approve",
+      "capability.action": "approve",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "approval",
+      "row": "approve",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:capability-design/split",
+      "row:capabilityRoute/split",
+      "branch:capabilityRoute/split"
+    ]
+  }
+]

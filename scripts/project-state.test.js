@@ -355,13 +355,14 @@ ${events ? "- source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key
   commit(root, "jmp boundary — product verification result");
 }
 
-function capabilityVerify(root, relative, { failures = "", audit = "- not run", retrospective = "- not run", verdict = "pass", executed = "fixture" } = {}) {
+function capabilityVerify(root, relative, { failures = "", audit = "- not run", retrospective = "- not run", verdict = "pass", executed = "fixture", capabilityPaths = [] } = {}) {
   const revisions = currentRevisions(root);
+  const capabilityRevision = capabilityPaths.length > 0 ? pathSetRevision(root, capabilityPaths) : "unresolved";
   write(root, relative, `# Verification · fixture · 2026-08-20
 Product revision: ${revisions.productRevision}
 Verification revision: ${revisions.verificationRevision}
 Code revision: ${revisions.codeRevision}
-Capability revision: unresolved
+Capability revision: ${capabilityRevision}
 Scenario: fixture
 Executed: ${executed}
 Verdict: ${verdict}
@@ -391,7 +392,7 @@ function completedRepo(t, verdict = null) {
   fs.mkdirSync(path.join(root, "devflow", "tree", "01-foundation.done"), { recursive: true });
   write(root, "devflow/tree/01-foundation.done/01.1-fixture.done.md", cardText("01.1"));
   commit(root, "jmp boundary — foundation");
-  if (verdict) rootVerify(root, verdict);
+  if (verdict) rootVerify(root, verdict, verdict === "pass" ? { executed: "fixture" } : undefined);
   return root;
 }
 
@@ -544,7 +545,7 @@ function mappingScene(t, number) {
       verify("# Verification\nFailure history:\nNone.\n## Audit\n- pending · source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key: product\n## Retrospective\n- not run\n");
       break;
     case 31:
-      rootVerify(root, "pass", { events: false });
+      rootVerify(root, "pass", { events: false, executed: "fixture execution observed" });
       break;
     case 32:
       fs.mkdirSync(path.join(root, "devflow", "tree", "02-capability"), { recursive: true });
@@ -723,6 +724,9 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
     { name: "evidence-finalizing", head: "evidence-finalizing:", batch: "base",
       line: `${timestamp} evidence-finalizing: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify(check)}`,
       zone: "transition", kind: "remote-evidence", fragment: "state=evidence-finalizing" },
+    { name: "knowledge landing pending", head: "knowledge landing pending:", batch: "base",
+      line: `${timestamp} knowledge landing pending: owner: devflow/project/capabilities/02-capability.md; writer: adopt; source-json: ${JSON.stringify(`${card}@${checkpoint}`)}`,
+      zone: "marker", kind: "knowledge-landing", fragment: `source=${card}@${checkpoint}` },
   ];
   const invalid = [
     { name: "layer opening", head: "layer opening:", line: `${timestamp} layer opening: parent: devflow/tree; children: 02+03+04+05` },
@@ -739,12 +743,13 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
     { name: "retrospective requested", head: "retrospective requested:", line: `${timestamp} retrospective requested: 02x` },
     { name: "evidence-wait", head: "evidence-wait:", line: `${timestamp} evidence-wait: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}` },
     { name: "evidence-finalizing", head: "evidence-finalizing:", line: `${timestamp} evidence-finalizing: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}` },
+    { name: "knowledge landing pending", head: "knowledge landing pending:", line: `${timestamp} knowledge landing pending: malformed` },
   ];
 
   const uniqueSorted = (values) => [...new Set(values)].sort();
   const tableHeads = uniqueSorted(valid.map((item) => item.head));
-  assert.equal(valid.length, 16);
-  assert.equal(invalid.length, 14);
+  assert.equal(valid.length, 17);
+  assert.equal(invalid.length, 15);
   assert.deepEqual(uniqueSorted(invalid.map((item) => item.head)), tableHeads);
 
   const toolSource = fs.readFileSync(TOOL, "utf8");
@@ -753,7 +758,7 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
   const parserHeads = uniqueSorted([...reservedBlock.groups.body.matchAll(/^\s+"([^"]+)",\s*$/gm)].map((match) => match[1]));
   assert.deepEqual(parserHeads, tableHeads);
 
-  const canon = fs.readFileSync(path.resolve(__dirname, "../skills/principles/SKILL.md"), "utf8");
+  const canon = fs.readFileSync(path.resolve(__dirname, "../skills/principles/references/state/journal-grammar.md"), "utf8");
   const canonPrefix = "YYYY-MM-DDTHH:MM:SSZ ";
   const canonStart = canon.indexOf(`${canonPrefix}layer opening:`);
   const canonEnd = canon.indexOf("\n```", canonStart);
@@ -800,7 +805,7 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
   const invalidOutput = await pendingInvalid;
   const item12 = invalidOutput.split(/\r?\n/)
     .filter((line) => line.startsWith("integrity: kind=blocking") && line.includes("item=12 "));
-  assert.equal(item12.length, 14, invalidOutput);
+  assert.equal(item12.length, 15, invalidOutput);
 
   for (const item of valid) {
     await t.test(`accepts ${item.name}`, () => {
@@ -894,7 +899,7 @@ test("T2 priority structure has one canonical array position per zone", async ()
   const module = await registry();
   assert.deepEqual(module.ZONE_DEFINITIONS.map((item) => item.zone), ROUTE_ZONES);
   assert.equal(new Set(module.ZONE_DEFINITIONS.map((item) => item.zone)).size, 14);
-  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 58);
+  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 59);
 });
 
 test("T2 priority selector uses the canonical array for every i less than j", async () => {
@@ -1453,10 +1458,12 @@ test("adversarial F2 capability Retrospective request becomes a runnable event",
 
 test("adversarial F2 post-failure capability Audit is automatic", (t) => {
   const root = makeRepo(t, { brownfield: "no", capabilities: ["capability"] });
-  write(root, "devflow/tree/02-capability.done/02.1-work.done.md", cardText("02.1"));
+  const card = "devflow/tree/02-capability.done/02.1-work.done.md";
+  write(root, card, cardText("02.1"));
   commit(root, "jmp capability done");
   capabilityVerify(root, "devflow/tree/02-capability.done/verify.md", {
     failures: "- source id: 4; timestamp: 2026-08-20T00:00:00Z; failure: exact failure; routing: fixed",
+    capabilityPaths: [card],
   });
   const result = run(root); ok(result);
   assertFragment(result.stdout, "event: kind=new", "role=Audit");
@@ -1465,9 +1472,10 @@ test("adversarial F2 post-failure capability Audit is automatic", (t) => {
 
 test("adversarial F2 first capability closure Retrospective is automatic", (t) => {
   const root = makeRepo(t, { brownfield: "no", capabilities: ["capability"] });
-  write(root, "devflow/tree/02-capability.done/02.1-work.done.md", cardText("02.1"));
+  const card = "devflow/tree/02-capability.done/02.1-work.done.md";
+  write(root, card, cardText("02.1"));
   commit(root, "jmp capability done");
-  capabilityVerify(root, "devflow/tree/02-capability.done/verify.md");
+  capabilityVerify(root, "devflow/tree/02-capability.done/verify.md", { capabilityPaths: [card] });
   const result = run(root); ok(result);
   const events = result.stdout.split(/\r?\n/).filter((line) => line.startsWith("event: kind=new"));
   assert.ok(events.some((line) => line.includes("role=Retrospective") && line.includes('key="first closure 2"')), result.stdout);
@@ -2270,16 +2278,36 @@ test("R7 a near-miss reserved progress head is a shape anomaly, not prose", (t) 
   assertFragment(result.stdout, "integrity:", "blocking=0");
 });
 
-test("R7 the canon's progress heads and the tool's recognizer are one table", () => {
+for (const [name, line, expectedHead] of [
+  ["bare remote check", 'remote evidence check: check-json: run-1; verdict: pending; detail-json: "waiting"', "remote evidence check:"],
+  ["object remote check", 'remote evidence check: check-json: {"run":1}; verdict: pending; detail-json: "waiting"', "remote evidence check:"],
+  ["bare remote detail", 'remote evidence check: check-json: "run-1"; verdict: pending; detail-json: waiting', "remote evidence check:"],
+  ["object completion detail", `completion signal result: head: ${"d".repeat(40)}; verdict: pass; detail-json: {"case":1}`, "completion signal result:"],
+]) test(`R7 ${name} is a progress shape anomaly`, (t) => {
+  const root = makeRepo(t);
+  const card = writeClaim(root, {
+    commitSubject: "jmp 02.1 fixture card",
+    progress: `2026-08-20T00:00:10Z ${line}`,
+  });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity:", "shape=1");
+  assertFragment(result.stdout, "integrity: kind=shape", `path=${card}`);
+  assertFragment(result.stdout, "integrity: kind=shape", `detail="progress-format:${expectedHead}"`);
+  assertFragment(result.stdout, "claim: kind=mine", "signal=absent");
+});
+
+test("R7 the canon's progress heads and the tool's recognizer are one table", async () => {
   const block = /const PROGRESS_HEADS = \[\r?\n(?<body>[\s\S]*?)\r?\n\];/.exec(fs.readFileSync(TOOL, "utf8"));
   assert.ok(block, "PROGRESS_HEADS block missing");
   const parserHeads = [...new Set([...block.groups.body.matchAll(/head: "([^"]+)"/g)].map((match) => match[1]))].sort();
-  const canon = fs.readFileSync(path.resolve(__dirname, "../skills/principles/SKILL.md"), "utf8");
-  const canonHeads = [...new Set([...canon.matchAll(/^\s*YYYY-MM-DDTHH:MM:SSZ (completion signal result:|review result:|carry:|remote evidence check:)/gm)]
-    .map((match) => match[1]))].sort();
+  const { FORMATS } = await import(pathToFileURL(path.resolve(__dirname, "../skills/principles/spec.mjs")).href);
+  const nativeHeads = Object.values(FORMATS).filter((format) => format.kind === "progress-line").map((format) => `${format.head}:`);
+  const grammar = fs.readFileSync(path.resolve(__dirname, "../skills/principles/templates/canonical-journal-progress-grammar.md"), "utf8");
+  const selectedHeads = [...grammar.matchAll(/^YYYY-MM-DDTHH:MM:SSZ (carry:|remote evidence check:)/gm)].map((match) => match[1]);
+  const canonHeads = [...new Set([...nativeHeads, ...selectedHeads])].sort();
   assert.deepEqual(parserHeads, ["carry:", "completion signal result:", "remote evidence check:", "review result:"]);
   assert.deepEqual(canonHeads, parserHeads, "the canon's four progress formats and the recognizer's heads are the same set");
-  assert.match(canon, /A line carrying one of those four heads that does not\n  stand in its format is not prose/);
+  assert.ok(grammar.includes("`project-state.mjs` is the deterministic parser and rejects malformed, reordered, duplicate, missing, bare, and CRLF forms"));
 });
 
 test("R7 an in-progress card before its review is not blocked by the missing evidence", (t) => {
@@ -2469,7 +2497,7 @@ test("current claim origin is none when its creation commit deleted no canonical
 test("S2 an old product verify without event sections emits each existing event kind once", (t) => {
   const root = makeRepo(t, { brownfield: "no" });
   const revisions = currentRevisions(root);
-  const oldVerify = `# Verification · product\nProduct revision: ${revisions.productRevision}\nVerification revision: ${revisions.verificationRevision}\nCode revision: ${revisions.codeRevision}\nCapability revision: not-applicable\nVerdict: pass\nFailure history:\nNone.\n`;
+  const oldVerify = `# Verification · product\nProduct revision: ${revisions.productRevision}\nVerification revision: ${revisions.verificationRevision}\nCode revision: ${revisions.codeRevision}\nCapability revision: not-applicable\nExecuted: cli smoke observed success\nVerdict: pass\nFailure history:\nNone.\n`;
   const relative = "devflow/tree/verify.md";
   write(root, relative, oldVerify);
   commit(root, "jmp old capability verify");
@@ -2978,10 +3006,11 @@ test("C design an anchor lookup Git cannot run fails closed ahead of the claim",
   const stale = git(scene.root, "rev-parse", "HEAD~1:devflow/journal.md");
   fs.rmSync(path.join(scene.root, ".git", "objects", stale.slice(0, 2), stale.slice(2)));
   const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "integrity: kind=blocking", "reason=knowledge-history-undecodable");
   assertFragment(result.stdout, "marker: kind=design-note", "reason=anchor-unavailable");
   assertFragment(result.stdout, "marker: kind=design-note", "recovery=external");
   assertNoFragment(result.stdout, "marker: kind=design-note", "anchor=");
-  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+  assert.equal(nextOf(result.stdout), "integrity.blocking", result.stdout);
 });
 
 test("C design an uncommitted note is not a durable route", (t) => {
@@ -3036,6 +3065,15 @@ test("C design an interrupted design-only prefix routes back to the writer", (t)
   assertFragment(result.stdout, "marker: kind=design-note", "prefix=design-only");
   assertFragment(result.stdout, "marker: kind=design-note", `card=${scene.card}`);
   assertFragment(result.stdout, "marker: kind=design-note", `anchor=${scene.anchor}`);
+  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+});
+
+test("C1 design-only accepts repeated nested K segments and no other nested path", (t) => {
+  const scene = designNoteScene(t);
+  write(scene.root, "devflow/project/capabilities/02-capability/K-001-parent/K-002-child.md", "# child\n");
+  write(scene.root, "devflow/journal.md", "");
+  const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "marker: kind=design-note", "prefix=design-only");
   assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
 });
 
@@ -3100,9 +3138,10 @@ test("C design an unreadable HEAD journal blocks instead of falling to the claim
   const blob = git(scene.root, "rev-parse", "HEAD:devflow/journal.md");
   fs.rmSync(path.join(scene.root, ".git", "objects", blob.slice(0, 2), blob.slice(2)));
   const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "integrity: kind=blocking", "reason=knowledge-head-undecodable");
   assertFragment(result.stdout, "marker: kind=design-note", "reason=head-journal-unavailable");
   assertFragment(result.stdout, "marker: kind=design-note", "recovery=external");
-  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+  assert.equal(nextOf(result.stdout), "integrity.blocking", result.stdout);
 });
 
 test("C design an interrupted prefix with an unreadable HEAD journal still blocks", (t) => {
@@ -3110,9 +3149,10 @@ test("C design an interrupted prefix with an unreadable HEAD journal still block
   const blob = git(scene.root, "rev-parse", "HEAD:devflow/journal.md");
   fs.rmSync(path.join(scene.root, ".git", "objects", blob.slice(0, 2), blob.slice(2)));
   const result = run(scene.root); ok(result);
+  assertFragment(result.stdout, "integrity: kind=blocking", "reason=knowledge-head-undecodable");
   assertFragment(result.stdout, "marker: kind=design-note", "reason=head-journal-unavailable");
   assertFragment(result.stdout, "marker: kind=design-note", "recovery=external");
-  assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
+  assert.equal(nextOf(result.stdout), "integrity.blocking", result.stdout);
 });
 
 test("C design an undecodable HEAD journal classifies its unresolved route as external", (t) => {
@@ -3312,4 +3352,365 @@ test("G malformed, uncommitted, and ghost-attributed glossary term lines remain 
     assert.equal(hasKind(result.stdout, "marker", "glossary-term"), false, result.stdout);
     assert.ok(result.stdout.split(/\r?\n/).includes(`open-item: ${item.line}`), result.stdout);
   }
+});
+
+function researchSource(root, number = "00.1") {
+  const card = `devflow/tree/00-project/${number}-source.done.md`;
+  const text = cardText(number, { progress: "2026-08-29T00:00:00Z durable research conclusion" })
+    .replace(`# ${number} fixture card`, `# ${number} Research: durable source`);
+  write(root, card, text);
+  const hash = commit(root, `jmp ${number} wip: research synthesis`);
+  return { card, hash, source: `${card}@${hash}` };
+}
+
+function knowledgeLanding(owner, writer, source, timestamp = "2026-08-29T01:00:00Z") {
+  return `${timestamp} knowledge landing pending: owner: ${owner}; writer: ${writer}; source-json: ${JSON.stringify(source)}`;
+}
+
+test("K calculateState is the structured canonical API and CLI is its compatibility view", async (t) => {
+  const root = makeRepo(t);
+  const module = await registry();
+  const state = await module.calculateState({ root });
+  const cli = run(root); ok(cli);
+  assert.equal(state.schema, "devflow/project-state/2");
+  assert.equal(state.route.id, nextOf(cli.stdout));
+  assert.equal(state.route.id, `${state.route.zone}.${state.route.kind}`);
+  assert.equal(typeof state.zones, "object");
+  assert.equal(typeof state.facts, "object");
+  assert.equal(state.metadata.root, root);
+  assert.equal(Object.hasOwn(state, "output"), false);
+});
+
+test("K calculateState exposes canonical brownfield metadata for yes, no, and a missing field", async (t) => {
+  const module = await registry();
+  const yesState = await module.calculateState({ root: makeRepo(t, { brownfield: "yes" }) });
+  const noState = await module.calculateState({ root: makeRepo(t, { brownfield: "no" }) });
+  const missingState = await module.calculateState({ root: makeRepo(t, { includeBrownfield: false }) });
+
+  assert.equal(yesState.metadata.brownfield, "yes");
+  assert.equal(noState.metadata.brownfield, "no");
+  assert.equal(missingState.metadata.brownfield, "unknown");
+});
+
+test("K canonical verify records expose verdict and executed evidence to package collectors", async (t) => {
+  const root = completedRepo(t);
+  rootVerify(root, "pass", { events: false, executed: "cli smoke: observed success" });
+  const module = await registry();
+  const state = await module.calculateState({ root });
+  const record = state.compatibility.evaluated.verify.records.find((item) => item.target === "product");
+  assert.equal(record?.current, true);
+  assert.equal(record?.verdict, "pass");
+  assert.equal(record?.executed, "cli smoke: observed success");
+});
+
+test("K a root pass with a stale capability revision cannot complete or create product events", async (t) => {
+  const root = completedRepo(t);
+  rootVerify(root, "pass", { events: false, executed: "claimed browser success" });
+  const relative = "devflow/tree/verify.md";
+  const text = fs.readFileSync(path.join(root, ...relative.split("/")), "utf8");
+  write(root, relative, text.replace(/^Capability revision: .*$/m, `Capability revision: ${"0".repeat(40)}`));
+  commit(root, "jmp counterfeit stale verification record");
+
+  const module = await registry();
+  const state = await module.calculateState({ root });
+  const record = state.compatibility.evaluated.verify.records.find((item) => item.target === "product");
+  assert.equal(record?.current, false);
+  assert.equal(record?.verdict, "pass");
+  assert.equal(record?.executed, "claimed browser success");
+  assert.equal(state.zones.complete.entries.some((entry) => entry.kind === "product-pass"), false);
+  assert.equal(state.zones.product.entries.some((entry) => entry.kind === "shape-or-revision"), true);
+  assert.equal(state.zones.event.entries.some((entry) => entry.kind === "new" && entry.target === "product"), false);
+});
+
+test("K a current root pass without meaningful Executed evidence cannot complete or create automatic events", async (t) => {
+  const module = await registry();
+  for (const [name, executed] of [["missing", null], ["whitespace-only", "   "]]) await t.test(name, async () => {
+    const root = completedRepo(t);
+    rootVerify(root, "pass", { events: false, executed });
+
+    const state = await module.calculateState({ root });
+    const record = state.compatibility.evaluated.verify.records.find((item) => item.target === "product");
+    assert.equal(record?.current, true);
+    assert.equal(record?.verdict, "pass");
+    assert.equal(record?.executed.trim(), "");
+    assert.equal(state.zones.complete.entries.some((entry) => entry.kind === "product-pass"), false);
+    assert.equal(state.zones.product.entries.some((entry) => entry.kind === "shape-or-revision" && entry.reasons.includes("execution-evidence")), true);
+    assert.equal(state.zones.event.entries.some((entry) => entry.kind === "new" && entry.target === "product"), false);
+  });
+});
+
+test("K a current completed-capability record without meaningful Executed evidence cannot create automatic events", async (t) => {
+  const root = makeRepo(t, { brownfield: "no", capabilities: ["capability"] });
+  const card = "devflow/tree/02-capability.done/02.1-work.done.md";
+  const verify = "devflow/tree/02-capability.done/verify.md";
+  write(root, card, cardText("02.1"));
+  commit(root, "jmp capability done");
+  capabilityVerify(root, verify, { executed: "   ", capabilityPaths: [card] });
+
+  const module = await registry();
+  const state = await module.calculateState({ root });
+  const record = state.compatibility.evaluated.verify.records.find((item) => item.target === 2);
+  assert.equal(record?.current, true);
+  assert.equal(record?.capabilityDone, true);
+  assert.equal(record?.verdict, "pass");
+  assert.equal(record?.executed.trim(), "");
+  assert.equal(state.zones.event.entries.some((entry) => entry.kind === "new" && entry.target === 2), false);
+});
+
+test("K a current pass reporting an unavailable channel cannot complete the product", async (t) => {
+  const root = completedRepo(t);
+  rootVerify(root, "pass", {
+    events: true,
+    executed: "unverified: channel unavailable — browser attach; timeout=30s",
+  });
+
+  const module = await registry();
+  const state = await module.calculateState({ root });
+  const rootRecord = state.compatibility.evaluated.verify.root;
+  assert.equal(rootRecord?.current, true);
+  assert.equal(rootRecord?.verdict, "pass");
+  assert.equal(rootRecord?.channelUnavailable, true);
+  assert.equal(state.zones.complete.entries.some((entry) => entry.kind === "product-pass"), false);
+});
+
+test("K C1 ordinary project research outranks missing product and rejects implementation cards", async (t) => {
+  const pending = makeRepo(t, { product: false, baseline: false });
+  write(pending, "devflow/tree/00-project/00.1-discovery.md",
+    cardText("00.1").replace("# 00.1 fixture card", "# 00.1 Research: product boundary"));
+  commit(pending, "jmp split ??project research");
+  const pendingState = run(pending); ok(pendingState);
+  assert.equal(nextOf(pendingState.stdout), "ready.ready", pendingState.stdout);
+
+  const active = makeRepo(t, { product: false, baseline: false });
+  write(active, "devflow/tree/00-project/00.1-discovery.wip-jmp.md",
+    cardText("00.1").replace("# 00.1 fixture card", "# 00.1 Research: product boundary"));
+  commit(active, "jmp 00.1 wip: project research");
+  const activeState = run(active); ok(activeState);
+  assert.equal(nextOf(activeState.stdout), "claim.mine", activeState.stdout);
+
+  const forbidden = makeRepo(t, { product: false, baseline: false });
+  write(forbidden, "devflow/tree/00-project/00.2-research.md", cardText("00.2"));
+  commit(forbidden, "jmp split ??spoofed project research");
+  const forbiddenState = run(forbidden); ok(forbiddenState);
+  assert.equal(nextOf(forbiddenState.stdout), "integrity.blocking", forbiddenState.stdout);
+  const module = await registry();
+  const structured = await module.calculateState({ root: forbidden });
+  assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "00-project-research-only"));
+});
+
+test("K exact knowledge landing marker validates writer, source, duplicate pair, and route", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const source = researchSource(root);
+  const valid = knowledgeLanding("devflow/project/arch.md", "arch", source.source);
+  write(root, "devflow/journal.md", `${valid}\n`);
+  commit(root, "jmp boundary ??knowledge landing");
+  const accepted = run(root); ok(accepted);
+  assert.equal(nextOf(accepted.stdout), "marker.knowledge-landing", accepted.stdout);
+  assertFragment(accepted.stdout, "marker: kind=knowledge-landing", "owner=devflow/project/arch.md");
+  assertFragment(accepted.stdout, "marker: kind=knowledge-landing", `source=${source.source}`);
+
+  write(root, "devflow/journal.md", `${knowledgeLanding("devflow/project/arch.md", "adopt", source.source)}\n`);
+  const wrongWriter = run(root); ok(wrongWriter);
+  assert.equal(nextOf(wrongWriter.stdout), "integrity.blocking", wrongWriter.stdout);
+  const module = await registry();
+  let structured = await module.calculateState({ root });
+  assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-writer"));
+
+  write(root, "devflow/journal.md", `${knowledgeLanding("devflow/project/arch.md", "arch", `${source.card}@${"0".repeat(40)}`)}\n`);
+  const unresolved = run(root); ok(unresolved);
+  assert.equal(nextOf(unresolved.stdout), "integrity.blocking", unresolved.stdout);
+  structured = await module.calculateState({ root });
+  assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-source-unresolved"));
+
+  write(root, "devflow/journal.md", `${valid}\n${valid}\n`);
+  const duplicate = run(root); ok(duplicate);
+  assert.equal(nextOf(duplicate.stdout), "integrity.blocking", duplicate.stdout);
+  structured = await module.calculateState({ root });
+  assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-owner-source-duplicate"));
+
+  const raw = `${valid.slice(0, valid.indexOf("source-json: ") + "source-json: ".length)}${source.source}`;
+  write(root, "devflow/journal.md", `${raw}\n`);
+  structured = await module.calculateState({ root });
+  assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-source-json"));
+
+  const objectValue = `${valid.slice(0, valid.indexOf("source-json: ") + "source-json: ".length)}${JSON.stringify({ source: source.source })}`;
+  write(root, "devflow/journal.md", `${objectValue}\n`);
+  structured = await module.calculateState({ root });
+  assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-source-json"));
+});
+
+test("K knowledge landing deletion requires its owner or an exact K Source basis", async (t) => {
+  const unauthorizedRoot = makeRepo(t, { brownfield: "no" });
+  const unauthorizedSource = researchSource(unauthorizedRoot);
+  const unauthorizedMarker = knowledgeLanding("devflow/project/arch.md", "arch", unauthorizedSource.source);
+  write(unauthorizedRoot, "devflow/journal.md", `${unauthorizedMarker}\n`);
+  commit(unauthorizedRoot, "jmp boundary ??knowledge landing");
+  write(unauthorizedRoot, "devflow/journal.md", "");
+  const badDeletion = commit(unauthorizedRoot, "jmp boundary ??marker-only deletion");
+  const unauthorized = run(unauthorizedRoot); ok(unauthorized);
+  assert.equal(nextOf(unauthorized.stdout), "integrity.blocking", unauthorized.stdout);
+  const module = await registry();
+  let structured = await module.calculateState({ root: unauthorizedRoot });
+  assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-marker-unauthorized-deletion" && entry.commit === badDeletion));
+
+  const replacedRoot = makeRepo(t, { brownfield: "no" });
+  const replacedSource = researchSource(replacedRoot);
+  const replacedMarker = knowledgeLanding("devflow/project/arch.md", "arch", replacedSource.source);
+  write(replacedRoot, "devflow/journal.md", `${replacedMarker}\n`);
+  commit(replacedRoot, "jmp boundary · knowledge landing");
+  const replacementMarker = knowledgeLanding("devflow/project/product.md", "arch", replacedSource.source, "2026-08-29T02:00:00Z");
+  write(replacedRoot, "devflow/journal.md", `${replacementMarker}\n`);
+  const replacedAt = commit(replacedRoot, "jmp boundary · replace marker without consumption");
+  structured = await module.calculateState({ root: replacedRoot });
+  assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-marker-unauthorized-deletion" && entry.commit === replacedAt));
+
+  const directRoot = makeRepo(t, { brownfield: "no" });
+  const directSource = researchSource(directRoot);
+  const directMarker = knowledgeLanding("devflow/project/arch.md", "arch", directSource.source);
+  write(directRoot, "devflow/journal.md", `${directMarker}\n`);
+  commit(directRoot, "jmp boundary ??knowledge landing");
+  write(directRoot, "devflow/journal.md", "");
+  write(directRoot, "devflow/project/arch.md", `${read(directRoot, "devflow/project/arch.md")}\nDirect compact landing.\n`);
+  commit(directRoot, "jmp arch: consume knowledge landing");
+  const direct = run(directRoot); ok(direct);
+  structured = await module.calculateState({ root: directRoot });
+  assert.equal(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-marker-unauthorized-deletion"), false);
+
+  const kRoot = makeRepo(t, { brownfield: "no" });
+  const kSource = researchSource(kRoot);
+  const kMarker = knowledgeLanding("devflow/project/arch.md", "arch", kSource.source);
+  write(kRoot, "devflow/journal.md", `${kMarker}\n`);
+  commit(kRoot, "jmp boundary ??knowledge landing");
+  write(kRoot, "devflow/journal.md", "");
+  write(kRoot, "devflow/project/arch/K-001-research.md", `# Research\nSource basis: ["${kSource.source}:1-2"]\n`);
+  commit(kRoot, "jmp arch: consume knowledge landing into K");
+  const k = run(kRoot); ok(k);
+  structured = await module.calculateState({ root: kRoot });
+  assert.equal(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-source-basis"), false);
+  assert.equal(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-marker-unauthorized-deletion"), false);
+
+  const impreciseRoot = makeRepo(t, { brownfield: "no" });
+  const impreciseSource = researchSource(impreciseRoot);
+  const impreciseMarker = knowledgeLanding("devflow/project/arch.md", "arch", impreciseSource.source);
+  write(impreciseRoot, "devflow/journal.md", `${impreciseMarker}\n`);
+  commit(impreciseRoot, "jmp boundary ??knowledge landing");
+  write(impreciseRoot, "devflow/journal.md", "");
+  write(impreciseRoot, "devflow/project/arch/K-001-research.md", `# Research\nSource basis: ["${impreciseSource.source}"]\n`);
+  commit(impreciseRoot, "jmp arch: imprecise knowledge landing");
+  const imprecise = run(impreciseRoot); ok(imprecise);
+  assert.equal(nextOf(imprecise.stdout), "integrity.blocking", imprecise.stdout);
+  structured = await module.calculateState({ root: impreciseRoot });
+  assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-source-basis"));
+});
+
+test("K knowledge landing K consumption requires the final exact bounded Source basis entry", async (t) => {
+  const module = await registry();
+  const scene = async (basis) => {
+    const root = makeRepo(t, { brownfield: "no" });
+    const source = researchSource(root);
+    const marker = knowledgeLanding("devflow/project/arch.md", "arch", source.source);
+    write(root, "devflow/journal.md", `${marker}\n`);
+    commit(root, "jmp boundary · knowledge landing");
+    write(root, "devflow/journal.md", "");
+    write(root, "devflow/project/arch/K-001-research.md", basis(source));
+    commit(root, "jmp arch: consume knowledge landing into K");
+    return { root, source, state: await module.calculateState({ root }) };
+  };
+  const rejected = (state) => state.zones.integrity.entries.some((entry) => entry.reason === "knowledge-source-basis");
+
+  const multi = await scene((source) => `# Research\nSource basis: ["devflow/project/product.md:1-2", "${source.source}:1-2"]\n`);
+  assert.equal(rejected(multi.state), false, "a valid current source may coexist with other Source basis entries");
+
+  const reversed = await scene((source) => `# Research\nSource basis: ["${source.source}:2-1"]\n`);
+  assert.equal(rejected(reversed.state), true, "a reversed current-source range must not consume the marker");
+
+  const outOfBounds = await scene((source) => `# Research\nSource basis: ["${source.source}:1-9999"]\n`);
+  assert.equal(rejected(outOfBounds.state), true, "a range beyond the cited card revision must not consume the marker");
+
+  const buried = await scene((source) => `# Research\nSource basis: ["${source.source}:1-2"]\n\nThe earlier line is not the capsule's file-level basis.\nSource basis: ["devflow/project/product.md:1-2"]\n`);
+  assert.equal(rejected(buried.state), true, "an earlier anchor cannot substitute for the final Source basis array");
+});
+
+test("K knowledge journal observation separates absence and root boundary from Git failure", async (t) => {
+  const module = await registry();
+  const reasons = (state) => state.zones.integrity.entries.map((entry) => entry.reason);
+
+  const absent = makeRepo(t, { brownfield: "no" });
+  fs.rmSync(path.join(absent, "devflow", "journal.md"));
+  commit(absent, "jmp boundary · journal remains absent");
+  let state = await module.calculateState({ root: absent });
+  assert.equal(reasons(state).includes("knowledge-head-undecodable"), false);
+  assert.equal(reasons(state).includes("knowledge-history-undecodable"), false);
+
+  const rootBoundary = makeRepo(t, { brownfield: "no" });
+  const rootSource = researchSource(rootBoundary);
+  const rootMarker = knowledgeLanding("devflow/project/arch.md", "arch", rootSource.source);
+  git(rootBoundary, "checkout", "--orphan", "knowledge-root");
+  write(rootBoundary, "devflow/journal.md", `${rootMarker}\n`);
+  commit(rootBoundary, "jmp boundary · root knowledge landing");
+  state = await module.calculateState({ root: rootBoundary });
+  assert.equal(reasons(state).includes("knowledge-history-undecodable"), false);
+  assert.equal(state.route.id, "marker.knowledge-landing");
+
+  const unreadableHead = makeRepo(t, { brownfield: "no" });
+  const headSource = researchSource(unreadableHead);
+  write(unreadableHead, "devflow/journal.md", `${knowledgeLanding("devflow/project/arch.md", "arch", headSource.source)}\n`);
+  commit(unreadableHead, "jmp boundary · knowledge landing");
+  const headBlob = git(unreadableHead, "rev-parse", "HEAD:devflow/journal.md");
+  fs.rmSync(path.join(unreadableHead, ".git", "objects", headBlob.slice(0, 2), headBlob.slice(2)));
+  state = await module.calculateState({ root: unreadableHead });
+  assert.equal(reasons(state).includes("knowledge-head-undecodable"), true);
+
+  const unreadableHistory = makeRepo(t, { brownfield: "no" });
+  const historySource = researchSource(unreadableHistory);
+  const historyMarker = knowledgeLanding("devflow/project/arch.md", "arch", historySource.source);
+  write(unreadableHistory, "devflow/journal.md", `${historyMarker}\n`);
+  const markerCommit = commit(unreadableHistory, "jmp boundary · knowledge landing");
+  const historyBlob = git(unreadableHistory, "rev-parse", `${markerCommit}:devflow/journal.md`);
+  write(unreadableHistory, "devflow/journal.md", "");
+  write(unreadableHistory, "devflow/project/arch.md", `${read(unreadableHistory, "devflow/project/arch.md")}\nDirect compact landing.\n`);
+  commit(unreadableHistory, "jmp arch: consume knowledge landing");
+  fs.rmSync(path.join(unreadableHistory, ".git", "objects", historyBlob.slice(0, 2), historyBlob.slice(2)));
+  state = await module.calculateState({ root: unreadableHistory });
+  assert.equal(reasons(state).includes("knowledge-history-undecodable"), true);
+});
+
+test("K knowledge landing permits partial multi-owner consumption", (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const source = researchSource(root);
+  const archMarker = knowledgeLanding("devflow/project/arch.md", "arch", source.source);
+  const productMarker = knowledgeLanding("devflow/project/product.md", "arch", source.source, "2026-08-29T01:01:00Z");
+  write(root, "devflow/journal.md", `${archMarker}\n${productMarker}\n`);
+  commit(root, "jmp boundary ??multi-owner knowledge landing");
+
+  write(root, "devflow/journal.md", `${productMarker}\n`);
+  write(root, "devflow/project/arch.md", `${read(root, "devflow/project/arch.md")}\nDirect compact landing.\n`);
+  commit(root, "jmp arch: partial multi-owner landing");
+  const state = run(root); ok(state);
+  assert.equal(nextOf(state.stdout), "marker.knowledge-landing", state.stdout);
+  assertFragment(state.stdout, "marker: kind=knowledge-landing", "owner=devflow/project/product.md");
+  assertNoFragment(state.stdout, "integrity:", "reason=knowledge-marker-unauthorized-deletion");
+});
+
+test("K restored knowledge landing clears a bad deletion and may later consume atomically", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const source = researchSource(root);
+  const marker = knowledgeLanding("devflow/project/arch.md", "arch", source.source);
+  write(root, "devflow/journal.md", `${marker}\n`);
+  commit(root, "jmp boundary ??knowledge landing");
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp boundary ??bad marker deletion");
+
+  write(root, "devflow/journal.md", `${marker}\n`);
+  commit(root, "jmp boundary ??restore knowledge landing");
+  const restored = run(root); ok(restored);
+  assert.equal(nextOf(restored.stdout), "marker.knowledge-landing", restored.stdout);
+
+  write(root, "devflow/journal.md", "");
+  write(root, "devflow/project/arch.md", `${read(root, "devflow/project/arch.md")}\nRecovered compact landing.\n`);
+  commit(root, "jmp arch: atomically consume restored landing");
+  const consumed = run(root); ok(consumed);
+  const module = await registry();
+  const structured = await module.calculateState({ root });
+  assert.equal(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-marker-unauthorized-deletion"), false);
 });

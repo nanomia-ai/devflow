@@ -1,0 +1,3 @@
+# Recovery completion
+
+For `prepared-route`, read the durable prepared object, validate the stored prefix and declared suffix, apply every remaining suffix operation in order exactly once, commit that completion, and resume only after the transition projection is `none`. For `interrupted-result`, read the stored result object, validate its complete record payload, finish that one durable result transition exactly once, commit it, and resume only after the transition projection is `none`; any absent, malformed, conflicting, or non-clearing object fails closed rather than routing back to verification.

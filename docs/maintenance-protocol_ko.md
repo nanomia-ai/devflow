@@ -18,14 +18,11 @@ blueprint 전부는 새 세션의 기본 온보딩 집합이 아니다. 필요�
 
 ## 2. 이중 언어와 문서 정합성
 
-**한국어로 설계하고 영어로 배포한다.** `_ko.md`는 소유자가 검토하는 설계 원본이고 영어 쌍은
-AI 소비용 배포물이다.
+**소유자 대면 문서와 Codex adapter는 한국어로 설계하고 영어로 배포한다.** 아래에 선언된
+`_ko.md`는 소유자가 검토하는 설계 원본이고 영어 쌍은 AI 소비용 배포물이다. 살아 있는 선언 쌍은
+다음뿐이다.
 
 ```
-skills/<name>/SKILL_ko.md ↔ SKILL.md
-skills/principles/{state-predicates,verification-predicates,baseline-predicates,planning-evidence,coordinator}_ko.md ↔ 같은 이름의 .md
-skills/work/reviewer_ko.md ↔ reviewer.md
-skills/verify/{verifier,auditor,retrospector}_ko.md ↔ 같은 이름의 .md
 codex/AGENTS-devflow_ko.md ↔ AGENTS-devflow.md
 docs/{design,design-decisions,design-backlog,maintenance-protocol}_ko.md ↔ 같은 이름의 .md
 docs/rounds/v0.10.0/proposal_ko.md ↔ proposal.md
@@ -33,21 +30,27 @@ docs/rounds/v0.11.0/report_ko.md ↔ report.md
 docs/rounds/v0.9.21/report_ko.md ↔ report.md
 ```
 
-영어 전용 파일은 `AGENTS.md`, `CHANGELOG.md`, `CLAUDE.md`다. `CLAUDE.md`는 이 저장소에서
-`@AGENTS.md` 한 줄만 유지한다. 역할 계약은 등록 에이전트가 아니라 깨끗한 컨텍스트에 원문으로
-전달하는 동반 파일이다. predicate 동반 정본과 역할 계약을 섞지 않는다.
+P2 런타임 스킬은 의도한 예외다. 영문 `spec.mjs`와 `body.md`가 실행 작성 정본이고,
+`SKILL.md`와 `.generated.json`은 생성 배포물과 영수증이다. `references/legacy-atoms/`의 한글
+원자는 이관 출처만 보존하며 살아 있는 쌍이나 수정 원본이 아니다.
 
-수정 순서는 고정한다.
+영어 전용 작성 파일은 `AGENTS.md`, `CHANGELOG.md`, `CLAUDE.md`, P2의 `spec.mjs`와 `body.md`다.
+`CLAUDE.md`는 이 저장소에서 `@AGENTS.md` 한 줄만 유지한다. 역할 계약은 등록 에이전트가 아니라
+깨끗한 컨텍스트에 원문으로 전달하는 동반 파일이다. predicate 동반 자료와 역할 계약을 섞지 않는다.
+
+선언된 한영 쌍의 수정 순서는 고정한다.
 
 1. `_ko` 원본을 먼저 수정하고 소유자 검토를 받는다.
 2. §9의 고정 용어를 사용해 영어 쌍에 번역한다. 같은 개념에 다른 영어를 만들지 않는다.
 3. 제목 수, 번호 목록 수, 표 행, diagram 수, 의미를 갖는 수치·비율·버전을 1:1로 확인한다.
 4. 배포 artifact를 바꿨다면 §7의 설치·CHANGELOG·버전 절차를 끝낸다.
 
-외부 기여자는 영어를 먼저 고칠 수 있으나, 관리자가 다음 릴리스 전에 한국어 원본을 역동기화한다.
-한국어는 `_ko.md`, 두 한국어 전용 상시 수단, 쌍이 없는 라운드 기록, 그리고 이 문서의 용어표에만
-산다. 영어 배포물에는 한국어가 한 줄도 없어야 하며 예외는 없다.
-`node --test "scripts/*.test.js"`가 한국어 0건과 한영 구조 대응을 검사한다.
+외부 기여자는 선언 쌍의 영어를 먼저 고칠 수 있으나, 관리자가 다음 릴리스 전에 한국어 원본을
+역동기화한다. 작성 중인 한국어는 `_ko.md`, 두 한국어 전용 상시 수단, 쌍이 없는 라운드 기록,
+그리고 이 문서의 용어표에만 산다. P2 이관 출처는 `references/legacy-atoms/`에 원문 한글을 보존할
+수 있지만 런타임 안내가 아니다. 영어 배포 안내에는 한국어가 한 줄도 없어야 한다.
+`node --test "scripts/*.test.js"`가 위 선언 쌍의 구조·기계 수치 대응과 영어 배포 안내의 한국어
+0건을 검사하고, legacy atom은 이관 출처로만 명시적으로 제외한다.
 
 ## 3. 설계 의도와 기록의 착지
 
