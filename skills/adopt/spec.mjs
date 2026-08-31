@@ -31,7 +31,7 @@ export const FORMATS = {
 
 export const TEMPLATES = {
   adoptionProposal: { file: "templates/adoption-proposal.md", fields: { candidates: "list", flows: "list", documentClaims: "list", records: "list", product: "block", architecture: "block", codeStyle: "block", glossary: "list", questions: "list", contradictions: "list", verification: "block" }, sections: [] },
-  product: { file: "templates/product.md", fields: { identity: "block", capabilities: "list", boundary: "block", screens: "list", interface: "block", success: "list", questions: "list" }, sections: [] },
+  product: { file: "templates/product.md", fields: { serviceName: "line", identity: "block", problem: "block", approach: "block", capabilityRows: "generated", boundary: "block", successCriteria: "list", accessPoints: "list", openQuestions: "block", interface: "line" }, sections: [] },
   architecture: { file: "templates/architecture.md", fields: { components: "list", stack: "list", codeStructure: "block", data: "block", existingRecords: "block", brownfield: "line", verification: "block" }, sections: [] },
   codeStyle: { file: "templates/code-style.md", fields: { values: "list", choices: "list", boundaries: "list" }, sections: [] },
   capabilityDesign: { file: "templates/capability-design.md", fields: { number: "line", name: "line", purpose: "line", boundary: "line", concepts: "line", intent: "block", conceptRows: "generated", invariants: "list", nonGoals: "list", adrs: "list", designHead: "line" }, sections: [] },

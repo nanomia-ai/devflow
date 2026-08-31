@@ -1,27 +1,34 @@
-# Product
+# {{serviceName}}
 
 {{identity}}
 
+## Problem
+
+{{problem}}
+
+## Approach
+
+{{approach}}
+
 ## Capabilities
 
-{{capabilities}}
+<!-- Generated rows use: C<number> <name> — User outcome: <outcome> — Needed for success: <reason>. -->
+{{capabilityRows}}
 
 ## Boundary
 
 {{boundary}}
 
-## Screens & access points
-
-{{screens}}
-
-## Interface
-
-{{interface}}
-
 ## Success criteria
 
-{{success}}
+{{successCriteria}}
+
+## Screens & access points
+
+{{accessPoints}}
 
 ## Open questions
 
-{{questions}}
+{{openQuestions}}
+
+interface: {{interface}}

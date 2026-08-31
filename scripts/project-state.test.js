@@ -10,6 +10,10 @@ const { test } = require("node:test");
 const { pathToFileURL } = require("node:url");
 
 const TOOL = path.resolve(__dirname, "../skills/principles/scripts/project-state.mjs");
+const ADOPT_SPEC = path.resolve(__dirname, "../skills/adopt/spec.mjs");
+const PRODUCT_SPEC = path.resolve(__dirname, "../skills/product/spec.mjs");
+const PRODUCT_COLLECTORS = path.resolve(__dirname, "../skills/product/collectors/index.mjs");
+const ADOPT_PRODUCT_TEMPLATE = path.resolve(__dirname, "../skills/adopt/templates/product.md");
 const PRODUCT_TEMPLATE = path.resolve(__dirname, "../skills/product/templates/product-confirmed.md");
 const PRODUCT_CAPABILITY_ROW_COMMENT = "<!-- Generated rows use: C<number> <name> — User outcome: <outcome> — Needed for success: <reason>. -->";
 assert.ok(fs.readFileSync(PRODUCT_TEMPLATE, "utf8").split(/\r?\n/).includes(PRODUCT_CAPABILITY_ROW_COMMENT),
@@ -86,6 +90,8 @@ Fixture boundary.
 None.
 ## Open questions
 None.
+
+interface: CLI
 `;
 }
 
@@ -1046,6 +1052,19 @@ for (let item = 1; item <= 15; item += 1) {
 test("T4 report service is the exact current project identity", (t) => {
   const result = run(makeRepo(t)); ok(result);
   assertFragment(result.stdout, "report:", 'service="Fixture service"');
+});
+
+test("T4 Adopt product projection matches Product and is Product-current", async (t) => {
+  const [adopt, productSpec, productCollectors] = await Promise.all([
+    import(pathToFileURL(ADOPT_SPEC).href),
+    import(pathToFileURL(PRODUCT_SPEC).href),
+    import(pathToFileURL(PRODUCT_COLLECTORS).href),
+  ]);
+  assert.deepEqual(adopt.TEMPLATES.product.fields, productSpec.TEMPLATES.productConfirmed.fields);
+  assert.deepEqual(fs.readFileSync(ADOPT_PRODUCT_TEMPLATE), fs.readFileSync(PRODUCT_TEMPLATE));
+
+  const root = makeRepo(t, { capabilities: ["Alpha"] });
+  assert.equal(await productCollectors.collectors["state.product-file"]({ projectRoot: root }), "current");
 });
 
 test("T4 legacy circled Product heading remains supported explicitly", (t) => {

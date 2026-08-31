@@ -43,6 +43,15 @@ over 1,800 package repeats with zero mismatches, 18/18 formats, 20/20 repository
 225/225 CR-normalized canonical runtime comparisons, and 342/342 generated-file hash checks.
 Principles retains public `--target`; each manifest owns the new builder-generated
 `observations.mjs`, creating exactly nine paths with zero deletion or movement.
+Compatibility: `## Capabilities` in `devflow/project/product.md` must contain canonical
+`C<n> <name>` rows (or the supported legacy circled / `1.` forms), or the single line
+`None.`. A section with substantive content but no recognized row now stops at
+`integrity.blocking` with reason `capability-rows-unparsed` instead of being dropped silently;
+the accepted mixed-row limit is recorded in the design backlog. Adopt now projects Product's
+complete confirmed field map and byte-identical template, including Problem, Approach, canonical
+generated capability rows, and terminal `interface:`, so its brownfield Layer 0 artifact is current
+for both the state parser and later Product entry; Product remains the canonical owner, with no
+runtime cross-skill import, registry, parser, or state zone.
 The 444/444 full root suite belongs to `dedf24a65c2767ff86079cb91e2719bc20a9f973`
 and is stale for this final-repair tree. The full wildcard suite, the 604-second standalone
 project-state suite, Phase-4 AFTER scenarios, and operational gates were not rerun; they remain

@@ -362,24 +362,33 @@ test("all promoted stages are complete portable P2 packages", () => {
   }
 });
 
-test("all promoted P2 packages share one Skill Rails runtime and validator version", () => {
+test("all promoted P2 packages share one Skill Rails runtime and validator version and hash", () => {
   const versions = P2_PACKAGES.map((id) => {
     const generated = JSON.parse(read(`skills/${id}/.generated.json`));
     return {
       id,
       runtime: generated.runtime_version,
+      runtimeHash: generated.runtime_hash,
       validator: generated.validator_version,
+      validatorHash: generated.validator_hash,
     };
   });
   const expected = {
     runtime: versions[0].runtime,
+    runtimeHash: versions[0].runtimeHash,
     validator: versions[0].validator,
+    validatorHash: versions[0].validatorHash,
   };
   for (const version of versions) {
     assert.deepEqual(
-      { runtime: version.runtime, validator: version.validator },
+      {
+        runtime: version.runtime,
+        runtimeHash: version.runtimeHash,
+        validator: version.validator,
+        validatorHash: version.validatorHash,
+      },
       expected,
-      `${version.id}: generated Skill Rails version differs from the shared package version`,
+      `${version.id}: generated Skill Rails version or hash differs from the shared package`,
     );
   }
 });
