@@ -180,7 +180,7 @@ function finalize(decision) {
   return decision;
 }
 
-function checkReads(spec, item, flat, facts, needFields = []) {
+export function checkReads(spec, item, flat, facts, needFields = []) {
   const needs = [];
   for (const field of item.reads ?? []) {
     const declaration = spec.OBSERVATIONS[field];

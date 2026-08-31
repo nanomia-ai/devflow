@@ -31,19 +31,22 @@ limitations, and still-unverified release gates are in `docs/rounds/v0.20.0/repo
 That report now carries the final Phase-3 evidence: 442 passing wildcard tests, the DD-92/DD-93
 Korean Codex fallback-header correction, independent bounded review, and the remaining
 unverified release gates; it does not claim production readiness.
-The Phase-4 root-repair addendum preserves that evidence and records the causal `targetPath`
-boundary, fixture `UNKNOWN` versus live `unknown()`, the `guard-pending`/L14 repair, exactly
-three Work/Resume/Verify consumers, and all-nine regeneration at runtime 0.3.0 and validator
-0.4.0. Focused evidence is 22/22 collectors/seams, 17/17 K state-consumers, 258/258 eval
-fixtures over 1,800 repeats, 20/20 mutation checks, 19/19 repository invariants, and zero
-runtime byte mismatches. At HEAD `dedf24a65c2767ff86079cb91e2719bc20a9f973`, the final root
-suite ran once with exit 0: tests 444, suites 0, pass 444, fail/cancelled/skipped/todo 0,
-duration_ms 1332167.6359; the earlier 604-second standalone wrapper timeout is unproven,
-superseded by that full suite, and is not a test failure. Opus leads and Sol's dispositions,
-including safely blocking unsupported comma-single-line `Read first`, accepted Fable
-terminology debt for guard-pending/event naming, exact upstream parity, and DD-93's
-upstream-owned generated mechanics, are recorded without a new decision; Phase-4 AFTER
-scenarios and operational gates remain unverified, and no production-readiness claim is made.
+The Phase-4 root-repair record preserves the causal `targetPath` boundary, fixture `UNKNOWN`
+versus live `unknown()`, `guard-pending`/L14 repair, and exactly three Work/Resume/Verify
+consumers. On 2026-08-31, after the canonical Product capability-row repair at
+`0310727b7c51d0b0a6da367c55c44b3ed4a51165`, the installed Skill Rails v0.1.7 builder rebuilt
+all nine P2 packages at runtime 0.3.1 and validator 0.4.1. Authored scenario-lane migration
+was limited to Principles and Verify; `spec.mjs` and `body.md` remain the behavior and judgment
+owners, and the other seven packages received generated projection changes only.
+Fresh bounded evidence is nine L-full/L0-L18 passes, 180/180 mutation kills, 258/258 scenarios
+over 1,800 package repeats with zero mismatches, 18/18 formats, 20/20 repository invariants,
+225/225 CR-normalized canonical runtime comparisons, and 342/342 generated-file hash checks.
+Principles retains public `--target`; each manifest owns the new builder-generated
+`observations.mjs`, creating exactly nine paths with zero deletion or movement.
+The 444/444 full root suite belongs to `dedf24a65c2767ff86079cb91e2719bc20a9f973`
+and is stale for this final-repair tree. The full wildcard suite, the 604-second standalone
+project-state suite, Phase-4 AFTER scenarios, and operational gates were not rerun; they remain
+unverified here, and no production-readiness claim is made.
 
 ## 0.18.9 — 2026-08-21 — the first real run found two walls, and two gates now stand where they were
 

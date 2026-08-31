@@ -362,6 +362,28 @@ test("all promoted stages are complete portable P2 packages", () => {
   }
 });
 
+test("all promoted P2 packages share one Skill Rails runtime and validator version", () => {
+  const versions = P2_PACKAGES.map((id) => {
+    const generated = JSON.parse(read(`skills/${id}/.generated.json`));
+    return {
+      id,
+      runtime: generated.runtime_version,
+      validator: generated.validator_version,
+    };
+  });
+  const expected = {
+    runtime: versions[0].runtime,
+    validator: versions[0].validator,
+  };
+  for (const version of versions) {
+    assert.deepEqual(
+      { runtime: version.runtime, validator: version.validator },
+      expected,
+      `${version.id}: generated Skill Rails version differs from the shared package version`,
+    );
+  }
+});
+
 test("P2 companion and role files stay package-local to their declared owners", () => {
   const companionHomes = new Map([
     ["principles", [
