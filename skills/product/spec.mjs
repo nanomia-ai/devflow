@@ -15,7 +15,7 @@ export const FORMATS = {};
 export const TEMPLATES = {
   productProposal: { file: "templates/product-proposal.md", fields: { serviceName: "line", identity: "block", problem: "block", approach: "block", capabilityRows: "generated", boundary: "block", successCriteria: "list", accessPoints: "list", glossaryDelta: "list" }, sections: [] },
   productConfirmed: { file: "templates/product-confirmed.md", fields: { serviceName: "line", identity: "block", problem: "block", approach: "block", capabilityRows: "generated", boundary: "block", successCriteria: "list", accessPoints: "list", openQuestions: "block", interface: "line" }, sections: [] },
-  glossary: { file: "templates/glossary.md", fields: { terms: "list" }, sections: [] }
+  glossary: { file: "templates/glossary.md", fields: { terms: "generated" }, sections: [] }
 };
 export const ORDERS = { planning: ["orient", "research", "glossary", "propose-and-confirm"] };
 export const OWNERSHIP = { "devflow/project/product.md": "product", "devflow/project/glossary.md": "product", "devflow/tree/00-project": "external.split", "devflow/project/capabilities/**": "external.arch-or-adopt" };

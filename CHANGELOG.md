@@ -52,10 +52,24 @@ complete confirmed field map and byte-identical template, including Problem, App
 generated capability rows, and terminal `interface:`, so its brownfield Layer 0 artifact is current
 for both the state parser and later Product entry; Product remains the canonical owner, with no
 runtime cross-skill import, registry, parser, or state zone.
+Fable's final glossary adjudication executed the frozen brownfield output and found six real
+terms parsed as zero canon entries plus the phantom term `Next`; it also refuted the earlier
+Product-unaffected and Adopt-only reach claims with two Product writers and Arch's glossary-term
+branches. Product now owns one glossary template whose heading comment carries the exact
+`<term>: <definition>` line grammar and whose `terms` field is `generated`; Adopt and Arch project
+that template byte-identically, bind every canonical glossary WRITE to it, and leave result and
+knowledge-owner writes unchanged. Installed Skill Rails v0.1.7 maintained and rebuilt only those
+three packages: L-full and eval cover 94/94 scenarios at 200 repeats with zero mismatch, the two
+focused T4 tests pass, all-nine manifest/edit/hash audit is 9/9 · 0 · 342/342 with one runtime/
+validator variant, the three-way glossary digest is
+`bf7916fa8a6185b21d394ac6230ff32cc8c35c4526da5c5125c5cdb839494e52`, and the post-rebuild
+Adopt approval Decision is `sha256:c7dae28d1f6dcab467a7983e660a9f33f11a3594d80e9ed86901593f035b8a68`.
 The 444/444 full root suite belongs to `dedf24a65c2767ff86079cb91e2719bc20a9f973`
-and is stale for this final-repair tree. The full wildcard suite, the 604-second standalone
-project-state suite, Phase-4 AFTER scenarios, and operational gates were not rerun; they remain
-unverified here, and no production-readiness claim is made.
+and is stale for this final-repair tree. The later 449/449 root suite with
+`duration_ms 1279527.7144` belongs to `86a4d19430002b5f90a1ded470a03d5438615390` and is also
+stale for the glossary-repaired tree. No new wildcard suite was run; the 604-second standalone
+project-state suite, Phase-4 AFTER scenarios, and operational gates remain unverified, and no
+production-readiness claim is made.
 
 ## 0.18.9 — 2026-08-21 — the first real run found two walls, and two gates now stand where they were
 

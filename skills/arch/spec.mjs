@@ -80,6 +80,7 @@ export const TEMPLATES = {
   channelEvidence: { file: "templates/channel-evidence.md", fields: {
     command: "line", exitCode: "line", readProbe: "block", interactionProbe: "block", cleanContext: "block", verdict: "line"
   }, sections: [] },
+  glossary: { file: "templates/glossary.md", fields: { terms: "generated" }, sections: [] },
   result: { file: "templates/result.md", fields: { summary: "block", next: "line" }, sections: [] }
 };
 
@@ -137,8 +138,8 @@ export const TABLES = {
 
 export const STAGES = [
   { id: "glossary-term", reads: ["state.route"], acceptsUnknown: [], done: s => s.state.route !== "marker.glossary-term", needs: ["glossary.phase"], reentry: "rejudge", branches: {
-    definition: [["READ", { path: "references/workflow.md" }], ["WRITE", { artifact: "glossary", template: "result" }], ["COMMIT", { boundary: "glossary-definition-marker-retained" }], "NEXT"],
-    "align-capabilities": [["WRITE", { artifact: "glossary", template: "result" }], ["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["RUN", { action: "delete-byte-identical-glossary-marker" }], ["COMMIT", { boundary: "glossary-capability-alignment" }], "NEXT"]
+    definition: [["READ", { path: "references/workflow.md" }], ["WRITE", { artifact: "glossary", template: "glossary" }], ["COMMIT", { boundary: "glossary-definition-marker-retained" }], "NEXT"],
+    "align-capabilities": [["WRITE", { artifact: "glossary", template: "glossary" }], ["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["RUN", { action: "delete-byte-identical-glossary-marker" }], ["COMMIT", { boundary: "glossary-capability-alignment" }], "NEXT"]
   }, body: "stage: glossary-term" },
 
   { id: "design-marker", reads: ["state.route"], acceptsUnknown: [], done: s => s.state.route !== "marker.design-note" && s.state.route !== "marker.design-open-item", effects: [
@@ -223,7 +224,7 @@ export const STAGES = [
 
 export const ARTIFACTS = {
   product: { path: "devflow/project/product.md", writer: "external.product", readers: ["stage.read-inputs", "stage.capability-design", "external.split"] },
-  glossary: { path: "devflow/project/glossary.md", writer: "arch", readers: ["stage.glossary-term", "stage.read-inputs", "stage.capability-design", "external.split"] },
+  glossary: { path: "devflow/project/glossary.md", writer: "arch", readers: ["stage.glossary-term", "stage.read-inputs", "stage.capability-design", "external.split"], template: "glossary" },
   architecture: { path: "devflow/project/arch.md", writer: "arch", readers: ["stage.repair-layer0-fields", "stage.read-inputs", "stage.approval", "stage.capability-design", "external.design", "external.split", "external.resume"], template: "architecture" },
   codeStyle: { path: "devflow/project/code-style.md", writer: "arch", readers: ["stage.read-inputs", "stage.approval", "external.split", "external.work"], template: "codeStyle" },
   journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.glossary-term", "stage.design-marker", "stage.knowledge-landing", "stage.read-inputs", "external.resume"] },

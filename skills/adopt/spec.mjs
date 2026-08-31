@@ -36,6 +36,7 @@ export const TEMPLATES = {
   codeStyle: { file: "templates/code-style.md", fields: { values: "list", choices: "list", boundaries: "list" }, sections: [] },
   capabilityDesign: { file: "templates/capability-design.md", fields: { number: "line", name: "line", purpose: "line", boundary: "line", concepts: "line", intent: "block", conceptRows: "generated", invariants: "list", nonGoals: "list", adrs: "list", designHead: "line" }, sections: [] },
   knowledgeNode: { file: "templates/knowledge-node.md", fields: { title: "line", openWhen: "line", about: "line", body: "block", sourceBasis: "generated" }, sections: [] },
+  glossary: { file: "templates/glossary.md", fields: { terms: "generated" }, sections: [] },
   result: { file: "templates/result.md", fields: { summary: "block", next: "line" }, sections: [] }
 };
 
@@ -100,7 +101,7 @@ export const STAGES = [
     draft: [["REPORT", { template: "adoptionProposal" }], "ASK"], interrupted: [["REPORT", { template: "adoptionProposal" }], "ASK"]
   }, body: "stage: proposal" },
   { id: "approval", reads: ["request.kind"], acceptsUnknown: [], done: s => s.request.kind === "capability-only" || s.request.kind === "none", needs: ["approval.action"], table: "approval", reentry: "rejudge", branches: {
-    ask: [["REPORT", { template: "adoptionProposal" }], "ASK"], refuse: [["REPORT", { template: "result" }], "DONE"], approve: [["WRITE", { artifact: "product", template: "product" }], ["WRITE", { artifact: "architecture", template: "architecture" }], ["WRITE", { artifact: "codeStyle", template: "codeStyle" }], ["WRITE", { artifact: "glossary", template: "result" }], ["COMMIT", { boundary: "confirmed-brownfield-layer-zero" }], "NEXT"]
+    ask: [["REPORT", { template: "adoptionProposal" }], "ASK"], refuse: [["REPORT", { template: "result" }], "DONE"], approve: [["WRITE", { artifact: "product", template: "product" }], ["WRITE", { artifact: "architecture", template: "architecture" }], ["WRITE", { artifact: "codeStyle", template: "codeStyle" }], ["WRITE", { artifact: "glossary", template: "glossary" }], ["COMMIT", { boundary: "confirmed-brownfield-layer-zero" }], "NEXT"]
   }, body: "stage: approval" },
   { id: "capability-design", reads: ["state.capabilities"], acceptsUnknown: [], done: s => s.state.capabilities === "current", needs: ["capability.action", "route.after"], table: "capabilityRoute", reentry: "rejudge", branches: {
     ask: [["REPORT", { template: "capabilityDesign" }], "ASK"], design: [["WRITE", { artifact: "capabilityDesigns", template: "capabilityDesign" }], ["COMMIT", { boundary: "adopt-capabilities" }], "ROUTE:design"], resume: [["WRITE", { artifact: "capabilityDesigns", template: "capabilityDesign" }], ["COMMIT", { boundary: "adopt-capabilities" }], "ROUTE:resume"], split: [["WRITE", { artifact: "capabilityDesigns", template: "capabilityDesign" }], ["COMMIT", { boundary: "adopt-capabilities" }], "ROUTE:split"]
@@ -114,7 +115,7 @@ export const ARTIFACTS = {
   product: { path: "devflow/project/product.md", writer: "adopt", readers: ["stage.approval", "stage.capability-design", "external.split"], template: "product" },
   architecture: { path: "devflow/project/arch.md", writer: "adopt", readers: ["stage.approval", "stage.capability-design", "external.resume"], template: "architecture" },
   codeStyle: { path: "devflow/project/code-style.md", writer: "adopt", readers: ["stage.approval", "external.split"], template: "codeStyle" },
-  glossary: { path: "devflow/project/glossary.md", writer: "adopt", readers: ["stage.approval", "stage.capability-design", "external.split"] },
+  glossary: { path: "devflow/project/glossary.md", writer: "adopt", readers: ["stage.approval", "stage.capability-design", "external.split"], template: "glossary" },
   journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.entry", "stage.knowledge-landing"] },
   capabilityDesigns: { path: "devflow/project/capabilities", writer: "adopt", readers: ["stage.capability-design", "external.split", "external.resume"], template: "capabilityDesign" },
   knowledgeOwner: { path: "devflow/project/arch.md", writer: "adopt", readers: ["stage.knowledge-landing"] },

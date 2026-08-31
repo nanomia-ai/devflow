@@ -11,10 +11,14 @@ const { pathToFileURL } = require("node:url");
 
 const TOOL = path.resolve(__dirname, "../skills/principles/scripts/project-state.mjs");
 const ADOPT_SPEC = path.resolve(__dirname, "../skills/adopt/spec.mjs");
+const ARCH_SPEC = path.resolve(__dirname, "../skills/arch/spec.mjs");
 const PRODUCT_SPEC = path.resolve(__dirname, "../skills/product/spec.mjs");
 const PRODUCT_COLLECTORS = path.resolve(__dirname, "../skills/product/collectors/index.mjs");
 const ADOPT_PRODUCT_TEMPLATE = path.resolve(__dirname, "../skills/adopt/templates/product.md");
 const PRODUCT_TEMPLATE = path.resolve(__dirname, "../skills/product/templates/product-confirmed.md");
+const PRODUCT_GLOSSARY_TEMPLATE = path.resolve(__dirname, "../skills/product/templates/glossary.md");
+const ADOPT_GLOSSARY_TEMPLATE = path.resolve(__dirname, "../skills/adopt/templates/glossary.md");
+const ARCH_GLOSSARY_TEMPLATE = path.resolve(__dirname, "../skills/arch/templates/glossary.md");
 const PRODUCT_CAPABILITY_ROW_COMMENT = "<!-- Generated rows use: C<number> <name> — User outcome: <outcome> — Needed for success: <reason>. -->";
 assert.ok(fs.readFileSync(PRODUCT_TEMPLATE, "utf8").split(/\r?\n/).includes(PRODUCT_CAPABILITY_ROW_COMMENT),
   "the Product fixture grammar must match the shipped confirmed template");
@@ -1065,6 +1069,57 @@ test("T4 Adopt product projection matches Product and is Product-current", async
 
   const root = makeRepo(t, { capabilities: ["Alpha"] });
   assert.equal(await productCollectors.collectors["state.product-file"]({ projectRoot: root }), "current");
+
+  const canonical = fs.readFileSync(PRODUCT_TEMPLATE, "utf8").replace(/\{\{\w+\}\}/g,
+    (placeholder) => (placeholder === "{{capabilityRows}}" ? "None." : "x"));
+  write(root, "devflow/project/product.md", canonical);
+  assert.equal(await productCollectors.collectors["state.product-file"]({ projectRoot: root }), "current");
+});
+
+test("T4 glossary projections match Product and a rendered glossary is canon", async (t) => {
+  const [adopt, arch, productSpec] = await Promise.all([
+    ADOPT_SPEC,
+    ARCH_SPEC,
+    PRODUCT_SPEC,
+  ].map((specPath) => import(pathToFileURL(specPath).href)));
+  for (const spec of [adopt, arch]) {
+    assert.deepEqual(spec.TEMPLATES.glossary, productSpec.TEMPLATES.glossary);
+    assert.equal(spec.ARTIFACTS.glossary.template, "glossary");
+  }
+
+  const approve = adopt.STAGES.find((stage) => stage.id === "approval").branches.approve;
+  assert.deepEqual(approve.filter((effect) => Array.isArray(effect) && effect[0] === "WRITE")
+    .map((effect) => effect[1].template), ["product", "architecture", "codeStyle", "glossary"]);
+  for (const branch of Object.values(arch.STAGES.find((stage) => stage.id === "glossary-term").branches)) {
+    for (const effect of branch) {
+      if (Array.isArray(effect) && effect[0] === "WRITE" && effect[1].artifact === "glossary") {
+        assert.equal(effect[1].template, "glossary");
+      }
+    }
+  }
+
+  const template = fs.readFileSync(PRODUCT_GLOSSARY_TEMPLATE, "utf8");
+  for (const projected of [ADOPT_GLOSSARY_TEMPLATE, ARCH_GLOSSARY_TEMPLATE]) {
+    assert.deepEqual(fs.readFileSync(projected), Buffer.from(template));
+  }
+  assert.match(template.split("\n")[0], /^# Glossary <!--.*<term>: <definition>.*-->$/);
+
+  const rendered = template.replace("{{terms}}", "Alpha: fixture definition");
+  assert.doesNotMatch(rendered, /\{\{/);
+  const root = makeRepo(t, { capabilities: ["Alpha"], glossaryText: rendered });
+  setCapabilityConcepts(root, "devflow/project/capabilities/02-Alpha.md", ["Alpha"]);
+  commit(root, "jmp arch — capability concepts");
+
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity:", "shape=0");
+  assertFragment(result.stdout, "integrity:", "blocking=0");
+  assert.equal(hasKind(result.stdout, "baseline", "design-refresh"), false, result.stdout);
+
+  const phantom = run(root, "--term", "Next"); ok(phantom);
+  assertFragment(phantom.stdout, "term:", "canonical=0");
+  const alpha = run(root, "--term", "Alpha"); ok(alpha);
+  assertFragment(alpha.stdout, "term:", "canonical=1");
+  assertFragment(alpha.stdout, "term:", 'capabilities=["02"]');
 });
 
 test("T4 legacy circled Product heading remains supported explicitly", (t) => {
