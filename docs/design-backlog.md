@@ -8,6 +8,20 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 
 ## Field observation items — watch during coming cycles, without adding rules
 
+- **Accepted limits of the canonical `C<n>` row parser** (recorded 2026-08-31 by the
+  v0.20.0 final-repair audit; `skills/principles/scripts/project-state.mjs:531-574`) — once
+  one row parses, every other substantive line under `## Capabilities` is dropped with no
+  anomaly (`C1, C3` → `02, 04`; `C1 Alpha …` plus `- Palette export needed` → `02` only).
+  Conversely, a line beginning `C<n> ` whose `n` no real row declares is parsed as a
+  capability (`C3 comes later.` beside a valid `C1 Alpha …` → `04-comes later..md` with
+  `blocking=0 anomalies=0`). Both behaviors predate this repair and also hold for the
+  circled grammar. Reach is an owner or model hand edit of a section the Product template
+  declares `generated`. The exact guard requiring the declared `User outcome:` tail or a
+  retirement marker in the canonical branch was rejected because a tail-drifted real row
+  would move into the silent-drop class above; the contiguity/near-miss anomaly was rejected
+  earlier. Reopen when a fabricated or dropped row is observed in a real `product.md`, or
+  when every substantive unparsed line can be made visible without touching the legacy
+  prose tests.
 - **Reaching prior records when maintenance reopens a capability** (verified 2026-08-08 ·
   wording improved 2026-08-11): maintenance cards formally have no dependency, so work's
   direct-dependency read may not fire. The promotion machinery (upper-document feedback · journal
