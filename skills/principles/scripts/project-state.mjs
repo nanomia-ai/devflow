@@ -537,6 +537,10 @@ function parseProduct(text) {
     : [];
   const body = start < 0 ? [] : lines.slice(start + 1, lines.findIndex((line, index) => index > start && /^##\s+/.test(line)) < 0
     ? lines.length : lines.findIndex((line, index) => index > start && /^##\s+/.test(line)));
+  const substantiveCapabilityContent = body.join("\n").replace(/<!--[\s\S]*?-->/g, "").split("\n").some((line) => {
+    const trimmed = line.trim();
+    return trimmed !== "" && trimmed !== "None." && !/^[-:| ]+$/.test(trimmed);
+  });
   const circled = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳";
   const capabilities = [];
   for (const line of body) {
@@ -547,8 +551,11 @@ function parseProduct(text) {
     let name = null;
     if (position >= 0) name = trimmed.slice(1).replace(/^\s*[-:|]\s*/, "").split("|")[0].trim();
     else {
-      const numbered = /^(\d+)[.)]\s*(.+)$/.exec(trimmed);
-      if (numbered) { position = Number(numbered[1]) - 1; name = numbered[2].split("|")[0].trim(); }
+      const numbered = /^(?:C(\d+)\s+|(\d+)[.)]\s*)(.+)$/.exec(trimmed);
+      if (numbered) {
+        position = Number(numbered[1] ?? numbered[2]) - 1;
+        name = numbered[3].split("|")[0].trim();
+      }
     }
     if (position < 0 || !name) continue;
     name = name.replace(/\s+[—-].*$/, "").replace(/\*\*/g, "").replace(/~~/g, "").trim();
@@ -563,7 +570,7 @@ function parseProduct(text) {
       detail: `duplicate-capability-number:${number}`,
     });
   }
-  return { service, capabilities, anomalies };
+  return { service, capabilities, anomalies, capabilityRowsUnparsed: substantiveCapabilityContent && capabilities.length === 0 };
 }
 
 function extractSection(text, heading) {
@@ -2555,7 +2562,13 @@ function evaluateZones(snapshot) {
       path: card.path,
       reason: "00-project-research-only",
     }));
-  const integrityItems = [...integrity(snapshot, verify), ...projectResearchIssues, ...landings.issues];
+  const productCapabilityIssues = snapshot.product.capabilityRowsUnparsed ? [{
+    item: "product-capability-rows",
+    blocking: true,
+    path: "devflow/project/product.md",
+    reason: "capability-rows-unparsed",
+  }] : [];
+  const integrityItems = [...integrity(snapshot, verify), ...productCapabilityIssues, ...projectResearchIssues, ...landings.issues];
   const blocking = integrityItems.filter((item) => item.blocking);
   const nonblocking = integrityItems.filter((item) => !item.blocking);
   const shapeAnomalies = [

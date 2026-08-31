@@ -10,6 +10,10 @@ const { test } = require("node:test");
 const { pathToFileURL } = require("node:url");
 
 const TOOL = path.resolve(__dirname, "../skills/principles/scripts/project-state.mjs");
+const PRODUCT_TEMPLATE = path.resolve(__dirname, "../skills/product/templates/product-confirmed.md");
+const PRODUCT_CAPABILITY_ROW_COMMENT = "<!-- Generated rows use: C<number> <name> — User outcome: <outcome> — Needed for success: <reason>. -->";
+assert.ok(fs.readFileSync(PRODUCT_TEMPLATE, "utf8").split(/\r?\n/).includes(PRODUCT_CAPABILITY_ROW_COMMENT),
+  "the Product fixture grammar must match the shipped confirmed template");
 const ROUTE_MAP = [
   ["git", "open-operation"],
   ["transition", "prepared-route"], ["transition", "interrupted"],
@@ -63,7 +67,6 @@ function commit(root, subject = "jmp fixture") {
 }
 
 function product(capabilities = []) {
-  const circled = "①②③④⑤⑥⑦⑧⑨⑩";
   return `# Fixture service
 
 Fixture identity.
@@ -72,8 +75,9 @@ Fixture identity.
 Fixture problem.
 ## Approach
 Fixture approach.
-## Capabilities        <!-- ① ② ③ number + name + user outcome + why that outcome is needed for success -->
-${capabilities.map((name, index) => `- **${circled[index]} ${name}** — Fixture user outcome because success needs it.`).join("\n") || "None."}
+## Capabilities
+${PRODUCT_CAPABILITY_ROW_COMMENT}
+${capabilities.map((name, index) => `C${index + 1} ${name} — User outcome: Fixture user outcome. — Needed for success: Fixture success needs it.`).join("\n") || "None."}
 ## Boundary
 Fixture boundary.
 ## Success criteria
@@ -83,6 +87,15 @@ None.
 ## Open questions
 None.
 `;
+}
+
+function legacyProduct(capabilities = []) {
+  const circled = "①②③④⑤⑥⑦⑧⑨⑩";
+  const legacyRows = capabilities.map((name, index) => `- **${circled[index]} ${name}** — Fixture user outcome because success needs it.`).join("\n") || "None.";
+  return product().replace(
+    `## Capabilities\n${PRODUCT_CAPABILITY_ROW_COMMENT}\nNone.`,
+    `## Capabilities        <!-- ① ② ③ number + name + user outcome + why that outcome is needed for success -->\n${legacyRows}`,
+  );
 }
 
 function arch({ brownfield = "yes", includeBrownfield = true, includeIntegration = true } = {}) {
@@ -1035,8 +1048,10 @@ test("T4 report service is the exact current project identity", (t) => {
   assertFragment(result.stdout, "report:", 'service="Fixture service"');
 });
 
-test("T4 product producer heading round-trips with its canonical HTML comment", (t) => {
+test("T4 legacy circled Product heading remains supported explicitly", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha"] });
+  write(root, "devflow/project/product.md", legacyProduct(["Alpha"]));
+  commit(root, "legacy product grammar");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "baseline:", "expected=2");
   assertFragment(result.stdout, "integrity:", "shape=0");
@@ -1044,7 +1059,7 @@ test("T4 product producer heading round-trips with its canonical HTML comment", 
 
 test("T4 product arbitrary heading suffix stays rejected and visible", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha"] });
-  const current = read(root, "devflow/project/product.md");
+  const current = legacyProduct(["Alpha"]);
   write(root, "devflow/project/product.md", current.replace(
     "## Capabilities        <!-- ① ② ③ number + name + user outcome + why that outcome is needed for success -->",
     "## Capabilities of the old plan",
@@ -1059,7 +1074,7 @@ test("T4 product arbitrary heading suffix stays rejected and visible", (t) => {
 
 test("T4 product prose beginning with bold circled numbers is not a capability", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha", "Beta", "Gamma", "Delta"] });
-  const current = read(root, "devflow/project/product.md");
+  const current = legacyProduct(["Alpha", "Beta", "Gamma", "Delta"]);
   write(root, "devflow/project/product.md", current.replace(
     "- **④ Delta** — Fixture user outcome because success needs it.\n## Boundary",
     "- **④ Delta** — Fixture user outcome because success needs it.\n**①② are the MVP.** ③④ support that flow.\n## Boundary",
@@ -1072,7 +1087,7 @@ test("T4 product prose beginning with bold circled numbers is not a capability",
 
 test("T4 product prose beginning with one circled number is a named duplicate anomaly", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha", "Beta", "Gamma", "Delta"] });
-  const current = read(root, "devflow/project/product.md");
+  const current = legacyProduct(["Alpha", "Beta", "Gamma", "Delta"]);
   write(root, "devflow/project/product.md", current.replace(
     "- **④ Delta** — Fixture user outcome because success needs it.\n## Boundary",
     "- **④ Delta** — Fixture user outcome because success needs it.\n**④ Work surface recovery comes later.**\n## Boundary",
@@ -1082,6 +1097,50 @@ test("T4 product prose beginning with one circled number is a named duplicate an
   assertFragment(result.stdout, "baseline:", "expected=6");
   assertFragment(result.stdout, "integrity:", "shape=1");
   assertFragment(result.stdout, "integrity: kind=shape", "detail=duplicate-capability-number:5");
+});
+
+test("T4 canonical Product C rows preserve count and foundation offset", (t) => {
+  const root = makeRepo(t, { brownfield: "no", capabilities: ["Alpha", "Beta"], baseline: false });
+  fs.mkdirSync(path.join(root, "devflow", "tree", "01-foundation"), { recursive: true });
+  write(root, "devflow/tree/01-foundation/.gitkeep", "");
+  commit(root, "foundation tree only");
+
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "baseline:", "expected=3");
+  assertFragment(result.stdout, "integrity:", "blocking=0");
+  assertFragment(result.stdout, "integrity:", "shape=0");
+  assertFragment(result.stdout, "layer: kind=correspondence-gap", "missing=[2,3]");
+});
+
+test("T4 mixed canonical Product C1 and bullet C2 rows lose no capability", (t) => {
+  const root = makeRepo(t, { brownfield: "no", capabilities: ["Alpha", "Beta"], baseline: false });
+  fs.mkdirSync(path.join(root, "devflow", "tree", "01-foundation"), { recursive: true });
+  write(root, "devflow/tree/01-foundation/.gitkeep", "");
+  const canonicalC2 = "C2 Beta — User outcome: Fixture user outcome. — Needed for success: Fixture success needs it.";
+  write(root, "devflow/project/product.md", read(root, "devflow/project/product.md").replace(canonicalC2, `- ${canonicalC2}`));
+  commit(root, "mixed canonical product grammar");
+
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "baseline:", "expected=3");
+  assertFragment(result.stdout, "integrity:", "blocking=0");
+  assertFragment(result.stdout, "integrity:", "shape=0");
+  assertFragment(result.stdout, "layer: kind=correspondence-gap", "missing=[2,3]");
+});
+
+test("T4 substantive unparsed Product capability rows block instead of disappearing", (t) => {
+  const root = makeRepo(t, { brownfield: "no", baseline: false });
+  write(root, "devflow/project/product.md", read(root, "devflow/project/product.md").replace(
+    `${PRODUCT_CAPABILITY_ROW_COMMENT}\nNone.\n## Boundary`,
+    `${PRODUCT_CAPABILITY_ROW_COMMENT}\nCapability 1: Alpha\n## Boundary`,
+  ));
+  commit(root, "unparsed product capability row");
+
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "baseline:", "expected=1");
+  assertFragment(result.stdout, "integrity:", "blocking=1");
+  assertFragment(result.stdout, "integrity: kind=blocking", "path=devflow/project/product.md");
+  assertFragment(result.stdout, "integrity: kind=blocking", "reason=capability-rows-unparsed");
+  assert.equal(nextOf(result.stdout), "integrity.blocking");
 });
 
 test("T4 report progressLastPoint is the exact last nonempty progress entry", (t) => {
