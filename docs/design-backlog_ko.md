@@ -9,8 +9,9 @@
 ## 실전 관찰 항목 — 규칙 추가 없이 다음 사이클에서 지켜볼 것
 
 - **정본 `C<n>` 행 파서의 수용된 한계** (v0.20.0 최종 수리 감사에서 2026-08-31 기록;
-  `skills/principles/scripts/project-state.mjs:531-574`) — `## Capabilities` 아래에서 한 행이라도
-  파싱되면 나머지 내용 있는 행은 이상 없이 버려진다(`C1, C3` → `02, 04`; `C1 Alpha …`와
+  `skills/principles/scripts/project-state.mjs:531-574`) — 선언된 번호의 빈칸은 이상 없이
+  수용된다(`C1, C3` → `02, 04`). 별개로, `## Capabilities` 아래에서 한 행이라도 파싱되면
+  나머지 내용 있는 비행은 이상 없이 버려진다(`C1 Alpha …`와
   `- Palette export needed` → `02`만). 반대로 실제 행이 선언하지 않은 `C<n> `으로 시작하는
   문장은 능력으로 파싱된다(유효한 `C1 Alpha …` 옆의 `C3 comes later.` →
   `04-comes later..md`, `blocking=0 anomalies=0`). 두 동작은 이번 수리보다 앞서며 원문자 문법에도
@@ -19,6 +20,16 @@
   달라진 실제 행을 위의 조용한 탈락으로 바꾸므로 기각했고, 연속성·near-miss 이상도 앞서 기각했다.
   실제 `product.md`에서 조작되거나 빠진 행이 관측되거나, legacy prose 시험을 건드리지 않고 내용
   있는 미파싱 행을 전부 보이게 할 수 있을 때 다시 연다.
+- **첫 번째가 아닌 `WRITE`의 템플릿 id 투영** (2026-08-31 v0.20.0 Phase 4 BEFORE와 Fable
+  판정 기록) — Skill Rails v0.1.7은 첫 `WRITE`만 `template_text`로 투영하지만 뒤의 `WRITE`는
+  `effects`와 `stage_artifacts`에 템플릿 id를 싣고, BEFORE 소비자 세 번(Claude 2·Codex 1)은 그
+  id의 템플릿 파일을 찾아 썼다. AFTER 실행에서 첫 번째가 아닌 산출물이 명명된 템플릿과 다른
+  모양으로 쓰이면 이 투영 경계를 다시 연다.
+- **템플릿 주석을 통한 glossary 문법 전달** (2026-08-31 Fable의 Product/Adopt/Arch 실물 실행·
+  파서 판정) — glossary 작성자에게 정확한 `term: definition` 형식이 닿는 곳은 제목 줄의 템플릿
+  주석뿐이며, 이번에는 새 런타임 규칙을 두지 않는다. AFTER 실행이 내용 있는 glossary 줄을 쓰고도
+  정의를 0개 파싱하면 `capability-rows-unparsed`에 대응하는 `glossary-terms-unparsed` 봉쇄를 다시
+  검토한다.
 - **유지보수 재개봉 시 기존 기록 도달** (2026-08-08 검증 완료 · 2026-08-11 문안 개선):
   유지보수 카드는 형식상 의존이 없어 work의 직접 의존 읽기가 발동하지 않을 수 있다. 승격
   기계(환류·journal 정리)가 구속 지식을 이미 공유 문서에 올려두므로 틈은 파국형이 아니라

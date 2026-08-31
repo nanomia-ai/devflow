@@ -9,9 +9,10 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 ## Field observation items — watch during coming cycles, without adding rules
 
 - **Accepted limits of the canonical `C<n>` row parser** (recorded 2026-08-31 by the
-  v0.20.0 final-repair audit; `skills/principles/scripts/project-state.mjs:531-574`) — once
-  one row parses, every other substantive line under `## Capabilities` is dropped with no
-  anomaly (`C1, C3` → `02, 04`; `C1 Alpha …` plus `- Palette export needed` → `02` only).
+  v0.20.0 final-repair audit; `skills/principles/scripts/project-state.mjs:531-574`) — a
+  declared numbering gap is accepted with no anomaly (`C1, C3` → `02, 04`). Separately,
+  once one row parses, every other substantive non-row under `## Capabilities` is dropped
+  with no anomaly (`C1 Alpha …` plus `- Palette export needed` → `02` only).
   Conversely, a line beginning `C<n> ` whose `n` no real row declares is parsed as a
   capability (`C3 comes later.` beside a valid `C1 Alpha …` → `04-comes later..md` with
   `blocking=0 anomalies=0`). Both behaviors predate this repair and also hold for the
@@ -22,6 +23,18 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   earlier. Reopen when a fabricated or dropped row is observed in a real `product.md`, or
   when every substantive unparsed line can be made visible without touching the legacy
   prose tests.
+- **Projection of non-first `WRITE` template ids** (recorded 2026-08-31 by the v0.20.0
+  Phase 4 BEFORE runs and Fable adjudication) — Skill Rails v0.1.7 projects only the first
+  `WRITE` as `template_text`, while later `WRITE`s carry template ids in `effects` and
+  `stage_artifacts`; three BEFORE consumers (Claude 2, Codex 1) resolved those ids to the
+  template files. Reopen this projection boundary if an AFTER run writes a non-first
+  artifact in a shape other than its named template.
+- **Glossary grammar carried by a template comment** (recorded 2026-08-31 by Fable's live
+  Product/Adopt/Arch execution and parser adjudication) — the heading-line template comment
+  is the only path that carries the exact `term: definition` form to a glossary writer; this
+  adds no runtime rule. Reopen toward a `glossary-terms-unparsed` blocking counterpart to
+  `capability-rows-unparsed` if an AFTER run writes substantive glossary lines that still
+  parse to zero definitions.
 - **Reaching prior records when maintenance reopens a capability** (verified 2026-08-08 ·
   wording improved 2026-08-11): maintenance cards formally have no dependency, so work's
   direct-dependency read may not fire. The promotion machinery (upper-document feedback · journal
