@@ -53,7 +53,8 @@ generated capability rows, and terminal `interface:`, so its brownfield Layer 0 
 for both the state parser and later Product entry; Product remains the canonical owner, with no
 runtime cross-skill import, registry, parser, or state zone.
 Fable's final glossary adjudication executed the frozen brownfield output and found six real
-terms parsed as zero canon entries plus the phantom term `Next`; it also refuted the earlier
+terms parsed as zero canon entries plus two phantom definitions, including `Next` and a malformed
+invariant-like line; it also refuted the earlier
 Product-unaffected and Adopt-only reach claims with two Product writers and Arch's glossary-term
 branches. Product now owns one glossary template whose heading comment carries the exact
 `<term>: <definition>` line grammar and whose `terms` field is `generated`; Adopt and Arch project
@@ -67,9 +68,15 @@ Adopt approval Decision is `sha256:c7dae28d1f6dcab467a7983e660a9f33f11a3594d80e9
 The 444/444 full root suite belongs to `dedf24a65c2767ff86079cb91e2719bc20a9f973`
 and is stale for this final-repair tree. The later 449/449 root suite with
 `duration_ms 1279527.7144` belongs to `86a4d19430002b5f90a1ded470a03d5438615390` and is also
-stale for the glossary-repaired tree. No new wildcard suite was run; the 604-second standalone
-project-state suite, Phase-4 AFTER scenarios, and operational gates remain unverified, and no
-production-readiness claim is made.
+stale for the glossary-repaired tree. At `f5655ef00b49aed9221fabb600e21cee43662afb`, the first
+full-suite wrapper timed out after 604022 ms and remains `UNPROVEN`; it is not a completed suite.
+After the harness was corrected to track the exact PID, one full root suite completed with
+tests/pass 450/450, fail/cancelled/skipped/todo 0, `duration_ms 1268897.1699`, stderr 0 B, and
+clean start/end status. Its complete raw record is
+`D:\Program Files\orca\workspaces\devflow\phase4-empirical-artifacts-run_3704018d415f\evidence\final-root-suite-f5655ef-complete.txt`.
+That gate closes Opus's sole gate blocker with zero mechanism blockers; its six tier-3 findings
+remain in the external report. Phase-4 AFTER scenarios remain unverified, Gate B is not
+applicable, and no production-readiness claim is made.
 
 ## 0.18.9 — 2026-08-21 — the first real run found two walls, and two gates now stand where they were
 

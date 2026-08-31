@@ -11,7 +11,7 @@
 - **정본 `C<n>` 행 파서의 수용된 한계** (v0.20.0 최종 수리 감사에서 2026-08-31 기록;
   `skills/principles/scripts/project-state.mjs:531-574`) — 선언된 번호의 빈칸은 이상 없이
   수용된다(`C1, C3` → `02, 04`). 별개로, `## Capabilities` 아래에서 한 행이라도 파싱되면
-  나머지 내용 있는 비행은 이상 없이 버려진다(`C1 Alpha …`와
+  나머지 내용 있는 행이 아닌 줄은 이상 없이 버려진다(`C1 Alpha …`와
   `- Palette export needed` → `02`만). 반대로 실제 행이 선언하지 않은 `C<n> `으로 시작하는
   문장은 능력으로 파싱된다(유효한 `C1 Alpha …` 옆의 `C3 comes later.` →
   `04-comes later..md`, `blocking=0 anomalies=0`). 두 동작은 이번 수리보다 앞서며 원문자 문법에도
