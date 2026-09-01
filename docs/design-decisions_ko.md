@@ -436,6 +436,58 @@ metadata가 바로 준다.
   규칙이 verify 전용 제목 아래로 가면 아무 에러 없이 사라진다. 결함 열 건을 함께 수리하는
   릴리스에 섞으면 어느 변경이 무엇을 깼는지 가릴 수 없다.
 
+### DD-95 · 전역 설치된 devflow는 현재 흔적이 없는 저장소에서 침묵하고, 명시 의도와 이력 인식 상태 판정이 도입 경계를 보존한다 (v0.20.0)
+
+주제: 정체성 · 배포 · 플랫폼 | 도입: v0.20.0 | 상태: 유효
+
+관찰된 문제: 전역 설치된 플러그인의 SessionStart가 모든 Git 저장소에 devflow 안내를 넣고,
+arch·design·split·work·verify·resume의 일반 개발 어휘와 product·adopt의 넓은 설명이 이를
+묵시적 단계 진입으로 바꿀 수 있었다. 상태 도구도 `product.md`가 없는 처음부터 비도입인 저장소와
+부분·과거 devflow 저장소를 모두 `setup.no-product`로 합쳐, 안전한 재개 경로가 설치 질문을 할 수
+있었다. 이는 DD-92의 재검토 조건인 「지연 안내가 resume과 다른 행동을 유발함」의 실제 장면이다.
+
+원하는 동작: devflow를 도입한 적 없는 보통 프로젝트에는 수동 안내도 남기지 않는다. 명시적
+devflow 호출은 언제나 작동하고, 다른 devflow 스킬이 건넨 경로와 기존 관리 프로젝트의 흐름은
+그대로 유지한다. 부분·삭제·얕은 이력·판정 실패 상태는 비도입으로 잘못 단정하지 않는다.
+
+선택한 경계: SessionStart는 Git 루트를 찾은 뒤 현재 `devflow` 경로와
+`devflow/project/product.md` 존재만 싸게 확인한다. 둘 다 없으면 출력 없이 0으로 끝나며, 하나라도
+있으면 기존 주입 바이트를 그대로 낸다. 이 검사는 고정 pointer의 유무만 고르고 index·이력·상태
+도구·zone·route를 읽지 않는 약한 비구속 판정이다. arch·design·split·work·verify·resume의 설명은
+명시 호출, 다른 devflow 스킬의 route, 기존 devflow 관리 프로젝트만 진입 팔로 둔다. product와
+adopt는 직접 호출, devflow 명명, 또는 Layer 0·devflow 능력 문서 같은 devflow 산출물을 요구하는
+명시 의도만 진입으로 삼는다.
+
+행동을 정하는 정본 판정은 `project-state.mjs` 하나에 남는다. 현재와 index의 devflow 흔적이 모두
+없고, 전체 이력에서 devflow 경로가 없다는 사실까지 증명될 때만 `setup.unmanaged`를 낸다. 과거
+흔적은 `setup.no-product`에 남고, shallow·Git 실패·해독 실패·불명확은 모두 기존
+`setup.no-product`로 보수적으로 후퇴한다. resume은 domain orientation을 먼저 보존한 뒤
+`setup.unmanaged`를 ASK·route·write 없이 한 보고와 DONE으로 끝내며, 사용자가 도입 의도를 밝힌
+경우에만 product 또는 adopt를 선택지로 알린다.
+
+경계가 필요한 이유: hook의 오판 비용은 비대칭이다. 관리 프로젝트에서 안내를 숨기는 false
+unmanaged는 미지 세션 복구를 끊지만, 애매한 저장소에 안내를 한 번 더 보이는 false managed는
+정본 상태 도구가 다음 진입에서 바로 정정한다. 따라서 hook은 현재의 압도적이고 싼 증거만 보고
+pointer를 억제하고, index·전체 이력·unknown 판정은 행동을 소유한 상태 도구만 수행한다. DD-92가
+막은 것은 hook의 route 판정과 파일 본문 주입이다. 이미 있던 Git-root 존재 검사가 보여 주듯 모든
+파일시스템 읽기가 상태 계산이라는 전제는 기록된 이유가 아니며, 이번 경계는 route나 본문을 만들지
+않는다. DD-05·DD-20·DD-83·DD-92·DD-93은 각각 훅 하나, 독립 adopt 발견성, 읽기 전용 상태 계산,
+상태 소유권, P2 작성 정본이라는 기존 이유와 범위에서 그대로 유효하다.
+
+기각한 대안: 새 init 스킬·도입 marker는 한 사실의 두 번째 집을 만든다. hook에서 index와 전체
+이력까지 복제하면 모든 세션의 비용과 두 판정의 표류를 늘린다. 비도입 저장소에 고정된 부정 안내를
+넣으면 침묵이라는 결과를 깨고 영구 context 세금을 만든다. `allow_implicit_invocation: false`는 관리
+프로젝트의 유효한 선택까지 막는다. product·adopt의 일반 어휘를 그대로 열어 두면 hook 침묵 뒤에도
+같은 결함이 두 입구로 되돌아온다.
+
+영향 좌표: `scripts/session-start.js`, 여덟 스킬의 `.skill-rails/intent.json`과 생성 trigger 투영,
+`skills/principles/scripts/project-state.mjs`, `skills/resume/spec.mjs`·`body.md`·fixture, 그 seam 시험,
+A10(도입 전 또는 오발동) 매트릭스 칸, CHANGELOG. 새 매트릭스 행·용어·marker·init 파일은 없다.
+
+재검토: 현재 devflow 프로젝트가 hook에서 침묵하거나, 명시 product/adopt 호출을 찾지 못하거나,
+일반 비도입 요청이 downstream 스킬을 다시 고르거나, hook과 `setup.unmanaged`의 의도된 약한 차이가
+pointer가 아니라 행동을 바꾸거나, SessionStart 지연이 유의하게 늘어날 때.
+
 ## 검증과 역할
 
 ### DD-08 · TDD 절차 미채택
@@ -722,6 +774,143 @@ edge를 식별하지 않는다. 명령은 카드가 이름 댄 assertion만 증�
 fixture. DD-24·DD-25·DD-50·DD-55·DD-69는 그대로 유효하다.
 재검토 조건: 유계 경로가 구현 처방 없이 소비 계약을 식별할 수 없음이 실측되거나, 작업 전용
 fixture가 완료 계약 중복 없이 다른 내구 소유자를 얻을 때.
+
+### DD-94 · 정확한 제목의 작업 커밋 뒤에는 미확정 증거가 COMMIT만 금지하고, 증거가 닫히고 상위 문서 환류가 없거나 호환 집합이 전부 소비됐을 때 경계 커밋 하나가 늦은 탈것이 된다 (v0.20.0)
+
+주제: 작업 트리와 카드 | 도입: v0.20.0 | 상태: 유효
+
+관측된 문제: 첫 그린필드 실사용 카드가 정본의 정확한 H1 제목으로 작업 커밋을 만든 뒤 검토와
+`carry`가 아직 없자, work의 `boundary-incomplete` 관문이 모든 stage보다 먼저 영구 `BLOCK`했다.
+그 결과 빠진 증거를 만들 수 있는 `review-reduction` 자체가 닿지 않았다. 이 관문을 단순 제거해
+늦은 검토를 붙인 재현에서는 다른 소실이 드러났다. 유효한 `carry:` 뒤에 `review result:`를
+덧붙이자 상태 도구가 진행 줄 전체의 마지막 줄만 읽어 물리적으로 남은 carry를 `absent`로
+바꿨고, work는 같은 carry를 한 번 더 쓰려 했다. 이 사실은 `missing`과 현재 점유뿐 아니라 능력
+폐쇄의 `children-done carryFacts`에서도 조용히 사라졌다.
+
+원하는 동작: 정확한 H1 작업 커밋은 하나만 유지하고, 그 뒤에도 커밋하지 않는 완료·검토 증거
+생산자는 닿을 수 있어야 한다. 한 증거 종류의 늦은 줄이 다른 종류의 유효한 사실을 철회하지
+않는다. 증거가 닫힌 뒤에도 `feedback.action`이 미판정 또는 UNKNOWN이면 모든 경계 효과보다 먼저
+그 판단을 요구한다. `none`은 기존 경계 커밋에 빠진 carry와 claim→done 이동을 싣는다.
+`compatible`은 정확한 제안이 처음 보이거나 current인 동안 기존 의미 소유자 경로를 마쳐야 하며,
+모든 정확한 lifecycle이 `consumed`이고 현재 카드의 current marker가 없을 때만 같은 경계 탈것으로
+닫힌다. UNKNOWN·current·never-seen compatible 상태와 그 밖의 관측된 환류 값은 닫히지 않는다.
+
+선택한 경계: 기존 `boundary-incomplete` BLOCK을 없애고, 작업 커밋이 이미 있으며 통합과 HANDOFF가
+현재이고 finish-boundary 증거가 미확정인 동안 **`COMMIT` 동사만** 금지하는 `RESTRICT` 관문 하나로
+바꾼다. 증거만 쓰는 완료 신호와 독립 검토는 계속 진행하지만, checkpoint나 두 번째 작업 커밋을
+품은 갈래는 기계적으로 막힌다. 완료가 `pass`이고 검토가 `pass`·`waived`·`not-applicable` 중
+하나로 닫힌 뒤에도 미판정 또는 UNKNOWN `feedback.action`은 경계 표보다 먼저 필요한 판단을 이름으로
+대는 `BLOCK`으로 돌아간다. 판단이 알려진 뒤 `feedback.action=none`인 기존 두 행은 그대로다.
+carry가 없으면 한 줄만 쓰고 claim→done 이동과 함께 경계 커밋에 싣고, 이미 있으면 다시 쓰지 않고
+이동만 싣는다. `feedback.action=compatible`에는 DD-96 위에 세운 정확한 lifecycle을 소비하는 두 행이 더
+있다. 모든 제안이 `consumed`이고 현재 marker가 없을 때만 같은 두 효과를 재사용하며, never-seen은
+정본 transport를 먼저 쓰고 current는 Resume으로 계속 라우팅하고 UNKNOWN·invalid는 차단한다.
+그 밖의 알려진 non-`none` 환류는 기존 `pending`의 `REPORT→WAIT`에 남는다.
+
+같은 변화에서 `carryState`는 전체 진행 줄의 마지막 줄이 아니라 **마지막 유효 carry-kind 줄**을
+고른다. signal과 review가 이미 쓰는 종류별 최신값 의미와 같으며, 잘못된 뒤쪽 carry 줄은 기존
+`integrity.shape`로 계속 보이되 앞의 유효한 carry를 가리지 않는다. work collector의 구조화된
+상태가 없는 fallback도 같은 선택을 쓴다. 상태 도구는 계속 읽기 전용이고 새 field·zone·형식·
+writer를 만들지 않는다.
+
+필요한 이유: `RESTRICT`는 판단값마다 복구 stage를 늘리지 않고 실제로 위험한 효과만 거부하므로
+증거 생산자와 한 작업 한 커밋을 함께 보존한다. 종류별 마지막 유효 줄은 carry만 갖던 손실성
+특례를 없애고 `missing`, 점유, 폐쇄 수확의 한 정본을 함께 고친다. 경계 커밋은 이미 HANDOFF와
+상태 이동을 함께 싣는 공유 탈것이라 별도 커밋이나 writer를 만들지 않는다. DD-09·DD-15·DD-83은
+그대로 유효하며, 이 결정은 DD-83의 두 재검토 조건 — 도구가 누락을 정확히 잡고도 같은 세션이
+닫지 못한 장면, 실제로 있는 carry를 `missing`이라 부른 장면 — 에 대한 유계한 답이다.
+
+기각한 대안: compatible 행을 `missing`까지 범용으로 넓히기 — 도입 당시 durable producer가 없어
+기존 work→resume→work 무효과 순환만 넓혔다. 판단값별 recovery stage·conflict 행 추가 — 같은
+COMMIT 위험과 기존 pending 동작을 중복한다. 두 번째 H1 또는 post-title checkpoint — DD-09를
+어기고 마지막-card-commit 인식을 지운다. collector만 수리 — `missing`과 폐쇄 수확의 소실을
+남긴다. carry를 다시 마지막에 쓰기 — 중복을 의도적으로 만든다. 새 carry field나 별도 boundary
+writer — 한 사실 두 집과 새 권한을 만든다.
+
+후속 출처 정정(DD-96): 위 `compatible` 기각과 none-only 경계는 durable producer가 없다는
+DD-94 도입 당시 전제에 의존했다. DD-96의 정본 `compatible feedback pending` transport와 정확한
+never/current/consumed lifecycle은 DD-94가 기록한 「durable producer가 생겨 pending 경로를 끝낼
+수 있을 때」를 충족하므로 그 전제는 더 이상 consumed 상태에 적용되지 않는다. 이 정정은 범용
+`compatible` 폐쇄를 허용하지 않는다. 증거 생산자는 계속 닿고, 미확정 증거에는 COMMIT이 금지되며,
+정확한 H1 작업 커밋 하나·경계 탈것 하나·새 writer 없음은 유지된다. UNKNOWN·current·never-seen
+compatible 상태도 계속 닫히지 않는다.
+
+영향 좌표: `skills/work/{spec.mjs,body.md,fixtures/scenarios.json,collectors/index.mjs}`,
+`skills/work/collectors/project-state-seam.test.mjs`,
+`skills/principles/scripts/project-state.mjs`,
+`skills/principles/references/delivery/commit-and-verification.md`,
+`scripts/project-state.test.js`. 호환 환류 transport의 소유권은 DD-96에 남고, 이 결정은 그 정확한
+consumed lifecycle이 늦은 경계를 끝내는 효과만 인정한다. 자동 활성화 gate는 이 결정 밖이다.
+재검토 조건: 마지막 carry-kind 줄이 현재 사실이 아닌 공인 작성 흐름이 관측되거나, 늦은
+증거-only 쓰기가 두 번째 작업 경계를 요구함이 실측되거나, DD-96의 정확한 consumed lifecycle이
+pending 경로를 결정적으로 끝내지 못할 때. durable producer가 생기는 기존 조건은 DD-96으로
+충족되었다.
+
+### DD-96 · 호환 환류는 최초 완전 집합이 봉인된 카드 경계 payload로 보존되고, Resume이 한 의미 소유자씩 증명해 착지시킨다 (v0.20.0)
+
+주제: 작업 트리와 카드 | 도입: v0.20.0 | 상태: 유효
+
+관측된 문제: 깨끗한 Work 검토가 재사용 가능한 호환 환류를 발견해도 기존 `compatible` 갈래는
+소유자에게 보고한 뒤 카드를 닫을 뿐 그 내용을 지속하지 않았다. 이를 K에 넣으면 카드 실행
+증거와 현재 재사용 진실의 소유권이 섞이고, 자유 메모나 HANDOFF에 넣으면 정본 소비자와 원자적
+완료 경계가 없다. 한편 단순한 소유자 파일 diff는 내용·출처·후속 함의가 실제로 착지했음을
+증명하지 못한다.
+
+원하는 동작: Work는 제목 커밋 전후 어느 경계에서도 호환 환류를 잃지 않는다. 한 카드에서
+lifecycle이 아직 없을 때만 이미 수집된 pending·eligible 집합과 카드 target의 기계적 관계를
+검증해 전체 소유자 집합을 완전하고 결정적인 payload로 한 번 원자 생산한다. 모든 줄이 정본
+payload이고 source가 하나이며 owner가 중복되지 않고 모든 owner 경로가 존재하는 첫 after-state가
+집합을 봉인한다. 이후의 차가운 재진입은 제안을 다시 발명하거나 pending 집합을 재구성하지 않고
+봉인된 current·consumed lifecycle과 eligible 공집합 사실을 소비한다. Resume은 current 소유자를 기존
+Product·Design·Arch·Adopt 단계로 전부 라우팅한다. 각 단계는 정확한 소유자에 Background,
+Why/증거, Conclusion, implication, 카드@커밋 출처가 모두 있음을 정본 상태 재생으로 확인한 뒤에만
+그 마커 하나를 삭제하며, 다른 소유자는 잔여 마커로 남는다.
+
+선택한 경계: 정본 문법은 `compatible feedback pending: payload-json:` 한 줄이며 payload 키는
+`owner`, `source`, `coordinates` 순서다. coordinates 키는 `target`, `background`, `why`,
+`conclusion`, `implication` 순서이고 모두 비어 있지 않다. owner는 product, glossary, design,
+arch 또는 정확한 능력 설계 문서뿐이다. source는 정확한 카드 경로와 전체 커밋 oid이고, 첫 집합의
+모든 항목은 같은 source revision을 쓴다. 한 source card의 모든 호환 줄이 정본 payload이고 source가
+하나이며 owner가 중복되지 않고 모든 owner 경로가 존재하는 첫 전이의 after-state가 그 완전한 정확
+payload 집합의 seal이다. 한 줄이라도 받아들일 수 없으면 그 전이는 도입이 아니며, 어느 카드에도
+귀속할 수 없는 invalid 줄은 그 전이의 모든 미봉인 카드를 보류한다. 그 뒤 같은 카드에서 기존 항목을 다시 도입하거나 새 owner·oid·좌표
+paraphrase를 도입하면 무결성 차단이다. 별도 journal 문법, tombstone, note 계층은 추가하지 않으며
+기존 Git lifecycle 이력이 seal과 소비 상태의 정본이다.
+
+Work의 제목 전 최초 생산은 기존 카드 내용과 정확한 H1 커밋에 완전한 마커 집합 쓰기를 함께
+싣는다. 제목 뒤 최초 생산은 journal만 만지는 별도 경계 커밋이고 카드를 수정하지 않는다. lifecycle
+하나라도 생긴 뒤에는 Work가 수집된 lifecycle 사실이 `settled`이고 eligible 집합이 비었는지만
+기계적으로 확인해 새 마커를 생산하지 않는다. 이 갈래에서 pending 집합은 비교 대상이 아니다.
+current는 Resume으로 계속 라우팅되고 consumed는 영구 은퇴하며,
+그 뒤 발견한 환류는 새 요청과 새 카드로 들어간다. 다른 카드 마커는 현재 작업을 가로채지 않고,
+미판정 UNKNOWN은 필요한 판단으로 차단되며 `none`, staling, design-note 경로는 바뀌지 않는다.
+
+Resume은 product와 glossary를 Product로, design을 Design으로, greenfield arch와 능력 문서를
+Arch로, brownfield arch와 능력 문서를 Adopt로 보낸다. 소유자 단계는 먼저 정확한 내용을 쓰고
+WAIT하여 상태를 다시 계산한다. 상태가 source와 다섯 좌표의 의미 착지를 증명한 재진입에서만
+바이트 동일 마커 삭제와 정확한 소유자 diff를 한 커밋에 묶는다. 소유자 파일 변화는 삭제 권한의
+필요조건일 뿐 의미 착지의 충분조건이 아니다.
+
+왜: 이 경계는 DD-09의 한 사실 한 집, DD-83의 K 소유권, DD-87의 의미 소유자, DD-94의 단일
+정확한 제목 커밋을 유지하면서 1000→30 요약 손실 없이 재사용 진실을 정본 소유자에게 전달한다.
+첫 완전 수용 after-state를 seal로 쓰면 완전한 다중 소유자 생산과 부분 소비를 함께 보존하면서 새 oid나 바꿔 쓴
+좌표로 같은 카드를 다시 여는 차가운 세션을 결정적으로 끝낸다. 카드는 실행과 출처를, journal은
+현재 대기 수송을, Git 이력은 봉인·소비 lifecycle을, 소유자 문서는 현재 재사용 진실을 각각 가진다.
+모든 seal 항목이 consumed이고 current가 없을 때만 Work 경계가 닫혀 Verify가 다음 소비자가 된다.
+
+정본 소유자: 문법·Git seal 도출·검증·lifecycle 재구성·우선순위는 Principles 상태 도구, 원자 생산과
+이미 수집된 집합의 기계적 정확성 guard는 Work, 전량 라우팅은 Resume, 의미 착지와 원자적 소비는
+Product·Design·Arch·Adopt가 소유한다.
+증거: `skills/principles/spec.mjs`, `skills/principles/scripts/project-state.mjs`,
+`skills/work/spec.mjs`, `skills/resume/spec.mjs`, 네 소유자 skill의 compatible-feedback stage,
+`scripts/project-state.test.js`, 각 skill의 실행 fixture.
+재검토 조건: 정상 Git 이력에서 첫 완전 도입을 결정적으로 식별할 수 없는 실측 사례가 생기거나,
+상태 재생이 동일 의미를 결정적으로 확인하지 못하거나, 여러 소유자의 원자적 공동 착지가 부분
+소비보다 반드시 안전하다는 증거가 생길 때. 이력에서 도출한 차단형 호환 환류 finding은 현재
+영구적이며 프로젝트 전체에 적용된다. Work가 아닌 writer가 현장에서 그 finding을 실제로 만난 뒤에
+clearable-finding 설계를 재검토한다. 후보는 현재 journal에서 reopen finding을 도출하고, 소비를
+오래된 것부터 순회하며, 이미 소비된 identity의 제거 검증은 건너뛰고, 소비된 nonmember 제거는
+advisory로 다루는 방식이다.
 
 ### 이 주제에서 기각된 안
 

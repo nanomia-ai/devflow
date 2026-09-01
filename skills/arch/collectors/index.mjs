@@ -36,7 +36,7 @@ function routeOf(state) {
   if (id === "none") return "none";
   const direct = new Set([
     "git.open-operation", "integrity.blocking", "integrity.shape",
-    "marker.glossary-term", "marker.design-note", "marker.design-open-item", "marker.knowledge-landing",
+    "marker.glossary-term", "marker.design-note", "marker.design-open-item", "marker.knowledge-landing", "marker.compatible-feedback",
     "setup.no-product", "setup.layer0-incomplete", "setup.brownfield-field", "setup.integration-config",
     "baseline.legacy-v010", "baseline.design-refresh", "baseline.boundary",
     "complete.product-pass", "complete.adoption"
@@ -120,6 +120,18 @@ async function knowledgeMarkerCount(context) {
   return markerEntries(await canonicalState(context), "knowledge-landing").length;
 }
 
+async function compatible(context) {
+  const state = await canonicalState(context);
+  const entries = state?.zones?.marker?.entries;
+  if (!Array.isArray(entries)) return { owner: "invalid", landing: "invalid" };
+  const marker = entries.find((entry) => entry?.kind === "compatible-feedback" && entry?.writer === "arch");
+  if (!marker) return { owner: "none", landing: "none" };
+  const owner = marker.owner === "devflow/project/arch.md" ? "arch"
+    : /^devflow\/project\/capabilities\/[0-9]+-[^/]+\.md$/.test(marker.owner) ? "capability" : "invalid";
+  const landing = marker.landing === "satisfied" ? "satisfied" : marker.landing === "pending" ? "pending" : "invalid";
+  return { owner, landing };
+}
+
 export const collectors = Object.freeze({
   "state.arch-kernel": kernel,
   "state.arch-route": route,
@@ -131,7 +143,9 @@ export const collectors = Object.freeze({
   "state.arch-capabilities": capabilities,
   "state.arch-expected": expected,
   "knowledge.arch-markers": knowledgeMarkers,
-  "knowledge.arch-marker-count": knowledgeMarkerCount
+  "knowledge.arch-marker-count": knowledgeMarkerCount,
+  "state.compatible-owner": async context => (await compatible(context)).owner,
+  "state.compatible-landing": async context => (await compatible(context)).landing
 });
 
 export const snapshotBasis = null;

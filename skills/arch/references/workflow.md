@@ -38,7 +38,7 @@ The proposal carries components, survival evidence, stack and derived choices, s
 
 Land product's attributed technical-choice lines beside their owning architecture conclusions. Report the complete proposal and ask for explicit approval. Refusal and interruption write nothing. On approval, write architecture, code style, and only qualifying ADRs, then immediately land the complete Layer 0 boundary. A refresh uses its binding architecture boundary.
 
-Integration defaults to the current branch when one worktree exists. With several worktrees, propose an integration branch checked out by none; if absent, show the exact branch-creation command and let the owner run it. Devflow creates neither branches nor worktrees. Merge is merge-commit or rebase; squash is forbidden.
+Write integration as a bare branch name, never a description. With one worktree, write the current branch name. With several worktrees, propose an integration branch checked out by none; if absent, show the exact branch-creation command and let the owner run it. Devflow creates neither branches nor worktrees. Merge is merge-commit or rebase; squash is forbidden.
 
 ## Capability design and routing
 

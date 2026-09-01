@@ -3,7 +3,8 @@
     "id": "domain-orientation-bounded",
     "s": {
       "state.canonicalNext": "ready.ready",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "domain-orientation"
@@ -24,10 +25,77 @@
     ]
   },
   {
+    "id": "unmanaged-ordinary-reports-and-stops",
+    "s": {
+      "state.canonicalNext": "setup.unmanaged",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/DONE:unmanaged",
+      "branch:canonicalNext/DONE:unmanaged"
+    ]
+  },
+  {
+    "id": "unmanaged-handoff-reports-and-stops",
+    "s": {
+      "state.canonicalNext": "setup.unmanaged",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "handoff-continuation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": []
+  },
+  {
+    "id": "unmanaged-domain-orientation-stays-first",
+    "s": {
+      "state.canonicalNext": "setup.unmanaged",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "domain-orientation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/DONE:orientation",
+      "branch:canonicalNext/DONE:orientation"
+    ]
+  },
+  {
     "id": "handoff-active-reentry",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "handoff-continuation"
@@ -48,7 +116,8 @@
     "id": "design-recovery-producer-routes-work",
     "s": {
       "state.canonicalNext": "marker.design-note",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -72,7 +141,8 @@
     "id": "design-recovery-external-reports-only",
     "s": {
       "state.canonicalNext": "marker.design-note",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -92,7 +162,8 @@
     "id": "recovery-routes-arch",
     "s": {
       "state.canonicalNext": "baseline.boundary",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -116,7 +187,8 @@
     "id": "recovery-routes-adopt",
     "s": {
       "state.canonicalNext": "marker.design-note",
-      "state.brownfield": "yes"
+      "state.brownfield": "yes",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -139,7 +211,8 @@
     "id": "folder-boundary-commits-before-wait",
     "s": {
       "state.canonicalNext": "layer.folder-boundary",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -163,7 +236,8 @@
     "id": "digest-commits-before-wait",
     "s": {
       "state.canonicalNext": "ready.digest-behind",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -187,7 +261,8 @@
     "id": "transition-family-verifies",
     "s": {
       "state.canonicalNext": "transition.prepared-route",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -208,7 +283,8 @@
     "id": "claim-and-layer-family-splits",
     "s": {
       "state.canonicalNext": "claim.needs-reapproval",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -229,7 +305,8 @@
     "id": "git-and-setup-ask",
     "s": {
       "state.canonicalNext": "git.open-operation",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -250,7 +327,8 @@
     "id": "glossary-term-asks-owner",
     "s": {
       "state.canonicalNext": "marker.glossary-term",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -271,7 +349,8 @@
     "id": "recovery-action-has-no-none-branch",
     "s": {
       "state.canonicalNext": "marker.design-open-item",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -293,7 +372,8 @@
     "id": "brownfield-baseline-adopts",
     "s": {
       "state.canonicalNext": "baseline.legacy-v010",
-      "state.brownfield": "yes"
+      "state.brownfield": "yes",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -314,7 +394,8 @@
     "id": "greenfield-baseline-arches",
     "s": {
       "state.canonicalNext": "baseline.legacy-v010",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -335,7 +416,8 @@
     "id": "product-marker-routes-product",
     "s": {
       "state.canonicalNext": "marker.product-rerun",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -356,7 +438,8 @@
     "id": "blocked-channel-reports-and-waits",
     "s": {
       "state.canonicalNext": "blocked.channel",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -378,7 +461,8 @@
     "id": "completion-reports-and-done",
     "s": {
       "state.canonicalNext": "complete.adoption",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -400,7 +484,8 @@
     "id": "unrecognized-fails-closed",
     "s": {
       "state.canonicalNext": "unrecognized",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -419,7 +504,8 @@
     "id": "handoff-unrecognized-guard",
     "s": {
       "state.canonicalNext": "unrecognized",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "handoff-continuation"
@@ -437,7 +523,8 @@
     "id": "ordinary-ready-routes-work",
     "s": {
       "state.canonicalNext": "ready.ready",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -459,7 +546,8 @@
     "id": "domain-entry-questions",
     "s": {
       "state.canonicalNext": "ready.ready",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "domain-orientation"
@@ -478,7 +566,8 @@
     "id": "tweak-entry",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "handoff-continuation"
@@ -496,7 +585,8 @@
     "id": "direct-reads",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "handoff-continuation"
@@ -514,7 +604,8 @@
     "id": "report-approval",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "handoff-continuation"
@@ -532,7 +623,8 @@
     "id": "routing-introduction",
     "s": {
       "state.canonicalNext": "transition.prepared-route",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -550,7 +642,8 @@
     "id": "defer-policy",
     "s": {
       "state.canonicalNext": "transition.prepared-route",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -568,7 +661,8 @@
     "id": "digest-policy",
     "s": {
       "state.canonicalNext": "ready.digest-behind",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -589,7 +683,8 @@
     "id": "exceptions",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "handoff-continuation"
@@ -607,7 +702,8 @@
     "id": "split-planning-routes",
     "s": {
       "state.canonicalNext": "claim.needs-reapproval",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -625,7 +721,8 @@
     "id": "event-routing-verifies",
     "s": {
       "state.canonicalNext": "transition.prepared-route",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -643,7 +740,8 @@
     "id": "product-verification",
     "s": {
       "state.canonicalNext": "transition.prepared-route",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -661,7 +759,8 @@
     "id": "integrity-blocking-asks",
     "s": {
       "state.canonicalNext": "integrity.blocking",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -682,7 +781,8 @@
     "id": "integrity-shape-advisory",
     "s": {
       "state.canonicalNext": "integrity.shape",
-      "state.brownfield": "no"
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
     },
     "judged": {
       "intent.scope": "ordinary"
@@ -702,44 +802,227 @@
   },
   {
     "id": "fresh-project-asks-preservation-before-product",
-    "s": { "state.canonicalNext": "setup.no-product", "state.brownfield": "no" },
-    "judged": { "intent.scope": "ordinary" },
-    "expect": { "stage": "scope-entry", "status": "ASK", "effects": ["ASK"] },
+    "s": {
+      "state.canonicalNext": "setup.no-product",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ASK",
+      "effects": [
+        "ASK"
+      ]
+    },
     "cover": []
   },
   {
     "id": "project-research-precedes-missing-product",
-    "s": { "state.canonicalNext": "ready.ready", "state.brownfield": "no" },
-    "judged": { "intent.scope": "ordinary" },
-    "expect": { "stage": "scope-entry", "status": "ROUTE", "effects": ["ROUTE:work"] },
+    "s": {
+      "state.canonicalNext": "ready.ready",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:work"
+      ]
+    },
     "cover": []
   },
   {
     "id": "active-claim-continues-work",
-    "s": { "state.canonicalNext": "claim.mine", "state.brownfield": "no" },
-    "judged": { "intent.scope": "handoff-continuation" },
-    "expect": { "stage": "scope-entry", "status": "ROUTE", "effects": ["ROUTE:work"] },
+    "s": {
+      "state.canonicalNext": "claim.mine",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "handoff-continuation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:work"
+      ]
+    },
     "cover": []
   },
   {
     "id": "interrupted-transition-routes-verify-without-rerun",
-    "s": { "state.canonicalNext": "transition.interrupted", "state.brownfield": "no" },
-    "judged": { "intent.scope": "ordinary" },
-    "expect": { "stage": "scope-entry", "status": "ROUTE", "effects": ["ROUTE:verify"] },
+    "s": {
+      "state.canonicalNext": "transition.interrupted",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:verify"
+      ]
+    },
     "cover": []
   },
   {
     "id": "domain-orientation-stays-read-only",
-    "s": { "state.canonicalNext": "claim.mine", "state.brownfield": "no" },
-    "judged": { "intent.scope": "domain-orientation" },
-    "expect": { "stage": "scope-entry", "status": "DONE", "effects": ["REPORT", "DONE"] },
+    "s": {
+      "state.canonicalNext": "claim.mine",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "domain-orientation"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "DONE",
+      "effects": [
+        "REPORT",
+        "DONE"
+      ]
+    },
     "cover": []
   },
   {
     "id": "partial-knowledge-landing-keeps-owner-active",
-    "s": { "state.canonicalNext": "marker.knowledge-landing", "state.brownfield": "no" },
-    "judged": { "intent.scope": "ordinary" },
-    "expect": { "stage": "scope-entry", "status": "ROUTE", "effects": ["ROUTE:arch"] },
+    "s": {
+      "state.canonicalNext": "marker.knowledge-landing",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:arch"
+      ]
+    },
     "cover": []
+  },
+  {
+    "id": "compatible-feedback-routes-product",
+    "s": {
+      "state.canonicalNext": "marker.compatible-feedback",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "product"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:product"
+      ],
+      "row": "compatible-product"
+    },
+    "cover": [
+      "row:canonicalNext/compatible-product",
+      "branch:canonicalNext/compatible-product"
+    ]
+  },
+  {
+    "id": "compatible-feedback-routes-design",
+    "s": {
+      "state.canonicalNext": "marker.compatible-feedback",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "design"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:design"
+      ],
+      "row": "compatible-design"
+    },
+    "cover": [
+      "row:canonicalNext/compatible-design",
+      "branch:canonicalNext/compatible-design"
+    ]
+  },
+  {
+    "id": "compatible-feedback-routes-arch",
+    "s": {
+      "state.canonicalNext": "marker.compatible-feedback",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "arch"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:arch"
+      ],
+      "row": "compatible-arch"
+    },
+    "cover": [
+      "row:canonicalNext/compatible-arch",
+      "branch:canonicalNext/compatible-arch"
+    ]
+  },
+  {
+    "id": "compatible-feedback-routes-adopt",
+    "s": {
+      "state.canonicalNext": "marker.compatible-feedback",
+      "state.brownfield": "yes",
+      "state.compatibleWriter": "adopt"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:adopt"
+      ],
+      "row": "compatible-adopt"
+    },
+    "cover": [
+      "row:canonicalNext/compatible-adopt",
+      "branch:canonicalNext/compatible-adopt"
+    ]
+  },
+  {
+    "id": "compatible-feedback-invalid-owner-blocks",
+    "s": {
+      "state.canonicalNext": "marker.compatible-feedback",
+      "state.brownfield": "no",
+      "state.compatibleWriter": "invalid"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "guard": "compatible-feedback-owner-required",
+      "status": "BLOCK"
+    },
+    "cover": [
+      "guard:compatible-feedback-owner-required"
+    ]
   }
 ]

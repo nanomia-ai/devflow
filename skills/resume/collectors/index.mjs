@@ -36,9 +36,18 @@ function brownfield(state) {
   return value === "yes" || value === "no" ? value : unknown();
 }
 
+function compatibleWriter(state) {
+  if (route(state) !== "marker.compatible-feedback") return "none";
+  const entries = state?.zones?.marker?.entries;
+  if (!Array.isArray(entries)) return "invalid";
+  const marker = entries.find((entry) => entry?.kind === "compatible-feedback");
+  return ["product", "design", "arch", "adopt"].includes(marker?.writer) ? marker.writer : "invalid";
+}
+
 export const collectors = Object.freeze({
   "state.canonical-next": async (context) => route(await stateFor(context)),
   "state.brownfield": async (context) => brownfield(await stateFor(context)),
+  "state.compatible-writer": async (context) => compatibleWriter(await stateFor(context)),
   "state.schema": async (context) => (await stateFor(context)) ? "schema-2" : "unavailable",
   "state.route": async (context) => route(await stateFor(context)),
   "state.zones": async (context) => (await stateFor(context)) ? "available" : "unavailable",

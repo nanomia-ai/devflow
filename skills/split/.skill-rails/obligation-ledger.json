@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:dc46a579279abfc1eb837fd034071f366474ba65d3928f90945f8ea6e945253b",
+  "intent_hash": "sha256:5dad288696b507de8c91b168fd765d98427ace1a93bde725d06cc58cbc00f157",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Task splitting. Opens the task tree (devflow/tree/) one layer at a time, creates task cards, and gets the execution proposal (order, parallelism, model tiers) approved by the user. Use for breaking down work, task decomposition, or planning what to do next.",
+      "text": "Task splitting. Opens the task tree (devflow/tree/) one layer at a time, creates task cards, and gets the execution proposal (order, parallelism, model tiers) approved by the user. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
@@ -3345,7 +3345,7 @@
         "file:references/purpose.md"
       ],
       "evidence": [
-        "fixture:intake-without-current-origin-asks"
+        "fixture:intake-tree-work-without-origin-records-request"
       ],
       "source_hash": "sha256:08711c1c57c20d1eecd63b950fefe41760d1ebc931b6c0e7108f8cca264f054b",
       "source_kind": "list-item",

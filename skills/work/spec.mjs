@@ -5,7 +5,7 @@ export const SPEC = { version: "5", id: "work", profile: "single", imports: [] }
 export const OBSERVATIONS = {
   "card.target": { collector: "work/card.target", domain: "path" },
   "state.kernel": { collector: "work/state.kernel", domain: ["available", "unavailable"] },
-  "state.route": { collector: "work/state.route", domain: ["claim.mine", "ready.ready", "transition.remote-evidence", "transition.finish-boundary", "marker.knowledge-landing", "other", "unavailable"] },
+  "state.route": { collector: "work/state.route", domain: ["claim.mine", "ready.ready", "transition.remote-evidence", "transition.finish-boundary", "marker.knowledge-landing", "marker.compatible-feedback", "other", "unavailable"] },
   "card.phase": { collector: "work/card.phase", domain: ["ready", "claimed", "done", "invalid"] },
   "card.contract": { collector: "work/card.contract", domain: ["valid", "invalid"] },
   "card.basis": { collector: "work/card.basis", domain: ["complete", "missing", "invalid"] },
@@ -15,6 +15,8 @@ export const OBSERVATIONS = {
   "remote.state": { collector: "work/remote.state", domain: ["none", "waiting", "pending", "pass", "fail", "unverified", "finalizing", "invalid"] },
   "research.checkpoint": { collector: "work/research.checkpoint", domain: ["not-applicable", "uncommitted", "committed", "invalid"] },
   "knowledge.marker": { collector: "work/knowledge.marker", domain: ["none", "current-source", "other-source", "invalid"] },
+  "feedback.marker": { collector: "work/feedback.marker", domain: ["none", "current-source", "other-source", "invalid"] },
+  "feedback.lifecycles": { collector: "work/feedback.lifecycles", domain: "json" },
   "task.commit": { collector: "work/task.commit", domain: ["absent", "present", "invalid"] },
   "task.integration": { collector: "work/task.integration", domain: ["pending", "integrated", "blocked", "invalid"] },
   "handoff.state": { collector: "work/handoff.state", domain: ["stale", "current", "invalid"] },
@@ -22,6 +24,10 @@ export const OBSERVATIONS = {
   "implementation.action": { judged: true, domain: ["continue", "signal-ready", "repair", "scope-escape", "park", "handoff"] },
   "review.action": { judged: true, domain: ["dispatch", "repair", "contract-route", "ask-disposition", "apply-disposition", "block-nonpass"] },
   "feedback.action": { judged: true, domain: ["none", "compatible", "staling", "design-note"] },
+  "feedback.pendingSet": { judged: true, domain: { bytes: "text", count: "integer", source: "text", sourceCard: "path", sourceCount: "integer", uniqueCount: "integer" } },
+  "feedback.eligibleSet": { judged: true, domain: { bytes: "text", count: "integer", source: "text", sourceCard: "path", sourceCount: "integer", uniqueCount: "integer" } },
+  "feedback.lifecycleAction": { judged: true, domain: ["produce", "settled", "invalid"] },
+  "feedback.pendingSetStatus": { judged: true, domain: ["complete", "invalid"] },
   "history.basis": { judged: true, domain: ["none", "named-card", "nonpass-repair", "current-k-source", "current-trap-source", "broad", "invalid"] },
   "knowledge.action": { judged: true, domain: ["none", "emit-arch", "emit-adopt"] }
 };
@@ -52,6 +58,7 @@ export const OWNERSHIP = {
   "devflow/tree/**.md": "work",
   "devflow/users/<id>/HANDOFF.md": "work",
   "devflow/journal.md#knowledge-landing-pending": "work",
+  "devflow/journal.md#compatible-feedback-pending": "work",
   "devflow/journal.md#remote-evidence-finalizing": "work",
   "devflow/project/<semantic-owner>.md#compatible-upper-feedback": "semantic owner",
   "task card and progress lifecycle": "work",
@@ -63,16 +70,44 @@ export const OWNERSHIP = {
   "upper-document feedback": "semantic owner"
 };
 
+function lateBoundarySettled(s) {
+  return s.boundary.state === "missing"
+    && s.task.commit === "present"
+    && s.task.integration === "integrated"
+    && s.handoff.state === "current"
+    && s.completion.state === "pass"
+    && ["pass", "waived", "not-applicable"].includes(s.review.state);
+}
+
+function compatibleFeedbackSetInvalid(s) {
+  return s.feedback.action === "compatible"
+    && (s.feedback.lifecycles === "invalid"
+      || s.feedback.pendingSetStatus !== "complete"
+      || (s.feedback.lifecycles.length !== 0
+        ? ![0].includes(s.feedback.eligibleSet.count) || s.feedback.lifecycleAction !== "settled"
+        : [0].includes(s.feedback.pendingSet.count)
+          || ![s.card.target].includes(s.feedback.pendingSet.sourceCard)
+          || ![1].includes(s.feedback.pendingSet.sourceCount)
+          || s.feedback.pendingSet.uniqueCount !== s.feedback.pendingSet.count
+          || s.feedback.pendingSet.bytes !== s.feedback.eligibleSet.bytes
+          || s.feedback.pendingSet.count !== s.feedback.eligibleSet.count
+          || s.feedback.pendingSet.source !== s.feedback.eligibleSet.source
+          || s.feedback.pendingSet.sourceCard !== s.feedback.eligibleSet.sourceCard
+          || s.feedback.lifecycleAction !== "produce"));
+}
+
 export const GUARDS = [
   { id: "card-target-required", reads: ["card.target"], acceptsUnknown: [], when: s => !s.card.target, then: "BLOCK", body: "guard: card-target-required" },
   { id: "state-kernel-unavailable", reads: ["state.kernel"], acceptsUnknown: [], when: s => s.state.kernel === "unavailable", then: "BLOCK", body: "guard: state-kernel-unavailable" },
   { id: "premature-knowledge-marker", reads: ["knowledge.marker", "research.checkpoint"], acceptsUnknown: [], when: s => s.knowledge.marker === "current-source" && s.research.checkpoint !== "committed", then: "BLOCK", body: "guard: premature-knowledge-marker" },
   { id: "knowledge-landing-before-closure", reads: ["knowledge.marker", "research.checkpoint"], acceptsUnknown: [], when: s => s.knowledge.marker === "current-source" && s.research.checkpoint === "committed", then: "ROUTE:resume", body: "guard: knowledge-landing-before-closure" },
+  { id: "compatible-feedback-set-required", reads: ["card.target", "feedback.action", "feedback.pendingSetStatus", "feedback.lifecycleAction", "feedback.lifecycles", "feedback.pendingSet", "feedback.eligibleSet"], acceptsUnknown: ["feedback.action", "feedback.pendingSetStatus", "feedback.lifecycleAction", "feedback.pendingSet", "feedback.eligibleSet"], when: s => compatibleFeedbackSetInvalid(s), then: "BLOCK", body: "guard: compatible-feedback-set-required" },
+  { id: "compatible-feedback-before-closure", reads: ["feedback.marker"], acceptsUnknown: [], when: s => s.feedback.marker === "current-source", then: "ROUTE:resume", body: "guard: compatible-feedback-before-closure" },
   { id: "invalid-card", reads: ["card.phase", "card.contract"], acceptsUnknown: [], when: s => s.card.phase === "invalid" || s.card.contract === "invalid", then: "ROUTE:split", body: "guard: invalid-card" },
   { id: "missing-bounded-basis", reads: ["card.basis"], acceptsUnknown: [], when: s => s.card.basis === "missing" || s.card.basis === "invalid", then: "BLOCK", body: "guard: missing-bounded-basis" },
   { id: "closed-history-refusal", reads: ["history.basis"], acceptsUnknown: [], when: s => s.history.basis === "broad" || s.history.basis === "invalid", then: "BLOCK", body: "guard: closed-history-refusal" },
   { id: "invalid-progress-evidence", reads: ["completion.state", "review.state", "carry.state", "remote.state"], acceptsUnknown: [], when: s => s.completion.state === "invalid" || s.review.state === "invalid" || s.carry.state === "invalid" || s.remote.state === "invalid", then: "BLOCK", body: "guard: invalid-progress-evidence" },
-  { id: "boundary-incomplete", reads: ["boundary.state", "handoff.state", "task.integration"], acceptsUnknown: [], when: s => s.boundary.state === "missing" && s.task.integration === "integrated" && s.handoff.state === "current", then: "BLOCK", body: "guard: boundary-incomplete" },
+  { id: "post-title-task-diff-closed", reads: ["boundary.state", "handoff.state", "task.integration", "task.commit", "completion.state", "review.state"], acceptsUnknown: [], when: s => s.task.commit === "present" && s.boundary.state === "missing" && s.task.integration === "integrated" && s.handoff.state === "current" && !(s.completion.state === "pass" && ["pass", "waived", "not-applicable"].includes(s.review.state)), then: "RESTRICT", forbids: ["COMMIT"], body: "guard: post-title-task-diff-closed" },
   { id: "non-work-route", reads: ["state.route", "card.phase", "boundary.state"], acceptsUnknown: [], when: s => s.state.route === "other" && s.card.phase !== "done" && s.boundary.state !== "complete", then: "ROUTE:resume", body: "guard: non-work-route" }
 ];
 
@@ -121,8 +156,12 @@ export const TABLES = {
     { state: "pending", reads: [], acceptsUnknown: [], when: () => true }
   ] },
   boundary: { exclusive: true, rows: [
-    { state: "compatible", reads: ["boundary.state", "feedback.action"], acceptsUnknown: [], when: s => s.boundary.state === "ready" && s.feedback.action === "compatible" },
+    { state: "compatible", reads: ["boundary.state", "completion.state", "review.state", "feedback.action", "feedback.lifecycleAction", "task.commit", "task.integration", "handoff.state"], acceptsUnknown: [], when: s => (s.boundary.state === "ready" || lateBoundarySettled(s)) && s.feedback.action === "compatible" && s.feedback.lifecycleAction === "produce" },
+    { state: "compatible-settled-carry", reads: ["boundary.state", "completion.state", "review.state", "carry.state", "feedback.action", "feedback.lifecycleAction", "task.commit", "task.integration", "handoff.state"], acceptsUnknown: [], when: s => (s.boundary.state === "ready" || lateBoundarySettled(s)) && s.feedback.action === "compatible" && s.feedback.lifecycleAction === "settled" && s.carry.state === "absent" },
+    { state: "compatible-settled", reads: ["boundary.state", "completion.state", "review.state", "carry.state", "feedback.action", "feedback.lifecycleAction", "task.commit", "task.integration", "handoff.state"], acceptsUnknown: [], when: s => (s.boundary.state === "ready" || lateBoundarySettled(s)) && s.feedback.action === "compatible" && s.feedback.lifecycleAction === "settled" && s.carry.state === "present" },
     { state: "plain", reads: ["boundary.state", "feedback.action"], acceptsUnknown: [], when: s => s.boundary.state === "ready" && s.feedback.action === "none" },
+    { state: "late-carry", reads: ["boundary.state", "completion.state", "review.state", "carry.state", "feedback.action", "task.commit", "task.integration", "handoff.state"], acceptsUnknown: [], when: s => lateBoundarySettled(s) && s.feedback.action === "none" && s.carry.state === "absent" },
+    { state: "late-anchor", reads: ["boundary.state", "completion.state", "review.state", "carry.state", "feedback.action", "task.commit", "task.integration", "handoff.state"], acceptsUnknown: [], when: s => lateBoundarySettled(s) && s.feedback.action === "none" && s.carry.state === "present" },
     { state: "pending", reads: [], acceptsUnknown: [], when: () => true }
   ] }
 };
@@ -160,12 +199,12 @@ export const STAGES = [
   { id: "task-finalization", reads: ["remote.state", "task.commit"], needs: ["feedback.action"], acceptsUnknown: [], done: s => s.task.commit === "present" || s.remote.state === "finalizing", table: "finalize", reentry: "rejudge", branches: {
     staling: [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: upper-document change" }], "ROUTE:resume"],
     "design-note": [["REPORT", { scope: "canonical-capability-writer-route" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: capability design note" }], "ROUTE:resume"],
-    "remote-compatible-carry": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["WRITE", { artifact: "activeCard", template: "carry" }], ["WRITE", { artifact: "remoteFinalizingTransport", scope: "evidence-finalizing replacement" }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
-    "remote-compatible": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["WRITE", { artifact: "remoteFinalizingTransport", scope: "evidence-finalizing replacement" }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
+    "remote-compatible-carry": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["WRITE", { artifact: "activeCard", template: "carry" }], ["WRITE", { artifact: "compatibleFeedbackTransport", grammar: "external.principles.compatibleFeedbackPending", entries: "feedback.eligibleSet.bytes", atomic: true }], ["WRITE", { artifact: "remoteFinalizingTransport", scope: "evidence-finalizing replacement" }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
+    "remote-compatible": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["WRITE", { artifact: "compatibleFeedbackTransport", grammar: "external.principles.compatibleFeedbackPending", entries: "feedback.eligibleSet.bytes", atomic: true }], ["WRITE", { artifact: "remoteFinalizingTransport", scope: "evidence-finalizing replacement" }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
     "remote-carry": [["WRITE", { artifact: "activeCard", template: "carry" }], ["WRITE", { artifact: "remoteFinalizingTransport", scope: "evidence-finalizing replacement" }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
     remote: [["WRITE", { artifact: "remoteFinalizingTransport", scope: "evidence-finalizing replacement" }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
-    "compatible-carry": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["WRITE", { artifact: "activeCard", template: "carry" }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
-    compatible: [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
+    "compatible-carry": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["WRITE", { artifact: "activeCard", template: "carry" }], ["WRITE", { artifact: "compatibleFeedbackTransport", grammar: "external.principles.compatibleFeedbackPending", entries: "feedback.eligibleSet.bytes", atomic: true }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
+    compatible: [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["WRITE", { artifact: "compatibleFeedbackTransport", grammar: "external.principles.compatibleFeedbackPending", entries: "feedback.eligibleSet.bytes", atomic: true }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
     carry: [["WRITE", { artifact: "activeCard", template: "carry" }], ["COMMIT", { scope: "task", subject: "exact card H1" }], "NEXT"],
     plain: [["COMMIT", { scope: "task", subject: "exact card H1" }], ["REPORT", { scope: "task-commit-observation" }], "NEXT"]
   }, body: "stage: task-finalization" },
@@ -174,9 +213,13 @@ export const STAGES = [
     pending: [["COMMIT", { scope: "integration", subject: "merge method from arch" }], ["REPORT", { scope: "integration-ancestor-check" }], "NEXT"]
   }, body: "stage: integration" },
   { id: "handoff", reads: ["task.integration", "handoff.state"], acceptsUnknown: [], done: s => s.task.integration !== "integrated" || s.handoff.state === "current", effects: [["WRITE", { artifact: "roomHandoff", template: "handoff" }], ["REPORT", { scope: "handoff-refresh" }], "NEXT"], reentry: "rejudge", body: "stage: handoff" },
-  { id: "boundary", reads: ["boundary.state", "card.phase", "knowledge.marker"], needs: ["feedback.action"], acceptsUnknown: [], done: s => s.card.phase === "done" && s.boundary.state === "complete" && s.knowledge.marker !== "current-source", table: "boundary", reentry: "rejudge", branches: {
-    compatible: [["REPORT", { scope: "compatible-feedback-owner-handoff" }], "ROUTE:resume"],
+  { id: "boundary", reads: ["boundary.state", "card.phase", "knowledge.marker", "feedback.marker"], needs: ["feedback.action"], acceptsUnknown: [], done: s => s.card.phase === "done" && s.boundary.state === "complete" && s.knowledge.marker !== "current-source" && s.feedback.marker !== "current-source", table: "boundary", reentry: "rejudge", branches: {
+    compatible: [["WRITE", { artifact: "compatibleFeedbackTransport", grammar: "external.principles.compatibleFeedbackPending", entries: "feedback.eligibleSet.bytes", atomic: true, touches: ["devflow/journal.md"] }], ["COMMIT", { scope: "compatible-marker", subject: "<id> boundary: compatible feedback", touches: ["devflow/journal.md"] }], "ROUTE:resume"],
+    "compatible-settled-carry": [["WRITE", { artifact: "activeCard", template: "carry" }], ["WRITE", { artifact: "activeCard", scope: "canonical claim-done move" }], ["COMMIT", { scope: "boundary", subject: "<id> boundary: task closure" }], "ROUTE:verify"],
+    "compatible-settled": [["WRITE", { artifact: "activeCard", scope: "canonical claim-done move" }], ["COMMIT", { scope: "boundary", subject: "<id> boundary: task closure" }], "ROUTE:verify"],
     plain: [["WRITE", { artifact: "activeCard", scope: "canonical claim-done move" }], ["COMMIT", { scope: "boundary", subject: "<id> boundary: task closure" }], "ROUTE:verify"],
+    "late-carry": [["WRITE", { artifact: "activeCard", template: "carry" }], ["WRITE", { artifact: "activeCard", scope: "canonical claim-done move" }], ["COMMIT", { scope: "boundary", subject: "<id> boundary: task closure" }], "ROUTE:verify"],
+    "late-anchor": [["WRITE", { artifact: "activeCard", scope: "canonical claim-done move" }], ["COMMIT", { scope: "boundary", subject: "<id> boundary: task closure" }], "ROUTE:verify"],
     pending: [["REPORT", { scope: "reobserve-finish-boundary" }], "WAIT"]
   }, body: "stage: boundary" }
 ];
@@ -190,6 +233,7 @@ export const ARTIFACTS = {
   glossary: { path: "devflow/project/glossary.md", writer: "project.product", readers: ["stage.implement-and-signal", "role.reviewer"] },
   journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.implement-and-signal", "stage.knowledge-marker", "stage.task-finalization", "role.reviewer"] },
   knowledgeMarkerTransport: { path: "devflow/journal.md#knowledge-landing-pending", writer: "work", readers: ["stage.knowledge-marker"] },
+  compatibleFeedbackTransport: { path: "devflow/journal.md#compatible-feedback-pending", writer: "work", readers: ["stage.task-finalization", "stage.boundary", "guard.compatible-feedback-before-closure"] },
   remoteFinalizingTransport: { path: "devflow/journal.md#remote-evidence-finalizing", writer: "work", readers: ["stage.task-finalization"] },
   roomHandoff: { path: "devflow/users/<id>/HANDOFF.md", writer: "work", readers: ["stage.handoff"] },
   reviewerContract: { path: "references/reviewer-role.md", writer: "work", readers: ["stage.review-reduction", "role.reviewer"] },
@@ -216,7 +260,7 @@ export const DECLARATIONS = {
   tweak_boundary: { value: "A passing tweak is completed only by principles entry and never invokes work; work has no tweak observation, stage, branch, token, commit, or recovery route.", consumer: "principles|work" },
   c2_research: { value: "Research evidence stays in the active or closed research card. Only a current durable synthesis may be promoted, after its conclusion is anchored by a committed checkpoint and one long-lived owner is named. Work emits exactly one knowledge landing pending marker per owner with writer arch|adopt and source-json equal to a JSON string containing exact repository-relative card path@full commit hash.", consumer: "stage.research-checkpoint|stage.knowledge-marker" },
   c5_history: { value: "Closed history opens only for an exact named card, a non-pass repair lineage, or the exact Source basis of the current K or Trap. Broad closed-tree loading is blocked.", consumer: "guard.closed-history-refusal|stage.implement-and-signal" },
-  c6_closure: { value: "Completion and branch closure are observed from the current card, structured calculateState facts, and concrete Git evidence. Every marker whose source is this card blocks closure, including after a partial multi-owner landing; crosscut work emits independent owner markers and has no batch object.", consumer: "guard.knowledge-landing-before-closure|stage.boundary" },
+  c6_closure: { value: "Completion and branch closure are observed from the current card, structured calculateState facts, and concrete Git evidence. The first complete compatible-feedback proposal set is produced atomically and seals that card's exact members in Git history; later sessions receive current and consumed lifecycle entries as the sealed-set fact, current residual owners block closure, and an all-consumed set follows ordinary or late closure without another marker or exact-title task commit.", consumer: "guard.compatible-feedback-set-required|guard.compatible-feedback-before-closure|stage.task-finalization|stage.boundary" },
   progress_formats: { value: "External principles owns the canonical completion, review, remote-evidence, carry, and knowledge-marker grammar IDs loaded at entry. Work's five local templates are byte projections only and are seam-tested through structured project-state; no local FORMAT owns policy.", consumer: "external.principles|template-projection-test" },
   remote_json_token: { value: "The remoteEvidenceCheck projection substitutes complete serialized JSON string tokens for checkJson and detailJson in canonical order. Structured project-state validation maps a bare, malformed, or duplicate line to invalid progress evidence.", consumer: "template.remoteEvidenceCheck|collector.work/remote.state" },
   legacy_loop: { value: "Claim/progress, completion signal, independent review, objections and repair lineage, carry, evidence wait/finalize, integration, compatible feedback, claim-done rename, boundary, handoff, failure and recovery remain ordered and none is replaced by a judged close action.", consumer: "orders|stages" },

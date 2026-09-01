@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:0b3f138606b5a4965c28f922468226a773593f4f4aa5d12208f06d80a5adedf9",
+  "intent_hash": "sha256:f9b208f94ba21f9d0508673f5ba61eb20c030240ee8864f9d8734ec3b2b63d74",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Resume and domain entry. Restores a new session from disk and continues to the next stage, or finds a capability document by number or name and explains the domain. Use for session restarts, continuing work, status checks, or capability and domain onboarding questions.",
+      "text": "Resume and domain entry. Restores a new session from disk and continues to the next stage, or finds a capability document by number or name and explains the domain. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
@@ -45,6 +45,22 @@
       ],
       "evidence": [
         "fixture:routing-introduction"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-002",
+      "source": "intent.state_dependent_behaviors[1]",
+      "text": "Canonical setup.unmanaged reports no current or historical devflow membership evidence and ends without ASK, route, or write; domain orientation remains first.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/canonicalNext/DONE:unmanaged",
+        "body:stage: scope-entry"
+      ],
+      "evidence": [
+        "fixture:unmanaged-ordinary-reports-and-stops",
+        "fixture:unmanaged-domain-orientation-stays-first"
       ]
     },
     {

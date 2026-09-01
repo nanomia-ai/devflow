@@ -8,6 +8,13 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 
 ## Field observation items — watch during coming cycles, without adding rules
 
+- **Compatible-feedback reopen findings are permanent and project-wide** (recorded
+  2026-09-02 by the DD-96 seal repair) — the state tool currently derives a blocking
+  finding from Git history and cannot clear it after the journal is corrected. This is
+  record-only, not authority to change runtime behavior. Reopen a clearable-finding design
+  only after a non-Work writer reaches one in field use. The candidate is to derive reopen
+  findings from the current journal, walk consumptions oldest-first, skip removal validation
+  for an identity already consumed, and treat removal of a consumed nonmember as advisory.
 - **Accepted limits of the canonical `C<n>` row parser** (recorded 2026-08-31 by the
   v0.20.0 final-repair audit; `skills/principles/scripts/project-state.mjs:531-574`) — a
   declared numbering gap is accepted with no anomaly (`C1, C3` → `02, 04`). Separately,

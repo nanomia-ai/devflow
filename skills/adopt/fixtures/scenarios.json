@@ -11,10 +11,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -46,10 +49,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -81,10 +87,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -116,10 +125,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -151,10 +163,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -186,10 +201,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -221,10 +239,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -256,10 +277,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "present",
-      "marker.count": 1
+      "marker.count": 1,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -299,10 +323,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "present",
-      "marker.count": 1
+      "marker.count": 1,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -341,10 +368,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "present",
-      "marker.count": 2
+      "marker.count": 2,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -383,10 +413,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "present",
-      "marker.count": 2
+      "marker.count": 2,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -425,10 +458,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "initial",
+      "entry.status": "pending",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -466,10 +502,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "partial",
+      "entry.status": "pending",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -506,10 +545,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "glossary-only",
+      "entry.status": "pending",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -545,10 +587,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "capability-only",
+      "entry.status": "pending",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -584,10 +629,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "design-only",
+      "entry.status": "pending",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -613,6 +661,48 @@
     ]
   },
   {
+    "id": "entry-none-skips",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.no-product",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "none",
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "judged": {
+      "entry.mode": "none",
+      "entry.status": "pending",
+      "inspection.status": "needed",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact",
+      "request.kind": "initial"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "inspect-and-trace",
+      "status": "NEXT",
+      "effects": [
+        "RUN",
+        "RUN",
+        "REPORT",
+        "NEXT"
+      ]
+    },
+    "cover": []
+  },
+  {
     "id": "trace-needed",
     "s": {
       "state.kernel": "available",
@@ -624,10 +714,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
-      "entry.mode": "none",
+      "entry.mode": "initial",
+      "entry.status": "read",
       "inspection.status": "needed",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -666,10 +759,13 @@
       "evidence.flow": "missing",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "evidence-missing",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -705,10 +801,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -744,10 +843,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "needed",
       "proposal.status": "ready",
@@ -785,10 +887,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "draft",
       "proposal.status": "ready",
@@ -824,10 +929,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "contradiction",
       "proposal.status": "ready",
@@ -863,10 +971,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "draft",
@@ -903,10 +1014,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "interrupted",
@@ -942,10 +1056,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -985,10 +1102,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -1027,10 +1147,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -1073,10 +1196,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -1116,10 +1242,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -1159,10 +1288,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -1202,10 +1334,13 @@
       "evidence.flow": "present",
       "evidence.records": "present",
       "marker.knowledge": "none",
-      "marker.count": 0
+      "marker.count": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "entry.mode": "none",
+      "entry.status": "read",
       "inspection.status": "traced",
       "derivation.status": "confirmed",
       "proposal.status": "ready",
@@ -1231,6 +1366,180 @@
       "branch:capability-design/approve",
       "row:capabilityRoute/split",
       "branch:capabilityRoute/split"
+    ]
+  },
+  {
+    "id": "compatible-feedback-write-arch",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.compatible-feedback",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "present",
+      "marker.count": 1,
+      "compatible.owner": "arch",
+      "compatible.landing": "pending"
+    },
+    "judged": {
+      "entry.mode": "none",
+      "entry.status": "read",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact",
+      "request.kind": "initial"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "compatible-feedback",
+      "row": "write-arch",
+      "status": "WAIT",
+      "effects": [
+        "WRITE",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:compatible-feedback",
+      "row:compatibleFeedback/write-arch",
+      "branch:compatibleFeedback/write-arch"
+    ]
+  },
+  {
+    "id": "compatible-feedback-write-capability",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.compatible-feedback",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "present",
+      "marker.count": 1,
+      "compatible.owner": "capability",
+      "compatible.landing": "pending"
+    },
+    "judged": {
+      "entry.mode": "none",
+      "entry.status": "read",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact",
+      "request.kind": "initial"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "compatible-feedback",
+      "row": "write-capability",
+      "status": "WAIT",
+      "effects": [
+        "WRITE",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:compatible-feedback",
+      "row:compatibleFeedback/write-capability",
+      "branch:compatibleFeedback/write-capability"
+    ]
+  },
+  {
+    "id": "compatible-feedback-semantic-landing",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.compatible-feedback",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "present",
+      "marker.count": 1,
+      "compatible.owner": "capability",
+      "compatible.landing": "satisfied"
+    },
+    "judged": {
+      "entry.mode": "none",
+      "entry.status": "read",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact",
+      "request.kind": "initial"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "stage": "compatible-feedback",
+      "row": "land",
+      "status": "ROUTE",
+      "effects": [
+        "RUN",
+        "COMMIT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:compatible-feedback",
+      "row:compatibleFeedback/land",
+      "branch:compatibleFeedback/land"
+    ]
+  },
+  {
+    "id": "compatible-feedback-invalid-shape-blocks",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.knowledge-landing",
+      "state.code": "present",
+      "state.brownfield": "yes",
+      "state.capabilities": "missing",
+      "evidence.inventory": "present",
+      "evidence.flow": "present",
+      "evidence.records": "present",
+      "marker.knowledge": "present",
+      "marker.count": 1,
+      "compatible.owner": "invalid",
+      "compatible.landing": "invalid"
+    },
+    "judged": {
+      "entry.mode": "none",
+      "entry.status": "read",
+      "inspection.status": "traced",
+      "derivation.status": "confirmed",
+      "proposal.status": "ready",
+      "landing.mode": "compact",
+      "request.kind": "initial"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split"
+    },
+    "expect": {
+      "guard": "compatible-feedback-shape",
+      "status": "BLOCK"
+    },
+    "cover": [
+      "guard:compatible-feedback-shape"
     ]
   }
 ]

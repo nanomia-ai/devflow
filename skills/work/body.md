@@ -30,6 +30,16 @@ Route the exact current-source marker to its named arch or adopt writer. One con
 does not clear another owner’s marker, so a crosscut source remains open until no marker
 from that source remains.
 
+## guard: compatible-feedback-set-required
+
+Compatible feedback has one card-boundary proposal set. Represent each judged set with canonical serialized JSON-array `bytes` plus mechanically collected `count`, `uniqueCount`, `sourceCount`, `sourceCard`, and `source`. With no lifecycle for this card, judge one complete deterministic nonempty `feedback.pendingSet`; its source card must equal this card's exact target, it must have one shared source and no duplicate payload, and `feedback.eligibleSet.bytes` plus its count and source identity must be byte-identical before `feedback.lifecycleAction=produce`. Partial, reordered, duplicate, mixed-source, foreign-card, empty, or collector-invalid input blocks. Once any lifecycle exists, treat the collected current and consumed entries as the sealed set, keep `feedback.eligibleSet.count` at zero, and use `settled`; do not rejudge or compare a pending set in that established arm.
+The guard rejects partial, reordered, duplicate, mixed-source, foreign-source, empty, or collector-invalid inputs before any task or boundary commit. Every first-set entry carries target, Background, Why/evidence, Conclusion, and implication; a prose review summary never substitutes for the sealed set.
+
+## guard: compatible-feedback-before-closure
+
+Route only a current marker sourced from the current card to Resume. Its exact named semantic owner remains visible until landing consumes it; residual current owners continue to block even when sibling entries are already consumed.
+A current or consumed lifecycle from another card does not hijack this card. A consumed sealed member stays retired, every residual current sealed member remains routable, and a nonmember is an integrity failure rather than an eligible proposal.
+
 ## guard: invalid-card
 
 Split owns a missing, stale, noncanonical, or undecidable card contract. Preserve current
@@ -51,10 +61,12 @@ folder, old-card set, or “relevant history” request is broad and remains clo
 Malformed signal, review, carry, or remote-evidence lines are neither prose nor evidence.
 Repair the canonical line shape in the card before any completion decision.
 
-## guard: boundary-incomplete
+## guard: post-title-task-diff-closed
 
-The structured finish-boundary fact names the missing signal, review, carry, or handoff
-passenger. Report that exact omission; never invent the lost result or close around it.
+After the exact-title task commit has closed the task diff, keep evidence-only producers
+reachable but refuse any branch that would create another commit while completion or review
+evidence remains unsettled. The original task boundary stays singular while current evidence
+can still become observable.
 
 ## guard: non-work-route
 
@@ -131,15 +143,8 @@ or semantic-owner inference.
 
 ## stage: task-finalization
 
-Judgment: `feedback.action` is exactly `none`, `compatible`, `staling`, or `design-note`.
-Before the task commit, decide whether upper feedback is absent, compatible,
-staling, or a confirmed design note. Staling leaves through the document hierarchy; a design
-note routes its canonical writer. Otherwise record compatible replacement coordinates, add
-the one final carry fact (or `none`), and commit the exact card H1. On remote pass, replace
-the wait record with finalizing inside that same commit.
-
-Why: the task commit is the durable evidence boundary; carry and feedback cannot be repaired
-after closure by guessing.
+Judgment: `feedback.action` is exactly `none`, `compatible`, `staling`, or `design-note`. Before the task commit, decide whether upper feedback is absent, compatible, staling, or a confirmed design note. Staling leaves through the document hierarchy; a design note routes its canonical writer. For compatible feedback with no lifecycle, form one complete proposal set, give every entry the same exact card-path@commit source, replay it through the canonical parser, and atomically append the whole eligible set with the progress evidence before the one exact-H1 commit. Once any lifecycle exists, use the collected lifecycle as the sealed-set fact, require an empty eligible set, and append nothing; later feedback belongs to a new request and card. Record exact replacement coordinates and reusable Background, Why/evidence, Conclusion, implication, and source revision, then add the one final carry fact (or `none`), and commit the exact card H1. On remote pass, replace the wait record with finalizing inside that same commit.
+Why: the first atomic transport commit is the durable proposal-set seal; exact lifecycle replay preserves every residual owner without letting a cold session reopen the card under a new OID or paraphrased coordinates.
 
 ## stage: integration
 
@@ -160,15 +165,9 @@ small enough to overwrite safely.
 
 ## stage: boundary
 
-Judgment: `feedback.action` is exactly `none`, `compatible`, `staling`, or `design-note`.
-Close only when the structured finish-boundary passenger set is empty, the task
-commit is integrated, and no marker sourced from this card remains. Transport compatible owner
-feedback to resume so its named product, arch, design, or adopt writer lands it before this
-boundary resumes; work never writes that owner document. A done card plus a complete boundary
-is observed completion; no completion judgment substitutes for it.
-
-Why: one ordered boundary prevents an ownerless rename, feedback fragment, or handoff; an
-owner handoff preserves the semantic-writer boundary before verify becomes the next consumer.
+Judgment: Obtain `feedback.action` as exactly `none`, `compatible`, `staling`, or `design-note`; an absent or unknown value must be judged before any boundary effect. Close only when the structured finish-boundary passenger set is empty, the task commit is integrated, and no current marker sourced from this card remains. For compatible feedback with no lifecycle, transport the whole complete parser-proven set atomically through a journal-only boundary commit that cannot touch the card or change its exact H1, then route to Resume so each named product, arch, design, or adopt writer lands it before this boundary resumes; work never writes that owner document. Once a lifecycle exists, use that collected lifecycle as the sealed-set fact, add no marker, route every current residual owner, and close only after the complete set is consumed.
+If the exact-title commit is already present, current completion and review evidence may settle without another checkpoint. A later same-card owner, source revision, or coordinate paraphrase is an integrity failure rather than a new eligible entry. A done card plus a complete boundary is observed completion; no completion judgment substitutes for it.
+Why: one ordered boundary prevents an ownerless rename, feedback fragment, or handoff; the Git-derived first-set seal preserves complete atomic multi-owner production and exact replay while preventing duplicate owner work before Verify becomes the next consumer.
 
 ## role: reviewer
 

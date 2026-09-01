@@ -122,14 +122,25 @@
   approach this card disproved, a measurement no document records. Anything the
   discovery→update table, journal, a capability document, or the code already received is
   not written here. The line rides the final task commit, so the canonical claim→done move
-  stays byte-identical.
+  stays byte-identical. If the exact-title task commit has already landed while completion or
+  review evidence is unsettled, a later evidence-only line does not retract an earlier valid
+  carry line. After that evidence settles, the boundary commit is the only late vehicle
+  for a missing carry line and the byte-identical claim→done move under the closure
+  conditions defined by the **Boundary commit** bullet; it never creates another exact-title
+  task commit.
 - **1 task = 1 commit.** Commit only after the completion signal passes (see the
   exception below when only remote evidence remains). The message is exactly the card H1
   with only `# ` removed, such as `02.2 signup API`.
   The card stays claimed after the final task commit until boundary cleanup. When the
   last commit that changed it has this exact subject, the final task commit is complete:
   that commit includes the claimed card and its progress log at that point. work does not
-  make it again and finishes only upper-document feedback and the boundary.
+  make it again and finishes only upper-document feedback and the boundary. Compatible
+  feedback lifecycle never reopens this commit: the first after-state whose compatible lines
+  are all canonical, share one source, name each owner once, and resolve every owner path seals
+  the complete exact-payload set for that source card in Git history. Malformed, mixed-source,
+  owner-absent, or unattributable input stays unsealed and correctable. Current members continue
+  routing and consumed members stay retired; after sealing, a later same-card owner, source
+  revision, or coordinate paraphrase is an integrity failure, not another marker producer.
 - **Canonical claim→done move**: the claimed card becomes a `.done.` card with the same
   number and name in the same parent, and the two files are byte-identical — that byte
   identity is the writer's contract. An uncommitted move is an unfinished boundary, and the
@@ -174,13 +185,17 @@
   ownerless fragment for the next session. Do not count that bundle by hand: immediately
   before the commit, run the state tool again, and the boundary closes only when that
   transition's `missing=` is empty. When `handoff` is missing, refresh the HANDOFF that
-  can ride this commit and rerun the tool. When `carry` is missing, the already-landed
-  final task commit omitted its carry line: report the exact card and do not close the
-  boundary, guess the lost fact, or invent a new after-the-fact record format. When `signal`
-  is missing, that card's progress log holds neither a completion-signal result nor a
-  remote-evidence check: report the exact card and do not close the boundary or write a
-  result after the fact. When `review` is missing, that card's `Review` is `required` and no
-  settled `review result:` line stands: report it and do not close the boundary. Message:
+  can ride this commit and rerun the tool. When `signal` or `review` is missing after the
+  exact-title task commit, allow only the evidence-only producer; any branch that would
+  create another checkpoint or task commit stops. Once completion is `pass`, required review
+  is settled, the task commit is integrated, and HANDOFF is current, append a missing carry
+  line when necessary and let that line plus the byte-identical claim→done move ride this
+  boundary commit when upper-document feedback is `none`, or when it remains `compatible`
+  but every exact member of the Git-sealed proposal set is consumed and no current marker
+  from this card remains. This established-set arm consumes the settled lifecycle fact and an
+  empty eligible set; it does not compare or reconstruct pending entries. Staling, design-note, later same-card introductions, unknown feedback,
+  and unsettled evidence never close.
+  Message:
   `boundary — <what closed>`.
   HANDOFF never gets a dedicated commit — it only rides here.
   If a task boundary records a final task commit or checkpoint not yet on

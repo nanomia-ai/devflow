@@ -1,0 +1,61 @@
+{
+  "schema": "skill-rails/semantic-diff/1",
+  "spec_hash": {
+    "before": "sha256:911aab872cc85b378d8b382e67c856d33204864773e5c9797632a510085f2add",
+    "after": "sha256:911aab872cc85b378d8b382e67c856d33204864773e5c9797632a510085f2add"
+  },
+  "changed": false,
+  "any_changed": true,
+  "source_changes": {
+    "behavior_source": false,
+    "observation_source": false,
+    "context": true
+  },
+  "artifact_receipts": [],
+  "groups": {
+    "observations": [],
+    "guards": [],
+    "stages": [],
+    "tables": [],
+    "formats": [],
+    "templates": [],
+    "template_content": [],
+    "body": [
+      {
+        "id": "stage: repair-layer0-fields",
+        "change": "modified",
+        "before": "sha256:06875b8f94cf91f780d3cb13d0528eec610f147a5445fdd21f9418ed828cc970",
+        "after": "sha256:deec2fa26ec9e964b4e6feaa3ca0b2074cd9116bff623719516595a027d914fb"
+      }
+    ],
+    "references": [
+      {
+        "id": "references/workflow.md",
+        "change": "modified",
+        "before": "sha256:6514513147a87d9b1264e47d3ede5fb94b2aa011f2e123d875b75ee9bccf5dd1",
+        "after": "sha256:621950d19c40ae9ba41cdbc5011a75a8bc37fe68b674a91fdbf7a4b70a924f32"
+      }
+    ],
+    "ownership": [],
+    "artifacts": [],
+    "roles": [],
+    "declarations": [],
+    "deferred": []
+  },
+  "change_id": "integration-config-machine-field",
+  "intent": "Make Arch repair malformed integration configuration through its existing Layer 0 owner and prevent prose-valued integration fields.",
+  "impact": {
+    "body": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "references": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
+}

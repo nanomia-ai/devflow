@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-// devflow SessionStart observes only the checkout boundary. Request classification belongs
-// to principles after the user has supplied intent; resume owns no hook-time work.
+// devflow SessionStart observes only cheap activation eligibility. Request classification
+// belongs to principles after the user has supplied intent; resume owns workflow state.
 "use strict";
 
 const fs = require("node:fs");
+const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
 // The session may start in any subfolder of the checkout, so the folder the hook happens
@@ -33,6 +34,13 @@ function checkoutRoot(directory) {
 
 const root = checkoutRoot(sessionDirectory());
 if (!root) process.exit(0);
+
+// This is the deliberately weaker, non-binding half of project-state's membership answer.
+// It gates only a fixed pointer, never a route or file body, and therefore uses current files
+// only: no index, history, project-state, or route lookup belongs in SessionStart.
+const currentDevflow = fs.existsSync(path.join(root, "devflow"));
+const currentProduct = fs.existsSync(path.join(root, "devflow", "project", "product.md"));
+if (!currentDevflow && !currentProduct) process.exit(0);
 
 const additionalContext = [
   "[devflow] After the user states their intent, run devflow:principles to classify the request and follow its route.",

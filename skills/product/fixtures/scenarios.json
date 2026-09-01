@@ -1,15 +1,517 @@
 [
-  { "id": "brownfield-adopt", "s": { "entry.state": "brownfield-no-product", "product.file": "absent", "glossary.state": "missing", "product.request": "none", "research.origin": "", "research.card.path": "", "research.card.state": "none" }, "decided": { "entry.action": "route-adopt" }, "judged": {}, "expect": { "stage": "orient", "status": "ROUTE", "effects": ["ROUTE:adopt"] }, "cover": ["stage:orient", "branch:orient/route-adopt"] },
-  { "id": "new-inline-ask", "s": { "entry.state": "new", "product.file": "absent", "glossary.state": "missing", "product.request": "none", "research.origin": "", "research.card.path": "", "research.card.state": "none" }, "decided": { "approval.action": "ask" }, "judged": { "research.need": "inline", "plan.disposition": "new" }, "expect": { "stage": "propose-and-confirm", "status": "ASK", "effects": ["REPORT", "ASK"] }, "cover": ["stage:propose-and-confirm", "branch:propose-and-confirm/ask"] },
-  { "id": "new-inline-approved-commit", "s": { "entry.state": "new", "product.file": "absent", "glossary.state": "missing", "product.request": "none", "research.origin": "", "research.card.path": "", "research.card.state": "none" }, "decided": { "approval.action": "commit" }, "judged": { "research.need": "inline", "plan.disposition": "new" }, "expect": { "stage": "propose-and-confirm", "status": "NEXT", "effects": ["WRITE", "WRITE", "COMMIT", "NEXT"] }, "cover": ["branch:propose-and-confirm/commit"] },
-  { "id": "durable-pre-product-research-route", "s": { "entry.state": "new", "product.file": "absent", "glossary.state": "missing", "product.request": "none", "research.origin": "", "research.card.path": "", "research.card.state": "none" }, "decided": {}, "judged": { "research.need": "needed" }, "expect": { "stage": "research", "status": "ROUTE", "effects": ["RUN", "ROUTE:split"] }, "cover": ["stage:research", "branch:research/needed"] },
-  { "id": "active-pre-product-research-routes-split", "s": { "entry.state": "existing", "product.file": "absent", "glossary.state": "missing", "product.request": "none", "research.origin": "journal:2026-08-30T00:00:00Z maintenance routing pending: request-json: product", "research.card.path": "devflow/tree/00-project/00.1-research.md", "research.card.state": "pending" }, "decided": {}, "judged": {}, "expect": { "stage": null, "status": "ROUTE", "guard": "existing-project-research", "effects": [] }, "cover": ["guard:existing-project-research"] },
-  { "id": "interrupted-return-routes-active-research-work", "s": { "entry.state": "existing", "product.file": "absent", "glossary.state": "missing", "product.request": "none", "research.origin": "journal:2026-08-30T00:00:00Z maintenance routing pending: request-json: product", "research.card.path": "devflow/tree/00-project/00.1-research.md", "research.card.state": "effective" }, "decided": {}, "judged": {}, "expect": { "stage": null, "status": "ROUTE", "guard": "existing-project-research", "effects": [] }, "cover": [] },
-  { "id": "interrupted-research-waits", "s": { "entry.state": "existing", "product.file": "absent", "glossary.state": "missing", "product.request": "none", "research.origin": "", "research.card.path": "", "research.card.state": "none" }, "decided": {}, "judged": { "research.need": "blocked" }, "expect": { "stage": "research", "status": "WAIT", "effects": ["WAIT"] }, "cover": ["branch:research/blocked"] },
-  { "id": "legacy-product-is-current", "s": { "entry.state": "existing", "product.file": "current", "glossary.state": "current", "product.request": "none", "research.origin": "", "research.card.path": "", "research.card.state": "none" }, "decided": {}, "judged": { "research.need": "inline" }, "expect": { "stage": null, "status": "DONE", "effects": [] }, "cover": [] },
-  { "id": "confirmed-product-glossary-only", "s": { "entry.state": "existing", "product.file": "current", "glossary.state": "missing", "product.request": "none", "research.origin": "", "research.card.path": "", "research.card.state": "none" }, "decided": { "glossary.action": "write" }, "judged": { "research.need": "inline" }, "expect": { "stage": "glossary", "status": "NEXT", "effects": ["WRITE", "COMMIT", "NEXT"] }, "cover": ["stage:glossary", "branch:glossary/write"] },
-  { "id": "confirmed-product-glossary-definition-ask", "s": { "entry.state": "existing", "product.file": "current", "glossary.state": "missing", "product.request": "none", "research.origin": "", "research.card.path": "", "research.card.state": "none" }, "decided": { "glossary.action": "ask" }, "judged": { "research.need": "inline" }, "expect": { "stage": "glossary", "status": "ASK", "effects": ["ASK"] }, "cover": ["branch:glossary/ask"] },
-  { "id": "product-rerun-asks-before-overwrite", "s": { "entry.state": "existing", "product.file": "current", "glossary.state": "current", "product.request": "product-re-run", "research.origin": "", "research.card.path": "", "research.card.state": "none" }, "decided": { "approval.action": "ask" }, "judged": { "research.need": "inline", "plan.disposition": "revised" }, "expect": { "stage": "propose-and-confirm", "status": "ASK", "effects": ["REPORT", "ASK"] }, "cover": ["stage:propose-and-confirm", "branch:propose-and-confirm/ask"] },
-  { "id": "product-rerun-confirmed-binding-commit", "s": { "entry.state": "existing", "product.file": "current", "glossary.state": "current", "product.request": "product-re-run", "research.origin": "", "research.card.path": "", "research.card.state": "none" }, "decided": { "approval.action": "commit" }, "judged": { "research.need": "inline", "plan.disposition": "revised" }, "expect": { "stage": "propose-and-confirm", "status": "NEXT", "effects": ["WRITE", "WRITE", "COMMIT", "NEXT"] }, "cover": ["branch:propose-and-confirm/commit"] },
-  { "id": "unknown-io-blocks", "s": { "entry.state": "unknown", "product.file": "unknown", "glossary.state": "unknown", "product.request": "unknown", "research.origin": "", "research.card.path": "", "research.card.state": "unknown" }, "decided": {}, "judged": {}, "expect": { "stage": null, "status": "BLOCK", "guard": "raw-state-unavailable", "effects": [] }, "cover": ["guard:raw-state-unavailable"] }
+  {
+    "id": "brownfield-adopt",
+    "s": {
+      "entry.state": "brownfield-no-product",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {
+      "entry.action": "route-adopt"
+    },
+    "judged": {},
+    "expect": {
+      "stage": "orient",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:adopt"
+      ]
+    },
+    "cover": [
+      "stage:orient",
+      "branch:orient/route-adopt"
+    ]
+  },
+  {
+    "id": "new-inline-ask",
+    "s": {
+      "entry.state": "new",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {
+      "approval.action": "ask"
+    },
+    "judged": {
+      "research.need": "inline",
+      "plan.disposition": "new"
+    },
+    "expect": {
+      "stage": "propose-and-confirm",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:propose-and-confirm",
+      "branch:propose-and-confirm/ask"
+    ]
+  },
+  {
+    "id": "new-inline-approved-commit",
+    "s": {
+      "entry.state": "new",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {
+      "approval.action": "commit"
+    },
+    "judged": {
+      "research.need": "inline",
+      "plan.disposition": "new"
+    },
+    "expect": {
+      "stage": "propose-and-confirm",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:propose-and-confirm/commit"
+    ]
+  },
+  {
+    "id": "durable-pre-product-research-route",
+    "s": {
+      "entry.state": "new",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {},
+    "judged": {
+      "research.need": "needed"
+    },
+    "expect": {
+      "stage": "research",
+      "status": "ROUTE",
+      "effects": [
+        "RUN",
+        "ROUTE:split"
+      ]
+    },
+    "cover": [
+      "stage:research",
+      "branch:research/needed"
+    ]
+  },
+  {
+    "id": "active-pre-product-research-routes-split",
+    "s": {
+      "entry.state": "existing",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "journal:2026-08-30T00:00:00Z maintenance routing pending: request-json: product",
+      "research.card.path": "devflow/tree/00-project/00.1-research.md",
+      "research.card.state": "pending",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {},
+    "judged": {},
+    "expect": {
+      "stage": null,
+      "status": "ROUTE",
+      "guard": "existing-project-research",
+      "effects": []
+    },
+    "cover": [
+      "guard:existing-project-research"
+    ]
+  },
+  {
+    "id": "interrupted-return-routes-active-research-work",
+    "s": {
+      "entry.state": "existing",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "journal:2026-08-30T00:00:00Z maintenance routing pending: request-json: product",
+      "research.card.path": "devflow/tree/00-project/00.1-research.md",
+      "research.card.state": "effective",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {},
+    "judged": {},
+    "expect": {
+      "stage": null,
+      "status": "ROUTE",
+      "guard": "existing-project-research",
+      "effects": []
+    },
+    "cover": []
+  },
+  {
+    "id": "interrupted-research-waits",
+    "s": {
+      "entry.state": "existing",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {},
+    "judged": {
+      "research.need": "blocked"
+    },
+    "expect": {
+      "stage": "research",
+      "status": "WAIT",
+      "effects": [
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "branch:research/blocked"
+    ]
+  },
+  {
+    "id": "legacy-product-is-current",
+    "s": {
+      "entry.state": "existing",
+      "product.file": "current",
+      "glossary.state": "current",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {},
+    "judged": {
+      "research.need": "inline"
+    },
+    "expect": {
+      "stage": null,
+      "status": "DONE",
+      "effects": []
+    },
+    "cover": []
+  },
+  {
+    "id": "confirmed-product-glossary-only",
+    "s": {
+      "entry.state": "existing",
+      "product.file": "current",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {
+      "glossary.action": "write"
+    },
+    "judged": {
+      "research.need": "inline"
+    },
+    "expect": {
+      "stage": "glossary",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:glossary",
+      "branch:glossary/write"
+    ]
+  },
+  {
+    "id": "confirmed-product-glossary-definition-ask",
+    "s": {
+      "entry.state": "existing",
+      "product.file": "current",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {
+      "glossary.action": "ask"
+    },
+    "judged": {
+      "research.need": "inline"
+    },
+    "expect": {
+      "stage": "glossary",
+      "status": "ASK",
+      "effects": [
+        "ASK"
+      ]
+    },
+    "cover": [
+      "branch:glossary/ask"
+    ]
+  },
+  {
+    "id": "product-rerun-asks-before-overwrite",
+    "s": {
+      "entry.state": "existing",
+      "product.file": "current",
+      "glossary.state": "current",
+      "product.request": "product-re-run",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {
+      "approval.action": "ask"
+    },
+    "judged": {
+      "research.need": "inline",
+      "plan.disposition": "revised"
+    },
+    "expect": {
+      "stage": "propose-and-confirm",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
+    },
+    "cover": [
+      "stage:propose-and-confirm",
+      "branch:propose-and-confirm/ask"
+    ]
+  },
+  {
+    "id": "product-rerun-confirmed-binding-commit",
+    "s": {
+      "entry.state": "existing",
+      "product.file": "current",
+      "glossary.state": "current",
+      "product.request": "product-re-run",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {
+      "approval.action": "commit"
+    },
+    "judged": {
+      "research.need": "inline",
+      "plan.disposition": "revised"
+    },
+    "expect": {
+      "stage": "propose-and-confirm",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "branch:propose-and-confirm/commit"
+    ]
+  },
+  {
+    "id": "unknown-io-blocks",
+    "s": {
+      "entry.state": "unknown",
+      "product.file": "unknown",
+      "glossary.state": "unknown",
+      "product.request": "unknown",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "unknown",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {},
+    "judged": {},
+    "expect": {
+      "stage": null,
+      "status": "BLOCK",
+      "guard": "raw-state-unavailable",
+      "effects": []
+    },
+    "cover": [
+      "guard:raw-state-unavailable"
+    ]
+  },
+  {
+    "id": "compatible-feedback-write-product",
+    "s": {
+      "entry.state": "new",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "product",
+      "compatible.landing": "pending"
+    },
+    "decided": {
+      "approval.action": "ask"
+    },
+    "judged": {
+      "research.need": "inline",
+      "plan.disposition": "new"
+    },
+    "expect": {
+      "stage": "compatible-feedback",
+      "row": "write-product",
+      "status": "WAIT",
+      "effects": [
+        "WRITE",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:compatible-feedback",
+      "row:compatibleFeedback/write-product",
+      "branch:compatibleFeedback/write-product"
+    ]
+  },
+  {
+    "id": "compatible-feedback-write-glossary",
+    "s": {
+      "entry.state": "new",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "glossary",
+      "compatible.landing": "pending"
+    },
+    "decided": {
+      "approval.action": "ask"
+    },
+    "judged": {
+      "research.need": "inline",
+      "plan.disposition": "new"
+    },
+    "expect": {
+      "stage": "compatible-feedback",
+      "row": "write-glossary",
+      "status": "WAIT",
+      "effects": [
+        "WRITE",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:compatible-feedback",
+      "row:compatibleFeedback/write-glossary",
+      "branch:compatibleFeedback/write-glossary"
+    ]
+  },
+  {
+    "id": "compatible-feedback-semantic-landing",
+    "s": {
+      "entry.state": "new",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "product",
+      "compatible.landing": "satisfied"
+    },
+    "decided": {
+      "approval.action": "ask"
+    },
+    "judged": {
+      "research.need": "inline",
+      "plan.disposition": "new"
+    },
+    "expect": {
+      "stage": "compatible-feedback",
+      "row": "land",
+      "status": "ROUTE",
+      "effects": [
+        "RUN",
+        "COMMIT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:compatible-feedback",
+      "row:compatibleFeedback/land",
+      "branch:compatibleFeedback/land"
+    ]
+  },
+  {
+    "id": "compatible-feedback-invalid-shape-blocks",
+    "s": {
+      "entry.state": "new",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "invalid",
+      "compatible.landing": "invalid"
+    },
+    "decided": {
+      "approval.action": "ask"
+    },
+    "judged": {
+      "research.need": "inline",
+      "plan.disposition": "new"
+    },
+    "expect": {
+      "guard": "compatible-feedback-shape",
+      "status": "BLOCK"
+    },
+    "cover": [
+      "guard:compatible-feedback-shape"
+    ]
+  }
 ]

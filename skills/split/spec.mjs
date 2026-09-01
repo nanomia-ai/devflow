@@ -46,6 +46,7 @@ export const TABLES = {
   intakeSelector: { exclusive: true, rows: [
     { state: "route-product", reads: ["project.product", "request.classification"], acceptsUnknown: ["request.classification"], when: s => s.project.product === "missing" && s.request.classification === "tree-work" },
     { state: "small-no-tree-delta", reads: ["request.classification"], acceptsUnknown: ["request.classification"], when: s => s.request.classification === "small-work" },
+    { state: "record-request", reads: ["project.product", "request.classification", "request.current", "origin.active"], acceptsUnknown: ["request.classification"], when: s => s.project.product === "present" && s.request.classification === "tree-work" && s.request.current === "NONE" && s.origin.active === "NONE" },
     { state: "ASK:intake-uncertain", reads: [], acceptsUnknown: [], when: () => true }
   ] },
   materializeSelector: { exclusive: true, rows: [
@@ -66,6 +67,7 @@ export const STAGES = [
   { id: "intake", reads: ["planning.receipt", "request.classification", "project.product", "request.current", "origin.active", "origin.projectResearch"], acceptsUnknown: ["request.classification"], done: s => s.planning.receipt !== "NONE" || (s.request.classification === "tree-work" && s.project.product === "present" && (s.request.current !== "NONE" || s.origin.active !== "NONE")) || (s.request.classification === "pre-product-research" && (s.request.current !== "NONE" || s.origin.active !== "NONE" || s.origin.projectResearch !== "NONE")), needs: ["request.classification"], table: "intakeSelector", reentry: "rejudge", branches: {
     "route-product": ["ROUTE:product"],
     "small-no-tree-delta": [["REPORT", { template: "result" }], "DONE"],
+    "record-request": [["WRITE", { artifact: "requestRecord", target: "devflow/journal.md", line: "maintenance routing pending", "request-json": "<the whole user request as one JSON string>" }], "NEXT"],
     "ASK:intake-uncertain": ["ASK"]
   }, body: "stage: intake" },
   { id: "materialize", reads: ["planning.receipt", "origin.drafts"], acceptsUnknown: [], done: s => s.planning.receipt !== "NONE" || s.origin.drafts !== "NONE", needs: ["bundle.contract", "bundle.units"], table: "materializeSelector", reentry: "rejudge", branches: {
@@ -86,6 +88,7 @@ export const STAGES = [
 export const ARTIFACTS = {
   product: { path: "devflow/project/product.md", writer: "external.product", readers: ["stage.intake"] },
   journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.intake", "stage.materialize", "stage.carry-approval", "stage.propose"] },
+  requestRecord: { path: "devflow/journal.md", writer: "split", readers: ["stage.intake", "stage.materialize"] },
   layerOpeningBundle: { path: "devflow/journal.md", writer: "split", readers: ["stage.materialize"] },
   cardBundle: { path: "devflow/tree/<exact-active-scopes>/<one-or-more-sibling-card-addresses>.md", writer: "split", readers: ["stage.materialize"] },
   approvalBundle: { path: "devflow/tree/<current-origin-card-paths>.md", writer: "split", readers: ["stage.carry-approval", "stage.propose"] },

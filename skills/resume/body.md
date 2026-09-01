@@ -48,6 +48,10 @@ Use the recovery policy only for design-note, design-open-item, baseline-boundar
 
 Block an unrecognized canonical token; it is outside the reviewed compatibility slice.
 
+## guard: compatible-feedback-owner-required
+
+Block a compatible-feedback route unless the state entry names exactly one closed writer: Product for `product.md` or `glossary.md`, Design for `design.md`, and Arch or Adopt for `arch.md` or one exact capability design document according to the Brownfield fact. Never guess an owner from prose or a nearby filename.
+
 ## stage: recovery-action
 
 Judgment: The structured route and Brownfield fact select the one recovery branch. The session may explain a named continuation but never supplies its state transition or a replacement route.
@@ -56,6 +60,6 @@ Why: Recovery is selected only for collected canonical state and cannot loop on 
 
 ## stage: scope-entry
 
-Judgment: `intent.scope` is exactly one of `ordinary`, `domain-orientation`, or `handoff-continuation`. Domain orientation reports its bounded explanation and ends; ordinary and handoff continuation use the same canonical state decision.
+Judgment: `intent.scope` is exactly one of `ordinary`, `domain-orientation`, or `handoff-continuation`. Domain orientation reports its bounded explanation and ends. An unmanaged report tells the user that canonical state found no current or historical devflow membership evidence and that this invocation wrote nothing; it names product or adopt only when the user intended to opt in. Ordinary and handoff continuation otherwise use the same canonical state decision. A compatible-feedback marker routes only by its state-supplied writer; each owner stage must preserve its exact source and all five coordinates, and any residual marker is routed again after the landed marker's atomic owner-plus-journal commit.
 
-Why: User intent selects a bounded orientation or the canonical route; it does not replace the state-tool priority.
+Why: Repository absence is not consent to create devflow state. User intent selects a bounded orientation or the canonical route; it does not replace the state-tool priority.

@@ -1,6 +1,6 @@
 {
   "name": "resume",
-  "description": "Resume and domain entry. Restores a new session from disk and continues to the next stage, or finds a capability document by number or name and explains the domain. Use for session restarts, continuing work, status checks, or capability and domain onboarding questions.",
+  "description": "Resume and domain entry. Restores a new session from disk and continues to the next stage, or finds a capability document by number or name and explains the domain. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
   "problem": "Preserve the behavior of the prose source in skills/resume without silently changing its obligations.",
   "use_cases": [],
   "near_misses": [],
@@ -8,7 +8,8 @@
   "outputs": [],
   "irreversible_boundaries": [],
   "state_dependent_behaviors": [
-    "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review."
+    "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review.",
+    "Canonical setup.unmanaged reports no current or historical devflow membership evidence and ends without ASK, route, or write; domain orientation remains first."
   ],
   "exact_formats": [],
   "external_dependencies": [],

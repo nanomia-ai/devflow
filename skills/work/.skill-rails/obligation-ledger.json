@@ -1,26 +1,647 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:0b47665c13e7e4f0f449d6d74f01772ecb9bce5ecc9ce95d450fec7adcf106d6",
+  "intent_hash": "sha256:d9a7ff14fadd87bf1eeb7db27efc134f1f9689625932fc341855680ead47e42b",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Implementation. Takes one task card, codes it, keeps the progress log on disk, runs the completion signal, and commits. Use when starting to code, continuing work, or beginning implementation.",
+      "text": "Implementation. Takes one task card, codes it, keeps the progress log on disk, runs the completion signal, and commits. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
-        "spec:STAGES/integration"
+        "file:SKILL.md",
+        "file:agents/openai.yaml"
       ],
       "evidence": [
-        "fixture:unrenamed-wip-cannot-complete"
+        "file:agents/openai.yaml"
       ]
     },
     {
       "id": "problem-001",
       "source": "intent.problem",
-      "text": "Preserve the behavior of the repository-relative prose source at skills/work without silently changing its obligations.",
+      "text": "Preserve the behavior and evidence boundaries of repository-relative skills/work without silently changing its obligations or duplicating the principles state kernel.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:why: purpose"
+      ],
+      "evidence": [
+        "fixture:happy-implementation"
+      ]
+    },
+    {
+      "id": "use-cases-001",
+      "source": "intent.use_cases[0]",
+      "text": "Claim or resume one approved card and carry its implementation through current completion evidence and clean review.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/claim-or-reenter",
+        "spec:STAGES/implement-and-signal",
+        "spec:STAGES/review-reduction"
+      ],
+      "evidence": [
+        "fixture:happy-implementation"
+      ]
+    },
+    {
+      "id": "use-cases-002",
+      "source": "intent.use_cases[1]",
+      "text": "Recover anchored failure, objection, remote-evidence, integration, handoff, and finish-boundary transitions after interruption.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/remote-evidence",
+        "spec:STAGES/integration",
+        "spec:STAGES/handoff",
+        "spec:STAGES/boundary"
+      ],
+      "evidence": [
+        "fixture:remote-evidence-wait",
+        "fixture:handoff-before-boundary"
+      ]
+    },
+    {
+      "id": "use-cases-003",
+      "source": "intent.use_cases[2]",
+      "text": "Promote one durable research synthesis to each named long-lived owner through an exact canonical knowledge marker.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/research-checkpoint",
+        "spec:STAGES/knowledge-marker"
+      ],
+      "evidence": [
+        "fixture:research-synthesis-marker-timing"
+      ]
+    },
+    {
+      "id": "use-cases-004",
+      "source": "intent.use_cases[3]",
+      "text": "Open closed history only from one exact current basis and close only after every observed passenger and source marker clears.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/closed-history-refusal",
+        "spec:STAGES/boundary"
+      ],
+      "evidence": [
+        "fixture:exact-history-descent",
+        "fixture:late-current-source-marker-preempts-boundary-recovery"
+      ]
+    },
+    {
+      "id": "near-misses-001",
+      "source": "intent.near_misses[0]",
+      "text": "A passing tweak; principles completes it and never invokes work.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/tweak_boundary"
+      ],
+      "evidence": [
+        "fixture:no-tiny-branch-work-not-entered"
+      ]
+    },
+    {
+      "id": "near-misses-002",
+      "source": "intent.near_misses[1]",
+      "text": "Planning or repairing the card contract; split owns it.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/non-work-route"
+      ],
+      "evidence": [
+        "fixture:invalid-card-routes-split"
+      ]
+    },
+    {
+      "id": "near-misses-003",
+      "source": "intent.near_misses[2]",
+      "text": "Writing current promoted knowledge; arch or adopt owns it.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/knowledge-marker"
+      ],
+      "evidence": [
+        "fixture:research-synthesis-marker-timing"
+      ]
+    },
+    {
+      "id": "near-misses-004",
+      "source": "intent.near_misses[3]",
+      "text": "Capability or product verification; verify owns it.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/non-work-route"
+      ],
+      "evidence": [
+        "fixture:no-tiny-branch-work-not-entered"
+      ]
+    },
+    {
+      "id": "inputs-001",
+      "source": "intent.inputs[0]",
+      "text": "A context-supplied repository root and the public --target path for the exact selected card.",
+      "candidate_class": "observation",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/card-target-required",
+        "spec:ARTIFACTS/activeCard"
+      ],
+      "evidence": [
+        "fixture:missing-public-target"
+      ]
+    },
+    {
+      "id": "inputs-002",
+      "source": "intent.inputs[1]",
+      "text": "The context-bound sibling principles calculateState schema-2 result.",
+      "candidate_class": "observation",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/state-kernel-unavailable",
+        "spec:DECLARATIONS/state_api"
+      ],
+      "evidence": [
+        "fixture:state-kernel-gap"
+      ]
+    },
+    {
+      "id": "inputs-003",
+      "source": "intent.inputs[2]",
+      "text": "The selected card, exact declared inputs, current progress evidence, and bounded semantic judgments.",
+      "candidate_class": "observation",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:ARTIFACTS/activeCard",
+        "spec:GUARDS/invalid-progress-evidence"
+      ],
+      "evidence": [
+        "fixture:malformed-progress-blocks"
+      ]
+    },
+    {
+      "id": "outputs-001",
+      "source": "intent.outputs[0]",
+      "text": "One fail-closed Decision with the next ordered work effect plan.",
+      "candidate_class": "artifact",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/claim-or-reenter"
+      ],
+      "evidence": [
+        "fixture:ready-card-claim-is-effectful"
+      ]
+    },
+    {
+      "id": "outputs-002",
+      "source": "intent.outputs[1]",
+      "text": "Canonical progress, marker, commit, handoff, feedback, and status effects owned by work.",
+      "candidate_class": "artifact",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/progressSnippet",
+        "spec:STAGES/boundary"
+      ],
+      "evidence": [
+        "fixture:happy-implementation",
+        "fixture:handoff-before-boundary"
+      ]
+    },
+    {
+      "id": "outputs-003",
+      "source": "intent.outputs[2]",
+      "text": "A route to split, resume, arch/adopt through resume, or verify when that owner is next.",
+      "candidate_class": "artifact",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/non-work-route"
+      ],
+      "evidence": [
+        "fixture:invalid-card-routes-split",
+        "fixture:compatible-feedback-routes-semantic-owner"
+      ]
+    },
+    {
+      "id": "irreversible-boundaries-001",
+      "source": "intent.irreversible_boundaries[0]",
+      "text": "Publishing the claim, task, knowledge-marker, integration, or boundary commit.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/claim-or-reenter",
+        "spec:STAGES/knowledge-marker",
+        "spec:STAGES/integration",
+        "spec:STAGES/boundary"
+      ],
+      "evidence": [
+        "fixture:happy-implementation",
+        "fixture:research-synthesis-marker-timing"
+      ]
+    },
+    {
+      "id": "irreversible-boundaries-002",
+      "source": "intent.irreversible_boundaries[1]",
+      "text": "Applying compatible upper-document feedback or the byte-identical claim-to-done move.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/task-finalization"
+      ],
+      "evidence": [
+        "fixture:compatible-feedback-adds-carry",
+        "fixture:unrenamed-wip-cannot-complete"
+      ]
+    },
+    {
+      "id": "irreversible-boundaries-003",
+      "source": "intent.irreversible_boundaries[2]",
+      "text": "Treating a research conclusion, clean review, remote result, or completion signal as durable evidence.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/research-checkpoint",
+        "spec:STAGES/review-reduction",
+        "spec:STAGES/remote-evidence",
+        "spec:STAGES/implement-and-signal"
+      ],
+      "evidence": [
+        "fixture:review-code-repair-lineage",
+        "fixture:remote-pass-final-task"
+      ]
+    },
+    {
+      "id": "irreversible-boundaries-004",
+      "source": "intent.irreversible_boundaries[3]",
+      "text": "Declaring completion while a source marker or required boundary passenger remains.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/knowledge-landing-before-closure",
+        "spec:STAGES/boundary"
+      ],
+      "evidence": [
+        "fixture:late-current-source-marker-preempts-boundary-recovery",
+        "fixture:boundary-pending-waits"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-001",
+      "source": "intent.state_dependent_behaviors[0]",
+      "text": "Structured sibling state selects claim, remote recovery, finish boundary, or another canonical route without CLI parsing or local journal state.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "spec:GUARDS/non-work-route"
+      ],
+      "evidence": [
+        "fixture:state-kernel-gap"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-002",
+      "source": "intent.state_dependent_behaviors[1]",
+      "text": "Completion and review non-pass results anchor before repair; the third code objection requires the person's adjacent disposition and one later non-pass spends it.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/review-reduction"
+      ],
+      "evidence": [
+        "fixture:third-review-objection-asks",
+        "fixture:spent-disposition-nonpass-blocks"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-003",
+      "source": "intent.state_dependent_behaviors[2]",
+      "text": "Research promotion requires a committed synthesis checkpoint and emits one independent arch/adopt owner marker at a time.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/research-checkpoint",
+        "spec:STAGES/knowledge-marker"
+      ],
+      "evidence": [
+        "fixture:research-synthesis-checkpoint-first",
+        "fixture:research-synthesis-marker-timing"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-004",
+      "source": "intent.state_dependent_behaviors[3]",
+      "text": "Closed history is bounded to an exact named card, non-pass repair lineage, or current K/Trap Source basis.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/closed-history-refusal"
+      ],
+      "evidence": [
+        "fixture:exact-history-descent",
+        "fixture:broad-history-refused"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-005",
+      "source": "intent.state_dependent_behaviors[4]",
+      "text": "Finalization orders feedback judgment, carry, task commit, integration, feedback landing, done rename, handoff, and boundary.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/task-finalization",
+        "spec:STAGES/integration",
+        "spec:STAGES/handoff",
+        "spec:STAGES/boundary"
+      ],
+      "evidence": [
+        "fixture:handoff-before-boundary",
+        "fixture:boundary-pending-waits"
+      ]
+    },
+    {
+      "id": "exact-formats-001",
+      "source": "intent.exact_formats[0]",
+      "text": "Canonical completion signal result, review result, remote evidence check, and carry Progress lines.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/completionSignalResult",
+        "spec:TEMPLATES/reviewResult",
+        "spec:TEMPLATES/remoteEvidenceCheck",
+        "spec:TEMPLATES/carry"
+      ],
+      "evidence": [
+        "fixture:happy-implementation",
+        "fixture:remote-evidence-wait"
+      ]
+    },
+    {
+      "id": "exact-formats-002",
+      "source": "intent.exact_formats[1]",
+      "text": "Canonical knowledge landing pending marker with owner, writer arch|adopt, and source-json containing exact card path@fullhash.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/knowledgeLandingPending"
+      ],
+      "evidence": [
+        "fixture:research-synthesis-marker-timing"
+      ]
+    },
+    {
+      "id": "exact-formats-003",
+      "source": "intent.exact_formats[2]",
+      "text": "Canonical HANDOFF Next single step and reviewer pass/four-line objection result.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/handoff",
+        "spec:TEMPLATES/reviewerResult"
+      ],
+      "evidence": [
+        "fixture:handoff-before-boundary",
+        "fixture:review-dispatch-before-close"
+      ]
+    },
+    {
+      "id": "exact-formats-004",
+      "source": "intent.exact_formats[3]",
+      "text": "Canonical claim, checkpoint, task, integration, and boundary commit subjects and status suffixes.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/claim-or-reenter",
+        "spec:STAGES/task-finalization",
+        "spec:STAGES/integration",
+        "spec:STAGES/boundary"
+      ],
+      "evidence": [
+        "fixture:happy-implementation",
+        "fixture:task-commit-must-integrate"
+      ]
+    },
+    {
+      "id": "external-dependencies-001",
+      "source": "intent.external_dependencies[0]",
+      "text": "Git for shared truth, full commit IDs, checkpoints, ancestry, and card identity.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:collectors/index.mjs"
+      ],
+      "evidence": [
+        "fixture:happy-implementation"
+      ]
+    },
+    {
+      "id": "external-dependencies-002",
+      "source": "intent.external_dependencies[1]",
+      "text": "The sibling principles package for calculateState schema devflow/project-state/2.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api"
+      ],
+      "evidence": [
+        "fixture:state-kernel-gap"
+      ]
+    },
+    {
+      "id": "external-dependencies-003",
+      "source": "intent.external_dependencies[2]",
+      "text": "Split, resume, arch/adopt, verify, the clean reviewer role, and the person at their owned boundaries.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:ARTIFACTS/reviewerContract",
+        "spec:GUARDS/non-work-route"
+      ],
+      "evidence": [
+        "fixture:review-dispatch-before-close",
+        "fixture:compatible-feedback-routes-semantic-owner"
+      ]
+    },
+    {
+      "id": "completion-evidence-001",
+      "source": "intent.completion_evidence[0]",
+      "text": "Every legacy atom has resolving forward and reverse provenance with zero review-required or DEFERRED entries.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:.skill-rails/obligation-ledger.json"
+      ],
+      "evidence": [
+        "file:.skill-rails/obligation-ledger.json"
+      ]
+    },
+    {
+      "id": "completion-evidence-002",
+      "source": "intent.completion_evidence[1]",
+      "text": "Happy implementation, C2 marker timing, C5 exact history, C6 multi-owner blocking, review repair, remote recovery, integration, handoff, and unsafe-closure scenarios execute.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/boundary"
+      ],
+      "evidence": [
+        "fixture:happy-implementation",
+        "fixture:research-synthesis-marker-timing",
+        "fixture:exact-history-descent",
+        "fixture:partial-multi-owner-blocking",
+        "fixture:review-code-repair-lineage",
+        "fixture:remote-evidence-wait",
+        "fixture:task-commit-must-integrate",
+        "fixture:handoff-before-boundary",
+        "fixture:boundary-pending-waits"
+      ]
+    },
+    {
+      "id": "completion-evidence-003",
+      "source": "intent.completion_evidence[2]",
+      "text": "Collector, role, fixture, semantic audit, official lint/build/eval, and portability checks report their actual evidence.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "file:.skill-rails/semantic-diff.json"
+      ],
+      "evidence": [
+        "file:.generated.json"
+      ]
+    },
+    {
+      "id": "completion-evidence-004",
+      "source": "intent.completion_evidence[3]",
+      "text": "A done current card, complete structured boundary, integrated task commit, and no marker from that source are all observed.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/boundary"
+      ],
+      "evidence": [
+        "fixture:unrenamed-wip-cannot-complete",
+        "fixture:handoff-before-boundary",
+        "fixture:late-current-source-marker-preempts-boundary-recovery"
+      ]
+    },
+    {
+      "id": "deterministic-helpers-001",
+      "source": "intent.deterministic_helpers[0]",
+      "text": "The collector imports sibling principles calculateState directly, consumes the runtime-normalized targetPath as an ordinary fact, and projects only structured schema-2 facts plus exact current-card and Git evidence.",
+      "candidate_class": "declaration",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:collectors/index.mjs",
+        "spec:DECLARATIONS/state_api"
+      ],
+      "evidence": [
+        "fixture:state-kernel-gap",
+        "fixture:happy-implementation"
+      ]
+    },
+    {
+      "id": "deterministic-helpers-002",
+      "source": "intent.deterministic_helpers[1]",
+      "text": "Skill Rails validates guard, table, stage, effect order, formats, templates, fixtures, mutation coverage, determinism, and generated hashes.",
+      "candidate_class": "declaration",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:.generated.json"
+      ],
+      "evidence": [
+        "file:.generated.json"
+      ]
+    },
+    {
+      "id": "deterministic-helpers-003",
+      "source": "intent.deterministic_helpers[2]",
+      "text": "Local contract tests reject CLI parsing, process.cwd, raw journal state duplication, semantic-owner inference, tiny-work branches, and effect-free NEXT plans.",
+      "candidate_class": "declaration",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:collectors/project-state-seam.test.mjs"
+      ],
+      "evidence": [
+        "file:collectors/project-state-seam.test.mjs"
+      ]
+    },
+    {
+      "id": "judgment-points-001",
+      "source": "intent.judgment_points[0]",
+      "text": "Choose the next implementation or repair point without widening the card.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: implement-and-signal"
+      ],
+      "evidence": [
+        "fixture:continue-progress-has-effects",
+        "fixture:scope-escape-checkpoint"
+      ]
+    },
+    {
+      "id": "judgment-points-002",
+      "source": "intent.judgment_points[1]",
+      "text": "Reduce the anchored clean-review lineage and identify the person's disposition boundary.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: review-reduction"
+      ],
+      "evidence": [
+        "fixture:third-review-objection-asks"
+      ]
+    },
+    {
+      "id": "judgment-points-003",
+      "source": "intent.judgment_points[2]",
+      "text": "Classify upper feedback and name its existing semantic owner.",
       "candidate_class": "judgment/body",
       "consequence": "low",
       "disposition": "projected",
@@ -28,35 +649,23 @@
         "body:stage: task-finalization"
       ],
       "evidence": [
-        "fixture:happy-implementation"
+        "fixture:compatible-feedback-routes-semantic-owner"
       ]
     },
     {
-      "id": "state-dependent-behaviors-001",
-      "source": "intent.state_dependent_behaviors[0]",
-      "text": "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review.",
-      "candidate_class": "stage",
-      "consequence": "high",
-      "disposition": "projected",
-      "targets": [
-        "spec:TEMPLATES/reviewerResult"
-      ],
-      "evidence": [
-        "fixture:review-code-repair-lineage"
-      ]
-    },
-    {
-      "id": "judgment-points-001",
-      "source": "intent.judgment_points[0]",
-      "text": "Every source atom remains review-required until explicitly disposed.",
+      "id": "judgment-points-004",
+      "source": "intent.judgment_points[3]",
+      "text": "Choose one exact permitted closed-history basis and one named long-lived research owner.",
       "candidate_class": "judgment/body",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
-        "body:role: reviewer"
+        "body:guard: closed-history-refusal",
+        "body:stage: knowledge-marker"
       ],
       "evidence": [
-        "fixture:review-code-repair-lineage"
+        "fixture:exact-history-descent",
+        "fixture:research-synthesis-marker-timing"
       ]
     },
     {

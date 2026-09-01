@@ -1,22 +1,21 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:b4e6323432c8e2bddfd663f57221a96b49eb62c0e860847ada958716e5611c8c",
+  "intent_hash": "sha256:6cd2e9b43943f538c6acaa9c39f1785bde21491ae3651caa0eea08b04011470d",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Design planning (optional stage). Decides the UI approach, source, token and component strategies, decomposition axis, and review surface, and creates devflow/project/design.md. Use for design systems, UI style, or component-library decisions.",
+      "text": "Design planning (optional stage). Decides the UI approach, source, token and component strategies, decomposition axis, and review surface, and creates devflow/project/design.md. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
-        "spec:STAGES/record-first",
-        "body:stage: record-first",
-        "file:references/legacy-source.md"
+        "file:SKILL.md",
+        "file:agents/openai.yaml"
       ],
       "evidence": [
-        "file:references/legacy-source.md"
+        "file:agents/openai.yaml"
       ]
     },
     {

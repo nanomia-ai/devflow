@@ -41,8 +41,18 @@ async function records(context) {
 }
 function routeOf(value) {
   const id = value?.route?.id;
-  const allowed = new Set(["none", "git.open-operation", "integrity.blocking", "marker.knowledge-landing", "marker.design-note", "marker.design-open-item", "setup.no-product", "setup.layer0-incomplete", "baseline.design-refresh", "baseline.legacy-v010", "baseline.boundary", "complete.adoption"]);
+  const allowed = new Set(["none", "git.open-operation", "integrity.blocking", "marker.knowledge-landing", "marker.compatible-feedback", "marker.design-note", "marker.design-open-item", "setup.no-product", "setup.layer0-incomplete", "baseline.design-refresh", "baseline.legacy-v010", "baseline.boundary", "complete.adoption"]);
   return allowed.has(id) ? id : "owned-elsewhere";
+}
+async function compatible(context) {
+  const entries = (await state(context))?.value?.zones?.marker?.entries;
+  if (!Array.isArray(entries)) return { owner: "invalid", landing: "invalid" };
+  const marker = entries.find(item => item?.kind === "compatible-feedback" && item?.writer === "adopt");
+  if (!marker) return { owner: "none", landing: "none" };
+  const owner = marker.owner === "devflow/project/arch.md" ? "arch"
+    : /^devflow\/project\/capabilities\/[0-9]+-[^/]+\.md$/.test(marker.owner) ? "capability" : "invalid";
+  const landing = marker.landing === "satisfied" ? "satisfied" : marker.landing === "pending" ? "pending" : "invalid";
+  return { owner, landing };
 }
 export const collectors = Object.freeze({
   "state.kernel": async context => (await state(context)) ? "available" : "unavailable",
@@ -52,6 +62,8 @@ export const collectors = Object.freeze({
   "state.capabilities": async context => { const records = (await state(context))?.value?.compatibility?.snapshot?.baseline?.records; if (!Array.isArray(records)) return "unknown"; return records.some(item => item?.headExists !== true) ? "missing" : records.some(item => item?.designRefresh || item?.legacyV010) ? "refresh" : "current"; },
   "adopt/inventory.project": inventory, "adopt/flow.project": flow, "adopt/records.project": records,
   "state.marker-knowledge": async context => { const entries = (await state(context))?.value?.zones?.marker?.entries; return Array.isArray(entries) && entries.some(item => item?.kind === "knowledge-landing" && item?.writer === "adopt") ? "present" : "none"; },
-  "state.marker-count": async context => { const entries = (await state(context))?.value?.zones?.marker?.entries; return Array.isArray(entries) ? entries.filter(item => item?.kind === "knowledge-landing" && item?.writer === "adopt").length : 0; }
+  "state.marker-count": async context => { const entries = (await state(context))?.value?.zones?.marker?.entries; return Array.isArray(entries) ? entries.filter(item => item?.kind === "knowledge-landing" && item?.writer === "adopt").length : 0; },
+  "state.compatible-owner": async context => (await compatible(context)).owner,
+  "state.compatible-landing": async context => (await compatible(context)).landing
 });
 export const snapshotBasis = null;

@@ -18,6 +18,10 @@ Keep reasons and discarded alternatives beside their owning decision, and keep r
 
 Do not replace a current design when canonical file state, maintenance state, or durable research card state cannot be observed.
 
+## guard: compatible-feedback-shape
+
+Block unless canonical state exposes the exact Design-owned marker for the current design owner with a valid pending or satisfied landing state; never infer this route from a review note or a nearby capability document.
+
 ## guard: product-required
 
 Product identity and scope are required before a design direction can be interpreted.
@@ -37,6 +41,12 @@ Current maintenance state means the request already has a durable identity. Retu
 ## guard: source-choice-required
 
 A design source is a scope-specific authority, not a repository-wide default. A stale source or unresolved conflict needs a choice before a proposal can be trusted.
+
+## stage: compatible-feedback
+
+Judgment: For a pending marker, edit only the exact design owner and preserve the source provenance plus Background, Why/evidence, Conclusion, and implication; then wait for canonical replay. Delete only the byte-identical marker after state reports that all requested content is present, and commit the owner diff and journal deletion atomically before routing to Resume.
+
+Why: A superficial diff is not semantic landing, and other owners' markers remain pending.
 
 ## stage: input
 

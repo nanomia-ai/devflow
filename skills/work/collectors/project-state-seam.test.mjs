@@ -7,6 +7,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { calculateState } from "../../principles/scripts/project-state.mjs";
 import { collectors } from "./index.mjs";
+import { GUARDS, STAGES, TABLES } from "../spec.mjs";
 
 const template = (await readFile(new URL("../templates/remote-evidence-check.md", import.meta.url), "utf8")).trimEnd();
 const skillRoot = fileURLToPath(new URL("../", import.meta.url));
@@ -14,6 +15,7 @@ const skillRoot = fileURLToPath(new URL("../", import.meta.url));
 function git(root, ...args) {
   const result = spawnSync("git", args, { cwd: root, encoding: "utf8", windowsHide: true });
   assert.equal(result.status, 0, result.stderr);
+  return result.stdout.trim();
 }
 
 function remoteLine(check, detail) {
@@ -45,13 +47,17 @@ async function project(progress) {
   return { root, cardPath };
 }
 
-async function stageProject(t, root, targetPath) {
+async function stageProject(t, root, targetPath, judged = []) {
   const trace = await mkdtemp(join(tmpdir(), "work-stage-trace-"));
   t.after(() => rm(trace, { recursive: true, force: true }));
   const args = [
     join(skillRoot, "scripts", "skill-rails", "run.mjs"), "stage",
     "--skill", skillRoot, "--project", root, "--trace-dir", trace, "--json",
-    ...(targetPath === undefined ? [] : ["--target", targetPath, "--judged", "history.basis=none"])
+    ...(targetPath === undefined ? [] : [
+      "--target", targetPath,
+      "--judged", "history.basis=none",
+      ...judged.flatMap((value) => ["--judged", value]),
+    ])
   ];
   const result = spawnSync(process.execPath, args, { encoding: "utf8", windowsHide: true });
   assert.ok([0, 2].includes(result.status), result.stderr || result.stdout);
@@ -68,6 +74,171 @@ function fact(decision, field) {
   return decision.facts.find(item => item.field === field)?.value;
 }
 
+test("compatible feedback transport preserves the pre-title H1 and post-title card bytes", () => {
+  const finalization = STAGES.find((stage) => stage.id === "task-finalization");
+  for (const name of ["remote-compatible-carry", "remote-compatible", "compatible-carry", "compatible"]) {
+    const effects = finalization.branches[name];
+    const marker = effects.findIndex((effect) => Array.isArray(effect) && effect[1]?.artifact === "compatibleFeedbackTransport");
+    const commit = effects.findIndex((effect) => Array.isArray(effect) && effect[0] === "COMMIT");
+    assert.ok(marker >= 0 && marker < commit, name);
+    assert.equal(effects[commit][1].subject, "exact card H1", name);
+  }
+
+  const boundary = STAGES.find((stage) => stage.id === "boundary").branches.compatible;
+  assert.deepEqual(boundary[0][1].touches, ["devflow/journal.md"]);
+  assert.deepEqual(boundary[1][1].touches, ["devflow/journal.md"]);
+  assert.equal(boundary.some((effect) => JSON.stringify(effect).includes("activeCard")), false);
+
+  const guard = GUARDS.find((item) => item.id === "compatible-feedback-before-closure");
+  assert.equal(guard.when({ feedback: { marker: "current-source" } }), true);
+  assert.equal(guard.when({ feedback: { marker: "other-source" } }), false);
+});
+
+function feedbackEntry(owner, source, suffix = "") {
+  return {
+    owner,
+    source,
+    coordinates: {
+      target: `${owner}#Compatible boundary${suffix}`,
+      background: `review observed reusable compatible context${suffix}`,
+      why: `evidence explains the durable choice${suffix}`,
+      conclusion: `retain the compatible behavior${suffix}`,
+      implication: `future work reuses this boundary${suffix}`,
+    },
+  };
+}
+
+function feedbackLifecycle(entry, state) {
+  return { identity: JSON.stringify(entry), state, entry };
+}
+
+function feedbackSet(...entries) {
+  const sources = [...new Set(entries.map((entry) => entry.source))];
+  const source = sources[0] ?? "";
+  return {
+    bytes: JSON.stringify(entries),
+    count: entries.length,
+    source,
+    sourceCard: source.includes("@") ? source.slice(0, source.lastIndexOf("@")) : "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+    sourceCount: sources.length,
+    uniqueCount: new Set(entries.map((entry) => JSON.stringify(entry))).size,
+  };
+}
+
+test("compatible feedback guard mechanically binds first production and established closure", async (t) => {
+  const card = "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md";
+  const source = `${card}@${"1".repeat(40)}`;
+  const consumed = feedbackEntry("devflow/project/arch.md", source);
+  const current = feedbackEntry("devflow/project/product.md", source);
+  const guard = GUARDS.find((item) => item.id === "compatible-feedback-set-required");
+  const snapshot = (feedback) => ({ card: { target: card }, feedback });
+  const initial = {
+    action: "compatible",
+    lifecycles: [],
+    pendingSet: feedbackSet(consumed, current),
+    eligibleSet: feedbackSet(consumed, current),
+    pendingSetStatus: "complete",
+    lifecycleAction: "produce",
+  };
+  assert.equal(guard.when(snapshot(initial)), false);
+
+  const sealed = {
+    action: "compatible",
+    lifecycles: [feedbackLifecycle(consumed, "consumed"), feedbackLifecycle(current, "current")],
+    pendingSet: feedbackSet(feedbackEntry("devflow/project/design.md", `${card}@${"9".repeat(40)}`)),
+    eligibleSet: feedbackSet(),
+    pendingSetStatus: "complete",
+    lifecycleAction: "settled",
+  };
+  assert.equal(guard.when(snapshot({ ...sealed, lifecycleAction: "produce", eligibleSet: feedbackSet(current) })), true);
+  assert.equal(guard.when(snapshot(sealed)), false);
+  assert.equal(guard.when(snapshot({ ...sealed, eligibleSet: feedbackSet(current) })), true);
+  assert.equal(guard.when(snapshot({ ...initial, eligibleSet: feedbackSet(consumed) })), true);
+  assert.equal(guard.when(snapshot({ ...initial, eligibleSet: feedbackSet(current, consumed) })), true);
+  const mixedSource = { ...current, source: `${card}@${"2".repeat(40)}` };
+  assert.equal(guard.when(snapshot({ ...initial, pendingSet: feedbackSet(consumed, mixedSource), eligibleSet: feedbackSet(consumed, mixedSource), pendingSetStatus: "invalid" })), true);
+  const foreign = feedbackEntry("devflow/project/product.md", `devflow/tree/01-foundation/01.2-other.wip-jmp.md@${"1".repeat(40)}`);
+  assert.equal(guard.when(snapshot({ ...initial, pendingSet: feedbackSet(foreign), eligibleSet: feedbackSet(foreign) })), true);
+  assert.equal(guard.when(snapshot({ ...initial, pendingSet: feedbackSet(consumed, consumed), eligibleSet: feedbackSet(consumed, consumed), pendingSetStatus: "invalid" })), true);
+  assert.equal(guard.when(snapshot({ ...initial, pendingSet: feedbackSet(), eligibleSet: feedbackSet() })), true);
+  assert.equal(guard.when(snapshot({ ...initial, lifecycles: "invalid" })), true);
+  assert.equal(guard.when(snapshot({ action: "none" })), false);
+  assert.deepEqual(guard.acceptsUnknown, [
+    "feedback.action",
+    "feedback.pendingSetStatus",
+    "feedback.lifecycleAction",
+    "feedback.pendingSet",
+    "feedback.eligibleSet",
+  ]);
+  assert.equal(guard.acceptsUnknown.includes("card.target"), false);
+  assert.equal(guard.acceptsUnknown.includes("feedback.lifecycles"), false);
+  for (const name of ["remote-compatible-carry", "remote-compatible", "compatible-carry", "compatible"]) {
+    const effects = STAGES.find((stage) => stage.id === "task-finalization").branches[name];
+    assert.equal(effects.find((effect) => effect?.[1]?.artifact === "compatibleFeedbackTransport")?.[1]?.entries, "feedback.eligibleSet.bytes");
+  }
+
+  const fixture = await project("");
+  try {
+    const exactSource = `${fixture.cardPath}@${git(fixture.root, "rev-parse", "HEAD")}`;
+    const exact = feedbackEntry("devflow/project/arch.md", exactSource);
+    const decision = await stageProject(t, fixture.root, fixture.cardPath, [
+      "feedback.action=compatible",
+      `feedback.pendingSet=${JSON.stringify(feedbackSet(exact))}`,
+      `feedback.eligibleSet=${JSON.stringify(feedbackSet(exact))}`,
+      "feedback.pendingSetStatus=complete",
+      "feedback.lifecycleAction=produce",
+    ]);
+    assert.deepEqual(fact(decision, "feedback.lifecycles"), []);
+    assert.deepEqual(fact(decision, "feedback.eligibleSet"), feedbackSet(exact));
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("all-consumed compatible reentry takes closure without a marker or exact-H1 commit", () => {
+  const boundaryTable = TABLES.boundary;
+  const state = {
+    boundary: { state: "ready" },
+    completion: { state: "pass" },
+    review: { state: "pass" },
+    carry: { state: "present" },
+    feedback: { action: "compatible", eligibleSet: [], lifecycleAction: "settled" },
+    task: { commit: "present", integration: "integrated" },
+    handoff: { state: "current" },
+  };
+  const row = boundaryTable.rows.find((item) => item.when(state));
+  assert.equal(row?.state, "compatible-settled");
+  const effects = STAGES.find((stage) => stage.id === "boundary").branches[row.state];
+  assert.equal(effects.some((effect) => effect?.[1]?.artifact === "compatibleFeedbackTransport"), false);
+  assert.equal(effects.some((effect) => effect?.[1]?.subject === "exact card H1"), false);
+  assert.deepEqual(effects.map((effect) => Array.isArray(effect) ? effect[0] : effect), ["WRITE", "COMMIT", "ROUTE:verify"]);
+});
+
+test("compatible lifecycle collector isolates another card", async () => {
+  const fixture = await project("");
+  try {
+    const other = "devflow/tree/01-foundation/01.2-other.wip-jmp.md";
+    const first = await readFile(join(fixture.root, ...fixture.cardPath.split("/")), "utf8");
+    await writeFile(join(fixture.root, ...other.split("/")), first
+      .replace("# 01.1 Remote", "# 01.2 Other")
+      .replace("Coordinates: fixture / foundation / 01.1", "Coordinates: fixture / foundation / 01.2"), "utf8");
+    await writeFile(join(fixture.root, "devflow", "project", "arch.md"), "# Architecture\n\nBrownfield: no\nIntegration branch: main\n", "utf8");
+    git(fixture.root, "add", ".");
+    git(fixture.root, "commit", "-m", "other compatible source");
+    const source = `${other}@${git(fixture.root, "rev-parse", "HEAD")}`;
+    const entry = feedbackEntry("devflow/project/arch.md", source);
+    await writeFile(join(fixture.root, "devflow", "journal.md"), `2026-08-30T01:00:00Z compatible feedback pending: payload-json: ${JSON.stringify(entry)}\n`, "utf8");
+    git(fixture.root, "add", ".");
+    git(fixture.root, "commit", "-m", "compatible marker for other card");
+
+    assert.deepEqual(await collectors["work/feedback.lifecycles"]({ projectRoot: fixture.root, targetPath: fixture.cardPath }), []);
+    assert.deepEqual(await collectors["work/feedback.lifecycles"]({ projectRoot: fixture.root, targetPath: other }), [feedbackLifecycle(entry, "current")]);
+    assert.equal(await collectors["work/feedback.marker"]({ projectRoot: fixture.root, targetPath: fixture.cardPath }), "other-source");
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
 test("schema-2 principles accepts the exact remote template and work observes it", async () => {
   const fixture = await project(remoteLine(JSON.stringify("https://ci.example/run/1; verdict: fail"), JSON.stringify('owner said "wait"')));
   try {
@@ -76,6 +247,21 @@ test("schema-2 principles accepts the exact remote template and work observes it
     assert.equal(state.zones.integrity.entries.some(entry => entry.path === fixture.cardPath), false, JSON.stringify({ integrity: state.zones.integrity.entries, claim: state.zones.claim.entries }));
     assert.equal(await collectors["work/state.kernel"]({ projectRoot: fixture.root }), "available");
     assert.equal(await collectors["work/remote.state"]({ projectRoot: fixture.root, targetPath: fixture.cardPath }), "pending");
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("carry fallback keeps the last valid carry-kind fact when later progress lines follow", async () => {
+  const fixture = await project("");
+  try {
+    const fallbackPath = "fallback-card.md";
+    const card = await readFile(join(fixture.root, ...fixture.cardPath.split("/")), "utf8");
+    await writeFile(join(fixture.root, fallbackPath), card.replace(
+      /## Progress log\n[\s\S]*$/,
+      `## Progress log\n2026-08-30T00:00:00Z carry: exact trap\n2026-08-30T00:01:00Z review result: head: ${"a".repeat(40)}; verdict: pass; detail-json: ""\n2026-08-30T00:02:00Z carry:`,
+    ), "utf8");
+    assert.equal(await collectors["work/carry.state"]({ projectRoot: fixture.root, targetPath: fallbackPath }), "present");
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
   }
@@ -157,6 +343,18 @@ test("direct card collector rejects lexical escapes before reading outside the p
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
     await rm(outside, { recursive: true, force: true });
+  }
+});
+
+test("direct card collector accepts a canonical spaced relative path", async () => {
+  const fixture = await project("");
+  try {
+    const targetPath = "devflow/tree/02-Swatch collection/02.1-Swatch Shelf first slice.wip-jmp.md";
+    await mkdir(join(fixture.root, "devflow", "tree", "02-Swatch collection"), { recursive: true });
+    await writeFile(join(fixture.root, ...targetPath.split("/")), await readFile(join(fixture.root, ...fixture.cardPath.split("/")), "utf8"), "utf8");
+    assert.equal(await collectors["work/card.contract"]({ projectRoot: fixture.root, targetPath }), "valid");
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
   }
 });
 

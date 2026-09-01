@@ -498,6 +498,66 @@ Revisit when delayed guidance causes an action different from resume, a C1–C6 
   Mixing it into a release that also repairs ten defects would make it impossible to tell
   which change broke what.
 
+### DD-95 · Globally installed devflow stays silent without current evidence; explicit intent and history-aware state preserve the adoption boundary (v0.20.0)
+
+Subject: Identity, packaging, platforms | Introduced: v0.20.0 | State: active
+
+Observed problem: the globally installed plugin's SessionStart injected devflow guidance into
+every Git repository, and ordinary development language in the Arch, Design, Split, Work,
+Verify, and Resume descriptions could turn that context into implicit stage entry. Broad Product
+and Adopt descriptions left the same path open. The state tool also collapsed a never-managed
+repository and a partial or historical devflow repository into `setup.no-product`, so the safe
+Resume path could ask setup questions. This is the real scene in DD-92's revisit condition:
+delayed guidance caused an action different from Resume.
+
+Desired behavior: leave no passive devflow framing in an ordinary project that never adopted it.
+Explicit devflow invocation always works, and routes from another devflow skill plus existing
+managed-project flow remain unchanged. Partial, deleted, shallow-history, or failed-observation
+states are never falsely declared unmanaged.
+
+Chosen boundary: after finding the Git root, SessionStart cheaply checks only the current
+`devflow` path and `devflow/project/product.md`. When neither exists it exits 0 with no output;
+when either exists it emits the existing injection byte-for-byte. This is a weaker, non-binding
+eligibility check that gates a fixed pointer only: it reads no index, history, state tool, zone,
+or route. The Arch, Design, Split, Work, Verify, and Resume descriptions admit only explicit
+invocation, a route from another devflow skill, or work in an existing devflow-managed project.
+Product and Adopt admit only explicit devflow intent: direct invocation, naming devflow, or
+requesting devflow-shaped artifacts such as Layer 0 and devflow capability documents.
+
+The one action-owning decision remains in `project-state.mjs`. It emits `setup.unmanaged` only
+when current and indexed devflow evidence are absent and full history proves that no devflow path
+ever existed. Historical evidence remains `setup.no-product`; shallow history, Git failure,
+undecodable output, and uncertainty conservatively fall back to the same existing
+`setup.no-product`. Resume preserves domain orientation first, then ends `setup.unmanaged` with
+one report and DONE—no ASK, route, or write—and mentions Product or Adopt only if the user
+intended to opt in.
+
+Why the boundary is needed: hook errors are asymmetric. A false unmanaged result strands
+unknown-session recovery for a managed project, while one false managed or ambiguous pointer is
+immediately corrected by the authoritative state tool. The hook therefore suppresses only on
+overwhelming cheap current evidence; the state tool alone owns index, full-history, and unknown
+judgment. DD-92 rejected route judgment and file-body injection in the hook. The existing Git-root
+check already refutes the unstated premise that every filesystem read is workflow-state
+computation, and this boundary computes neither a route nor a body. DD-05, DD-20, DD-83, DD-92,
+and DD-93 remain affirmed within their recorded reasons: one hook, independently discoverable
+Adopt, one read-only state computation, state ownership, and P2 authored-canon ownership.
+
+Rejected alternatives: a new init skill or adoption marker creates a second home for one fact.
+Copying index and full-history logic into the hook adds permanent session cost and a divergent
+second predicate. A fixed negative hook message defeats silence and taxes every ordinary session.
+`allow_implicit_invocation: false` also suppresses valid managed-project selection. Leaving broad
+Product and Adopt language open recreates the same ambient trigger through those two entries.
+
+Affected coordinates: `scripts/session-start.js`; the eight skills' `.skill-rails/intent.json`
+and generated trigger projections; `skills/principles/scripts/project-state.mjs`;
+`skills/resume/spec.mjs`, `body.md`, fixtures, and their seam tests; matrix cell A10 (pre-adoption
+or accidental entry); and CHANGELOG. No new matrix row, term, marker, or init file is created.
+
+Revisit when a current devflow project is silenced by the hook, explicit Product or Adopt becomes
+undiscoverable, an ordinary unmanaged request again selects a downstream skill, the intentional
+weak-hook/authoritative-state disagreement changes an action rather than a pointer, or
+SessionStart latency rises materially.
+
 ## Verification and roles
 
 ### DD-08 · TDD procedure not adopted
@@ -805,6 +865,164 @@ repository invariant fixture. DD-24, DD-25, DD-50, DD-55, and DD-69 remain in fo
 Revisit when: a bounded path is shown unable to identify the consumed contract without an
 implementation recipe, or a task-specific fixture can acquire another durable owner without
 duplicating the completion contract.
+
+### DD-94 · After the exact-title task commit, unsettled evidence forbids only COMMIT; settled evidence with no upper feedback or a fully consumed compatible set uses the boundary commit as its one late vehicle (v0.20.0)
+
+Subject: The task tree and its cards | Introduced: v0.20.0 | State: active
+
+Observed problem: the first greenfield real-use card made its task commit with the canonical
+exact-H1 subject while review and `carry` were still absent. Work's `boundary-incomplete` guard
+then returned permanent `BLOCK` before every stage, so even `review-reduction`, the producer of
+the missing evidence, was unreachable. Removing only that guard exposed a second loss in replay:
+after a valid `carry:` line, appending `review result:` made the state tool read the last progress
+line overall and change a physically present carry to `absent`, so work would append a duplicate.
+The same fact vanished silently from `missing`, the current claim, and capability closure's
+`children-done carryFacts` harvest.
+
+Desired behavior: keep exactly one exact-H1 task commit while leaving non-committing completion
+and review evidence producers reachable afterward. A late line of one evidence kind never
+retracts a valid fact of another kind. After evidence settles, an unjudged or UNKNOWN
+`feedback.action` is requested before any boundary effect. A `none` value lets the existing
+boundary commit carry a missing carry line and the claim→done move. `compatible` must finish the
+existing semantic-owner path while an exact proposal is never-seen or current, and may close on
+the same boundary vehicle only when every exact lifecycle is `consumed` and no current marker from
+this card remains. UNKNOWN, current, and never-seen compatible states, and every other known
+feedback value, do not close.
+
+Chosen boundary: remove the `boundary-incomplete` BLOCK and replace it with one `RESTRICT` guard
+that forbids only the `COMMIT` verb while the task commit is present, integration and HANDOFF are
+current, finish-boundary is missing, and completion or review evidence is unsettled. Evidence-only
+completion-signal and clean-review producers remain reachable, while any branch containing a
+checkpoint or second task commit is refused mechanically. Once completion is `pass` and review
+is `pass`, `waived`, or `not-applicable`, an unjudged or UNKNOWN `feedback.action` returns an
+actionable `BLOCK` naming the required judgment before the boundary table acts. Once known,
+the two existing `feedback.action=none` rows remain: absent carry writes one line before the
+claim→done move and boundary commit; present carry skips that write and uses the same move and
+commit. Two exact-lifecycle rows built on DD-96 also exist for `feedback.action=compatible`. They reuse the
+same effects only when every proposal is `consumed` and no current marker remains: never-seen
+writes the canonical transport first, current continues routing to Resume, and UNKNOWN or invalid
+blocks. Every other known non-`none` feedback value remains on the existing `pending`
+`REPORT→WAIT` branch.
+
+In the same change, `carryState` selects the **last valid carry-kind line**, not the last progress
+line overall. That matches signal and review's existing last-of-kind meaning; a malformed later
+carry line still appears through `integrity.shape` but no longer masks an earlier valid fact. The
+work collector's structured-state fallback uses the same selection. The state tool stays
+read-only and gains no field, zone, format, or writer.
+
+Why the boundary is needed: `RESTRICT` rejects the dangerous effect rather than proliferating
+recovery stages per judgment value, preserving both evidence production and one-task-one-commit.
+Last-valid-of-kind removes carry's lone lossy special case and corrects every existing consumer
+through one owner: `missing`, claim projection, and closure harvest. The boundary commit already
+is the shared passenger vehicle for HANDOFF and status movement, so no new commit or writer is
+created. DD-09, DD-15, and DD-83 remain active. This is the bounded answer to both of DD-83's
+recorded revisit conditions: the tool caught a real omission that the same session could not
+close, and it called an existing carry missing.
+
+Rejected alternatives: widen `compatible` to `missing` generically — at introduction no durable
+producer existed, so this would only have extended the existing zero-effect work→resume→work loop;
+add recovery stages and conflict rows per
+judgment — they duplicate one COMMIT risk and the existing pending behavior; make a second H1 or a
+post-title checkpoint — that violates DD-09 and erases last-card-commit recognition; repair only
+the collector — `missing` and closure harvest still lose the fact; append carry again at the end —
+that deliberately duplicates it; add a carry field or separate boundary writer — one fact gains
+two homes and new authority.
+
+Later provenance correction (DD-96): the `compatible` rejection and none-only boundary above
+depended on DD-94's introduction-time premise that no durable producer existed. DD-96's canonical
+`compatible feedback pending` transport and exact never/current/consumed lifecycle satisfy
+DD-94's recorded condition that a durable producer make the pending path terminable, so that
+premise no longer applies to the consumed state. This correction does not permit generic
+`compatible` closure. Evidence producers remain reachable, unsettled evidence still forbids
+COMMIT, and one exact-H1 task commit, one boundary vehicle, and no new writer remain invariant.
+UNKNOWN, current, and never-seen compatible states still do not close.
+
+Affected coordinates: `skills/work/{spec.mjs,body.md,fixtures/scenarios.json,collectors/index.mjs}`,
+`skills/work/collectors/project-state-seam.test.mjs`,
+`skills/principles/scripts/project-state.mjs`,
+`skills/principles/references/delivery/commit-and-verification.md`, and
+`scripts/project-state.test.js`. DD-96 continues to own compatible-feedback transport; this
+decision recognizes only the effect by which its exact consumed lifecycle terminates the late
+boundary. Automatic activation gating remains outside this decision.
+Revisit when: an authorized authoring flow proves the last carry-kind line is not the current
+fact; a late evidence-only write is measured to require a second task boundary; or DD-96's exact
+consumed lifecycle fails to terminate the pending path deterministically. DD-96 has satisfied the
+former durable-producer condition.
+
+### DD-96 · Compatible feedback persists as a first-complete-set-sealed card-boundary payload and Resume proves one semantic-owner landing at a time (v0.20.0)
+
+Subject: The task tree and its cards | Introduced: v0.20.0 | State: active
+
+Observed problem: a clean Work review could discover compatible reusable feedback, yet the
+existing `compatible` branch merely reported an owner handoff and then closed the card without
+persisting the content. Putting it in K mixes execution evidence with the current reusable-truth
+owner; putting it in a free note or HANDOFF has neither a canonical consumer nor an atomic
+completion boundary. A superficial owner-file diff also does not prove that content, provenance,
+and downstream implication actually landed.
+
+Desired behavior: Work loses no compatible feedback at either a pre-title or post-title boundary.
+Only while the card has no lifecycle does it mechanically relate the already-collected pending and
+eligible sets to the card target and atomically produce the complete deterministic owner set once.
+The first after-state whose lines are all canonical payloads, use one source, name each owner once,
+and resolve every owner path seals the set. Every later cold reentry consumes the sealed current and
+consumed lifecycle fact plus an empty eligible set instead of inventing proposals or reconstructing
+pending state again.
+Resume totally routes current owners through the existing Product, Design, Arch, and Adopt stages.
+Each stage removes one marker only after canonical state replay proves its exact owner contains
+Background, Why/evidence, Conclusion, implication, and the card@commit provenance. Other owners
+remain as residual markers.
+
+Chosen boundary: the canonical grammar is one `compatible feedback pending: payload-json:` line
+whose payload keys are ordered `owner`, `source`, and `coordinates`. Coordinate keys are ordered
+`target`, `background`, `why`, `conclusion`, and `implication`, and every value is non-empty. The
+owner is only product, glossary, design, arch, or one exact capability design document; source is
+an exact card path plus full commit oid, and every member of the first set uses the same source
+revision. The first transition whose after-state leaves every compatible line for one source card
+wholly acceptable—canonical valid payloads, one source, one line per owner, and every owner path
+present—is the introduction and seals the complete after-state exact-payload set. A transition that
+leaves any unacceptable line for that card is not the introduction; an invalid line unattributable
+to a card defers every unsealed card in that transition. Reintroducing an existing member or introducing a later same-card owner, oid, or
+coordinate paraphrase is an integrity block. No new journal grammar, tombstone, or note layer is
+added: existing Git lifecycle history is the canon for the seal and consumption state.
+
+Pre-title first production adds the complete marker-set write to the existing card content and
+exact-H1 task commit. Post-title first production is a journal-only boundary commit and never
+changes the card. Once any lifecycle exists, Work requires the collected lifecycle fact to be
+`settled` and the eligible set to be empty, makes no pending-set comparison, and produces no new marker. Current
+members continue routing to Resume, consumed members stay permanently retired, and later feedback
+enters a new request and card. Another card's marker does not hijack current work. Unjudged UNKNOWN
+still blocks with its named need, while `none`, staling, and design-note paths do not change.
+
+Resume sends product and glossary to Product, design to Design, greenfield arch and capability
+owners to Arch, and brownfield arch and capability owners to Adopt. The owner stage writes the
+exact content first and waits for state recomputation. Only a reentry whose state proves source
+and five-coordinate semantic landing may combine byte-identical marker deletion with the exact
+owner diff in one commit. An owner-file change is necessary deletion authority, not sufficient
+semantic-landing proof.
+
+Why: this boundary preserves DD-09's one-fact-one-home rule, DD-83's K ownership, DD-87's semantic
+owners, and DD-94's single exact-title task commit while carrying reusable truth without a
+1000-to-30 summary loss. Using the first wholly acceptable after-state as the seal preserves complete atomic
+multi-owner production and partial consumption while making a cold session terminate
+deterministically instead of reopening the card under a new oid or rewritten coordinates. The
+card owns execution and provenance, the journal owns current pending transport, Git history owns
+the seal and consumption lifecycle, and the owner document owns current reusable truth. Work
+closes to Verify only after every sealed member is consumed and no current member remains.
+
+Canonical owners: the Principles state tool owns grammar, Git-seal derivation, validation,
+lifecycle reconstruction, and priority; Work owns atomic production and the mechanical exact-set
+guard over already-collected facts; Resume owns total routing; Product, Design, Arch, and Adopt own semantic
+landing and atomic consumption.
+Evidence: `skills/principles/spec.mjs`, `skills/principles/scripts/project-state.mjs`,
+`skills/work/spec.mjs`, `skills/resume/spec.mjs`, the four owner skills' compatible-feedback
+stages, `scripts/project-state.test.js`, and each skill's executable fixtures.
+Revisit when: normal Git history cannot deterministically identify the first complete introduction;
+state replay cannot deterministically establish an equivalent semantic landing; or evidence shows
+that multi-owner all-at-once landing is necessarily safer than partial consumption. History-derived
+blocking compatible-feedback findings are currently permanent and project-wide. Revisit a
+clearable-finding design after a non-Work writer reaches one in field use: derive reopen findings
+from the current journal, walk consumptions oldest-first, skip removal validation for an identity
+already consumed, and treat removal of a consumed nonmember as advisory.
 
 ### Rejected under this subject
 

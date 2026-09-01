@@ -24,6 +24,10 @@ The immutable English and Korean sources are migration provenance. Runtime behav
 
 Stop when the sibling structured state calculation cannot be obtained for the supplied project.
 
+## guard: compatible-feedback-shape
+
+Block unless canonical state exposes an Arch-owned marker for exactly the architecture owner or one exact capability design document, with a valid pending or satisfied landing state. Never broaden a capability target to the whole capabilities folder or infer ownership from prose.
+
 ## guard: layer0-state-unknown
 
 Stop because the sibling state contract could not establish whether Layer 0 is current. A write boundary is unsafe until that canonical fact is available.
@@ -56,6 +60,12 @@ Adopt, not arch, owns brownfield capability design writing.
 
 Return unrelated canonical routes to resume so arch never steals another stage's transition.
 
+## stage: compatible-feedback
+
+Judgment: For a pending marker, edit only its exact owner and preserve the source provenance plus Background, Why/evidence, Conclusion, and implication; then wait for canonical replay. Delete only the byte-identical marker after state proves those values are present in that owner, and commit the exact owner diff with the journal deletion atomically before routing to Resume.
+
+Why: A superficial owner-file diff is insufficient, and every other owner's marker remains pending.
+
 ## stage: glossary-term
 
 Judgment: glossary.phase is definition or align-capabilities.
@@ -76,9 +86,9 @@ Why: Recursive structure is optional, while every consumed marker must have a co
 
 ## stage: repair-layer0-fields
 
-Judgment: repair.action is ask or commit.
+Judgment: repair.action is ask or commit. When repairing integration configuration, write a bare Git branch name; with one worktree, write the current branch name.
 
-Why: A missing brownfield or integration field is a bounded repair, not permission to rerun architecture planning.
+Why: A missing brownfield field or missing or malformed integration field is a bounded repair, not permission to rerun architecture planning.
 
 ## stage: read-inputs
 

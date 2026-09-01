@@ -128,5 +128,26 @@
       "timestamp": "2026-08-30T00:00:00.000Z"
     },
     "expect": "2026-08-30T00:00:00.000Z review result: head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass; detail-json: \"review; clean\""
+  },
+  {
+    "id": "golden-compatibleFeedbackPending",
+    "format": "compatibleFeedbackPending",
+    "values": {
+      "payload-json": {
+        "owner": "devflow/project/arch.md",
+        "source": "devflow/tree/01-foundation/01.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "coordinates": {
+          "target": "devflow/project/arch.md#Boundary",
+          "background": "review observed",
+          "why": "evidence explains choice",
+          "conclusion": "retain behavior",
+          "implication": "future work reuses it"
+        }
+      }
+    },
+    "context": {
+      "timestamp": "2026-08-30T00:00:00.000Z"
+    },
+    "expect": "2026-08-30T00:00:00.000Z compatible feedback pending: payload-json: {\"owner\":\"devflow/project/arch.md\",\"source\":\"devflow/tree/01-foundation/01.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"coordinates\":{\"target\":\"devflow/project/arch.md#Boundary\",\"background\":\"review observed\",\"why\":\"evidence explains choice\",\"conclusion\":\"retain behavior\",\"implication\":\"future work reuses it\"}}"
   }
 ]

@@ -1,20 +1,21 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:754d88cb15dfc7d6d0b854edc8c25b013b978dcf2c7b7a7cb893e1f2c05b09a4",
+  "intent_hash": "sha256:580f4f11750f44f103afd65cfff1b0d0516e89c6c1860dad7eee83a3685b5d4c",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, then writes capability design zones. Use for stack selection, architecture design, or creating and repairing capability documents in a new project.",
+      "text": "Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, then writes capability design zones. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
-        "file:SKILL.md"
+        "file:SKILL.md",
+        "file:agents/openai.yaml"
       ],
       "evidence": [
-        "fixture:initial-architecture-creation"
+        "file:agents/openai.yaml"
       ]
     },
     {
@@ -4965,6 +4966,5 @@
     "atom_count": 154,
     "evidence_root": "fixtures/scenarios.json",
     "locator_base": ".skill-rails-migration/arch"
-  },
-  "source_root": "skills/arch"
+  }
 }

@@ -1,22 +1,22 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:39da31b0d0c5acde48834894b7de073c3dadc82dbd45c41bb49ae615638a9892",
-    "after": "sha256:a7572fe18a345bfc7af2892b53d4b19e87e5d89c29b8acdfce5e69f9db90a44f"
+    "before": "sha256:8e4b29890ef3e351a071f42ce21a90c25dea02c9b06b812d3bae963d08945570",
+    "after": "sha256:901476967588f7edd25577822c422919d150f3638dae21765ebf8e38ba073a10"
   },
   "changed": true,
   "any_changed": true,
   "source_changes": {
     "behavior_source": true,
     "observation_source": false,
-    "context": false
+    "context": true
   },
   "artifact_receipts": [
     {
       "kind": "spec",
       "path": "spec.mjs",
-      "before_hash": "sha256:39da31b0d0c5acde48834894b7de073c3dadc82dbd45c41bb49ae615638a9892",
-      "after_hash": "sha256:a7572fe18a345bfc7af2892b53d4b19e87e5d89c29b8acdfce5e69f9db90a44f",
+      "before_hash": "sha256:8e4b29890ef3e351a071f42ce21a90c25dea02c9b06b812d3bae963d08945570",
+      "after_hash": "sha256:901476967588f7edd25577822c422919d150f3638dae21765ebf8e38ba073a10",
       "source": "behavior_source"
     }
   ],
@@ -42,7 +42,6 @@
             "transition.event-routing",
             "transition.event-decision",
             "transition.failure-routing",
-            "transition.residual-landing",
             "marker.product-rerun",
             "marker.glossary-term",
             "marker.design-note",
@@ -114,6 +113,7 @@
             "marker.capability-closure",
             "marker.knowledge-landing",
             "marker.re-split",
+            "setup.unmanaged",
             "setup.no-product",
             "setup.layer0-incomplete",
             "setup.brownfield-field",
@@ -157,12 +157,418 @@
       }
     ],
     "guards": [],
-    "stages": [],
-    "tables": [],
+    "stages": [
+      {
+        "id": "scope-entry",
+        "change": "modified",
+        "before": {
+          "reads": [],
+          "needs": [
+            "intent.scope"
+          ],
+          "table": "canonicalNext",
+          "branches": [
+            "DONE:orientation",
+            "ASK:integrity",
+            "ASK:setup",
+            "ASK:owner-mapping",
+            "ROUTE:product",
+            "ROUTE:arch",
+            "ROUTE:adopt",
+            "ROUTE:split",
+            "ROUTE:work",
+            "ROUTE:verify",
+            "WAIT:blocked",
+            "DONE:advisory",
+            "DONE:complete",
+            "BLOCK:unrecognized"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ASK:integrity": [
+                "ASK"
+              ],
+              "ASK:owner-mapping": [
+                "ASK"
+              ],
+              "ASK:setup": [
+                "ASK"
+              ],
+              "BLOCK:unrecognized": [
+                "BLOCK"
+              ],
+              "DONE:advisory": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ],
+              "DONE:complete": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ],
+              "DONE:orientation": [
+                [
+                  "REPORT",
+                  {
+                    "template": "orientation"
+                  }
+                ],
+                "DONE"
+              ],
+              "ROUTE:adopt": [
+                "ROUTE:adopt"
+              ],
+              "ROUTE:arch": [
+                "ROUTE:arch"
+              ],
+              "ROUTE:product": [
+                "ROUTE:product"
+              ],
+              "ROUTE:split": [
+                "ROUTE:split"
+              ],
+              "ROUTE:verify": [
+                "ROUTE:verify"
+              ],
+              "ROUTE:work": [
+                "ROUTE:work"
+              ],
+              "WAIT:blocked": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: scope-entry",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [],
+          "needs": [
+            "intent.scope"
+          ],
+          "table": "canonicalNext",
+          "branches": [
+            "DONE:orientation",
+            "DONE:unmanaged",
+            "ASK:integrity",
+            "ASK:setup",
+            "ASK:owner-mapping",
+            "ROUTE:product",
+            "ROUTE:arch",
+            "ROUTE:adopt",
+            "ROUTE:split",
+            "ROUTE:work",
+            "ROUTE:verify",
+            "WAIT:blocked",
+            "DONE:advisory",
+            "DONE:complete",
+            "BLOCK:unrecognized"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ASK:integrity": [
+                "ASK"
+              ],
+              "ASK:owner-mapping": [
+                "ASK"
+              ],
+              "ASK:setup": [
+                "ASK"
+              ],
+              "BLOCK:unrecognized": [
+                "BLOCK"
+              ],
+              "DONE:advisory": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ],
+              "DONE:complete": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ],
+              "DONE:orientation": [
+                [
+                  "REPORT",
+                  {
+                    "template": "orientation"
+                  }
+                ],
+                "DONE"
+              ],
+              "DONE:unmanaged": [
+                [
+                  "REPORT",
+                  {
+                    "scope": "unmanaged-repository",
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ],
+              "ROUTE:adopt": [
+                "ROUTE:adopt"
+              ],
+              "ROUTE:arch": [
+                "ROUTE:arch"
+              ],
+              "ROUTE:product": [
+                "ROUTE:product"
+              ],
+              "ROUTE:split": [
+                "ROUTE:split"
+              ],
+              "ROUTE:verify": [
+                "ROUTE:verify"
+              ],
+              "ROUTE:work": [
+                "ROUTE:work"
+              ],
+              "WAIT:blocked": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: scope-entry",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "canonicalNext",
+        "change": "modified",
+        "before": {
+          "rows": [
+            {
+              "state": "DONE:orientation",
+              "reads": [
+                "intent.scope"
+              ]
+            },
+            {
+              "state": "ROUTE:verify",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ROUTE:work",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ROUTE:split",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ASK:integrity",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "DONE:advisory",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ASK:setup",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ASK:owner-mapping",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ROUTE:adopt",
+              "reads": [
+                "state.canonicalNext",
+                "state.brownfield"
+              ]
+            },
+            {
+              "state": "ROUTE:arch",
+              "reads": [
+                "state.canonicalNext",
+                "state.brownfield"
+              ]
+            },
+            {
+              "state": "ROUTE:product",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "WAIT:blocked",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "DONE:complete",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "BLOCK:unrecognized",
+              "reads": []
+            }
+          ]
+        },
+        "after": {
+          "rows": [
+            {
+              "state": "DONE:orientation",
+              "reads": [
+                "intent.scope"
+              ]
+            },
+            {
+              "state": "DONE:unmanaged",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ROUTE:verify",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ROUTE:work",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ROUTE:split",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ASK:integrity",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "DONE:advisory",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ASK:setup",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ASK:owner-mapping",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "ROUTE:adopt",
+              "reads": [
+                "state.canonicalNext",
+                "state.brownfield"
+              ]
+            },
+            {
+              "state": "ROUTE:arch",
+              "reads": [
+                "state.canonicalNext",
+                "state.brownfield"
+              ]
+            },
+            {
+              "state": "ROUTE:product",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "WAIT:blocked",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "DONE:complete",
+              "reads": [
+                "state.canonicalNext"
+              ]
+            },
+            {
+              "state": "BLOCK:unrecognized",
+              "reads": []
+            }
+          ]
+        }
+      }
+    ],
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [],
+    "body": [
+      {
+        "id": "stage: scope-entry",
+        "change": "modified",
+        "before": "sha256:f92fc0ee39f35ae2144330e1907eb996014e354149f25c9feafc832aa8600f20",
+        "after": "sha256:7920a44e735d71ad970132119eec04fb9707c682673244a0e9a1d1741b877689"
+      }
+    ],
     "references": [],
     "ownership": [],
     "artifacts": [],
@@ -170,10 +576,28 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "remove-dead-residual-landing-d4",
-  "intent": "Remove the producerless residual landing route while preserving canonical knowledge-landing and baseline ownership routing.",
+  "change_id": "activation-gate-resume",
+  "intent": "Report proven unmanaged repositories without asking, routing, or writing while preserving domain orientation priority.",
   "impact": {
     "observations": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "stages": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "tables": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "body": {
       "total": 1,
       "added": 0,
       "removed": 0,

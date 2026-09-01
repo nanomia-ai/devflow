@@ -297,6 +297,7 @@ new concepts; add a row in the same change that coins a canonical term.
 | synthesis | synthesis | | conjecture | conjecture |
 | dispute | dispute | | provenance sampling check | provenance sampling check |
 | named open item | named open item | | design open item | design open item |
+| compatible feedback pending | compatible feedback pending | | semantic landing | semantic landing |
 
 A hypothesis is the trust state of a capability knowledge baseline, not the verification
 result `unverified`. The artifact's full name is `capability document` and its only short

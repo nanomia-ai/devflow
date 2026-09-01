@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:9278389caa4fe77613300e6caa0b22e4f6bf722e5f8557bfd43d5051b8999cc2",
+  "intent_hash": "sha256:5a1f3db1a2a608a1e22e10b13a76948eca3289731e44c1ba53a1ca2b5df8622c",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Verification. Checks acceptance criteria at the capability and product level through real execution. Use for capability-completion verification, MVP verification, or regression checks.",
+      "text": "Verification. Checks acceptance criteria at the capability and product level through real execution. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",

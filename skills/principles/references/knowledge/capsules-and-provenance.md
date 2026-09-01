@@ -7,10 +7,11 @@ topic, opened only when needed. Measured basis: one real brownfield capability's
 source ran to 3,699 lines — pressed into a 185-line vessel as summary, what survives is
 confidence, not understanding.
 
-- The path is `devflow/project/capabilities/<number>-<name suffix>/K-<three digits, zero-padded>-<topic slug>.md`.
-  The folder name equals the same-numbered capability document's filename without `.md`.
-  K numbers are immutable and never reused within the folder, and only `.md` files of this
-  form inside that folder are capsules. A capability without capsules is the default —
+- The root path is `devflow/project/capabilities/<number>-<name suffix>/K-<three digits, zero-padded>-<topic slug>.md`.
+  The folder name equals the same-numbered capability document's filename without `.md`. A
+  child capsule lives in its parent's same-stem folder. K numbers are immutable and unique
+  across the whole subtree under the capability's folder, not merely the immediate folder.
+  A capability without capsules is the default —
   capsules exist only when knowledge overflows the capability document budget. On a
   capability rename the capsule folder follows the new name in the same capability design
   commit.

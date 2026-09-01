@@ -50,7 +50,7 @@ check("portable-references", () => {
 check("immutable-format-owner-matrix", () => {
   const grammarPath = path.join(root, "templates", "canonical-journal-progress-grammar.md");
   const grammar = fs.readFileSync(grammarPath, "utf8");
-  const formatOwners = ["maintenanceRoutingPending", "productReRunPending", "productVerificationRequested", "productVerificationRunning", "productVerificationResult", "capabilityClosing", "capabilityNote", "knowledgeLandingPending", "completionSignalResult", "reviewResult"];
+  const formatOwners = ["maintenanceRoutingPending", "productReRunPending", "productVerificationRequested", "productVerificationRunning", "productVerificationResult", "capabilityClosing", "capabilityNote", "knowledgeLandingPending", "compatibleFeedbackPending", "completionSignalResult", "reviewResult"];
   const guidanceHeads = ["layer opening:", "re-split pending:", "audit requested:", "retrospective requested:", "capability note:", "evidence-wait:", "evidence-finalizing:", "remote evidence check:", "carry:"];
   assert.deepEqual(Object.keys(FORMATS).sort(), [...formatOwners].sort());
   assert.equal(TEMPLATES.canonicalJournalProgressGrammar.file, "templates/canonical-journal-progress-grammar.md");

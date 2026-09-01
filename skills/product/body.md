@@ -20,6 +20,16 @@ Stop when a required project-state read cannot establish product entry, product 
 
 An observed pending or effective `00-project` research card carries its exact origin and path into the decision and routes to split. Product does not record a second origin or route that durable work to implementation.
 
+## guard: compatible-feedback-shape
+
+Block unless canonical state exposes an exact Product-owned marker for only the Product plan or the glossary canon, with a valid pending or satisfied landing state. A nearby file or free-form review note cannot substitute for the marker.
+
+## stage: compatible-feedback
+
+Judgment: For a pending marker, edit only its exact owner and land its Background, Why/evidence, Conclusion, implication, and source provenance without rewriting unrelated current truth; then wait so canonical state can replay the exact owner content. On reentry, delete only the byte-identical marker when state reports `satisfied`, and commit the owner diff plus that journal deletion atomically before routing to Resume.
+
+Why: A superficial owner-file diff is still pending, and other owners' markers remain untouched.
+
 ## stage: orient
 
 Judgment: entry.action is one of route-adopt. A brownfield without a product plan is an adoption boundary, not a product interview shortcut.

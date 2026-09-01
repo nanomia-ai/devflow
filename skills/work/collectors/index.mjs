@@ -195,7 +195,8 @@ async function carry(context) {
   if (entry?.carry === "present" || entry?.carry === "absent") return entry.carry;
   const lines = card.text.split("\n").filter(line => line.includes("carry:"));
   if (lines.length === 0) return "absent";
-  return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z carry: .+$/.test(lines.at(-1)) ? "present" : "invalid";
+  const last = lines.filter(line => /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z carry: .+$/.test(line)).at(-1);
+  return last ? "present" : "invalid";
 }
 
 async function remote(context) {
@@ -224,6 +225,26 @@ async function knowledgeMarker(context) {
   const card = cardRecord(context); const state = await snapshot(context);
   if (!card || !state) return "invalid";
   const entries = state.zones.marker?.entries?.filter(entry => entry.kind === "knowledge-landing") ?? [];
+  if (entries.some(entry => typeof entry.source === "string" && entry.source.startsWith(`${card.path}@`))) return "current-source";
+  return entries.length > 0 ? "other-source" : "none";
+}
+
+function compatibleLifecyclesForCard(state, cardPath) {
+  const lifecycles = state?.facts?.compatibleFeedback?.lifecycles;
+  if (!Array.isArray(lifecycles) || typeof cardPath !== "string") return null;
+  return lifecycles.filter(item => typeof item?.entry?.source === "string" && item.entry.source.startsWith(`${cardPath}@`));
+}
+
+async function feedbackLifecycles(context) {
+  const card = cardRecord(context); const state = await snapshot(context);
+  if (!card || !state) return "invalid";
+  return compatibleLifecyclesForCard(state, card.path) ?? "invalid";
+}
+
+async function compatibleMarker(context) {
+  const card = cardRecord(context); const state = await snapshot(context);
+  if (!card || !state) return "invalid";
+  const entries = state.zones.marker?.entries?.filter(entry => entry.kind === "compatible-feedback") ?? [];
   if (entries.some(entry => typeof entry.source === "string" && entry.source.startsWith(`${card.path}@`))) return "current-source";
   return entries.length > 0 ? "other-source" : "none";
 }
@@ -269,7 +290,7 @@ export const collectors = Object.freeze({
   "work/state.kernel": kernel,
   "work/state.route": async context => {
     const value = await route(context);
-    return ["claim.mine", "ready.ready", "transition.remote-evidence", "transition.finish-boundary", "marker.knowledge-landing"].includes(value) ? value : value === "unavailable" ? "unavailable" : "other";
+    return ["claim.mine", "ready.ready", "transition.remote-evidence", "transition.finish-boundary", "marker.knowledge-landing", "marker.compatible-feedback"].includes(value) ? value : value === "unavailable" ? "unavailable" : "other";
   },
   "work/card.phase": phase,
   "work/card.contract": contract,
@@ -280,6 +301,8 @@ export const collectors = Object.freeze({
   "work/remote.state": remote,
   "work/research.checkpoint": researchCheckpoint,
   "work/knowledge.marker": knowledgeMarker,
+  "work/feedback.marker": compatibleMarker,
+  "work/feedback.lifecycles": feedbackLifecycles,
   "work/task.commit": taskCommit,
   "work/task.integration": integration,
   "work/handoff.state": handoff,

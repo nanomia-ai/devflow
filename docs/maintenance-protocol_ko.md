@@ -271,6 +271,7 @@ CHANGELOG 맨 위에 날짜·무엇·왜·파일을 적는다. 약 60줄 안에�
 | 종합 | synthesis | | 추정 | conjecture |
 | 다툼 | dispute | | 출처 표본 검사 | provenance sampling check |
 | 기명 미결 항목 | named open item | | 설계 미결 항목 | design open item |
+| 호환 환류 대기 | compatible feedback pending | | 의미 착지 | semantic landing |
 
 가설은 능력 지식 기준선의 신뢰 상태이며 검증 결과인 `unverified`와 다른 개념이다. artifact의 정식
 명칭은 `capability document`, 짧은 이름은 `baseline`뿐이다. `capability file`과 `capability baseline`을

@@ -4,7 +4,7 @@ export const SPEC = { version: "5", id: "adopt", profile: "single", imports: [] 
 
 export const OBSERVATIONS = {
   "state.kernel": { collector: "state.kernel", domain: ["available", "unavailable"] },
-  "state.route": { collector: "state.route", domain: ["none", "git.open-operation", "integrity.blocking", "marker.knowledge-landing", "marker.design-note", "marker.design-open-item", "setup.no-product", "setup.layer0-incomplete", "baseline.design-refresh", "baseline.legacy-v010", "baseline.boundary", "complete.adoption", "owned-elsewhere"] },
+  "state.route": { collector: "state.route", domain: ["none", "git.open-operation", "integrity.blocking", "marker.knowledge-landing", "marker.compatible-feedback", "marker.design-note", "marker.design-open-item", "setup.no-product", "setup.layer0-incomplete", "baseline.design-refresh", "baseline.legacy-v010", "baseline.boundary", "complete.adoption", "owned-elsewhere"] },
   "state.code": { collector: "state.code", domain: ["present", "none", "unknown"] },
   "state.brownfield": { collector: "state.brownfield", domain: ["yes", "no", "unknown"] },
   "state.capabilities": { collector: "state.capabilities", domain: ["missing", "refresh", "current", "unknown"] },
@@ -13,7 +13,10 @@ export const OBSERVATIONS = {
   "evidence.records": { collector: "adopt/records.project", domain: ["present", "none", "unknown"] },
   "marker.knowledge": { collector: "state.marker-knowledge", domain: ["present", "none", "unknown"] },
   "marker.count": { collector: "state.marker-count", domain: "integer" },
+  "compatible.owner": { collector: "state.compatible-owner", domain: ["none", "arch", "capability", "invalid"] },
+  "compatible.landing": { collector: "state.compatible-landing", domain: ["none", "pending", "satisfied", "invalid"] },
   "entry.mode": { judged: true, domain: ["initial", "partial", "glossary-only", "capability-only", "design-only", "none"] },
+  "entry.status": { judged: true, domain: ["pending", "read"] },
   "inspection.status": { judged: true, domain: ["needed", "traced", "evidence-missing"] },
   "derivation.status": { judged: true, domain: ["needed", "draft", "confirmed", "contradiction"] },
   "proposal.status": { judged: true, domain: ["draft", "ready", "interrupted"] },
@@ -41,16 +44,17 @@ export const TEMPLATES = {
 };
 
 export const ORDERS = {
-  adoption: ["canonical-entry", "inspect-code-and-records", "trace-representative-flow-per-candidate", "derive-boundaries-and-layer-zero", "report", "approval", "layer-zero-commit", "capability-design-commit", "route"],
+  adoption: ["canonical-entry", "compatible-feedback", "inspect-code-and-records", "trace-representative-flow-per-candidate", "derive-boundaries-and-layer-zero", "report", "approval", "layer-zero-commit", "capability-design-commit", "route"],
   landing: ["read-valid-marker", "open-exact-card-revision", "choose-owner-or-recursive-k", "write-owner-and-k", "delete-only-consumed-markers", "boundary-commit"]
 };
 
 export const OWNERSHIP = {
-  "devflow/project/**": "adopt", "devflow/journal.md": "external.principles", "devflow/tree/**": "external.split"
+  "devflow/project/**": "adopt", "devflow/journal.md#compatible-feedback-pending": "adopt-on-exact-owner-landing", "devflow/journal.md": "external.principles", "devflow/tree/**": "external.split"
 };
 
 export const GUARDS = [
   { id: "state-kernel-unavailable", reads: ["state.kernel"], acceptsUnknown: [], when: s => s.state.kernel === "unavailable", then: "BLOCK", body: "guard: state-kernel-unavailable" },
+  { id: "compatible-feedback-shape", reads: ["compatible.owner", "compatible.landing"], acceptsUnknown: [], when: s => s.compatible.owner === "invalid" || s.compatible.landing === "invalid", then: "BLOCK", body: "guard: compatible-feedback-shape" },
   { id: "canonical-integrity-block", reads: ["state.route"], acceptsUnknown: [], when: s => s.state.route === "integrity.blocking", then: "BLOCK", body: "guard: canonical-integrity-block" },
   { id: "open-git-operation", reads: ["state.route"], acceptsUnknown: [], when: s => s.state.route === "git.open-operation", then: "ASK", body: "guard: open-git-operation" },
   { id: "no-code-routes-product", reads: ["state.code"], acceptsUnknown: [], when: s => s.state.code === "none", then: "ROUTE:product", body: "guard: no-code-routes-product" },
@@ -60,6 +64,11 @@ export const GUARDS = [
 ];
 
 export const TABLES = {
+  compatibleFeedback: { exclusive: true, rows: [
+    { state: "write-arch", reads: ["compatible.owner", "compatible.landing"], acceptsUnknown: [], when: s => s.compatible.owner === "arch" && s.compatible.landing === "pending" },
+    { state: "write-capability", reads: ["compatible.owner", "compatible.landing"], acceptsUnknown: [], when: s => s.compatible.owner === "capability" && s.compatible.landing === "pending" },
+    { state: "land", reads: [], acceptsUnknown: [], when: () => true }
+  ] },
   approval: { exclusive: true, reads: ["approval.action", "request.kind"], rows: [
     { state: "ask", reads: ["approval.action"], acceptsUnknown: [], when: s => s.approval.action === "ask" },
     { state: "refuse", reads: ["approval.action"], acceptsUnknown: [], when: s => s.approval.action === "refuse" },
@@ -74,13 +83,18 @@ export const TABLES = {
 };
 
 export const STAGES = [
+  { id: "compatible-feedback", reads: ["compatible.owner"], acceptsUnknown: [], done: s => s.compatible.owner === "none", table: "compatibleFeedback", reentry: "rejudge", branches: {
+    "write-arch": [["WRITE", { artifact: "architecture", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], "WAIT"],
+    "write-capability": [["WRITE", { artifact: "capabilityDesigns", target: "exact compatible-feedback owner", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], "WAIT"],
+    land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: ["compatible.owner", "devflow/journal.md"] }], "ROUTE:resume"]
+  }, body: "stage: compatible-feedback" },
   { id: "knowledge-landing", reads: ["state.route", "marker.knowledge", "marker.count"], acceptsUnknown: [], done: s => s.state.route !== "marker.knowledge-landing" && s.marker.knowledge === "none" && s.marker.count === 0, needs: ["landing.mode"], reentry: "rejudge", branches: {
     compact: [["READ", { path: "references/knowledge-landing.md" }], ["WRITE", { artifact: "knowledgeOwner", template: "result" }], ["RUN", { action: "delete-only-selected-byte-identical-markers" }], ["COMMIT", { boundary: "atomic-knowledge-landing" }], "NEXT"],
     recursive: [["READ", { path: "references/knowledge-landing.md" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode" }], ["RUN", { action: "delete-only-selected-byte-identical-markers" }], ["COMMIT", { boundary: "atomic-knowledge-landing" }], "NEXT"],
     "partial-compact": [["READ", { path: "references/knowledge-landing.md" }], ["WRITE", { artifact: "knowledgeOwner", template: "result" }], ["RUN", { action: "preserve-unconsumed-markers" }], ["COMMIT", { boundary: "atomic-partial-knowledge-landing" }], "NEXT"],
     "partial-recursive": [["READ", { path: "references/knowledge-landing.md" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode" }], ["RUN", { action: "preserve-unconsumed-markers" }], ["COMMIT", { boundary: "atomic-partial-knowledge-landing" }], "NEXT"]
   }, body: "stage: knowledge-landing" },
-  { id: "entry", reads: ["entry.mode"], acceptsUnknown: [], done: s => s.entry.mode === "none", needs: ["entry.mode"], reentry: "rejudge", branches: {
+  { id: "entry", reads: ["entry.mode", "entry.status"], acceptsUnknown: [], done: s => s.entry.status === "read" || s.entry.mode === "none", needs: ["entry.mode", "entry.status"], reentry: "rejudge", branches: {
     "capability-only": [["READ", { artifact: "layer0" }], "NEXT"],
     "design-only": [["READ", { artifact: "layer0" }], ["READ", { artifact: "journal" }], "NEXT"],
     "glossary-only": [["READ", { artifact: "layer0" }], "NEXT"],
@@ -113,11 +127,12 @@ export const ARTIFACTS = {
   existingRecords: { path: "<project docs and specs selected by filename evidence>", writer: "project.docs", readers: ["stage.entry", "stage.inspect-and-trace", "stage.derive-layer-zero"] },
   layer0: { path: "devflow/project", writer: "adopt", readers: ["stage.entry", "stage.derive-layer-zero", "stage.capability-design"] },
   product: { path: "devflow/project/product.md", writer: "adopt", readers: ["stage.approval", "stage.capability-design", "external.split"], template: "product" },
-  architecture: { path: "devflow/project/arch.md", writer: "adopt", readers: ["stage.approval", "stage.capability-design", "external.resume"], template: "architecture" },
+  architecture: { path: "devflow/project/arch.md", writer: "adopt", readers: ["stage.compatible-feedback", "stage.approval", "stage.capability-design", "external.resume"], template: "architecture" },
   codeStyle: { path: "devflow/project/code-style.md", writer: "adopt", readers: ["stage.approval", "external.split"], template: "codeStyle" },
   glossary: { path: "devflow/project/glossary.md", writer: "adopt", readers: ["stage.approval", "stage.capability-design", "external.split"], template: "glossary" },
-  journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.entry", "stage.knowledge-landing"] },
-  capabilityDesigns: { path: "devflow/project/capabilities", writer: "adopt", readers: ["stage.capability-design", "external.split", "external.resume"], template: "capabilityDesign" },
+  compatibleFeedbackMarker: { path: "devflow/journal.md#compatible-feedback-pending", writer: "adopt", readers: ["stage.compatible-feedback"] },
+  journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.compatible-feedback", "stage.entry", "stage.knowledge-landing"] },
+  capabilityDesigns: { path: "devflow/project/capabilities", writer: "adopt", readers: ["stage.compatible-feedback", "stage.capability-design", "external.split", "external.resume"], template: "capabilityDesign" },
   knowledgeOwner: { path: "devflow/project/arch.md", writer: "adopt", readers: ["stage.knowledge-landing"] },
   knowledgeNodes: { path: "devflow/project/capabilities", writer: "adopt", readers: ["stage.knowledge-landing"], template: "knowledgeNode" }
 };

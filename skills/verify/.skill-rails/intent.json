@@ -1,6 +1,6 @@
 {
   "name": "verify",
-  "description": "Verification. Checks acceptance criteria at the capability and product level through real execution. Use for capability-completion verification, MVP verification, or regression checks.",
+  "description": "Verification. Checks acceptance criteria at the capability and product level through real execution. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
   "problem": "Preserve the behavior of the portable prose source at skills/verify without silently changing its obligations.",
   "use_cases": [],
   "near_misses": [],

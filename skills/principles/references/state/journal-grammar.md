@@ -46,6 +46,7 @@ YYYY-MM-DDTHH:MM:SSZ retrospective requested: <capability number|product>
 YYYY-MM-DDTHH:MM:SSZ evidence-wait: card-json: <JSON string containing the full task-card path>; checkpoint: <NN.N wip: evidence-wait commit hash>; check-json: <JSON string containing the exact remote-result command or URL>
 YYYY-MM-DDTHH:MM:SSZ evidence-finalizing: card-json: <JSON string containing the full task-card path>; checkpoint: <NN.N wip: evidence-wait commit hash>; check-json: <JSON string containing the exact remote-result command or URL>
 YYYY-MM-DDTHH:MM:SSZ knowledge landing pending: owner: <canonical product, arch, design, or capability owner path>; writer: arch | adopt; source-json: <JSON string containing task-card path@unabbreviated committed source hash>
+YYYY-MM-DDTHH:MM:SSZ compatible feedback pending: payload-json: {...}
 ```
 
 `knowledge landing pending` is the sole knowledge-landing marker. Work, including a research

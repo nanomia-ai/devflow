@@ -1,6 +1,6 @@
 {
   "name": "arch",
-  "description": "Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, then writes capability design zones. Use for stack selection, architecture design, or creating and repairing capability documents in a new project.",
+  "description": "Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, then writes capability design zones. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
   "problem": "Preserve the behavior of the immutable repository source at skills/arch without silently changing its obligations.",
   "use_cases": [],
   "near_misses": [],

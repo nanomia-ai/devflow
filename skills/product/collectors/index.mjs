@@ -64,11 +64,23 @@ const projectResearch = async (ctx, root) => {
     return matches[0].approval === "effective" ? "effective" : matches[0].approval === "pending" ? "pending" : "unknown";
   } catch { return "unknown"; }
 };
+const compatible = async (ctx, root) => {
+  const state = await canonicalState(ctx, root);
+  const entries = state?.zones?.marker?.entries;
+  if (!Array.isArray(entries)) return { owner: "invalid", landing: "invalid" };
+  const marker = entries.find(entry => entry?.kind === "compatible-feedback" && entry?.writer === "product");
+  if (!marker) return { owner: "none", landing: "none" };
+  const owner = marker.owner === "devflow/project/product.md" ? "product" : marker.owner === "devflow/project/glossary.md" ? "glossary" : "invalid";
+  const landing = marker.landing === "satisfied" ? "satisfied" : marker.landing === "pending" ? "pending" : "invalid";
+  return { owner, landing };
+};
 export const collectors = Object.freeze({
   "state.product-entry": ctx => readState(ctx, root => (!file(root, "devflow/project/product.md") && file(root, "devflow/project/arch.md") ? "brownfield-no-product" : file(root, "devflow/project/product.md") ? "existing" : "new")),
   "state.product-file": ctx => readState(ctx, productIsCurrent),
   "state.glossary": ctx => readState(ctx, root => file(root, "devflow/project/glossary.md") ? "current" : "missing"),
   "state.product-request": ctx => readState(ctx, root => productRequest(ctx, root)),
-  "state.project-research-state": ctx => readState(ctx, async root => projectResearch(ctx, root))
+  "state.project-research-state": ctx => readState(ctx, async root => projectResearch(ctx, root)),
+  "state.compatible-owner": ctx => readState(ctx, async root => (await compatible(ctx, root)).owner),
+  "state.compatible-landing": ctx => readState(ctx, async root => (await compatible(ctx, root)).landing)
 });
 export const snapshotBasis = null;

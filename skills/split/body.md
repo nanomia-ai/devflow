@@ -14,7 +14,7 @@ Only route a `00-project` research card to work when principles project-state re
 
 ## stage: intake
 
-Judgment: `request.classification` is exactly pre-product-research, tree-work, small-work, or unknown. Pre-product research enters materialize with `devflow/tree/00-project` as its exact active scope, uses the ordinary numbered research-card contract with its exact Origin field and `Approval: pending`, and is never implementation. It then crosses the same proposal write-and-commit boundary as every other card; unrelated research cards do not count. Ordinary tree work without product routes product, and a genuinely small request ends with zero tree delta.
+Judgment: `request.classification` is exactly pre-product-research, tree-work, small-work, or unknown. Pre-product research enters materialize with `devflow/tree/00-project` as its exact active scope, uses the ordinary numbered research-card contract with its exact Origin field and `Approval: pending`, and is never implementation. It then crosses the same proposal write-and-commit boundary as every other card; unrelated research cards do not count. Tree work with a confirmed product and neither a durable request nor an active origin first writes the exact canonical `maintenance routing pending` line carrying the whole user request, then rejudges; that line rides the `split — begin` commit as the source record. Ordinary tree work without product routes product, and a genuinely small request ends with zero tree delta.
 
 Why: Request identity must survive interruption before any scope or card is chosen.
 

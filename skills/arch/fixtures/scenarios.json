@@ -12,7 +12,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -57,7 +59,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -102,7 +106,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -147,7 +153,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -192,7 +200,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -237,7 +247,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -282,7 +294,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -327,7 +341,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -372,7 +388,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -417,7 +435,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -462,7 +482,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -512,7 +534,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -563,7 +587,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -613,7 +639,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}]",
-      "marker.knowledgeCount": 1
+      "marker.knowledgeCount": 1,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -664,7 +692,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
-      "marker.knowledgeCount": 1
+      "marker.knowledgeCount": 1,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -715,7 +745,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
-      "marker.knowledgeCount": 2
+      "marker.knowledgeCount": 2,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -766,7 +798,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"},{\"owner\":\"devflow/project/capabilities/02-billing.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/09-card.md@cccccccccccccccccccccccccccccccccccccccc\"}]",
-      "marker.knowledgeCount": 2
+      "marker.knowledgeCount": 2,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -817,7 +851,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
-      "marker.knowledgeCount": 2
+      "marker.knowledgeCount": 2,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -869,7 +905,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -916,7 +954,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -965,7 +1005,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1019,7 +1061,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "refresh",
@@ -1067,7 +1111,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "refresh",
@@ -1115,7 +1161,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1163,7 +1211,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1211,7 +1261,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1259,7 +1311,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1307,7 +1361,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1355,7 +1411,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1403,7 +1461,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1451,7 +1511,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1499,7 +1561,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1547,7 +1611,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1597,7 +1663,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1647,7 +1715,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1697,7 +1767,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1745,7 +1817,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1793,7 +1867,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1841,7 +1917,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1889,7 +1967,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1937,7 +2017,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -1987,7 +2069,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -2037,7 +2121,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "initial",
@@ -2090,7 +2176,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "refresh",
@@ -2143,7 +2231,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "capability-only",
@@ -2191,7 +2281,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "capability-only",
@@ -2241,7 +2333,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "capability-only",
@@ -2293,7 +2387,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "capability-only",
@@ -2345,7 +2441,9 @@
       "state.capabilities": "missing",
       "state.expected": 3,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "capability-only",
@@ -2397,7 +2495,9 @@
       "state.capabilities": "current",
       "state.expected": 0,
       "marker.knowledge": "none",
-      "marker.knowledgeCount": 0
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
     },
     "judged": {
       "request.kind": "none",
@@ -2425,5 +2525,207 @@
       "effects": []
     },
     "cover": []
+  },
+  {
+    "id": "compatible-feedback-write-arch",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.compatible-feedback",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "arch",
+      "compatible.landing": "pending"
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "compatible-feedback",
+      "row": "write-arch",
+      "status": "WAIT",
+      "effects": [
+        "WRITE",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:compatible-feedback",
+      "row:compatibleFeedback/write-arch",
+      "branch:compatibleFeedback/write-arch"
+    ]
+  },
+  {
+    "id": "compatible-feedback-write-capability",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.compatible-feedback",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "capability",
+      "compatible.landing": "pending"
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "compatible-feedback",
+      "row": "write-capability",
+      "status": "WAIT",
+      "effects": [
+        "WRITE",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "stage:compatible-feedback",
+      "row:compatibleFeedback/write-capability",
+      "branch:compatibleFeedback/write-capability"
+    ]
+  },
+  {
+    "id": "compatible-feedback-semantic-landing",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.compatible-feedback",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "capability",
+      "compatible.landing": "satisfied"
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "compatible-feedback",
+      "row": "land",
+      "status": "ROUTE",
+      "effects": [
+        "RUN",
+        "COMMIT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:compatible-feedback",
+      "row:compatibleFeedback/land",
+      "branch:compatibleFeedback/land"
+    ]
+  },
+  {
+    "id": "compatible-feedback-invalid-shape-blocks",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "marker.glossary-term",
+      "state.brownfield": "no",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "incomplete",
+      "state.capabilities": "missing",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "invalid",
+      "compatible.landing": "invalid"
+    },
+    "judged": {
+      "request.kind": "initial",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "ask",
+      "route.after": "split",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "guard": "compatible-feedback-shape",
+      "status": "BLOCK"
+    },
+    "cover": [
+      "guard:compatible-feedback-shape"
+    ]
   }
 ]

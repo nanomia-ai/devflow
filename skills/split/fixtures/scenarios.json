@@ -211,7 +211,7 @@
     }
   },
   {
-    "id": "intake-without-current-origin-asks",
+    "id": "intake-tree-work-without-origin-records-request",
     "s": {
       "project.product": "present",
       "request.current": "NONE",
@@ -225,6 +225,36 @@
     },
     "judged": {
       "request.classification": "tree-work"
+    },
+    "expect": {
+      "stage": "intake",
+      "row": "record-request",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "row:intakeSelector/record-request",
+      "branch:intakeSelector/record-request"
+    ]
+  },
+  {
+    "id": "intake-pre-product-without-origin-asks",
+    "s": {
+      "project.product": "present",
+      "request.current": "NONE",
+      "origin.active": "NONE",
+      "origin.drafts": "NONE",
+      "origin.projectResearch": "NONE",
+      "approval.boundary": "NONE",
+      "approval.issue": "NONE",
+      "planning.receipt": "NONE",
+      "projectResearch.approval": "none"
+    },
+    "judged": {
+      "request.classification": "pre-product-research"
     },
     "expect": {
       "stage": "intake",

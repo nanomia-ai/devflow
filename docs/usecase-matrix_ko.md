@@ -495,6 +495,21 @@ fixture 대조다.
 
 v0.20.0 재판정(DD-92): 이 셀의 다중 소유 패스는 대상 목록을 추측하지 않는다. C1 product 전 research는 `00-project` 아래에서 지속적으로 남고, C2 card/source evidence는 이름 붙은 source evidence로 남으며, C3 conclusion은 가장 가까운 semantic owner 또는 정확한 crosscut owner에 착지하고, C4 `K`는 arch 또는 adopt만 쓰며, C5 closed history는 정확히 이름 붙은 provenance로만 열고, C6 multi-owner conclusion은 모든 owner를 보존해 원자적으로 착지한다. 정확한 JSON marker shape은 principles FORMAT 하나가 소유하고 work template과 project-state parser는 seam test가 묶는 실행 투영이며, field는 이 셀에 중복하지 않는다. 지식은 작업 트리와 직교한 같은 stem 인접 재귀 `K`로만 열며 수동/중앙 색인은 없고 자식 0도 유효하다.
 
+v0.20.0 최종 재판정(DD-96·first-acceptance seal): **정합.** 기존 한 요청의 `출처-json`
+identity와 이미 쓴 카드의 `origin`·`siblings`·`readFirst`를 유지한 채, Work는 선택한 카드에
+귀속된 pending/eligible 집합이 ordered·nonempty·duplicate-free·single-source이고 byte-identical한
+최초 완전 card-boundary proposal일 때만 생산한다. Principles의 Git-history kernel은 일부가 처음
+나온 순간이 아니라 전체 after-state가 canonical이고 owner/card 중복이 없으며 모든 owner path가
+존재하는 첫 순간의 완전 집합을 seal한다. Resume은 owner-sorted sealed marker 하나씩만 자연
+semantic owner에 착지시키고, 한 owner의 소비가 residual owner를 지우지 않는다. Verify closure는
+sealed member 전부가 consumed된 뒤에만 열린다. 같은 owner/card의 중복은 seal 전에 막히고,
+소비한 member·다른 OID·coordinate paraphrase의 재도입은 큰 integrity finding이라 새 패스나
+중복 owner를 만들지 않는다. actor-computed judged summary와 canonical key-order loud-stop은
+기록된 한계이나 조용한 소실 경로는 아니다. 검증 시 확인할 것: two-owner set에서 첫 owner 착지
+뒤 residual route가 남고, 둘째 착지 뒤에만 Work→Verify가 열리며, reintroduced member가 route를
+만들지 않는지. current-byte affected evidence는 direct predicate 19/19, Work seam 17/17,
+state-history pattern 17/17이다. final hand Gate B는 아직 **미검증**이다.
+
 ### 3.21 H47×A1·A3 — 복합 카드에서 확정된 다른 능력의 문장 [12판 신규 · §3.17의 세분]
 
 ```
@@ -654,3 +669,12 @@ A1·A2·A3·A11로 해결되므로 행을 늘리지 않았다. 남은 공백: �
 남는다 — 어느 것도 실사용 제품 실행으로 재지 않았고, 이 라운드에 새 실사용 증거는 없다.
 그리고 **0.18.8·0.18.9의 전 칸 재판정이 이 문서에 기록돼 있지 않다**(그 두 릴리스는 칸 하나만
 고쳤다) — 다음 버전 범프가 갚아야 할 부채로 남긴다
+
+0.20.0 최종 재판정 결과(DD-96·seal): §1의 요청 50행과 §2의 진입 21행을 대조했고 새
+request/entry shape는 없다. DD-96의 compatible-feedback lifecycle은 기존 §3.20 H4×A1·A3이
+표현한다. Work의 최초 완전 card-boundary proposal, Principles의 first wholly acceptable
+after-state seal, Resume의 one-semantic-owner-at-a-time landing과 residual-owner 보존, 모든 sealed
+member 소비 뒤의 Verify closure를 그 셀에 추가해 **정합**으로 재판정했다. 기존 request
+identity와 no-duplicate-owner mechanics는 유지된다. **새 H·A 행 0, 새 공백 0.** current-byte
+유계 증거는 MET이나 final hand Gate B와 wildcard/Gate A·official install·clean comparison은
+미검증이므로 실사용 통과로 바꾸지 않는다.

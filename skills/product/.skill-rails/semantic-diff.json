@@ -1,8 +1,8 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:5e78f68c1a749693f9106fa1cdbbe4073f4c1c40cac1ba05ecd25292aafe2b93",
-    "after": "sha256:5e78f68c1a749693f9106fa1cdbbe4073f4c1c40cac1ba05ecd25292aafe2b93"
+    "before": "sha256:c12a5cc93ffba0012a2d54b64fa089a276a8a91e40d9de96e57ad8b9b6bea49e",
+    "after": "sha256:c12a5cc93ffba0012a2d54b64fa089a276a8a91e40d9de96e57ad8b9b6bea49e"
   },
   "changed": false,
   "any_changed": false,
@@ -28,7 +28,7 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "repair-planning-audit-product",
-  "intent": "Regenerate the obligation ledger from the repaired observable research lineage.",
+  "change_id": "activation-gate-descriptions",
+  "intent": "Prevent ambient selection in unmanaged repositories while preserving explicit, routed, and managed-project entry.",
   "impact": {}
 }

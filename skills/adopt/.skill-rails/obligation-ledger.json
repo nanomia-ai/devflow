@@ -1,24 +1,21 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:4b4c83f59c23310bb488db5fd6d15c075d57c8e189f4171ef60a98171665b53d",
+  "intent_hash": "sha256:fb2fcc014ddc28288e7b7c1b9a03daa591cf27a8e1e96d24b5884db734309599",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Existing-project adoption. In a repository that already has code, traces one representative flow per capability candidate and reverse-derives Layer 0 and capability design zones. Use for adopting an existing project, reverse-deriving codebase documents, or creating and repairing capability documents in a brownfield.",
+      "text": "Existing-project adoption. In a repository that already has code, traces one representative flow per capability candidate and reverse-derives Layer 0 and capability design zones. Use only with explicit devflow intent—direct invocation, naming devflow, or asking to adopt an existing codebase into devflow, reverse-derive Layer 0, or create or repair devflow capability documents.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
         "file:SKILL.md",
-        "file:agents/openai.yaml",
-        "spec:STAGES/entry"
+        "file:agents/openai.yaml"
       ],
       "evidence": [
-        "file:agents/openai.yaml",
-        "fixture:trace-needed",
-        "fixture:entry-initial"
+        "file:agents/openai.yaml"
       ]
     },
     {
@@ -2274,6 +2271,5 @@
       "SKILL_ko.md"
     ],
     "atom_count": 76
-  },
-  "source_root": "skills/adopt"
+  }
 }

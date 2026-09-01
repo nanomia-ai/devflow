@@ -1,6 +1,6 @@
 {
   "name": "product",
-  "description": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing devflow/project/product.md. Use when starting a new project, planning a service, defining a product, or deciding MVP scope.",
+  "description": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing devflow/project/product.md. Use only with explicit devflow intent—direct invocation, naming devflow, or asking for a devflow project, Layer 0, devflow capability documents, or devflow/project/product.md.",
   "problem": "Preserve the behavior of immutable repository sources `skills/product/SKILL.md` and `skills/product/SKILL_ko.md`, identified by their recorded source hashes, without silently changing their obligations.",
   "use_cases": [],
   "near_misses": [],

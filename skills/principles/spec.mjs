@@ -22,6 +22,7 @@ export const FORMATS = {
   capabilityClosing: line("capability closing", { folder: "path", head: "hex40", product: "hex40", verification: "hex40", capability: "hex40" }),
   capabilityNote: line("capability note", { capability: "integer", "note-json": "json" }),
   knowledgeLandingPending: line("knowledge landing pending", { owner: "path", writer: ["arch", "adopt"], "source-json": "json" }),
+  compatibleFeedbackPending: line("compatible feedback pending", { "payload-json": "json" }),
   completionSignalResult: progressLine("completion signal result", { head: "hex40", verdict: ["pass", "fail", "unverified"], "detail-json": "json" }),
   reviewResult: progressLine("review result", { head: "hex40", verdict: ["pass", "objections", "unverified"], "detail-json": "json" })
 };
@@ -128,6 +129,7 @@ export const DECLARATIONS = {
   closed_history: { value: "Legacy closed-history descent remains exact and no automatic migration is added.", consumer: "work|verify|resume" },
   package_portability: { value: "Every runtime and policy reference resolves inside the copied package.", consumer: "build|runtime" }
   ,canonical_format_ownership: { value: "Every immutable journal/progress form has exactly one owner: a native FORMAT when its parser can preserve the canonical byte order, otherwise the mandatory canonicalJournalProgressGrammar template plus project-state parser.", consumer: "principles|project-state|stages" }
+  ,compatible_feedback_set: { value: "The first atomic compatible-feedback introduction for one source card seals its complete exact-payload set in Git history. Later same-card introductions cannot enlarge or reopen it, while current and consumed members remain the exact replay lifecycle until every semantic owner lands once and Verify becomes the next consumer.", consumer: "project-state|work|resume|verify" }
 };
 
 export const DEFERRED = [];

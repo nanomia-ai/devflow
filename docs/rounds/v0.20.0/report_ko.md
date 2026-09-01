@@ -1,15 +1,31 @@
-# v0.20.0 구현 기록 — Phase 3 최종 증거 및 정정
+# v0.20.0 구현 및 최종 릴리스 후보 기록
 
-## 범위와 보관
+## 현재 지위와 보관
 
-이 기록은 Phase 3의 최종 증거로, 대상 브랜치 `jmp-develop/devflow-skill-rails`,
-HEAD `080a8cbd031b2da9efa4051bd56197ddbaf54017`에서 작성했다. 구현 이관은 작업 트리가
-아닌 staged snapshot이 보관한다. 현재 사실의 소유자는 Git과 manifests이며, 이 보고서는
-그 스냅샷의 증거와 한계를 기록할 뿐 별도의 current-facts 층을 만들지 않는다.
+이 문서는 DD-72가 정한 v0.20.0의 유일한 구현 보고서이며, 현재 최종 후보 바이트의
+측정·판정·한계를 보관한다. 현재 사실은 Git과 두 manifest가 소유하고 이 문서는 별도
+current-facts 층을 만들지 않는다. 후보 작업 트리는
+`jmp-develop/phase4-devflow-final-repair`, 기준 HEAD
+`632e96ccff5685f0c10b27f2a6161e36066248b9`다.
 
-이번 정정의 문서 쓰기 범위는 이 보고서와 `CHANGELOG.md`뿐이다. 생성·삭제·이동한
-경로는 없으며, `skills/**`는 이 문서 정정의 범위 밖이고 이 작업으로 인한 `skills/**`
-diff는 없다.
+최종 기록 편집 진입 시 custody는 porcelain 118행(추적 수정 115 + 기존 untracked Skill
+Rails receipt 3), staged 0, 두 manifest `0.20.0`이었다. 이 편집의 유일한 쓰기 범위는
+`docs/rounds/v0.20.0/report_ko.md`, `CHANGELOG.md`의 최신 `## 0.20.0`,
+`docs/usecase-matrix_ko.md`의 §3.20·§6 재판정이다. 따라서 편집 뒤 status 행은 report와
+matrix가 새로 modified가 되는 만큼만 늘 수 있고, deploy/runtime 경로는 움직이면 안 된다.
+생성·삭제·이동 경로는 0이고 staged는 계속 0이어야 한다.
+
+시험한 runtime 바이트와 출하할 runtime 바이트는 같아야 한다. 이후 존재할 수 있는
+commit/install 식별자 기록은 `skills/`, `codex/`, `hooks/`, `scripts/`, 두 manifest의
+closure가 시험한 후보와 hash-identical임을 먼저 증명하는 identifier-only 문서 갱신이어야
+하며 deploy 바이트를 바꾸면 안 된다. 아직 존재하지 않는 후보 commit id는 이 문서에 쓰지 않는다.
+
+## 역사적 Phase 3·Phase 4 증거 — 현재 후보의 릴리스 통과로 세지 않음
+
+아래 기존 Phase 3 기록은 당시 브랜치 `jmp-develop/devflow-skill-rails`, HEAD
+`080a8cbd031b2da9efa4051bd56197ddbaf54017`부터 이어진 구현 계보를 보존한다. 뒤의 442,
+444, 449, 450 wildcard 수치와 14개 clean-entry transcript는 각 당시 바이트의 역사적
+문맥일 뿐, 현재 `632e96c` 기반 dirty 후보의 최종 관문을 통과시킨 증거가 아니다.
 
 ## Phase 3 최종 결과
 
@@ -282,3 +298,148 @@ stale history이고, 현재 통과는 위 `f5655ef`의 한 450/450 suite다. 이
 경로는 `skills/adopt/templates/glossary.md`와 `skills/arch/templates/glossary.md` 둘이고,
 삭제·이동은 0이다. Phase 4 실사용 재실행은 parser와 all-nine projection이 착지한 후 같은
 frozen condition을 별도 실행하는 다음 handoff다.
+
+## 최종 후보 바이트의 실제 동작 경계
+
+현재 후보는 다음 한 경계를 이룬다.
+
+1. Principles 진입은 상태를 판단하지 않고 Resume 한 경로로 간다. SessionStart는 현재
+   `devflow` 흔적이 없는 저장소에서 침묵하고 명시적 Product/Adopt 진입은 보존한다.
+2. P2 아홉 package의 행동·판단 원본은 영문 `spec.mjs`·`body.md`이고 생성 `SKILL.md`와
+   `.generated.json`은 projection/receipt다. 현재 최종 receipt의 Skill Rails runtime은
+   `0.3.2`, validator는 `0.4.2`이며, 앞선 `0.3.1`/`0.4.1` 표시는 역사적 중간 trail이다.
+3. Product의 canonical capability/glossary grammar를 Adopt·Arch가 정확히 투영한다.
+   `capability-rows-unparsed`는 내용 있는 미인식 capability 절을 조용히 버리지 않고 막는다.
+4. DD-94 경계는 미확정 evidence 동안 COMMIT만 제한하고, carry가 없으면 late-carry,
+   이미 있으면 late-anchor를 한 기존 boundary commit에 싣는다.
+5. DD-96의 compatible feedback은 카드 하나의 최초 완전 집합만 card-boundary payload로
+   제안한다. Work는 collected `card.target`·lifecycle과 actor-computed judged pending/eligible
+   summary를 비교해 partial·reordered·empty·duplicate·mixed/foreign-source 제안을 WRITE 전에
+   막는다. Established lifecycle은 judged `lifecycleAction=settled`와 empty eligible만 받는다.
+6. Principles의 Git-history kernel은 첫 등장 일부가 아니라 **처음으로 전체 after-state가
+   canonical이고, source 하나를 공유하며, owner/card 중복이 없고, 모든 owner path가 존재하는
+   순간**의 완전 집합을 seal한다. malformed·mixed-source·owner-absent·unattributable 초안은
+   unsealed라 같은 자리에서 고칠 수 있다.
+7. Resume은 owner-sorted sealed marker 중 하나의 writer만 Product·Design·Arch·Adopt로 보낸다.
+   각 writer는 owner 문서에 source·target·Background·Why·Conclusion·implication을 먼저
+   착지시키고 byte-identical marker 하나만 원자적으로 소비한다. 다른 owner는 residual marker로
+   남고, Work/Verify closure는 sealed member가 모두 소비된 뒤에만 열린다.
+8. 이미 소비한 정확한 member의 재도입은 `member-reopened`, 같은 카드의 다른 payload·OID·
+   coordinate paraphrase는 `set-reopened`으로 크게 막힌다. current kernel에서 이 history finding은
+   project-wide·permanent이며 clearable redesign은 DD-96 revisit/backlog에만 기록돼 있다.
+9. Resume의 folder-boundary recovery는 code를 바꾸지 않고 deepest-first `.done` rename과 boundary
+   commit 하나만 수행하며, Split은 출처 없는 confirmed-product tree work를 `maintenance routing
+   pending`으로 먼저 기록해 요청 identity를 보존한다.
+
+이 경계의 component purpose는 한 카드의 reusable conclusion을 모든 자연 semantic owner에
+소실·중복 없이 착지시키는 것이다. Work가 producer/pre-write guard, Principles와 Git history가
+seal, Resume이 route, Product·Design·Arch·Adopt가 semantic landing, Verify가 all-consumed closure의
+consumer다. 이 경계를 없애면 partial/foreign/reopened set, residual-owner 소실, premature Verify가
+가능해진다. 설계 이유와 재개 조건의 durable owner는 DD-96이다.
+
+## 증거 원장 — MET / FALL / UNVERIFIED
+
+`MET`은 이름 댄 현재 바이트와 명령에서 관측된 것, `FALL`은 같은 조건의 기대를 만족하지 못한
+것, `UNVERIFIED`는 실행하지 않았거나 source identity가 다른 것이다. 역사적 성공을 현재 MET로
+승격하지 않는다.
+
+| 판정 | 현재 후보에서 확인한 것 | 경계 |
+|---|---|---|
+| **MET** | fresh Fable final-runtime audit PASS | Tier-1/Tier-2 0, rule-conflict/loss-path 0; exact current runtime boundary의 source·purpose 판정 |
+| **MET** | all-nine receipt↔byte identity | 615 entries, mismatch 0, missing 0; runtime `0.3.2`, validator `0.4.2`, 아홉 `spec_hash` 일치 |
+| **MET** | Work direct predicate probe | fixture verdict를 미리 주지 않은 19 cases 전부 expected verdict와 일치 |
+| **MET** | affected executable tests | decision-index 12/12, Work project-state seam 17/17, compatible-feedback state pattern 17/17, `git diff --check` clean |
+| **MET** | runtime ownership/lifecycle walk | first-acceptable seal, reopen block, residual owner, one-owner landing, all-consumed closure가 현재 source와 real Git temp scenes에서 확인됨 |
+| **FALL** | 현재 fresh runtime boundary의 release-blocking 판정 | 0건. 과거 BLOCK·stale fixture는 이 후보가 닫은 history이며 현재 FALL로 중복 계산하지 않음 |
+| **UNVERIFIED** | editor-reported Skill Rails build/eval | Work 74/74×200, Principles 10/10×200은 유계 역사 증거이나 fresh auditor가 rebuild/eval을 재실행하지 않음 |
+| **UNVERIFIED** | candidate commit·repair push | 아직 만들거나 push하지 않음; 존재하지 않는 id를 적지 않음 |
+| **UNVERIFIED** | official-home install·installed byte match | clean committed source에서 real Claude/Codex/Orca home으로 설치하고 exact closure를 비교하지 않음 |
+| **UNVERIFIED** | frozen clean baseline/candidate comparison | 과거 14 transcript는 context only; final-byte 동일 질문·rubric 비교를 실행하지 않음 |
+| **UNVERIFIED** | one hand Gate B | genuine fixture의 create/list/filter/revisit와 Work→Resume→Work→Verify/closure를 현재 바이트로 실행하지 않음 |
+| **UNVERIFIED** | final wildcard root suite / Gate A | `node --test "scripts/*.test.js"`를 현재 frozen 후보에서 실행하지 않음; Gate A도 따라서 미실행 |
+
+이 보고서 자체는 production readiness 또는 release PASS를 선언하지 않는다.
+
+## DD-96·seal 매트릭스 재판정
+
+`docs/usecase-matrix_ko.md` §1·§2 축을 대조한 결과 새 H/A 요청 shape는 없다. 기존 §3.20
+H4×A1·A3이 정확한 칸이다. 한 요청의 `출처-json` identity와 기존 `origin`·`siblings`·
+`readFirst` 계산을 보존하면서, Work가 한 카드의 first complete boundary set을 제안하고
+Principles가 first wholly acceptable after-state를 seal한다. Resume은 duplicate owner를 만들지
+않고 semantic owner 하나씩 착지시키며 residual owner를 지우지 않는다. Verify는 sealed member가
+전부 consumed된 뒤에만 닫힌다. §3.20 판정은 **정합**, 새 행 0, 새 공백 0이다. 이 판정은 위
+current-byte evidence에 한정하며 final hand Gate B는 계속 UNVERIFIED다.
+
+## fresh audit disposition과 carry-forward
+
+### F-1 — 미수리 Tier-3 precision limitation
+
+`skills/work/body.md`는 judged summary field인 `count`, `uniqueCount`, `sourceCount`,
+`sourceCard`, `source`를 “mechanically collected”라고 부른다. 실제 `spec.mjs`는 pending/eligible
+set을 `judged: true`로 선언하고 Work actor가 summary를 계산한다. divergent literal reader가
+summary 없이 호출하면 domain exact-key 검사 L3 diagnostic에서 WRITE 전에 크게 멈춘다. 따라서
+quiet loss나 wrong action은 아니고 retry 비용이다. fresh PASS 뒤 runtime 문구만 다시 고치면
+동작상 우월한 root change 없이 repair-on-repair를 하나 더 만드는 셈이므로 이번 frozen boundary는
+수리하지 않는다. 별도 scope에서 손댄다면 “actor-computed judged summary”와 judged
+`lifecycleAction=settled`로 정확히 좁힌 뒤 유계 재감사한다.
+
+### E-1 — 미수리 evidence-instrument limitation
+
+mixed-source와 duplicate seam/fixture negative는 `sourceCount`/`uniqueCount`와 함께
+`pendingSetStatus=invalid`도 설정하므로 두 conjunct를 단독으로 격리하지 못한다. 다만 fresh
+independent 19-case direct predicate probe가 `pendingSetStatus=complete` 상태에서 두 conjunct를
+각각 실행했고 모두 expected BLOCK이었다. 제품 predicate defect가 아니라 instrument weakness다.
+이미 답이 난 뒤 새 harness를 늘리거나 product byte를 바꾸지 않는다.
+
+### O-1~O-6 — blocker가 아닌 관찰
+
+- **O-1:** 최종 receipt는 runtime `0.3.2` / validator `0.4.2`다. 이전 CHANGELOG의
+  `0.3.1`/`0.4.1`은 중간 바이트의 stale trail이라 최신 항목을 최종 identity로 정정한다.
+- **O-2:** `sourceCard`·`sourceCount`·`uniqueCount`는 DSL/AST 제한 때문에 actor-attested judged
+  summary다. kernel은 mixed/duplicate를 unsealed correctable draft로 backstop하지만 의도적
+  misattestation을 새 parser로 해결하지 않는다.
+- **O-3:** canonical payload key order가 틀리면 first-acceptance 전 loud correctable stop이다.
+  Work actor surface에 outer key order가 완전히 적히지 않은 comprehension tension은 남는다.
+- **O-4:** sealed source OID가 rebase/prune/gc 뒤 resolve되지 않을 수 있다. 현 계약은
+  `ASK:integrity`에서 old source·coordinates를 실제 owner에 착지하고 byte-identical marker를
+  소비하는 사람 개입 출구를 보존한다.
+- **O-5:** compatible·settled-state의 pending/eligible/lifecycleAction은 의도적으로 judged다.
+  unjudged compatible input은 bare BLOCK으로 크게 멈추며 조용한 WRITE는 없다.
+- **O-6:** DD-96와 final seal은 이 보고서와 matrix §3.20·§6에서 재판정했다. 새 H/A 행과 새
+  공백은 0이다.
+
+## 감리 지침 §5 정지 조항
+
+- 이번 **report-only disposition**의 새 규칙 충돌·소실 경로는 0이다.
+- 남은 제품 소견은 F-1의 판단어/표현 등급 하나이고, E-1은 fixture/scoring instrument 약점이다.
+  O-1~O-6은 관찰이며 Tier-1/Tier-2 blocker가 아니다.
+- 수리를 만들지 않은 보고 전용 패스이므로 repair/convergence clause는 **판정 대상 없음**이다.
+  post-PASS runtime wording repair를 억지로 열지 않았고 새 action 해석도 만들지 않았다.
+- 개인 회로 차단기 네 개는 모두 미발동이다: 같은 문장의 세 번째 수리 0, 구체적 두 오독 없는
+  가능성 소견 0, 진자 운동 0, 지난 review만을 근거로 한 소견 0.
+- unexecuted behavior를 pass로 바꾸지 않았다. candidate commit/push, official install/byte match,
+  frozen comparison, one hand Gate B, final wildcard/Gate A는 전부 UNVERIFIED다.
+
+따라서 text loop는 여기서 멈추고 다음 검증 수단을 empirical execution으로 넘긴다.
+
+## 경계 출력
+
+**Actually shipped:** 아직 아님. 위 “최종 후보 바이트의 실제 동작 경계”가 frozen candidate이고
+commit·push·official install 식별자는 아직 없다.
+
+**New binding decisions:** 없음. DD-96의 state/reason은 움직이지 않았고 matrix만 현재 바이트에
+맞춰 재판정했다.
+
+**Unrepaired findings:** F-1 Tier-3 runtime wording precision, E-1 conjunct-isolation instrument
+weakness. 둘 다 release blocker로 부풀리지 않는다.
+
+**Remaining limitations:** actor-attested judged summaries, key-order loud-stop ergonomics,
+source-OID rebase/prune tension, permanent project-wide reopen finding, 그리고 위 UNVERIFIED 관문들.
+
+**Next revalidation:** runtime 바이트를 바꾸지 않은 채 explicit stage-set audit와 candidate commit을
+만들고, clean committed baseline/candidate의 official-home byte identity와 frozen comparison을
+확인한 뒤, 같은 frozen candidate에서 hand Gate B 한 번과 wildcard root suite/Gate A 한 번을
+실행한다. 그 뒤 commit/install 식별자를 문서에 보태야 한다면 deploy closure가 시험 바이트와
+hash-identical임을 증명한다.
+
+=== 보고 완료 ===

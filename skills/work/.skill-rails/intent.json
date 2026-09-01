@@ -1,6 +1,6 @@
 {
   "name": "work",
-  "description": "Implementation. Takes one task card, codes it, keeps the progress log on disk, runs the completion signal, and commits. Use when starting to code, continuing work, or beginning implementation.",
+  "description": "Implementation. Takes one task card, codes it, keeps the progress log on disk, runs the completion signal, and commits. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
   "problem": "Preserve the behavior and evidence boundaries of repository-relative skills/work without silently changing its obligations or duplicating the principles state kernel.",
   "use_cases": [
     "Claim or resume one approved card and carry its implementation through current completion evidence and clean review.",

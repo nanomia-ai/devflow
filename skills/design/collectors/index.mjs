@@ -59,6 +59,16 @@ async function researchState(ctx, projectRoot) {
     return matches[0].approval === "effective" ? "effective" : matches[0].approval === "pending" ? "pending" : "unknown";
   } catch { return "unknown"; }
 }
+async function compatible(ctx, projectRoot) {
+  const state = await canonicalState(ctx, projectRoot);
+  const entries = state?.zones?.marker?.entries;
+  if (!Array.isArray(entries)) return { owner: "invalid", landing: "invalid" };
+  const marker = entries.find(entry => entry?.kind === "compatible-feedback" && entry?.writer === "design");
+  if (!marker) return { owner: "none", landing: "none" };
+  const owner = marker.owner === "devflow/project/design.md" ? "design" : "invalid";
+  const landing = marker.landing === "satisfied" ? "satisfied" : marker.landing === "pending" ? "pending" : "invalid";
+  return { owner, landing };
+}
 function fileState(ctx, local) {
   const projectRoot = root(ctx);
   return projectRoot === null ? "unknown" : existsSync(join(projectRoot, local)) ? "present" : "absent";
@@ -79,6 +89,14 @@ export const collectors = Object.freeze({
   "state.design-research-state": async ctx => {
     const projectRoot = root(ctx);
     return projectRoot === null ? "unknown" : researchState(ctx, projectRoot);
+  },
+  "state.compatible-owner": async ctx => {
+    const projectRoot = root(ctx);
+    return projectRoot === null ? "invalid" : (await compatible(ctx, projectRoot)).owner;
+  },
+  "state.compatible-landing": async ctx => {
+    const projectRoot = root(ctx);
+    return projectRoot === null ? "invalid" : (await compatible(ctx, projectRoot)).landing;
   },
   "state.design-frontend": ctx => {
     const projectRoot = root(ctx);

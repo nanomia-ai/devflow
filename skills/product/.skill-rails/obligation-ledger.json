@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:9f365607638fc91677bf26beb56a0366fc9d20851f3a20bc3fb7eaba77b6edf0",
+  "intent_hash": "sha256:4298d8d451f7468e2d33699e07ee130c26a89e5527a5f778aa5b5de7e3da2356",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing devflow/project/product.md. Use when starting a new project, planning a service, defining a product, or deciding MVP scope.",
+      "text": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing devflow/project/product.md. Use only with explicit devflow intent—direct invocation, naming devflow, or asking for a devflow project, Layer 0, devflow capability documents, or devflow/project/product.md.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",

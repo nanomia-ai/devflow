@@ -31,6 +31,7 @@ const RESERVED_JOURNAL_HEADS = [
   "evidence-wait:",
   "evidence-finalizing:",
   "knowledge landing pending:",
+  "compatible feedback pending:",
 ];
 
 // One recognizer owns every canon-fixed progress head. The canon says a progress line that
@@ -71,13 +72,15 @@ export const ZONE_DEFINITIONS = Object.freeze([
     { name: "knowledge-landing", present: 4.04, absent: 4 },
     { name: "capability-closure", present: 4.05, absent: null },
     { name: "re-split", present: 4.06, absent: 8 },
+    { name: "compatible-feedback", present: 4.07, absent: null },
   ] },
   { zone: "setup", present: 5, absent: 5, kinds: [
-    { name: "no-product", present: 5, absent: 1 },
-    { name: "layer0-incomplete", present: 5.01, absent: 3 },
-    { name: "brownfield-field", present: 5.02, absent: 5 },
-    { name: "integration-config", present: 5.03, absent: 5 },
-    { name: "room-upgrade", present: 5.04, absent: 5 },
+    { name: "unmanaged", present: 5, absent: 1 },
+    { name: "no-product", present: 5.01, absent: 2 },
+    { name: "layer0-incomplete", present: 5.02, absent: 3 },
+    { name: "brownfield-field", present: 5.03, absent: 5 },
+    { name: "integration-config", present: 5.04, absent: 5 },
+    { name: "room-upgrade", present: 5.05, absent: 5 },
   ] },
   { zone: "claim", present: 6, absent: 20, kinds: [
     "depends-anomaly", "needs-reapproval", "blocked-by-prerequisite", "mine",
@@ -275,6 +278,60 @@ function gitNulList(root, args) {
   // File names are only decoded after Git has finished producing its NUL-delimited list.
   // Revision hashes below never cross this conversion boundary.
   return decodeUtf8(bytes.stdout, `git ${args[0]} path list`).split("\0").filter(Boolean);
+}
+
+function currentPathEvidence(root, relative) {
+  try {
+    fs.lstatSync(path.join(root, ...relative.split("/")));
+    return "present";
+  } catch (error) {
+    return ["ENOENT", "ENOTDIR"].includes(error?.code) ? "absent" : "unknown";
+  }
+}
+
+function indexedDevflowEvidence(root) {
+  const indexed = gitRun(root, ["ls-files", "-z", "--", "devflow"], { allowFailure: true });
+  if (indexed.status !== 0) return "unknown";
+  try {
+    return decodeUtf8(indexed.stdout, "indexed devflow paths").split("\0").some(Boolean) ? "present" : "absent";
+  } catch {
+    return "unknown";
+  }
+}
+
+function devflowHistoryEvidence(root) {
+  const history = gitRun(root, ["log", "-1", "--format=%H", "--all", "--", "devflow"], { allowFailure: true });
+  if (history.status !== 0) return "unknown";
+  let commit;
+  try {
+    commit = decodeUtf8(history.stdout, "devflow history").trim();
+  } catch {
+    return "unknown";
+  }
+  if (commit !== "") return /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit) ? "present" : "unknown";
+
+  const shallow = gitRun(root, ["rev-parse", "--is-shallow-repository"], { allowFailure: true });
+  if (shallow.status !== 0) return "unknown";
+  let value;
+  try {
+    value = decodeUtf8(shallow.stdout, "shallow repository state").trim();
+  } catch {
+    return "unknown";
+  }
+  if (value === "true") return "unknown";
+  return value === "false" ? "absent" : "unknown";
+}
+
+function devflowMembershipEvidence(root) {
+  const paths = [currentPathEvidence(root, "devflow"), currentPathEvidence(root, "devflow/project/product.md")];
+  const current = paths.includes("present") ? "present" : paths.includes("unknown") ? "unknown" : "absent";
+  if (current !== "absent") return { current, indexed: "not-checked", history: "not-checked", unmanaged: false };
+
+  const indexed = indexedDevflowEvidence(root);
+  if (indexed !== "absent") return { current, indexed, history: "not-checked", unmanaged: false };
+
+  const history = devflowHistoryEvidence(root);
+  return { current, indexed, history, unmanaged: history === "absent" };
 }
 
 export async function nativeBinaryHash(root, revision, paths) {
@@ -940,6 +997,9 @@ function glossaryTermFields(line) {
 const KNOWLEDGE_OWNER = /^(?:devflow\/project\/(?:product|arch|design)\.md|devflow\/project\/capabilities\/[0-9]+-[^/]+\.md)$/;
 const KNOWLEDGE_SOURCE = new RegExp(`^(?<card>devflow/tree/[^@\\r\\n]+\\.md)@(?<hash>[0-9a-f]{40,64})$`);
 const KNOWLEDGE_LANDING_BYTES = Buffer.from("knowledge landing pending:", "utf8");
+const COMPATIBLE_OWNER = /^(?:devflow\/project\/(?:product|glossary|design|arch)\.md|devflow\/project\/capabilities\/[0-9]+-[^/]+\.md)$/;
+const COMPATIBLE_FEEDBACK_BYTES = Buffer.from("compatible feedback pending:", "utf8");
+const COMPATIBLE_COORDINATE_KEYS = ["target", "background", "why", "conclusion", "implication"];
 
 function knowledgeLandingFields(line, start) {
   const match = /^(?<owner>[^;]+); writer: (?<writer>arch|adopt); source-json: (?<sourceJson>[^\r\n]+)$/.exec(line.slice(start));
@@ -957,6 +1017,42 @@ function knowledgeLandingFields(line, start) {
     sourceHash: source?.groups.hash ?? null,
     valid: KNOWLEDGE_OWNER.test(match.groups.owner) && source !== null,
     reason: KNOWLEDGE_OWNER.test(match.groups.owner) ? (source === null ? "knowledge-source-format" : null) : "knowledge-owner",
+  };
+}
+
+function compatibleFeedbackFields(line, start) {
+  const payloadJson = line.slice(start);
+  const decoded = parseJsonValue(payloadJson);
+  if (!decoded.ok || decoded.value === null || Array.isArray(decoded.value)
+      || typeof decoded.value !== "object" || JSON.stringify(decoded.value) !== payloadJson) {
+    return { payloadJson, valid: false, reason: "compatible-payload-json" };
+  }
+  const payload = decoded.value;
+  if (Object.keys(payload).join("|") !== "owner|source|coordinates") {
+    return { payloadJson, valid: false, reason: "compatible-payload-shape" };
+  }
+  const { owner, source: sourceValue, coordinates } = payload;
+  if (typeof owner !== "string" || typeof sourceValue !== "string") {
+    return { payloadJson, owner, source: sourceValue, coordinates, valid: false, reason: "compatible-payload-shape" };
+  }
+  const source = KNOWLEDGE_SOURCE.exec(sourceValue);
+  if (!source) return { payloadJson, owner, source: sourceValue, coordinates, valid: false, reason: "compatible-source-format" };
+  const coordinatesJson = JSON.stringify(coordinates);
+  if (coordinates === null || Array.isArray(coordinates) || typeof coordinates !== "object") {
+    return { payloadJson, owner, coordinatesJson, source: sourceValue, sourceCard: source.groups.card, sourceHash: source.groups.hash, valid: false, reason: "compatible-coordinates-json" };
+  }
+  const keys = Object.keys(coordinates);
+  const shapeValid = keys.length === COMPATIBLE_COORDINATE_KEYS.length
+    && keys.every((key, index) => key === COMPATIBLE_COORDINATE_KEYS[index])
+    && keys.every((key) => typeof coordinates[key] === "string" && coordinates[key].trim() !== "")
+    && coordinates.target.startsWith(`${owner}#`) && coordinates.target.length > owner.length + 1;
+  if (!shapeValid) {
+    return { payloadJson, owner, coordinatesJson, coordinates, source: sourceValue, sourceCard: source.groups.card, sourceHash: source.groups.hash, valid: false, reason: "compatible-coordinates-shape" };
+  }
+  return {
+    payloadJson, owner, coordinatesJson, coordinates,
+    source: sourceValue, sourceCard: source.groups.card, sourceHash: source.groups.hash,
+    valid: COMPATIBLE_OWNER.test(owner), reason: COMPATIBLE_OWNER.test(owner) ? null : "compatible-owner",
   };
 }
 
@@ -999,6 +1095,9 @@ function parseJournalLine(line, lineNumber) {
   }
   if ((match = new RegExp(`^${TIMESTAMP} knowledge landing pending: owner: `).exec(line))) {
     return { ...out, kind: "knowledge-landing", ...match.groups, ...knowledgeLandingFields(line, match[0].length) };
+  }
+  if ((match = new RegExp(`^${TIMESTAMP} compatible feedback pending: payload-json: `).exec(line))) {
+    return { ...out, kind: "compatible-feedback", ...match.groups, ...compatibleFeedbackFields(line, match[0].length) };
   }
   const timestamped = new RegExp(`^${TIMESTAMP} (?<body>.+)$`).exec(line);
   if (timestamped) {
@@ -1044,7 +1143,33 @@ function removedKnowledgeLandings(beforeText, afterText) {
   });
 }
 
-function knowledgeJournalAt(root, ref) {
+function removedCompatibleFeedback(beforeText, afterText) {
+  const before = parseJournal(beforeText).filter((line) => line.kind === "compatible-feedback" && line.valid);
+  const after = parseJournal(afterText).filter((line) => line.kind === "compatible-feedback" && line.valid);
+  const remaining = new Map();
+  for (const line of after) remaining.set(line.raw, (remaining.get(line.raw) ?? 0) + 1);
+  return before.filter((line) => {
+    const count = remaining.get(line.raw) ?? 0;
+    if (count === 0) return true;
+    remaining.set(line.raw, count - 1);
+    return false;
+  });
+}
+
+function addedCompatibleFeedback(beforeText, afterText) {
+  const before = parseJournal(beforeText).filter((line) => line.kind === "compatible-feedback" && line.valid);
+  const after = parseJournal(afterText).filter((line) => line.kind === "compatible-feedback" && line.valid);
+  const remaining = new Map();
+  for (const line of before) remaining.set(line.raw, (remaining.get(line.raw) ?? 0) + 1);
+  return after.filter((line) => {
+    const count = remaining.get(line.raw) ?? 0;
+    if (count === 0) return true;
+    remaining.set(line.raw, count - 1);
+    return false;
+  });
+}
+
+function knowledgeJournalAt(root, ref, markerBytes = KNOWLEDGE_LANDING_BYTES) {
   const listed = gitRun(root, ["ls-tree", "-z", "--name-only", ref, "--", "devflow/journal.md"], { allowFailure: true });
   if (listed.status !== 0) return { state: "failure", text: null };
   let paths;
@@ -1056,7 +1181,7 @@ function knowledgeJournalAt(root, ref) {
   if (!paths.includes("devflow/journal.md")) return { state: "absent", text: "" };
   const shown = gitRun(root, ["show", `${ref}:devflow/journal.md`], { allowFailure: true });
   if (shown.status !== 0) return { state: "failure", text: null };
-  if (!shown.stdout.includes(KNOWLEDGE_LANDING_BYTES)) return { state: "present", text: "" };
+  if (!shown.stdout.includes(markerBytes)) return { state: "present", text: "" };
   try {
     return { state: "present", text: normalizeFileText(decodeUtf8(shown.stdout, `${ref}:devflow/journal.md`)) };
   } catch {
@@ -1206,6 +1331,206 @@ function knowledgeLandingState(snapshot) {
   return { accepted, issues };
 }
 
+function compatibleFeedbackWriter(snapshot, owner) {
+  if (owner === "devflow/project/product.md" || owner === "devflow/project/glossary.md") return "product";
+  if (owner === "devflow/project/design.md") return "design";
+  if (owner === "devflow/project/arch.md" || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(owner)) {
+    const brownfield = snapshot.archFields.get("Brownfield");
+    return brownfield === "yes" ? "adopt" : brownfield === "no" ? "arch" : null;
+  }
+  return null;
+}
+
+function compatibleFeedbackLanded(snapshot, line) {
+  if (!snapshot.status.some((entry) => entry.path === line.owner)) return false;
+  const ownerText = readFile(snapshot.root, line.owner);
+  if (ownerText === null || !ownerText.includes(line.source)) return false;
+  const heading = line.coordinates.target.slice(line.owner.length + 1);
+  return ownerText.includes(heading) && ["background", "why", "conclusion", "implication"].every((key) => ownerText.includes(line.coordinates[key]));
+}
+
+function compatibleFeedbackLandedAt(snapshot, line, ref) {
+  const shown = gitRun(snapshot.root, ["show", `${ref}:${line.owner}`], { allowFailure: true });
+  if (shown.status !== 0) return false;
+  let ownerText;
+  try { ownerText = normalizeFileText(decodeUtf8(shown.stdout, "compatible feedback owner")); } catch { return false; }
+  const heading = line.coordinates.target.slice(line.owner.length + 1);
+  return ownerText.includes(line.source) && ownerText.includes(heading)
+    && ["background", "why", "conclusion", "implication"].every((key) => ownerText.includes(line.coordinates[key]));
+}
+
+function compatibleFeedbackState(snapshot) {
+  const current = snapshot.journal.filter((line) => line.kind === "compatible-feedback");
+  const issues = [];
+  const accepted = [];
+  const lifecycles = new Map();
+  const pairs = new Set();
+  for (const line of current) {
+    const pair = `${line.owner}\0${line.sourceCard}`;
+    let reason = !line.valid ? line.reason : null;
+    const writer = reason ? null : compatibleFeedbackWriter(snapshot, line.owner);
+    if (!reason && !knowledgeOwnerExists(snapshot, line.owner)) reason = "compatible-owner-unresolved";
+    if (!reason && writer === null) reason = "compatible-writer-unresolved";
+    if (!reason && !committedKnowledgeSource(snapshot, line)) reason = "compatible-source-unresolved";
+    if (!reason && pairs.has(pair)) reason = "compatible-owner-source-duplicate";
+    if (reason) issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", line: line.line, reason });
+    else {
+      pairs.add(pair);
+      accepted.push({ ...line, writer, landing: compatibleFeedbackLanded(snapshot, line) ? "satisfied" : "pending" });
+    }
+  }
+
+  const rememberLifecycle = (line, state) => {
+    if (!line.valid) return;
+    const identity = line.payloadJson;
+    if (state === "current" || !lifecycles.has(identity)) {
+      lifecycles.set(identity, {
+        identity,
+        state,
+        entry: { owner: line.owner, source: line.source, coordinates: line.coordinates },
+      });
+    }
+  };
+  const validateConsumption = (line, changed, commit = null) => {
+    if (!changed.has(line.owner)) {
+      issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", line: line.line, commit, reason: "compatible-marker-unauthorized-deletion" });
+      return false;
+    } else if (commit === null ? !compatibleFeedbackLanded(snapshot, line) : !compatibleFeedbackLandedAt(snapshot, line, commit)) {
+      issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", line: line.line, commit, reason: "compatible-semantic-landing-missing" });
+      return false;
+    }
+    return true;
+  };
+  const headJournal = knowledgeJournalAt(snapshot.root, "HEAD", COMPATIBLE_FEEDBACK_BYTES);
+  const headReadable = !["failure", "undecodable"].includes(headJournal.state);
+  const workingChanged = new Set(snapshot.status.map((item) => item.path));
+  const effectiveLifecycles = new Set(current.filter((line) => line.valid).map((line) => line.raw));
+  if (!headReadable) {
+    issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", reason: "compatible-head-undecodable" });
+  }
+
+  const history = gitRun(snapshot.root,
+    ["log", "--topo-order", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", "--", "devflow/journal.md"],
+    { allowFailure: true });
+  let journalCommits = null;
+  if (history.status === 0) {
+    try {
+      journalCommits = normalizeFileText(decodeUtf8(history.stdout, "compatible feedback history")).split("\n").filter(Boolean);
+      if (journalCommits.some((commit) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit))) journalCommits = null;
+    } catch { journalCommits = null; }
+  }
+  if (journalCommits === null) {
+    issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", reason: "compatible-history-undecodable" });
+    return { accepted, issues, lifecycles: [...lifecycles.values()].sort((left, right) => byteCompare(left.identity, right.identity)) };
+  }
+  const transitions = [];
+  for (const commit of journalCommits) {
+    const ancestry = gitRun(snapshot.root, ["rev-list", "--parents", "-n", "1", commit], { allowFailure: true });
+    let lineage = null;
+    try { if (ancestry.status === 0) lineage = decodeUtf8(ancestry.stdout, "compatible feedback ancestry").trim().split(/\s+/).filter(Boolean); } catch { lineage = null; }
+    if (!lineage || lineage[0] !== commit || lineage.some((hash) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(hash))) {
+      issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", commit, reason: "compatible-history-undecodable" });
+      continue;
+    }
+    const parent = lineage[1] ?? null;
+    const before = parent === null
+      ? { state: "absent", text: "" }
+      : knowledgeJournalAt(snapshot.root, parent, COMPATIBLE_FEEDBACK_BYTES);
+    const after = knowledgeJournalAt(snapshot.root, commit, COMPATIBLE_FEEDBACK_BYTES);
+    if ([before.state, after.state].some((state) => ["failure", "undecodable"].includes(state))) {
+      if (!(commit === snapshot.head && !headReadable)) {
+        issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", commit, reason: "compatible-history-undecodable" });
+      }
+      continue;
+    }
+    transitions.push({ commit, parent, before: before.text, after: after.text });
+  }
+
+  const seals = new Map();
+  const reopened = new Set();
+  const recordIntroductions = (beforeText, afterText, commit = null, working = false) => {
+    const additions = addedCompatibleFeedback(beforeText, afterText);
+    for (const line of additions) {
+      const seal = seals.get(line.sourceCard);
+      if (!seal) continue;
+      reopened.add(line.raw);
+      issues.push({
+        item: "compatible-feedback", blocking: true, path: "devflow/journal.md", line: line.line, commit,
+        reason: seal.identities.has(line.payloadJson)
+          ? "compatible-feedback-member-reopened"
+          : "compatible-feedback-set-reopened",
+        ...(working ? { working: true } : {}),
+      });
+    }
+
+    const lines = parseJournal(afterText).filter((line) => line.kind === "compatible-feedback");
+    if (lines.some((line) => !line.valid && !line.sourceCard)) return;
+    const byCard = new Map();
+    for (const line of lines) {
+      if (!byCard.has(line.sourceCard)) byCard.set(line.sourceCard, []);
+      byCard.get(line.sourceCard).push(line);
+    }
+    for (const [sourceCard, entries] of byCard) {
+      if (seals.has(sourceCard)) continue;
+      if (entries.some((line) => !line.valid)) continue;
+      const sources = new Set(entries.filter((line) => line.valid).map((line) => line.source));
+      if (working && sources.size > 1) {
+        issues.push({
+          item: "compatible-feedback", blocking: true, path: "devflow/journal.md", commit,
+          reason: "compatible-feedback-set-source-mismatch",
+          working: true,
+        });
+      }
+      const owners = entries.map((line) => line.owner);
+      const ownersExist = entries.every((line) => commit === null
+        ? knowledgeOwnerExists(snapshot, line.owner)
+        : gitPathExists(snapshot.root, commit, line.owner));
+      if (entries.length === 0 || sources.size !== 1 || new Set(owners).size !== owners.length || !ownersExist) continue;
+      seals.set(sourceCard, {
+        source: entries[0].source,
+        identities: new Set(entries.map((line) => line.payloadJson)),
+      });
+    }
+  };
+
+  for (const transition of [...transitions].reverse()) {
+    recordIntroductions(transition.before, transition.after, transition.commit);
+  }
+  if (headReadable) recordIntroductions(headJournal.text, snapshot.journalText ?? "", null, true);
+  for (const raw of reopened) effectiveLifecycles.delete(raw);
+
+  const authorized = accepted.filter((line) => seals.get(line.sourceCard)?.identities.has(line.payloadJson) && !reopened.has(line.raw));
+  for (const line of authorized) rememberLifecycle(line, "current");
+
+  for (const line of removedCompatibleFeedback(headJournal.text, snapshot.journalText ?? "")) {
+    if (!seals.get(line.sourceCard)?.identities.has(line.payloadJson)) continue;
+    if (validateConsumption(line, workingChanged)) rememberLifecycle(line, "consumed");
+    effectiveLifecycles.add(line.raw);
+  }
+
+  for (const { commit, parent, before, after } of transitions) {
+    const removed = removedCompatibleFeedback(before, after);
+    if (removed.length === 0) continue;
+    const changedRun = parent === null
+      ? { status: 0, stdout: Buffer.alloc(0) }
+      : gitRun(snapshot.root, ["diff", "--name-only", "-z", parent, commit, "--"], { allowFailure: true });
+    let changed = null;
+    try { if (changedRun.status === 0) changed = new Set(decodeUtf8(changedRun.stdout, "compatible feedback changed paths").split("\0").filter(Boolean)); } catch { changed = null; }
+    if (changed === null) {
+      issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", commit, reason: "compatible-history-undecodable" });
+      continue;
+    }
+    for (const line of removed) {
+      if (effectiveLifecycles.has(line.raw)) continue;
+      if (!seals.get(line.sourceCard)?.identities.has(line.payloadJson)) continue;
+      if (validateConsumption(line, changed, commit)) rememberLifecycle(line, "consumed");
+      effectiveLifecycles.add(line.raw);
+    }
+  }
+  authorized.sort((left, right) => byteCompare(left.owner, right.owner) || byteCompare(left.source, right.source) || byteCompare(left.coordinatesJson, right.coordinatesJson));
+  return { accepted: authorized, issues, lifecycles: [...lifecycles.values()].sort((left, right) => byteCompare(left.identity, right.identity)) };
+}
+
 function parseHandoff(snapshot) {
   const { root, room } = snapshot;
   if (!room) return { date: null, stale: true, nextStep: null, openItems: [] };
@@ -1262,10 +1587,18 @@ function parseStatus(root) {
 function resolveIntegration(root, archText, head, branch) {
   const archFields = fields(archText);
   const configured = archFields.get("integration");
-  const name = !configured || configured === branch ? (branch || "HEAD") : configured;
-  const ref = !configured || configured === branch ? "HEAD" : configured;
-  const hash = gitLine(root, ["rev-parse", "--verify", ref], { allowFailure: true });
-  return { branch: name, ref: hash ? ref : "HEAD", hash: hash || (ref === "HEAD" ? head : null), networkNeeded: !hash && ref !== "HEAD" };
+  if (configured === undefined) return {
+    branch: branch || "HEAD", ref: "HEAD", hash: head, networkNeeded: false, configuration: "missing",
+  };
+  const refCheck = gitRun(root, ["check-ref-format", "--branch", configured], { allowFailure: true });
+  if (refCheck.status !== 0) return {
+    branch: configured, ref: configured, hash: null, networkNeeded: false, configuration: "integration-not-a-ref",
+  };
+  if (configured === branch) return {
+    branch: branch || "HEAD", ref: "HEAD", hash: head, networkNeeded: false, configuration: "valid",
+  };
+  const hash = gitLine(root, ["rev-parse", "--verify", configured], { allowFailure: true });
+  return { branch: configured, ref: configured, hash: hash || null, networkNeeded: !hash, configuration: "valid" };
 }
 
 function openGitOperation(root) {
@@ -1350,6 +1683,7 @@ async function loadSnapshot(options) {
   const head = gitLine(root, ["rev-parse", "--verify", "HEAD"], { allowFailure: true }) || "none";
   const branch = gitLine(root, ["symbolic-ref", "--quiet", "--short", "HEAD"], { allowFailure: true }) || null;
   const productText = readFile(root, "devflow/project/product.md");
+  const devflowMembership = devflowMembershipEvidence(root);
   const archText = readFile(root, "devflow/project/arch.md");
   const tree = directTree(root);
   const closedDepth1 = tree.folders.filter((relative) => ["done", "stale"].includes(folderIdentity(relative)?.status));
@@ -1376,6 +1710,7 @@ async function loadSnapshot(options) {
     branch,
     integration,
     productText,
+    devflowMembership,
     product: parseProduct(productText),
     glossaryText,
     glossary: parseGlossary(glossaryText),
@@ -2119,11 +2454,10 @@ function progressMachineLines(text) {
   return progressLinesFromText(text).map(parseProgressLine).filter(Boolean);
 }
 
-// The carry line is bound to its position — the canon appends it immediately before the final
-// task commit — so only the last progress line can be it. The recognizer decides the format.
 function carryState(card) {
-  const last = parseProgressLine(progressLines(card).at(-1) ?? "");
-  return last?.kind === "carry" && last.valid ? { present: true, fact: last.fact } : { present: false, fact: null };
+  const last = progressMachineLines(card?.text)
+    .filter((line) => line.kind === "carry" && line.valid).at(-1);
+  return last ? { present: true, fact: last.fact } : { present: false, fact: null };
 }
 
 // Settled means anchored: the line is in the card as HEAD already holds it. Whether an
@@ -2549,10 +2883,20 @@ function finalTaskCommit(snapshot, card) {
   return subject === expected;
 }
 
+function pendingCompatible(compatibleFeedback, cardPath) {
+  return typeof cardPath === "string"
+    && compatibleFeedback.accepted.some((entry) => entry.source.startsWith(`${cardPath}@`));
+}
+
 function evaluateZones(snapshot) {
   const zones = zoneBag();
   const verify = verifyProjection(snapshot);
-  const landings = knowledgeLandingState(snapshot);
+  const landings = snapshot.devflowMembership.unmanaged
+    ? { accepted: [], issues: [] }
+    : knowledgeLandingState(snapshot);
+  const compatibleFeedback = snapshot.devflowMembership.unmanaged
+    ? { accepted: [], issues: [], lifecycles: [] }
+    : compatibleFeedbackState(snapshot);
   const projectResearchIssues = snapshot.cards
     .filter((card) => card.path.startsWith("devflow/tree/00-project/")
       && !new RegExp(`^# ${card.number.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} Research: \\S`).test(card.text ?? ""))
@@ -2568,7 +2912,7 @@ function evaluateZones(snapshot) {
     path: "devflow/project/product.md",
     reason: "capability-rows-unparsed",
   }] : [];
-  const integrityItems = [...integrity(snapshot, verify), ...productCapabilityIssues, ...projectResearchIssues, ...landings.issues];
+  const integrityItems = [...integrity(snapshot, verify), ...productCapabilityIssues, ...projectResearchIssues, ...landings.issues, ...compatibleFeedback.issues];
   const blocking = integrityItems.filter((item) => item.blocking);
   const nonblocking = integrityItems.filter((item) => !item.blocking);
   const shapeAnomalies = [
@@ -2622,6 +2966,7 @@ function evaluateZones(snapshot) {
   for (const line of snapshot.journal.filter((item) => item.kind === "product-result")) addEntry(zones, "transition", "product-result", {
     path: "devflow/tree/verify.md", product: line.product, verification: line.verification, code: line.code, verdict: line.verdict, trigger: line.trigger,
   });
+  const invalidIntegration = snapshot.integration.configuration === "integration-not-a-ref";
   for (const line of snapshot.journal.filter((item) => ["evidence-wait", "evidence-finalizing"].includes(item.kind) && item.card)) {
     const card = snapshot.cards.find((candidate) => candidate.path === line.card);
     if (card?.claimant === snapshot.room?.id) addEntry(zones, "transition", "remote-evidence", {
@@ -2629,15 +2974,31 @@ function evaluateZones(snapshot) {
       state: line.kind,
       checkpoint: line.checkpoint,
       nextAction: line.kind === "evidence-wait" ? "run-check" : "finish-boundary",
+      ...(line.kind === "evidence-finalizing"
+        ? invalidIntegration
+          ? { blockedBy: "integration-config" }
+          : pendingCompatible(compatibleFeedback, line.card) ? { blockedBy: "compatible-feedback" } : {}
+        : {}),
     });
   }
   for (const card of snapshot.cards.filter((item) => item.claimant === snapshot.room?.id && finalTaskCommit(snapshot, item))) {
-    addEntry(zones, "transition", "finish-boundary", { card: card.path, case: "final-task-subject", ...boundaryFields(snapshot, card) });
+    addEntry(zones, "transition", "finish-boundary", {
+      card: card.path,
+      case: "final-task-subject",
+      ...boundaryFields(snapshot, card),
+      ...(invalidIntegration
+        ? { blockedBy: "integration-config" }
+        : pendingCompatible(compatibleFeedback, card.path) ? { blockedBy: "compatible-feedback" } : {}),
+    });
   }
   for (const move of claimDoneMoves(snapshot)) {
     const card = snapshot.cards.find((item) => item.path === move.path)
       ?? parseCard(snapshot.root, move.path, false);
-    addEntry(zones, "transition", "finish-boundary", { ...move, ...boundaryFields(snapshot, card, move.card) });
+    addEntry(zones, "transition", "finish-boundary", {
+      ...move,
+      ...boundaryFields(snapshot, card, move.card),
+      ...(invalidIntegration ? { blockedBy: "integration-config" } : {}),
+    });
   }
   for (const item of verify.eventRouting) addEntry(zones, "transition", "event-routing", item);
   for (const item of verify.eventDecision) addEntry(zones, "transition", "event-decision", item);
@@ -2648,6 +3009,10 @@ function evaluateZones(snapshot) {
   for (const line of snapshot.journal.filter((item) => item.kind === "product-rerun")) addEntry(zones, "marker", "product-rerun", { marker: line.raw, timestamp: line.timestamp });
   for (const line of landings.accepted) addEntry(zones, "marker", "knowledge-landing", {
     owner: line.owner, writer: line.writer, source: line.source, timestamp: line.timestamp,
+  });
+  for (const line of compatibleFeedback.accepted) addEntry(zones, "marker", "compatible-feedback", {
+    marker: line.raw, owner: line.owner, writer: line.writer, source: line.source,
+    coordinates: line.coordinates, coordinatesJson: line.coordinatesJson, landing: line.landing, timestamp: line.timestamp,
   });
   for (const entry of glossary.routes) addEntry(zones, "marker", "glossary-term", entry);
   for (const { form, ...entry } of design.routes) addEntry(zones, "marker", form === "open-item" ? "design-open-item" : "design-note", entry);
@@ -2660,11 +3025,13 @@ function evaluateZones(snapshot) {
   if (snapshot.productText !== null && readFile(snapshot.root, "devflow/project/glossary.md") === null) missing.push("devflow/project/glossary.md");
   if (snapshot.productText !== null && snapshot.archText === null) missing.push("devflow/project/arch.md");
   if (snapshot.productText !== null && readFile(snapshot.root, "devflow/project/code-style.md") === null) missing.push("devflow/project/code-style.md");
-  if (snapshot.productText === null) addEntry(zones, "setup", "no-product", { missing: ["devflow/project/product.md"] });
+  if (snapshot.productText === null && snapshot.devflowMembership.unmanaged) addEntry(zones, "setup", "unmanaged");
+  else if (snapshot.productText === null) addEntry(zones, "setup", "no-product", { missing: ["devflow/project/product.md"] });
   else if (missing.length > 0) addEntry(zones, "setup", "layer0-incomplete", { missing });
   else if (!snapshot.archFields.has("Brownfield")) addEntry(zones, "setup", "brownfield-field", { missing: ["Brownfield"] });
-  else if (!snapshot.archFields.has("integration") || !snapshot.archFields.has("merge")) addEntry(zones, "setup", "integration-config", {
+  else if (!snapshot.archFields.has("integration") || !snapshot.archFields.has("merge") || invalidIntegration) addEntry(zones, "setup", "integration-config", {
     missing: [!snapshot.archFields.has("integration") ? "integration" : null, !snapshot.archFields.has("merge") ? "merge" : null].filter(Boolean),
+    ...(invalidIntegration ? { reason: snapshot.integration.configuration } : {}),
     worktreeCount: snapshot.worktrees,
   });
   if (snapshot.cards.some((card) => card.bare) || readFile(snapshot.root, "devflow/HANDOFF.md") !== null) addEntry(zones, "setup", "room-upgrade", {
@@ -2855,6 +3222,7 @@ function evaluateZones(snapshot) {
     existingRequests: requests.map((line) => line.raw),
     findings: verify.findings,
     term: glossaryTermProjection(snapshot),
+    compatibleFeedback: { lifecycles: compatibleFeedback.lifecycles },
   };
   return { zones, facts, verify, integrityItems, changedOnBranch };
 }
@@ -2930,6 +3298,7 @@ function firstRoute(order, zones, treePresent) {
       if (!entry.kind) continue;
       const registered = ROUTE_RANK.get(`${definition.zone}.${entry.kind}`);
       if (registered.routing === false) continue;
+      if (entry.blockedBy) continue;
       if (!treePresent && registered.absent === null) continue;
       return `${definition.zone}.${entry.kind}`;
     }

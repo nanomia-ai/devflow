@@ -16,6 +16,10 @@ The structured state result has already validated marker grammar, writer, owner,
 
 Stop because adoption cannot safely replace the shared entry calculation.
 
+## guard: compatible-feedback-shape
+
+Block unless canonical state exposes an Adopt-owned marker for exactly the architecture owner or one exact capability design document, with a valid pending or satisfied landing state. Never broaden a capability target to the whole folder or infer its owner from review prose.
+
 ## guard: canonical-integrity-block
 
 Stop on canonical integrity failure; do not repair a journal or infer a marker locally.
@@ -40,6 +44,12 @@ Greenfield design-zone repair belongs to arch.
 
 Resume owns canonical routes outside adoption’s brownfield boundary.
 
+## stage: compatible-feedback
+
+Judgment: For a pending marker, edit only its exact owner and preserve the source provenance plus Background, Why/evidence, Conclusion, and implication; then wait for canonical replay. Delete only the byte-identical marker after state proves those values are present in that owner, and commit the exact owner diff with the journal deletion atomically before routing to Resume.
+
+Why: A superficial owner-file diff is insufficient, and every other owner's marker remains pending.
+
 ## stage: knowledge-landing
 
 Judgment: landing.mode is compact, recursive, partial-compact, or partial-recursive; select only valid marker owners that can be fully updated now.
@@ -48,7 +58,7 @@ Why: marker deletion is authorized only by the matching owner or K Source basis 
 
 ## stage: entry
 
-Judgment: entry.mode is initial, partial, glossary-only, capability-only, design-only, or none.
+Judgment: entry.mode is initial, partial, glossary-only, capability-only, design-only, or none. entry.status is pending until the selected entry reads are complete, then read.
 
 Why: a narrow repair must not reopen broad reverse derivation.
 

@@ -108,7 +108,7 @@ function legacyProduct(capabilities = []) {
   );
 }
 
-function arch({ brownfield = "yes", includeBrownfield = true, includeIntegration = true } = {}) {
+function arch({ brownfield = "yes", includeBrownfield = true, includeIntegration = true, integration = "main" } = {}) {
   return `# Architecture
 
 ${includeBrownfield ? `Brownfield: ${brownfield}\n` : ""}
@@ -129,7 +129,7 @@ frontend: none
 verify_channel:
   work server: node --test
   means: CLI
-${includeIntegration ? "integration: main\nmerge: merge-commit\n" : ""}`;
+${includeIntegration ? `integration: ${integration}\nmerge: merge-commit\n` : ""}`;
 }
 
 function baseline(number, name, designHead, overrides = {}) {
@@ -260,6 +260,20 @@ function makeRepo(t, options = {}) {
       write(root, `devflow/project/capabilities/${String(index + 2).padStart(2, "0")}-${options.capabilities[index]}.md`, baseline(index + 2, options.capabilities[index], designHead));
     }
     commit(root, "jmp arch — capabilities");
+  }
+  return root;
+}
+
+function makePlainRepo(t, { unborn = false } = {}) {
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "devflow-state-plain-")));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  git(root, "init", "-q", "-b", "main");
+  git(root, "config", "core.autocrlf", "false");
+  git(root, "config", "user.name", "Jmp");
+  git(root, "config", "user.email", "jmp@example.test");
+  if (!unborn) {
+    write(root, "seed.txt", "seed\n");
+    commit(root, "jmp seed");
   }
   return root;
 }
@@ -750,6 +764,9 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
     { name: "knowledge landing pending", head: "knowledge landing pending:", batch: "base",
       line: `${timestamp} knowledge landing pending: owner: devflow/project/capabilities/02-capability.md; writer: adopt; source-json: ${JSON.stringify(`${card}@${checkpoint}`)}`,
       zone: "marker", kind: "knowledge-landing", fragment: `source=${card}@${checkpoint}` },
+    { name: "compatible feedback pending", head: "compatible feedback pending:", batch: "base",
+      line: `${timestamp} compatible feedback pending: payload-json: ${JSON.stringify({ owner: "devflow/project/product.md", source: `${card}@${checkpoint}`, coordinates: { target: "devflow/project/product.md#Compatible boundary", background: "review observed reusable context", why: "evidence explains the durable choice", conclusion: "retain the compatible behavior", implication: "future work reuses this boundary" } })}`,
+      zone: "marker", kind: "compatible-feedback", fragment: "owner=devflow/project/product.md" },
   ];
   const invalid = [
     { name: "layer opening", head: "layer opening:", line: `${timestamp} layer opening: parent: devflow/tree; children: 02+03+04+05` },
@@ -767,12 +784,13 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
     { name: "evidence-wait", head: "evidence-wait:", line: `${timestamp} evidence-wait: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}` },
     { name: "evidence-finalizing", head: "evidence-finalizing:", line: `${timestamp} evidence-finalizing: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}` },
     { name: "knowledge landing pending", head: "knowledge landing pending:", line: `${timestamp} knowledge landing pending: malformed` },
+    { name: "compatible feedback pending", head: "compatible feedback pending:", line: `${timestamp} compatible feedback pending: malformed` },
   ];
 
   const uniqueSorted = (values) => [...new Set(values)].sort();
   const tableHeads = uniqueSorted(valid.map((item) => item.head));
-  assert.equal(valid.length, 17);
-  assert.equal(invalid.length, 15);
+  assert.equal(valid.length, 18);
+  assert.equal(invalid.length, 16);
   assert.deepEqual(uniqueSorted(invalid.map((item) => item.head)), tableHeads);
 
   const toolSource = fs.readFileSync(TOOL, "utf8");
@@ -828,7 +846,7 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
   const invalidOutput = await pendingInvalid;
   const item12 = invalidOutput.split(/\r?\n/)
     .filter((line) => line.startsWith("integrity: kind=blocking") && line.includes("item=12 "));
-  assert.equal(item12.length, 15, invalidOutput);
+  assert.equal(item12.length, 16, invalidOutput);
 
   for (const item of valid) {
     await t.test(`accepts ${item.name}`, () => {
@@ -922,7 +940,86 @@ test("T2 priority structure has one canonical array position per zone", async ()
   const module = await registry();
   assert.deepEqual(module.ZONE_DEFINITIONS.map((item) => item.zone), ROUTE_ZONES);
   assert.equal(new Set(module.ZONE_DEFINITIONS.map((item) => item.zone)).size, 14);
-  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 59);
+  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 61);
+});
+
+test("T2 unmanaged activation needs absent current, index, and proven full history", async (t) => {
+  const assertSetup = (root, kind) => {
+    const result = run(root);
+    ok(result);
+    assert.ok(hasKind(result.stdout, "setup", kind), `missing setup.${kind}\n${result.stdout}`);
+    assert.equal(nextOf(result.stdout), `setup.${kind}`, result.stdout);
+  };
+
+  await t.test("full-history ordinary repository is unmanaged", () => {
+    assertSetup(makePlainRepo(t), "unmanaged");
+  });
+
+  await t.test("unborn full-history repository is unmanaged", () => {
+    assertSetup(makePlainRepo(t, { unborn: true }), "unmanaged");
+  });
+
+  await t.test("current devflow path remains no-product", () => {
+    const root = makePlainRepo(t);
+    write(root, "devflow/partial.txt", "partial\n");
+    assertSetup(root, "no-product");
+  });
+
+  await t.test("indexed devflow path remains no-product when absent from the worktree", () => {
+    const root = makePlainRepo(t);
+    write(root, "devflow/partial.txt", "partial\n");
+    git(root, "add", "devflow/partial.txt");
+    fs.rmSync(path.join(root, "devflow"), { recursive: true, force: true });
+    assertSetup(root, "no-product");
+  });
+
+  await t.test("deleted historical devflow path remains no-product", () => {
+    const root = makePlainRepo(t);
+    write(root, "devflow/partial.txt", "partial\n");
+    commit(root, "jmp add devflow");
+    fs.rmSync(path.join(root, "devflow"), { recursive: true, force: true });
+    commit(root, "jmp remove devflow");
+    assertSetup(root, "no-product");
+  });
+
+  await t.test("empty shallow history is unknown and remains no-product", () => {
+    const root = makePlainRepo(t);
+    fs.writeFileSync(path.join(root, ".git", "shallow"), `${git(root, "rev-parse", "HEAD")}\n`, "utf8");
+    assertSetup(root, "no-product");
+  });
+
+  await t.test("failed history inspection remains no-product", () => {
+    const root = makePlainRepo(t);
+    write(root, ".git/refs/heads/broken", "not-an-object-id\n");
+    assert.notEqual(gitTry(root, "log", "-1", "--format=%H", "--all", "--", "devflow").status, 0);
+    assertSetup(root, "no-product");
+  });
+
+  await t.test("nested invocation resolves the ordinary repository root", () => {
+    const root = makePlainRepo(t);
+    const nested = path.join(root, "src", "deep");
+    fs.mkdirSync(nested, { recursive: true });
+    const result = run(nested);
+    ok(result);
+    assert.equal(nextOf(result.stdout), "setup.unmanaged", result.stdout);
+    assert.match(result.stdout, new RegExp(`root=${root.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+  });
+
+  await t.test("linked worktree sees devflow history on another current ref", () => {
+    const root = makePlainRepo(t);
+    const seed = git(root, "rev-parse", "HEAD");
+    write(root, "devflow/partial.txt", "partial\n");
+    commit(root, "jmp add devflow on main");
+    const linked = `${root}-linked`;
+    t.after(() => fs.rmSync(linked, { recursive: true, force: true }));
+    git(root, "worktree", "add", "-q", "-b", "plain-linked", linked, seed);
+    assertSetup(linked, "no-product");
+  });
+
+  const module = await registry();
+  assert.equal(module.selectFirstRoute(["setup.unmanaged", "git.open-operation"], false), "git.open-operation");
+  assert.equal(module.selectFirstRoute(["setup.unmanaged", "integrity.blocking"], false), "integrity.blocking");
+  assert.equal(module.selectFirstRoute(["setup.no-product", "setup.unmanaged"], false), "setup.unmanaged");
 });
 
 test("T2 priority selector uses the canonical array for every i less than j", async () => {
@@ -2314,9 +2411,9 @@ test("R5 digestLag parses no Git output before that command's status is checked"
     "output outside Git's grammar is a bounded fact, not a count");
 });
 
-test("R5 an unresolved integration ref is unavailable, not a count against local HEAD", (t) => {
+test("R5 an unresolved integration ref is unavailable, not a count against local HEAD", async (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/project/arch.md", arch().replace("integration: main", "integration: never-created"));
+  write(root, "devflow/project/arch.md", arch({ integration: "never-created" }));
   write(root, "devflow/users/jmp/digest.md", "none\n");
   otherCommit(root, "other change");
   const result = run(root); ok(result);
@@ -2325,6 +2422,103 @@ test("R5 an unresolved integration ref is unavailable, not a count against local
   assertFragment(result.stdout, "ready: kind=digest-behind", "reason=integration-ref-unresolved");
   assertNoFragment(result.stdout, "ready: kind=digest-behind", "behind=");
   assertNoFragment(result.stdout, "ready: kind=digest-behind", "others=");
+  const module = await registry();
+  const state = await module.calculateState({ root });
+  assert.deepEqual(state.metadata.integration, {
+    branch: "never-created",
+    ref: "never-created",
+    hash: null,
+    networkNeeded: true,
+    configuration: "valid",
+  });
+});
+
+test("C integration configuration routes malformed local prose to its existing Arch repair owner", async (t) => {
+  const module = await registry();
+  const setupEntry = (state) => state.zones.setup.entries.find((entry) => entry.kind === "integration-config");
+
+  await t.test("current-branch prose is a repair cause, not HEAD or a network wait", async () => {
+    const root = makeRepo(t);
+    const configured = "current branch `main` (one worktree)";
+    write(root, "devflow/project/arch.md", arch({ integration: configured }));
+    const state = await module.calculateState({ root });
+    assert.equal(state.route.id, "setup.integration-config");
+    assert.deepEqual(state.metadata.integration, {
+      branch: configured,
+      ref: configured,
+      hash: null,
+      networkNeeded: false,
+      configuration: "integration-not-a-ref",
+    });
+    assert.equal(setupEntry(state)?.reason, "integration-not-a-ref");
+    assert.deepEqual(setupEntry(state)?.missing, []);
+  });
+
+  await t.test("one-worktree none prose uses the same machine classification", async () => {
+    const root = makeRepo(t);
+    write(root, "devflow/project/arch.md", arch({ integration: "none (single component, nothing to integrate)" }));
+    const state = await module.calculateState({ root });
+    assert.equal(state.route.id, "setup.integration-config");
+    assert.equal(state.metadata.integration.configuration, "integration-not-a-ref");
+    assert.equal(setupEntry(state)?.reason, "integration-not-a-ref");
+  });
+
+  await t.test("the bare current branch still collapses to integrated HEAD", async () => {
+    const root = makeRepo(t);
+    const head = git(root, "rev-parse", "HEAD");
+    const state = await module.calculateState({ root });
+    assert.deepEqual(state.metadata.integration, {
+      branch: "main",
+      ref: "HEAD",
+      hash: head,
+      networkNeeded: false,
+      configuration: "valid",
+    });
+    assert.equal(state.zones.setup.entries.some((entry) => entry.kind === "integration-config"), false);
+  });
+
+  await t.test("missing integration and merge fields keep their existing repair shape", async () => {
+    const integrationMissing = makeRepo(t);
+    write(integrationMissing, "devflow/project/arch.md", arch().replace("integration: main\n", ""));
+    let state = await module.calculateState({ root: integrationMissing });
+    assert.equal(state.route.id, "setup.integration-config");
+    assert.deepEqual(setupEntry(state)?.missing, ["integration"]);
+    assert.equal(Object.hasOwn(setupEntry(state), "reason"), false);
+    assert.equal(state.metadata.integration.configuration, "missing");
+
+    const mergeMissing = makeRepo(t);
+    write(mergeMissing, "devflow/project/arch.md", arch().replace("merge: merge-commit\n", ""));
+    state = await module.calculateState({ root: mergeMissing });
+    assert.equal(state.route.id, "setup.integration-config");
+    assert.deepEqual(setupEntry(state)?.missing, ["merge"]);
+    assert.equal(Object.hasOwn(setupEntry(state), "reason"), false);
+    assert.equal(state.metadata.integration.configuration, "valid");
+  });
+
+  await t.test("same-card finish and evidence-finalizing boundaries stand down for repair", async () => {
+    const root = makeRepo(t, { brownfield: "no" });
+    write(root, "devflow/project/arch.md", arch({ brownfield: "no", integration: "current branch `main` (one worktree)" }));
+    commit(root, "jmp arch fixture invalid integration");
+    const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+    const check = "https://example.test/check";
+    const waiting = `2026-08-29T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: unrun; detail-json: ""`;
+    write(root, card, cardText("02.1", { progress: waiting }));
+    const checkpoint = commit(root, "jmp 02.1 wip: evidence-wait");
+    const passed = `2026-08-29T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: pass; detail-json: ${JSON.stringify("passed")}`;
+    write(root, card, cardText("02.1", { progress: `${passed}\n2026-08-29T00:01:00Z carry: remote evidence passed` }));
+    const transport = `evidence-finalizing: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify(check)}`;
+    write(root, "devflow/journal.md", `2026-08-29T00:02:00Z ${transport}\n`);
+    commit(root, "jmp 02.1 fixture card");
+
+    const state = await module.calculateState({ root });
+    const remote = state.zones.transition.entries.find((entry) => entry.kind === "remote-evidence"
+      && entry.state === "evidence-finalizing" && entry.path === card);
+    const boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary"
+      && entry.case === "final-task-subject" && entry.card === card);
+    assert.equal(remote?.blockedBy, "integration-config");
+    assert.equal(boundary?.blockedBy, "integration-config");
+    assert.equal(state.route.id, "setup.integration-config");
+  });
 });
 
 test("R6 final-task boundary reports missing carry and claim exposes carry absence", (t) => {
@@ -2359,6 +2553,73 @@ test("R6 a final carry line makes boundary completeness explicit", (t) => {
   assertFragment(result.stdout, "claim: kind=mine", "signal=pass");
   assertFragment(result.stdout, "claim: kind=mine", "reviews=1");
   assertFragment(result.stdout, "claim: kind=mine", "review=pass");
+});
+
+test("R6 a later review line does not retract an earlier valid carry", (t) => {
+  const root = makeRepo(t);
+  const head = "a".repeat(40);
+  const card = writeClaim(root, {
+    commitSubject: "jmp 02.1 fixture card",
+    progress: [
+      `2026-08-20T00:00:10Z completion signal result: head: ${head}; verdict: pass; detail-json: ""`,
+      "2026-08-20T00:01:00Z carry: exact trap",
+    ].join("\n"),
+  });
+  fs.appendFileSync(path.join(root, ...card.split("/")), `2026-08-20T00:02:00Z review result: head: ${head}; verdict: pass; detail-json: ""\n`, "utf8");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "claim: kind=mine", "carry=present");
+  assertFragment(result.stdout, "transition: kind=finish-boundary", 'missing=["review"]');
+  assertFragment(result.stdout, "integrity:", "shape=0");
+});
+
+test("R6 a later completion result does not retract an earlier valid carry", (t) => {
+  const root = makeRepo(t);
+  const head = "a".repeat(40);
+  const card = writeClaim(root, {
+    commitSubject: "jmp 02.1 fixture card",
+    review: "waived",
+    progress: "2026-08-20T00:01:00Z carry: exact trap",
+  });
+  fs.appendFileSync(path.join(root, ...card.split("/")), `2026-08-20T00:02:00Z completion signal result: head: ${head}; verdict: pass; detail-json: ""\n`, "utf8");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "claim: kind=mine", "carry=present");
+  assertFragment(result.stdout, "claim: kind=mine", "signal=pass");
+  assertFragment(result.stdout, "transition: kind=finish-boundary", "missing=[]");
+});
+
+test("R6 a malformed later carry line does not mask an earlier valid carry", (t) => {
+  const root = makeRepo(t);
+  const head = "a".repeat(40);
+  const card = writeClaim(root, {
+    commitSubject: "jmp 02.1 fixture card",
+    progress: [
+      `2026-08-20T00:00:10Z completion signal result: head: ${head}; verdict: pass; detail-json: ""`,
+      `2026-08-20T00:00:20Z review result: head: ${head}; verdict: pass; detail-json: ""`,
+      "2026-08-20T00:01:00Z carry: exact trap",
+      "2026-08-20T00:02:00Z carry:",
+    ].join("\n"),
+  });
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "claim: kind=mine", `path=${card}`);
+  assertFragment(result.stdout, "claim: kind=mine", "carry=present");
+  assertFragment(result.stdout, "transition: kind=finish-boundary", "missing=[]");
+  assertFragment(result.stdout, "integrity:", "shape=1");
+  assertFragment(result.stdout, "integrity:", "blocking=0");
+  assertFragment(result.stdout, "integrity: kind=shape", "detail=progress-format:carry:");
+});
+
+test("R6 committed and uncommitted valid carry lines are both visible", (t) => {
+  const root = makeRepo(t);
+  const card = writeClaim(root, {
+    commitSubject: "jmp 02.1 wip: implementing",
+    progress: "2026-08-20T00:00:00Z implementation complete",
+  });
+  fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-20T00:01:00Z carry: exact trap\n", "utf8");
+  const uncommitted = run(root); ok(uncommitted);
+  assertFragment(uncommitted.stdout, "claim: kind=mine", "carry=present");
+  commit(root, "jmp 02.1 fixture card");
+  const committed = run(root); ok(committed);
+  assertFragment(committed.stdout, "claim: kind=mine", "carry=present");
 });
 
 test("R7 one recognizer covers every canon-fixed progress head", (t) => {
@@ -2476,12 +2737,28 @@ test("R6 capability closure projects only non-none carry facts", (t) => {
   const root = makeRepo(t, { capabilities: ["capability"] });
   const first = "devflow/tree/02-capability/02.1-first.done.md";
   const second = "devflow/tree/02-capability/02.2-second.done.md";
-  write(root, first, cardText("02.1", { progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: exact trap" }));
+  write(root, first, cardText("02.1", { progress: `2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: exact trap\n2026-08-20T00:02:00Z review result: head: ${"a".repeat(40)}; verdict: pass; detail-json: ""` }));
   write(root, second, cardText("02.2", { progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: none" }));
   commit(root, "jmp completed capability children");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "layer: kind=children-done", "carry=1");
   assertFragment(result.stdout, "layer: kind=children-done", `carryFacts=[{\"card\":\"${first}\",\"fact\":\"exact trap\"}]`);
+});
+
+test("R6 capability closure uses the last valid carry-kind fact", (t) => {
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  const card = "devflow/tree/02-capability/02.1-first.done.md";
+  write(root, card, cardText("02.1", { progress: [
+    "2026-08-20T00:00:00Z implemented",
+    "2026-08-20T00:01:00Z carry: superseded trap",
+    "2026-08-20T00:02:00Z review result: head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass; detail-json: \"\"",
+    "2026-08-20T00:03:00Z carry: current trap",
+  ].join("\n") }));
+  commit(root, "jmp completed capability children");
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "layer: kind=children-done", "carry=1");
+  assertFragment(result.stdout, "layer: kind=children-done", `carryFacts=[{\"card\":\"${card}\",\"fact\":\"current trap\"}]`);
+  assertNoFragment(result.stdout, "layer: kind=children-done", "superseded trap");
 });
 
 test("R6 capability closure includes carry facts from done cards below promoted subfolders", (t) => {
@@ -3569,6 +3846,503 @@ function researchSource(root, number = "00.1") {
 function knowledgeLanding(owner, writer, source, timestamp = "2026-08-29T01:00:00Z") {
   return `${timestamp} knowledge landing pending: owner: ${owner}; writer: ${writer}; source-json: ${JSON.stringify(source)}`;
 }
+
+function compatibleCoordinates(owner, suffix = "") {
+  return {
+    target: `${owner}#Compatible boundary${suffix}`,
+    background: `review observed reusable context${suffix}`,
+    why: `evidence explains the durable choice${suffix}`,
+    conclusion: `retain the compatible behavior${suffix}`,
+    implication: `future work reuses this boundary${suffix}`,
+  };
+}
+
+function compatibleFeedback(owner, source, coordinates = compatibleCoordinates(owner), timestamp = "2026-08-29T01:00:00Z") {
+  return `${timestamp} compatible feedback pending: payload-json: ${JSON.stringify({ owner, source, coordinates })}`;
+}
+
+function landCompatibleOwner(root, owner, source, coordinates) {
+  const heading = coordinates.target.slice(owner.length + 1);
+  write(root, owner, `${read(root, owner)}\n## ${heading}\n${coordinates.background}\n${coordinates.why}\n${coordinates.conclusion}\n${coordinates.implication}\nSource: ${source}\n`);
+}
+
+async function stableCompatibleState(module, root) {
+  const first = await module.calculateState({ root });
+  const second = await module.calculateState({ root });
+  assert.deepEqual(second.facts.compatibleFeedback, first.facts.compatibleFeedback);
+  assert.deepEqual(
+    second.zones.integrity.entries.filter((entry) => entry.item === "compatible-feedback"),
+    first.zones.integrity.entries.filter((entry) => entry.item === "compatible-feedback"),
+  );
+  return first;
+}
+
+test("compatible feedback: a card's own marker outranks its finish boundary", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-spaced fixture.wip-jmp.md";
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: compatible review")}`;
+  write(root, "devflow/journal.md", `${compatibleFeedback("devflow/project/arch.md", source)}\n`);
+  fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:01:00Z compatible feedback recorded\n", "utf8");
+  commit(root, "jmp 02.1 fixture card");
+
+  const module = await registry();
+  const state = await module.calculateState({ root });
+  const boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary"
+    && entry.case === "final-task-subject" && entry.card === card);
+  assert.equal(boundary?.blockedBy, "compatible-feedback");
+  assert.equal(state.route.id, "marker.compatible-feedback");
+});
+
+test("compatible feedback: another card's marker does not block this card's finish boundary", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const sourceCard = "devflow/tree/02-capability/02.1-source.wip-jmp.md";
+  const currentCard = "devflow/tree/02-capability/02.2-current.wip-jmp.md";
+  write(root, sourceCard, cardText("02.1"));
+  write(root, currentCard, cardText("02.2"));
+  const source = `${sourceCard}@${commit(root, "jmp compatible source cards")}`;
+  write(root, "devflow/journal.md", `${compatibleFeedback("devflow/project/arch.md", source)}\n`);
+  fs.appendFileSync(path.join(root, ...currentCard.split("/")), "2026-08-29T01:01:00Z final task state\n", "utf8");
+  commit(root, "jmp 02.2 fixture card");
+
+  const module = await registry();
+  const state = await module.calculateState({ root });
+  const boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary"
+    && entry.case === "final-task-subject" && entry.card === currentCard);
+  assert.ok(boundary);
+  assert.equal(Object.hasOwn(boundary, "blockedBy"), false);
+  assert.equal(state.route.id, "transition.finish-boundary");
+});
+
+test("compatible feedback: the boundary returns when the last owner marker is consumed", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const archOwner = "devflow/project/arch.md";
+  const designOwner = "devflow/project/design.md";
+  write(root, designOwner, "# Design\n\nFixture design.\n");
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: compatible review")}`;
+  const archCoordinates = compatibleCoordinates(archOwner, " arch");
+  const designCoordinates = compatibleCoordinates(designOwner, " design");
+  const archMarker = compatibleFeedback(archOwner, source, archCoordinates);
+  const designMarker = compatibleFeedback(designOwner, source, designCoordinates, "2026-08-29T01:01:00Z");
+  write(root, "devflow/journal.md", `${archMarker}\n${designMarker}\n`);
+  fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:02:00Z compatible feedback recorded\n", "utf8");
+  commit(root, "jmp 02.1 fixture card");
+
+  const land = (owner, coordinates) => {
+    const heading = coordinates.target.slice(owner.length + 1);
+    write(root, owner, `${read(root, owner)}\n## ${heading}\n${coordinates.background}\n${coordinates.why}\n${coordinates.conclusion}\n${coordinates.implication}\nSource: ${source}\n`);
+  };
+  const module = await registry();
+
+  land(archOwner, archCoordinates);
+  write(root, "devflow/journal.md", `${designMarker}\n`);
+  commit(root, "jmp arch: land one compatible owner");
+  let state = await module.calculateState({ root });
+  let boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary"
+    && entry.case === "final-task-subject" && entry.card === card);
+  assert.equal(boundary?.blockedBy, "compatible-feedback");
+  assert.equal(state.route.id, "marker.compatible-feedback");
+  assert.deepEqual(Object.fromEntries(state.facts.compatibleFeedback.lifecycles.map((item) => [item.identity, item.state])), {
+    [JSON.stringify({ owner: archOwner, source, coordinates: archCoordinates })]: "consumed",
+    [JSON.stringify({ owner: designOwner, source, coordinates: designCoordinates })]: "current",
+  });
+
+  land(designOwner, designCoordinates);
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp design: land last compatible owner");
+  state = await module.calculateState({ root });
+  boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary"
+    && entry.case === "final-task-subject" && entry.card === card);
+  assert.ok(boundary);
+  assert.equal(Object.hasOwn(boundary, "blockedBy"), false);
+  assert.equal(state.route.id, "transition.finish-boundary");
+  assert.deepEqual(Object.fromEntries(state.facts.compatibleFeedback.lifecycles.map((item) => [item.identity, item.state])), {
+    [JSON.stringify({ owner: archOwner, source, coordinates: archCoordinates })]: "consumed",
+    [JSON.stringify({ owner: designOwner, source, coordinates: designCoordinates })]: "consumed",
+  });
+  const distinct = { owner: archOwner, source, coordinates: compatibleCoordinates(archOwner, " revised") };
+  assert.equal(state.facts.compatibleFeedback.lifecycles.some((item) => item.identity === JSON.stringify(distinct)), false);
+});
+
+test("compatible feedback: first-set history blocks later card OID and coordinate paraphrase", async (t) => {
+  const exercise = async (fixture, kind) => {
+    const root = makeRepo(fixture, { brownfield: "no" });
+    const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+    const owner = "devflow/project/arch.md";
+    write(root, card, cardText("02.1"));
+    const sealSource = `${card}@${commit(root, "jmp 02.1 wip: compatible review")}`;
+    const coordinates = compatibleCoordinates(owner, " sealed");
+    write(root, "devflow/journal.md", `${compatibleFeedback(owner, sealSource, coordinates)}\n`);
+    fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:01:00Z compatible feedback recorded\n", "utf8");
+    const taskOid = commit(root, "jmp 02.1 fixture card");
+
+    const heading = coordinates.target.slice(owner.length + 1);
+    write(root, owner, `${read(root, owner)}\n## ${heading}\n${coordinates.background}\n${coordinates.why}\n${coordinates.conclusion}\n${coordinates.implication}\nSource: ${sealSource}\n`);
+    write(root, "devflow/journal.md", "");
+    commit(root, "jmp arch: land sealed compatible owner");
+
+    const module = await registry();
+    const baseline = await module.calculateState({ root });
+    const boundary = baseline.zones.transition.entries.find((entry) => entry.kind === "finish-boundary"
+      && entry.case === "final-task-subject" && entry.card === card);
+    assert.ok(boundary);
+    assert.equal(Object.hasOwn(boundary, "blockedBy"), false);
+    assert.deepEqual(baseline.facts.compatibleFeedback.lifecycles, [{
+      identity: JSON.stringify({ owner, source: sealSource, coordinates }),
+      state: "consumed",
+      entry: { owner, source: sealSource, coordinates },
+    }]);
+
+    const laterSource = kind === "card-oid" ? `${card}@${taskOid}` : sealSource;
+    const laterCoordinates = kind === "coordinate-paraphrase"
+      ? compatibleCoordinates(owner, " paraphrased")
+      : coordinates;
+    write(root, "devflow/journal.md", `${compatibleFeedback(owner, laterSource, laterCoordinates, "2026-08-29T02:00:00Z")}\n`);
+    commit(root, `jmp boundary: reject later compatible ${kind}`);
+
+    const blocked = await module.calculateState({ root });
+    assert.ok(blocked.zones.integrity.entries.some((entry) => entry.reason === "compatible-feedback-set-reopened"));
+    assert.equal(blocked.zones.marker.entries.some((entry) => entry.kind === "compatible-feedback"), false);
+    assert.deepEqual(blocked.facts.compatibleFeedback.lifecycles, baseline.facts.compatibleFeedback.lifecycles);
+    assert.equal(read(root, owner).split(`Source: ${sealSource}`).length - 1, 1);
+
+    const replay = await module.calculateState({ root });
+    assert.deepEqual(replay.facts.compatibleFeedback, blocked.facts.compatibleFeedback);
+    assert.deepEqual(
+      replay.zones.integrity.entries.filter((entry) => entry.item === "compatible-feedback"),
+      blocked.zones.integrity.entries.filter((entry) => entry.item === "compatible-feedback"),
+    );
+  };
+
+  await t.test("later OID for the same card", async (fixture) => exercise(fixture, "card-oid"));
+  await t.test("later coordinate paraphrase for the same card", async (fixture) => exercise(fixture, "coordinate-paraphrase"));
+});
+
+test("compatible feedback: an exact consumed member reintroduced later is a reopen, not current work", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = "devflow/project/arch.md";
+  const coordinates = compatibleCoordinates(owner, " exact replay");
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: compatible exact replay")}`;
+  const marker = compatibleFeedback(owner, source, coordinates);
+  write(root, "devflow/journal.md", `${marker}\n`);
+  fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:01:00Z compatible feedback recorded\n", "utf8");
+  commit(root, "jmp 02.1 fixture card");
+  landCompatibleOwner(root, owner, source, coordinates);
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp arch: consume exact compatible member");
+
+  const module = await registry();
+  const baseline = await stableCompatibleState(module, root);
+  assert.equal(baseline.facts.compatibleFeedback.lifecycles[0]?.state, "consumed");
+
+  write(root, "devflow/journal.md", `${marker}\n`);
+  commit(root, "jmp boundary: replay exact compatible member");
+  const replay = await stableCompatibleState(module, root);
+  assert.ok(replay.zones.integrity.entries.some((entry) => entry.reason === "compatible-feedback-member-reopened"));
+  assert.equal(replay.zones.marker.entries.some((entry) => entry.kind === "compatible-feedback"), false);
+  assert.deepEqual(replay.facts.compatibleFeedback.lifecycles, baseline.facts.compatibleFeedback.lifecycles);
+});
+
+test("compatible feedback: a malformed third member defers the whole set until the after-state is acceptable", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owners = ["devflow/project/arch.md", "devflow/project/design.md", "devflow/project/product.md"];
+  write(root, "devflow/project/design.md", "# Design\n\nFixture design.\n");
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: compatible three-owner review")}`;
+  const coordinates = owners.map((owner, index) => compatibleCoordinates(owner, ` member ${index + 1}`));
+  const valid = owners.map((owner, index) => compatibleFeedback(owner, source, coordinates[index], `2026-08-29T01:0${index}:00Z`));
+  const malformedCoordinates = { ...coordinates[2] };
+  delete malformedCoordinates.implication;
+  const malformed = compatibleFeedback(owners[2], source, malformedCoordinates, "2026-08-29T01:02:00Z");
+  write(root, "devflow/journal.md", `${valid[0]}\n${valid[1]}\n${malformed}\n`);
+  fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:03:00Z compatible feedback recorded\n", "utf8");
+  commit(root, "jmp 02.1 fixture card");
+
+  const module = await registry();
+  let state = await stableCompatibleState(module, root);
+  assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-coordinates-shape"));
+  assert.equal(state.zones.marker.entries.some((entry) => entry.kind === "compatible-feedback"), false);
+  assert.deepEqual(state.facts.compatibleFeedback.lifecycles, []);
+
+  write(root, "devflow/journal.md", `${valid.join("\n")}\n`);
+  commit(root, "jmp boundary: correct compatible three-owner set");
+  state = await stableCompatibleState(module, root);
+  assert.equal(state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").length, 3);
+  assert.equal(state.facts.compatibleFeedback.lifecycles.length, 3);
+
+  owners.forEach((owner, index) => landCompatibleOwner(root, owner, source, coordinates[index]));
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp boundary: consume compatible three-owner set");
+  state = await stableCompatibleState(module, root);
+  const boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary" && entry.card === card);
+  assert.ok(boundary);
+  assert.equal(Object.hasOwn(boundary, "blockedBy"), false);
+  assert.ok(state.facts.compatibleFeedback.lifecycles.every((entry) => entry.state === "consumed"));
+});
+
+test("compatible feedback: mixed source revisions remain correctable and report one current mismatch", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const archOwner = "devflow/project/arch.md";
+  const designOwner = "devflow/project/design.md";
+  write(root, "devflow/project/design.md", "# Design\n\nFixture design.\n");
+  write(root, card, cardText("02.1"));
+  const firstSource = `${card}@${commit(root, "jmp 02.1 wip: first compatible revision")}`;
+  fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T00:01:00Z later source revision\n", "utf8");
+  const secondSource = `${card}@${commit(root, "jmp 02.1 wip: second compatible revision")}`;
+  const archCoordinates = compatibleCoordinates(archOwner, " mixed arch");
+  const designCoordinates = compatibleCoordinates(designOwner, " mixed design");
+  const archMarker = compatibleFeedback(archOwner, firstSource, archCoordinates);
+  const mixedDesignMarker = compatibleFeedback(designOwner, secondSource, designCoordinates, "2026-08-29T01:01:00Z");
+  write(root, "devflow/journal.md", `${archMarker}\n${mixedDesignMarker}\n`);
+  fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:02:00Z compatible feedback recorded\n", "utf8");
+  commit(root, "jmp 02.1 fixture card");
+
+  const module = await registry();
+  let state = await stableCompatibleState(module, root);
+  assert.equal(state.zones.integrity.entries.filter((entry) => entry.reason === "compatible-feedback-set-source-mismatch").length, 1);
+  assert.equal(state.zones.marker.entries.some((entry) => entry.kind === "compatible-feedback"), false);
+  assert.deepEqual(state.facts.compatibleFeedback.lifecycles, []);
+
+  const designMarker = compatibleFeedback(designOwner, firstSource, designCoordinates, "2026-08-29T01:01:00Z");
+  write(root, "devflow/journal.md", `${archMarker}\n${designMarker}\n`);
+  commit(root, "jmp boundary: align compatible source revision");
+  state = await stableCompatibleState(module, root);
+  assert.equal(state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").length, 2);
+
+  landCompatibleOwner(root, archOwner, firstSource, archCoordinates);
+  landCompatibleOwner(root, designOwner, firstSource, designCoordinates);
+  write(root, "devflow/journal.md", "");
+  commit(root, "jmp boundary: consume aligned compatible set");
+  state = await stableCompatibleState(module, root);
+  const boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary" && entry.card === card);
+  assert.ok(boundary);
+  assert.equal(Object.hasOwn(boundary, "blockedBy"), false);
+});
+
+test("compatible feedback: one owner using two revisions of the same card is duplicate ownership", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = "devflow/project/arch.md";
+  write(root, card, cardText("02.1"));
+  const firstSource = `${card}@${commit(root, "jmp 02.1 wip: first duplicate revision")}`;
+  fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T00:01:00Z second duplicate revision\n", "utf8");
+  const secondSource = `${card}@${commit(root, "jmp 02.1 wip: second duplicate revision")}`;
+  const first = compatibleFeedback(owner, firstSource, compatibleCoordinates(owner, " duplicate first"));
+  const second = compatibleFeedback(owner, secondSource, compatibleCoordinates(owner, " duplicate second"), "2026-08-29T01:01:00Z");
+  write(root, "devflow/journal.md", `${first}\n${second}\n`);
+  commit(root, "jmp boundary: duplicate compatible owner");
+
+  const module = await registry();
+  const state = await stableCompatibleState(module, root);
+  assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-owner-source-duplicate"));
+  assert.equal(state.zones.marker.entries.some((entry) => entry.kind === "compatible-feedback"), false);
+  assert.deepEqual(state.facts.compatibleFeedback.lifecycles, []);
+});
+
+test("compatible feedback: an unattributable malformed line defers another card's first seal", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = "devflow/project/arch.md";
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: attributable compatible review")}`;
+  const marker = compatibleFeedback(owner, source);
+  const malformed = "2026-08-29T01:01:00Z compatible feedback pending: payload-json: {";
+  write(root, "devflow/journal.md", `${marker}\n${malformed}\n`);
+  commit(root, "jmp boundary: malformed compatible neighbor");
+
+  const module = await registry();
+  let state = await stableCompatibleState(module, root);
+  assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-payload-json"));
+  assert.equal(state.zones.marker.entries.some((entry) => entry.kind === "compatible-feedback"), false);
+  assert.deepEqual(state.facts.compatibleFeedback.lifecycles, []);
+
+  write(root, "devflow/journal.md", `${marker}\n`);
+  commit(root, "jmp boundary: remove malformed compatible neighbor");
+  state = await stableCompatibleState(module, root);
+  assert.equal(state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").length, 1);
+  assert.equal(state.facts.compatibleFeedback.lifecycles.length, 1);
+});
+
+test("compatible feedback: a missing allowed owner stays unsealed until the owner appears", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = "devflow/project/capabilities/02-missing.md";
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: missing-owner compatible review")}`;
+  const marker = compatibleFeedback(owner, source);
+  write(root, "devflow/journal.md", `${marker}\n`);
+  commit(root, "jmp boundary: missing compatible owner");
+
+  const module = await registry();
+  let state = await stableCompatibleState(module, root);
+  assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-owner-unresolved"));
+  assert.equal(state.zones.marker.entries.some((entry) => entry.kind === "compatible-feedback"), false);
+  assert.deepEqual(state.facts.compatibleFeedback.lifecycles, []);
+
+  write(root, owner, "# Capability 02\n\nCompatible owner.\n");
+  state = await stableCompatibleState(module, root);
+  assert.equal(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-owner-unresolved"), false);
+  assert.equal(state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").length, 1);
+  assert.equal(state.facts.compatibleFeedback.lifecycles.length, 1);
+});
+
+test("compatible feedback: an undecodable HEAD blocks comparison without fabricating a reopen", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = "devflow/project/arch.md";
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: undecodable-head review")}`;
+  const marker = compatibleFeedback(owner, source);
+  write(root, "devflow/journal.md", `${marker}\n`);
+  commit(root, "jmp boundary: seal compatible marker before undecodable head");
+  fs.writeFileSync(path.join(root, "devflow", "journal.md"), Buffer.concat([Buffer.from(`${marker}\n`, "utf8"), Buffer.from([0xff])]));
+  commit(root, "jmp boundary: undecodable compatible head");
+  write(root, "devflow/journal.md", `${marker}\n`);
+
+  const module = await registry();
+  const state = await stableCompatibleState(module, root);
+  const related = state.zones.integrity.entries.filter((entry) => entry.item === "compatible-feedback");
+  assert.deepEqual(related.map((entry) => entry.reason), ["compatible-head-undecodable"]);
+  assert.equal(related.some((entry) => ["compatible-feedback-member-reopened", "compatible-feedback-set-reopened"].includes(entry.reason)), false);
+});
+
+test("compatible feedback: remote finalizing stands down while evidence-wait stays routable", async (t) => {
+  const setup = (kind) => {
+    const root = makeRepo(t, { brownfield: "no" });
+    const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+    const check = "https://example.test/check";
+    const waiting = `2026-08-29T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: unrun; detail-json: ""`;
+    write(root, card, cardText("02.1", { progress: waiting }));
+    const checkpoint = commit(root, "jmp 02.1 wip: evidence-wait");
+    const transport = `${kind}: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify(check)}`;
+    if (kind === "evidence-finalizing") {
+      const passed = `2026-08-29T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: pass; detail-json: ${JSON.stringify("passed")}`;
+      write(root, card, cardText("02.1", { progress: `${passed}\n2026-08-29T00:01:00Z carry: remote evidence passed` }));
+    }
+    write(root, "devflow/journal.md", `2026-08-29T00:02:00Z ${transport}\n${compatibleFeedback("devflow/project/arch.md", `${card}@${checkpoint}`)}\n`);
+    commit(root, kind === "evidence-finalizing" ? "jmp 02.1 fixture card" : "jmp boundary: evidence wait with compatible feedback");
+    return { root, card };
+  };
+  const module = await registry();
+
+  const finalizing = setup("evidence-finalizing");
+  let state = await module.calculateState({ root: finalizing.root });
+  let remote = state.zones.transition.entries.find((entry) => entry.kind === "remote-evidence"
+    && entry.state === "evidence-finalizing" && entry.path === finalizing.card);
+  assert.equal(remote?.blockedBy, "compatible-feedback");
+  assert.equal(state.route.id, "marker.compatible-feedback");
+
+  const waiting = setup("evidence-wait");
+  state = await module.calculateState({ root: waiting.root });
+  remote = state.zones.transition.entries.find((entry) => entry.kind === "remote-evidence"
+    && entry.state === "evidence-wait" && entry.path === waiting.card);
+  assert.ok(remote);
+  assert.equal(Object.hasOwn(remote, "blockedBy"), false);
+  assert.equal(state.route.id, "transition.remote-evidence");
+});
+
+test("compatible feedback grammar preserves escaped coordinates, closed ownership, and deterministic multiple markers", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const source = researchSource(root);
+  const archOwner = "devflow/project/arch.md";
+  const productOwner = "devflow/project/product.md";
+  const escaped = compatibleCoordinates(archOwner, `; quote \" exact`);
+  const archMarker = compatibleFeedback(archOwner, source.source, escaped);
+  const productMarker = compatibleFeedback(productOwner, source.source, compatibleCoordinates(productOwner), "2026-08-29T01:01:00Z");
+  write(root, "devflow/journal.md", `${productMarker}\n${archMarker}\n`);
+  commit(root, "jmp boundary: compatible feedback set");
+
+  const module = await registry();
+  let state = await module.calculateState({ root });
+  assert.equal(state.route.id, "marker.compatible-feedback");
+  const markers = state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback");
+  assert.deepEqual(markers.map((entry) => entry.owner), [archOwner, productOwner]);
+  assert.equal(markers[0].writer, "arch");
+  assert.equal(markers[0].coordinates.implication, escaped.implication);
+  assert.equal(markers[0].landing, "pending");
+
+  const malformed = compatibleFeedback(archOwner, source.source, { target: escaped.target, background: escaped.background, why: escaped.why, conclusion: escaped.conclusion });
+  write(root, "devflow/journal.md", `${malformed}\n`);
+  state = await module.calculateState({ root });
+  assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-coordinates-shape"));
+
+  write(root, "devflow/journal.md", `${compatibleFeedback("devflow/project/other.md", source.source, compatibleCoordinates("devflow/project/other.md"))}\n`);
+  state = await module.calculateState({ root });
+  assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-owner"));
+
+  const unknownWriter = makeRepo(t, { includeBrownfield: false });
+  const unknownSource = researchSource(unknownWriter);
+  write(unknownWriter, "devflow/journal.md", `${compatibleFeedback(archOwner, unknownSource.source)}\n`);
+  commit(unknownWriter, "jmp boundary: compatible writer unknown");
+  state = await module.calculateState({ root: unknownWriter });
+  assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-writer-unresolved"));
+});
+
+test("compatible feedback semantic replay rejects superficial diff and proves exact owner landing", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const source = researchSource(root);
+  const owner = "devflow/project/arch.md";
+  const coordinates = compatibleCoordinates(owner);
+  const marker = compatibleFeedback(owner, source.source, coordinates);
+  write(root, "devflow/journal.md", `${marker}\n`);
+  commit(root, "jmp boundary: compatible feedback");
+  const module = await registry();
+
+  write(root, owner, `${read(root, owner)}\nUnrelated formatting only.\n`);
+  let state = await module.calculateState({ root });
+  let entry = state.zones.marker.entries.find((item) => item.kind === "compatible-feedback");
+  assert.equal(entry?.landing, "pending");
+
+  const payload = `\n## Compatible boundary\n${coordinates.background}\n${coordinates.why}\n${coordinates.conclusion}\n${coordinates.implication}\nSource: ${source.source}\n`;
+  write(root, owner, `${read(root, owner)}${payload}`);
+  state = await module.calculateState({ root });
+  entry = state.zones.marker.entries.find((item) => item.kind === "compatible-feedback");
+  assert.equal(entry?.landing, "satisfied");
+});
+
+test("compatible feedback deletion requires semantic landing and preserves residual owners", async (t) => {
+  const module = await registry();
+  const superficial = makeRepo(t, { brownfield: "no" });
+  const superficialSource = researchSource(superficial);
+  const owner = "devflow/project/arch.md";
+  const superficialMarker = compatibleFeedback(owner, superficialSource.source);
+  write(superficial, "devflow/journal.md", `${superficialMarker}\n`);
+  commit(superficial, "jmp boundary: compatible feedback");
+  write(superficial, owner, `${read(superficial, owner)}\nUnrelated owner diff.\n`);
+  write(superficial, "devflow/journal.md", "");
+  commit(superficial, "jmp arch: superficial compatible deletion");
+  let state = await module.calculateState({ root: superficial });
+  assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-semantic-landing-missing"));
+  assert.deepEqual(state.facts.compatibleFeedback.lifecycles, []);
+
+  const residual = makeRepo(t, { brownfield: "no" });
+  const residualSource = researchSource(residual);
+  const productOwner = "devflow/project/product.md";
+  const archCoordinates = compatibleCoordinates(owner);
+  const archMarker = compatibleFeedback(owner, residualSource.source, archCoordinates);
+  const productMarker = compatibleFeedback(productOwner, residualSource.source, compatibleCoordinates(productOwner), "2026-08-29T01:01:00Z");
+  write(residual, "devflow/journal.md", `${archMarker}\n${productMarker}\n`);
+  commit(residual, "jmp boundary: compatible feedback set");
+  write(residual, owner, `${read(residual, owner)}\n## Compatible boundary\n${archCoordinates.background}\n${archCoordinates.why}\n${archCoordinates.conclusion}\n${archCoordinates.implication}\nSource: ${residualSource.source}\n`);
+  write(residual, "devflow/journal.md", `${productMarker}\n`);
+  commit(residual, "jmp arch: land one compatible owner");
+  state = await module.calculateState({ root: residual });
+  assert.equal(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-semantic-landing-missing"), false);
+  const markers = state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback");
+  assert.equal(markers.length, 1);
+  assert.equal(markers[0].owner, productOwner);
+  assert.equal(markers[0].writer, "product");
+  assert.deepEqual(Object.fromEntries(state.facts.compatibleFeedback.lifecycles.map((item) => [item.identity, item.state])), {
+    [JSON.stringify({ owner, source: residualSource.source, coordinates: archCoordinates })]: "consumed",
+    [JSON.stringify({ owner: productOwner, source: residualSource.source, coordinates: compatibleCoordinates(productOwner) })]: "current",
+  });
+});
 
 test("K calculateState is the structured canonical API and CLI is its compatibility view", async (t) => {
   const root = makeRepo(t);

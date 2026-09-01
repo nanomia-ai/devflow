@@ -19,64 +19,67 @@ Entries for 0.10.0 and later are here; older ones are in
 
 The release makes the accepted redesign explicit: principles entry is state-free and reaches
 resume by one route; `scripts/session-start.js` supplies delayed guidance without judging or
-injecting state, while the shared hook wiring is unchanged. Knowledge and work now have
-orthogonal trees: pre-product research persists under `00-project`, named card/source evidence
-and exact provenance stay durable, conclusions land with their semantic owners, only arch or
-adopt writes `K`, and multi-owner landings preserve every owner atomically. P2 Skill Rails
-packages use English `spec.mjs` and `body.md` as executable authored canon, generate `SKILL.md`
-with a receipt, and retain Korean legacy atoms only as migration provenance alongside portable
-generation, build, and evaluation evidence. The deploy artifacts changed under `skills/`,
-`scripts/`, `codex/`, and both plugin manifests; the detailed evidence,
-limitations, and still-unverified release gates are in `docs/rounds/v0.20.0/report_ko.md`.
-That report now carries the final Phase-3 evidence: 442 passing wildcard tests, the DD-92/DD-93
-Korean Codex fallback-header correction, independent bounded review, and the remaining
-unverified release gates; it does not claim production readiness.
-The Phase-4 root-repair record preserves the causal `targetPath` boundary, fixture `UNKNOWN`
-versus live `unknown()`, `guard-pending`/L14 repair, and exactly three Work/Resume/Verify
-consumers. On 2026-08-31, after the canonical Product capability-row repair at
-`0310727b7c51d0b0a6da367c55c44b3ed4a51165`, the installed Skill Rails v0.1.7 builder rebuilt
-all nine P2 packages at runtime 0.3.1 and validator 0.4.1. Authored scenario-lane migration
-was limited to Principles and Verify; `spec.mjs` and `body.md` remain the behavior and judgment
-owners, and the other seven packages received generated projection changes only.
-Fresh bounded evidence is nine L-full/L0-L18 passes, 180/180 mutation kills, 258/258 scenarios
-over 1,800 package repeats with zero mismatches, 18/18 formats, 20/20 repository invariants,
-225/225 CR-normalized canonical runtime comparisons, and 342/342 generated-file hash checks.
-Principles retains public `--target`; each manifest owns the new builder-generated
-`observations.mjs`, creating exactly nine paths with zero deletion or movement.
+injecting state. SessionStart stays silent in repositories with no current devflow evidence,
+while explicit Product/Adopt invocation and managed-project entry remain available. Knowledge and
+work use orthogonal trees: pre-product research persists under `00-project`, card/source evidence
+keeps exact provenance, conclusions land with their semantic owners, only Arch or Adopt writes
+`K`, and multi-owner landings preserve every owner. P2 packages use English `spec.mjs` and
+`body.md` as authored behavior and judgment, generate `SKILL.md` plus receipts, and retain Korean
+legacy atoms only as migration provenance. Final all-nine receipts identify Skill Rails runtime
+`0.3.2` and validator `0.4.2`; the earlier `0.3.1`/`0.4.1` rebuild was an intermediate trail.
+Principles retains public `--target`, with portable root-bounded paths and fixture `UNKNOWN` kept
+distinct from live `unknown()`.
 Compatibility: `## Capabilities` in `devflow/project/product.md` must contain canonical
 `C<n> <name>` rows (or the supported legacy circled / `1.` forms), or the single line
 `None.`. A section with substantive content but no recognized row now stops at
-`integrity.blocking` with reason `capability-rows-unparsed` instead of being dropped silently;
-the accepted mixed-row limit is recorded in the design backlog. Adopt now projects Product's
-complete confirmed field map and byte-identical template, including Problem, Approach, canonical
-generated capability rows, and terminal `interface:`, so its brownfield Layer 0 artifact is current
-for both the state parser and later Product entry; Product remains the canonical owner, with no
-runtime cross-skill import, registry, parser, or state zone.
-Fable's final glossary adjudication executed the frozen brownfield output and found six real
-terms parsed as zero canon entries plus two phantom definitions, including `Next` and a malformed
-invariant-like line; it also refuted the earlier
-Product-unaffected and Adopt-only reach claims with two Product writers and Arch's glossary-term
-branches. Product now owns one glossary template whose heading comment carries the exact
-`<term>: <definition>` line grammar and whose `terms` field is `generated`; Adopt and Arch project
-that template byte-identically, bind every canonical glossary WRITE to it, and leave result and
-knowledge-owner writes unchanged. Installed Skill Rails v0.1.7 maintained and rebuilt only those
-three packages: L-full and eval cover 94/94 scenarios at 200 repeats with zero mismatch, the two
-focused T4 tests pass, all-nine manifest/edit/hash audit is 9/9 · 0 · 342/342 with one runtime/
-validator variant, the three-way glossary digest is
-`bf7916fa8a6185b21d394ac6230ff32cc8c35c4526da5c5125c5cdb839494e52`, and the post-rebuild
-Adopt approval Decision is `sha256:c7dae28d1f6dcab467a7983e660a9f33f11a3594d80e9ed86901593f035b8a68`.
-The 444/444 full root suite belongs to `dedf24a65c2767ff86079cb91e2719bc20a9f973`
-and is stale for this final-repair tree. The later 449/449 root suite with
-`duration_ms 1279527.7144` belongs to `86a4d19430002b5f90a1ded470a03d5438615390` and is also
-stale for the glossary-repaired tree. At `f5655ef00b49aed9221fabb600e21cee43662afb`, the first
-full-suite wrapper timed out after 604022 ms and remains `UNPROVEN`; it is not a completed suite.
-After the harness was corrected to track the exact PID, one full root suite completed with
-tests/pass 450/450, fail/cancelled/skipped/todo 0, `duration_ms 1268897.1699`, stderr 0 B, and
-clean start/end status. Its complete raw record is
-`D:\Program Files\orca\workspaces\devflow\phase4-empirical-artifacts-run_3704018d415f\evidence\final-root-suite-f5655ef-complete.txt`.
-That gate closes Opus's sole gate blocker with zero mechanism blockers; its six tier-3 findings
-remain in the external report. Phase-4 AFTER scenarios remain unverified, Gate B is not
-applicable, and no production-readiness claim is made.
+`integrity.blocking` with `capability-rows-unparsed` instead of disappearing. Adopt projects
+Product's complete confirmed field map and byte-identical template for both the state parser and
+later Product entry. Product also owns the exact `<term>: <definition>` glossary template;
+Adopt and Arch project it byte-identically and bind existing glossary WRITEs to it. No runtime
+cross-skill import, registry, parser, state zone, or knowledge-owner route was added.
+On 2026-09-01, Work's post-title boundary repair replaced the evidence-blind
+`boundary-incomplete` BLOCK with a COMMIT-only RESTRICT while completion or review remains
+unsettled. Existing boundary commits add a missing carry once (`late-carry`) or preserve one
+(`late-anchor`) before claim→done; non-none, unjudged, and UNKNOWN feedback remains blocked.
+The last valid carry-kind line cannot be retracted by a later review or signal. A fully consumed
+compatible set closes through that same boundary vehicle. Authored owners are Work's spec/body
+and Principles' state/delivery canon, with generated projections and focused tests following.
+On 2026-09-01, the activation gate stopped a globally installed devflow from framing ordinary
+repositories that never opted in. The state tool proves `setup.unmanaged` only from absent current,
+indexed, and historical evidence, validates integration branches with `git check-ref-format`, and
+routes `integration-not-a-ref` to `setup.integration-config`. Resume returns unmanaged DONE with
+no ASK, route, or write; DD-95 records the boundary.
+On 2026-09-01, compatible reusable Work feedback gained a durable card-boundary transport instead
+of disappearing at closure or being diverted into K, carry, HANDOFF, or a new note layer.
+`compatible feedback pending: payload-json:` records the semantic owner, card@full-oid source,
+and ordered target/Background/Why/Conclusion/implication coordinates. Work proposes the complete
+current-card set; the Principles state tool validates Git history; Resume routes one sealed owner
+to Product, Design, Arch, or Adopt; each owner writes first and then atomically consumes one
+byte-identical marker while residual owners remain. DD-96 records this boundary.
+
+On 2026-09-02, the compatible-feedback lifecycle was closed at its actual termination boundary.
+The first wholly acceptable journal after-state—canonical payloads, one source, one owner/card,
+and existing owner paths—seals the complete exact-payload set. Malformed, mixed-source,
+owner-absent, and unattributable drafts remain unsealed and correctable. Reintroduced members,
+new same-card payloads/OIDs, and coordinate paraphrases become blocking findings with no new
+route. Work compares collected target/lifecycle facts with actor-computed judged pending/eligible
+summaries and blocks partial, reordered, empty, duplicate, mixed-source, or foreign-card
+proposals before WRITE. Established lifecycles require judged `settled` plus an empty eligible
+set. Verify opens only after every sealed member is consumed.
+
+The deploy surface for this release is the existing `skills/**`, `scripts/**`, `codex/**`,
+`hooks/**`, `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json`; detailed current-byte
+evidence and limitations live in `docs/rounds/v0.20.0/report_ko.md`. Fresh affected evidence
+includes all-nine receipt identity (615 entries, zero mismatch), a 19-case Work predicate probe,
+17/17 Work seams, 17/17 compatible-history cases, and 12/12 decision-index tests. The final
+wildcard root suite/Gate A, one hand Gate B, frozen clean baseline/candidate comparison, official
+install and byte match, candidate commit, and push remain UNVERIFIED. Tested runtime bytes must
+equal shipped runtime bytes; later identifier-only evidence must not mutate deploy/runtime bytes.
+
+Resume recovery now projects the existing DD-26 folder-boundary rule: change no code, rename
+closing non-capability folders deepest-first to `.done`, and make one boundary commit. Split intake
+now records confirmed-product tree work with no durable request or active origin as the canonical
+`maintenance routing pending` line before rejudging, so request identity survives interruption.
 
 ## 0.18.9 — 2026-08-21 — the first real run found two walls, and two gates now stand where they were
 
