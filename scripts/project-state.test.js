@@ -3877,6 +3877,110 @@ async function stableCompatibleState(module, root) {
   return first;
 }
 
+function addLinkedWorktree(t, root, name, start = "HEAD") {
+  const linked = `${root}-${name}`;
+  t.after(() => fs.rmSync(linked, { recursive: true, force: true }));
+  git(root, "worktree", "add", "-q", "-b", name, linked, start);
+  return linked;
+}
+
+test("compatible feedback linked worktree: a stale invocation sees only the integration residual", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const archOwner = "devflow/project/arch.md";
+  const productOwner = "devflow/project/product.md";
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: linked compatible review")}`;
+  const archCoordinates = compatibleCoordinates(archOwner, " linked arch");
+  const productCoordinates = compatibleCoordinates(productOwner, " linked product");
+  const archMarker = compatibleFeedback(archOwner, source, archCoordinates);
+  const productMarker = compatibleFeedback(productOwner, source, productCoordinates, "2026-08-29T01:01:00Z");
+  write(root, "devflow/journal.md", `${archMarker}\n${productMarker}\n`);
+  commit(root, "jmp boundary: seal linked compatible set");
+  const stale = addLinkedWorktree(t, root, "compatible-stale");
+
+  landCompatibleOwner(root, archOwner, source, archCoordinates);
+  write(root, "devflow/journal.md", `${productMarker}\n`);
+  const integrationHead = commit(root, "jmp arch: consume linked compatible owner");
+
+  const module = await registry();
+  const state = await stableCompatibleState(module, stale);
+  assert.equal(state.metadata.integration.hash, integrationHead);
+  assert.deepEqual(
+    state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").map((entry) => entry.owner),
+    [productOwner],
+  );
+  assert.deepEqual(Object.fromEntries(state.facts.compatibleFeedback.lifecycles.map((entry) => [entry.entry.owner, entry.state])), {
+    [archOwner]: "consumed",
+    [productOwner]: "current",
+  });
+});
+
+test("compatible feedback linked worktree: a pre-seal invocation sees the integration marker", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = "devflow/project/arch.md";
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: pre-seal compatible review")}`;
+  const stale = addLinkedWorktree(t, root, "compatible-pre-seal");
+  write(root, "devflow/journal.md", `${compatibleFeedback(owner, source, compatibleCoordinates(owner, " integration"))}\n`);
+  const integrationHead = commit(root, "jmp boundary: seal integration compatible marker");
+
+  const module = await registry();
+  const state = await stableCompatibleState(module, stale);
+  assert.equal(state.metadata.integration.hash, integrationHead);
+  assert.deepEqual(
+    state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").map((entry) => entry.owner),
+    [owner],
+  );
+  assert.equal(state.facts.compatibleFeedback.lifecycles[0]?.state, "current");
+});
+
+test("compatible feedback linked worktree: a local not-yet-integrated transition remains visible", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = "devflow/project/arch.md";
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: local compatible review")}`;
+  const integrationHead = git(root, "rev-parse", "main");
+  const linked = addLinkedWorktree(t, root, "compatible-local");
+  write(linked, "devflow/journal.md", `${compatibleFeedback(owner, source, compatibleCoordinates(owner, " local"))}\n`);
+  commit(linked, "jmp boundary: local compatible marker");
+
+  const module = await registry();
+  const state = await stableCompatibleState(module, linked);
+  assert.equal(state.metadata.integration.hash, integrationHead);
+  assert.notEqual(state.metadata.head, integrationHead);
+  assert.deepEqual(
+    state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").map((entry) => entry.owner),
+    [owner],
+  );
+  assert.equal(state.facts.compatibleFeedback.lifecycles[0]?.state, "current");
+});
+
+test("compatible feedback linked worktree: divergent additions do not invent a union", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const archOwner = "devflow/project/arch.md";
+  const productOwner = "devflow/project/product.md";
+  write(root, card, cardText("02.1"));
+  const source = `${card}@${commit(root, "jmp 02.1 wip: divergent compatible review")}`;
+  const linked = addLinkedWorktree(t, root, "compatible-divergent");
+
+  write(root, "devflow/journal.md", `${compatibleFeedback(archOwner, source, compatibleCoordinates(archOwner, " integration"))}\n`);
+  commit(root, "jmp boundary: integration compatible addition");
+  write(linked, "devflow/journal.md", `${compatibleFeedback(productOwner, source, compatibleCoordinates(productOwner, " local"))}\n`);
+  commit(linked, "jmp boundary: local compatible addition");
+
+  const module = await registry();
+  const state = await stableCompatibleState(module, linked);
+  assert.deepEqual(
+    state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").map((entry) => entry.owner),
+    [archOwner],
+  );
+  assert.deepEqual(state.facts.report.notYetOnIntegration, ["devflow/journal.md"]);
+});
+
 test("compatible feedback: a card's own marker outranks its finish boundary", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
   const card = "devflow/tree/02-capability/02.1-spaced fixture.wip-jmp.md";

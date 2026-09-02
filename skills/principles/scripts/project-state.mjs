@@ -1359,8 +1359,55 @@ function compatibleFeedbackLandedAt(snapshot, line, ref) {
     && ["background", "why", "conclusion", "implication"].every((key) => ownerText.includes(line.coordinates[key]));
 }
 
+function integrationHasCompatibleFeedbackTransition(snapshot, base, integration) {
+  const history = gitRun(snapshot.root,
+    ["log", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", `${base}..${integration}`, "--", "devflow/journal.md"],
+    { allowFailure: true });
+  if (history.status !== 0) return null;
+  try {
+    const commits = normalizeFileText(decodeUtf8(history.stdout, "compatible feedback integration history")).split("\n").filter(Boolean);
+    if (commits.some((commit) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit))) return null;
+    return commits.length > 0;
+  } catch {
+    return null;
+  }
+}
+
+function compatibleFeedbackAuthority(snapshot) {
+  const integration = snapshot.integration.hash;
+  let commit = snapshot.head;
+  let ref = "HEAD";
+  let overlayWorking = true;
+
+  if (integration && integration !== snapshot.head) {
+    commit = integration;
+    ref = integration;
+    overlayWorking = false;
+    const base = gitLine(snapshot.root, ["merge-base", integration, snapshot.head], { allowFailure: true });
+    // A local transition is a safe overlay only while integration has made no compatible
+    // transition since the common base.  Once both histories changed this lifecycle, keep
+    // the configured integration tip intact; the existing integration path carries the
+    // local journal change instead of this read-only kernel inventing a union.
+    if (base && integrationHasCompatibleFeedbackTransition(snapshot, base, integration) === false) {
+      commit = snapshot.head;
+      ref = "HEAD";
+      overlayWorking = true;
+    }
+  }
+
+  const journal = knowledgeJournalAt(snapshot.root, ref, COMPATIBLE_FEEDBACK_BYTES);
+  return {
+    commit,
+    ref,
+    journal,
+    overlayWorking,
+    workingText: overlayWorking ? snapshot.journalText ?? "" : journal.text ?? "",
+  };
+}
+
 function compatibleFeedbackState(snapshot) {
-  const current = snapshot.journal.filter((line) => line.kind === "compatible-feedback");
+  const authority = compatibleFeedbackAuthority(snapshot);
+  const current = parseJournal(authority.workingText).filter((line) => line.kind === "compatible-feedback");
   const issues = [];
   const accepted = [];
   const lifecycles = new Map();
@@ -1369,14 +1416,17 @@ function compatibleFeedbackState(snapshot) {
     const pair = `${line.owner}\0${line.sourceCard}`;
     let reason = !line.valid ? line.reason : null;
     const writer = reason ? null : compatibleFeedbackWriter(snapshot, line.owner);
-    if (!reason && !knowledgeOwnerExists(snapshot, line.owner)) reason = "compatible-owner-unresolved";
+    const ownerExists = reason ? false : authority.overlayWorking
+      ? knowledgeOwnerExists(snapshot, line.owner)
+      : gitPathExists(snapshot.root, authority.ref, line.owner);
+    if (!reason && !ownerExists) reason = "compatible-owner-unresolved";
     if (!reason && writer === null) reason = "compatible-writer-unresolved";
     if (!reason && !committedKnowledgeSource(snapshot, line)) reason = "compatible-source-unresolved";
     if (!reason && pairs.has(pair)) reason = "compatible-owner-source-duplicate";
     if (reason) issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", line: line.line, reason });
     else {
       pairs.add(pair);
-      accepted.push({ ...line, writer, landing: compatibleFeedbackLanded(snapshot, line) ? "satisfied" : "pending" });
+      accepted.push({ ...line, writer, landing: authority.overlayWorking && compatibleFeedbackLanded(snapshot, line) ? "satisfied" : "pending" });
     }
   }
 
@@ -1401,16 +1451,16 @@ function compatibleFeedbackState(snapshot) {
     }
     return true;
   };
-  const headJournal = knowledgeJournalAt(snapshot.root, "HEAD", COMPATIBLE_FEEDBACK_BYTES);
+  const headJournal = authority.journal;
   const headReadable = !["failure", "undecodable"].includes(headJournal.state);
-  const workingChanged = new Set(snapshot.status.map((item) => item.path));
+  const workingChanged = new Set(authority.overlayWorking ? snapshot.status.map((item) => item.path) : []);
   const effectiveLifecycles = new Set(current.filter((line) => line.valid).map((line) => line.raw));
   if (!headReadable) {
     issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", reason: "compatible-head-undecodable" });
   }
 
   const history = gitRun(snapshot.root,
-    ["log", "--topo-order", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", "--", "devflow/journal.md"],
+    ["log", "--topo-order", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", authority.ref, "--", "devflow/journal.md"],
     { allowFailure: true });
   let journalCommits = null;
   if (history.status === 0) {
@@ -1438,7 +1488,7 @@ function compatibleFeedbackState(snapshot) {
       : knowledgeJournalAt(snapshot.root, parent, COMPATIBLE_FEEDBACK_BYTES);
     const after = knowledgeJournalAt(snapshot.root, commit, COMPATIBLE_FEEDBACK_BYTES);
     if ([before.state, after.state].some((state) => ["failure", "undecodable"].includes(state))) {
-      if (!(commit === snapshot.head && !headReadable)) {
+      if (!(commit === authority.commit && !headReadable)) {
         issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", commit, reason: "compatible-history-undecodable" });
       }
       continue;
@@ -1496,13 +1546,13 @@ function compatibleFeedbackState(snapshot) {
   for (const transition of [...transitions].reverse()) {
     recordIntroductions(transition.before, transition.after, transition.commit);
   }
-  if (headReadable) recordIntroductions(headJournal.text, snapshot.journalText ?? "", null, true);
+  if (headReadable && authority.overlayWorking) recordIntroductions(headJournal.text, authority.workingText, null, true);
   for (const raw of reopened) effectiveLifecycles.delete(raw);
 
   const authorized = accepted.filter((line) => seals.get(line.sourceCard)?.identities.has(line.payloadJson) && !reopened.has(line.raw));
   for (const line of authorized) rememberLifecycle(line, "current");
 
-  for (const line of removedCompatibleFeedback(headJournal.text, snapshot.journalText ?? "")) {
+  for (const line of removedCompatibleFeedback(headJournal.text, authority.workingText)) {
     if (!seals.get(line.sourceCard)?.identities.has(line.payloadJson)) continue;
     if (validateConsumption(line, workingChanged)) rememberLifecycle(line, "consumed");
     effectiveLifecycles.add(line.raw);
