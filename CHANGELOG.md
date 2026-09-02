@@ -67,6 +67,17 @@ summaries and blocks partial, reordered, empty, duplicate, mixed-source, or fore
 proposals before WRITE. Established lifecycles require judged `settled` plus an empty eligible
 set. Verify opens only after every sealed member is consumed.
 
+On 2026-09-02, repair `c28facc1b9707f06234a32426f9b51a695bad053` also closed the
+integration-behind edge of that lifecycle. The configured integration tip remains the sole
+compatible-feedback authority; a lagging user-managed worktree now reaches the existing
+`integrity.blocking` route with reason `compatible-feedback-integration-behind` and resolution
+`update-current-branch-from-integration`. A competing committed or uncommitted local compatible
+transition makes the local lifecycle fact `invalid` without unioning it into integration truth.
+Bounded editor evidence is fifth scene 1/1, all linked-worktree scenes 5/5, affected state cases
+22/22, and direct Work seams 4/4. Independent Fable evidence is PASS with current scenes 5/5 and
+the parent fifth scene 0/1. The uncommitted-local, update-to-overlay, and merge-commit-entry probes,
+plus the non-canonical direct Product/Design entry residual, remain UNVERIFIED rather than passed.
+
 The deploy surface for this release is the existing `skills/**`, `scripts/**`, `codex/**`,
 `hooks/**`, `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json`; detailed current-byte
 evidence and limitations live in `docs/rounds/v0.20.0/report_ko.md`. Fresh affected evidence

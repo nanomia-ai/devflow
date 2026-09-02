@@ -8,13 +8,22 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 
 ## Field observation items — watch during coming cycles, without adding rules
 
-- **Compatible-feedback reopen findings are permanent and project-wide** (recorded
-  2026-09-02 by the DD-96 seal repair) — the state tool currently derives a blocking
-  finding from Git history and cannot clear it after the journal is corrected. This is
-  record-only, not authority to change runtime behavior. Reopen a clearable-finding design
-  only after a non-Work writer reaches one in field use. The candidate is to derive reopen
-  findings from the current journal, walk consumptions oldest-first, skip removal validation
-  for an identity already consumed, and treat removal of a consumed nonmember as advisory.
+- **Compatible-feedback field residuals remain bounded observations** (recorded 2026-09-02
+  by the DD-96 seal and integration-behind repairs) — first, the state tool currently derives
+  a blocking reopen finding from Git history and cannot clear it after the journal is corrected.
+  This is record-only, not authority to change runtime behavior. Reopen a clearable-finding
+  design only after a non-Work writer reaches one in field use. The candidate is to derive
+  reopen findings from the current journal, walk consumptions oldest-first, skip removal
+  validation for an identity already consumed, and treat removal of a consumed nonmember as
+  advisory. Second, **R-1** is a source-literal but unexecuted residual on non-canonical direct
+  Product/Design entry: `skills/principles/scripts/project-state.mjs:1446` keeps an integration
+  marker's `landing = "pending"`, while the Product and Design collectors read that value and
+  their specs do not consume `state.route`. A user who invokes either owner skill directly in
+  a lagging worktree, bypassing the hook's Principles-to-Resume route, can therefore write,
+  wait, and see `pending` again. The canonical route reaches `integrity.blocking`, and no loss
+  or duplicate marker is predicted, so this is not a v0.20.0 release blocker. Reopen the
+  kernel-only landing-state correction if the owner makes direct owner-skill invocation
+  canonical for this concurrency state or an end-to-end field run reproduces the loop.
 - **Accepted limits of the canonical `C<n>` row parser** (recorded 2026-08-31 by the
   v0.20.0 final-repair audit; `skills/principles/scripts/project-state.mjs:531-574`) — a
   declared numbering gap is accepted with no anomaly (`C1, C3` → `02, 04`). Separately,

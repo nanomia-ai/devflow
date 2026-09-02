@@ -148,6 +148,12 @@ H19 · 비코드 카드 H20 · 워크트리 이사 H25 · 긴급 우회 H17)은 
 경량 차선은 DD-66의 대상 경로 검사·양보로 막고, 카드끼리의 같은 파일 동시 편집 잔여는
 「보장하지 않는 것」 목록의 행이다 — 그 목록의 정본은 2026-08-20 DD-79 로 선 밖에 있고 소유자의 것이다)
 
+(2026-09-02 `c28facc` 재판정: **정합 유지.** integration tip보다 뒤처진 공유
+worktree의 모든 터미널은 terminal identity가 아니라 같은 HEAD·integration ancestry로
+같은 `integrity.blocking`/업데이트 해소를 재계산한다. 현재 source가 per-terminal state·lock·
+sibling-HEAD scan을 추가하지 않았음은 대조했지만, simultaneous shared-folder write는 이
+scene에서 실행하지 않았으므로 기존 3점유 실사용 증거를 새로 초과 주장하지 않는다.)
+
 ### 3.2 H5·H6·H12 — 사소한 변경과 상태 질문 [판정 교체]
 
 2판 판정: 긴장(카드 하나짜리 세션에 상각 논리가 안 듦 — P1).
@@ -183,6 +189,15 @@ journal 덧붙임」은 **생성 술어가 아니라 정확히 넷의 닫힌 열
 착지하므로 대기다. 정본이 그 넷을 닫고 `재분할 대기`·`능력 닫기`를 대기 목록에 이름 부른다.
 검증 시 확인할 것에 한 줄 추가: 봉쇄 fixture에서 상위 문서 결정이 나면 세션이 `재분할 대기`
 마커를 **쓰지 않고** 봉쇄 원인을 보고한다.)
+
+(2026-09-02 `c28facc` 재판정: **정합 유지.** 기존 H24의 사용자 관리
+worktree 병행 모양에서 root `main`이 compatible marker로 앞선 뒤, 뒤처진 linked
+worktree의 owner landing과 별도 local marker 재생산을 모두 실행했다. 현재 다섯 scene은
+5/5, parent 다섯 번째 scene은 0/1이었고, 현재는 두 갈래 모두 기존
+`integrity.blocking`이 `compatible-feedback-integration-behind`·
+`update-current-branch-from-integration`을 낸다. local truth를 integration lifecycle에 합치지
+않았다. 다만 uncommitted local·blocked→update→overlay·merge-commit lag probe는 모두
+미실행이므로 이 재판정이 그 경로의 통과를 뜻하지 않는다.)
 
 ### 3.4 H37 — 같은 카드를 두 터미널에 동시 지시 [3판 신규]
 
@@ -678,3 +693,10 @@ member 소비 뒤의 Verify closure를 그 셀에 추가해 **정합**으로 재
 identity와 no-duplicate-owner mechanics는 유지된다. **새 H·A 행 0, 새 공백 0.** current-byte
 유계 증거는 MET이나 final hand Gate B와 wildcard/Gate A·official install·clean comparison은
 미검증이므로 실사용 통과로 바꾸지 않는다.
+
+0.20.0 integration-behind 최종 증거(`c28facc`): 새 H/A 행이 아니라 기존
+H22·H24·H27×A12의 교차를 재판정했다. Sol이 current linked-worktree 5/5·
+affected state 22/22·Work seam 4/4를 실행했고, Fable은 current 5/5와 parent fifth
+0/1을 직접 실행해 canonical entry 폐쇄를 PASS로 판정했다. I-1∼I-3·R-1 direct
+Product/Design 진입·simultaneous shared-folder write는 미실행이며, 그 경계를 통과로
+바꾸지 않았다. **기존 판정 정합, 새 H·A 행 0, 새 공백 0.**

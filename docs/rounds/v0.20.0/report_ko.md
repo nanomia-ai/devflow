@@ -5,27 +5,28 @@
 이 문서는 DD-72가 정한 v0.20.0의 유일한 구현 보고서이며, 현재 최종 후보 바이트의
 측정·판정·한계를 보관한다. 현재 사실은 Git과 두 manifest가 소유하고 이 문서는 별도
 current-facts 층을 만들지 않는다. 후보 작업 트리는
-`jmp-develop/phase4-devflow-final-repair`, 기준 HEAD
-`632e96ccff5685f0c10b27f2a6161e36066248b9`다.
+`jmp-develop/phase4-devflow-final-repair`, runtime 기준 commit은
+`c28facc1b9707f06234a32426f9b51a695bad053`다.
 
-최종 기록 편집 진입 시 custody는 porcelain 118행(추적 수정 115 + 기존 untracked Skill
-Rails receipt 3), staged 0, 두 manifest `0.20.0`이었다. 이 편집의 유일한 쓰기 범위는
-`docs/rounds/v0.20.0/report_ko.md`, `CHANGELOG.md`의 최신 `## 0.20.0`,
-`docs/usecase-matrix_ko.md`의 §3.20·§6 재판정이다. 따라서 편집 뒤 status 행은 report와
-matrix가 새로 modified가 되는 만큼만 늘 수 있고, deploy/runtime 경로는 움직이면 안 된다.
-생성·삭제·이동 경로는 0이고 staged는 계속 0이어야 한다.
+이번 최종 기록 편집은 위 committed repair와 제공된 두 보고서만 증거로 삼고, 동시 작업 중인
+범위 밖 unstaged byte는 판정이나 커밋에 포함하지 않는다. 두 manifest는 `0.20.0`이다. 이
+편집의 유일한 저장소 쓰기 범위는 `CHANGELOG.md`, 이 보고서,
+`docs/usecase-matrix_ko.md`, `docs/design-decisions{,_ko}.md`,
+`docs/design-backlog.md`다. runtime·generated·manifest는 움직이지 않고 저장소 경로의
+생성·삭제·이동은 0이다.
 
 시험한 runtime 바이트와 출하할 runtime 바이트는 같아야 한다. 이후 존재할 수 있는
 commit/install 식별자 기록은 `skills/`, `codex/`, `hooks/`, `scripts/`, 두 manifest의
 closure가 시험한 후보와 hash-identical임을 먼저 증명하는 identifier-only 문서 갱신이어야
-하며 deploy 바이트를 바꾸면 안 된다. 아직 존재하지 않는 후보 commit id는 이 문서에 쓰지 않는다.
+하며 deploy 바이트를 바꾸면 안 된다. 이 기록 커밋의 id는 문서 자체가 들어가는 commit이므로
+사전에 추측해 쓰지 않는다.
 
 ## 역사적 Phase 3·Phase 4 증거 — 현재 후보의 릴리스 통과로 세지 않음
 
 아래 기존 Phase 3 기록은 당시 브랜치 `jmp-develop/devflow-skill-rails`, HEAD
 `080a8cbd031b2da9efa4051bd56197ddbaf54017`부터 이어진 구현 계보를 보존한다. 뒤의 442,
 444, 449, 450 wildcard 수치와 14개 clean-entry transcript는 각 당시 바이트의 역사적
-문맥일 뿐, 현재 `632e96c` 기반 dirty 후보의 최종 관문을 통과시킨 증거가 아니다.
+문맥일 뿐, 현재 `c28facc` committed 후보의 남은 최종 관문을 통과시킨 증거가 아니다.
 
 ## Phase 3 최종 결과
 
@@ -330,12 +331,19 @@ frozen condition을 별도 실행하는 다음 handoff다.
 9. Resume의 folder-boundary recovery는 code를 바꾸지 않고 deepest-first `.done` rename과 boundary
    commit 하나만 수행하며, Split은 출처 없는 confirmed-product tree work를 `maintenance routing
    pending`으로 먼저 기록해 요청 identity를 보존한다.
+10. configured integration tip이 compatible-feedback lifecycle의 유일한 authority인 상태에서
+    호출 worktree가 뒤처지면 상태 도구는 기존 `integrity.blocking` route와
+    `compatible-feedback-integration-behind` 사유, `update-current-branch-from-integration`
+    해소를 낸다. 그 worktree의 경쟁하는 committed·uncommitted compatible transition은
+    integration truth에 합치지 않고 lifecycle 사실을 `invalid`로 만든다.
 
 이 경계의 component purpose는 한 카드의 reusable conclusion을 모든 자연 semantic owner에
 소실·중복 없이 착지시키는 것이다. Work가 producer/pre-write guard, Principles와 Git history가
 seal, Resume이 route, Product·Design·Arch·Adopt가 semantic landing, Verify가 all-consumed closure의
-consumer다. 이 경계를 없애면 partial/foreign/reopened set, residual-owner 소실, premature Verify가
-가능해진다. 설계 이유와 재개 조건의 durable owner는 DD-96이다.
+consumer다. Principles 상태 도구는 integration ancestry와 local transition을 읽어 unsafe owner
+action을 막는 authority boundary도 소유한다. 이 경계를 없애면 partial/foreign/reopened set,
+residual-owner 소실, lagging worktree의 불가능한 owner landing·local marker 재생산, premature
+Verify가 가능해진다. 설계 이유와 재개 조건의 durable owner는 DD-96이다.
 
 ## 증거 원장 — MET / FALL / UNVERIFIED
 
@@ -350,13 +358,18 @@ consumer다. 이 경계를 없애면 partial/foreign/reopened set, residual-owne
 | **MET** | Work direct predicate probe | fixture verdict를 미리 주지 않은 19 cases 전부 expected verdict와 일치 |
 | **MET** | affected executable tests | decision-index 12/12, Work project-state seam 17/17, compatible-feedback state pattern 17/17, `git diff --check` clean |
 | **MET** | runtime ownership/lifecycle walk | first-acceptable seal, reopen block, residual owner, one-owner landing, all-consumed closure가 현재 source와 real Git temp scenes에서 확인됨 |
+| **MET** | Sol integration-behind repair execution @ `c28facc` | 새 다섯 번째 scene 1/1, linked-worktree 전체 5/5, compatible-feedback state 22/22, Work direct seam 4/4; `git diff --check` exit 0 |
+| **MET** | Fable post-edit PASS @ `c28facc` | 현재 linked-worktree scene 5/5, parent `a7bec151` 다섯 번째 scene 0/1; canonical Principles→Resume 진입의 owner-action dead end·local-marker reproduction 폐쇄 |
 | **FALL** | 현재 fresh runtime boundary의 release-blocking 판정 | 0건. 과거 BLOCK·stale fixture는 이 후보가 닫은 history이며 현재 FALL로 중복 계산하지 않음 |
 | **UNVERIFIED** | editor-reported Skill Rails build/eval | Work 74/74×200, Principles 10/10×200은 유계 역사 증거이나 fresh auditor가 rebuild/eval을 재실행하지 않음 |
-| **UNVERIFIED** | candidate commit·repair push | 아직 만들거나 push하지 않음; 존재하지 않는 id를 적지 않음 |
+| **UNVERIFIED** | post-`c28facc` build·generation·receipt identity | 이 record-only 편집과 Fable 패스는 build·generation을 실행하지 않았고 generated·manifest byte를 바꾸지 않음 |
+| **UNVERIFIED** | release push | repair commit은 `c28facc`로 존재하지만 release publication·push는 실행하지 않음 |
 | **UNVERIFIED** | official-home install·installed byte match | clean committed source에서 real Claude/Codex/Orca home으로 설치하고 exact closure를 비교하지 않음 |
 | **UNVERIFIED** | frozen clean baseline/candidate comparison | 과거 14 transcript는 context only; final-byte 동일 질문·rubric 비교를 실행하지 않음 |
 | **UNVERIFIED** | one hand Gate B | genuine fixture의 create/list/filter/revisit와 Work→Resume→Work→Verify/closure를 현재 바이트로 실행하지 않음 |
 | **UNVERIFIED** | final wildcard root suite / Gate A | `node --test "scripts/*.test.js"`를 현재 frozen 후보에서 실행하지 않음; Gate A도 따라서 미실행 |
+| **UNVERIFIED** | integration-behind 남은 실행 경계 | I-1 uncommitted local transition, I-2 block→branch update→overlay, I-3 merge-commit lag entry, merge-resolution-only `git log -G`, full Product/Arch/Resume/Work closure는 실행하지 않음 |
+| **UNVERIFIED** | R-1 direct Product/Design entry | hook의 Principles→Resume을 우회한 사용자 직접 호출은 source-literal loop residual이지만 end-to-end 실행하지 않음; canonical entry PASS로 승격하지 않음 |
 
 이 보고서 자체는 production readiness 또는 release PASS를 선언하지 않는다.
 
@@ -370,7 +383,34 @@ Principles가 first wholly acceptable after-state를 seal한다. Resume은 dupli
 전부 consumed된 뒤에만 닫힌다. §3.20 판정은 **정합**, 새 행 0, 새 공백 0이다. 이 판정은 위
 current-byte evidence에 한정하며 final hand Gate B는 계속 UNVERIFIED다.
 
+`c28facc` integration-behind 수리는 새 shape를 만들지 않고 기존 H22(한 도메인
+다중 터미널), H24(사용자 관리 worktree 병행), H27×A12(통합 봉쇄 재진입)에
+착지한다. 실제 linked worktree에서 integration tip이 앞서고 owner landing·local marker
+재생산이 각각 통합 업데이트를 요구하는 하나의 `integrity.blocking` 경계로 수렴했다.
+다만 simultaneous shared-folder write와 I-1∼I-3은 실행하지 않았으므로 이 칸들의 기존
+실사용 보장으로 부풀리지 않는다.
+
 ## fresh audit disposition과 carry-forward
+
+### R-1 — 비정본 direct Product/Design 진입 residual
+
+integration mode의 marker는 `skills/principles/scripts/project-state.mjs:1446`에서
+`landing = "pending"`을 유지한다. Product·Design collector는 이 값을 직접 읽지만 두 spec은
+`state.route`를 소비하지 않는다. 따라서 lagging worktree에서 사용자가 hook의
+Principles→Resume을 우회해 Product 또는 Design을 직접 호출하면 owner를 쓰고 WAIT한
+뒤 다시 `pending`을 보는 loop가 source-literal로 남는다. Fable은 이 end-to-end scene을
+실행하지 않았다. canonical entry는 `integrity.blocking`을 먼저 보고, 소실·중복 없이
+멈추며, kernel-only 수리 경계가 있으므로 release blocker로 승격하지 않는다. 사용자가
+direct owner-skill invocation을 정본 진입으로 판정하거나 실전에서 loop가 재현되면 다시 연다.
+
+### R-2·I-1∼I-3 — 비차단 cost와 미실행 probe
+
+R-2는 `integrity.blocking`이 Resume의 사람 ASK로 가므로 merge-commit 운용의 매 lag event가
+worktree 전체의 사람 확인 비용을 낼 수 있다는 소유자 설계 cost다. 출구와 해소가
+정확히 이름 붙어 있으므로 §2 결함으로 채택하지 않는다. I-1 uncommitted local
+transition, I-2 blocked→update→overlay 전이, I-3 merge-commit lag entry는 코드 원문·유사
+경로로만 판단했고 실행하지 않았다. 전부 UNVERIFIED이며 새 backlog 항목을
+만들지 않는다.
 
 ### F-1 — 미수리 Tier-3 precision limitation
 
@@ -411,35 +451,46 @@ independent 19-case direct predicate probe가 `pendingSetStatus=complete` 상태
 ## 감리 지침 §5 정지 조항
 
 - 이번 **report-only disposition**의 새 규칙 충돌·소실 경로는 0이다.
-- 남은 제품 소견은 F-1의 판단어/표현 등급 하나이고, E-1은 fixture/scoring instrument 약점이다.
-  O-1~O-6은 관찰이며 Tier-1/Tier-2 blocker가 아니다.
+- `c28facc`의 수리는 integration authority 하나와 기존 blocking route 하나로 수렴한다.
+  Sol의 current 5/5·22/22·4/4와 Fable의 current 5/5·parent 0/1이 수리 문장·실행
+  경계를 한 번 재감사했고 신규 충돌·소실 경로는 0이다.
+- 남은 제품 소견은 F-1의 판단어/표현 등급과 R-1의 비정본 direct-entry residual이다.
+  E-1은 fixture/scoring instrument 약점, R-2는 owner design cost, O-1~O-6은 관찰이며
+  Tier-1/Tier-2 blocker가 아니다.
 - 수리를 만들지 않은 보고 전용 패스이므로 repair/convergence clause는 **판정 대상 없음**이다.
   post-PASS runtime wording repair를 억지로 열지 않았고 새 action 해석도 만들지 않았다.
 - 개인 회로 차단기 네 개는 모두 미발동이다: 같은 문장의 세 번째 수리 0, 구체적 두 오독 없는
   가능성 소견 0, 진자 운동 0, 지난 review만을 근거로 한 소견 0.
-- unexecuted behavior를 pass로 바꾸지 않았다. candidate commit/push, official install/byte match,
-  frozen comparison, one hand Gate B, final wildcard/Gate A는 전부 UNVERIFIED다.
+- unexecuted behavior를 pass로 바꾸지 않았다. release push, official install/byte match,
+  frozen comparison, one hand Gate B, final wildcard/Gate A, R-1 end-to-end, I-1∼I-3,
+  merge-resolution-only `git log -G`는 전부 UNVERIFIED다.
 
 따라서 text loop는 여기서 멈추고 다음 검증 수단을 empirical execution으로 넘긴다.
 
 ## 경계 출력
 
-**Actually shipped:** 아직 아님. 위 “최종 후보 바이트의 실제 동작 경계”가 frozen candidate이고
-commit·push·official install 식별자는 아직 없다.
+**Actually shipped:** integration-behind 수리는 후보 이력의
+`c28facc1b9707f06234a32426f9b51a695bad053`에 commit됐다. configured integration tip authority,
+lagging worktree의 `integrity.blocking`, local transition의 non-union `invalid` 판정이 실제 동작
+경계다. 다만 v0.20.0 release publication·push·official install은 아직 완료되지 않았다.
 
 **New binding decisions:** 없음. DD-96의 state/reason은 움직이지 않았고 matrix만 현재 바이트에
 맞춰 재판정했다.
 
 **Unrepaired findings:** F-1 Tier-3 runtime wording precision, E-1 conjunct-isolation instrument
-weakness. 둘 다 release blocker로 부풀리지 않는다.
+weakness, R-1 non-canonical Product/Design direct-entry residual. 셋 다 release blocker로
+부풀리지 않으며 R-1은 source-literal이지만 end-to-end 미실행이다.
 
 **Remaining limitations:** actor-attested judged summaries, key-order loud-stop ergonomics,
-source-OID rebase/prune tension, permanent project-wide reopen finding, 그리고 위 UNVERIFIED 관문들.
+source-OID rebase/prune tension, permanent project-wide reopen finding, R-2 human ASK cost,
+I-1∼I-3·merge-resolution-only gap, 그리고 위 UNVERIFIED 관문들.
 
-**Next revalidation:** runtime 바이트를 바꾸지 않은 채 explicit stage-set audit와 candidate commit을
-만들고, clean committed baseline/candidate의 official-home byte identity와 frozen comparison을
+**Next revalidation:** runtime 바이트를 바꾸지 않은 채 clean committed baseline/candidate의
+official-home byte identity와 frozen comparison을
 확인한 뒤, 같은 frozen candidate에서 hand Gate B 한 번과 wildcard root suite/Gate A 한 번을
-실행한다. 그 뒤 commit/install 식별자를 문서에 보태야 한다면 deploy closure가 시험 바이트와
-hash-identical임을 증명한다.
+실행한다. integration-behind는 I-1 uncommitted local, I-2 update-to-overlay, I-3
+merge-commit lag entry와 R-1 direct-entry를 각각 실행 증거로만 올린다. 그 뒤
+commit/install 식별자를 문서에 보태야 한다면 deploy closure가 시험 바이트와 hash-identical임을
+증명한다.
 
 === 보고 완료 ===

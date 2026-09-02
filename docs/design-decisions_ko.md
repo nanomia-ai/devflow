@@ -904,6 +904,16 @@ Product·Design·Arch·Adopt가 소유한다.
 증거: `skills/principles/spec.mjs`, `skills/principles/scripts/project-state.mjs`,
 `skills/work/spec.mjs`, `skills/resume/spec.mjs`, 네 소유자 skill의 compatible-feedback stage,
 `scripts/project-state.test.js`, 각 skill의 실행 fixture.
+통합 authority 증거(2026-09-02): 수리
+`c28facc1b9707f06234a32426f9b51a695bad053`은 configured integration tip을 compatible-feedback
+lifecycle의 유일한 authority로 유지한다. 그 authority가 호출 worktree를 포함하지 않으면
+기존 `integrity.blocking` route가 `compatible-feedback-integration-behind`와
+`update-current-branch-from-integration`을 보고하고, 경쟁하는 committed 또는 uncommitted local
+transition은 local truth를 integration truth에 합치지 않고 lifecycle 사실을 `invalid`로 만든다.
+독립 Fable 검토는 현재 linked-worktree scene 5/5와 parent 다섯 번째 scene 0/1을 직접
+실행한 뒤 PASS했다. 이 증거는 정본 Principles→Resume 경로만 입증한다. uncommitted-local,
+update-to-overlay, merge-commit-entry probe와 원문상 Product/Design direct-entry residual은
+통과가 아니라 미검증이다.
 재검토 조건: 정상 Git 이력에서 첫 완전 도입을 결정적으로 식별할 수 없는 실측 사례가 생기거나,
 상태 재생이 동일 의미를 결정적으로 확인하지 못하거나, 여러 소유자의 원자적 공동 착지가 부분
 소비보다 반드시 안전하다는 증거가 생길 때. 이력에서 도출한 차단형 호환 환류 finding은 현재

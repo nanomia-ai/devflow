@@ -1016,6 +1016,16 @@ landing and atomic consumption.
 Evidence: `skills/principles/spec.mjs`, `skills/principles/scripts/project-state.mjs`,
 `skills/work/spec.mjs`, `skills/resume/spec.mjs`, the four owner skills' compatible-feedback
 stages, `scripts/project-state.test.js`, and each skill's executable fixtures.
+Integration-authority proof (2026-09-02): repair
+`c28facc1b9707f06234a32426f9b51a695bad053` keeps the configured integration tip as the only
+compatible-feedback lifecycle authority. When it excludes the invoking worktree, the existing
+`integrity.blocking` route reports `compatible-feedback-integration-behind` and
+`update-current-branch-from-integration`; a competing committed or uncommitted local transition
+makes the lifecycle fact `invalid` without unioning local truth into integration truth. Independent
+Fable review passed after executing the current five linked-worktree scenes 5/5 and the parent
+fifth scene 0/1. This proves the canonical Principles-to-Resume path only. The uncommitted-local,
+update-to-overlay, and merge-commit-entry probes and the source-literal Product/Design direct-entry
+residual are unverified, not passed.
 Revisit when: normal Git history cannot deterministically identify the first complete introduction;
 state replay cannot deterministically establish an equivalent semantic landing; or evidence shows
 that multi-owner all-at-once landing is necessarily safer than partial consumption. History-derived
