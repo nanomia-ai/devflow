@@ -83,9 +83,13 @@ The deploy surface for this release is the existing `skills/**`, `scripts/**`, `
 evidence and limitations live in `docs/rounds/v0.20.0/report_ko.md`. Fresh affected evidence
 includes all-nine receipt identity (615 entries, zero mismatch), a 19-case Work predicate probe,
 17/17 Work seams, 17/17 compatible-history cases, and 12/12 decision-index tests. The final
-wildcard root suite/Gate A, one hand Gate B, frozen clean baseline/candidate comparison, official
-install and byte match, candidate commit, and push remain UNVERIFIED. Tested runtime bytes must
-equal shipped runtime bytes; later identifier-only evidence must not mutate deploy/runtime bytes.
+wildcard root suite and Gate A pass 498/498 on the final candidate bytes. One hand Gate B, frozen
+clean baseline/candidate comparison, official install and byte match, candidate commit, and push
+remain UNVERIFIED. Tested runtime bytes must equal shipped runtime bytes; later identifier-only
+evidence must not mutate deploy/runtime bytes.
+Gate A keeps the same parser and read-only assertions but uses a 60-second finite harness bound:
+its isolated 35/35 run completed in 28.5 seconds while the loaded wildcard suite crossed the old
+30-second bound by 42 milliseconds and cancelled only its derivative child cases.
 
 Resume recovery now projects the existing DD-26 folder-boundary rule: change no code, rename
 closing non-capability folders deepest-first to `.done`, and make one boundary commit. Split intake

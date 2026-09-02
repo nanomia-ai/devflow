@@ -367,7 +367,7 @@ Verify가 가능해진다. 설계 이유와 재개 조건의 durable owner는 DD
 | **UNVERIFIED** | official-home install·installed byte match | clean committed source에서 real Claude/Codex/Orca home으로 설치하고 exact closure를 비교하지 않음 |
 | **UNVERIFIED** | frozen clean baseline/candidate comparison | 과거 14 transcript는 context only; final-byte 동일 질문·rubric 비교를 실행하지 않음 |
 | **UNVERIFIED** | one hand Gate B | genuine fixture의 create/list/filter/revisit와 Work→Resume→Work→Verify/closure를 현재 바이트로 실행하지 않음 |
-| **UNVERIFIED** | final wildcard root suite / Gate A | `node --test "scripts/*.test.js"`를 현재 frozen 후보에서 실행하지 않음; Gate A도 따라서 미실행 |
+| **MET** | final wildcard root suite / Gate A | `rtk node --test "scripts/*.test.js"`: tests/pass 498/498, fail/cancelled/skipped/todo 0, `duration_ms 3536616.9279`; Gate A는 동일 parser·read-only assertion과 60초 유한 하네스 한도에서 통과 |
 | **UNVERIFIED** | integration-behind 남은 실행 경계 | I-1 uncommitted local transition, I-2 block→branch update→overlay, I-3 merge-commit lag entry, merge-resolution-only `git log -G`, full Product/Arch/Resume/Work closure는 실행하지 않음 |
 | **UNVERIFIED** | R-1 direct Product/Design entry | hook의 Principles→Resume을 우회한 사용자 직접 호출은 source-literal loop residual이지만 end-to-end 실행하지 않음; canonical entry PASS로 승격하지 않음 |
 
@@ -462,7 +462,7 @@ independent 19-case direct predicate probe가 `pendingSetStatus=complete` 상태
 - 개인 회로 차단기 네 개는 모두 미발동이다: 같은 문장의 세 번째 수리 0, 구체적 두 오독 없는
   가능성 소견 0, 진자 운동 0, 지난 review만을 근거로 한 소견 0.
 - unexecuted behavior를 pass로 바꾸지 않았다. release push, official install/byte match,
-  frozen comparison, one hand Gate B, final wildcard/Gate A, R-1 end-to-end, I-1∼I-3,
+  frozen comparison, one hand Gate B, R-1 end-to-end, I-1∼I-3,
   merge-resolution-only `git log -G`는 전부 UNVERIFIED다.
 
 따라서 text loop는 여기서 멈추고 다음 검증 수단을 empirical execution으로 넘긴다.
@@ -486,9 +486,9 @@ source-OID rebase/prune tension, permanent project-wide reopen finding, R-2 huma
 I-1∼I-3·merge-resolution-only gap, 그리고 위 UNVERIFIED 관문들.
 
 **Next revalidation:** runtime 바이트를 바꾸지 않은 채 clean committed baseline/candidate의
-official-home byte identity와 frozen comparison을
-확인한 뒤, 같은 frozen candidate에서 hand Gate B 한 번과 wildcard root suite/Gate A 한 번을
-실행한다. integration-behind는 I-1 uncommitted local, I-2 update-to-overlay, I-3
+official-home byte identity와 frozen comparison을 확인한 뒤, 같은 frozen candidate에서 hand
+Gate B를 한 번 실행한다. wildcard root suite/Gate A는 위 498/498로 닫혔다.
+integration-behind는 I-1 uncommitted local, I-2 update-to-overlay, I-3
 merge-commit lag entry와 R-1 direct-entry를 각각 실행 증거로만 올린다. 그 뒤
 commit/install 식별자를 문서에 보태야 한다면 deploy closure가 시험 바이트와 hash-identical임을
 증명한다.

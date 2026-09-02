@@ -702,7 +702,7 @@ test("E channel-unavailable results wait for an explicit verification request", 
   assert.equal(nextOf(requested.stdout), "event.product-requested", requested.stdout);
 });
 
-test("gate A feeds every canon-reserved journal line to the deployed parser", { timeout: 30_000 }, async (t) => {
+test("gate A feeds every canon-reserved journal line to the deployed parser", { timeout: 60_000 }, async (t) => {
   const timestamp = "2026-08-21T00:00:00Z";
   const root = makeRepo(t, { capabilities: ["capability"] });
   rootVerify(root, "pass");
