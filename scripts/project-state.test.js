@@ -4793,6 +4793,7 @@ test("K knowledge journal observation separates absence and root boundary from G
   const rootSource = researchSource(rootBoundary);
   const rootMarker = knowledgeLanding("devflow/project/arch.md", "arch", rootSource.source);
   git(rootBoundary, "checkout", "--orphan", "knowledge-root");
+  write(rootBoundary, "devflow/project/arch.md", arch({ brownfield: "no", integration: "knowledge-root" }));
   write(rootBoundary, "devflow/journal.md", `${rootMarker}\n`);
   commit(rootBoundary, "jmp boundary · root knowledge landing");
   state = await module.calculateState({ root: rootBoundary });

@@ -8,6 +8,21 @@
 
 ## 실전 관찰 항목 — 규칙 추가 없이 다음 사이클에서 지켜볼 것
 
+- **호환 환류 실전 잔여는 유계 관찰로 남는다** (DD-96 seal과 integration-behind 수리가
+  2026-09-02 기록) — 첫째, 상태 도구는 현재 Git 이력에서 차단형 reopen finding을 도출하며
+  journal을 고친 뒤에도 그것을 지울 수 없다. 이것은 기록일 뿐이고 런타임 동작 변경 권한이
+  아니다. Work가 아닌 writer가 실전에서 하나에 도달한 뒤에만 clearable-finding 설계를 다시
+  연다. 후보는 현재 journal에서 reopen finding을 도출하고, 소비를 오래된 것부터 순회하며,
+  이미 소비된 identity의 제거 검증은 건너뛰고, 소비된 nonmember 제거는 advisory로 다루는
+  방식이다. 둘째, **R-1**은 비정본 direct Product/Design 진입에 관한 source-literal이지만
+  실행하지 않은 residual이다. `skills/principles/scripts/project-state.mjs:1446`은 integration
+  marker의 `landing = "pending"`을 유지하고, Product와 Design collector는 그 값을 읽지만 두
+  spec은 `state.route`를 소비하지 않는다. 따라서 lagging worktree에서 hook의
+  Principles→Resume route를 우회해 사용자가 어느 owner skill이든 직접 호출하면 쓰고, 기다린 뒤,
+  다시 `pending`을 볼 수 있다. 정본 route는 `integrity.blocking`에 도달하고 소실이나 marker
+  중복은 예측되지 않으므로 이것은 v0.20.0 release blocker가 아니다. 소유자가 이 concurrency
+  state의 direct owner-skill invocation을 정본으로 만들거나 end-to-end 실전 실행이 loop를
+  재현하면 kernel-only landing-state correction을 다시 연다.
 - **정본 `C<n>` 행 파서의 수용된 한계** (v0.20.0 최종 수리 감사에서 2026-08-31 기록;
   `skills/principles/scripts/project-state.mjs:531-574`) — 선언된 번호의 빈칸은 이상 없이
   수용된다(`C1, C3` → `02, 04`). 별개로, `## Capabilities` 아래에서 한 행이라도 파싱되면
