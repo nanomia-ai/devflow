@@ -3981,6 +3981,72 @@ test("compatible feedback linked worktree: divergent additions do not invent a u
   assert.deepEqual(state.facts.report.notYetOnIntegration, ["devflow/journal.md"]);
 });
 
+test("compatible feedback linked worktree: integration-behind blocks owner landing and local reproduction", async (t) => {
+  const root = makeRepo(t, { brownfield: "no" });
+  const integrationCard = "devflow/tree/02-capability/02.1-integration.wip-jmp.md";
+  const localCard = "devflow/tree/02-capability/02.2-local.wip-jmp.md";
+  const productOwner = "devflow/project/product.md";
+  const archOwner = "devflow/project/arch.md";
+  write(root, integrationCard, cardText("02.1"));
+  write(root, localCard, cardText("02.2"));
+  const sourceCommit = commit(root, "jmp compatible integration-behind sources");
+  const integrationSource = `${integrationCard}@${sourceCommit}`;
+  const localSource = `${localCard}@${sourceCommit}`;
+  const productCoordinates = compatibleCoordinates(productOwner, " integration-behind product");
+  const localCoordinates = compatibleCoordinates(archOwner, " integration-behind local");
+  const linked = addLinkedWorktree(t, root, "compatible-integration-behind");
+
+  write(root, "devflow/journal.md", `${compatibleFeedback(productOwner, integrationSource, productCoordinates)}\n`);
+  const integrationHead = commit(root, "jmp boundary: integration-behind compatible marker");
+  landCompatibleOwner(linked, productOwner, integrationSource, productCoordinates);
+
+  const module = await registry();
+  const landed = await stableCompatibleState(module, linked);
+
+  write(linked, "devflow/journal.md", `${compatibleFeedback(archOwner, localSource, localCoordinates, "2026-08-29T01:01:00Z")}\n`);
+  commit(linked, "jmp boundary: local marker while integration-behind");
+  const local = await stableCompatibleState(module, linked);
+  const lifecycleFor = (state, card) => Array.isArray(state.facts.compatibleFeedback.lifecycles)
+    ? state.facts.compatibleFeedback.lifecycles.filter((item) => item.entry.source.startsWith(`${card}@`)).length
+    : state.facts.compatibleFeedback.lifecycles;
+  const blockingReason = (state) => state.zones.integrity.entries
+    .find((entry) => entry.item === "compatible-feedback" && entry.reason === "compatible-feedback-integration-behind")?.reason ?? "none";
+
+  assert.deepEqual({
+    landed: {
+      integration: landed.metadata.integration.hash,
+      route: landed.route.id,
+      markerLanding: landed.zones.marker.entries.find((entry) => entry.kind === "compatible-feedback")?.landing,
+      blockedBy: landed.facts.compatibleFeedback.blockedBy ?? "none",
+      blockingReason: blockingReason(landed),
+    },
+    local: {
+      route: local.route.id,
+      markerOwners: local.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").map((entry) => entry.owner),
+      localCardLifecycle: lifecycleFor(local, localCard),
+      blockedBy: local.facts.compatibleFeedback.blockedBy ?? "none",
+      blockingReason: blockingReason(local),
+      notYetOnIntegration: local.facts.report.notYetOnIntegration,
+    },
+  }, {
+    landed: {
+      integration: integrationHead,
+      route: "integrity.blocking",
+      markerLanding: "pending",
+      blockedBy: "integration-behind",
+      blockingReason: "compatible-feedback-integration-behind",
+    },
+    local: {
+      route: "integrity.blocking",
+      markerOwners: [productOwner],
+      localCardLifecycle: "invalid",
+      blockedBy: "integration-behind",
+      blockingReason: "compatible-feedback-integration-behind",
+      notYetOnIntegration: ["devflow/journal.md"],
+    },
+  });
+});
+
 test("compatible feedback: a card's own marker outranks its finish boundary", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
   const card = "devflow/tree/02-capability/02.1-spaced fixture.wip-jmp.md";

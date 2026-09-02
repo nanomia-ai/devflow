@@ -1359,13 +1359,13 @@ function compatibleFeedbackLandedAt(snapshot, line, ref) {
     && ["background", "why", "conclusion", "implication"].every((key) => ownerText.includes(line.coordinates[key]));
 }
 
-function integrationHasCompatibleFeedbackTransition(snapshot, base, integration) {
+function hasCompatibleFeedbackTransition(snapshot, base, ref) {
   const history = gitRun(snapshot.root,
-    ["log", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", `${base}..${integration}`, "--", "devflow/journal.md"],
+    ["log", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", `${base}..${ref}`, "--", "devflow/journal.md"],
     { allowFailure: true });
   if (history.status !== 0) return null;
   try {
-    const commits = normalizeFileText(decodeUtf8(history.stdout, "compatible feedback integration history")).split("\n").filter(Boolean);
+    const commits = normalizeFileText(decodeUtf8(history.stdout, "compatible feedback range history")).split("\n").filter(Boolean);
     if (commits.some((commit) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit))) return null;
     return commits.length > 0;
   } catch {
@@ -1378,6 +1378,7 @@ function compatibleFeedbackAuthority(snapshot) {
   let commit = snapshot.head;
   let ref = "HEAD";
   let overlayWorking = true;
+  let localTransition = false;
 
   if (integration && integration !== snapshot.head) {
     commit = integration;
@@ -1385,13 +1386,19 @@ function compatibleFeedbackAuthority(snapshot) {
     overlayWorking = false;
     const base = gitLine(snapshot.root, ["merge-base", integration, snapshot.head], { allowFailure: true });
     // A local transition is a safe overlay only while integration has made no compatible
-    // transition since the common base.  Once both histories changed this lifecycle, keep
-    // the configured integration tip intact; the existing integration path carries the
-    // local journal change instead of this read-only kernel inventing a union.
-    if (base && integrationHasCompatibleFeedbackTransition(snapshot, base, integration) === false) {
+    // transition since the common base.  Once integration changed this lifecycle, keep its
+    // projection intact and report the lagging worktree instead of inventing a history union.
+    if (base && hasCompatibleFeedbackTransition(snapshot, base, integration) === false) {
       commit = snapshot.head;
       ref = "HEAD";
       overlayWorking = true;
+    } else {
+      const committedLocal = base ? hasCompatibleFeedbackTransition(snapshot, base, snapshot.head) : null;
+      const headJournal = knowledgeJournalAt(snapshot.root, "HEAD", COMPATIBLE_FEEDBACK_BYTES);
+      const workingLocal = ["failure", "undecodable"].includes(headJournal.state) ? null
+        : addedCompatibleFeedback(headJournal.text, snapshot.journalText ?? "").length > 0
+          || removedCompatibleFeedback(headJournal.text, snapshot.journalText ?? "").length > 0;
+      localTransition = committedLocal !== false || workingLocal !== false;
     }
   }
 
@@ -1401,14 +1408,24 @@ function compatibleFeedbackAuthority(snapshot) {
     ref,
     journal,
     overlayWorking,
+    localTransition,
     workingText: overlayWorking ? snapshot.journalText ?? "" : journal.text ?? "",
   };
 }
 
 function compatibleFeedbackState(snapshot) {
   const authority = compatibleFeedbackAuthority(snapshot);
+  const blockedBy = authority.overlayWorking ? null : "integration-behind";
   const current = parseJournal(authority.workingText).filter((line) => line.kind === "compatible-feedback");
-  const issues = [];
+  const issues = blockedBy ? [{
+    item: "compatible-feedback",
+    blocking: true,
+    path: "devflow/journal.md",
+    reason: "compatible-feedback-integration-behind",
+    head: snapshot.head,
+    integration: authority.commit,
+    resolution: "update-current-branch-from-integration",
+  }] : [];
   const accepted = [];
   const lifecycles = new Map();
   const pairs = new Set();
@@ -1471,7 +1488,7 @@ function compatibleFeedbackState(snapshot) {
   }
   if (journalCommits === null) {
     issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", reason: "compatible-history-undecodable" });
-    return { accepted, issues, lifecycles: [...lifecycles.values()].sort((left, right) => byteCompare(left.identity, right.identity)) };
+    return { accepted, issues, lifecycles: [...lifecycles.values()].sort((left, right) => byteCompare(left.identity, right.identity)), blockedBy, localTransition: authority.localTransition };
   }
   const transitions = [];
   for (const commit of journalCommits) {
@@ -1578,7 +1595,7 @@ function compatibleFeedbackState(snapshot) {
     }
   }
   authorized.sort((left, right) => byteCompare(left.owner, right.owner) || byteCompare(left.source, right.source) || byteCompare(left.coordinatesJson, right.coordinatesJson));
-  return { accepted: authorized, issues, lifecycles: [...lifecycles.values()].sort((left, right) => byteCompare(left.identity, right.identity)) };
+  return { accepted: authorized, issues, lifecycles: [...lifecycles.values()].sort((left, right) => byteCompare(left.identity, right.identity)), blockedBy, localTransition: authority.localTransition };
 }
 
 function parseHandoff(snapshot) {
@@ -3272,7 +3289,10 @@ function evaluateZones(snapshot) {
     existingRequests: requests.map((line) => line.raw),
     findings: verify.findings,
     term: glossaryTermProjection(snapshot),
-    compatibleFeedback: { lifecycles: compatibleFeedback.lifecycles },
+    compatibleFeedback: {
+      lifecycles: compatibleFeedback.localTransition ? "invalid" : compatibleFeedback.lifecycles,
+      ...(compatibleFeedback.blockedBy ? { blockedBy: compatibleFeedback.blockedBy } : {}),
+    },
   };
   return { zones, facts, verify, integrityItems, changedOnBranch };
 }
