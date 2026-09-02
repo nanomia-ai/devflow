@@ -3,7 +3,6 @@
     "id": "domain-orientation-bounded",
     "s": {
       "state.canonicalNext": "ready.ready",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -28,7 +27,6 @@
     "id": "unmanaged-ordinary-reports-and-stops",
     "s": {
       "state.canonicalNext": "setup.unmanaged",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -51,7 +49,6 @@
     "id": "unmanaged-handoff-reports-and-stops",
     "s": {
       "state.canonicalNext": "setup.unmanaged",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -71,7 +68,6 @@
     "id": "unmanaged-domain-orientation-stays-first",
     "s": {
       "state.canonicalNext": "setup.unmanaged",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -94,7 +90,6 @@
     "id": "handoff-active-reentry",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -116,7 +111,6 @@
     "id": "design-recovery-producer-routes-work",
     "s": {
       "state.canonicalNext": "marker.design-note",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -141,7 +135,6 @@
     "id": "design-recovery-external-reports-only",
     "s": {
       "state.canonicalNext": "marker.design-note",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -162,7 +155,6 @@
     "id": "recovery-routes-arch",
     "s": {
       "state.canonicalNext": "baseline.boundary",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -184,10 +176,9 @@
     ]
   },
   {
-    "id": "recovery-routes-adopt",
+    "id": "design-recovery-routes-arch-without-origin-branch",
     "s": {
       "state.canonicalNext": "marker.design-note",
-      "state.brownfield": "yes",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -199,19 +190,18 @@
       "effects": [
         "READ",
         "READ",
-        "ROUTE:adopt"
+        "ROUTE:arch"
       ]
     },
     "cover": [
-      "row:recovery/route-adopt",
-      "branch:recovery/route-adopt"
+      "row:recovery/route-arch",
+      "branch:recovery/route-arch"
     ]
   },
   {
     "id": "folder-boundary-commits-before-wait",
     "s": {
       "state.canonicalNext": "layer.folder-boundary",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -236,7 +226,6 @@
     "id": "digest-commits-before-wait",
     "s": {
       "state.canonicalNext": "ready.digest-behind",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -261,7 +250,6 @@
     "id": "transition-family-verifies",
     "s": {
       "state.canonicalNext": "transition.prepared-route",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -283,7 +271,6 @@
     "id": "claim-and-layer-family-splits",
     "s": {
       "state.canonicalNext": "claim.needs-reapproval",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -305,7 +292,6 @@
     "id": "git-and-setup-ask",
     "s": {
       "state.canonicalNext": "git.open-operation",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -324,10 +310,9 @@
     ]
   },
   {
-    "id": "glossary-term-asks-owner",
+    "id": "glossary-term-routes-arch",
     "s": {
       "state.canonicalNext": "marker.glossary-term",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -335,21 +320,20 @@
     },
     "expect": {
       "stage": "scope-entry",
-      "status": "ASK",
+      "status": "ROUTE",
       "effects": [
-        "ASK"
+        "ROUTE:arch"
       ]
     },
     "cover": [
-      "row:canonicalNext/ASK:owner-mapping",
-      "branch:canonicalNext/ASK:owner-mapping"
+      "row:canonicalNext/ROUTE:arch",
+      "branch:canonicalNext/ROUTE:arch"
     ]
   },
   {
     "id": "recovery-action-has-no-none-branch",
     "s": {
       "state.canonicalNext": "marker.design-open-item",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -369,10 +353,9 @@
     ]
   },
   {
-    "id": "brownfield-baseline-adopts",
+    "id": "baseline-refresh-routes-arch-without-origin-branch",
     "s": {
       "state.canonicalNext": "baseline.legacy-v010",
-      "state.brownfield": "yes",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -382,19 +365,18 @@
       "stage": "scope-entry",
       "status": "ROUTE",
       "effects": [
-        "ROUTE:adopt"
+        "ROUTE:arch"
       ]
     },
     "cover": [
-      "row:canonicalNext/ROUTE:adopt",
-      "branch:canonicalNext/ROUTE:adopt"
+      "row:canonicalNext/ROUTE:arch",
+      "branch:canonicalNext/ROUTE:arch"
     ]
   },
   {
     "id": "greenfield-baseline-arches",
     "s": {
       "state.canonicalNext": "baseline.legacy-v010",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -416,7 +398,6 @@
     "id": "product-marker-routes-product",
     "s": {
       "state.canonicalNext": "marker.product-rerun",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -438,7 +419,6 @@
     "id": "blocked-channel-reports-and-waits",
     "s": {
       "state.canonicalNext": "blocked.channel",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -461,7 +441,6 @@
     "id": "completion-reports-and-done",
     "s": {
       "state.canonicalNext": "complete.adoption",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -484,7 +463,6 @@
     "id": "unrecognized-fails-closed",
     "s": {
       "state.canonicalNext": "unrecognized",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -504,7 +482,6 @@
     "id": "handoff-unrecognized-guard",
     "s": {
       "state.canonicalNext": "unrecognized",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -523,7 +500,6 @@
     "id": "ordinary-ready-routes-work",
     "s": {
       "state.canonicalNext": "ready.ready",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -546,7 +522,6 @@
     "id": "domain-entry-questions",
     "s": {
       "state.canonicalNext": "ready.ready",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -566,7 +541,6 @@
     "id": "tweak-entry",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -585,7 +559,6 @@
     "id": "direct-reads",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -604,7 +577,6 @@
     "id": "report-approval",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -623,7 +595,6 @@
     "id": "routing-introduction",
     "s": {
       "state.canonicalNext": "transition.prepared-route",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -642,7 +613,6 @@
     "id": "defer-policy",
     "s": {
       "state.canonicalNext": "transition.prepared-route",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -661,7 +631,6 @@
     "id": "digest-policy",
     "s": {
       "state.canonicalNext": "ready.digest-behind",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -683,7 +652,6 @@
     "id": "exceptions",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -702,7 +670,6 @@
     "id": "split-planning-routes",
     "s": {
       "state.canonicalNext": "claim.needs-reapproval",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -721,7 +688,6 @@
     "id": "event-routing-verifies",
     "s": {
       "state.canonicalNext": "transition.prepared-route",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -740,7 +706,6 @@
     "id": "product-verification",
     "s": {
       "state.canonicalNext": "transition.prepared-route",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -759,7 +724,6 @@
     "id": "integrity-blocking-asks",
     "s": {
       "state.canonicalNext": "integrity.blocking",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -781,7 +745,6 @@
     "id": "integrity-shape-advisory",
     "s": {
       "state.canonicalNext": "integrity.shape",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -804,7 +767,6 @@
     "id": "fresh-project-asks-preservation-before-product",
     "s": {
       "state.canonicalNext": "setup.no-product",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -823,7 +785,6 @@
     "id": "project-research-precedes-missing-product",
     "s": {
       "state.canonicalNext": "ready.ready",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -842,7 +803,6 @@
     "id": "active-claim-continues-work",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -861,7 +821,6 @@
     "id": "interrupted-transition-routes-verify-without-rerun",
     "s": {
       "state.canonicalNext": "transition.interrupted",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -880,7 +839,6 @@
     "id": "domain-orientation-stays-read-only",
     "s": {
       "state.canonicalNext": "claim.mine",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -897,10 +855,9 @@
     "cover": []
   },
   {
-    "id": "partial-knowledge-landing-keeps-owner-active",
+    "id": "arch-writer-knowledge-landing-keeps-arch-owner",
     "s": {
       "state.canonicalNext": "marker.knowledge-landing",
-      "state.brownfield": "no",
       "state.compatibleWriter": "none"
     },
     "judged": {
@@ -916,10 +873,31 @@
     "cover": []
   },
   {
+    "id": "legacy-adopt-writer-knowledge-landing-routes-arch",
+    "s": {
+      "state.canonicalNext": "marker.knowledge-landing",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:arch"
+      ],
+      "row": "ROUTE:arch"
+    },
+    "cover": [
+      "row:canonicalNext/ROUTE:arch",
+      "branch:canonicalNext/ROUTE:arch"
+    ]
+  },
+  {
     "id": "compatible-feedback-routes-product",
     "s": {
       "state.canonicalNext": "marker.compatible-feedback",
-      "state.brownfield": "no",
       "state.compatibleWriter": "product"
     },
     "judged": {
@@ -942,7 +920,6 @@
     "id": "compatible-feedback-routes-design",
     "s": {
       "state.canonicalNext": "marker.compatible-feedback",
-      "state.brownfield": "no",
       "state.compatibleWriter": "design"
     },
     "judged": {
@@ -965,7 +942,6 @@
     "id": "compatible-feedback-routes-arch",
     "s": {
       "state.canonicalNext": "marker.compatible-feedback",
-      "state.brownfield": "no",
       "state.compatibleWriter": "arch"
     },
     "judged": {
@@ -985,33 +961,9 @@
     ]
   },
   {
-    "id": "compatible-feedback-routes-adopt",
-    "s": {
-      "state.canonicalNext": "marker.compatible-feedback",
-      "state.brownfield": "yes",
-      "state.compatibleWriter": "adopt"
-    },
-    "judged": {
-      "intent.scope": "ordinary"
-    },
-    "expect": {
-      "stage": "scope-entry",
-      "status": "ROUTE",
-      "effects": [
-        "ROUTE:adopt"
-      ],
-      "row": "compatible-adopt"
-    },
-    "cover": [
-      "row:canonicalNext/compatible-adopt",
-      "branch:canonicalNext/compatible-adopt"
-    ]
-  },
-  {
     "id": "compatible-feedback-invalid-owner-blocks",
     "s": {
       "state.canonicalNext": "marker.compatible-feedback",
-      "state.brownfield": "no",
       "state.compatibleWriter": "invalid"
     },
     "judged": {

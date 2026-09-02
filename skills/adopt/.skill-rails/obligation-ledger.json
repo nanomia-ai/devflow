@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:fb2fcc014ddc28288e7b7c1b9a03daa591cf27a8e1e96d24b5884db734309599",
+  "intent_hash": "sha256:41744730ec45da9d6c2ca79ac46fe0888431e59d19dc71d2e5aa6eb9819d18ee",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Existing-project adoption. In a repository that already has code, traces one representative flow per capability candidate and reverse-derives Layer 0 and capability design zones. Use only with explicit devflow intent—direct invocation, naming devflow, or asking to adopt an existing codebase into devflow, reverse-derive Layer 0, or create or repair devflow capability documents.",
+      "text": "Explicit brownfield adoption. In an unmanaged repository with maintained pre-devflow material—documentation, code, or both—account for all maintained sources and reverse-derive Product, Architecture, applicable Design, code style, glossary, capability design zones, and complete durable domain knowledge; ask only irreducible decisions and contradictions, then request binding confirmation. Use only when Adopt is directly invoked or named, or when the user explicitly asks to adopt an existing project into devflow. General devflow discussion and generic project documentation do not trigger it.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
@@ -21,53 +21,634 @@
     {
       "id": "problem-001",
       "source": "intent.problem",
-      "text": "Preserve the behavior of the immutable repository source at skills/adopt without silently changing its obligations.",
+      "text": "Convert an unmanaged repository's maintained pre-devflow material—documentation, code, or both—into devflow's canonical planning and domain-knowledge surface without treating material presence as completed evidence, stealing Resume state ownership, or asking the owner to restate discoverable facts.",
       "candidate_class": "judgment/body",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
         "body:why: purpose",
-        "file:references/purpose.md",
-        "spec:STAGES/entry"
+        "file:references/purpose.md"
       ],
       "evidence": [
-        "body:why: purpose",
-        "fixture:trace-needed",
-        "fixture:entry-initial"
+        "body:why: purpose"
+      ]
+    },
+    {
+      "id": "use-cases-001",
+      "source": "intent.use_cases[0]",
+      "text": "Explicitly adopt an unmanaged already-progressed repository that contains maintained documentation, implementation code, or both.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/explicit_entry"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "use-cases-002",
+      "source": "intent.use_cases[1]",
+      "text": "Reverse-derive product, architecture, applicable design, conventions, vocabulary, capabilities, and complete domain knowledge from all maintained pre-devflow material.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption",
+        "spec:DECLARATIONS/source_coverage"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "use-cases-003",
+      "source": "intent.use_cases[2]",
+      "text": "Repair or create brownfield Layer 0 and capability design zones from documentary bases and, where executable code exists, evidence-backed representative flows.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/representative_flow",
+        "spec:TEMPLATES/capabilityDesign"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "near-misses-001",
+      "source": "intent.near_misses[0]",
+      "text": "Ordinary Resume or session-start in an unmanaged repository; those remain silent or DONE according to the state owner.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/state-owned-elsewhere",
+        "body:guard: state-owned-elsewhere"
+      ],
+      "evidence": [
+        "fixture:managed-state",
+        "fixture:no-project-material"
+      ]
+    },
+    {
+      "id": "near-misses-002",
+      "source": "intent.near_misses[1]",
+      "text": "A repository with no meaningful maintained non-devflow project material, which routes to Product.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/no-project-material-routes-product"
+      ],
+      "evidence": [
+        "fixture:no-project-material"
+      ]
+    },
+    {
+      "id": "near-misses-003",
+      "source": "intent.near_misses[2]",
+      "text": "A managed project re-entry or an active Work/Verify operation, which routes to Resume.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/state-owned-elsewhere",
+        "body:guard: state-owned-elsewhere"
+      ],
+      "evidence": [
+        "fixture:managed-state",
+        "fixture:no-project-material"
+      ]
+    },
+    {
+      "id": "near-misses-004",
+      "source": "intent.near_misses[3]",
+      "text": "A request to invent a new product rather than reconstruct an existing one.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/state-owned-elsewhere",
+        "body:guard: state-owned-elsewhere"
+      ],
+      "evidence": [
+        "fixture:managed-state",
+        "fixture:no-project-material"
+      ]
+    },
+    {
+      "id": "inputs-001",
+      "source": "intent.inputs[0]",
+      "text": "One read-only devflow project-state snapshot whose route is setup.unmanaged and whose current tracked-plus-untracked, non-ignored non-devflow material observation is present.",
+      "candidate_class": "observation",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:OBSERVATIONS/state.material",
+        "body:why: workflow"
+      ],
+      "evidence": [
+        "eval:uncommitted-document-material"
+      ]
+    },
+    {
+      "id": "inputs-002",
+      "source": "intent.inputs[1]",
+      "text": "Existing implementation, tests, APIs, schemas, configuration, maintained documentation, specifications, and operational records.",
+      "candidate_class": "observation",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:OBSERVATIONS/state.route",
+        "file:references/workflow.md"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare",
+        "file:collectors/index.mjs"
+      ]
+    },
+    {
+      "id": "inputs-003",
+      "source": "intent.inputs[2]",
+      "text": "Explicit owner answers only for irreducible missing decisions or contradictions, followed by one binding approval or refusal.",
+      "candidate_class": "observation",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:OBSERVATIONS/state.route",
+        "file:references/workflow.md"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare",
+        "file:collectors/index.mjs"
+      ]
+    },
+    {
+      "id": "outputs-001",
+      "source": "intent.outputs[0]",
+      "text": "A proposal that gives every maintained source one explicit disposition and includes capability candidates, one representative executable flow per code-backed candidate, exact documentary bases for document-derived candidates, reconciled claims, derived Layer 0, applicable Design, capability zones, the complete K-node landing plan, and any whole follow-on request that must survive the adoption boundary.",
+      "candidate_class": "artifact",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/adoptionProposal",
+        "spec:DECLARATIONS/representative_flow",
+        "spec:DECLARATIONS/source_coverage"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "outputs-002",
+      "source": "intent.outputs[1]",
+      "text": "After approval, canonical product.md, arch.md, applicable design.md, code-style.md, glossary.md, capability design documents, and every required owner-adjacent K node.",
+      "candidate_class": "artifact",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "outputs-003",
+      "source": "intent.outputs[2]",
+      "text": "Two ordered commits under the one approval: `adopt — layer 0` contains complete Layer 0 and any idempotent follow-on record with product.md written last; `adopt — capabilities` contains capability documents whose Design head is the first commit plus every required validated K node beside its owner.",
+      "candidate_class": "artifact",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption",
+        "body:stage: adoption"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "irreversible-boundaries-001",
+      "source": "intent.irreversible_boundaries[0]",
+      "text": "The owner's confirmation binds the complete proposed Layer 0, capability, and knowledge write set.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption",
+        "body:stage: adoption"
+      ],
+      "evidence": [
+        "fixture:approval-refuse",
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "irreversible-boundaries-002",
+      "source": "intent.irreversible_boundaries[1]",
+      "text": "The approved projection lands through two ordered boundaries: product.md is the last write before the Layer 0 commit, then capability documents use that landed commit as Design head and their K nodes validate beside them; interruption before product remains unmanaged, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption",
+        "body:stage: adoption"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
       ]
     },
     {
       "id": "state-dependent-behaviors-001",
       "source": "intent.state_dependent_behaviors[0]",
-      "text": "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review.",
+      "text": "Explicit Adopt consumes setup.unmanaged directly; it does not invoke Principles as a preflight and does not ask Resume to reinterpret that route.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",
       "targets": [
-        "file:references/legacy-atoms/intent-01.md",
-        "spec:STAGES/entry"
+        "spec:GUARDS/state-owned-elsewhere",
+        "spec:STAGES/adoption"
       ],
       "evidence": [
-        "file:references/legacy-atoms/intent-01.md",
-        "fixture:trace-needed",
-        "fixture:entry-initial"
+        "fixture:managed-state",
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-002",
+      "source": "intent.state_dependent_behaviors[1]",
+      "text": "No maintained non-devflow project material routes to Product; unknown material evidence fails closed; documentation-only or code-backed material proceeds through Adopt, while managed or active-operation routes remain owned by Resume.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/no-project-material-routes-product",
+        "spec:GUARDS/unknown-project-material",
+        "spec:DECLARATIONS/explicit_entry"
+      ],
+      "evidence": [
+        "fixture:no-project-material",
+        "fixture:unknown-project-material",
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-003",
+      "source": "intent.state_dependent_behaviors[2]",
+      "text": "Refusal or interruption before binding approval writes nothing.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-004",
+      "source": "intent.state_dependent_behaviors[3]",
+      "text": "If the adoption request also contains follow-on work, the whole request is preserved idempotently once through Principles' maintenance-routing record in the first adoption commit.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption",
+        "spec:DECLARATIONS/follow_on_request"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-005",
+      "source": "intent.state_dependent_behaviors[4]",
+      "text": "Approved adoption stops after reporting and does not synthesize another route or automatically opt into Split, Arch, or Resume.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "exact-formats-001",
+      "source": "intent.exact_formats[0]",
+      "text": "Canonical product, architecture, applicable design, code-style, glossary, capability-design, knowledge-node, result, and adoption-proposal templates.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/adoptionProposal",
+        "spec:TEMPLATES/product",
+        "spec:TEMPLATES/architecture",
+        "spec:TEMPLATES/design",
+        "spec:TEMPLATES/codeStyle",
+        "spec:TEMPLATES/glossary",
+        "spec:TEMPLATES/capabilityDesign",
+        "spec:TEMPLATES/knowledgeNode",
+        "spec:TEMPLATES/result"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare",
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "exact-formats-002",
+      "source": "intent.exact_formats[1]",
+      "text": "Owner-adjacent K nodes retain same-stem identity and exact provenance with no central index.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/knowledgeNode",
+        "spec:DECLARATIONS/knowledge_shape"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "external-dependencies-001",
+      "source": "intent.external_dependencies[0]",
+      "text": "The read-only project-state snapshot for kernel validity, route, and the single non-devflow material observation.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "body:why: purpose"
+      ],
+      "evidence": [
+        "eval:unmanaged-all-source-reconstruction"
+      ]
+    },
+    {
+      "id": "external-dependencies-002",
+      "source": "intent.external_dependencies[1]",
+      "text": "Git for exact source coordinates, history evidence, the first Layer 0 boundary, and the capability-and-knowledge boundary whose Design head names the first.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption",
+        "file:references/workflow.md"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "external-dependencies-003",
+      "source": "intent.external_dependencies[2]",
+      "text": "Product as the no-material destination and Resume as the owner of managed or active-operation states.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/no-project-material-routes-product",
+        "spec:GUARDS/state-owned-elsewhere"
+      ],
+      "evidence": [
+        "fixture:no-project-material",
+        "fixture:managed-state"
+      ]
+    },
+    {
+      "id": "external-dependencies-004",
+      "source": "intent.external_dependencies[3]",
+      "text": "Arch, Split, Work, and Resume as readers of the canonical artifacts; none is automatically invoked on completion.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:collectors/index.mjs",
+        "spec:DECLARATIONS/state_api"
+      ],
+      "evidence": [
+        "file:collectors/index.mjs",
+        "fixture:managed-state"
+      ]
+    },
+    {
+      "id": "completion-evidence-001",
+      "source": "intent.completion_evidence[0]",
+      "text": "Every maintained source has an explicit named landing, evidence disposition, reasoned non-domain exclusion, or visible unresolved status.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/source_coverage"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "completion-evidence-002",
+      "source": "intent.completion_evidence[1]",
+      "text": "Every code-backed capability candidate has one representative executable flow with exact coordinates; every document-derived candidate without executable code cites its exact maintained documentary basis and marks the flow not applicable.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/representative_flow",
+        "body:stage: adoption"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "completion-evidence-003",
+      "source": "intent.completion_evidence[2]",
+      "text": "Every proposal claim identifies executable or documentary evidence, contradiction, inference, and confidence.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: adoption",
+        "spec:TEMPLATES/adoptionProposal"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "completion-evidence-004",
+      "source": "intent.completion_evidence[3]",
+      "text": "The owner confirms the complete write set after irreducible questions are resolved.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TABLES/approval/approve",
+        "body:stage: adoption"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "completion-evidence-005",
+      "source": "intent.completion_evidence[4]",
+      "text": "Complete Layer 0 is published in the first confirmed commit; all capability designs and their validated K nodes are published together in the second with Design head equal to the first commit.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption",
+        "body:stage: adoption"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "completion-evidence-006",
+      "source": "intent.completion_evidence[5]",
+      "text": "A final report names committed artifacts and preserves unknown or unverified items without claiming completion.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:TEMPLATES/result",
+        "body:stage: adoption"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "deterministic-helpers-001",
+      "source": "intent.deterministic_helpers[0]",
+      "text": "The Adopt collector reads state kernel, setup.unmanaged, and the state snapshot's canonical non-devflow material observation without rescanning filenames or extensions as a project-evidence proxy.",
+      "candidate_class": "declaration",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "spec:DECLARATIONS/brownfield_effects"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "deterministic-helpers-002",
+      "source": "intent.deterministic_helpers[1]",
+      "text": "Skill Rails evaluates guards, approval, exact templates, artifact ownership, and the two ordered commit effects.",
+      "candidate_class": "declaration",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/adoption",
+        "spec:DECLARATIONS/brownfield_effects"
+      ],
+      "evidence": [
+        "fixture:approval-approve"
+      ]
+    },
+    {
+      "id": "deterministic-helpers-003",
+      "source": "intent.deterministic_helpers[2]",
+      "text": "Git supplies immutable coordinates and commit boundaries; filesystem inventory only enumerates selected evidence and never owns state.",
+      "candidate_class": "declaration",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "file:collectors/index.mjs",
+        "spec:DECLARATIONS/state_api"
+      ],
+      "evidence": [
+        "file:collectors/index.mjs",
+        "fixture:adoption-prepare"
       ]
     },
     {
       "id": "judgment-points-001",
       "source": "intent.judgment_points[0]",
-      "text": "Every source atom remains review-required until explicitly disposed.",
+      "text": "Classify sources as implemented/current material, binding plans, exploratory research, superseded records, or unresolved conflicts. Judge authority from document-internal status and actual code, test, and operational evidence; use path/name context, Git history when available, and last-modified time only as corroborating clues. Resolve evidence-supported discrepancies with exact provenance, and ask with conflicting coordinates plus the exact decision only when current product intent remains genuinely undecidable.",
       "candidate_class": "judgment/body",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
-        "file:references/legacy-atoms/intent-01.md",
-        "spec:STAGES/entry"
+        "body:stage: adoption",
+        "spec:DECLARATIONS/representative_flow"
       ],
       "evidence": [
-        "file:references/legacy-atoms/intent-01.md",
-        "fixture:proposal-draft",
-        "fixture:entry-initial"
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "judgment-points-002",
+      "source": "intent.judgment_points[1]",
+      "text": "Choose capability boundaries from entrypoints, top-level modules, service boundaries, and maintained domain documents; documentation may establish a candidate even when no executable code exists.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: adoption",
+        "spec:TEMPLATES/adoptionProposal"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "judgment-points-003",
+      "source": "intent.judgment_points[2]",
+      "text": "Distinguish discoverable facts from irreducible owner decisions and contradictions.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: adoption",
+        "file:references/workflow.md"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare",
+        "file:templates/adoption-proposal.md"
+      ]
+    },
+    {
+      "id": "judgment-points-004",
+      "source": "intent.judgment_points[3]",
+      "text": "Decide which domain knowledge belongs in the always-read capability document and how many owner-adjacent K nodes deeper reusable evidence requires.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/knowledge_shape",
+        "body:stage: adoption"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare"
+      ]
+    },
+    {
+      "id": "judgment-points-005",
+      "source": "intent.judgment_points[4]",
+      "text": "Preserve explicit uncertainty and confidence instead of inventing generic architecture or product decisions.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: adoption",
+        "file:references/workflow.md"
+      ],
+      "evidence": [
+        "fixture:adoption-prepare",
+        "file:templates/adoption-proposal.md"
       ]
     },
     {
@@ -79,11 +660,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-01.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-01.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:403c767c3ecc21f2ef0078dbca5116f9e88712797653cea87a8910822fe6c5c1",
       "source_kind": "frontmatter",
@@ -99,11 +680,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-01.md",
-        "spec:STAGES/capability-design"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-01.md",
-        "fixture:capability-split"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:e4041e9b5b39184fe9cb7c587d9b26507579625738918ac27921187e25db40a8",
       "source_kind": "heading",
@@ -116,15 +697,9 @@
       "text": "glossary.md is an always-read Layer 0 baseline. Align reverse-derived capability composition\r\nwith exact canonical terms in capability-header `Concepts:`. On `marker.glossary-term`,\r\nconsume only the tool payload, first land the glossary definition in a binding commit while\r\nretaining the marker, then in the next `adopt — capabilities` batch align the glossary definition and every known affected `Concepts:` line, refresh every Design head, and delete the marker. Never infer semantic ownership from a card number for a shared term or project-root `[]`.",
       "candidate_class": "guard",
       "consequence": "high",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill-01.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill-01.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:718423bfb1578839c2be125810bffb41b027110ee6448aa9a216d4dd1501e7b5",
       "source_kind": "paragraph",
       "context": [
@@ -145,11 +720,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-01.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-01.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:53c7ba10fb2281fc49656f47c0477a348a49316e551c193f448bc89d8016de5e",
       "source_kind": "paragraph",
@@ -171,11 +746,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-01.md",
-        "spec:STAGES/capability-design"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-01.md",
-        "fixture:capability-split"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:ae1cc020df413c369a98fe25de9da5a134f3a827e89ccff42c3eba97287e98d0",
       "source_kind": "paragraph",
@@ -197,11 +772,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-01.md",
-        "spec:STAGES/capability-design"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-01.md",
-        "fixture:capability-split"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:373b18551702339e19c12d2d50e75fff0ed112ce494a78eda74652203f17c2cd",
       "source_kind": "paragraph",
@@ -223,11 +798,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-01.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-01.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:9b9b509842f97823ef9e047f9af64ca3fe21ccba29d05da80e9c3cc2d4a37d99",
       "source_kind": "paragraph",
@@ -249,11 +824,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-01.md",
-        "spec:STAGES/capability-design"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-01.md",
-        "fixture:capability-split"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:eb7a8b402d9582c41c83adac76f28b8d61ce7f17dd2e042105fb12c39e1a7360",
       "source_kind": "paragraph",
@@ -275,11 +850,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/capability-design"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-02.md",
-        "fixture:capability-split"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:511bd46dc76e87f79871bae7896bdfcd8d59e6b0b49be7f6b9dcf79015073a8d",
       "source_kind": "paragraph",
@@ -301,11 +876,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-02.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:9e31307961888592280daf3731077493512ba2d8d8005d2305ccbf126ed9387a",
       "source_kind": "list-item",
@@ -327,7 +902,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-02.md",
@@ -353,7 +928,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-02.md",
@@ -379,7 +954,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-02.md",
@@ -405,11 +980,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-02.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:6db4db02980632fac372d2430c1a15d365e116f3690351dbbb6d3d422a9a51cd",
       "source_kind": "heading",
@@ -431,7 +1006,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-02.md",
@@ -462,11 +1037,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/capability-design"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-02.md",
-        "fixture:capability-split"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:c4a5bf001e122e9ab253f299760a4d09149f74a06dc156c9bfa69f40cbf95ab5",
       "source_kind": "list-item",
@@ -490,15 +1065,9 @@
       "text": "- External contracts and possibilities are answered by official documentation,\r\n  specifications, source, and primary APIs for the version the repository pins. First find\r\n  the version in a manifest, lockfile, or config, then fix that version and lookup time.",
       "candidate_class": "stage/done/evidence",
       "consequence": "high",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill-02.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:448a0942ae0cfd8e21adb9b8a42cc56b6d1aea8c1675c9d17f3a7d5ea7528646",
       "source_kind": "list-item",
       "context": [
@@ -524,11 +1093,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/entry"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-02.md",
-        "fixture:entry-initial"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:a113670bac0c96a1daf112d78adca24bc5f1f2e4a86d1f2d002a1eeba04c166c",
       "source_kind": "list-item",
@@ -555,11 +1124,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-02.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-02.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:863ff2c9e992886e4ab50896de2b94b696b57c360dd30f7db9fbf98856f058ac",
       "source_kind": "paragraph",
@@ -586,11 +1155,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-03.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-03.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:9cdab205bf295ca3212c5f9342f18f977c1b64238b1d94db5c60dbf24f687b15",
       "source_kind": "paragraph",
@@ -617,11 +1186,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-03.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-03.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:0b490ae447cc99c0271f1ae5b7f7cf2bf4a2ef3895759f6c267dad3a41380569",
       "source_kind": "table-row",
@@ -648,11 +1217,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-03.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-03.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:bdb0a6ea01f36b85697bbed05a29b0d7f5148733c02463d6d8da0718fa7fcd61",
       "source_kind": "paragraph",
@@ -679,7 +1248,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-03.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-03.md",
@@ -710,11 +1279,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-03.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-03.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:f6796d5662394b65ee8f9a207335db184ed2ed9bd71113ed69d308e7c238df04",
       "source_kind": "paragraph",
@@ -741,11 +1310,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-03.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-03.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:b1b7b2c446136507a064a1baced13c04dd85441450a91dd7e1b88efd20662504",
       "source_kind": "paragraph",
@@ -772,11 +1341,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-03.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-03.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:465e0a1e140308a556aed6f6f497e10f9bc3c088cede14835550c1af0cab6819",
       "source_kind": "heading",
@@ -803,11 +1372,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-03.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-03.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:ededfa736c6ea13b5cc3f2ca15703116f56041846daddf0b8e005a3093fb69e0",
       "source_kind": "list-item",
@@ -834,7 +1403,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-04.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-04.md",
@@ -865,12 +1434,12 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-04.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-04.md",
-        "fixture:trace-needed",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare",
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:afc8112d494a2be5a8525d3cf32da1a4c64ccd836fe5fa84b78a58ed833b8762",
       "source_kind": "list-item",
@@ -897,11 +1466,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-04.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-04.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:f8bd43dbf343e171a2cbde096665a7458f35e795460f6f81992f93daae0590ca",
       "source_kind": "list-item",
@@ -925,15 +1494,9 @@
       "text": "5. **Never backfill the tree with already-finished code.** `devflow/tree/` starts from\r\n   work done after adoption — filling it with `.done.` cards for existing features is\r\n   waste. Opening the tree is split's job — capability folder names must be the same\r\n   words as the reverse-derived capability list, so new work accumulates in the right place.\r\n",
       "candidate_class": "guard",
       "consequence": "high",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill-04.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill-04.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:29e5023ad03faecc931da6460c042cd41169800e447b27662dda4a357e9c4009",
       "source_kind": "list-item",
       "context": [
@@ -959,7 +1522,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-04.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-04.md",
@@ -990,7 +1553,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-05.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-05.md",
@@ -1021,11 +1584,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-05.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-05.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:7ad4bdc4d14d96f4d1a69efb42ee06db5c24ebb884ec744445bdc94e7ae4c9a3",
       "source_kind": "paragraph",
@@ -1052,11 +1615,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-05.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-05.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:21f67b6ecb058277c763f6df3dfaa734870a7394c51e32dd67fabd11e7d324e1",
       "source_kind": "list-item",
@@ -1080,15 +1643,9 @@
       "text": "- **Capsule processing.** When existing domain documents the user named overflow the\r\n  capability-document budget, process them into the canonical baseline predicates' knowledge\r\n  capsules. The order is five steps: ① inventory the source (headings and line ranges) at the\r\n  revision the user specified ② cut it into topics and check them against code ③ intent that\r\n  runs through the capability goes to the capability document's Intent overview and topic\r\n  knowledge into capsules — provenance marks, dispute preservation, and `Source basis` follow\r\n  the canonical contract exactly, and differing statements inside the source are kept as a\r\n  dispute rather than resolved to one side ④ a clean session's refutation round — omissions\r\n  and inventions of key intent, boundaries, and traps must be zero, it includes a provenance\r\n  sampling check that finds three unmarked sentences per capsule at their source coordinates,\r\n  and a capsule that fails does not land ⑤ land with the same confirmation and the same commit\r\n  as the canonical baseline predicates' design batch. Report the dispute list in the confirmation batch as items for\r\n  the owner to decide. Deleting or moving the source is not part of this procedure — report\r\n  only the material for that judgment.\r\n",
       "candidate_class": "stage/done/evidence",
       "consequence": "high",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill-05.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill-05.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:55a6d28649d37b196ceaf87de96de303441fbfc454980d0372d361838f718361",
       "source_kind": "list-item",
       "context": [
@@ -1111,15 +1668,9 @@
       "text": "**Design-only entry.** When the entry handed over a `marker.design-note` or a\r\n`marker.design-open-item`, do not run the\r\nreverse derivation again. Rederive only the design zone of the one capability that line names,\r\nfrom the confirmed current Layer 0 and that exact statement. Put the statement in Intent or\r\nInvariants when it fits the capability-document budget, and move design-topic detail over that\r\nbudget down through the capsule procedure above. The `anchor` handed over is the exact snapshot\r\nbasis of that `card` and `code`; recompute no other basis from history or cards, and never\r\nduplicate a capability fact into arch.md to wake the writer — only a real Layer 0 fact takes\r\nthe discovery→update table's existing route. A `marker.design-open-item` carries no `anchor`\r\nand no `code`: the person-confirmed `statement` is itself the basis, its `card` is only where\r\nthe confirmation happened, and the owner is the `capability` that line names — read no code\r\nfrom that card, and never move the statement to that card's capability. Delete the journal\r\nline byte-identical to that one\r\nin the same binding capability-document commit.",
       "candidate_class": "guard",
       "consequence": "high",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill-05.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill-05.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:63c6afc263a26830a2664f83e68c38be8f575a4a3fcbb5b7bef3e3f13ac4787c",
       "source_kind": "paragraph",
       "context": [
@@ -1145,7 +1696,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill-06.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill-06.md",
@@ -1176,11 +1727,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "spec:STAGES/entry"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "fixture:entry-initial"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:a50b4e4b3620f31084fa04612f7c2a7b4c9500ad81aabdbfaed87d01c35346c5",
       "source_kind": "frontmatter",
@@ -1196,11 +1747,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:0214e6a6b1c4fc13b769cac7dded0f763eaba3d4fb69251b3611e53df07e30ea",
       "source_kind": "heading",
@@ -1213,15 +1764,9 @@
       "text": "glossary.md는 항상 읽는 Layer 0 기준선이며, 역산한 능력 구성과 능력 문서 머리의 `Concepts:`를\r\n정확한 정본 용어로 맞춘다. `marker.glossary-term`이면 도구 payload만 소비해 먼저 glossary\r\n정의를 구속 커밋하고 마커를 남긴다. 다음 `adopt — capabilities` 배치에서 glossary definition\r\nand every known affected `Concepts:` line을 함께 맞추고 모든 Design head를 갱신한 뒤 마커를\r\n지운다. 공유 용어나 프로젝트 루트 `[]`에서 카드 번호를 의미 소유자로 추론하지 않는다.",
       "candidate_class": "stage/done/evidence",
       "consequence": "high",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill_ko-01.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill_ko-01.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:47d9cc6c6ae9dff149f3114e1282fb6158bf94b46ac35ae98b1221240333210d",
       "source_kind": "paragraph",
       "context": [
@@ -1242,11 +1787,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:b183f84c8602e0a98316a6126502712de4cfacd88b266c9981eb4dbe0a4f4108",
       "source_kind": "paragraph",
@@ -1268,7 +1813,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-01.md",
@@ -1294,11 +1839,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "spec:STAGES/capability-design"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "fixture:capability-split"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:d3a0cf32bc3d4b3eaa1b76fc6918b04d3022d5ff65869dfed9ea185e96bcdd28",
       "source_kind": "paragraph",
@@ -1320,11 +1865,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:104fb8b416ecc0c90bfc6dcc2ea12bad3a729dbe71dbf9fd9ddaed3e74a84ec2",
       "source_kind": "paragraph",
@@ -1346,11 +1891,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-01.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:66863022c041b4182f196397bb553f27b3833bac762842ea769c7c6b155efad3",
       "source_kind": "paragraph",
@@ -1372,11 +1917,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:f1bb99fe35eb48f3921e0041556007a33dd3f8fdffe7110b5251fb92e8915758",
       "source_kind": "paragraph",
@@ -1398,11 +1943,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:9d29c8c6fb5f18684c26e03600e6868717b2d1695076a8bba1b6432337006ff0",
       "source_kind": "list-item",
@@ -1424,11 +1969,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:a00b87acfeeee0f4a2d692b66291982b3498c7d65a6a78f56eabbc2db2f3c371",
       "source_kind": "list-item",
@@ -1450,7 +1995,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
@@ -1476,11 +2021,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:b690590cd518407dbb98647c9cd6a242e27c36812e9b313b97a00665680ffccd",
       "source_kind": "paragraph",
@@ -1499,15 +2044,9 @@
       "text": "## 증거 권위와 확인 묶음",
       "candidate_class": "ambiguous/review-required",
       "consequence": "low",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:e124b170b3ebcd6c89b64bb4760df3dd8a37baadc38c838f5d1281e98b1e9ca6",
       "source_kind": "heading",
       "context": [
@@ -1528,11 +2067,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/entry"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:entry-initial"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:8722ed2df50368d344c55b1ea36f9c36842b8642371c827043cfe02ee3bfe908",
       "source_kind": "paragraph",
@@ -1559,11 +2098,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:a98ed2f489bc80b9d2e26714dcd4d45a04579a2ea3c74dad53bb86e60f6f1c29",
       "source_kind": "list-item",
@@ -1590,11 +2129,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:f221bd5f936710c856bb571a7700e2bffb5ab0d3fe8b9dae97f9b22988846e44",
       "source_kind": "list-item",
@@ -1621,11 +2160,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/proposal"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:proposal-draft"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:b65a84bf85e240d1a7379ac4fd9f63e21c740480c0e827bfe20df6cadeacd548",
       "source_kind": "list-item",
@@ -1652,7 +2191,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
@@ -1683,11 +2222,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/capability-design"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:capability-split"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:990a439c95d6ff7b5623a17f347c2823a5f0602066ecb99b5f0d94693e238899",
       "source_kind": "paragraph",
@@ -1711,15 +2250,9 @@
       "text": "| 후보 | 관찰 | 출처·버전 | 해석 | 남은 소유자 결정 |",
       "candidate_class": "table row",
       "consequence": "medium",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:8734fdb20c1e6257637b150add0ebbe1137f5e6c8ff43fe08d74d403d4fbf29f",
       "source_kind": "table-row",
       "context": [
@@ -1745,11 +2278,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "spec:STAGES/entry"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-02.md",
-        "fixture:entry-initial"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:ff60a48f20190dbd7def89476868be7f33faebc968bdfd46b917190d83aaf500",
       "source_kind": "paragraph",
@@ -1776,11 +2309,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "spec:STAGES/inspect-and-trace"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "fixture:trace-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:5b1195a38cbbf67b71c97cdc0ef2d3cb56586d7799bbba06d818f906908d73e4",
       "source_kind": "paragraph",
@@ -1807,11 +2340,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:198455fd5aa8326f30553b2b66e1b4ea6d525ef52ba5d6f14e728c7afe05ca2b",
       "source_kind": "paragraph",
@@ -1838,11 +2371,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "spec:STAGES/proposal"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "fixture:proposal-draft"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:8875c9c625b1becb6fcfe59b318318674f1da72b22d286d533015ff55a7a1d44",
       "source_kind": "paragraph",
@@ -1869,7 +2402,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-03.md",
@@ -1900,11 +2433,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "spec:STAGES/capability-design"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "fixture:capability-split"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:b1988a468e21baa23fd8983eae3a559409464dbdfad085a6b5f195249faf8240",
       "source_kind": "list-item",
@@ -1931,11 +2464,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:7819860ce39a35c634a4c65ac457ec5c5742a182da19dedfc294ab0d41a8646d",
       "source_kind": "list-item",
@@ -1962,11 +2495,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-03.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:be84bd36e6eca4ff8e5688fc3395694b5037f1298c9e98fdb2496248e5ec0962",
       "source_kind": "list-item",
@@ -1993,11 +2526,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-04.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-04.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:1898eac03121a8f362e28859d718d027730d2e98ab2acdfebb972566c74dec99",
       "source_kind": "list-item",
@@ -2024,11 +2557,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-04.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-04.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:8b467c76b39e5a82eae1bff4fda2e44f4e2adbbd0e94665cc1c9f669ac36c1fe",
       "source_kind": "list-item",
@@ -2055,11 +2588,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-04.md",
-        "spec:STAGES/proposal"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-04.md",
-        "fixture:proposal-draft"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:09dbbcbf8cd3e47151ac0241fd9bc41db53258b09ed2a0c43437d29009feee83",
       "source_kind": "paragraph",
@@ -2086,7 +2619,7 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-04.md",
-        "spec:STAGES/approval"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-04.md",
@@ -2117,11 +2650,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-04.md",
-        "spec:STAGES/derive-layer-zero"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-04.md",
-        "fixture:derive-needed"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:f33f014641dcb8a20b5bfcc7c2da23132008be812c1f604ae77188209f9c14a8",
       "source_kind": "paragraph",
@@ -2145,15 +2678,9 @@
       "text": "- `01-foundation.md`와 모든 비은퇴 능력의 목적·경계·Intent 총론·개념 모델·불변식·하지 않기로\r\n  한 것·구속 ADR을 Layer 0에서 능력 단위로 도출한다.",
       "candidate_class": "example",
       "consequence": "low",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill_ko-04.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill_ko-04.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:4a2a54cfa176e233eff3d40ea5e68f4677dce28d9f1f77a5069d1517479399b0",
       "source_kind": "list-item",
       "context": [
@@ -2176,15 +2703,9 @@
       "text": "- **캡슐 가공.** 사용자가 지목한 기존 도메인 문서가 능력 문서 예산을 넘치면 기준선 판정\r\n  정본의 지식 캡슐로 가공한다. 순서는 다섯이다: ①사용자가 지정한 revision에서 원문\r\n  인벤토리(제목·줄 범위) ②주제 단위로 자르고 코드와 대조 ③관통 의도는 능력 문서 Intent\r\n  총론으로, 주제 지식은 캡슐로 — 출처 표기·다툼 보존·Source basis는 정본 계약 그대로이며,\r\n  원문 안의 서로 다른 서술은 한쪽을 고르지 않고 dispute로 남긴다 ④깨끗한 세션의 반증\r\n  문답 — 중요 의도·경계·함정의 누락과 창작이 0이어야 하고, 캡슐마다 무표 문장 3개를 원문\r\n  좌표에서 실제로 찾는 출처 표본 검사를 포함하며, 실패한 캡슐은 착지하지 않는다 ⑤기준선 판정 정본의 설계\r\n  확인 묶음과 같은 확인·같은 커밋으로 착지. dispute 목록은 확인 묶음에서 소유자 결정거리로\r\n  함께 보고한다. 원문의 삭제·이동은 이 절차에 없다 — 판단 재료만 보고한다.\r\n",
       "candidate_class": "stage/done/evidence",
       "consequence": "high",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill_ko-04.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill_ko-04.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:eca3421ec75e8424e4acb3b9daedfe1295efbf786e0c5e8008c50d20cc074ff2",
       "source_kind": "list-item",
       "context": [
@@ -2207,15 +2728,9 @@
       "text": "**설계 전용 진입.** 진입이 `marker.design-note` 또는 `marker.design-open-item`을 넘겨 왔으면\r\n역산 전체를 다시 돌지 않는다.\r\n그 줄이 이름 댄 능력 하나의 설계 구역만, 확정된 현재 Layer 0과 그 정확한 문장에서 다시\r\n유도한다. 문장이 능력 문서 예산 안에 들면 Intent 또는 Invariants에 넣고, 예산을 넘치는 설계\r\n주제 상세는 위 캡슐 가공 계약으로 내린다. 넘겨받은 `anchor`가 그 `card`·`code`의 정확한\r\n스냅샷 기준이며, 이력이나 카드에서 다른 기준을 다시 계산하지 않고 능력 사실을 arch.md에 복제해\r\n작성자를 깨우지도 않는다 — 진짜 Layer 0 사실만 발견→갱신 표의 기존 경로로 간다.\r\n`marker.design-open-item`은 `anchor`도 `code`도 싣지 않는다 — 사람이 확정한 `statement`\r\n자체가 기준이고, 그 `card`는 확정이 일어난 자리일 뿐이며, 소유자는 그 줄이 이름 댄\r\n`capability`다. 그 카드에서 코드를 읽지 말고 문장을 그 카드의 능력으로 옮기지도 않는다.\r\n그 줄과 바이트가\r\n같은 journal 줄은 같은 구속 능력 문서 커밋에서 지운다.",
       "candidate_class": "ambiguous/review-required",
       "consequence": "low",
-      "disposition": "projected",
-      "targets": [
-        "file:references/legacy-atoms/skill_ko-04.md",
-        "spec:STAGES/knowledge-landing"
-      ],
-      "evidence": [
-        "file:references/legacy-atoms/skill_ko-04.md",
-        "fixture:landing-compact"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:a5c6d4d4589aa72821c06a6619fe12d164ea932c06539636f7f4e39941311217",
       "source_kind": "paragraph",
       "context": [
@@ -2241,11 +2756,11 @@
       "disposition": "projected",
       "targets": [
         "file:references/legacy-atoms/skill_ko-05.md",
-        "spec:STAGES/proposal"
+        "spec:STAGES/adoption"
       ],
       "evidence": [
         "file:references/legacy-atoms/skill_ko-05.md",
-        "fixture:proposal-draft"
+        "fixture:adoption-prepare"
       ],
       "source_hash": "sha256:dd158e950c987488105554b94c44267364ec01196d44bcb28d6ce44f70b85a7a",
       "source_kind": "paragraph",

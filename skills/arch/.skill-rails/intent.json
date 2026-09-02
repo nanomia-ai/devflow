@@ -1,6 +1,6 @@
 {
   "name": "arch",
-  "description": "Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, then writes capability design zones. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
+  "description": "Current technical planning for devflow-managed projects. Takes product.md and current Layer 0, decides or refreshes components, stack, code structure, the verify channel, Brownfield-preserving architecture, and capability design zones. Use when explicitly invoked, when Resume routes a managed marker or baseline refresh, or for work in an existing devflow-managed project; Adopt remains the initial unmanaged reconstruction entry.",
   "problem": "Preserve the behavior of the immutable repository source at skills/arch without silently changing its obligations.",
   "use_cases": [],
   "near_misses": [],
@@ -8,7 +8,9 @@
   "outputs": [],
   "irreversible_boundaries": [],
   "state_dependent_behaviors": [
-    "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review."
+    "Initial architecture approval writes Brownfield: no, while managed refresh preserves the current observed Brownfield value.",
+    "A partial setup.no-product state with implementation code or brownfield history routes to Resume; Arch never redirects managed recovery to Adopt.",
+    "Arch consumes both valid legacy writer=adopt and current writer=arch knowledge markers; writer is provenance, mixed sets stay in Arch until drained, and only invalid or unsupported markers fail integrity."
   ],
   "exact_formats": [],
   "external_dependencies": [],

@@ -22,6 +22,24 @@ Brownfield: {{brownfield}}
 
 {{existingRecords}}
 
-## Verify channel
+## Provisional
 
-{{verification}}
+| Item | Provisional value | Where it came from | Settled by |
+| --- | --- | --- | --- |
+{{provisionalRows}}
+
+## Risks
+
+{{risks}}
+
+## Out of scope
+
+{{outOfScope}}
+
+<!-- frontend: none | needed; integration: bare Git branch name (current branch with one worktree); merge: merge-commit | rebase -->
+frontend: {{frontend}}
+verify_channel:
+  work server: {{workServer}}
+  means: {{verifyMeans}}
+integration: {{integration}}
+merge: {{merge}}

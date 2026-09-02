@@ -1,22 +1,21 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:9b2140448b8d2ef1b954daa52084b46b88f1c514f1d4f11f6cf5f6cc5206c1d5",
+  "intent_hash": "sha256:d8bf733639cf4a835ffc78e6774bb6eaf8243374f46d47860fdf23eabafb8710",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "devflow canonical rules. Every devflow skill follows this document first — the 7 prompt principles, model tiers, failure ladder, status notation, commit discipline, and the verification iron rule.",
+      "text": "Canonical devflow mechanics and evidence boundaries for explicit routing or recovery questions, ownership, knowledge landing, commits, and verification; explicit stage invocations are their own entry and do not require Principles preflight.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
-        "body:why: purpose",
-        "spec:DECLARATIONS/entry_contract"
+        "file:SKILL.md",
+        "file:agents/openai.yaml"
       ],
       "evidence": [
-        "body:why: purpose",
-        "file:spec.mjs"
+        "file:agents/openai.yaml"
       ]
     },
     {
@@ -36,28 +35,690 @@
       ]
     },
     {
+      "id": "use-cases-001",
+      "source": "intent.use_cases[0]",
+      "text": "Route a new or resumed devflow session from current Git and project state.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "body:why: entry-topology"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "use-cases-002",
+      "source": "intent.use_cases[1]",
+      "text": "Preserve and resume research, planning, implementation, verification, and multi-owner landing across sessions.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "body:why: entry-topology"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "use-cases-003",
+      "source": "intent.use_cases[2]",
+      "text": "Choose bounded knowledge and work paths for a small change, one domain, a deep subtopic, or a project-wide change.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "body:why: entry-topology"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "use-cases-004",
+      "source": "intent.use_cases[3]",
+      "text": "Validate exact journal, progress, canonical knowledge-capsule, commit, claim, and verification evidence boundaries.",
+      "candidate_class": "example",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "body:why: entry-topology"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "near-misses-001",
+      "source": "intent.near_misses[0]",
+      "text": "A request that does not use devflow and does not touch a devflow project.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: classify",
+        "spec:DECLARATIONS/entry_contract"
+      ],
+      "evidence": [
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "near-misses-002",
+      "source": "intent.near_misses[1]",
+      "text": "A request to manage Git worktrees; devflow observes worktrees but does not create or manage them.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: classify",
+        "spec:DECLARATIONS/entry_contract"
+      ],
+      "evidence": [
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "near-misses-003",
+      "source": "intent.near_misses[2]",
+      "text": "A request to turn every judgment into a parser rule or to create a second knowledge canon.",
+      "candidate_class": "guard",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: classify",
+        "spec:DECLARATIONS/entry_contract"
+      ],
+      "evidence": [
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "inputs-001",
+      "source": "intent.inputs[0]",
+      "text": "Raw project and Git observations collected from the current project without mutation.",
+      "candidate_class": "observation",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:OBSERVATIONS/request.partition",
+        "file:references/enter-resume-contract.md"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "inputs-002",
+      "source": "intent.inputs[1]",
+      "text": "The invoked devflow stage, explicit user choices, and named role results.",
+      "candidate_class": "observation",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:OBSERVATIONS/request.partition",
+        "file:references/enter-resume-contract.md"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "inputs-003",
+      "source": "intent.inputs[2]",
+      "text": "Canonical Layer 0 documents, capability owners, recursive K headers, active work cards, journal markers, and exact source locators.",
+      "candidate_class": "observation",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:OBSERVATIONS/request.partition",
+        "file:references/enter-resume-contract.md"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "outputs-001",
+      "source": "intent.outputs[0]",
+      "text": "One fail-closed current Decision: route, ask, wait, block, or ordered effects.",
+      "candidate_class": "artifact",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "spec:STAGES/classify"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "outputs-002",
+      "source": "intent.outputs[1]",
+      "text": "A bounded consumption set that opens only the active work and the nearest current-knowledge owner path needed now.",
+      "candidate_class": "artifact",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "spec:STAGES/classify"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "outputs-003",
+      "source": "intent.outputs[2]",
+      "text": "Evidence requirements for durable landing, reentry, commits, verification, and knowledge closure.",
+      "candidate_class": "artifact",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "spec:STAGES/classify"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "irreversible-boundaries-001",
+      "source": "intent.irreversible_boundaries[0]",
+      "text": "User confirmation of product, architecture, design, capability, or other binding decisions.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "body:why: purpose"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ]
+    },
+    {
+      "id": "irreversible-boundaries-002",
+      "source": "intent.irreversible_boundaries[1]",
+      "text": "A commit that publishes a task, Layer 0, knowledge refresh, verification, or closure boundary.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "body:why: purpose"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ]
+    },
+    {
+      "id": "irreversible-boundaries-003",
+      "source": "intent.irreversible_boundaries[2]",
+      "text": "Deleting, retiring, renaming, moving, or replacing a canonical owner, work card, knowledge capsule, marker, or source locator.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "body:why: purpose"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ]
+    },
+    {
+      "id": "irreversible-boundaries-004",
+      "source": "intent.irreversible_boundaries[3]",
+      "text": "Claiming pass, completion, migration parity, or knowledge closure without the declared durable evidence.",
+      "candidate_class": "guard",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "body:why: purpose"
+      ],
+      "evidence": [
+        "file:references/purpose.md"
+      ]
+    },
+    {
       "id": "state-dependent-behaviors-001",
       "source": "intent.state_dependent_behaviors[0]",
-      "text": "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review.",
+      "text": "The first non-empty route in the canonical state priority wins; UNKNOWN never becomes absence or success.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",
       "targets": [
-        "spec:STAGES/classify"
+        "spec:STAGES/classify",
+        "spec:DECLARATIONS/stateful_route"
       ],
       "evidence": [
-        "file:fixtures/scenarios.json"
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-002",
+      "source": "intent.state_dependent_behaviors[1]",
+      "text": "Active-work resume and new-work orientation are distinct views over the same disk state.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "spec:DECLARATIONS/stateful_route"
+      ],
+      "evidence": [
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-003",
+      "source": "intent.state_dependent_behaviors[2]",
+      "text": "A passing tweak adds no devflow artifact; uncertainty or durable knowledge exits the tweak lane.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "spec:DECLARATIONS/stateful_route"
+      ],
+      "evidence": [
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-004",
+      "source": "intent.state_dependent_behaviors[3]",
+      "text": "Pre-product multi-session research uses the reserved 00-project work scope but cannot own implementation or masquerade as a capability.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "spec:DECLARATIONS/stateful_route"
+      ],
+      "evidence": [
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-005",
+      "source": "intent.state_dependent_behaviors[4]",
+      "text": "Current knowledge uses only the canonical capability-capsule artifacts projected by project-knowledge; the package introduces no second node schema.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "spec:DECLARATIONS/stateful_route"
+      ],
+      "evidence": [
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-006",
+      "source": "intent.state_dependent_behaviors[5]",
+      "text": "Knowledge landing uses the externally state-owned knowledgeLandingPending family; Arch is the canonical managed writer, while Adopt appears only in the initial unmanaged projection and retained legacy provenance.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/knowledge_landing",
+        "body:why: entry-topology"
+      ],
+      "evidence": [
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-007",
+      "source": "intent.state_dependent_behaviors[6]",
+      "text": "Multi-owner closure follows the canonical state and knowledge owners without a parallel landing family.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "spec:DECLARATIONS/stateful_route"
+      ],
+      "evidence": [
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-008",
+      "source": "intent.state_dependent_behaviors[7]",
+      "text": "Closed history is opened only by an exact named card, repair lineage, or a current capsule or Trap source basis.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "spec:DECLARATIONS/stateful_route"
+      ],
+      "evidence": [
+        "body:why: entry-topology"
+      ]
+    },
+    {
+      "id": "exact-formats-001",
+      "source": "intent.exact_formats[0]",
+      "text": "Canonical journal and Progress machine lines, commit subjects, claim and readiness lines, and status suffixes.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:FORMATS/knowledgeLandingPending",
+        "spec:TEMPLATES/canonicalJournalProgressGrammar"
+      ],
+      "evidence": [
+        "file:templates/canonical-journal-progress-grammar.md"
+      ]
+    },
+    {
+      "id": "exact-formats-002",
+      "source": "intent.exact_formats[1]",
+      "text": "Capability design and verified-zone boundaries and their metadata.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:FORMATS/knowledgeLandingPending",
+        "spec:TEMPLATES/canonicalJournalProgressGrammar"
+      ],
+      "evidence": [
+        "file:templates/canonical-journal-progress-grammar.md"
+      ]
+    },
+    {
+      "id": "exact-formats-003",
+      "source": "intent.exact_formats[2]",
+      "text": "Recursive K header, stable K identity, same-stem parent-child address, source basis, direct consumer, and use-when fields.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:FORMATS/knowledgeLandingPending",
+        "spec:TEMPLATES/canonicalJournalProgressGrammar"
+      ],
+      "evidence": [
+        "file:templates/canonical-journal-progress-grammar.md"
+      ]
+    },
+    {
+      "id": "exact-formats-004",
+      "source": "intent.exact_formats[3]",
+      "text": "The project-state zone and route result schema and the project-knowledge projection, validation, and selection schema.",
+      "candidate_class": "format",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:FORMATS/knowledgeLandingPending",
+        "spec:TEMPLATES/canonicalJournalProgressGrammar"
+      ],
+      "evidence": [
+        "file:templates/canonical-journal-progress-grammar.md"
+      ]
+    },
+    {
+      "id": "external-dependencies-001",
+      "source": "intent.external_dependencies[0]",
+      "text": "Git for shared truth, immutable history, containing revisions, and exact path identity.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "file:references/policy-index.md"
+      ],
+      "evidence": [
+        "file:references/enter-resume-contract.md"
+      ]
+    },
+    {
+      "id": "external-dependencies-002",
+      "source": "intent.external_dependencies[1]",
+      "text": "Node.js for read-only project-state, project-knowledge, and Skill Rails runtimes.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "file:references/policy-index.md"
+      ],
+      "evidence": [
+        "file:references/enter-resume-contract.md"
+      ]
+    },
+    {
+      "id": "external-dependencies-003",
+      "source": "intent.external_dependencies[2]",
+      "text": "The user for semantic ownership, ambiguous nearest-owner choices, binding confirmation, and genuine value judgments.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "file:references/policy-index.md"
+      ],
+      "evidence": [
+        "file:references/enter-resume-contract.md"
+      ]
+    },
+    {
+      "id": "external-dependencies-004",
+      "source": "intent.external_dependencies[3]",
+      "text": "Stage-local devflow packages for product, adopt, arch, design, resume, split, work, and verify judgment and effects.",
+      "candidate_class": "collector",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "file:references/policy-index.md"
+      ],
+      "evidence": [
+        "file:references/enter-resume-contract.md"
+      ]
+    },
+    {
+      "id": "completion-evidence-001",
+      "source": "intent.completion_evidence[0]",
+      "text": "Every old source atom has forward and reverse provenance to a current spec, judgment body, template, collector, fixture, or preserved compatibility source.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "body:stage: classify"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "completion-evidence-002",
+      "source": "intent.completion_evidence[1]",
+      "text": "Old behavior parity and the C1-C6 redesign scenarios pass with critical omissions and false confirmations equal to zero.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "body:stage: classify"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "completion-evidence-003",
+      "source": "intent.completion_evidence[2]",
+      "text": "State and knowledge collectors remain read-only; policy, order, formats, ownership, and completion live in the P2 spec.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "body:stage: classify"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "completion-evidence-004",
+      "source": "intent.completion_evidence[3]",
+      "text": "A fresh AI can resume active work or orient to new work without broad search and can place new knowledge at the correct owner.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "body:stage: classify"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "completion-evidence-005",
+      "source": "intent.completion_evidence[4]",
+      "text": "Tiny, deep-domain, crosscut, interrupted, multi-owner, and large-corpus scenarios preserve human usability and bounded AI reading.",
+      "candidate_class": "stage/done/evidence",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/classify",
+        "body:stage: classify"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "deterministic-helpers-001",
+      "source": "intent.deterministic_helpers[0]",
+      "text": "project-state observes disk and Git, validates exact shapes, and projects complete route candidates without mutating the project.",
+      "candidate_class": "declaration",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "spec:DECLARATIONS/package_portability"
+      ],
+      "evidence": [
+        "file:references/policy-index.md"
+      ]
+    },
+    {
+      "id": "deterministic-helpers-002",
+      "source": "intent.deterministic_helpers[1]",
+      "text": "project-knowledge projects canonical capsule headers, validates address integrity and source coordinates, and enforces opening budgets.",
+      "candidate_class": "declaration",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "spec:DECLARATIONS/package_portability"
+      ],
+      "evidence": [
+        "file:references/policy-index.md"
+      ]
+    },
+    {
+      "id": "deterministic-helpers-003",
+      "source": "intent.deterministic_helpers[2]",
+      "text": "Skill Rails evaluates guards, route priority, stage and effect order, evidence alignment, and deterministic generated artifacts.",
+      "candidate_class": "declaration",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "spec:DECLARATIONS/package_portability"
+      ],
+      "evidence": [
+        "file:references/policy-index.md"
+      ]
+    },
+    {
+      "id": "deterministic-helpers-004",
+      "source": "intent.deterministic_helpers[3]",
+      "text": "Repository tests compare legacy and migrated behavior, source provenance, platform delivery, and real-use fixtures.",
+      "candidate_class": "declaration",
+      "consequence": "medium",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/state_api",
+        "spec:DECLARATIONS/package_portability"
+      ],
+      "evidence": [
+        "file:references/policy-index.md"
       ]
     },
     {
       "id": "judgment-points-001",
       "source": "intent.judgment_points[0]",
-      "text": "Every source atom remains review-required until explicitly disposed.",
+      "text": "Choose semantic owner and whether a fact is current knowledge, active work, closed history, or external source.",
       "candidate_class": "judgment/body",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
+        "body:stage: classify",
+        "file:references/purpose.md"
+      ],
+      "evidence": [
         "body:stage: classify"
+      ]
+    },
+    {
+      "id": "judgment-points-002",
+      "source": "intent.judgment_points[1]",
+      "text": "Decide whether complexity has produced an independent frontier or consumer that warrants a child card or canonical capsule.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: classify",
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "judgment-points-003",
+      "source": "intent.judgment_points[2]",
+      "text": "Judge research sufficiency, synthesis quality, rejected alternatives, and whether a result actually advances the user's intended outcome.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: classify",
+        "file:references/purpose.md"
+      ],
+      "evidence": [
+        "body:stage: classify"
+      ]
+    },
+    {
+      "id": "judgment-points-004",
+      "source": "intent.judgment_points[3]",
+      "text": "When repeated fixes stop converging, reconsider the owning structure or ask the user instead of adding exceptions.",
+      "candidate_class": "judgment/body",
+      "consequence": "low",
+      "disposition": "projected",
+      "targets": [
+        "body:stage: classify",
+        "file:references/purpose.md"
       ],
       "evidence": [
         "body:stage: classify"

@@ -1,7 +1,7 @@
 # Canonical Capability Knowledge Baseline Predicates
 
 This document defines only the disk contract and bounded projections for capability
-knowledge baselines. arch, adopt, and verify read this canon directly; resume opens only
+knowledge baselines. Arch, initial-unmanaged Adopt, and Verify read this canon directly; Resume opens only
 the `Writers and replacement boundaries` section, and work, reviewer, and retrospector
 receive only their required projections in their own contracts.
 Each skill owns its execution procedure and does not redefine this contract. Capability
@@ -94,7 +94,7 @@ ownership. Use the honest `none` form when no domain term applies.
   over-cap write succeeds; its writer reports the section and actual row, node, or step
   count. Splitting a capability is a user decision about a product change, not an automatic
   result. What moves down into a capsule beyond this budget is only design-zone domain
-  knowledge, which arch and adopt own — it is not cut but lowered into the same-number
+  knowledge, which initial-unmanaged Adopt or managed-state Arch owns — it is not cut but lowered into the same-number
   capsule. verify writes the fixed verified-zone sections as it normally does, creates no
   capsule and drops no verified fact to meet this cap, and reports whole-document overage.
 - Purpose, ownership boundary, and discovery concepts must be readable in the first 5 lines, followed by the

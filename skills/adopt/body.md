@@ -1,93 +1,47 @@
-# Adopt
-
 ## why: purpose
 
-Adopt makes a brownfield project legible from executable evidence. It creates no retroactive task history: Layer 0 describes the existing project and split owns work that starts after adoption.
+Adopt is the explicit brownfield projection boundary. It reads an unmanaged repository's maintained pre-devflow material—documentation, code, or both—reconstructs the complete devflow knowledge surface that the project already implies, and asks the owner only where evidence cannot settle a decision or contradiction.
+
+The state tool remains the sole route owner. Explicit Adopt consumes `setup.unmanaged`; ordinary Resume, session-start, and state-tool behavior are unchanged. Only a repository with no maintained non-devflow project material routes to Product. Adopt is its own entry and does not run Principles as a preflight.
 
 ## why: workflow
 
-Code is the present authority. Existing records become evidence only after they connect to a traced flow; future scope, trade-offs, and success criteria remain owner decisions.
+Treat implementation paths, tests, APIs, schemas, configuration, operational records, specifications, and maintained documentation as evidence. Inventory every maintained source with project-relative coordinates. Record one authority status—implemented/current material, binding plan, exploratory research, superseded record, or unresolved conflict—and one separate disposition, exactly as the workflow defines. Grouping related sources is allowed; silently sampling or dropping the remainder is not. Use document-internal status and actual code, test, and operational evidence to judge authority; path/name context, Git history when available, and last-modified time are corroboration only and never decide authority alone. Resolve evidence-supported discrepancies with exact provenance. When competing sources leave current product intent genuinely undecidable, ask with both conflicting coordinates and the exact decision needed instead of inventing a resolution. Trace one representative flow for each code-backed capability candidate; for a document-derived candidate with no executable code, cite its documentary basis and mark executable flow as not applicable.
 
-## why: knowledge-landing
+Read the shared baseline, freshness, and capsule contracts named by the workflow before authoring. Reverse-derive `product.md`, `arch.md`, applicable `design.md`, `code-style.md`, `glossary.md`, capability design zones, and the durable domain knowledge those owners need. `Brownfield` records whether executable implementation existed before adoption, not whether documents existed. Put concise always-needed domain knowledge in its capability document. Create as many same-stem owner-adjacent `K` nodes as the evidence requires for deeper reusable knowledge; zero is valid only when every maintained domain source has a complete named landing elsewhere. Never create a central knowledge index.
 
-The structured state result has already validated marker grammar, writer, owner, and source revision. A compact owner update is the normal landing; recursive K exists only for independently reusable depth.
+Do not ask the owner to repeat discoverable facts. Ask only irreducible missing decisions and evidence contradictions, then present one complete binding proposal. If the request also contains work after adoption, preserve that whole request through Principles' canonical `maintenanceRoutingPending` record in the first adoption commit; adoption alone creates no continuation marker. Interruption before approval or refusal writes nothing.
 
 ## guard: state-kernel-unavailable
 
-Stop because adoption cannot safely replace the shared entry calculation.
-
-## guard: compatible-feedback-shape
-
-Block unless canonical state exposes an Adopt-owned marker for exactly the architecture owner or one exact capability design document, with a valid pending or satisfied landing state. Never broaden a capability target to the whole folder or infer its owner from review prose.
+Treat an unavailable state kernel as a recovery problem. Do not infer state from filesystem fragments.
 
 ## guard: canonical-integrity-block
 
-Stop on canonical integrity failure; do not repair a journal or infer a marker locally.
+Canonical integrity findings block before any proposal or write.
 
 ## guard: open-git-operation
 
-Ask before touching an existing merge or rebase. Its resolution is the owner’s choice.
+Return the active Git operation to the user without changing it.
 
-## guard: no-code-routes-product
+## guard: no-project-material-routes-product
 
-Without implementation evidence this is greenfield product discovery, not adoption.
+Without any maintained non-devflow project material there is nothing to reconstruct, so new Product discovery owns the entry.
 
-## guard: unknown-code-evidence
+## guard: unknown-project-material
 
-Stop when the supplied root cannot be inspected reliably.
-
-## guard: not-brownfield-writer
-
-Greenfield design-zone repair belongs to arch.
+An unavailable or malformed non-devflow material observation is not approval to adopt. Stop until it can be classified safely.
 
 ## guard: state-owned-elsewhere
 
-Resume owns canonical routes outside adoption’s brownfield boundary.
+Only explicit Adopt consumes `setup.unmanaged`. Managed, completed, baseline-recovery, and unrelated marker routes remain owned by Resume or their declared stage.
 
-## stage: compatible-feedback
+## stage: adoption
 
-Judgment: For a pending marker, edit only its exact owner and preserve the source provenance plus Background, Why/evidence, Conclusion, and implication; then wait for canonical replay. Delete only the byte-identical marker after state proves those values are present in that owner, and commit the exact owner diff with the journal deletion atomically before routing to Resume.
+Judgment: the prepare fallback reads no approval value. It separates discoverable evidence from irreducible decisions and contradictions, chooses capability boundaries from evidence, accounts for every maintained source, and sizes domain knowledge between the always-read capability document and however many owner-adjacent K nodes the evidence requires.
 
-Why: A superficial owner-file diff is insufficient, and every other owner's marker remains pending.
+Why: on first entry it inventories code, documents, specifications, and records; reconciles their claims; traces one executable flow per code-backed capability candidate while using maintained documentary evidence for document-only candidates; and reverse-derives Product, Architecture, applicable Design, code style, glossary, capability zones, and all durable domain knowledge before asking anything.
 
-## stage: knowledge-landing
+Every proposal claim distinguishes executable evidence, documentary evidence, contradiction, and inference with exact coordinates and confidence. Ask only irreducible decisions or contradictions, then request one confirmation binding the complete write set.
 
-Judgment: landing.mode is compact, recursive, partial-compact, or partial-recursive; select only valid marker owners that can be fully updated now.
-
-Why: marker deletion is authorized only by the matching owner or K Source basis in the same boundary commit.
-
-## stage: entry
-
-Judgment: entry.mode is initial, partial, glossary-only, capability-only, design-only, or none. entry.status is pending until the selected entry reads are complete, then read.
-
-Why: a narrow repair must not reopen broad reverse derivation.
-
-## stage: inspect-and-trace
-
-Judgment: inspection.status is needed, traced, or evidence-missing; name candidates from code entrypoints and top-level modules.
-
-Why: an untraced document claim cannot define a capability or durable record mapping.
-
-## stage: derive-layer-zero
-
-Judgment: derivation.status is needed, draft, confirmed, or contradiction; separate code observations from owner-only future decisions.
-
-Why: Layer 0 is inherited truth only after its evidence and unresolved choices are explicit.
-
-## stage: proposal
-
-Judgment: proposal.status is draft, ready, or interrupted; a ready proposal has evidence and answerable owner questions.
-
-Why: interruption cannot turn a partial report into current project truth.
-
-## stage: approval
-
-Judgment: approval.action is ask, approve, or refuse; request.kind is initial, refresh, capability-only, or none; refusal makes no write.
-
-Why: product and architectural boundaries are binding decisions, not a model inference.
-
-## stage: capability-design
-
-Judgment: capability.action is ask or approve and route.after is split, resume, or design.
-
-Why: design zones and their baselines require one confirmed Layer 0 basis.
+Only the approve and refuse rows read `approval.action` on re-entry. Refusal and interruption before approval are write-free. Under that one approval, first write canonical Layer 0 and any idempotent Principles-owned follow-on record; write `product.md` last and commit only those paths as `adopt — layer 0`. Then calculate the canonical Design head from the landed commit, write capability design documents with that exact value, write every approved K node beside its owner, validate every written capsule with the canonical knowledge tool, and commit only those capability documents and capsules as `adopt — capabilities`. Before `product.md` is written, interruption leaves an unmanaged repository that explicit Adopt rederives. If interruption occurs after that write but before the first commit, report the exact dirty paths and let the owner commit the exact approved boundary or discard it; no devflow stage claims that partial boundary. After the first commit and before second-boundary writes, baseline-missing state is recovered through Resume to Arch. Any interrupted uncommitted write is unverified, never reported as a landed boundary. Report and stop without synthetic phase values, a new recovery mechanism, a next-route decision, or automatic opt-in to another skill.

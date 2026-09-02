@@ -1,6 +1,6 @@
 {
   "name": "resume",
-  "description": "Resume and domain entry. Restores a new session from disk and continues to the next stage, or finds a capability document by number or name and explains the domain. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
+  "description": "Resume and domain entry. Restores a new session from disk and continues to the next stage, routes canonical knowledge markers to Arch while preserving their declared writers as provenance and residual markers for replay, or finds a capability document by number or name and explains the domain. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
   "problem": "Preserve the behavior of the prose source in skills/resume without silently changing its obligations.",
   "use_cases": [],
   "near_misses": [],

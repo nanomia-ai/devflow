@@ -5,14 +5,15 @@ unavailable (flag off, or older Codex). Not needed in Claude Code either. -->
 
 ## devflow
 
-This project is managed with devflow. After the user states their intent, invoke the
-model-invocable `devflow:principles` skill to classify the request and follow its route.
+This project is managed with devflow. Invoke an explicitly named devflow stage directly.
+For other devflow intent, invoke the model-invocable `devflow:principles` skill to classify
+the request and follow its route.
 If you were handed a devflow role contract, follow that contract directly; do not re-enter
 through principles. Do not modify code before the selected route and any required approval.
 
 Before dispatching another agent to perform a devflow stage in this project, read and
 follow devflow's `coordinator` role contract.
 
-If no model-invocable principles skill is available, do not modify code. Ask the user to
+If the required model-invocable skill is unavailable, do not modify code. Ask the user to
 install or enable the devflow plugin. Never assume that the model can invoke a slash
 command itself.

@@ -14,7 +14,9 @@ const S = {
   "state.capabilities": "missing",
   "state.expected": 3,
   "marker.knowledge": "none",
-  "marker.knowledgeCount": 0
+  "marker.knowledgeCount": 0,
+  "compatible.owner": "none",
+  "compatible.landing": "none"
 };
 
 const JUDGED = {
@@ -70,8 +72,8 @@ const cases = [
   guard("invalid-writer", "canonical-integrity-block", "BLOCK", { "state.route": "integrity.blocking" }),
   guard("open-git-operation", "open-git-operation", "ASK", { "state.route": "git.open-operation" }),
   guard("missing-product-new-project", "product-required", "ROUTE", { "state.route": "setup.no-product", "state.code": "none" }),
-  guard("missing-product-existing-code", "adoption-required", "ROUTE", { "state.route": "setup.no-product", "state.code": "present" }),
-  guard("brownfield-refresh-routes-adopt", "brownfield-capability-writer", "ROUTE", { "state.route": "baseline.design-refresh", "state.brownfield": "yes" }),
+  guard("missing-product-existing-code", "partial-setup-owned-by-resume", "ROUTE", { "state.route": "setup.no-product", "state.code": "present" }),
+  guard("missing-product-existing-history", "partial-setup-owned-by-resume", "ROUTE", { "state.route": "setup.no-product", "state.code": "none", "state.brownfield": "yes" }),
   guard("state-owned-elsewhere", "state-owned-elsewhere", "ROUTE", { "state.route": "owned-elsewhere" }),
 
   branch("glossary-definition", "glossary-term", "definition", "NEXT", ["READ", "WRITE", "COMMIT", "NEXT"], { s: { "state.route": "marker.glossary-term" }, judged: { "glossary.phase": "definition" } }),
@@ -79,10 +81,10 @@ const cases = [
   scenario("design-marker-binding", { s: { "state.route": "marker.design-note" }, expect: { stage: "design-marker", status: "ROUTE", effects: ["READ", "WRITE", "RUN", "COMMIT", "ROUTE:resume"] }, cover: ["stage:design-marker"] }),
 
   branch("compact-owner-landing", "knowledge-landing", "compact", "NEXT", ["READ", "WRITE", "RUN", "COMMIT", "NEXT"], { s: { "state.route": "marker.knowledge-landing", "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}]", "marker.knowledgeCount": 1 }, judged: { "landing.mode": "compact" } }),
-  branch("recursive-k-landing", "knowledge-landing", "recursive", "NEXT", ["READ", "WRITE", "RUN", "COMMIT", "NEXT"], { s: { "state.route": "marker.knowledge-landing", "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]", "marker.knowledgeCount": 1 }, judged: { "landing.mode": "recursive" } }),
+  branch("legacy-adopt-writer-landing", "knowledge-landing", "recursive", "NEXT", ["READ", "WRITE", "RUN", "COMMIT", "NEXT"], { s: { "state.route": "marker.knowledge-landing", "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"adopt\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]", "marker.knowledgeCount": 1 }, judged: { "landing.mode": "recursive" } }),
   branch("multi-owner-partial-compact", "knowledge-landing", "partial-compact", "NEXT", ["READ", "WRITE", "RUN", "COMMIT", "NEXT"], { s: { "state.route": "marker.knowledge-landing", "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]", "marker.knowledgeCount": 2 }, judged: { "landing.mode": "partial-compact" } }),
   branch("multi-owner-partial-recursive", "knowledge-landing", "partial-recursive", "NEXT", ["READ", "WRITE", "RUN", "COMMIT", "NEXT"], { s: { "state.route": "marker.knowledge-landing", "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"},{\"owner\":\"devflow/project/capabilities/02-billing.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/09-card.md@cccccccccccccccccccccccccccccccccccccccc\"}]", "marker.knowledgeCount": 2 }, judged: { "landing.mode": "partial-recursive" } }),
-  branch("multi-owner-mixed-landing", "knowledge-landing", "multi-mixed", "NEXT", ["READ", "WRITE", "WRITE", "RUN", "COMMIT", "NEXT"], { s: { "state.route": "marker.knowledge-landing", "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]", "marker.knowledgeCount": 2 }, judged: { "landing.mode": "multi-mixed" } }),
+  branch("multi-owner-mixed-landing", "knowledge-landing", "multi-mixed", "NEXT", ["READ", "WRITE", "WRITE", "RUN", "COMMIT", "NEXT"], { s: { "state.route": "marker.knowledge-landing", "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"adopt\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]", "marker.knowledgeCount": 2 }, judged: { "landing.mode": "multi-mixed" } }),
 
   branch("repair-layer0-ask", "repair-layer0-fields", "ask", "ASK", ["ASK"], { s: { "state.route": "setup.integration-config" }, decided: { "repair.action": "ask" } }),
   branch("repair-layer0-commit", "repair-layer0-fields", "commit", "ROUTE", ["WRITE", "COMMIT", "ROUTE:resume"], { s: { "state.route": "setup.integration-config" }, decided: { "repair.action": "commit" } }),
@@ -114,8 +116,13 @@ const cases = [
   branch("capability-docs-approval-request", "capability-design", "ask", "ASK", ["REPORT", "ASK"], { judged: { "request.kind": "capability-only" }, decided: { "capability.action": "ask" }, cover: ["row:capabilityRoute/ask", "branch:capabilityRoute/ask"] }),
   branch("capability-docs-route-design", "capability-design", "approve", "ROUTE", ["WRITE", "WRITE", "COMMIT", "ROUTE:design"], { s: { "state.frontend": "needed" }, judged: { "request.kind": "capability-only" }, decided: { "capability.action": "approve", "route.after": "design" }, cover: ["row:capabilityRoute/approve-design", "branch:capabilityRoute/approve-design"] }),
   branch("capability-docs-route-resume", "capability-design", "approve", "ROUTE", ["WRITE", "WRITE", "COMMIT", "ROUTE:resume"], { judged: { "request.kind": "capability-only" }, decided: { "capability.action": "approve", "route.after": "resume" }, cover: ["row:capabilityRoute/approve-resume", "branch:capabilityRoute/approve-resume"] }),
+  branch("managed-brownfield-design-refresh", "capability-design", "approve", "ROUTE", ["WRITE", "WRITE", "COMMIT", "ROUTE:resume"], { s: { "state.route": "baseline.design-refresh", "state.brownfield": "yes", "state.layer0": "current", "state.capabilities": "refresh" }, judged: { "request.kind": "capability-only" }, decided: { "capability.action": "approve", "route.after": "resume" } }),
   branch("route-after-commit-split", "capability-design", "approve", "ROUTE", ["WRITE", "WRITE", "COMMIT", "ROUTE:split"], { judged: { "request.kind": "capability-only" }, decided: { "capability.action": "approve", "route.after": "split" }, cover: ["row:capabilityRoute/approve-split", "branch:capabilityRoute/approve-split"] }),
-  scenario("already-current", { s: { "state.route": "complete.product-pass", "state.layer0": "current", "state.capabilities": "current", "state.expected": 0 }, judged: { "request.kind": "none" }, expect: { stage: null, status: "DONE", effects: [] } })
+  scenario("already-current", { s: { "state.route": "complete.product-pass", "state.layer0": "current", "state.capabilities": "current", "state.expected": 0 }, judged: { "request.kind": "none" }, expect: { stage: null, status: "DONE", effects: [] } }),
+  scenario("compatible-feedback-write-arch", { s: { "state.route": "marker.compatible-feedback", "compatible.owner": "arch", "compatible.landing": "pending" }, expect: { stage: "compatible-feedback", row: "write-arch", status: "WAIT", effects: ["WRITE", "WAIT"] }, cover: ["stage:compatible-feedback", "row:compatibleFeedback/write-arch", "branch:compatibleFeedback/write-arch"] }),
+  scenario("compatible-feedback-write-capability", { s: { "state.route": "marker.compatible-feedback", "compatible.owner": "capability", "compatible.landing": "pending" }, expect: { stage: "compatible-feedback", row: "write-capability", status: "WAIT", effects: ["WRITE", "WAIT"] }, cover: ["stage:compatible-feedback", "row:compatibleFeedback/write-capability", "branch:compatibleFeedback/write-capability"] }),
+  scenario("compatible-feedback-semantic-landing", { s: { "state.route": "marker.compatible-feedback", "compatible.owner": "capability", "compatible.landing": "satisfied" }, expect: { stage: "compatible-feedback", row: "land", status: "ROUTE", effects: ["RUN", "COMMIT", "ROUTE:resume"] }, cover: ["stage:compatible-feedback", "row:compatibleFeedback/land", "branch:compatibleFeedback/land"] }),
+  scenario("compatible-feedback-invalid-shape-blocks", { s: { "state.route": "marker.glossary-term", "compatible.owner": "invalid", "compatible.landing": "invalid" }, expect: { guard: "compatible-feedback-shape", status: "BLOCK" }, cover: ["guard:compatible-feedback-shape"] })
 ];
 
 await writeFile(destination, `${JSON.stringify(cases, null, 2)}\n`, "utf8");

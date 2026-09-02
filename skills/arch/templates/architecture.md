@@ -1,6 +1,6 @@
 # Architecture
 
-Brownfield: no
+Brownfield: {{brownfield}}
 
 ## Components
 
@@ -36,6 +36,7 @@ Brownfield: no
 
 {{outOfScope}}
 
+<!-- frontend: none | needed; integration: bare Git branch name (current branch with one worktree); merge: merge-commit | rebase -->
 frontend: {{frontend}}
 verify_channel:
   work server: {{workServer}}

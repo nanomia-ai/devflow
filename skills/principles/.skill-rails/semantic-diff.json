@@ -1,23 +1,23 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:b3e07f826090013ae7a5e40c1d14cabc919f3b7c2636398abb3cd807e8b3c5cb",
-    "after": "sha256:b3e07f826090013ae7a5e40c1d14cabc919f3b7c2636398abb3cd807e8b3c5cb"
+    "before": "sha256:88160cbbb1f012ac4f4dc36eef3beddfb703c59c0c82e98fe69443e49e078964",
+    "after": "sha256:7c1514a0216d73956bf4b02d00775242e0f2f2edec8555f37b977f89fabbf746"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
-    "context": true
+    "context": false
   },
   "artifact_receipts": [
     {
-      "kind": "reference",
-      "path": "references/delivery/commit-and-verification.md",
-      "source": "context",
-      "before_hash": "sha256:65ab66d4af4cd5af641d4146ce03797e78ce23baf35e4d2bdd5c8028634b5460",
-      "after_hash": "sha256:4c02df3d15abb71d63df27f3a2e22076f0e75d8df4055502b59d4c2ebb60b32d"
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:88160cbbb1f012ac4f4dc36eef3beddfb703c59c0c82e98fe69443e49e078964",
+      "after_hash": "sha256:7c1514a0216d73956bf4b02d00775242e0f2f2edec8555f37b977f89fabbf746",
+      "source": "behavior_source"
     }
   ],
   "groups": {
@@ -34,9 +34,29 @@
     "artifacts": [],
     "roles": [],
     "declarations": [],
-    "deferred": []
+    "deferred": [
+      {
+        "id": "map-managed-knowledge-owner",
+        "change": "removed",
+        "before": {
+          "id": "map-managed-knowledge-owner",
+          "rule": "Map the corrected initial-Adopt and managed-Arch ownership intent after its canonical references are installed.",
+          "collector": "none",
+          "fixture": "fixtures/scenarios.json#entry-stateful-routes-once",
+          "owner": "principles",
+          "until": "before-release"
+        }
+      }
+    ]
   },
-  "change_id": "compatible-seal-reseal-history",
-  "intent": "Seal compatible feedback at the first wholly acceptable after-state while preserving correction and exact reopen evidence.",
-  "impact": {}
+  "change_id": "v0.21-close-managed-knowledge-owner",
+  "intent": "Close the temporary ownership obligation after mapping it to the current Principles declaration and entry guidance.",
+  "impact": {
+    "deferred": {
+      "total": 1,
+      "added": 0,
+      "removed": 1,
+      "modified": 0
+    }
+  }
 }

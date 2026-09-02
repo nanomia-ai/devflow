@@ -29,7 +29,7 @@ export const OBSERVATIONS = {
   "feedback.lifecycleAction": { judged: true, domain: ["produce", "settled", "invalid"] },
   "feedback.pendingSetStatus": { judged: true, domain: ["complete", "invalid"] },
   "history.basis": { judged: true, domain: ["none", "named-card", "nonpass-repair", "current-k-source", "current-trap-source", "broad", "invalid"] },
-  "knowledge.action": { judged: true, domain: ["none", "emit-arch", "emit-adopt"] }
+  "knowledge.action": { judged: true, domain: ["none", "emit-arch"] }
 };
 
 export const FORMATS = {};
@@ -50,7 +50,7 @@ export const ORDERS = {
   workLoop: ["claim", "bounded-read", "progress", "implementation", "completion-signal", "independent-review", "upper-feedback", "carry", "task-commit", "integration", "owner-feedback", "done-rename", "handoff", "boundary", "verify"],
   reviewRepair: ["anchor-nonpass", "repair-or-disposition", "completion-signal", "independent-review"],
   remoteEvidence: ["review", "evidence-wait-checkpoint", "evidence-record", "push", "current-check", "final-task-commit-or-repair", "boundary"],
-  knowledgeLanding: ["durable-conclusion", "committed-checkpoint", "one-owner-marker", "arch-or-adopt-landing", "source-marker-clear", "closure"],
+  knowledgeLanding: ["durable-conclusion", "committed-checkpoint", "one-owner-marker", "arch-landing", "source-marker-clear", "closure"],
   closedHistory: ["exact-basis", "exact-target", "bounded-read"]
 };
 
@@ -66,7 +66,7 @@ export const OWNERSHIP = {
   "Git and devflow route facts": "principles.calculateState",
   "clean review judgment": "reviewer",
   "knowledge marker producer": "work",
-  "current knowledge writer": "arch|adopt",
+  "current knowledge writer": "arch",
   "upper-document feedback": "semantic owner"
 };
 
@@ -136,7 +136,6 @@ export const TABLES = {
   ] },
   knowledge: { exclusive: true, rows: [
     { state: "emit-arch", reads: ["knowledge.action"], acceptsUnknown: [], when: s => s.knowledge.action === "emit-arch" },
-    { state: "emit-adopt", reads: ["knowledge.action"], acceptsUnknown: [], when: s => s.knowledge.action === "emit-adopt" },
     { state: "none", reads: [], acceptsUnknown: [], when: () => true }
   ] },
   finalize: { exclusive: true, rows: [
@@ -193,7 +192,6 @@ export const STAGES = [
   { id: "research-checkpoint", reads: ["research.checkpoint"], acceptsUnknown: [], done: s => s.research.checkpoint === "not-applicable" || s.research.checkpoint === "committed", effects: [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: research synthesis" }], "NEXT"], reentry: "rejudge", body: "stage: research-checkpoint" },
   { id: "knowledge-marker", reads: ["research.checkpoint", "knowledge.marker"], needs: ["knowledge.action"], acceptsUnknown: [], done: s => s.research.checkpoint === "not-applicable" || s.knowledge.marker === "current-source", table: "knowledge", reentry: "rejudge", branches: {
     "emit-arch": [["WRITE", { artifact: "knowledgeMarkerTransport", template: "knowledgeLandingPending", writer: "arch", source: "exact-card-path@fullhash" }], ["COMMIT", { scope: "knowledge-marker", subject: "<id> boundary: knowledge landing" }], "ROUTE:resume"],
-    "emit-adopt": [["WRITE", { artifact: "knowledgeMarkerTransport", template: "knowledgeLandingPending", writer: "adopt", source: "exact-card-path@fullhash" }], ["COMMIT", { scope: "knowledge-marker", subject: "<id> boundary: knowledge landing" }], "ROUTE:resume"],
     none: [["REPORT", { scope: "research-evidence-remains-in-card" }], "NEXT"]
   }, body: "stage: knowledge-marker" },
   { id: "task-finalization", reads: ["remote.state", "task.commit"], needs: ["feedback.action"], acceptsUnknown: [], done: s => s.task.commit === "present" || s.remote.state === "finalizing", table: "finalize", reentry: "rejudge", branches: {
@@ -258,7 +256,7 @@ export const DECLARATIONS = {
   profile: { value: "p2; state-dependent guards, evidence gates, recovery, review lineage, and ordered commit effects are mechanical", consumer: "build" },
   state_api: { value: "The context-bound sibling principles scripts/project-state.mjs calculateState({root}) schema devflow/project-state/2 object is the sole shared-state API. Work never parses CLI rendering, calls process.cwd(), rereads journal as a state kernel, or infers a semantic owner.", consumer: "collector" },
   tweak_boundary: { value: "A passing tweak is completed only by principles entry and never invokes work; work has no tweak observation, stage, branch, token, commit, or recovery route.", consumer: "principles|work" },
-  c2_research: { value: "Research evidence stays in the active or closed research card. Only a current durable synthesis may be promoted, after its conclusion is anchored by a committed checkpoint and one long-lived owner is named. Work emits exactly one knowledge landing pending marker per owner with writer arch|adopt and source-json equal to a JSON string containing exact repository-relative card path@full commit hash.", consumer: "stage.research-checkpoint|stage.knowledge-marker" },
+  c2_research: { value: "Research evidence stays in the active or closed research card. Only a current durable synthesis may be promoted, after its conclusion is anchored by a committed checkpoint and one long-lived owner is named. Work emits exactly one knowledge landing pending marker per owner with writer arch and source-json equal to a JSON string containing exact repository-relative card path@full commit hash.", consumer: "stage.research-checkpoint|stage.knowledge-marker" },
   c5_history: { value: "Closed history opens only for an exact named card, a non-pass repair lineage, or the exact Source basis of the current K or Trap. Broad closed-tree loading is blocked.", consumer: "guard.closed-history-refusal|stage.implement-and-signal" },
   c6_closure: { value: "Completion and branch closure are observed from the current card, structured calculateState facts, and concrete Git evidence. The first complete compatible-feedback proposal set is produced atomically and seals that card's exact members in Git history; later sessions receive current and consumed lifecycle entries as the sealed-set fact, current residual owners block closure, and an all-consumed set follows ordinary or late closure without another marker or exact-title task commit.", consumer: "guard.compatible-feedback-set-required|guard.compatible-feedback-before-closure|stage.task-finalization|stage.boundary" },
   progress_formats: { value: "External principles owns the canonical completion, review, remote-evidence, carry, and knowledge-marker grammar IDs loaded at entry. Work's five local templates are byte projections only and are seam-tested through structured project-state; no local FORMAT owns policy.", consumer: "external.principles|template-projection-test" },

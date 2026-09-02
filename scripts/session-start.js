@@ -38,12 +38,11 @@ if (!root) process.exit(0);
 // This is the deliberately weaker, non-binding half of project-state's membership answer.
 // It gates only a fixed pointer, never a route or file body, and therefore uses current files
 // only: no index, history, project-state, or route lookup belongs in SessionStart.
-const currentDevflow = fs.existsSync(path.join(root, "devflow"));
 const currentProduct = fs.existsSync(path.join(root, "devflow", "project", "product.md"));
-if (!currentDevflow && !currentProduct) process.exit(0);
+if (!currentProduct) process.exit(0);
 
 const additionalContext = [
-  "[devflow] After the user states their intent, run devflow:principles to classify the request and follow its route.",
+  "[devflow] An explicitly named devflow stage enters that stage directly. For other devflow intent, run devflow:principles to classify the request and follow its route.",
   "If you were handed a devflow role contract, follow that contract directly; do not re-enter through principles.",
 ].join("\n");
 

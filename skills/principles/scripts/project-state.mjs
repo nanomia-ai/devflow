@@ -323,8 +323,7 @@ function devflowHistoryEvidence(root) {
 }
 
 function devflowMembershipEvidence(root) {
-  const paths = [currentPathEvidence(root, "devflow"), currentPathEvidence(root, "devflow/project/product.md")];
-  const current = paths.includes("present") ? "present" : paths.includes("unknown") ? "unknown" : "absent";
+  const current = currentPathEvidence(root, "devflow/project/product.md");
   if (current !== "absent") return { current, indexed: "not-checked", history: "not-checked", unmanaged: false };
 
   const indexed = indexedDevflowEvidence(root);
@@ -332,6 +331,12 @@ function devflowMembershipEvidence(root) {
 
   const history = devflowHistoryEvidence(root);
   return { current, indexed, history, unmanaged: history === "absent" };
+}
+
+function nonDevflowMaterialEvidence(root) {
+  const listed = gitRun(root, ["ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", ".", ":(exclude)devflow/**"], { allowFailure: true });
+  if (listed.status !== 0 || !Buffer.isBuffer(listed.stdout)) return "unknown";
+  return listed.stdout.length === 0 ? "none" : "present";
 }
 
 export async function nativeBinaryHash(root, revision, paths) {
@@ -1229,12 +1234,10 @@ function knowledgeLandingState(snapshot) {
   const issues = [];
   const accepted = [];
   const pairs = new Set();
-  const expectedWriter = snapshot.archFields.get("Brownfield") === "yes" ? "adopt" : "arch";
   for (const line of current) {
     const pair = `${line.owner}\0${line.source}`;
     let reason = !line.valid ? line.reason : null;
     if (!reason && !knowledgeOwnerExists(snapshot, line.owner)) reason = "knowledge-owner-unresolved";
-    if (!reason && line.writer !== expectedWriter) reason = "knowledge-writer";
     if (!reason && !committedKnowledgeSource(snapshot, line)) reason = "knowledge-source-unresolved";
     if (!reason && pairs.has(pair)) reason = "knowledge-owner-source-duplicate";
     if (reason) issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", line: line.line, reason });
@@ -1334,10 +1337,7 @@ function knowledgeLandingState(snapshot) {
 function compatibleFeedbackWriter(snapshot, owner) {
   if (owner === "devflow/project/product.md" || owner === "devflow/project/glossary.md") return "product";
   if (owner === "devflow/project/design.md") return "design";
-  if (owner === "devflow/project/arch.md" || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(owner)) {
-    const brownfield = snapshot.archFields.get("Brownfield");
-    return brownfield === "yes" ? "adopt" : brownfield === "no" ? "arch" : null;
-  }
+  if (owner === "devflow/project/arch.md" || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(owner)) return "arch";
   return null;
 }
 
@@ -1778,6 +1778,7 @@ async function loadSnapshot(options) {
     integration,
     productText,
     devflowMembership,
+    nonDevflowMaterial: nonDevflowMaterialEvidence(root),
     product: parseProduct(productText),
     glossaryText,
     glossary: parseGlossary(glossaryText),
@@ -3127,10 +3128,10 @@ function evaluateZones(snapshot) {
     const relative = matches.length === 1 ? matches[0] : item.path;
     const text = gitFile(snapshot.root, snapshot.integration.ref, relative);
     const shape = capabilityShape(text, relative, item.number, snapshot.glossary.definitions);
-    if (legacyV010(text, item.number)) addEntry(zones, "baseline", "legacy-v010", { paths: [relative], stage: snapshot.archFields.get("Brownfield") === "yes" ? "adopt" : "arch" });
+    if (legacyV010(text, item.number)) addEntry(zones, "baseline", "legacy-v010", { paths: [relative], stage: "arch" });
     else if (text === null || (shape.boundaryCount === 1 && shape.anomalies.some((anomaly) => anomaly.zone === "design"))
       || (shape.boundaryCount === 1 && !snapshot.baseline.records.find((record) => record.capability === item.number)?.designFresh)) {
-      addEntry(zones, "baseline", "design-refresh", { paths: [relative], stage: snapshot.archFields.get("Brownfield") === "yes" ? "adopt" : "arch", reasons: text === null ? ["missing"] : shape.anomalies.filter((anomaly) => anomaly.zone === "design").map((anomaly) => anomaly.detail) });
+      addEntry(zones, "baseline", "design-refresh", { paths: [relative], stage: "arch", reasons: text === null ? ["missing"] : shape.anomalies.filter((anomaly) => anomaly.zone === "design").map((anomaly) => anomaly.detail) });
     } else if (text !== null && shape.boundaryCount !== 1) addEntry(zones, "baseline", "boundary", { paths: [relative], boundaryCount: shape.boundaryCount });
   }
 

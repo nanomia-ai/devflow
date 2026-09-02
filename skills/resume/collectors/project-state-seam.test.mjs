@@ -6,7 +6,6 @@ import { join } from "node:path";
 import test from "node:test";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { collectors } from "./index.mjs";
-import { unknown as unknownValue } from "../scripts/skill-rails/dsl.mjs";
 
 const projectRoot = realpathSync(fileURLToPath(new URL("../../../", import.meta.url)));
 const skillRoot = realpathSync(fileURLToPath(new URL("../", import.meta.url)));
@@ -62,48 +61,25 @@ test("resume collector requires an explicit root and reads the schema-2 state se
   assert.equal(await collectors["state.facts"](context), "available");
 });
 
-test("resume collector consumes only canonical brownfield metadata", async (t) => {
-  const yesProject = makeProject(t, "yes");
-  const noProject = makeProject(t, "no");
-  const missingProject = makeProject(t, null);
-
-  assert.equal(await collectors["state.brownfield"]({ projectRoot: yesProject }), "yes");
-  assert.equal(await collectors["state.brownfield"]({ projectRoot: noProject }), "no");
-  assert.deepEqual(await collectors["state.brownfield"]({ projectRoot: missingProject }), unknownValue());
-});
-
-test("setup routing does not read branch-local brownfield state", (t) => {
+test("setup routing does not read a knowledge writer selector", (t) => {
   const decision = stageProject(t, makeProject(t, null));
   assert.equal(decision.status, "ASK");
   assert.equal(decision.stage, "scope-entry");
   assert.equal(decision.row, "ASK:setup");
-  assert.equal(decision.facts.some(({ field }) => field === "state.brownfield"), false);
+  assert.equal(decision.facts.some(({ field }) => field === "state.knowledgeWriter"), false);
 });
 
-test("brownfield-consuming routes remain fail-closed until yes or no", async () => {
+test("knowledge recovery routes every validated marker to Arch", async () => {
   const { simulateSkill } = await import(pathToFileURL(join(skillRoot, "scripts", "skill-rails", "api.mjs")).href);
-  const simulate = brownfield => simulateSkill({
+  const decision = (await simulateSkill({
     skillRoot,
     fixture: {
-      id: `brownfield-${brownfield}`,
-      s: { "state.canonicalNext": "baseline.design-refresh", "state.brownfield": brownfield },
+      id: "knowledge-landing",
+      s: { "state.canonicalNext": "marker.knowledge-landing" },
       judged: { "intent.scope": "ordinary" }
     }
-  });
-
-  const unknown = (await simulate("UNKNOWN")).decision;
-  assert.equal(unknown.status, "BLOCK");
-  assert.equal(unknown.stage, "scope-entry");
-  assert.equal(unknown.row, "ROUTE:adopt");
-  assert.deepEqual(unknown.needs.map(({ field }) => field), ["state.brownfield"]);
-
-  const yes = (await simulate("yes")).decision;
-  assert.equal(yes.status, "ROUTE");
-  assert.equal(yes.row, "ROUTE:adopt");
-  assert.equal(yes.effects.at(-1), "ROUTE:adopt");
-
-  const no = (await simulate("no")).decision;
-  assert.equal(no.status, "ROUTE");
-  assert.equal(no.row, "ROUTE:arch");
-  assert.equal(no.effects.at(-1), "ROUTE:arch");
+  })).decision;
+  assert.equal(decision.status, "ROUTE");
+  assert.equal(decision.row, "ROUTE:arch");
+  assert.equal(decision.effects.at(-1), "ROUTE:arch");
 });

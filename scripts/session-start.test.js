@@ -11,7 +11,7 @@ const { test } = require("node:test");
 const hook = path.join(__dirname, "session-start.js");
 const workspace = path.resolve(__dirname, "..");
 const managedContext = [
-  "[devflow] After the user states their intent, run devflow:principles to classify the request and follow its route.",
+  "[devflow] An explicitly named devflow stage enters that stage directly. For other devflow intent, run devflow:principles to classify the request and follow its route.",
   "If you were handed a devflow role contract, follow that contract directly; do not re-enter through principles.",
 ].join("\n");
 const managedOutput = JSON.stringify({
@@ -98,24 +98,25 @@ test("an unmanaged Git checkout exits silently", (t) => {
   assert.equal(result.context, "");
 });
 
-test("a current devflow directory receives the byte-identical delayed instruction", (t) => {
+test("an empty devflow directory remains silent", (t) => {
   const root = makeProject(t, { "devflow/.keep": "", "NOTES.md": "# Fixture\n" }, { git: true });
   const { raw, payload, context } = runHook(root, root, { input: sessionInput(root) });
-  assert.equal(raw, managedOutput);
-  assert.equal(payload.hookSpecificOutput.hookEventName, "SessionStart");
-  assert.equal(context.split("\n").length, 2);
-  assert.match(context, /After the user states their intent/);
-  assert.match(context, /devflow:principles/);
-  assert.doesNotMatch(context, /run (?:the )?devflow resume|project-state/i);
+  assert.equal(raw, "");
+  assert.equal(payload, null);
+  assert.equal(context, "");
 });
 
 test("a current product file receives the byte-identical delayed instruction", (t) => {
   const root = makeProject(t, { "devflow/project/product.md": "# Product\n" }, { git: true });
-  assert.equal(runHook(root, root, { input: sessionInput(root) }).raw, managedOutput);
+  const { raw, context } = runHook(root, root, { input: sessionInput(root) });
+  assert.equal(raw, managedOutput);
+  assert.match(context, /explicitly named devflow stage enters that stage directly/i);
+  assert.match(context, /devflow:principles/);
+  assert.doesNotMatch(context, /run (?:the )?devflow resume|project-state/i);
 });
 
 test("a role contract bypasses entry classification", (t) => {
-  const root = makeProject(t, { "devflow/.keep": "" }, { git: true });
+  const root = makeProject(t, { "devflow/project/product.md": "# Product\n" }, { git: true });
   const { context } = runHook(root, root, { input: sessionInput(root) });
   assert.match(context, /role contract.*follow that contract directly/i);
   assert.match(context, /do not re-enter through principles/i);
@@ -141,14 +142,13 @@ test("a subdirectory start resolves the checkout root with current-files checks 
     { type: "read", target: hook },
     { type: "read", target: "0" },
     { type: "spawn", command: "git", args: ["rev-parse", "--show-toplevel"], cwd: startDirectory },
-    { type: "exists", target: path.join(root, "devflow") },
     { type: "exists", target: path.join(root, "devflow", "project", "product.md") },
   ]);
   assert.doesNotMatch(JSON.stringify(events), /project-state|resume|\"log\"|ls-files/i);
 });
 
 test("malformed or missing stdin falls back safely, while non-Git directories stay silent", (t) => {
-  const gitRoot = makeProject(t, { "devflow/.keep": "" }, { git: true });
+  const gitRoot = makeProject(t, { "devflow/project/product.md": "# Product\n" }, { git: true });
   assert.match(runHook(gitRoot, gitRoot, { input: "{not-json" }).context, /devflow:principles/);
   assert.match(runHook(gitRoot, gitRoot).context, /devflow:principles/);
 

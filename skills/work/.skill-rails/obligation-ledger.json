@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:d9a7ff14fadd87bf1eeb7db27efc134f1f9689625932fc341855680ead47e42b",
+  "intent_hash": "sha256:d3cd8b25e3f683d64211b6d84649851099c7bbe1383da57b99750bb23bcd288b",
   "profile": "p2",
   "atoms": [
     {
@@ -128,7 +128,7 @@
     {
       "id": "near-misses-003",
       "source": "intent.near_misses[2]",
-      "text": "Writing current promoted knowledge; arch or adopt owns it.",
+      "text": "Writing current promoted knowledge; Arch owns it for every managed project.",
       "candidate_class": "guard",
       "consequence": "medium",
       "disposition": "projected",
@@ -231,16 +231,15 @@
     {
       "id": "outputs-003",
       "source": "intent.outputs[2]",
-      "text": "A route to split, resume, arch/adopt through resume, or verify when that owner is next.",
+      "text": "A route to split, resume, Arch through resume, or verify when that owner is next.",
       "candidate_class": "artifact",
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:GUARDS/non-work-route"
+        "spec:STAGES/knowledge-marker"
       ],
       "evidence": [
-        "fixture:invalid-card-routes-split",
-        "fixture:compatible-feedback-routes-semantic-owner"
+        "fixture:research-synthesis-marker-timing"
       ]
     },
     {
@@ -343,16 +342,14 @@
     {
       "id": "state-dependent-behaviors-003",
       "source": "intent.state_dependent_behaviors[2]",
-      "text": "Research promotion requires a committed synthesis checkpoint and emits one independent arch/adopt owner marker at a time.",
+      "text": "Research promotion requires a committed synthesis checkpoint and emits one independent writer=arch owner marker at a time.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",
       "targets": [
-        "spec:STAGES/research-checkpoint",
         "spec:STAGES/knowledge-marker"
       ],
       "evidence": [
-        "fixture:research-synthesis-checkpoint-first",
         "fixture:research-synthesis-marker-timing"
       ]
     },
@@ -410,12 +407,12 @@
     {
       "id": "exact-formats-002",
       "source": "intent.exact_formats[1]",
-      "text": "Canonical knowledge landing pending marker with owner, writer arch|adopt, and source-json containing exact card path@fullhash.",
+      "text": "Canonical knowledge landing pending marker emitted by Work with owner, writer arch, and source-json containing exact card path@fullhash.",
       "candidate_class": "format",
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TEMPLATES/knowledgeLandingPending"
+        "spec:STAGES/knowledge-marker"
       ],
       "evidence": [
         "fixture:research-synthesis-marker-timing"
@@ -486,17 +483,15 @@
     {
       "id": "external-dependencies-003",
       "source": "intent.external_dependencies[2]",
-      "text": "Split, resume, arch/adopt, verify, the clean reviewer role, and the person at their owned boundaries.",
+      "text": "Split, Resume, Arch, Verify, the clean reviewer role, and the person at their owned boundaries.",
       "candidate_class": "collector",
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:ARTIFACTS/reviewerContract",
-        "spec:GUARDS/non-work-route"
+        "spec:STAGES/knowledge-marker"
       ],
       "evidence": [
-        "fixture:review-dispatch-before-close",
-        "fixture:compatible-feedback-routes-semantic-owner"
+        "fixture:research-synthesis-marker-timing"
       ]
     },
     {

@@ -1,1 +1,89 @@
-[]
+[
+  {
+    "id": "unmanaged-all-source-reconstruction",
+    "task": "Explicitly use devflow Adopt on an unmanaged repository with maintained code, tests, APIs, schemas, configuration, and extensive domain documentation.",
+    "should_trigger": true,
+    "expected_obligations": [
+      "Give every maintained source one disposition and reconcile executable and documentary claims.",
+      "Propose Product, Architecture, applicable Design, code style, glossary, one evidence-grounded executable flow per capability candidate, capability design zones, and all required owner-adjacent K nodes."
+    ],
+    "forbidden_actions": [
+      "Ask the owner to restate discoverable repository facts.",
+      "Write or commit before binding confirmation."
+    ],
+    "acceptance": [
+      "The proposal accounts for every maintained source and makes document-abundance overflow explicit in owner-adjacent K nodes."
+    ]
+  },
+  {
+    "id": "unmanaged-document-only-reconstruction",
+    "task": "Explicitly use devflow Adopt on an unmanaged already-progressed repository whose maintained pre-devflow material is extensive product, architecture, glossary, and domain documentation with no executable code.",
+    "should_trigger": true,
+    "expected_obligations": [
+      "Reverse-derive Product, Architecture, applicable Design, code style, glossary, capability design zones, and durable domain knowledge from the maintained documents.",
+      "Give every document one disposition and mark executable flows not applicable for document-derived candidates instead of inventing code evidence."
+    ],
+    "forbidden_actions": [
+      "Route to Product merely because executable code is absent.",
+      "Invent a representative executable flow."
+    ],
+    "acceptance": [
+      "The complete proposal cites documentary bases for every document-derived capability and sizes owner-adjacent K nodes for overflow."
+    ]
+  },
+  {
+    "id": "refusal-no-write",
+    "task": "During explicit devflow Adopt, reject the complete brownfield proposal at binding confirmation.",
+    "should_trigger": true,
+    "expected_obligations": [
+      "Report refusal and stop without changing project state."
+    ],
+    "forbidden_actions": [
+      "Write an adoption artifact, marker, or commit after refusal."
+    ],
+    "acceptance": [
+      "The refusal path contains no WRITE, RUN, or COMMIT effect."
+    ]
+  },
+  {
+    "id": "conflicting-source-authority",
+    "task": "During explicit devflow Adopt, a maintained design document calls itself exploratory, an older binding plan disagrees, and current tests plus operational records support only part of either claim.",
+    "should_trigger": true,
+    "expected_obligations": [
+      "Classify each source by its internal status and reconcile evidence-supported differences with exact provenance.",
+      "Ask only if the remaining conflict makes current product intent genuinely undecidable, naming both coordinates and the exact decision needed."
+    ],
+    "forbidden_actions": [
+      "Treat filename, folder, or last-modified time as sole authority.",
+      "Invent a current product decision that the competing evidence cannot establish."
+    ],
+    "acceptance": [
+      "The proposal distinguishes current implementation, binding plan, exploratory research, superseded record, and unresolved conflict."
+    ]
+  },
+  {
+    "id": "uncommitted-document-material",
+    "task": "Explicitly use devflow Adopt on an unmanaged repository whose maintained documentation is currently untracked but not ignored.",
+    "should_trigger": true,
+    "expected_obligations": [
+      "Treat the state snapshot's current non-devflow material observation as present and inspect the documentation before proposing adoption."
+    ],
+    "forbidden_actions": [
+      "Route to Product because the repository has no committed code revision.",
+      "Treat a repository-support file by itself as proof of a product capability."
+    ],
+    "acceptance": [
+      "Uncommitted maintained documentation enters reconstruction while capability claims still require evidence."
+    ]
+  },
+  {
+    "id": "generic-code-documentation-near-miss",
+    "task": "Document an existing codebase without naming devflow or asking to adopt it into devflow.",
+    "should_trigger": false,
+    "expected_obligations": [],
+    "forbidden_actions": [
+      "Automatically initialize devflow or enter Adopt."
+    ],
+    "acceptance": []
+  }
+]

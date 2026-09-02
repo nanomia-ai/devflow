@@ -153,15 +153,18 @@ test("collector consumes only the context-bound structured calculateState contra
   assert.deepEqual(decision.effects.map((effect) => Array.isArray(effect) ? effect[0] : effect), ["READ", "WRITE", "RUN", "COMMIT", "NEXT"]);
 });
 
-test("invalid writer and non-JSON source are rejected by shared state, never arch-local parsing", async (t) => {
-  const wrongWriter = makeProject(t);
-  write(wrongWriter.root, "devflow/journal.md", `${marker("devflow/project/arch.md", "adopt", wrongWriter.source)}\n`);
-  commit(wrongWriter.root, "jmp boundary — invalid writer");
+test("legacy adopt writer is consumed by arch while non-JSON source remains rejected", async (t) => {
+  const legacyWriter = makeProject(t);
+  write(legacyWriter.root, "devflow/journal.md", `${marker("devflow/project/arch.md", "adopt", legacyWriter.source)}\n`);
+  commit(legacyWriter.root, "jmp boundary — legacy writer");
   let collectors = await currentContractCollectors(t);
-  assert.equal(await collectors["state.arch-route"]({ projectRoot: wrongWriter.root }), "integrity.blocking");
-  const blockedWriter = stageProject(t, wrongWriter.root);
-  assert.equal(blockedWriter.status, "BLOCK");
-  assert.equal(blockedWriter.guard.id, "canonical-integrity-block");
+  const legacyContext = { projectRoot: legacyWriter.root };
+  assert.equal(await collectors["state.arch-route"](legacyContext), "marker.knowledge-landing");
+  assert.equal(await collectors["knowledge.arch-marker-count"](legacyContext), 1);
+  const legacyPayload = JSON.parse(await collectors["knowledge.arch-markers"](legacyContext));
+  assert.equal(legacyPayload[0].writer, "adopt");
+  const legacyDecision = stageProject(t, legacyWriter.root, ["judged", "landing.mode=compact"]);
+  assert.equal(legacyDecision.stage, "knowledge-landing");
 
   const rawSource = makeProject(t);
   const validPrefix = marker("devflow/project/arch.md", "arch", rawSource.source);
@@ -179,7 +182,7 @@ test("structured multi-owner markers preserve exact owner/source pairs", async (
   const fixture = makeProject(t);
   const lines = [
     marker("devflow/project/arch.md", "arch", fixture.source),
-    marker("devflow/project/product.md", "arch", fixture.source, "2026-08-29T01:01:00Z")
+    marker("devflow/project/product.md", "adopt", fixture.source, "2026-08-29T01:01:00Z")
   ];
   write(fixture.root, "devflow/journal.md", `${lines.join("\n")}\n`);
   commit(fixture.root, "jmp boundary — multi-owner knowledge landing");
@@ -187,7 +190,10 @@ test("structured multi-owner markers preserve exact owner/source pairs", async (
   const context = { projectRoot: fixture.root };
   assert.equal(await collectors["knowledge.arch-marker-count"](context), 2);
   const payload = JSON.parse(await collectors["knowledge.arch-markers"](context));
-  assert.deepEqual(payload.map((entry) => entry.owner), ["devflow/project/arch.md", "devflow/project/product.md"]);
+  assert.deepEqual(payload.map(({ owner, writer }) => ({ owner, writer })), [
+    { owner: "devflow/project/arch.md", writer: "arch" },
+    { owner: "devflow/project/product.md", writer: "adopt" }
+  ]);
   const decision = stageProject(t, fixture.root, ["judged", "landing.mode=partial-compact"]);
   assert.equal(decision.stage, "knowledge-landing");
   assert.deepEqual(decision.effects.map((effect) => Array.isArray(effect) ? effect[0] : effect), ["READ", "WRITE", "RUN", "COMMIT", "NEXT"]);
@@ -208,11 +214,13 @@ test("workflow has concrete writes and atomic landing boundaries", async () => {
   }
   const approval = spec.STAGES.find((stage) => stage.id === "approval");
   assert.deepEqual(approval.branches["approve-initial"].map((effect) => Array.isArray(effect) ? effect[0] : effect), ["WRITE", "WRITE", "WRITE", "COMMIT", "NEXT"]);
+  assert.equal(approval.branches["approve-initial"][0][1].fields.brownfield, "no");
+  assert.equal(approval.branches["approve-refresh"][0][1].fields.brownfield, "state.brownfield");
 });
 
 test("templates retain exact Layer 0 and capability design-zone contracts", () => {
   const architectureText = readFileSync(join(skillRoot, "templates", "architecture.md"), "utf8");
-  for (const required of ["Brownfield: no", "## Components", "## Stack", "## Code structure", "## Data", "## Existing records", "## Provisional", "frontend:", "verify_channel:", "  work server:", "  means:", "integration:", "merge:"]) {
+  for (const required of ["Brownfield: {{brownfield}}", "## Components", "## Stack", "## Code structure", "## Data", "## Existing records", "## Provisional", "frontend:", "verify_channel:", "  work server:", "  means:", "integration:", "merge:"]) {
     assert.ok(architectureText.includes(required), required);
   }
   const capabilityText = readFileSync(join(skillRoot, "templates", "capability-design.md"), "utf8");

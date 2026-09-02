@@ -5,16 +5,26 @@
 - **Every devflow commit carries only its own paths.** Whatever else this working tree has
   staged, a commit contains exactly the paths its own rule names — a file another flow in
   the same folder staged earlier never rides along.
-- **Layer 0 commit**: product, arch, design, and adopt land each core document in one
+- **Layer 0 commit**: product, arch, and design land each core document in one
   commit immediately after the user confirms it — message `<skill> — <document filename>`
-  (adopt lands all adoption documents together as `adopt — layer 0`). A document created
-  alongside another (glossary.md with product.md) rides the same commit. A single-field
+  A document created alongside another (glossary.md with product.md) rides the same commit. A single-field
   completion of an existing document uses the same message form. This commit is a
   binding decision.
-- **Capability-design commit**: after every confirmed Layer 0 commit has landed, arch, or
-  adopt in a brownfield, writes the design zones for the expected capability documents as
-  its final output. Land only those capability documents and their knowledge capsules as
-  `arch — capabilities` or `adopt — capabilities`; if no capability bytes change, do not
+- **Initial-adoption commits**: one confirmation binds the complete approved Product,
+  Architecture, applicable Design, code style, glossary, capability design zones, knowledge
+  capsules, and any exact follow-on marker. Adopt first writes Layer 0 and the optional marker,
+  writes `product.md` last, stages only those paths, and lands `adopt — layer 0`. It then
+  calculates the canonical Design head from that landed commit, writes capability documents
+  carrying that exact value, writes and validates their capsules beside them, stages only those
+  documents and capsules, and lands `adopt — capabilities`. Refusal or interruption before
+  approval writes nothing. Before `product.md` is written the repository remains unmanaged.
+  A post-product pre-commit interruption is an unverified dirty boundary reported for the owner
+  to commit exactly or discard; no stage claims it. After the first commit and before
+  second-boundary writes, the existing managed baseline-missing state routes through Resume to Arch.
+- **Capability-design commit**: after every confirmed managed Layer 0 commit has landed,
+  Arch writes the design zones for the expected capability documents as its final output.
+  Land only those capability documents and their knowledge capsules as
+  `arch — capabilities`; if no capability bytes change, do not
   commit. This is a binding decision.
 - **Planning commit**: split bundles newly created or revised pending cards,
   user-confirmed card-dependency format corrections, tree structure, card Approval and

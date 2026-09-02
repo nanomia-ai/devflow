@@ -6,10 +6,11 @@ Stage packages retain their own procedures; local policy and mechanical owners a
 
 ## why: entry-topology
 
-Read [Enter and resume contract](references/enter-resume-contract.md#enter-and-resume-contract).
+Read [Enter and resume contract](references/enter-resume-contract.md#enter-and-resume-contract) only when Principles itself owns the routing or recovery question.
 
-Principles classifies the request; stateful, status, and project-read-only work routes once
+Principles classifies requests that entered Principles; stateful, status, and project-read-only work routes once
 to resume, whose only state input is calculateState. Role contracts bypass this classifier.
+An explicitly invoked stage is its own entry and does not use Principles as a preflight; its local guards route state recovery to Resume.
 
 ## why: policy-index
 

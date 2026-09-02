@@ -8,6 +8,15 @@
 
 ## 실전 관찰 항목 — 규칙 추가 없이 다음 사이클에서 지켜볼 것
 
+- **Skill Rails trace 위치가 관찰 대상 프로젝트를 더럽힐 수 있다** (세 작업 트리 Adopt 진단 중
+  2026-09-03 기록) — 공용 P2 런타임은 설치된 스킬 패키지 내부 저장만 거부하지만 생성 adapter
+  안내는 단지 “설치된 스킬 밖”이라고 말한다. 문자적으로 따른 소비자가 프로젝트 로컬
+  `.devflow-traces/adopt`를 골라 뒤의 Git snapshot이 볼 수 있는 미추적 상태를 남겼다. trace는 같은
+  실행의 종료 snapshot 뒤에 추가되므로 그 실행의 오래된 결과를 설명하지는 못하며, 정확한 오래된
+  writer 원인은 아직 입증되지 않았다. Adopt만의 경로 예외나 description 문구를 추가하지 않는다.
+  upstream Skill Rails에서 런타임 상태가 설치 패키지와 관찰 대상 프로젝트 양쪽 바깥에 있도록 생성
+  adapter와 `assertExternalStateDir`를 함께 고친 뒤 영향받는 P2 패키지를 재생성한다. Skill Rails
+  자체가 범위에 들어올 때 다시 연다.
 - **호환 환류 실전 잔여는 유계 관찰로 남는다** (DD-96 seal과 integration-behind 수리가
   2026-09-02 기록) — 첫째, 상태 도구는 현재 Git 이력에서 차단형 reopen finding을 도출하며
   journal을 고친 뒤에도 그것을 지울 수 없다. 이것은 기록일 뿐이고 런타임 동작 변경 권한이
@@ -85,7 +94,10 @@
 - **Design head 줄만 바뀐 일괄 확인의 반복** (v0.15.2 관찰 등재) — Layer 0 접촉 뒤 모든 능력
   문서의 일괄 diff가 `Design head` 줄뿐인 확인이 N회 반복되는지를 본다. 사용자가 그 반복에서
   확인 피로를 보고하면, 일괄의 모든 파일에서 유일한 diff가 그 줄인 경우 확인 질문 없이
-  `arch|adopt — capabilities` 커밋을 착지하는 안을 다시 연다. synky에서는 Provisional 6행을
+  `arch — capabilities` 커밋을 착지하는 안을 다시 연다. DD-97 뒤 초기 Adopt는 같은 한 승인 아래
+  별도 `adopt — capabilities` 커밋을 사용해 앞선 Layer 0 커밋을 새 능력의 최신 `Design head`로
+  기록하고 각 캡슐을 그 소유자 옆에서 검증한다. 이는 여기서 관찰한 관리 상태의 반복 확인이
+  아니다. synky에서는 Provisional 6행을
   정산하자 전 능력의 `Design head`가 6회 노후했다. 그 전에는 현재 확인 게이트를 유지한다.
 - **`verify_channel`이 선택과 현재 실행 가능 상태를 한 값에 섞는다** (v0.17.0) — 값 문법과
   소비 규칙(파싱·planned 상태에서 정지)을 함께 정의해야 하므로 이번 라운드에서 고치지 않았다.

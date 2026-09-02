@@ -118,13 +118,13 @@ export const READ_FIRST = [
 
 export const DECLARATIONS = {
   profile: { value: "p2", consumer: "build:profile" },
-  entry_contract: { value: "principles-entry-classifier/2", consumer: "all devflow entries" },
+  entry_contract: { value: "principles-entry-classifier/3; explicit stage invocations are their own entry and bypass Principles preflight", consumer: "principles|explicit stages" },
   state_api: { value: "calculateState -> devflow/project-state/2; CLI text is compatibility only", consumer: "resume|stages" },
-  stateful_route: { value: "Every stateful, status, or project-read-only request routes exactly once to resume.", consumer: "resume" },
+  stateful_route: { value: "Every stateful, status, or project-read-only request that enters Principles routes exactly once to resume; explicit stage invocations use that stage's guards.", consumer: "resume|explicit stages" },
   tweak_lane: { value: "Conversation all-no gate, bounded preflight, one edit/check/diff sequence, exactly one tweak commit; card=0, K=0, journal=0.", consumer: "all devflow entries" },
   mixed_items: { value: "Route only failing items through normal flow, retain accepted interruption scope, then re-enter remaining tweak items without loss or a route loop.", consumer: "resume|split" },
   role_bypass: { value: "Role-contract invocation bypasses request classification and project-state collection.", consumer: "roles" },
-  knowledge_landing: { value: "marker.knowledge-landing uses owner, arch|adopt writer, and card-path@full-commit source; no residual object, route, token, or batch concept.", consumer: "project-state|arch|adopt|work" },
+  knowledge_landing: { value: "marker.knowledge-landing uses owner, arch|adopt provenance writer, and card-path@full-commit source; Arch consumes both writers and current Work produces arch only; no residual object, route, token, or batch concept.", consumer: "project-state|arch|work" },
   research_entry: { value: "Ordinary 00-project cards are research-only when their canonical heading is '# NN.N Research: ...'; active or pending research outranks setup.no-product.", consumer: "project-state|resume|split|work" },
   closed_history: { value: "Legacy closed-history descent remains exact and no automatic migration is added.", consumer: "work|verify|resume" },
   package_portability: { value: "Every runtime and policy reference resolves inside the copied package.", consumer: "build|runtime" }

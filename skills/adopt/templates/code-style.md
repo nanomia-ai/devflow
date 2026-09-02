@@ -1,4 +1,4 @@
-# Code style
+# Code Style
 
 ## Values
 
@@ -6,8 +6,14 @@
 
 ## Project choices
 
-{{choices}}
+{{projectChoices}}
 
-## Trust boundaries
+## Trust boundary
 
-{{boundaries}}
+- Posture: {{trustPosture}}
+- Boundary list:
+{{trustBoundaries}}
+
+## Non-goals
+
+{{nonGoals}}

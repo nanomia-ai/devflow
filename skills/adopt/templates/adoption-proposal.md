@@ -1,45 +1,49 @@
 # Brownfield adoption proposal
 
-## Candidates
+## Source inventory
+{{sourceInventory}}
 
+## Capability candidates
 {{candidates}}
 
 ## Representative flows
-
 {{flows}}
 
-## Existing records
-
-{{records}}
-
-## Document claims checked against code
-
+## Document claims
 {{documentClaims}}
 
-## Product draft
-
+## Derived product
 {{product}}
 
-## Architecture draft
-
+## Derived architecture
 {{architecture}}
 
-## Code-style draft
+## Derived design when applicable
+{{design}}
 
+## Derived code style
 {{codeStyle}}
 
-## Glossary terms
-
+## Derived glossary
 {{glossary}}
 
-## Verification channel
+## Capability design zones
+{{capabilityDesigns}}
 
-{{verification}}
+## Owner-adjacent knowledge nodes
+{{knowledgeNodes}}
 
-## Owner questions
+## Preserved follow-on request
+{{followOn}}
 
+## Irreducible questions
 {{questions}}
 
 ## Contradictions
-
 {{contradictions}}
+
+## Evidence verification
+{{verification}}
+
+## Binding confirmation
+{{binding}}

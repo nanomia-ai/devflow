@@ -32,9 +32,9 @@ Why: A superficial owner-file diff is still pending, and other owners' markers r
 
 ## stage: orient
 
-Judgment: entry.action is one of route-adopt. A brownfield without a product plan is an adoption boundary, not a product interview shortcut.
+Judgment: An observed brownfield project without a product plan is a partial managed lifecycle state. Route to Resume, which owns canonical recovery; Product never jumps directly to Adopt.
 
-Why: adopt back-derives existing behavior before a service plan can be responsibly changed.
+Why: explicit unmanaged reconstruction remains Adopt's separate entry, while Resume owns incomplete managed state.
 
 ## stage: research
 

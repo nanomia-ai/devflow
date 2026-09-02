@@ -52,7 +52,8 @@ YYYY-MM-DDTHH:MM:SSZ compatible feedback pending: payload-json: {...}
 `knowledge landing pending` is the sole knowledge-landing marker. Work, including a research
 synthesis card, may produce it only after the conclusion and source checkpoint are durable.
 State parses and enforces it but never produces it. A source may name several owners; each
-owner has one marker and arch, or adopt in brownfield, consumes each independently. Marker
+owner has one marker and Arch consumes each independently while preserving the exact `writer`
+as provenance. Current managed work writes `arch`; `adopt` is accepted only on legacy markers. Marker
 deletion is valid only with that owner file's direct update, or with a K update whose final
 `Source basis` names the same source and an exact line range. A compact owner update never
 forces creation of a K. No residual marker family, route, token, or batch object exists.

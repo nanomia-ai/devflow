@@ -8,7 +8,7 @@ const homes = [
   { match: /knowledge landing|knowledge-landing|recursive|same-stem|source basis|owner-adjacent|\bK\d|지식/i, target: "spec:STAGES/knowledge-landing", evidence: "fixture:multi-owner-mixed-landing" },
   { match: /glossary|term: definition|용어/i, target: "spec:STAGES/glossary-term", evidence: "fixture:glossary-capability-alignment" },
   { match: /design note|design open item|설계 메모|설계 열린/i, target: "spec:STAGES/design-marker", evidence: "fixture:design-marker-binding" },
-  { match: /brownfield|existing code|adopt|기존 코드|브라운필드/i, target: "spec:GUARDS/brownfield-capability-writer", evidence: "fixture:brownfield-refresh-routes-adopt" },
+  { match: /brownfield|existing code|adopt|기존 코드|브라운필드/i, target: "spec:DECLARATIONS/managedProjectWriter", evidence: "fixture:managed-brownfield-design-refresh" },
   { match: /verification channel|verify channel|read probe|interaction probe|검증 채널|검증.*수단/i, target: "spec:STAGES/verify-channel", evidence: "fixture:verification-channel-probe" },
   { match: /capability design|design zone|concept model|invariants|non-goals|binding ADR|verified state|capability document|역량.*설계|개념 모델|불변식/i, target: "spec:TEMPLATES/capabilityDesign", evidence: "fixture:capability-docs-route-design" },
   { match: /code-style|code style|trust posture|trust boundar|코드 스타일/i, target: "spec:TEMPLATES/codeStyle", evidence: "fixture:initial-architecture-creation" },

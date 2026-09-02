@@ -14,7 +14,7 @@ Domain explanation is a bounded read-only orientation distinct from active hando
 
 ## why: handoff-continuity
 
-An active claim, its provenance, and its explicitly named continuity inputs remain authoritative; absent or stale HANDOFF text does not invent state. Interrupted transitions, folder boundaries, and digest distance continue only from their structured state entry, while a partial knowledge landing remains with arch or adopt.
+An active claim, its provenance, and its explicitly named continuity inputs remain authoritative; absent or stale HANDOFF text does not invent state. Interrupted transitions, folder boundaries, and digest distance continue only from their structured state entry, while every partial knowledge landing remains with Arch.
 
 ## why: report-approval
 
@@ -22,7 +22,7 @@ The result template keeps observed facts, the selected continuation, and approva
 
 ## why: canonical-routing
 
-The state snapshot owns priority and raw route selection; resume maps that selection without re-deriving disk predicates.
+The state snapshot owns priority and raw route selection; resume maps that selection without re-deriving disk predicates. Managed glossary-term, design-note, design-open-item, knowledge-landing, legacy-v010, and design-refresh routes always select Arch, while setup.unmanaged remains a report-and-DONE boundary. Arch preserves each knowledge marker's declared writer as provenance and consumes only the selected exact markers, leaving residual markers for replay.
 
 ## why: integrity-approval
 
@@ -50,16 +50,16 @@ Block an unrecognized canonical token; it is outside the reviewed compatibility 
 
 ## guard: compatible-feedback-owner-required
 
-Block a compatible-feedback route unless the state entry names exactly one closed writer: Product for `product.md` or `glossary.md`, Design for `design.md`, and Arch or Adopt for `arch.md` or one exact capability design document according to the Brownfield fact. Never guess an owner from prose or a nearby filename.
+Block a compatible-feedback route unless the state entry resolves exactly one current semantic owner: Product for `product.md` or `glossary.md`, Design for `design.md`, and Arch for `arch.md` or one exact capability design document. Never guess an owner from prose, a nearby filename, legacy writer provenance, or historical Brownfield origin.
 
 ## stage: recovery-action
 
-Judgment: The structured route and Brownfield fact select the one recovery branch. The session may explain a named continuation but never supplies its state transition or a replacement route.
+Judgment: The structured route selects the one recovery branch. Design-note and design-open-item select Arch regardless of Brownfield; the session may explain a named continuation but never supplies its state transition or a replacement route.
 
 Why: Recovery is selected only for collected canonical state and cannot loop on unchanged state, recreate a handoff, or broaden a marker into a new plan.
 
 ## stage: scope-entry
 
-Judgment: `intent.scope` is exactly one of `ordinary`, `domain-orientation`, or `handoff-continuation`. Domain orientation reports its bounded explanation and ends. An unmanaged report tells the user that canonical state found no current or historical devflow membership evidence and that this invocation wrote nothing; it names product or adopt only when the user intended to opt in. Ordinary and handoff continuation otherwise use the same canonical state decision. A compatible-feedback marker routes only by its state-supplied writer; each owner stage must preserve its exact source and all five coordinates, and any residual marker is routed again after the landed marker's atomic owner-plus-journal commit.
+Judgment: `intent.scope` is exactly one of `ordinary`, `domain-orientation`, or `handoff-continuation`. Domain orientation reports its bounded explanation and ends. An unmanaged report tells the user that canonical state found no current or historical devflow membership evidence and that this invocation wrote nothing; it names product or adopt only when the user intended to opt in. Ordinary and handoff continuation otherwise use the same canonical state decision. A compatible-feedback marker routes only to its state-derived semantic consumer; each owner stage must preserve its exact source and all five coordinates, and any residual marker is routed again after the landed marker's atomic owner-plus-journal commit.
 
 Why: Repository absence is not consent to create devflow state. User intent selects a bounded orientation or the canonical route; it does not replace the state-tool priority.

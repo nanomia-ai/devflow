@@ -34,7 +34,7 @@ Core philosophy — every modification must keep to it:
 ## Structure at a glance
 
 ```
-Layer 0 (once, or inherited): product → arch → [design] · existing code: adopt back-derives     Layer 1 (loop): split → work ⇄ verify
+Layer 0 (once, or inherited): product → arch → [design] · existing project evidence: adopt back-derives     Layer 1 (loop): split → work ⇄ verify
 Shared: resume, principles (canonical rules)
 Created in the target project: devflow/{project/, tree/, journal.md, users/<id>/ rooms}
 Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugin — registered by codex/install.*)
@@ -48,11 +48,11 @@ points to from their actual sources.
 
 | Component | Why it exists and what it owns | Input → next consumer | Design lineage |
 |---|---|---|---|
-| `principles` | owns common rules and commit discipline; it does not judge state and routes only to resume | every entry skill and role contract → resume | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 |
-| `product` | confirms the problem, identity, capabilities, boundary, and success criteria with the owner | request → arch and design, or the adopt boundary | origin · DD-33 · DD-67 |
-| `arch` | confirms components, stack, code structure, data, verify channel, and capability design zones | product → split, work, and verify | DD-42 · DD-43 · DD-69 |
+| `principles` | owns common rules and commit discipline; it classifies only requests that enter Principles and does not preflight an explicitly named stage | general devflow intent → resume; explicit stages and role contracts enter their named owner | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 |
+| `product` | confirms the problem, identity, capabilities, boundary, and success criteria with the owner | explicit new-project or product-planning request → arch and design; initial existing-project reconstruction bypasses Product and belongs to Adopt | origin · DD-33 · DD-67 · DD-97 |
+| `arch` | confirms and refreshes current technical Layer 0, stack, code structure, data, verify channel, glossary, and capability design zones in managed projects | product or a managed glossary/design/baseline route → split, work, and verify | DD-42 · DD-43 · DD-69 · DD-97 |
 | `design` | optionally confirms UI approach, source, token/component strategies, decomposition axis, and review surface | product and arch → arch capability design and split | DD-69 |
-| `adopt` | traces representative existing-code flows to back-derive Layer 0 and capability design zones | brownfield code → split | DD-10 · DD-20 · DD-28 |
+| `adopt` | explicitly accounts for all maintained brownfield sources and projects them into Product, Architecture, applicable Design, code style, glossary, capability design zones, and complete durable domain knowledge | unmanaged documents and/or code → a confirmed managed planning and knowledge surface, then stop | DD-10 · DD-20 · DD-26 · DD-97 |
 | `split` | owns implementation boundaries by opening one task-tree layer and approving an execution proposal | Layer 0, records, and current code → work | DD-25 · DD-50 · DD-67 |
 | `work` | carries one card's code, progress log, completion signal, and upper-document feedback to completion | approved card, canon, and baseline → verify or the next card | DD-09 · DD-48 · DD-56 |
 | `verify` | executes capability and product verdicts and owns survival paths for failure, audit, and retrospective events | closed code, signals, and baseline → repair through split or closure | DD-21–DD-24 · DD-30 · DD-36 · DD-68 |

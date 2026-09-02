@@ -8,6 +8,16 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 
 ## Field observation items — watch during coming cycles, without adding rules
 
+- **Skill Rails trace placement can dirty the project it is observing** (recorded 2026-09-03
+  during the three-worktree Adopt diagnosis) — the shared P2 runtime rejects trace storage only
+  inside the installed skill package, while generated adapter guidance says merely “outside the
+  installed skill.” A literal consumer therefore chose project-local `.devflow-traces/adopt`,
+  leaving untracked state that a later Git snapshot can observe. The trace is appended after the
+  same run's end snapshot, so it does not explain that run's stale result; the exact stale writer
+  remains unproven. Do not add an Adopt-only path exception or description instruction. Repair the
+  invariant once in upstream Skill Rails so generated adapters and `assertExternalStateDir`
+  require runtime state outside both the installed package and the observed project, then rebuild
+  every affected P2 package. Reopen when Skill Rails itself is in scope.
 - **Compatible-feedback field residuals remain bounded observations** (recorded 2026-09-02
   by the DD-96 seal and integration-behind repairs) — first, the state tool currently derives
   a blocking reopen finding from Git history and cannot clear it after the journal is corrected.
@@ -101,8 +111,12 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 - **Repeated bulk confirmation when only the Design head line changed** (added as a v0.15.2
   observation) — watch for N repetitions where a bulk diff across all capability documents
   changes only the `Design head` line after a Layer 0 touch. If the user reports confirmation
-  fatigue from that repetition, reopen the option to land an `arch|adopt — capabilities`
+  fatigue from that repetition, reopen the option to land an `arch — capabilities`
   commit without a confirmation question when that line is the only diff in every file.
+  Initial Adopt uses a separate `adopt — capabilities` commit under the same confirmation so
+  every new capability can store the preceding Layer 0 commit as its fresh `Design head` and
+  each capsule can validate beside that owner; this is not the repeated managed Arch
+  confirmation observed here.
   In synky, settling six Provisional rows made every capability's `Design head` stale six
   times. Until then, keep the current confirmation gate.
 - **`verify_channel` mixes selection with current executability in one value** (v0.17.0) —

@@ -1,6 +1,6 @@
 [
   {
-    "id": "brownfield-adopt",
+    "id": "brownfield-resume",
     "s": {
       "entry.state": "brownfield-no-product",
       "product.file": "absent",
@@ -12,20 +12,17 @@
       "compatible.owner": "none",
       "compatible.landing": "none"
     },
-    "decided": {
-      "entry.action": "route-adopt"
-    },
+    "decided": {},
     "judged": {},
     "expect": {
       "stage": "orient",
       "status": "ROUTE",
       "effects": [
-        "ROUTE:adopt"
+        "ROUTE:resume"
       ]
     },
     "cover": [
-      "stage:orient",
-      "branch:orient/route-adopt"
+      "stage:orient"
     ]
   },
   {

@@ -1,6 +1,6 @@
 {
   "name": "principles",
-  "description": "Canonical devflow mechanics and evidence boundaries used by every devflow skill; use before any devflow stage or when routing, recovery, ownership, knowledge landing, commits, or verification are in question.",
+  "description": "Canonical devflow mechanics and evidence boundaries for explicit routing or recovery questions, ownership, knowledge landing, commits, and verification; explicit stage invocations are their own entry and do not require Principles preflight.",
   "problem": "Keep devflow flexible for people while making mechanical state, recovery, evidence, ownership, and completion decisions deterministic for AI. Prevent prose drift, silent loss, duplicate authority, unbounded reading, and a check-passing workflow that no longer serves the user's development outcome.",
   "use_cases": [
     "Route a new or resumed devflow session from current Git and project state.",
@@ -35,7 +35,7 @@
     "A passing tweak adds no devflow artifact; uncertainty or durable knowledge exits the tweak lane.",
     "Pre-product multi-session research uses the reserved 00-project work scope but cannot own implementation or masquerade as a capability.",
     "Current knowledge uses only the canonical capability-capsule artifacts projected by project-knowledge; the package introduces no second node schema.",
-    "Knowledge landing uses the externally state-owned knowledgeLandingPending family; arch, or adopt in brownfield, is its canonical writer.",
+    "Knowledge landing uses the externally state-owned knowledgeLandingPending family; Arch is the canonical managed writer, while Adopt appears only in the initial unmanaged projection and retained legacy provenance.",
     "Multi-owner closure follows the canonical state and knowledge owners without a parallel landing family.",
     "Closed history is opened only by an exact named card, repair lineage, or a current capsule or Trap source basis."
   ],

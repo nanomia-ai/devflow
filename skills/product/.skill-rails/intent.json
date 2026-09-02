@@ -1,6 +1,6 @@
 {
   "name": "product",
-  "description": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing devflow/project/product.md. Use only with explicit devflow intent—direct invocation, naming devflow, or asking for a devflow project, Layer 0, devflow capability documents, or devflow/project/product.md.",
+  "description": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing devflow/project/product.md. Use only with direct Product invocation or explicit intent to plan a new project's product or service, define its problem, capability composition, and boundary, or create devflow/project/product.md. A generic devflow mention is not a Product trigger; Principles owns generic entry.",
   "problem": "Preserve the behavior of immutable repository sources `skills/product/SKILL.md` and `skills/product/SKILL_ko.md`, identified by their recorded source hashes, without silently changing their obligations.",
   "use_cases": [],
   "near_misses": [],
@@ -8,7 +8,9 @@
   "outputs": [],
   "irreversible_boundaries": [],
   "state_dependent_behaviors": [
-    "Durable pre-product research records one origin and routes through split; it never creates or routes directly to implementation work."
+    "Durable pre-product research records one origin and routes through split; it never creates or routes directly to implementation work.",
+    "A brownfield-no-product partial managed state routes to Resume for canonical recovery; Product never routes it directly to Adopt.",
+    "Managed capability refresh and recursive K ownership belong to Arch; Adopt is only initial unmanaged reconstruction."
   ],
   "exact_formats": [],
   "external_dependencies": [],

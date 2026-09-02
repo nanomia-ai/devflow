@@ -367,19 +367,19 @@
     },
     "expect": {
       "stage": null,
-      "guard": "adoption-required",
+      "guard": "partial-setup-owned-by-resume",
       "status": "ROUTE",
       "effects": []
     },
     "cover": [
-      "guard:adoption-required"
+      "guard:partial-setup-owned-by-resume"
     ]
   },
   {
-    "id": "brownfield-refresh-routes-adopt",
+    "id": "missing-product-existing-history",
     "s": {
       "state.kernel": "available",
-      "state.route": "baseline.design-refresh",
+      "state.route": "setup.no-product",
       "state.brownfield": "yes",
       "state.code": "none",
       "state.frontend": "needed",
@@ -414,12 +414,12 @@
     },
     "expect": {
       "stage": null,
-      "guard": "brownfield-capability-writer",
+      "guard": "partial-setup-owned-by-resume",
       "status": "ROUTE",
       "effects": []
     },
     "cover": [
-      "guard:brownfield-capability-writer"
+      "guard:partial-setup-owned-by-resume"
     ]
   },
   {
@@ -680,7 +680,7 @@
     ]
   },
   {
-    "id": "recursive-k-landing",
+    "id": "legacy-adopt-writer-landing",
     "s": {
       "state.kernel": "available",
       "state.route": "marker.knowledge-landing",
@@ -691,7 +691,7 @@
       "state.layer0": "incomplete",
       "state.capabilities": "missing",
       "state.expected": 3,
-      "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
+      "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"adopt\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
       "marker.knowledgeCount": 1,
       "compatible.owner": "none",
       "compatible.landing": "none"
@@ -850,7 +850,7 @@
       "state.layer0": "incomplete",
       "state.capabilities": "missing",
       "state.expected": 3,
-      "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
+      "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"adopt\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
       "marker.knowledgeCount": 2,
       "compatible.owner": "none",
       "compatible.landing": "none"
@@ -2426,6 +2426,58 @@
       "branch:capability-design/approve",
       "row:capabilityRoute/approve-resume",
       "branch:capabilityRoute/approve-resume"
+    ]
+  },
+  {
+    "id": "managed-brownfield-design-refresh",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "baseline.design-refresh",
+      "state.brownfield": "yes",
+      "state.code": "none",
+      "state.frontend": "needed",
+      "state.worktrees": "one",
+      "state.layer0": "current",
+      "state.capabilities": "refresh",
+      "state.expected": 3,
+      "marker.knowledge": "none",
+      "marker.knowledgeCount": 0,
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "judged": {
+      "request.kind": "capability-only",
+      "glossary.phase": "definition",
+      "landing.mode": "compact",
+      "inputs.status": "read",
+      "refresh.result": "compatible",
+      "components.status": "confirmed",
+      "research.state": "settled",
+      "stack.status": "confirmed",
+      "project.shape": "confirmed",
+      "verification.state": "confirmed",
+      "proposal.state": "ready",
+      "capacity.state": "enough"
+    },
+    "decided": {
+      "approval.action": "ask",
+      "capability.action": "approve",
+      "route.after": "resume",
+      "repair.action": "ask"
+    },
+    "expect": {
+      "stage": "capability-design",
+      "status": "ROUTE",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "stage:capability-design",
+      "branch:capability-design/approve"
     ]
   },
   {

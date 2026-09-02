@@ -1,7 +1,7 @@
 # authoring card — resume
 Purpose: restore a cold session from the structured state kernel, distinguish continuation from domain orientation, and route exactly once.
 Failure scene: a new AI scans the repository, reconstructs journal rules, confuses handoff with onboarding, or loops through principles instead of continuing the canonical route.
-Observations: intent.scope; state.canonicalNext; state.brownfield, with schema-2 state, zones, and facts collected from an explicit project root.
+Observations: intent.scope, state.canonicalNext, and state.compatibleWriter, with schema-2 state, zones, and facts collected from an explicit project root. Every knowledge marker routes to Arch; its declared writer remains provenance rather than a stage selector.
 Terminals: BLOCK unrecognized state; ASK for a required owner choice; ROUTE to the canonical stage; WAIT after a recovery boundary; DONE for bounded orientation/status answers.
 Guards: unrecognized-state.
 Stages: recovery-action; scope-entry.

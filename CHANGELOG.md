@@ -15,6 +15,60 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.21.0 — 2026-09-03 — purpose-first brownfield adoption
+
+Explicit Adopt now enters the stage the user named and consumes the state tool's
+`setup.unmanaged` result directly; Principles remains the classifier for requests that actually
+enter Principles. SessionStart, the Codex fallback, and installer guidance carry the same entry
+topology. SessionStart now requires `devflow/project/product.md`; an empty `devflow/` directory
+cannot activate managed-project guidance or change canonical unmanaged state unless Git's index or
+history contains devflow evidence. Explicit Adopt accepts maintained pre-devflow material in either
+documents or code; only a repository with no such material routes to Product.
+
+Adopt now performs one evidence-led reconstruction instead of asking the model to self-report a
+sequence of phase statuses. It inventories every maintained code and documentary source with an
+explicit disposition, traces one executable flow per code-backed capability candidate, derives
+document-backed capability evidence where no executable flow exists, reconciles claims, and proposes
+Product, Architecture, applicable Design, code style, glossary,
+capability design zones, and every owner-adjacent K node needed for durable domain knowledge. Zero
+K nodes requires evidence that all maintained domain material already lands completely in an
+always-read owner. Only irreducible decisions and contradictions become owner questions. One
+binding confirmation precedes all writes; refusal writes nothing; approval commits the complete
+Layer 0 and optional maintenance-routing record first as `adopt — layer 0`, with `product.md`
+written last, then writes capability documents using that commit as their canonical Design head,
+writes and validates every K node beside its owner, and commits both as `adopt — capabilities`.
+Before the Product write an interruption remains unmanaged. A post-Product pre-commit diff is an
+unverified owner-directed Git recovery boundary; after the first commit and before second-boundary
+writes, the existing missing-baseline route recovers through Resume to Arch. A documentation-
+only project records `Brownfield: no`; `yes` means executable implementation predated adoption. Adopt
+then stops without asking whether to run Product or choosing a later stage. Filename proxies,
+code-presence-as-flow, pseudo artifact paths, and the
+post-adoption route selector were removed.
+
+Document authority is reconstructed from content status and corroborating implementation, test,
+operational, path, Git-history, and modification-time evidence. Names, folders, and timestamps guide
+inspection but never decide truth alone. Evidence-resolvable disagreement is synthesized with
+provenance; genuinely undecidable current intent is presented to the owner with the conflicting
+coordinates and exact decision needed.
+
+Managed design markers and legacy/design-refresh baselines now route to Arch regardless of the
+historical Brownfield field, so they cannot cycle through Adopt. Already committed exact
+`writer=adopt` knowledge markers retain that value as legacy provenance, while Arch consumes both
+legacy `adopt` and current `arch` markers and Work produces only `writer=arch`. Compatible feedback
+for architecture and capability owners now always lands through Arch because its payload declares
+an owner, not a writer. Canonical state keeps a knowledge marker's declared writer rather than
+recomputing it from Brownfield, while Arch consumes either valid legacy or current provenance so
+mixed sets cannot loop.
+
+Current lifecycle wording now matches that boundary: Arch is the sole managed knowledge writer;
+Adopt remains only as initial unmanaged provenance. Resume and compatible-feedback guidance name
+current semantic consumers rather than treating legacy `writer=adopt` provenance as a live route.
+DD-97 records the ownership correction and the rejection of an Adopt-local trace workaround;
+project-local trace placement remains an upstream Skill Rails observation. Package-local Skill
+Rails maintain/build checks cover the changed P2 projections. The broad repository suite and new
+installed Codex/Claude behavior remain unverified for the owner's direct branch test rather than
+being reported as passed.
+
 ## 0.20.0 — 2026-08-30 — one state owner, orthogonal trees, and authored portable packages
 
 The release makes the accepted redesign explicit: principles entry is state-free and reaches

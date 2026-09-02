@@ -2,7 +2,7 @@
 
 ## Entry and prerequisite reads
 
-Take the canonical sibling state result as it stands. An absent product with no implementation routes to product; existing implementation routes to adopt. A brownfield capability write also routes to adopt. Open Git operations and integrity failures stop before normal effects. Unrelated canonical routes return to resume.
+Take the canonical sibling state result as it stands. An absent product with no implementation routes to Product; existing implementation without a managed product definition routes to Resume for recovery, while direct Adopt remains the initial unmanaged reconstruction entry. Once the project is managed, design markers and baseline refresh routes remain in arch. Open Git operations and integrity failures stop before normal effects. Unrelated canonical routes return to resume.
 
 For initial or refresh planning, read the canonical rules and planning-evidence discipline from the sibling principles skill, then read product and glossary completely. Read existing architecture, code-style, journal, and direct legacy ADRs when present. For capability work, open the sibling capability baseline contract. Omit its knowledge-overflow topic until an actual named source is processed or the design-zone budget is about to overflow; uncertainty opens the whole contract.
 
@@ -36,15 +36,15 @@ Immediately before hard-to-reverse stack, structure, data, or channel choices, p
 
 The proposal carries components, survival evidence, stack and derived choices, structure, data, Provisional rows, risks, exclusions, exact verification evidence, every decision meeting all three ADR conditions, and every decision whose ground is missing. The ADR conditions are hard to reverse, non-obvious to a future reader, and supported by real alternatives. A smaller decision stays with its reason and rejected alternatives in architecture; numeric grounds also carry conditions and a rerun command.
 
-Land product's attributed technical-choice lines beside their owning architecture conclusions. Report the complete proposal and ask for explicit approval. Refusal and interruption write nothing. On approval, write architecture, code style, and only qualifying ADRs, then immediately land the complete Layer 0 boundary. A refresh uses its binding architecture boundary.
+Land product's attributed technical-choice lines beside their owning architecture conclusions. Report the complete proposal and ask for explicit approval. Refusal and interruption before approval write nothing. On approval, write architecture, code style, and only qualifying ADRs, then immediately land the complete Layer 0 boundary. A refresh uses its binding architecture boundary.
 
 Write integration as a bare branch name, never a description. With one worktree, write the current branch name. With several worktrees, propose an integration branch checked out by none; if absent, show the exact branch-creation command and let the owner run it. Devflow creates neither branches nor worktrees. Merge is merge-commit or rebase; squash is forbidden.
 
 ## Capability design and routing
 
-When Layer 0 is confirmed, report the expected document count before generation. A context warning ends the run at that commit with no partial capability output and routes the next unclaimed session through resume. Brownfield routes to adopt.
+When Layer 0 is confirmed, report the expected document count before generation. A context warning ends the run at that commit with no partial capability output and routes the next unclaimed session through resume.
 
-For greenfield, generate the foundation plus every non-retired product capability using the disk-first number and name rules. Rederive the entire expected design set from confirmed product, architecture, glossary, and only currently cited ADRs. Preserve an existing valid verified zone byte-for-byte; a new document receives the empty scaffold in the capability template. Process a named source into K only when the design budget requires it; K rides the same confirmed capability-design commit.
+For a managed project, generate the foundation plus every non-retired product capability using the disk-first number and name rules. Rederive the entire expected design set from confirmed product, architecture, glossary, and only currently cited ADRs. Preserve an existing valid verified zone byte-for-byte; a new document receives the empty scaffold in the capability template. Process a named source into K only when the design budget requires it; K rides the same confirmed capability-design commit.
 
 A design note or design open item updates only its named capability design zone and deletes the exact routed line in that same binding commit. The note's anchor is the supplied snapshot basis; an open item's confirmed statement is its basis and its card is only the confirmation location.
 

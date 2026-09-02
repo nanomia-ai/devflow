@@ -245,51 +245,6 @@
     ]
   },
   {
-    "id": "research-synthesis-adopt-writer",
-    "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
-      "state.kernel": "available",
-      "state.route": "claim.mine",
-      "card.phase": "claimed",
-      "card.contract": "valid",
-      "card.basis": "complete",
-      "completion.state": "pass",
-      "review.state": "not-applicable",
-      "carry.state": "absent",
-      "remote.state": "none",
-      "research.checkpoint": "committed",
-      "knowledge.marker": "none",
-      "task.commit": "absent",
-      "task.integration": "pending",
-      "handoff.state": "stale",
-      "boundary.state": "pending",
-      "feedback.marker": "none",
-      "feedback.lifecycles": []
-    },
-    "judged": {
-      "implementation.action": "continue",
-      "review.action": "dispatch",
-      "feedback.action": "none",
-      "history.basis": "none",
-      "knowledge.action": "emit-adopt",
-      "feedback.lifecycleAction": "invalid"
-    },
-    "expect": {
-      "stage": "knowledge-marker",
-      "row": "emit-adopt",
-      "status": "ROUTE",
-      "effects": [
-        "WRITE",
-        "COMMIT",
-        "ROUTE:resume"
-      ]
-    },
-    "cover": [
-      "branch:knowledge/emit-adopt",
-      "row:knowledge/emit-adopt"
-    ]
-  },
-  {
     "id": "premature-marker-refusal",
     "s": {
       "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",

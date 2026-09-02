@@ -1,17 +1,25 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:0094ea485e6b9925d6312954be9fcfa2e93329d385d3f5945f4017c4eb9c468e",
-    "after": "sha256:0094ea485e6b9925d6312954be9fcfa2e93329d385d3f5945f4017c4eb9c468e"
+    "before": "sha256:2d8cdfb98309ce4466135643cf20c9f3aae8a6510b3d7c80f28987b2562fd2ef",
+    "after": "sha256:4b9b2af0e43e38fcabe4a09f2f301afb440a3c45a9dab2b78708fd4e5eae1ed4"
   },
-  "changed": false,
-  "any_changed": false,
+  "changed": true,
+  "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
-    "context": false
+    "context": true
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:2d8cdfb98309ce4466135643cf20c9f3aae8a6510b3d7c80f28987b2562fd2ef",
+      "after_hash": "sha256:4b9b2af0e43e38fcabe4a09f2f301afb440a3c45a9dab2b78708fd4e5eae1ed4",
+      "source": "behavior_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
@@ -21,14 +29,47 @@
     "templates": [],
     "template_content": [],
     "body": [],
-    "references": [],
+    "references": [
+      {
+        "id": "references/ownership.md",
+        "change": "modified",
+        "before": "sha256:9231a88c4af90bc792d29ec233133ac80b9afd2a5ab8e29932b9992e924d70b7",
+        "after": "sha256:3de52275f4769b769552d7dc5d964c0b144432d561eb9f6e870ca8daef32ebd0"
+      }
+    ],
     "ownership": [],
     "artifacts": [],
     "roles": [],
-    "declarations": [],
+    "declarations": [
+      {
+        "id": "knowledgeLanding",
+        "change": "modified",
+        "before": {
+          "value": "Only later confirmed work or research synthesis may emit the canonical knowledge-landing marker; arch or adopt is the sole recursive capability knowledge writer.",
+          "consumer": "external.arch-or-adopt"
+        },
+        "after": {
+          "value": "Only later confirmed work or research synthesis may emit the canonical knowledge-landing marker; Arch is the sole managed recursive capability knowledge writer. Adopt remains only as initial artifact provenance from the unmanaged projection.",
+          "consumer": "external.arch-or-adopt"
+        }
+      }
+    ],
     "deferred": []
   },
-  "change_id": "activation-gate-descriptions",
-  "intent": "Prevent ambient selection in unmanaged repositories while preserving explicit, routed, and managed-project entry.",
-  "impact": {}
+  "change_id": "v0.21-managed-knowledge-owner",
+  "intent": "Remove stale managed-state Adopt routing and preserve Adopt only as initial artifact provenance.",
+  "impact": {
+    "references": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "declarations": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
 }

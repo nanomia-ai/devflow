@@ -2,7 +2,7 @@
 Purpose: {{purpose}}
 Boundary: {{boundary}}
 Concepts: {{concepts}}
-Trust: design is derived from traced brownfield code and existing records; verified state reflects the last passing capability verification, or contains no evidence before one. Judge each zone by its metadata.
+Trust: design reflects confirmed Layer 0; verified state reflects the last passing capability verification, or contains no evidence before one. Judge each zone by its metadata.
 
 ## Intent
 
@@ -24,7 +24,7 @@ Trust: design is derived from traced brownfield code and existing records; verif
 
 ## Binding ADRs
 
-{{adrs}}
+{{bindingAdrs}}
 
 ## Design metadata
 

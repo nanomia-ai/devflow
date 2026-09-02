@@ -1,8 +1,8 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:fd622420c621cac499143a79624c7fd8b957d590f682e3b8ff79f0799ff5f383",
-    "after": "sha256:fd622420c621cac499143a79624c7fd8b957d590f682e3b8ff79f0799ff5f383"
+    "before": "sha256:085588f1e671a0ec7a31a6210b988cf92ad454f272237f86b69f37f2ee883b34",
+    "after": "sha256:085588f1e671a0ec7a31a6210b988cf92ad454f272237f86b69f37f2ee883b34"
   },
   "changed": false,
   "any_changed": false,
@@ -28,7 +28,7 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "activation-gate-descriptions",
-  "intent": "Prevent ambient selection in unmanaged repositories while preserving explicit, routed, and managed-project entry.",
+  "change_id": "adopt-k-owner-validation-boundary",
+  "intent": "Keep each capsule with its capability owner so canonical validation can run, while preserving the source evidence needed for interruption recovery without temporary owners or validator exceptions.",
   "impact": {}
 }

@@ -3,7 +3,7 @@
   "skill_id": "verify",
   "profile": "p2",
   "built_at": null,
-  "build_id": "sha256:c027306c7911fe764184b72ebad0a94587af63affe975ed4caf3100060f22907",
+  "build_id": "sha256:4671d6c318641c7878205ba6afde4b1755a5eff949ee191ff8d0cdd9f03417b2",
   "spec_hash": "sha256:4112d562db9555182518b7a621eb56286abe4ea896b0e53bef2cbffd09f8c877",
   "dsl_hash": "sha256:e8d77b180b886db5cf0474682c7ea2dfea19065561a015878c70efe1441694e6",
   "runtime_hash": "sha256:5af2d9272f953e9f99cb3bba366ce4f421aba2c4560164ed198fd3c67a45fed8",
@@ -334,9 +334,9 @@
     "fixtures": {
       "passed": 28,
       "total": 28,
-      "deterministic_repeats": 200,
+      "deterministic_repeats": 5,
       "mismatches": 0,
-      "predicate_evaluations": 1400,
+      "predicate_evaluations": 35,
       "predicate_evaluation_limit_ms": 50,
       "predicate_performance": {
         "status": "pass",

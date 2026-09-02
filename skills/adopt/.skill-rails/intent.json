@@ -1,20 +1,67 @@
 {
   "name": "adopt",
-  "description": "Existing-project adoption. In a repository that already has code, traces one representative flow per capability candidate and reverse-derives Layer 0 and capability design zones. Use only with explicit devflow intent—direct invocation, naming devflow, or asking to adopt an existing codebase into devflow, reverse-derive Layer 0, or create or repair devflow capability documents.",
-  "problem": "Preserve the behavior of the immutable repository source at skills/adopt without silently changing its obligations.",
-  "use_cases": [],
-  "near_misses": [],
-  "inputs": [],
-  "outputs": [],
-  "irreversible_boundaries": [],
+  "description": "Explicit brownfield adoption. In an unmanaged repository with maintained pre-devflow material—documentation, code, or both—account for all maintained sources and reverse-derive Product, Architecture, applicable Design, code style, glossary, capability design zones, and complete durable domain knowledge; ask only irreducible decisions and contradictions, then request binding confirmation. Use only when Adopt is directly invoked or named, or when the user explicitly asks to adopt an existing project into devflow. General devflow discussion and generic project documentation do not trigger it.",
+  "problem": "Convert an unmanaged repository's maintained pre-devflow material—documentation, code, or both—into devflow's canonical planning and domain-knowledge surface without treating material presence as completed evidence, stealing Resume state ownership, or asking the owner to restate discoverable facts.",
+  "use_cases": [
+    "Explicitly adopt an unmanaged already-progressed repository that contains maintained documentation, implementation code, or both.",
+    "Reverse-derive product, architecture, applicable design, conventions, vocabulary, capabilities, and complete domain knowledge from all maintained pre-devflow material.",
+    "Repair or create brownfield Layer 0 and capability design zones from documentary bases and, where executable code exists, evidence-backed representative flows."
+  ],
+  "near_misses": [
+    "Ordinary Resume or session-start in an unmanaged repository; those remain silent or DONE according to the state owner.",
+    "A repository with no meaningful maintained non-devflow project material, which routes to Product.",
+    "A managed project re-entry or an active Work/Verify operation, which routes to Resume.",
+    "A request to invent a new product rather than reconstruct an existing one."
+  ],
+  "inputs": [
+    "One read-only devflow project-state snapshot whose route is setup.unmanaged and whose current tracked-plus-untracked, non-ignored non-devflow material observation is present.",
+    "Existing implementation, tests, APIs, schemas, configuration, maintained documentation, specifications, and operational records.",
+    "Explicit owner answers only for irreducible missing decisions or contradictions, followed by one binding approval or refusal."
+  ],
+  "outputs": [
+    "A proposal that gives every maintained source one explicit disposition and includes capability candidates, one representative executable flow per code-backed candidate, exact documentary bases for document-derived candidates, reconciled claims, derived Layer 0, applicable Design, capability zones, the complete K-node landing plan, and any whole follow-on request that must survive the adoption boundary.",
+    "After approval, canonical product.md, arch.md, applicable design.md, code-style.md, glossary.md, capability design documents, and every required owner-adjacent K node.",
+    "Two ordered commits under the one approval: `adopt — layer 0` contains complete Layer 0 and any idempotent follow-on record with product.md written last; `adopt — capabilities` contains capability documents whose Design head is the first commit plus every required validated K node beside its owner."
+  ],
+  "irreversible_boundaries": [
+    "The owner's confirmation binds the complete proposed Layer 0, capability, and knowledge write set.",
+    "The approved projection lands through two ordered boundaries: product.md is the last write before the Layer 0 commit, then capability documents use that landed commit as Design head and their K nodes validate beside them; interruption before product remains unmanaged, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery."
+  ],
   "state_dependent_behaviors": [
-    "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review."
+    "Explicit Adopt consumes setup.unmanaged directly; it does not invoke Principles as a preflight and does not ask Resume to reinterpret that route.",
+    "No maintained non-devflow project material routes to Product; unknown material evidence fails closed; documentation-only or code-backed material proceeds through Adopt, while managed or active-operation routes remain owned by Resume.",
+    "Refusal or interruption before binding approval writes nothing.",
+    "If the adoption request also contains follow-on work, the whole request is preserved idempotently once through Principles' maintenance-routing record in the first adoption commit.",
+    "Approved adoption stops after reporting and does not synthesize another route or automatically opt into Split, Arch, or Resume."
   ],
-  "exact_formats": [],
-  "external_dependencies": [],
-  "completion_evidence": [],
+  "exact_formats": [
+    "Canonical product, architecture, applicable design, code-style, glossary, capability-design, knowledge-node, result, and adoption-proposal templates.",
+    "Owner-adjacent K nodes retain same-stem identity and exact provenance with no central index."
+  ],
+  "external_dependencies": [
+    "The read-only project-state snapshot for kernel validity, route, and the single non-devflow material observation.",
+    "Git for exact source coordinates, history evidence, the first Layer 0 boundary, and the capability-and-knowledge boundary whose Design head names the first.",
+    "Product as the no-material destination and Resume as the owner of managed or active-operation states.",
+    "Arch, Split, Work, and Resume as readers of the canonical artifacts; none is automatically invoked on completion."
+  ],
+  "completion_evidence": [
+    "Every maintained source has an explicit named landing, evidence disposition, reasoned non-domain exclusion, or visible unresolved status.",
+    "Every code-backed capability candidate has one representative executable flow with exact coordinates; every document-derived candidate without executable code cites its exact maintained documentary basis and marks the flow not applicable.",
+    "Every proposal claim identifies executable or documentary evidence, contradiction, inference, and confidence.",
+    "The owner confirms the complete write set after irreducible questions are resolved.",
+    "Complete Layer 0 is published in the first confirmed commit; all capability designs and their validated K nodes are published together in the second with Design head equal to the first commit.",
+    "A final report names committed artifacts and preserves unknown or unverified items without claiming completion."
+  ],
   "judgment_points": [
-    "Every source atom remains review-required until explicitly disposed."
+    "Classify sources as implemented/current material, binding plans, exploratory research, superseded records, or unresolved conflicts. Judge authority from document-internal status and actual code, test, and operational evidence; use path/name context, Git history when available, and last-modified time only as corroborating clues. Resolve evidence-supported discrepancies with exact provenance, and ask with conflicting coordinates plus the exact decision only when current product intent remains genuinely undecidable.",
+    "Choose capability boundaries from entrypoints, top-level modules, service boundaries, and maintained domain documents; documentation may establish a candidate even when no executable code exists.",
+    "Distinguish discoverable facts from irreducible owner decisions and contradictions.",
+    "Decide which domain knowledge belongs in the always-read capability document and how many owner-adjacent K nodes deeper reusable evidence requires.",
+    "Preserve explicit uncertainty and confidence instead of inventing generic architecture or product decisions."
   ],
-  "deterministic_helpers": []
+  "deterministic_helpers": [
+    "The Adopt collector reads state kernel, setup.unmanaged, and the state snapshot's canonical non-devflow material observation without rescanning filenames or extensions as a project-evidence proxy.",
+    "Skill Rails evaluates guards, approval, exact templates, artifact ownership, and the two ordered commit effects.",
+    "Git supplies immutable coordinates and commit boundaries; filesystem inventory only enumerates selected evidence and never owns state."
+  ]
 }

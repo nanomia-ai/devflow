@@ -959,10 +959,10 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
     assertSetup(makePlainRepo(t, { unborn: true }), "unmanaged");
   });
 
-  await t.test("current devflow path remains no-product", () => {
+  await t.test("an untracked partial devflow path remains unmanaged", () => {
     const root = makePlainRepo(t);
     write(root, "devflow/partial.txt", "partial\n");
-    assertSetup(root, "no-product");
+    assertSetup(root, "unmanaged");
   });
 
   await t.test("indexed devflow path remains no-product when absent from the worktree", () => {
@@ -3348,7 +3348,7 @@ test("D7 closure a creation diff that will not decode is unknown, not none", (t)
 });
 
 // C: a user-confirmed Intent or Invariant of the capability being worked on has no path into
-// its design zone. The note it is written as must reach arch or adopt before the claim
+// its design zone. The note it is written as must reach Arch before the claim
 // continues and before that capability's closure harvest, carrying the exact statement, card,
 // code basis, and the commit that first held it.
 function designNote(capability, statement, card, code) {
@@ -4645,7 +4645,7 @@ test("K C1 ordinary project research outranks missing product and rejects implem
   assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "00-project-research-only"));
 });
 
-test("K exact knowledge landing marker validates writer, source, duplicate pair, and route", async (t) => {
+test("K exact knowledge landing marker preserves its declared writer, source, duplicate pair, and route", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
   const source = researchSource(root);
   const valid = knowledgeLanding("devflow/project/arch.md", "arch", source.source);
@@ -4657,11 +4657,11 @@ test("K exact knowledge landing marker validates writer, source, duplicate pair,
   assertFragment(accepted.stdout, "marker: kind=knowledge-landing", `source=${source.source}`);
 
   write(root, "devflow/journal.md", `${knowledgeLanding("devflow/project/arch.md", "adopt", source.source)}\n`);
-  const wrongWriter = run(root); ok(wrongWriter);
-  assert.equal(nextOf(wrongWriter.stdout), "integrity.blocking", wrongWriter.stdout);
+  const adoptWriter = run(root); ok(adoptWriter);
+  assert.equal(nextOf(adoptWriter.stdout), "marker.knowledge-landing", adoptWriter.stdout);
   const module = await registry();
   let structured = await module.calculateState({ root });
-  assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-writer"));
+  assert.equal(structured.zones.marker.entries.find((entry) => entry.kind === "knowledge-landing")?.writer, "adopt");
 
   write(root, "devflow/journal.md", `${knowledgeLanding("devflow/project/arch.md", "arch", `${source.card}@${"0".repeat(40)}`)}\n`);
   const unresolved = run(root); ok(unresolved);

@@ -1,8 +1,8 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:c12a5cc93ffba0012a2d54b64fa089a276a8a91e40d9de96e57ad8b9b6bea49e",
-    "after": "sha256:c12a5cc93ffba0012a2d54b64fa089a276a8a91e40d9de96e57ad8b9b6bea49e"
+    "before": "sha256:4210eb9bfaf024311292f421180c19b7a6f293b5f0243d44d9f2ac8394c976f6",
+    "after": "sha256:4210eb9bfaf024311292f421180c19b7a6f293b5f0243d44d9f2ac8394c976f6"
   },
   "changed": false,
   "any_changed": false,
@@ -28,7 +28,7 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "activation-gate-descriptions",
-  "intent": "Prevent ambient selection in unmanaged repositories while preserving explicit, routed, and managed-project entry.",
+  "change_id": "product-lifecycle-ownership",
+  "intent": "Return partial managed state to Resume instead of entering Adopt.",
   "impact": {}
 }

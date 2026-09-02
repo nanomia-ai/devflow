@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:f9b208f94ba21f9d0508673f5ba61eb20c030240ee8864f9d8734ec3b2b63d74",
+  "intent_hash": "sha256:5a021845efdd92094d65b0722752de3714825e20f49bcdd4a3ec9022f10dd9d1",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Resume and domain entry. Restores a new session from disk and continues to the next stage, or finds a capability document by number or name and explains the domain. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
+      "text": "Resume and domain entry. Restores a new session from disk and continues to the next stage, routes canonical knowledge markers to Arch while preserving their declared writers as provenance and residual markers for replay, or finds a capability document by number or name and explains the domain. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
@@ -1736,14 +1736,9 @@
       "text": "| `setup.integration-config` | arch — propose under arch's integration default rule (branching on worktree count), confirm it, and add only those two lines |",
       "candidate_class": "table row",
       "consequence": "medium",
-      "disposition": "projected",
-      "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:adopt",
-        "spec:TABLES/canonicalNext/ROUTE:arch"
-      ],
-      "evidence": [
-        "fixture:exceptions"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:ffbae848efe674a98df178fe07fac398ad3a04cf98d76c4533031e06d81bf371",
       "source_kind": "table-row",
       "context": [
@@ -1917,14 +1912,9 @@
       "text": "| `baseline.legacy-v010` | with `Brownfield: yes`, adopt; with `no`, arch — migrate to current Layer 0 design plus the mechanically carried verified zone |",
       "candidate_class": "table row",
       "consequence": "medium",
-      "disposition": "projected",
-      "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:adopt",
-        "spec:TABLES/canonicalNext/ROUTE:arch"
-      ],
-      "evidence": [
-        "fixture:exceptions"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:e9e1e32935030aa2b859f09bd40ffe6055083056fe631eb502d2f24ffd5b3873",
       "source_kind": "table-row",
       "context": [
@@ -1948,14 +1938,9 @@
       "text": "| `baseline.design-refresh` | with `Brownfield: yes`, adopt; with `no`, arch — refresh only the expected set's design zones without rebuilding Layer 0 |",
       "candidate_class": "table row",
       "consequence": "medium",
-      "disposition": "projected",
-      "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:adopt",
-        "spec:TABLES/canonicalNext/ROUTE:arch"
-      ],
-      "evidence": [
-        "fixture:exceptions"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:6f1eabd6f7718c7c6521ae36dc08c04bba796bbe08d90df32075afb5ab1cf2dc",
       "source_kind": "table-row",
       "context": [
@@ -4744,14 +4729,9 @@
       "text": "| `setup.integration-config` | arch — arch의 integration 기본 제안 규칙(워크트리 수 분기)대로 제안해 확인받고 그 두 줄만 추가 |",
       "candidate_class": "table row",
       "consequence": "medium",
-      "disposition": "projected",
-      "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:adopt",
-        "spec:TABLES/canonicalNext/ROUTE:arch"
-      ],
-      "evidence": [
-        "fixture:exceptions"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:7b7072c69792decb4a721aa12daee34782e2446cd9425327f9146faa50a5fe1a",
       "source_kind": "table-row",
       "context": [
@@ -4925,14 +4905,9 @@
       "text": "| `baseline.legacy-v010` | `브라운필드: 예`면 adopt, `아니오`면 arch — 현재 Layer 0 설계와 기계적으로 옮긴 검증 구역으로 이관 |",
       "candidate_class": "table row",
       "consequence": "medium",
-      "disposition": "projected",
-      "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:adopt",
-        "spec:TABLES/canonicalNext/ROUTE:arch"
-      ],
-      "evidence": [
-        "fixture:exceptions"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:6187772706eef8199b852bf45be7028a30956a105b4daaa3206350f367124178",
       "source_kind": "table-row",
       "context": [
@@ -4956,14 +4931,9 @@
       "text": "| `baseline.design-refresh` | `브라운필드: 예`면 adopt, `아니오`면 arch — Layer 0를 다시 만들지 않고 기대 집합의 설계 구역만 갱신 |",
       "candidate_class": "table row",
       "consequence": "medium",
-      "disposition": "projected",
-      "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:adopt",
-        "spec:TABLES/canonicalNext/ROUTE:arch"
-      ],
-      "evidence": [
-        "fixture:exceptions"
-      ],
+      "disposition": "obsolete",
+      "targets": [],
+      "evidence": [],
       "source_hash": "sha256:301d276bd63b28fc73cfb750831b692aa82e0b8448a4747f5aa35a5f121efa0f",
       "source_kind": "table-row",
       "context": [

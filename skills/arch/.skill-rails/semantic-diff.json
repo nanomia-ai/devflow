@@ -1,8 +1,8 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:911aab872cc85b378d8b382e67c856d33204864773e5c9797632a510085f2add",
-    "after": "sha256:911aab872cc85b378d8b382e67c856d33204864773e5c9797632a510085f2add"
+    "before": "sha256:b9b562a0620bb36d0d85326969d932cf987848d652428766284935d70f9d7b7e",
+    "after": "sha256:b9b562a0620bb36d0d85326969d932cf987848d652428766284935d70f9d7b7e"
   },
   "changed": false,
   "any_changed": true,
@@ -20,20 +20,13 @@
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [
-      {
-        "id": "stage: repair-layer0-fields",
-        "change": "modified",
-        "before": "sha256:06875b8f94cf91f780d3cb13d0528eec610f147a5445fdd21f9418ed828cc970",
-        "after": "sha256:deec2fa26ec9e964b4e6feaa3ca0b2074cd9116bff623719516595a027d914fb"
-      }
-    ],
+    "body": [],
     "references": [
       {
         "id": "references/workflow.md",
         "change": "modified",
-        "before": "sha256:6514513147a87d9b1264e47d3ede5fb94b2aa011f2e123d875b75ee9bccf5dd1",
-        "after": "sha256:621950d19c40ae9ba41cdbc5011a75a8bc37fe68b674a91fdbf7a4b70a924f32"
+        "before": "sha256:3dd123cf27e64e703053d35b2f45a269e4c3ea677ab4daaa404b1fa3f2501481",
+        "after": "sha256:353e723a6afa9dc9acfb4e5c77e5ba0aa7987deac0d0aa34f9d551c85701f0a0"
       }
     ],
     "ownership": [],
@@ -42,15 +35,9 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "integration-config-machine-field",
-  "intent": "Make Arch repair malformed integration configuration through its existing Layer 0 owner and prevent prose-valued integration fields.",
+  "change_id": "v0.21.0-phase1-arch-workflow-alignment",
+  "intent": "Align Arch's mandatory workflow guidance with its guards and qualify its write-free interruption promise to the pre-approval boundary.",
   "impact": {
-    "body": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
     "references": {
       "total": 1,
       "added": 0,

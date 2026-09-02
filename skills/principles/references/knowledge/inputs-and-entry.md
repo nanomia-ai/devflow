@@ -76,12 +76,12 @@
   With an empty resolution set it reports only foundation plus non-retired number/name
   candidates and asks; with two or more it reports only the resolved candidates and asks.
   It opens no body before that answer. When one number is selected but no same-numbered file
-  exists, including foundation, it reports only the expected path and the arch or adopt repair route and invents
+  exists, including foundation, it reports only the expected path and the Arch repair route and invents
   no body. Before opening a body, exactly one same-numbered file and its fixed boundary,
   sections, and metadata shape must be valid. On a duplicate or shape anomaly, report only
   the canonical bounded shape facts and repair route; open no body. A duplicate requires the
   user to resolve the number/path anomaly; zero or multiple boundaries use Lifecycle and
-  recovery below; arch or adopt repairs one-boundary design shape, while the next capability
+  recovery below; Arch repairs one-boundary design shape, while the next capability
   closure's verify repairs a verified-only shape anomaly. When the user explicitly
   requests the full expected set, apply this judgment per number, read only valid files, skip anomalous
   numbers, and continue. Ordinary resume reads only filenames and the shape projection,

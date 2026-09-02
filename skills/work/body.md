@@ -26,7 +26,7 @@ card and report the marker; do not legitimize it after the fact.
 
 ## guard: knowledge-landing-before-closure
 
-Route the exact current-source marker to its named arch or adopt writer. One consumed owner
+Route the exact current-source marker to its named Arch writer. One consumed owner
 does not clear another owner’s marker, so a crosscut source remains open until no marker
 from that source remains.
 
@@ -133,9 +133,9 @@ knowledge.
 
 ## stage: knowledge-marker
 
-Judgment: `knowledge.action` is exactly `none`, `emit-arch`, or `emit-adopt`. Promote only a
-reusable current conclusion with one named long-lived owner. Choose
-arch for a new-project writer and adopt for a brownfield writer. Emit one owner marker now;
+Judgment: `knowledge.action` is exactly `none` or `emit-arch`. Promote only a
+reusable current conclusion with one named long-lived owner. Arch is the current technical
+owner for every managed project, including brownfield projects. Emit one owner marker now;
 if the same source has another owner, re-evaluate after the first marker is consumed.
 
 Why: independent markers preserve partial multi-owner landing without a batch or shared set,
@@ -165,7 +165,7 @@ small enough to overwrite safely.
 
 ## stage: boundary
 
-Judgment: Obtain `feedback.action` as exactly `none`, `compatible`, `staling`, or `design-note`; an absent or unknown value must be judged before any boundary effect. Close only when the structured finish-boundary passenger set is empty, the task commit is integrated, and no current marker sourced from this card remains. For compatible feedback with no lifecycle, transport the whole complete parser-proven set atomically through a journal-only boundary commit that cannot touch the card or change its exact H1, then route to Resume so each named product, arch, design, or adopt writer lands it before this boundary resumes; work never writes that owner document. Once a lifecycle exists, use that collected lifecycle as the sealed-set fact, add no marker, route every current residual owner, and close only after the complete set is consumed.
+Judgment: Obtain `feedback.action` as exactly `none`, `compatible`, `staling`, or `design-note`; an absent or unknown value must be judged before any boundary effect. Close only when the structured finish-boundary passenger set is empty, the task commit is integrated, and no current marker sourced from this card remains. For compatible feedback with no lifecycle, transport the whole complete parser-proven set atomically through a journal-only boundary commit that cannot touch the card or change its exact H1, then route to Resume so each state-named Product, Design, or Arch semantic owner lands it before this boundary resumes; work never writes that owner document. Once a lifecycle exists, use that collected lifecycle as the sealed-set fact, add no marker, route every current residual owner, and close only after the complete set is consumed.
 If the exact-title commit is already present, current completion and review evidence may settle without another checkpoint. A later same-card owner, source revision, or coordinate paraphrase is an integrity failure rather than a new eligible entry. A done card plus a complete boundary is observed completion; no completion judgment substitutes for it.
 Why: one ordered boundary prevents an ownerless rename, feedback fragment, or handoff; the Git-derived first-set seal preserves complete atomic multi-owner production and exact replay while preventing duplicate owner work before Verify becomes the next consumer.
 

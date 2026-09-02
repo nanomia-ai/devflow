@@ -30,7 +30,7 @@
 ## 구조 한눈에
 
 ```
-Layer 0 (1회·상속): product → arch → [design] · 기존 코드는 adopt가 역산     Layer 1 (반복): split → work ⇄ verify
+Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증거는 adopt가 역산     Layer 1 (반복): split → work ⇄ verify
 공통: resume, principles(규칙 정본)
 대상 프로젝트에 생기는 것: devflow/{project/, tree/, journal.md, users/<id>/ 방}
 배포: Claude 플러그인(.claude-plugin) + Codex 네이티브 플러그인(.codex-plugin — codex/install.*가 등록)
@@ -43,11 +43,11 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 코드는 adopt�
 
 | 구성요소 | 존재 이유와 소유 범위 | 입력 → 다음 소비자 | 설계 계보 |
 |---|---|---|---|
-| `principles` | 공통 규칙·커밋 규율을 소유하며 상태는 판정하지 않고 resume으로만 보냄 | 모든 entry skill과 역할 계약 → resume | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 |
-| `product` | 문제·정체성·능력·경계·성공 판정을 소유자와 확정 | 요청 → arch·design 또는 adopt 경계 | 기원 · DD-33 · DD-67 |
-| `arch` | 컴포넌트·stack·코드 구조·data·verify channel과 능력 설계 구역을 확정 | product → split·work·verify | DD-42 · DD-43 · DD-69 |
+| `principles` | 공통 규칙·커밋 규율을 소유하며 Principles로 들어온 요청만 분류하고 이름을 명시한 단계는 사전 분류하지 않음 | 일반 devflow 의도 → resume, 명시 단계와 역할 계약 → 이름 난 소유자 | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 |
+| `product` | 문제·정체성·능력·경계·성공 판정을 소유자와 확정 | 명시한 새 프로젝트·제품 기획 요청 → arch·design. 기존 프로젝트의 최초 역산은 Product를 거치지 않고 Adopt가 소유 | 기원 · DD-33 · DD-67 · DD-97 |
+| `arch` | 관리 프로젝트의 현재 기술 Layer 0·stack·코드 구조·data·verify channel·glossary·능력 설계 구역을 확정하고 갱신 | product 또는 관리 상태 glossary·design·baseline 경로 → split·work·verify | DD-42 · DD-43 · DD-69 · DD-97 |
 | `design` | 선택적 UI 접근 방식·원천·token/component 전략·분해 축·검토 표면을 확정 | product·arch → arch 능력 설계와 split | DD-69 |
-| `adopt` | 기존 코드의 대표 흐름을 추적해 Layer 0와 능력 설계 구역을 역산 | brownfield 코드 → split | DD-10 · DD-20 · DD-28 |
+| `adopt` | 무관리 브라운필드의 모든 유지 자료를 Product·Architecture·해당 시 Design·code style·glossary·능력 설계 구역·완전한 영속 도메인 지식으로 명시적으로 투영 | 무관리 문서 및/또는 코드 → 확인된 관리 지식 표면, 그 뒤 정지 | DD-10 · DD-20 · DD-26 · DD-97 |
 | `split` | 한 층씩 task tree와 승인된 실행 제안을 만들어 구현 경계를 소유 | Layer 0·기록·현재 코드 → work | DD-25 · DD-50 · DD-67 |
 | `work` | 카드 하나의 코드·진행 로그·완료 신호·상위 문서 환류를 끝까지 운반 | 승인 카드·정본·baseline → verify 또는 다음 카드 | DD-09 · DD-48 · DD-56 |
 | `verify` | 실제 실행으로 능력·제품 verdict를 내리고 실패·감리·회고의 생존 경로를 소유 | 닫힌 코드·신호·baseline → split 수리 또는 폐쇄 | DD-21–DD-24 · DD-30 · DD-36 · DD-68 |

@@ -2,7 +2,7 @@
 
 ## why: purpose
 
-Arch turns an approved product definition into current technical Layer 0 and greenfield capability design zones. It preserves reasons and rejected alternatives, keeps uncertain optimization values visibly provisional, and leaves implementation method to later work.
+Arch turns an approved product definition into current technical Layer 0 and capability design zones for a devflow-managed project, including an adopted brownfield. Adopt owns only the initial reconstruction of an unmanaged codebase. Arch preserves the canonical Brownfield origin rather than using it to redirect managed refresh, preserves reasons and rejected alternatives, keeps uncertain optimization values visibly provisional, and leaves implementation method to later work.
 
 ## why: workflow
 
@@ -48,13 +48,9 @@ Ask the owner how the existing merge or rebase should proceed before architectur
 
 A new project needs approved product intent before technical planning.
 
-## guard: adoption-required
+## guard: partial-setup-owned-by-resume
 
-Existing implementation without a product definition belongs to adoption and reverse derivation.
-
-## guard: brownfield-capability-writer
-
-Adopt, not arch, owns brownfield capability design writing.
+Existing implementation without a product definition is a partial managed lifecycle state. Route to Resume, which owns recovery; Adopt remains an explicit initial entry for unmanaged reconstruction.
 
 ## guard: state-owned-elsewhere
 
@@ -81,6 +77,8 @@ Why: A confirmed localized statement should refresh one design zone without reop
 ## stage: knowledge-landing
 
 Judgment: landing.mode is compact, recursive, partial-compact, partial-recursive, or multi-mixed. Choose compact when the conclusion stays understandable in its named owner; choose recursive only for depth or reuse, and select only owners that can be completed in this boundary.
+
+The stage is complete as soon as no valid knowledge marker remains. Treat `writer=adopt` as legacy provenance and `writer=arch` as current provenance; both land here, including mixed sets, and neither is routed back to Resume. Invalid or unsupported markers remain canonical integrity failures rather than a writer-based residual branch.
 
 Why: Recursive structure is optional, while every consumed marker must have a concrete owner or K write in the same commit.
 
@@ -140,7 +138,7 @@ Why: Interruption cannot promote a partial report into current architecture.
 
 ## stage: approval
 
-Judgment: approval.action is ask, approve, or refuse; request.kind is initial, refresh, capability-only, or none.
+Judgment: approval.action is ask, approve, or refuse; request.kind is initial, refresh, capability-only, or none. Initial approval writes `Brownfield: no`; refresh binds the architecture template's Brownfield field to the canonical observed project origin and preserves it.
 
 Why: Reporting precedes explicit approval. Refusal writes nothing, while approval makes the complete Layer 0 pair current at the appropriate boundary.
 
@@ -154,7 +152,7 @@ Why: A context warning ends the run at the confirmed Layer 0 boundary so a fresh
 
 Judgment: capability.action is ask or approve; route.after is design, split, or resume. Confirm the full expected design batch, preserve existing verified zones, and choose the next stage from the confirmed frontend need and owner preference.
 
-Why: Capability documents are arch's final greenfield output and must exist before the first tree opening.
+Why: Capability documents are arch's final technical-planning output for a managed project and must exist before the first tree opening.
 
 ## role: channel-verifier
 

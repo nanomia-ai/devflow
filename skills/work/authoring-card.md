@@ -15,11 +15,11 @@ Progress machine lines; concrete Git checkpoint and ancestry evidence.
 
 Judgment inputs: implementation next point; review reduction after the anchored boundary;
 upper-document feedback class and its parser-validated complete owner/source/coordinate set; one exact closed-history basis; and whether a committed
-research synthesis names one arch/adopt owner now.
+research synthesis names one Arch owner now.
 
 Owners: principles owns route and state facts; split owns card contract; work owns progress,
-marker production, card status, and task boundary; reviewer owns clean judgment; arch/adopt
-owns current promoted knowledge; the named semantic owner owns compatible feedback.
+marker production, card status, and task boundary; reviewer owns clean judgment; Arch
+owns current promoted knowledge for managed projects; the named semantic owner owns compatible feedback.
 
 Terminals: BLOCK on unavailable structured state, malformed evidence, missing bounded input,
 premature marker, broad history, lost passengers, or broken review lineage; ROUTE split for
@@ -51,7 +51,7 @@ Consumer consumption sets:
   exact paths named by the card/Decision.
 - reviewer: role body + reviewer contract + progress-excluded card + exact bounded review
   inputs only.
-- resume/product/design/arch/adopt: boundary or exact marker plus sibling principles state and the marker’s named owner, source, coordinates, and semantic landing state.
+- resume/product/design/arch: boundary or exact marker plus sibling principles state and the marker’s named owner, source, coordinates, and semantic landing state. Managed work never routes a marker to Adopt.
 - verifier: closed card evidence and the verify route; work does not provide verifier history.
 
 Consumer closure check: every static path needed by a selected stage/guard is declared;

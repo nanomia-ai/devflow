@@ -43,10 +43,11 @@
 
 ## Lifecycle and recovery
 
-- Every arch or adopt run re-derives the design zone for the whole expected set. A new or
-  split capability gets a new file; an existing capability keeps its number.
+- The initial Adopt projection and every later Arch design batch re-derive the design
+  zone for their whole expected set. A new or split capability gets a new file; an existing
+  capability keeps its number.
 - A capability rename first lands the product and tree name change as a binding decision.
-  The following arch capability-design commit, or adopt in a brownfield, preserves the number
+  The following Arch capability-design commit preserves the number
   while changing the baseline path and design zone together. If interrupted between those
   commits, number lookup still reaches the old file and the Design head mismatch recovers the
   second commit. Retirement leaves the file unchanged and excludes it only from ordinary
@@ -61,8 +62,8 @@
   and boundary count, therefore uses the same HEAD values as writer eligibility, and the
   working-tree count only joins the report a person reads. When an expected
   file is absent, or its boundary is valid but its design shape differs, route at a clean
-  boundary after any active claim or verification transition: `Brownfield: yes` to adopt,
-  `no` to arch, for design-zone writing only.
+  boundary after any active claim or verification transition: Arch owns the repair regardless
+  of the historical `Brownfield` value.
 - An existing project with complete Layer 0 and no baselines uses the same route. Do not
   repeat Layer 0 interviewing or reverse derivation. If the user defers repair, continue the
   remaining state judgment for that session.

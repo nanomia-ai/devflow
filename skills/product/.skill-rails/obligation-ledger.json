@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:4298d8d451f7468e2d33699e07ee130c26a89e5527a5f778aa5b5de7e3da2356",
+  "intent_hash": "sha256:7ef6a358df919478558251eed9170b7d5d3d27b8846d18fc1e08d89d6dec124f",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing devflow/project/product.md. Use only with explicit devflow intent—direct invocation, naming devflow, or asking for a devflow project, Layer 0, devflow capability documents, or devflow/project/product.md.",
+      "text": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing devflow/project/product.md. Use only with direct Product invocation or explicit intent to plan a new project's product or service, define its problem, capability composition, and boundary, or create devflow/project/product.md. A generic devflow mention is not a Product trigger; Principles owns generic entry.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
@@ -48,6 +48,34 @@
       "evidence": [
         "fixture:durable-pre-product-research-route",
         "fixture:active-pre-product-research-routes-split"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-002",
+      "source": "intent.state_dependent_behaviors[1]",
+      "text": "A brownfield-no-product partial managed state routes to Resume for canonical recovery; Product never routes it directly to Adopt.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/orient"
+      ],
+      "evidence": [
+        "fixture:brownfield-resume"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-003",
+      "source": "intent.state_dependent_behaviors[2]",
+      "text": "Managed capability refresh and recursive K ownership belong to Arch; Adopt is only initial unmanaged reconstruction.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:DECLARATIONS/knowledgeWriter"
+      ],
+      "evidence": [
+        "file:authoring-card.md"
       ]
     },
     {

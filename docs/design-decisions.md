@@ -478,7 +478,7 @@ observed — what is restored then is not the table but **a callable path**.
 
 ### DD-92 · Principles entry is state-free, resume owns state, and knowledge/work trees and P2 packages keep separate boundaries (v0.20.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.20.0 | State: active, partly corrected by DD-93 (v0.20.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.20.0 | State: active, partly corrected by DD-93 (v0.20.0), DD-97 (v0.21.0)
 
 Observed problem: if the rulebook recomputes entry state or a hook injects it, it can disagree with resume; if one capability-number structure represents both knowledge and work, research and multi-owner knowledge can disappear. A manual index or central registry makes a second home for new facts, while missing package provenance makes it impossible to verify what a deploy artifact executes.
 
@@ -500,7 +500,7 @@ Revisit when delayed guidance causes an action different from resume, a C1–C6 
 
 ### DD-95 · Globally installed devflow stays silent without current evidence; explicit intent and history-aware state preserve the adoption boundary (v0.20.0)
 
-Subject: Identity, packaging, platforms | Introduced: v0.20.0 | State: active
+Subject: Identity, packaging, platforms | Introduced: v0.20.0 | State: active, partly corrected by DD-97 (v0.21.0)
 
 Observed problem: the globally installed plugin's SessionStart injected devflow guidance into
 every Git repository, and ordinary development language in the Arch, Design, Split, Work,
@@ -951,7 +951,7 @@ former durable-producer condition.
 
 ### DD-96 · Compatible feedback persists as a first-complete-set-sealed card-boundary payload and Resume proves one semantic-owner landing at a time (v0.20.0)
 
-Subject: The task tree and its cards | Introduced: v0.20.0 | State: active
+Subject: The task tree and its cards | Introduced: v0.20.0 | State: active, partly corrected by DD-97 (v0.21.0)
 
 Observed problem: a clean Work review could discover compatible reusable feedback, yet the
 existing `compatible` branch merely reported an owner handoff and then closed the card without
@@ -1230,7 +1230,7 @@ Grounds are three measurements: across jgnote's 12 existing handoffs the chronol
 
 ### DD-43 · Capability documents physically separate a design zone born with Layer 0 from a verified zone refreshed at closure, and are always on (v0.11.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0), DD-92 (v0.20.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0), DD-92 (v0.20.0), DD-97 (v0.21.0)
 
 The owner's operating intent is that a new MVP, a brownfield, and a mid-project join all obtain domain boundaries and concepts before the first card and reach them by number without card wiring. arch, or adopt in a brownfield, replaces the design zone; verify replaces the verified zone. They own disjoint byte ranges separated by the fixed `## Verified state` boundary. This decomposes rather than overturns v0.10.0's one-writer grounds: the two writing moments are serial, no byte is shared, design declares trust through `Design head`, and verification through `Scope head` and `Covered cards`. One seven-field machine block would overlap the two owners again, so the two design-metadata fields sit before the boundary and the five verification-metadata fields after it. The switch is removed because the adopted shape is not a 1,100–1,700-line relay-note second handoff layer: it is capped near 185 lines per capability, forbids chronology, and costs O(1) reads per card; even a small project gets the same lifecycle from a six-section design zone. Design freshness uses only the actual sources product.md, arch.md, and glossary.md. Including code-style.md or design.md would make every capability hypothetical with no failure path that changes its design zone — an over-harness. The exact v0.10 predecessor is separated from damage reset: design is re-derived from current Layer 0 and verified bodies plus compatible metadata migrate mechanically, but its old `Scope head` did not include consumed paths and therefore does not carry forward; verified statements remain hypotheses until the next capability closure
 
@@ -1301,7 +1301,7 @@ scene appears where arch or adopt receives the line and still cannot land it in 
 
 ### DD-88 · A confirmed statement another capability owns is routed by one exact form, ahead of ready work, to that owner's design writer (v0.19.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active, partly corrected by DD-89 (v0.19.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active, partly corrected by DD-89 (v0.19.0), DD-97 (v0.21.0)
 
 Observed problem: the path DD-86 opened never reached a consumer. The line is produced and the
 state tool emits it as an `open-item:` fact, but in a repository whose architecture already
@@ -1528,7 +1528,7 @@ produces a loss or double-plan that these rules do not classify.
 
 ### DD-76 · Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute (v0.18.1)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2), DD-92 (v0.20.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2), DD-92 (v0.20.0), DD-97 (v0.21.0)
 
 Observed problem: one capability's domain source in a real brownfield (jgnote property) ran
 to 3,699 lines — pressed as summary into a 185-line capability document, knowledge is lost;
@@ -1565,8 +1565,15 @@ procedure — it belongs to a person alone.
 Rejection lineage refuted: DR-30 (rejecting a new per-capability work-note layer) reasoned
 that "relay notes already exist in four layers" — a capsule is not a fifth free-form note
 layer but the capability document's overflow moved under the same number, with the same
-writer, confirmation, and commit as the capability design commit, and it is a bounded
+writer and confirmation bundle as the capability design commit, and it is a bounded
 contract of fixed header, closed marks, and an opening budget rather than free recording.
+DD-97 narrows only the writer's lifecycle for initial Adopt: Adopt writes K during the initial
+unmanaged projection and co-commits each capsule with its capability document in
+`adopt — capabilities`; managed Arch does the same in `arch — capabilities`. The preceding
+Layer 0 commit preserves every source coordinate, authority, disposition, and landing owner in
+Architecture `Existing records`, so interruption recovery rederives from source rather than
+using partial bytes. Number, writer, confirmation, address, provenance, validation, and opening
+rules remain unchanged.
 What justifies the addition is not taste but a 3,699-line measurement. DR-19 (rejecting a
 split into two files: "two paths, double the reading") reasoned about an always-read path —
 capsules are not always read and their opening cap is hard, so fixed reading does not grow.
@@ -1886,6 +1893,119 @@ An adopted repository and a new project had the same document shape, so resume b
 ### Rejected under this subject
 
 Nothing has been rejected under this subject yet.
+
+### DD-97 · Explicit Adopt reconstructs an unmanaged brownfield once; managed technical refresh belongs to Arch (v0.21.0)
+
+Subject: Brownfield and entry | Introduced: v0.21.0 | State: active
+
+Observed problem: three clean existing-code worktrees invoked Adopt explicitly, yet the installed
+entry text told Codex to enter Principles first and Adopt did not accept the state tool's
+`setup.unmanaged` route. Principles therefore sent the request to Resume, which correctly ended
+the unmanaged state without writing; one more-active model escaped only by inspecting runtime
+source and creating an empty `devflow/` directory, the second-home marker DD-95 rejected. Even
+after the missing route was added, Adopt's inherited phase fields asked the model to report that
+it had read, inspected, derived, and prepared instead of doing the work. Filename-shaped document
+selection and “code exists” stood in for documentary and representative-flow evidence. Its broad
+fallback also formed `Resume → Adopt → Resume` cycles for Brownfield design markers and baseline
+refreshes.
+
+Desired behavior: an explicit adoption request starts from the purpose the owner selected. It
+reconstructs the complete planning and knowledge surface already expressed by maintained documents
+and/or code, including applicable product design, and accounts for every maintained source rather than
+sampling a convenient subset. It builds enough glossary and domain structure for later cold
+maintenance, asks only questions that evidence cannot resolve, presents one coherent write set for
+confirmation, and then stops. A
+managed project must never be sent back through first-time adoption merely because its
+implementation predates devflow.
+
+Chosen boundary: an explicitly named devflow stage is its own entry. Principles classifies only
+requests that entered Principles; SessionStart and the Codex fallback state this same topology.
+SessionStart remains silent unless `devflow/project/product.md` exists. In canonical state, an
+untracked empty or partial `devflow/` directory is likewise not managed-project evidence; indexed
+or historical devflow paths remain recovery evidence. A folder alone cannot activate Resume
+guidance or change explicit Adopt's unmanaged route.
+Explicit Adopt consumes `setup.unmanaged` directly when any maintained pre-devflow project source is
+present and sends only a repository with no such material to Product. Its collector observes
+canonical state and that bounded source presence only. The model inventories every maintained implementation, test, API, schema,
+configuration, document, specification, and operational source and gives each one an explicit
+named landing, supporting-evidence status, supersession or contradiction, reasoned non-domain
+exclusion, or visible unresolved status. It traces one executable flow per code-backed capability
+candidate; where a capability exists only in maintained documents, it records that provenance and
+derives the candidate without inventing runtime evidence. It reconciles claims and contradictions
+and derives Product, Architecture, applicable Design, code
+style, glossary, capability design zones, and every owner-adjacent K node needed for deeper durable
+  domain knowledge. Zero K nodes is valid only when all maintained domain sources demonstrably land
+  in the always-read owners. One complete proposal precedes the owner's binding approval. Refusal or
+  interruption before approval writes nothing. Under that one approval, Adopt preserves any follow-on
+  work in Principles' canonical maintenance-routing record, writes `product.md` last, and commits the
+  complete Layer 0 as `adopt — layer 0`. It then calculates the canonical Design head from that landed
+  commit, writes the capability documents carrying that exact value, writes and validates every K
+  capsule beside its owner, and commits both as `adopt — capabilities`, then ends without choosing
+  Product, Arch, Design, Split, or Resume on the owner's behalf. Before `product.md` is written an
+  interruption remains unmanaged. A post-product pre-commit interruption leaves an unverified dirty
+  boundary for owner-directed exact commit or discard; no stage claims it. After the first commit and
+  before second-boundary writes, the existing managed baseline-missing state routes through Resume to
+  Arch without reopening Adopt. Architecture `Existing records` already holds the source coordinates,
+  authority, disposition, and landing owner needed to rederive the second boundary from source.
+
+Document authority is reconstructed rather than assumed. Internal status and corroborating code,
+tests, operational evidence, path context, Git history, and last modification time distinguish
+implemented/current material, binding plans, exploratory research, superseded records, and unresolved
+conflict. A filename, folder, or timestamp is a clue, never sole authority. The model resolves only
+disagreements the combined evidence can close and records the provenance of that synthesis; otherwise
+it asks the owner with the competing coordinates and the exact current-intent decision still needed.
+
+Once Layer 0 exists, current technical design has one owner: Arch. Resume routes
+`marker.glossary-term`, `marker.design-note`, `marker.design-open-item`, `baseline.legacy-v010`, and
+  `baseline.design-refresh` there regardless of the historical Brownfield field, and Arch no longer
+  redirects those managed refreshes to Adopt. The entry and membership clauses above correct DD-92's
+  former all-entry preclassification wording and DD-95's directory-presence activation wording; their
+  one state owner, quiet global installation, and indexed/history recovery grounds remain intact. The
+  managed technical refresh boundary corrects only the origin-based writer clauses of
+DD-43 and DD-88: their exact capability owner, attributed marker, byte-identical consumption,
+design/verified byte boundary, and ready-work priority remain intact. The old origin split had a
+reason before Adopt was separated from Arch, but after DD-20 it gives one present-tense artifact
+two procedural owners and now has an observed route loop. The Brownfield field still records
+pre-adoption origin and still prevents Resume from backfilling existing implementation into the
+work tree, as DD-26 requires.
+
+DD-76's same-commit owner rule remains intact: initial Adopt writes and validates K only beside its
+capability documents in `adopt — capabilities`, and every managed capsule refresh belongs to Arch.
+
+Existing exact `writer=adopt` knowledge markers keep that value as bounded legacy provenance until
+consumed, because changing an already committed marker's declaration would break DD-92 provenance.
+Resume no longer turns that provenance into a procedural owner: Arch consumes both legacy `adopt`
+and current `arch` markers, while Work produces only `writer=arch`. Compatible-feedback
+payloads declare a semantic owner but no writer, so canonical state derives their consumer from that
+owner alone: Product for product/glossary, Design for design, and Arch for architecture/capability.
+This corrects DD-96's Brownfield-based Arch/Adopt route split while preserving its exact payload,
+Git seal, semantic-landing proof, and byte-identical consumption grounds. Neither legacy provenance
+form is permission to reopen adoption or to route any managed work to Adopt.
+
+Rejected alternatives: adding only `setup.unmanaged` repairs the first route but preserves fake
+evidence and model-reported phase loops. Teaching Principles or Resume an Adopt-intent exception
+re-couples explicit stage entry to the classifier that obscured it. Reintroducing separate Adopt
+branches for every design and baseline state duplicates Arch and recreates the patchwork. Asking
+whether to run Product after explicit Adopt contradicts the existing-project evidence and can loop
+through Product's own Brownfield guard. A project-local trace-path instruction is also rejected as
+an Adopt rule: trace placement is shared Skill Rails adapter behavior and must be corrected once
+upstream rather than copied into one domain skill. A single adoption commit is impossible under the
+current Git-based Design-head contract because a capability document cannot contain its own future
+commit id; changing that contract to a content hash moves every baseline consumer, while leaving all
+capability authoring to a later Arch session no longer fulfills Adopt's confirmed projection.
+
+Affected coordinates: the Adopt, Arch, Product, Design, Resume, Work, Verify, and Principles authored P2 packages and generated
+adapters, including Principles' current knowledge/delivery references and state tool; SessionStart and its focused
+tests; Codex fallback text;
+the design component index; matrix cells 3.21 and 3.24; deploy manifests and CHANGELOG. DD-20,
+DD-26, DD-89, DD-92, DD-95, and DD-96 otherwise remain affirmed within their recorded reasons.
+
+Revisit when an explicit stage still enters Principles first, an unmanaged repository with maintained
+documents or code fails to reach Adopt, Adopt asks the owner for a discoverable repository fact or for a next-stage choice,
+a maintained source disappears without an explicit disposition, a follow-on request is lost at the
+adoption boundary, a managed design/baseline/Arch-written knowledge route returns to Adopt, or the
+resulting glossary and capability/K surface is insufficient for a later cold maintenance session, or
+an adopted capability's stored Design head differs immediately after the two approved commits.
 
 ## Git mechanics and interruption recovery
 

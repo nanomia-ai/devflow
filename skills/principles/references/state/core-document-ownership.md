@@ -5,10 +5,11 @@
 Core documents (`devflow/project/*`) are modified **only through this procedure or by
 re-running the owning skill** — never edited in passing during a task.
 Target ownership is fixed: product owns product.md and glossary.md; arch owns arch.md,
-code-style.md, and the legacy ADRs; design owns design.md; adopt owns arch.md `Existing records`
-and may add only a missing `Brownfield` field to an existing arch.md;
-split owns the tree and task cards; verify owns verify.md. arch, or adopt in a brownfield,
-owns the design zone under `devflow/project/capabilities/`; verify owns the verified zone
+code-style.md, and the legacy ADRs; design owns design.md; Adopt initially projects the whole
+confirmed unmanaged knowledge surface, including arch.md `Existing records`; after that boundary,
+split owns the tree and task cards and verify owns verify.md. Adopt owns the capability design
+zone only inside that atomic initial projection; Arch owns every managed refresh under
+`devflow/project/capabilities/`, and verify owns the verified zone
 after creation. The same-numbered knowledge capsule folder belongs to the design-zone
 writer, and the canonical baseline predicates govern its path, header, provenance marks,
 and opening budget. Skills never delete, move, or edit the source documents a capsule was
@@ -17,7 +18,7 @@ govern the initial empty verified
 scaffold, the exact byte boundary,
 the exact mechanical v0.10 migration, and the human-deletion exception.
 The one narrow delegation is the existing product-writer route for `marker.glossary-term`:
-arch, or adopt in a brownfield, consumes only that confirmed payload and updates the glossary
+Arch consumes only that confirmed payload and updates the glossary
 definition and every known affected `Concepts:` through the two boundaries above. No other
 observation, progress-log line, or card tag may edit glossary.md directly.
 Fixed target ownership means ownership of rerunning the whole document; the current skill walking this table performs a one-line update named by the table.

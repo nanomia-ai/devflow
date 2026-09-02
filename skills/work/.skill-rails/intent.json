@@ -11,7 +11,7 @@
   "near_misses": [
     "A passing tweak; principles completes it and never invokes work.",
     "Planning or repairing the card contract; split owns it.",
-    "Writing current promoted knowledge; arch or adopt owns it.",
+    "Writing current promoted knowledge; Arch owns it for every managed project.",
     "Capability or product verification; verify owns it."
   ],
   "inputs": [
@@ -22,7 +22,7 @@
   "outputs": [
     "One fail-closed Decision with the next ordered work effect plan.",
     "Canonical progress, marker, commit, handoff, feedback, and status effects owned by work.",
-    "A route to split, resume, arch/adopt through resume, or verify when that owner is next."
+    "A route to split, resume, Arch through resume, or verify when that owner is next."
   ],
   "irreversible_boundaries": [
     "Publishing the claim, task, knowledge-marker, integration, or boundary commit.",
@@ -33,20 +33,20 @@
   "state_dependent_behaviors": [
     "Structured sibling state selects claim, remote recovery, finish boundary, or another canonical route without CLI parsing or local journal state.",
     "Completion and review non-pass results anchor before repair; the third code objection requires the person's adjacent disposition and one later non-pass spends it.",
-    "Research promotion requires a committed synthesis checkpoint and emits one independent arch/adopt owner marker at a time.",
+    "Research promotion requires a committed synthesis checkpoint and emits one independent writer=arch owner marker at a time.",
     "Closed history is bounded to an exact named card, non-pass repair lineage, or current K/Trap Source basis.",
     "Finalization orders feedback judgment, carry, task commit, integration, feedback landing, done rename, handoff, and boundary."
   ],
   "exact_formats": [
     "Canonical completion signal result, review result, remote evidence check, and carry Progress lines.",
-    "Canonical knowledge landing pending marker with owner, writer arch|adopt, and source-json containing exact card path@fullhash.",
+    "Canonical knowledge landing pending marker emitted by Work with owner, writer arch, and source-json containing exact card path@fullhash.",
     "Canonical HANDOFF Next single step and reviewer pass/four-line objection result.",
     "Canonical claim, checkpoint, task, integration, and boundary commit subjects and status suffixes."
   ],
   "external_dependencies": [
     "Git for shared truth, full commit IDs, checkpoints, ancestry, and card identity.",
     "The sibling principles package for calculateState schema devflow/project-state/2.",
-    "Split, resume, arch/adopt, verify, the clean reviewer role, and the person at their owned boundaries."
+    "Split, Resume, Arch, Verify, the clean reviewer role, and the person at their owned boundaries."
   ],
   "completion_evidence": [
     "Every legacy atom has resolving forward and reverse provenance with zero review-required or DEFERRED entries.",

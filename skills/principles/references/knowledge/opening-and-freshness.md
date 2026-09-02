@@ -61,8 +61,9 @@ Consumed paths: ["src/customer/contract.ts", ...]
 Scope head: <output of the Scope head command | none>
 ```
 
-- `Capability number` equals the filename number. arch or adopt owns `Design head`; verify
-  owns the other five fields.
+- `Capability number` equals the filename number. Adopt owns `Design head` only in its initial
+  unmanaged projection; Arch owns it after the project becomes managed. Verify owns
+  the other five fields.
 - `Covered cards` holds every non-`.stale.` `.done.` task-card number below the capability
   folder, without duplicates and in canonical card-number order. It is empty for the
   foundation and at initial creation.
@@ -102,8 +103,8 @@ A consumer makes only three comparisons.
    statements are hypotheses and the complement consumers use is every current
    non-`.stale.` `.done.` card — never the empty set.
 
-Only the design-zone writers — arch, and adopt in a brownfield — update the Binding ADRs
-list. `Verified at: none` makes the verified statements hypotheses. Binding ADRs are outside
+Only the current design-zone writer — Adopt during initial unmanaged projection,
+otherwise Arch — updates the Binding ADRs list. `Verified at: none` makes the verified statements hypotheses. Binding ADRs are outside
 both statement groups; a consumer checks each exact path when reading it. Metadata is the
 comparison itself. The symmetric difference between the current completed-card set and
 `Covered cards` is the completed-card change list since the baseline. For a current-only

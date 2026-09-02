@@ -1,21 +1,20 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:580f4f11750f44f103afd65cfff1b0d0516e89c6c1860dad7eee83a3685b5d4c",
+  "intent_hash": "sha256:8275a9167d15c1225819b2a00fd5912e96ff2cf1590a3046f2266243b1fc754a",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Development planning. Takes product.md and decides components, stack, code structure, and the verify channel, then writes capability design zones. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
+      "text": "Current technical planning for devflow-managed projects. Takes product.md and current Layer 0, decides or refreshes components, stack, code structure, the verify channel, Brownfield-preserving architecture, and capability design zones. Use when explicitly invoked, when Resume routes a managed marker or baseline refresh, or for work in an existing devflow-managed project; Adopt remains the initial unmanaged reconstruction entry.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
-        "file:SKILL.md",
-        "file:agents/openai.yaml"
+        "file:SKILL.md"
       ],
       "evidence": [
-        "file:agents/openai.yaml"
+        "fixture:initial-architecture-creation"
       ]
     },
     {
@@ -35,15 +34,43 @@
     {
       "id": "state-dependent-behaviors-001",
       "source": "intent.state_dependent_behaviors[0]",
-      "text": "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review.",
+      "text": "Initial architecture approval writes Brownfield: no, while managed refresh preserves the current observed Brownfield value.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",
       "targets": [
-        "spec:DECLARATIONS/workflowOrder"
+        "spec:TABLES/approvalBoundary/approve-initial"
       ],
       "evidence": [
-        "fixture:interrupted-proposal"
+        "fixture:initial-architecture-creation"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-002",
+      "source": "intent.state_dependent_behaviors[1]",
+      "text": "A partial setup.no-product state with implementation code or brownfield history routes to Resume; Arch never redirects managed recovery to Adopt.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:GUARDS/partial-setup-owned-by-resume"
+      ],
+      "evidence": [
+        "fixture:missing-product-existing-history"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-003",
+      "source": "intent.state_dependent_behaviors[2]",
+      "text": "Arch consumes both valid legacy writer=adopt and current writer=arch knowledge markers; writer is provenance, mixed sets stay in Arch until drained, and only invalid or unsupported markers fail integrity.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/knowledge-landing"
+      ],
+      "evidence": [
+        "fixture:legacy-adopt-writer-landing"
       ]
     },
     {

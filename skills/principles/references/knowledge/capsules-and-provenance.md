@@ -54,10 +54,13 @@ confidence, not understanding.
 - The authoring cap is soft at 120 lines per capsule — exceeding it never blocks the write;
   the writer reports it, and a split that would tear meaning apart is not made — the capsule
   stays with its reason.
-- Capsules are owned by the same number's design-zone writer (arch; adopt for brownfield).
-  They ride the same confirmation bundle and the same `arch — capabilities` ·
-  `adopt — capabilities` commit, and verify never writes capsules. The human deletion
-  exception matches the capability document's.
+- Capsules are owned by the same number's design-zone writer: Adopt only inside the initial
+  unmanaged projection, otherwise Arch. They always ride that writer's confirmation bundle
+  and the same commit as their capability document. Initial Adopt writes the owner documents,
+  then writes and validates their capsules, and lands both in `adopt — capabilities`.
+  Every managed Arch refresh likewise lands both in `arch — capabilities`.
+  Verify never writes capsules. The human deletion exception matches the capability
+  document's.
 - Capsules and the capability document are a derived account of the source documents, not
   their owner. Skills never delete, move, or edit the source documents a capsule was
   processed from — disposition is always a person's act.

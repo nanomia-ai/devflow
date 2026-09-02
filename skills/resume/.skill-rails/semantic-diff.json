@@ -1,603 +1,63 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:8e4b29890ef3e351a071f42ce21a90c25dea02c9b06b812d3bae963d08945570",
-    "after": "sha256:901476967588f7edd25577822c422919d150f3638dae21765ebf8e38ba073a10"
+    "before": "sha256:c4e3abbeec0d848211ddf3758ebb6b06c507fc4e46930b7b7d80df6b0b2d7c5a",
+    "after": "sha256:c4e3abbeec0d848211ddf3758ebb6b06c507fc4e46930b7b7d80df6b0b2d7c5a"
   },
-  "changed": true,
+  "changed": false,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": true,
+    "behavior_source": false,
     "observation_source": false,
     "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:8e4b29890ef3e351a071f42ce21a90c25dea02c9b06b812d3bae963d08945570",
-      "after_hash": "sha256:901476967588f7edd25577822c422919d150f3638dae21765ebf8e38ba073a10",
-      "source": "behavior_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
-    "observations": [
-      {
-        "id": "state.canonicalNext",
-        "change": "modified",
-        "before": {
-          "collector": "state.canonical-next",
-          "domain": [
-            "git.open-operation",
-            "integrity.blocking",
-            "integrity.shape",
-            "transition.prepared-route",
-            "transition.interrupted",
-            "transition.source-id-migration",
-            "transition.layer-opening",
-            "transition.product-running",
-            "transition.product-result",
-            "transition.remote-evidence",
-            "transition.finish-boundary",
-            "transition.event-routing",
-            "transition.event-decision",
-            "transition.failure-routing",
-            "marker.product-rerun",
-            "marker.glossary-term",
-            "marker.design-note",
-            "marker.design-open-item",
-            "marker.capability-closure",
-            "marker.knowledge-landing",
-            "marker.re-split",
-            "setup.no-product",
-            "setup.layer0-incomplete",
-            "setup.brownfield-field",
-            "setup.integration-config",
-            "setup.room-upgrade",
-            "claim.depends-anomaly",
-            "claim.needs-reapproval",
-            "claim.blocked-by-prerequisite",
-            "claim.mine",
-            "baseline.legacy-v010",
-            "baseline.design-refresh",
-            "baseline.boundary",
-            "request.existing",
-            "event.product-requested",
-            "event.pending",
-            "event.new",
-            "layer.empty-folder",
-            "layer.folder-boundary",
-            "layer.children-done",
-            "layer.correspondence-gap",
-            "layer.no-foundation",
-            "layer.no-tree",
-            "ready.digest-behind",
-            "ready.needs-normalization",
-            "ready.approval-invalid",
-            "ready.approval-pending",
-            "ready.ready",
-            "ready.waiting-capability",
-            "blocked.channel",
-            "blocked.audits",
-            "blocked.dependencies",
-            "blocked.other-claims",
-            "product.shape-or-revision",
-            "product.fail",
-            "product.unverified",
-            "complete.product-pass",
-            "complete.adoption",
-            "unrecognized"
-          ]
-        },
-        "after": {
-          "collector": "state.canonical-next",
-          "domain": [
-            "git.open-operation",
-            "integrity.blocking",
-            "integrity.shape",
-            "transition.prepared-route",
-            "transition.interrupted",
-            "transition.source-id-migration",
-            "transition.layer-opening",
-            "transition.product-running",
-            "transition.product-result",
-            "transition.remote-evidence",
-            "transition.finish-boundary",
-            "transition.event-routing",
-            "transition.event-decision",
-            "transition.failure-routing",
-            "marker.product-rerun",
-            "marker.glossary-term",
-            "marker.design-note",
-            "marker.design-open-item",
-            "marker.capability-closure",
-            "marker.knowledge-landing",
-            "marker.re-split",
-            "setup.unmanaged",
-            "setup.no-product",
-            "setup.layer0-incomplete",
-            "setup.brownfield-field",
-            "setup.integration-config",
-            "setup.room-upgrade",
-            "claim.depends-anomaly",
-            "claim.needs-reapproval",
-            "claim.blocked-by-prerequisite",
-            "claim.mine",
-            "baseline.legacy-v010",
-            "baseline.design-refresh",
-            "baseline.boundary",
-            "request.existing",
-            "event.product-requested",
-            "event.pending",
-            "event.new",
-            "layer.empty-folder",
-            "layer.folder-boundary",
-            "layer.children-done",
-            "layer.correspondence-gap",
-            "layer.no-foundation",
-            "layer.no-tree",
-            "ready.digest-behind",
-            "ready.needs-normalization",
-            "ready.approval-invalid",
-            "ready.approval-pending",
-            "ready.ready",
-            "ready.waiting-capability",
-            "blocked.channel",
-            "blocked.audits",
-            "blocked.dependencies",
-            "blocked.other-claims",
-            "product.shape-or-revision",
-            "product.fail",
-            "product.unverified",
-            "complete.product-pass",
-            "complete.adoption",
-            "unrecognized"
-          ]
-        }
-      }
-    ],
+    "observations": [],
     "guards": [],
-    "stages": [
-      {
-        "id": "scope-entry",
-        "change": "modified",
-        "before": {
-          "reads": [],
-          "needs": [
-            "intent.scope"
-          ],
-          "table": "canonicalNext",
-          "branches": [
-            "DONE:orientation",
-            "ASK:integrity",
-            "ASK:setup",
-            "ASK:owner-mapping",
-            "ROUTE:product",
-            "ROUTE:arch",
-            "ROUTE:adopt",
-            "ROUTE:split",
-            "ROUTE:work",
-            "ROUTE:verify",
-            "WAIT:blocked",
-            "DONE:advisory",
-            "DONE:complete",
-            "BLOCK:unrecognized"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "ASK:integrity": [
-                "ASK"
-              ],
-              "ASK:owner-mapping": [
-                "ASK"
-              ],
-              "ASK:setup": [
-                "ASK"
-              ],
-              "BLOCK:unrecognized": [
-                "BLOCK"
-              ],
-              "DONE:advisory": [
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ],
-              "DONE:complete": [
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ],
-              "DONE:orientation": [
-                [
-                  "REPORT",
-                  {
-                    "template": "orientation"
-                  }
-                ],
-                "DONE"
-              ],
-              "ROUTE:adopt": [
-                "ROUTE:adopt"
-              ],
-              "ROUTE:arch": [
-                "ROUTE:arch"
-              ],
-              "ROUTE:product": [
-                "ROUTE:product"
-              ],
-              "ROUTE:split": [
-                "ROUTE:split"
-              ],
-              "ROUTE:verify": [
-                "ROUTE:verify"
-              ],
-              "ROUTE:work": [
-                "ROUTE:work"
-              ],
-              "WAIT:blocked": [
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "WAIT"
-              ]
-            }
-          },
-          "body": "stage: scope-entry",
-          "record": null,
-          "reentry": "rejudge"
-        },
-        "after": {
-          "reads": [],
-          "needs": [
-            "intent.scope"
-          ],
-          "table": "canonicalNext",
-          "branches": [
-            "DONE:orientation",
-            "DONE:unmanaged",
-            "ASK:integrity",
-            "ASK:setup",
-            "ASK:owner-mapping",
-            "ROUTE:product",
-            "ROUTE:arch",
-            "ROUTE:adopt",
-            "ROUTE:split",
-            "ROUTE:work",
-            "ROUTE:verify",
-            "WAIT:blocked",
-            "DONE:advisory",
-            "DONE:complete",
-            "BLOCK:unrecognized"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "ASK:integrity": [
-                "ASK"
-              ],
-              "ASK:owner-mapping": [
-                "ASK"
-              ],
-              "ASK:setup": [
-                "ASK"
-              ],
-              "BLOCK:unrecognized": [
-                "BLOCK"
-              ],
-              "DONE:advisory": [
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ],
-              "DONE:complete": [
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ],
-              "DONE:orientation": [
-                [
-                  "REPORT",
-                  {
-                    "template": "orientation"
-                  }
-                ],
-                "DONE"
-              ],
-              "DONE:unmanaged": [
-                [
-                  "REPORT",
-                  {
-                    "scope": "unmanaged-repository",
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ],
-              "ROUTE:adopt": [
-                "ROUTE:adopt"
-              ],
-              "ROUTE:arch": [
-                "ROUTE:arch"
-              ],
-              "ROUTE:product": [
-                "ROUTE:product"
-              ],
-              "ROUTE:split": [
-                "ROUTE:split"
-              ],
-              "ROUTE:verify": [
-                "ROUTE:verify"
-              ],
-              "ROUTE:work": [
-                "ROUTE:work"
-              ],
-              "WAIT:blocked": [
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "WAIT"
-              ]
-            }
-          },
-          "body": "stage: scope-entry",
-          "record": null,
-          "reentry": "rejudge"
-        }
-      }
-    ],
-    "tables": [
-      {
-        "id": "canonicalNext",
-        "change": "modified",
-        "before": {
-          "rows": [
-            {
-              "state": "DONE:orientation",
-              "reads": [
-                "intent.scope"
-              ]
-            },
-            {
-              "state": "ROUTE:verify",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ROUTE:work",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ROUTE:split",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ASK:integrity",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "DONE:advisory",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ASK:setup",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ASK:owner-mapping",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ROUTE:adopt",
-              "reads": [
-                "state.canonicalNext",
-                "state.brownfield"
-              ]
-            },
-            {
-              "state": "ROUTE:arch",
-              "reads": [
-                "state.canonicalNext",
-                "state.brownfield"
-              ]
-            },
-            {
-              "state": "ROUTE:product",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "WAIT:blocked",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "DONE:complete",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "BLOCK:unrecognized",
-              "reads": []
-            }
-          ]
-        },
-        "after": {
-          "rows": [
-            {
-              "state": "DONE:orientation",
-              "reads": [
-                "intent.scope"
-              ]
-            },
-            {
-              "state": "DONE:unmanaged",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ROUTE:verify",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ROUTE:work",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ROUTE:split",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ASK:integrity",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "DONE:advisory",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ASK:setup",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ASK:owner-mapping",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "ROUTE:adopt",
-              "reads": [
-                "state.canonicalNext",
-                "state.brownfield"
-              ]
-            },
-            {
-              "state": "ROUTE:arch",
-              "reads": [
-                "state.canonicalNext",
-                "state.brownfield"
-              ]
-            },
-            {
-              "state": "ROUTE:product",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "WAIT:blocked",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "DONE:complete",
-              "reads": [
-                "state.canonicalNext"
-              ]
-            },
-            {
-              "state": "BLOCK:unrecognized",
-              "reads": []
-            }
-          ]
-        }
-      }
-    ],
+    "stages": [],
+    "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
     "body": [
       {
+        "id": "guard: compatible-feedback-owner-required",
+        "change": "modified",
+        "before": "sha256:fe66b50430b10ea5a240ef911b611539ca8e02d91ac4096d13f7f37fb12dd6df",
+        "after": "sha256:907c5a0112e4808bc9b2ddd1c5ef9719ae2706224e7960f46fbced4b59c897b1"
+      },
+      {
         "id": "stage: scope-entry",
         "change": "modified",
-        "before": "sha256:f92fc0ee39f35ae2144330e1907eb996014e354149f25c9feafc832aa8600f20",
-        "after": "sha256:7920a44e735d71ad970132119eec04fb9707c682673244a0e9a1d1741b877689"
+        "before": "sha256:cc3e47a0246ef29163960df6561b4ecb1a5fbd62e78d0dd0db38668874863103",
+        "after": "sha256:b4a9f020f39210c321b00acd00cdf85c5204ec0880192349e2edd7eee4bf6334"
       }
     ],
-    "references": [],
+    "references": [
+      {
+        "id": "references/canonical-routing.md",
+        "change": "modified",
+        "before": "sha256:98b0d0472b3376e59074791587e762beae4ebe7e4ce6148d7de35baa68567ca4",
+        "after": "sha256:7b77088f209df228a25eb26cfffbac19c70caee18ad3d0be4b58ac1319269744"
+      }
+    ],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "activation-gate-resume",
-  "intent": "Report proven unmanaged repositories without asking, routing, or writing while preserving domain orientation priority.",
+  "change_id": "v0.21-current-semantic-consumers",
+  "intent": "Remove a nonexistent managed Adopt route and distinguish current semantic consumers from retained legacy writer provenance.",
   "impact": {
-    "observations": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
-    "stages": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
-    "tables": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
     "body": {
+      "total": 2,
+      "added": 0,
+      "removed": 0,
+      "modified": 2
+    },
+    "references": {
       "total": 1,
       "added": 0,
       "removed": 0,

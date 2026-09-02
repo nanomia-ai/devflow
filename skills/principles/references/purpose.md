@@ -9,8 +9,8 @@ or sibling-card state.
 
 The six redesign invariants are: `00-project` contains research work only; work maps to the
 nearest unique owner; each canonical owner file owns a same-stem K folder, and a K file may
-own its own same-stem child folder while leaves may have zero children; arch writes knowledge
-for new projects and adopt writes it for brownfield projects; closed history descends only
+own its own same-stem child folder while leaves may have zero children; Adopt writes knowledge
+only in the initial unmanaged projection and Arch writes every managed refresh; closed history descends only
 from a named card, repair lineage, current K source, or Trap source to an exact target; and
 every affected owner landing must finish before synthesis closes. Parent and child
 relationships come only from file/folder placement, never from a manual Parent field, and K

@@ -77,7 +77,7 @@ export const READ_FIRST = [
 export const DECLARATIONS = {
   currentDesign: { value: "design.md is current only after explicit approval and the matching atomic design commit; drafts are reports, not durable current state.", consumer: "stage:confirmation" },
   refinement: { value: "Initial, refresh, crosscut, and domain requests select the same state-driven design route; a tiny change with no design delta leaves the current owner untouched.", consumer: "stage:record-first" },
-  knowledgeLanding: { value: "Only later confirmed work or research synthesis may emit the canonical knowledge-landing marker; arch or adopt is the sole recursive capability knowledge writer.", consumer: "external.arch-or-adopt" },
+  knowledgeLanding: { value: "Only later confirmed work or research synthesis may emit the canonical knowledge-landing marker; Arch is the sole managed recursive capability knowledge writer. Adopt remains only as initial artifact provenance from the unmanaged projection.", consumer: "external.arch-or-adopt" },
   compactProject: { value: "No-UI projects skip design without a file, marker, or commit, and small projects may retain one compact current design document.", consumer: "stage:input" }
 };
 export const DEFERRED = [];
