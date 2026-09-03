@@ -1,6 +1,6 @@
 # v0.23.0 구현 보고 — 실사용 가능한 단계 연결 복구
 
-상태: 구현·정적 검증·교차 재감사 완료, devflow 배포 확인 대기  
+상태: 구현·정적 검증·교차 재감사·배포 완료, 실사용 시험 대기  
 기준 커밋: `9462cf2c18d9`
 
 ## 범위와 판단 기준
@@ -48,4 +48,6 @@ Fable의 1차 구현 감사와 2차 목적 감사는 누락·모순·간섭·불
 
 공통 생성기 수정은 sibling Skill Rails commit `63147c2c83533ca9bcb69ff4e4a719217ee4d844`, annotated tag와 GitHub Release `v0.1.9`로 배포됐다. GitHub workflow run `33719014072`가 success로 끝났고, release source를 Codex와 Claude Code에 설치한 뒤 `SKILL.md`, generator, P2 contract의 newline-normalized SHA-256 일치를 확인했다. 배포 증거는 docs commit `f2af5b7`로 `main`에 push했으며 사용자 소유 `docs/plan/`은 건드리지 않았다.
 
-devflow는 다음 커밋에서 push하고 Codex와 Claude에 설치한 뒤 설치본의 버전과 정본 hash를 이 보고서에 추가한다. 실사용 시험과 수동 Gate B는 설치 이후에도 unverified로 명시해 사용자 시험 범위로 넘긴다.
+devflow 구현은 commit `cea7a4b31e309ed65d5fb90c30576ef10864cc5f`로 `origin/main`에 push했다. Codex 설치 스크립트는 Orca가 지정한 `CODEX_HOME`에 `devflow@nanomia` 0.23.0을 설치했고, `codex plugin list --marketplace nanomia --json`에서 enabled 상태와 이 저장소의 최신 local source를 확인했다. Claude는 `devflow@nanomia`를 0.22.0에서 0.23.0으로 갱신했으며 9개 skill과 SessionStart hook을 인식한다. Claude 0.23.0 cache와 release source 사이에서 두 manifest, 아홉 패키지의 `spec.mjs`·`SKILL.md`·`.generated.json`, project-state와 SessionStart를 포함한 선택 30개 배포 파일의 newline-normalized mismatch는 0이었다. 최종 Direct/Verify spec SHA-256은 각각 `c06c7091026332a0eb908da68dd7cdf74d12cd683503d0cf2aaedf45aaad8552`, `7da9d8f7b43e3a5685f51dd6fc15c9705c12668af4cc30b53de942d88e937350`이다.
+
+Codex의 `/hooks` 화면에서 native SessionStart command를 사람이 확인하는 단계는 실행하지 않았다. 따라서 기존 global hook 제거도 하지 않았고, 이 UI 확인과 시험 브랜치의 실사용 흐름 및 수동 Gate B는 **unverified**로 사용자에게 넘긴다.
