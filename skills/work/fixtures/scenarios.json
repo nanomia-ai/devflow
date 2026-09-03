@@ -539,7 +539,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -736,7 +736,7 @@
     ]
   },
   {
-    "id": "review-contract-routes-split",
+    "id": "review-contract-routes-direct",
     "s": {
       "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
@@ -773,7 +773,7 @@
         "WRITE",
         "COMMIT",
         "WRITE",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -1981,7 +1981,7 @@
     "cover": []
   },
   {
-    "id": "invalid-card-routes-split",
+    "id": "invalid-card-routes-direct",
     "s": {
       "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",

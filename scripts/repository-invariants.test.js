@@ -15,7 +15,7 @@ const P2_PACKAGES = [
   "arch",
   "design",
   "resume",
-  "split",
+  "direct",
   "work",
   "verify",
 ];
@@ -312,7 +312,10 @@ test("the Codex installer retains one native channel and only cleans its generat
     assert.match(installer, /open \/hooks in a Codex session and confirm/, relative);
   }
   const { GENERATED_NAMES } = require("./remove-generated-codex-prompts.js");
-  const expected = P2_PACKAGES.filter((id) => id !== "principles").map((id) => `devflow-${id}.md`).sort();
+  const expected = [
+    ...P2_PACKAGES.filter((id) => id !== "principles" && id !== "direct").map((id) => `devflow-${id}.md`),
+    "devflow-split.md",
+  ].sort();
   assert.deepEqual([...GENERATED_NAMES].sort(), expected, "generated-prompt cleanup does not match the installed stages");
 });
 

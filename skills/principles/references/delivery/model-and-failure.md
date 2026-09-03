@@ -3,7 +3,7 @@
 ## Model Tiers
 
 **Never write model names in files.** Use tiers only. The actual model and reasoning
-effort are chosen by the user, per session, in split's execution proposal.
+effort are chosen by the user, per session, in direct's execution proposal.
 
 | Tier | Role | Use for |
 |---|---|---|

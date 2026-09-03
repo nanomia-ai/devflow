@@ -122,7 +122,7 @@ clean-boundary-only.
 Apply the following gate (the **open-Git-operation gate**) only when
 `git rev-parse --is-inside-work-tree` returns `true`. Otherwise skip the gate and do not initialize Git. Immediately on entry before normal
 routing, execution, or any path change, and immediately after an integration rebase or merge
-command, product, arch, design, adopt, split, work, verify, and resume check whether `git status` reports an open rebase or merge.
+command, product, arch, design, adopt, direct, work, verify, and resume check whether `git status` reports an open rebase or merge.
 When either is open, stop normal routing and report
 the operation kind, current branch or detached HEAD, and every unmerged path. Before the
 user decides, change no path and make no commit; even with no unmerged path, ask whether

@@ -150,7 +150,7 @@ Why: A context warning ends the run at the confirmed Layer 0 boundary so a fresh
 
 ## stage: capability-design
 
-Judgment: capability.action is ask or approve; route.after is design, split, or resume. Confirm the full expected design batch, preserve existing verified zones, and choose the next stage from the confirmed frontend need and owner preference.
+Judgment: capability.action is ask or approve; route.after is design, direct, or resume. Confirm the full expected design batch, preserve existing verified zones, and choose the next stage from the confirmed frontend need and owner preference.
 
 Why: Capability documents are arch's final technical-planning output for a managed project and must exist before the first tree opening.
 

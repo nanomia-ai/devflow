@@ -1,13 +1,13 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:c4e3abbeec0d848211ddf3758ebb6b06c507fc4e46930b7b7d80df6b0b2d7c5a",
-    "after": "sha256:1157bdc417a5d567ea7d14ee7e647042c893db5cb4455afa61c0b7091bca9d9b"
+    "before": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54",
+    "after": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54"
   },
-  "changed": true,
-  "any_changed": true,
+  "changed": false,
+  "any_changed": false,
   "source_changes": {
-    "behavior_source": true,
+    "behavior_source": false,
     "observation_source": false,
     "context": false
   },
@@ -15,8 +15,8 @@
     {
       "kind": "spec",
       "path": "spec.mjs",
-      "before_hash": "sha256:c4e3abbeec0d848211ddf3758ebb6b06c507fc4e46930b7b7d80df6b0b2d7c5a",
-      "after_hash": "sha256:1157bdc417a5d567ea7d14ee7e647042c893db5cb4455afa61c0b7091bca9d9b",
+      "before_hash": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54",
+      "after_hash": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54",
       "source": "behavior_source"
     }
   ],
@@ -30,190 +30,13 @@
     "template_content": [],
     "body": [],
     "references": [],
-    "ownership": [
-      {
-        "id": ".devflow/journal.md",
-        "change": "added",
-        "after": "external.principles"
-      },
-      {
-        "id": ".devflow/project/capabilities/**",
-        "change": "added",
-        "after": "project.arch-or-adopt"
-      },
-      {
-        "id": ".devflow/tree/**",
-        "change": "added",
-        "after": "project.split-or-work"
-      },
-      {
-        "id": ".devflow/users/<id>/HANDOFF.md",
-        "change": "added",
-        "after": "project.room-owner"
-      },
-      {
-        "id": ".devflow/users/<id>/digest.md",
-        "change": "added",
-        "after": "project.room-owner"
-      },
-      {
-        "id": "devflow/journal.md",
-        "change": "removed",
-        "before": "external.principles"
-      },
-      {
-        "id": "devflow/project/capabilities/**",
-        "change": "removed",
-        "before": "project.arch-or-adopt"
-      },
-      {
-        "id": "devflow/tree/**",
-        "change": "removed",
-        "before": "project.split-or-work"
-      },
-      {
-        "id": "devflow/users/<id>/HANDOFF.md",
-        "change": "removed",
-        "before": "project.room-owner"
-      },
-      {
-        "id": "devflow/users/<id>/digest.md",
-        "change": "removed",
-        "before": "project.room-owner"
-      }
-    ],
-    "artifacts": [
-      {
-        "id": "capability",
-        "change": "modified",
-        "before": {
-          "path": "devflow/project/capabilities/**",
-          "writer": "project.arch-or-adopt",
-          "readers": [
-            "stage.scope-entry"
-          ]
-        },
-        "after": {
-          "path": ".devflow/project/capabilities/**",
-          "writer": "project.arch-or-adopt",
-          "readers": [
-            "stage.scope-entry"
-          ]
-        }
-      },
-      {
-        "id": "cards",
-        "change": "modified",
-        "before": {
-          "path": "devflow/tree/**",
-          "writer": "project.split-or-work",
-          "readers": [
-            "stage.recovery-action",
-            "stage.scope-entry"
-          ]
-        },
-        "after": {
-          "path": ".devflow/tree/**",
-          "writer": "project.split-or-work",
-          "readers": [
-            "stage.recovery-action",
-            "stage.scope-entry"
-          ]
-        }
-      },
-      {
-        "id": "digest",
-        "change": "modified",
-        "before": {
-          "path": "devflow/users/*/digest.md",
-          "writer": "project.room-owner",
-          "readers": [
-            "stage.recovery-action",
-            "stage.scope-entry"
-          ]
-        },
-        "after": {
-          "path": ".devflow/users/*/digest.md",
-          "writer": "project.room-owner",
-          "readers": [
-            "stage.recovery-action",
-            "stage.scope-entry"
-          ]
-        }
-      },
-      {
-        "id": "glossary",
-        "change": "modified",
-        "before": {
-          "path": "devflow/project/glossary.md",
-          "writer": "project.product",
-          "readers": [
-            "stage.scope-entry"
-          ]
-        },
-        "after": {
-          "path": ".devflow/project/glossary.md",
-          "writer": "project.product",
-          "readers": [
-            "stage.scope-entry"
-          ]
-        }
-      },
-      {
-        "id": "handoff",
-        "change": "modified",
-        "before": {
-          "path": "devflow/users/*/HANDOFF.md",
-          "writer": "project.room-owner",
-          "readers": [
-            "stage.scope-entry"
-          ]
-        },
-        "after": {
-          "path": ".devflow/users/*/HANDOFF.md",
-          "writer": "project.room-owner",
-          "readers": [
-            "stage.scope-entry"
-          ]
-        }
-      },
-      {
-        "id": "product",
-        "change": "modified",
-        "before": {
-          "path": "devflow/project/product.md",
-          "writer": "project.product",
-          "readers": [
-            "stage.scope-entry"
-          ]
-        },
-        "after": {
-          "path": ".devflow/project/product.md",
-          "writer": "project.product",
-          "readers": [
-            "stage.scope-entry"
-          ]
-        }
-      }
-    ],
+    "ownership": [],
+    "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "dot-devflow-root-resume",
-  "intent": "Move the target-project state and knowledge root to .devflow without compatibility branches, while preserving devflow namespace identifiers.",
-  "impact": {
-    "ownership": {
-      "total": 10,
-      "added": 5,
-      "removed": 5,
-      "modified": 0
-    },
-    "artifacts": {
-      "total": 6,
-      "added": 0,
-      "removed": 0,
-      "modified": 6
-    }
-  }
+  "change_id": "v0.22.0-direct-hard-rename",
+  "intent": "Regenerate and validate this P2 package after the owner-approved atomic Split-to-Direct vocabulary change.",
+  "impact": {}
 }

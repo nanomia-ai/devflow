@@ -22,7 +22,7 @@ knowledge baselines are always on; there is no per-project switch.
   capsule folder — the "Domain knowledge capsules" section below owns its contract.
 - A filename is the number, `-`, then the name suffix. When a tree folder or waiting file
   exists, use its text after the number unchanged. Before either exists, use the product.md
-  capability name exactly as split would use it in the tree; invent no separate slug
+  capability name exactly as direct would use it in the tree; invent no separate slug
   normalization. The name suffix has no authority; every judgment and automatic entry uses
   the string before the first `-`.
 - Filename format anomalies are a file with no `-` or with a pre-`-` value that is not one

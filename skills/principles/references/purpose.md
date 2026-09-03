@@ -2,7 +2,7 @@
 
 Principles is the universal state-free request classifier and shared-policy kernel. Every
 devflow skill, card, and prompt follows this package; when another devflow document conflicts
-with it, this package wins. Product, arch, adopt, design, split, work, verify, and resume own
+with it, this package wins. Product, arch, adopt, design, direct, work, verify, and resume own
 their procedures. The project-state tool owns Git/disk classification and canonical route
 priority; Principles neither parses its rendering nor recollects journal, card, dependency,
 or sibling-card state.

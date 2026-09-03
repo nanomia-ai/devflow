@@ -32,7 +32,7 @@
     "No maintained non-devflow project material routes to Product; unknown material evidence fails closed; documentation-only or code-backed material proceeds through Adopt, while managed or active-operation routes remain owned by Resume.",
     "Refusal or interruption before binding approval writes nothing.",
     "If the adoption request also contains follow-on work, the whole request is preserved idempotently once through Principles' maintenance-routing record in the first adoption commit.",
-    "Approved adoption stops after reporting and does not synthesize another route or automatically opt into Split, Arch, or Resume."
+    "Approved adoption stops after reporting and does not synthesize another route or automatically opt into Direct, Arch, or Resume."
   ],
   "exact_formats": [
     "Canonical product, architecture, applicable design, code-style, glossary, capability-design, knowledge-node, result, and adoption-proposal templates.",
@@ -42,7 +42,7 @@
     "The read-only project-state snapshot for kernel validity, route, and the single non-devflow material observation.",
     "Git for exact source coordinates, history evidence, the first Layer 0 boundary, and the capability-and-knowledge boundary whose Design head names the first.",
     "Product as the no-material destination and Resume as the owner of managed or active-operation states.",
-    "Arch, Split, Work, and Resume as readers of the canonical artifacts; none is automatically invoked on completion."
+    "Arch, Direct, Work, and Resume as readers of the canonical artifacts; none is automatically invoked on completion."
   ],
   "completion_evidence": [
     "Every maintained source has an explicit named landing, evidence disposition, reasoned non-domain exclusion, or visible unresolved status.",

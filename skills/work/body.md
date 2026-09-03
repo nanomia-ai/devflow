@@ -4,13 +4,13 @@
 
 Carry one approved card through implementation, current execution evidence, clean review,
 integration, durable feedback, and its observed boundary without replacing principles,
-split, verify, or a semantic owner.
+direct, verify, or a semantic owner.
 
 ## guard: card-target-required
 
 Supply the already selected project-relative card through the public `--target` stage option.
 The target is an ordinary Decision fact; its absence is unknown evidence, not an invalid card,
-permission to choose among claims, or a route back to split.
+permission to choose among claims, or a route back to direct.
 
 ## guard: state-kernel-unavailable
 
@@ -42,7 +42,7 @@ A current or consumed lifecycle from another card does not hijack this card. A c
 
 ## guard: invalid-card
 
-Split owns a missing, stale, noncanonical, or undecidable card contract. Preserve current
+Direct owns a missing, stale, noncanonical, or undecidable card contract. Preserve current
 progress in the card before release; work does not repair planning authority by inference.
 
 ## guard: missing-bounded-basis
@@ -79,7 +79,7 @@ Judgment: Claim only the selected ready card after the contract preflight; other
 the exact current claim. A T-low basis must be concrete enough for its consumer, and the
 completion signal must state the expected observation and what it proves.
 
-Why: split owns readiness and the card contract; the binding claim makes concurrent ownership
+Why: direct owns readiness and the card contract; the binding claim makes concurrent ownership
 durable before code changes begin.
 
 ## stage: remote-evidence
@@ -98,7 +98,7 @@ Judgment: implementation.action continue signal-ready repair scope-escape park h
 `nonpass-repair`, `current-k-source`, `current-trap-source`, `broad`, or `invalid`. Work only
 inside the card destination and exact bounded inputs. `continue` means the
 next named implementation point is not yet signal-ready; `repair` answers anchored non-pass
-evidence; scope escape belongs to split; parking requires an explicit request; a mid-task
+evidence; scope escape belongs to direct; parking requires an explicit request; a mid-task
 handoff waits at the next boundary. For closed history, choose only one allowed exact basis.
 
 Why: current progress survives interruption, while scope and historical context stay bounded
@@ -117,7 +117,7 @@ Reduce the settled review events with these non-overlapping conditions:
 - A valid disposition with exactly one settled `review result` after it that is not `pass` selects `block-nonpass`; the disposition is spent and later evidence does not revive it.
 - A valid disposition with two or more settled `review result` lines after it selects `block-nonpass` because the record is broken.
 - With no valid disposition and no settled review result, select `dispatch` after establishing a current pass. A latest pass completes review; a card-contract objection selects `contract-route`; a first or second code objection selects `repair`; and `unverified` selects `repair` of its missing evidence without increasing the objection count.
-- With no valid disposition, and the latest result objects to the code and is the third or later, select `block-nonpass` and report to the person: a disposition written in any other checkpoint authorizes nothing. Only a fresh execution-proposal approval from split starts a new boundary.
+- With no valid disposition, and the latest result objects to the code and is the third or later, select `block-nonpass` and report to the person: a disposition written in any other checkpoint authorizes nothing. Only a fresh execution-proposal approval from direct starts a new boundary.
 - A fresh unanchored third code objection selects `ask-disposition`; once the adjacent disposition is present, anchor the result and disposition together before selecting `apply-disposition`.
 
 Why: clean review challenges intent, logic, and scope without implementation-history bias, and the anchored lineage makes interruption recovery deterministic.

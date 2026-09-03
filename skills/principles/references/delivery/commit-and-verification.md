@@ -26,12 +26,12 @@
   Land only those capability documents and their knowledge capsules as
   `arch — capabilities`; if no capability bytes change, do not
   commit. This is a binding decision.
-- **Planning commit**: split bundles newly created or revised pending cards,
+- **Planning commit**: Direct bundles newly created or revised pending cards,
   user-confirmed card-dependency format corrections, tree structure, card Approval and
   Review, arch.md `Settled by` replacements, verify.md
   failure or adopted-finding routing, and deletion of every layer-opening marker it settles
   in one commit. It needs no completion signal because it is not an
-  implementation result. Message: `split — <opened layer>`. A promotion's `NN.N promote`
+  implementation result. Message: `direct — <opened layer>`. A promotion's `NN.N promote`
   is the dedicated message for the same commit class. It lands on the
   integration branch as a binding decision.
 - **Routing write order**: once the exact result of a Failure-history or adopted-finding

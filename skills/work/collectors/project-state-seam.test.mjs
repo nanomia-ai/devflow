@@ -319,7 +319,7 @@ test("missing public target is UNKNOWN guidance and never invalid-card routing",
     assert.ok(decision.snapshot.unknowns.some(({ field }) => field === "card.target"));
     assert.deepEqual(decision.needs.map(({ field }) => field), ["card.target"]);
     assert.match(decision.body.markdown, /public `--target` stage option/);
-    assert.equal(JSON.stringify(decision).includes("ROUTE:split"), false);
+    assert.equal(JSON.stringify(decision).includes("ROUTE:direct"), false);
   } finally {
     await rm(fixture.root, { recursive: true, force: true });
   }

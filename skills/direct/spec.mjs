@@ -1,4 +1,4 @@
-export const SPEC = { version: "5", id: "split", profile: "single", imports: [] };
+export const SPEC = { version: "5", id: "direct", profile: "single", imports: [] };
 
 export const OBSERVATIONS = {
   "project.product": { collector: "state.project.product", domain: ["present", "missing", "unknown"] },
@@ -31,8 +31,8 @@ export const ORDERS = {
 };
 
 export const OWNERSHIP = {
-  ".devflow/tree/**": "split",
-  ".devflow/journal.md": "split",
+  ".devflow/tree/**": "direct",
+  ".devflow/journal.md": "direct",
   ".devflow/project/**": "external.layer0",
   ".git/**": "external.git"
 };
@@ -72,7 +72,7 @@ export const STAGES = [
   }, body: "stage: intake" },
   { id: "materialize", reads: ["planning.receipt", "origin.drafts"], acceptsUnknown: [], done: s => s.planning.receipt !== "NONE" || s.origin.drafts !== "NONE", needs: ["bundle.contract", "bundle.units"], table: "materializeSelector", reentry: "rejudge", branches: {
     "continue-active-bundle": [["WRITE", { artifact: "cardBundle", target: "<exact-active-scopes>/<one-or-more-sibling-card-addresses>", units: "bundle.units", templates: "00-project=researchCard; all-other-scopes=taskCard", forbiddenTemplates: "taskCard@00-project" }], "NEXT"],
-    "begin-request-bundle": [["WRITE", { artifact: "layerOpeningBundle", target: ".devflow/journal.md", source: "request.current.source", scopes: "bundle.units" }], ["COMMIT", { scope: "layer-opening-bundle", message: "split — begin <parent>" }], ["WRITE", { artifact: "cardBundle", target: "<exact-active-scopes>/<one-or-more-sibling-card-addresses>", units: "bundle.units", templates: "00-project=researchCard; all-other-scopes=taskCard", forbiddenTemplates: "taskCard@00-project" }], "NEXT"],
+    "begin-request-bundle": [["WRITE", { artifact: "layerOpeningBundle", target: ".devflow/journal.md", source: "request.current.source", scopes: "bundle.units" }], ["COMMIT", { scope: "layer-opening-bundle", message: "direct — begin <parent>" }], ["WRITE", { artifact: "cardBundle", target: "<exact-active-scopes>/<one-or-more-sibling-card-addresses>", units: "bundle.units", templates: "00-project=researchCard; all-other-scopes=taskCard", forbiddenTemplates: "taskCard@00-project" }], "NEXT"],
     "ASK:bundle-uncertain": ["ASK"]
   }, body: "stage: materialize" },
   { id: "carry-approval", reads: ["planning.receipt", "approval.boundary", "origin.drafts"], acceptsUnknown: [], done: s => s.planning.receipt !== "NONE" || s.approval.boundary === "NONE" || s.origin.drafts === "NONE", effects: [["WRITE", { artifact: "approvalBundle", target: "origin.drafts.cards", source: "approval.boundary.values" }], ["COMMIT", { scope: "current-origin-planning-pass", consumes: "settled-layer-opening-markers" }], "WAIT"], reentry: "rejudge", body: "stage: carry-approval" },
@@ -88,24 +88,24 @@ export const STAGES = [
 export const ARTIFACTS = {
   product: { path: ".devflow/project/product.md", writer: "external.product", readers: ["stage.intake"] },
   journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.intake", "stage.materialize", "stage.carry-approval", "stage.propose"] },
-  requestRecord: { path: ".devflow/journal.md", writer: "split", readers: ["stage.intake", "stage.materialize"] },
-  layerOpeningBundle: { path: ".devflow/journal.md", writer: "split", readers: ["stage.materialize"] },
-  cardBundle: { path: ".devflow/tree/<exact-active-scopes>/<one-or-more-sibling-card-addresses>.md", writer: "split", readers: ["stage.materialize"] },
-  approvalBundle: { path: ".devflow/tree/<current-origin-card-paths>.md", writer: "split", readers: ["stage.carry-approval", "stage.propose"] },
-  approvalRepair: { path: ".devflow/tree/<approval-invalid-current-origin-card-paths>.md", writer: "split", readers: ["stage.propose"] },
-  cancelDraftCleanup: { path: ".devflow/tree/<current-origin-drafts>", writer: "split", readers: ["stage.propose"] },
-  cancelMarkerCleanup: { path: ".devflow/journal.md", writer: "split", readers: ["stage.propose"] }
+  requestRecord: { path: ".devflow/journal.md", writer: "direct", readers: ["stage.intake", "stage.materialize"] },
+  layerOpeningBundle: { path: ".devflow/journal.md", writer: "direct", readers: ["stage.materialize"] },
+  cardBundle: { path: ".devflow/tree/<exact-active-scopes>/<one-or-more-sibling-card-addresses>.md", writer: "direct", readers: ["stage.materialize"] },
+  approvalBundle: { path: ".devflow/tree/<current-origin-card-paths>.md", writer: "direct", readers: ["stage.carry-approval", "stage.propose"] },
+  approvalRepair: { path: ".devflow/tree/<approval-invalid-current-origin-card-paths>.md", writer: "direct", readers: ["stage.propose"] },
+  cancelDraftCleanup: { path: ".devflow/tree/<current-origin-drafts>", writer: "direct", readers: ["stage.propose"] },
+  cancelMarkerCleanup: { path: ".devflow/journal.md", writer: "direct", readers: ["stage.propose"] }
 };
 
 export const ROLES = {};
 export const READ_FIRST = [{ body: "why: purpose", path: "references/purpose.md" }];
 export const DECLARATIONS = {
   profile: { value: "p2", consumer: "build:profile" },
-  canonicalStateBoundary: { value: "split selects no filename; principles project-state supplies the exact current journal origin, active layer-opening scopes, approval freshness, and card origin siblings", consumer: "split" },
+  canonicalStateBoundary: { value: "direct selects no filename; principles project-state supplies the exact current journal origin, active layer-opening scopes, approval freshness, and card origin siblings", consumer: "direct" },
   siblingUnitBoundary: { value: "one request may create several independently executable sibling cards; each unit is one card and may list several affected knowledge owners, but is never mirrored once per owner", consumer: "stage.materialize" },
   projectResearchBoundary: { value: "00-project is one many-branch research root; each numeric research card carries the exact Origin field, remains pending until the ordinary proposal boundary, and routes to work only after project-state reports effective approval", consumer: "guard.approved-project-research" },
-  residualSeam: { value: "principles-owned layer-opening markers are the only split-time remaining-scope representation; split records affected owners but never creates knowledge-landing markers, which later confirmed work or research synthesis owns", consumer: "stage.carry-approval" },
-  splitWritesNoK: { value: "split writes task-tree structure and planning records only; it never writes current K knowledge", consumer: "split" },
-  smallWorkBoundary: { value: "when no durable task or research unit is needed, split emits zero tree delta", consumer: "stage.intake" }
+  residualSeam: { value: "principles-owned layer-opening markers are the only direct-time remaining-scope representation; direct records affected owners but never creates knowledge-landing markers, which later confirmed work or research synthesis owns", consumer: "stage.carry-approval" },
+  directWritesNoK: { value: "direct writes task-tree structure and planning records only; it never writes current K knowledge", consumer: "direct" },
+  smallWorkBoundary: { value: "when no durable task or research unit is needed, direct emits zero tree delta", consumer: "stage.intake" }
 };
 export const DEFERRED = [];

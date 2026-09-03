@@ -158,7 +158,7 @@ test("malformed or missing stdin falls back safely, while non-Git directories st
 });
 
 test("generated trigger surfaces require managed routing or explicit devflow intent", () => {
-  const downstream = ["arch", "design", "split", "work", "verify", "resume"];
+  const downstream = ["arch", "design", "direct", "work", "verify", "resume"];
   const activation = "Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.";
   for (const name of downstream) {
     const root = path.join(workspace, "skills", name);

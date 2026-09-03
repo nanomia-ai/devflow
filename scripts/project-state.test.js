@@ -333,7 +333,7 @@ function writeClaim(root, { number = "02.1", status = "wip-jmp", depends = "none
 function writePending(root, { number = "02.1", depends = "none", approval, review, omit = [] } = {}) {
   const relative = `.devflow/tree/02-capability/${number}-fixture.md`;
   write(root, relative, cardText(number, { depends, approval, review, omit }));
-  commit(root, "jmp split — fixture");
+  commit(root, "jmp direct — fixture");
   return relative;
 }
 
@@ -1074,7 +1074,7 @@ test("T2 overlap preserves ineffective card A and ready card B exact predicates"
   const root = makeRepo(t);
   write(root, ".devflow/tree/02-capability/02.1-a.md", cardText("02.1", { approval: "invalid" }));
   write(root, ".devflow/tree/02-capability/02.2-b.md", cardText("02.2"));
-  commit(root, "jmp split — two cards");
+  commit(root, "jmp direct — two cards");
   const result = run(root);
   ok(result);
   assertFragment(result.stdout, "ready: kind=approval-invalid", "file=.devflow/tree/02-capability/02.1-a.md");
@@ -1815,7 +1815,7 @@ test("adversarial F3 core locator falls back to HEAD when an uncommitted output 
   const root = makeRepo(t);
   const locator = "core:.devflow/project/product.md#Capabilities";
   write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
-  commit(root, "jmp split — begin .devflow/tree");
+  commit(root, "jmp direct — begin .devflow/tree");
   fs.rmSync(path.join(root, ".devflow", "project", "product.md"));
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
@@ -1827,7 +1827,7 @@ test("adversarial F3 journal locator falls back to HEAD when an uncommitted outp
   const source = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact source")}`;
   const marker = `2026-08-20T00:00:01Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(`journal:${source}`)}`;
   write(root, ".devflow/journal.md", `${source}\n${marker}\n`);
-  commit(root, "jmp split — begin .devflow/tree");
+  commit(root, "jmp direct — begin .devflow/tree");
   write(root, ".devflow/journal.md", `${marker}\n`);
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
@@ -1841,7 +1841,7 @@ test("adversarial F3 Failure history locator falls back to HEAD after another un
   const locator = `verify:${verify}#Failure history@1`;
   write(root, verify, pending);
   write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
-  commit(root, "jmp split — begin .devflow/tree");
+  commit(root, "jmp direct — begin .devflow/tree");
   write(root, verify, pending.replace("- source id: 1; timestamp: 2026-08-20T00:00:00Z; failure: exact source; routing: pending", "None."));
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
@@ -1855,7 +1855,7 @@ test("adversarial F3 event locator falls back to HEAD after another uncommitted 
   const locator = `verify:${verify}#Retrospective@1/1`;
   write(root, verify, pending);
   write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
-  commit(root, "jmp split — begin .devflow/tree");
+  commit(root, "jmp direct — begin .devflow/tree");
   write(root, verify, pending.replace(/## Retrospective[\s\S]*$/, "## Retrospective\n- not run\n"));
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
@@ -1869,7 +1869,7 @@ test("adversarial F3 card locator remains anchored to its explicit commit hash",
   const hash = commit(root, "jmp 02.1 source");
   const locator = `card:${card}@${hash}`;
   write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
-  commit(root, "jmp split — begin .devflow/tree");
+  commit(root, "jmp direct — begin .devflow/tree");
   fs.rmSync(path.join(root, ...card.split("/")));
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
@@ -2131,7 +2131,7 @@ test("R4 capability filtering keeps global judgment and adds only requested deta
   const root = makeRepo(t, { capabilities: ["Alpha", "Beta"] });
   write(root, ".devflow/tree/02-Alpha/02.1-alpha.md", cardText("02.1"));
   write(root, ".devflow/tree/03-Beta/03.1-beta.md", cardText("03.1"));
-  commit(root, "jmp split — two capabilities");
+  commit(root, "jmp direct — two capabilities");
   write(root, "outside.txt", "global diff\n");
   const full = run(root); ok(full);
   const narrowed = run(root, "--capability", "2"); ok(narrowed);
@@ -2167,7 +2167,7 @@ test("R4 capability filtering projects aggregate blocked facts and counts to the
   write(root, ".devflow/tree/02-Alpha/02.2-work.md", cardText("02.2", { depends: "02.1" }));
   write(root, ".devflow/tree/03-Beta/03.1-prerequisite.wip-other.md", cardText("03.1"));
   write(root, ".devflow/tree/03-Beta/03.2-work.md", cardText("03.2", { depends: "03.1" }));
-  commit(root, "jmp split — two blocked capabilities");
+  commit(root, "jmp direct — two blocked capabilities");
   const result = run(root, "--capability", "2"); ok(result);
   const blocked = result.stdout.split(/\r?\n/).find((line) => line.startsWith("blocked: kind=dependencies"));
   assert.ok(blocked, result.stdout);
@@ -2781,7 +2781,7 @@ test("current claim origin is derived from the card-creation commit's deleted re
   const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
   write(root, ".devflow/journal.md", "");
-  commit(root, "jmp split — request planned");
+  commit(root, "jmp direct — request planned");
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
   commit(root, "jmp 02.1 claim");
@@ -2795,11 +2795,11 @@ function claimFromMarkerOnlyBundle(t, sourceSetup) {
   const firstMarker = `2026-08-20T00:01:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(source)}`;
   const secondMarker = `2026-08-20T00:02:00Z layer opening: parent: .devflow/tree/02-capability; children: 02.1+02.2; source-json: ${JSON.stringify(source)}`;
   write(root, ".devflow/journal.md", `${retainedJournal}${firstMarker}\n${secondMarker}\n`);
-  commit(root, "jmp split — marker-only bundle opened");
+  commit(root, "jmp direct — marker-only bundle opened");
   const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
   write(root, ".devflow/journal.md", retainedJournal);
-  commit(root, "jmp split — marker-only bundle planned");
+  commit(root, "jmp direct — marker-only bundle planned");
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
   commit(root, "jmp 02.1 claim");
@@ -2839,11 +2839,11 @@ test("Phase 5B E1 one deleted request and its same-source layer markers are one 
   const rootMarker = `2026-08-20T00:01:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(source)}`;
   const childMarker = `2026-08-20T00:02:00Z layer opening: parent: .devflow/tree/02-capability; children: 02.1+02.2; source-json: ${JSON.stringify(source)}`;
   write(root, ".devflow/journal.md", `${request}\n${rootMarker}\n${childMarker}\n`);
-  commit(root, "jmp split — request layers opened");
+  commit(root, "jmp direct — request layers opened");
   const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
   write(root, ".devflow/journal.md", "");
-  commit(root, "jmp split — request planned");
+  commit(root, "jmp direct — request planned");
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
   commit(root, "jmp 02.1 claim");
@@ -2859,11 +2859,11 @@ test("Phase 5B E1 genuinely different deleted origin identities remain unknown",
   const firstMarker = `2026-08-20T00:01:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(`journal:${first}`)}`;
   const secondMarker = `2026-08-20T00:02:00Z layer opening: parent: .devflow/tree/02-capability; children: 02.1; source-json: ${JSON.stringify(`journal:${second}`)}`;
   write(root, ".devflow/journal.md", `${first}\n${second}\n${firstMarker}\n${secondMarker}\n`);
-  commit(root, "jmp split — different origins opened");
+  commit(root, "jmp direct — different origins opened");
   const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
   write(root, ".devflow/journal.md", "");
-  commit(root, "jmp split — different origins planned");
+  commit(root, "jmp direct — different origins planned");
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
   commit(root, "jmp 02.1 claim");
@@ -2876,11 +2876,11 @@ test("Phase 5B E1 a single deleted layer marker keeps its exact legacy origin", 
   const root = makeRepo(t);
   const marker = `2026-08-20T00:01:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify("core:.devflow/project/product.md#Capabilities")}`;
   write(root, ".devflow/journal.md", `${marker}\n`);
-  commit(root, "jmp split — legacy layer opened");
+  commit(root, "jmp direct — legacy layer opened");
   const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
   write(root, ".devflow/journal.md", "");
-  commit(root, "jmp split — legacy layer planned");
+  commit(root, "jmp direct — legacy layer planned");
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
   commit(root, "jmp 02.1 claim");
@@ -3014,7 +3014,7 @@ test("D1 Progress prose shaped like plan fields does not override the plan", (t)
       "Review: waived",
     ].join("\n"),
   }));
-  commit(root, "jmp split — fixture");
+  commit(root, "jmp direct — fixture");
   const result = run(root);
   ok(result);
   assertFragment(result.stdout, "ready: kind=approval-pending", `file=${card}`);
@@ -3028,7 +3028,7 @@ test("D1 a Review line only below the heading leaves the card legacy", (t) => {
     omit: ["Review"],
     progress: "2026-01-02T00:00:00Z implemented exact fixture\nReview: waived",
   }));
-  commit(root, "jmp split — fixture");
+  commit(root, "jmp direct — fixture");
   const result = run(root);
   ok(result);
   assertFragment(result.stdout, "ready: kind=needs-normalization", `file=${card}`);
@@ -3068,7 +3068,7 @@ test("D1 a clean committed card with no Progress log heading is invalid, not rea
   const root = makeRepo(t);
   const card = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, card, malformedCard("02.1", 0));
-  commit(root, "jmp split — fixture");
+  commit(root, "jmp direct — fixture");
   const result = run(root);
   ok(result);
   assert.ok(!hasKind(result.stdout, "ready", "ready"), "a card with no plan boundary is never ready");
@@ -3080,7 +3080,7 @@ test("D1 a clean committed card with two Progress log headings is invalid, not r
   const root = makeRepo(t);
   const card = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, card, malformedCard("02.1", 2));
-  commit(root, "jmp split — fixture");
+  commit(root, "jmp direct — fixture");
   const result = run(root);
   ok(result);
   assert.ok(!hasKind(result.stdout, "ready", "ready"), "a card with two plan boundaries is never ready");
@@ -3119,12 +3119,12 @@ function sameOriginPlan(t) {
   write(root, pending, cardText("02.2"));
   write(root, closingSource, cardText("02.3"));
   write(root, ".devflow/journal.md", `${other}\n`);
-  commit(root, "jmp split — first request planned");
+  commit(root, "jmp direct — first request planned");
 
   const foreign = ".devflow/tree/02-capability/02.4-fourth.md";
   write(root, foreign, cardText("02.4"));
   write(root, ".devflow/journal.md", "");
-  commit(root, "jmp split — second request planned");
+  commit(root, "jmp direct — second request planned");
 
   const claimed = mineSource.replace(".md", ".wip-jmp.md");
   const closed = closingSource.replace(".md", ".done.md");
@@ -3160,7 +3160,7 @@ test("D7 compact output never shortens the exact same-origin sibling paths", (t)
     write(root, cards[index], cardText(`02.${index + 1}`, { progress }));
   }
   write(root, ".devflow/journal.md", "");
-  commit(root, "jmp split — long sibling request planned");
+  commit(root, "jmp direct — long sibling request planned");
   const claimed = cards[0].replace(/\.md$/, ".wip-jmp.md");
   git(root, "mv", cards[0], claimed);
   commit(root, "jmp boundary — compact output fixture");
@@ -3193,18 +3193,18 @@ function multiOwnerBundle(t, { finishSecondOwner = true } = {}) {
   const first = `2026-08-20T00:01:00Z layer opening: parent: .devflow/tree/02-capability; children: 02.1; source-json: ${JSON.stringify(source)}`;
   const second = `2026-08-20T00:01:01Z layer opening: parent: .devflow/tree/03-second; children: 03.1; source-json: ${JSON.stringify(source)}`;
   write(root, ".devflow/journal.md", `${request}\n${first}\n${second}\n`);
-  commit(root, "jmp split — begin .devflow/tree/02-capability+.devflow/tree/03-second");
+  commit(root, "jmp direct — begin .devflow/tree/02-capability+.devflow/tree/03-second");
 
   const owned = ".devflow/tree/02-capability/02.1-filter.md";
   write(root, owned, cardText("02.1", { readFirst: ["src/filter/date.ts", "src/filter/range.ts"] }));
   write(root, ".devflow/journal.md", `${request}\n${second}\n`);
-  commit(root, "jmp split — first owner planned");
+  commit(root, "jmp direct — first owner planned");
 
   const sibling = ".devflow/tree/03-second/03.1-export.md";
   if (finishSecondOwner) {
     write(root, sibling, cardText("03.1", { readFirst: "src/export/contract.ts" }));
     write(root, ".devflow/journal.md", "");
-    commit(root, "jmp split — second owner planned");
+    commit(root, "jmp direct — second owner planned");
   }
 
   const claimed = owned.replace(".md", ".wip-jmp.md");
@@ -3269,7 +3269,7 @@ test("D7 none and unknown origins never become a sibling bundle", (t) => {
   const noneB = ".devflow/tree/02-capability/02.2-none-b.md";
   write(root, noneA, cardText("02.1"));
   write(root, noneB, cardText("02.2"));
-  commit(root, "jmp split — planned with no recorded input");
+  commit(root, "jmp direct — planned with no recorded input");
 
   const first = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("first request")}`;
   const second = `2026-08-20T00:00:01Z maintenance routing pending: request-json: ${JSON.stringify("second request")}`;
@@ -3280,7 +3280,7 @@ test("D7 none and unknown origins never become a sibling bundle", (t) => {
   write(root, unknownA, cardText("02.3"));
   write(root, unknownB, cardText("02.4"));
   write(root, ".devflow/journal.md", "");
-  commit(root, "jmp split — two origins planned at once");
+  commit(root, "jmp direct — two origins planned at once");
 
   const result = run(root); ok(result);
   for (const relative of [noneA, noneB]) {
@@ -3309,7 +3309,7 @@ function unreadableOriginPlan(t, breakJournal) {
   const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
   write(root, ".devflow/journal.md", "");
-  commit(root, "jmp split — request planned");
+  commit(root, "jmp direct — request planned");
   breakJournal.after(root);
   return { root, pending };
 }
@@ -3590,7 +3590,7 @@ function designOpenItemScene(t, { capability = "03", line = null, card: named = 
   const root = makeRepo(t, { capabilities: ["capability", "neighbour"] });
   const card = writePending(root);
   write(root, ".devflow/tree/03-neighbour.md", "neighbour\n");
-  commit(root, "jmp split — waiting capability 03");
+  commit(root, "jmp direct — waiting capability 03");
   const statement = "an export always carries the tenant id";
   const raw = line ?? designOpenItem(capability, statement, named ?? card);
   write(root, ".devflow/journal.md", `${raw}\n`);

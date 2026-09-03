@@ -33,7 +33,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -80,7 +80,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -127,7 +127,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -174,7 +174,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -221,7 +221,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -268,7 +268,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -315,7 +315,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -362,7 +362,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -409,7 +409,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -456,7 +456,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -503,7 +503,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -555,7 +555,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -608,7 +608,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -660,7 +660,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -713,7 +713,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -766,7 +766,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -819,7 +819,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -872,7 +872,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -926,7 +926,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -975,7 +975,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "commit"
     },
     "expect": {
@@ -1026,7 +1026,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1082,7 +1082,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1132,7 +1132,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1182,7 +1182,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1232,7 +1232,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1282,7 +1282,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1290,7 +1290,7 @@
       "status": "ROUTE",
       "effects": [
         "REPORT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -1332,7 +1332,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1382,7 +1382,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1432,7 +1432,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1482,7 +1482,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1532,7 +1532,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1582,7 +1582,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1632,7 +1632,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1684,7 +1684,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1736,7 +1736,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1788,7 +1788,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1838,7 +1838,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1888,7 +1888,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1938,7 +1938,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -1988,7 +1988,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2038,7 +2038,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2090,7 +2090,7 @@
     "decided": {
       "approval.action": "refuse",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2142,7 +2142,7 @@
     "decided": {
       "approval.action": "approve",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2197,7 +2197,7 @@
     "decided": {
       "approval.action": "approve",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2252,7 +2252,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2302,7 +2302,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2481,7 +2481,7 @@
     ]
   },
   {
-    "id": "route-after-commit-split",
+    "id": "route-after-commit-direct",
     "s": {
       "state.kernel": "available",
       "state.route": "setup.layer0-incomplete",
@@ -2514,7 +2514,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "approve",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2524,14 +2524,14 @@
         "WRITE",
         "WRITE",
         "COMMIT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
       "stage:capability-design",
       "branch:capability-design/approve",
-      "row:capabilityRoute/approve-split",
-      "branch:capabilityRoute/approve-split"
+      "row:capabilityRoute/approve-direct",
+      "branch:capabilityRoute/approve-direct"
     ]
   },
   {
@@ -2568,7 +2568,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2612,7 +2612,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2664,7 +2664,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2716,7 +2716,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {
@@ -2769,7 +2769,7 @@
     "decided": {
       "approval.action": "ask",
       "capability.action": "ask",
-      "route.after": "split",
+      "route.after": "direct",
       "repair.action": "ask"
     },
     "expect": {

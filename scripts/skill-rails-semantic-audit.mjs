@@ -7,7 +7,7 @@ const ROOT = resolve(process.cwd(), "skills");
 // Principles is deliberately state-free: it classifies conversational intent and
 // routes stateful work once to resume. Requiring a project collector there would
 // recreate the duplicated entry collectors the redesign removes.
-const MECHANICAL_PACKAGES = new Set(["resume", "split", "work", "verify"]);
+const MECHANICAL_PACKAGES = new Set(["resume", "direct", "work", "verify"]);
 
 function readJson(path) {
   return JSON.parse(readFileSync(path, "utf8"));

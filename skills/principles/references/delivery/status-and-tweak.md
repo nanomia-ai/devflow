@@ -38,7 +38,7 @@ decisions. These records do not directly change card or folder status. A task ca
   waiting capability file, not a task card, when its name equals a non-retired product.md
   capability's name and its number is that assigned tree number. Its body is the single
   line `# <number> <capability name>`; it has no `Approval`, `Review`, or completion signal.
-  When opening the capability, split turns this file into the same-numbered, same-named
+  When opening the capability, direct turns this file into the same-numbered, same-named
   folder and creates its direct task cards
 - A retired capability gets `.stale` when it is an opened folder, or `.stale.md` when it
   is an unopened waiting file. Every card status inside an opened retired folder is void.

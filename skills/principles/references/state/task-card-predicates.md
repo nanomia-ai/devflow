@@ -1,6 +1,6 @@
 # Canonical State Predicates
 
-This document defines only the task-card disk predicates shared by split, work, verify, and resume.
+This document defines only the task-card disk predicates shared by direct, work, verify, and resume.
 Each stage owns its procedure and does not redefine these predicates.
 
 ## Task-card predicates

@@ -3,12 +3,12 @@
   "skill_id": "adopt",
   "profile": "p2",
   "built_at": null,
-  "build_id": "sha256:a7c2bb317f4e11bf400476eb647506ebb1e16a5781a008d6e10f4e2c9b28aeac",
-  "spec_hash": "sha256:d6dea75634fc40e6db3573b0391b961052eb3e68348bd44ad3a6b130cd61ee66",
+  "build_id": "sha256:e05b984d460bd345d97d6d13bf7563cc3278db274b5f7ba881aa6f894b5c51c3",
+  "spec_hash": "sha256:ec093501eff0ead89e4a02315d14cbb409c436c1e07a86fb524a923ed2be4722",
   "dsl_hash": "sha256:e8d77b180b886db5cf0474682c7ea2dfea19065561a015878c70efe1441694e6",
   "runtime_hash": "sha256:5af2d9272f953e9f99cb3bba366ce4f421aba2c4560164ed198fd3c67a45fed8",
   "validator_hash": "sha256:70eb557f897034321626ef52408bdd96549c5eeef92ab44618f54af6af8cd53a",
-  "content_hash": "sha256:461e437fa814b9324047d2cbec75545f9c88cfe3f32a012fc08896eb56972234",
+  "content_hash": "sha256:d7a38daccaee32694021181cc3eea251853b3c0ab93e6742312e1fe422ab42d0",
   "content": {
     "SKILL.md": "sha256:be2069007e13cfb6b6cf5d0512d2a4ba660230c8cec80d66ff0b6c9fbd4b1f68",
     "body.md": "sha256:e571a2ef22c248505699a87b7655088401ceda839067eb44a6a2af598afa0af6",
@@ -46,10 +46,10 @@
     "templates/knowledge-node.md": "sha256:c5d18fae74d59b63746b3ec383ba3a842d2d2cbe379583b3145d7b02cebb39a7",
     "templates/product.md": "sha256:5bdea011440d1b74c9f375d8d4d9814f20fc6f9be22ea46be28def759034e649",
     "templates/result.md": "sha256:d045f17ff9e4a0d249ab4a52708cafa85febb3db04983003f830c0ebf64fc1c6",
-    ".skill-rails/intent.json": "sha256:84799acb807073896585f2522f6255f905667d8c22b8031cb9fdb8970db801af",
+    ".skill-rails/intent.json": "sha256:00aba6bc9fbc94fafaf0cdbebfcb8a42bfa02a64964020ed1655af0138dcb973",
     ".skill-rails/profile-decision.json": "sha256:1c27d1059f3f56d761b02dcfc1c21c0e40b925275573e62c64a20c6d97a989c0",
     ".skill-rails/eval-cases.json": "sha256:377a01fd2413bc7f45b5aad3308c122e7ed58b684ec9d1d8c426feb4205bfdb7",
-    ".skill-rails/obligation-ledger.json": "sha256:9ef97031d565965b7110b6c42bb114e75ba645f2eb68fc857ea34ce15ac10bdf"
+    ".skill-rails/obligation-ledger.json": "sha256:91cdda9dc401322cbcc39646b835a8b440dcf9666ed7246c33f4ffaf96a6747e"
   },
   "runtime_files": [
     "align.mjs",

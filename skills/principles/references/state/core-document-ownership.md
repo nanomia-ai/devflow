@@ -7,7 +7,7 @@ re-running the owning skill** — never edited in passing during a task.
 Target ownership is fixed: product owns product.md and glossary.md; arch owns arch.md,
 code-style.md, and the legacy ADRs; design owns design.md; Adopt initially projects the whole
 confirmed unmanaged knowledge surface, including arch.md `Existing records`; after that boundary,
-split owns the tree and task cards and verify owns verify.md. Adopt owns the capability design
+direct owns the tree and task cards and verify owns verify.md. Adopt owns the capability design
 zone only inside that atomic initial projection; Arch owns every managed refresh under
 `.devflow/project/capabilities/`, and verify owns the verified zone
 after creation. The same-numbered knowledge capsule folder belongs to the design-zone

@@ -1,6 +1,6 @@
 # Planning evidence discipline
 
-This companion is the common discipline product, arch, adopt, and split use to settle facts before binding user decisions.
+This companion is the common discipline product, arch, adopt, and direct use to settle facts before binding user decisions.
 
 ## Four Kinds of Unknown
 
@@ -32,7 +32,7 @@ When a blocking fact is `conflicted` or `unavailable`, report the conflict or ab
 
 Do not create raw research files. Leave only the conclusion, its impact on the current decision, and the exact source in an existing owning statement.
 product puts follow-up facts in `Open questions`; arch uses a `Provisional` value with a safe default and a `settling card`.
-split uses an existing `research card` for an unknown that would force guessing the Destination or Completion signal; adopt sends a future decision to its owning stage.
+direct uses an existing `research card` for an unknown that would force guessing the Destination or Completion signal; adopt sends a future decision to its owning stage.
 When no home fits, create no file or card and report the exact owning stage.
 When the same concept is updated, that settlement overwrites the concept's place in the owning document, in place — the reason and the discarded alternatives live beside that conclusion, in the statement that owns it.
 
@@ -77,4 +77,4 @@ When they do not, keep the current option. Do not apply pre-commitment review ag
 | product | Before asking the user the current question frontier | After applying an answer, before creating the next frontier or final confirmation | Does not select the stack or DB |
 | arch | Before presenting a candidate to the user | After confirming candidate-survival facts, before binding a hard-to-reverse choice | Does not change product's Problem, Capabilities, Boundary, or Success criteria |
 | adopt | Before previewing the current implementation and pinned-version external contracts | After separating observation, interpretation, and future decision, before confirmation | Does not delegate representative-flow structural understanding or promote a current fact into future intent |
-| split | When reading sources for the maintenance planning depth grade | After the four card fields first become unique, before landing the card | Does not compare a Layer 0 change; routes it back as 2a |
+| direct | When reading sources for the maintenance planning depth grade | After the four card fields first become unique, before landing the card | Does not compare a Layer 0 change; routes it back as 2a |

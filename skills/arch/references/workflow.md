@@ -48,4 +48,4 @@ For a managed project, generate the foundation plus every non-retired product ca
 
 A design note or design open item updates only its named capability design zone and deletes the exact routed line in that same binding commit. The note's anchor is the supplied snapshot basis; an open item's confirmed statement is its basis and its card is only the confirmation location.
 
-After the capability-design commit, frontend projects route to design when the owner chooses it, otherwise split. Non-frontend projects route to split. A deliberate session boundary routes to resume. No completion guidance is emitted before the capability batch commits.
+After the capability-design commit, frontend projects route to design when the owner chooses it, otherwise direct. Non-frontend projects route to direct. A deliberate session boundary routes to resume. No completion guidance is emitted before the capability batch commits.

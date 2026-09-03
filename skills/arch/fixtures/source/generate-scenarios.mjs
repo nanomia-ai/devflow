@@ -37,7 +37,7 @@ const JUDGED = {
 const DECIDED = {
   "approval.action": "ask",
   "capability.action": "ask",
-  "route.after": "split",
+  "route.after": "direct",
   "repair.action": "ask"
 };
 
@@ -93,7 +93,7 @@ const cases = [
   branch("refresh-capability-only-change", "refresh-check", "capability-only", "ROUTE", ["REPORT", "ROUTE:resume"], { judged: { "request.kind": "refresh", "refresh.result": "capability-only" } }),
   branch("derive-components", "component-derivation", "derive", "ASK", ["REPORT", "ASK"], { judged: { "components.status": "derive" } }),
   branch("confirm-component-proposal", "component-derivation", "proposed", "ASK", ["REPORT", "ASK"], { judged: { "components.status": "proposed" } }),
-  branch("candidate-research-route", "candidate-research", "needed", "ROUTE", ["REPORT", "ROUTE:split"], { judged: { "research.state": "needed" } }),
+  branch("candidate-research-route", "candidate-research", "needed", "ROUTE", ["REPORT", "ROUTE:direct"], { judged: { "research.state": "needed" } }),
   branch("candidate-research-active", "candidate-research", "active", "ROUTE", ["REPORT", "ROUTE:work"], { judged: { "research.state": "active" } }),
   branch("candidate-research-blocked", "candidate-research", "blocked", "WAIT", ["REPORT", "WAIT"], { judged: { "research.state": "blocked" } }),
   branch("candidate-research-conflicted", "candidate-research", "conflicted", "BLOCK", ["REPORT", "BLOCK"], { judged: { "research.state": "conflicted" } }),
@@ -117,7 +117,7 @@ const cases = [
   branch("capability-docs-route-design", "capability-design", "approve", "ROUTE", ["WRITE", "WRITE", "COMMIT", "ROUTE:design"], { s: { "state.frontend": "needed" }, judged: { "request.kind": "capability-only" }, decided: { "capability.action": "approve", "route.after": "design" }, cover: ["row:capabilityRoute/approve-design", "branch:capabilityRoute/approve-design"] }),
   branch("capability-docs-route-resume", "capability-design", "approve", "ROUTE", ["WRITE", "WRITE", "COMMIT", "ROUTE:resume"], { judged: { "request.kind": "capability-only" }, decided: { "capability.action": "approve", "route.after": "resume" }, cover: ["row:capabilityRoute/approve-resume", "branch:capabilityRoute/approve-resume"] }),
   branch("managed-brownfield-design-refresh", "capability-design", "approve", "ROUTE", ["WRITE", "WRITE", "COMMIT", "ROUTE:resume"], { s: { "state.route": "baseline.design-refresh", "state.brownfield": "yes", "state.layer0": "current", "state.capabilities": "refresh" }, judged: { "request.kind": "capability-only" }, decided: { "capability.action": "approve", "route.after": "resume" } }),
-  branch("route-after-commit-split", "capability-design", "approve", "ROUTE", ["WRITE", "WRITE", "COMMIT", "ROUTE:split"], { judged: { "request.kind": "capability-only" }, decided: { "capability.action": "approve", "route.after": "split" }, cover: ["row:capabilityRoute/approve-split", "branch:capabilityRoute/approve-split"] }),
+  branch("route-after-commit-direct", "capability-design", "approve", "ROUTE", ["WRITE", "WRITE", "COMMIT", "ROUTE:direct"], { judged: { "request.kind": "capability-only" }, decided: { "capability.action": "approve", "route.after": "direct" }, cover: ["row:capabilityRoute/approve-direct", "branch:capabilityRoute/approve-direct"] }),
   scenario("already-current", { s: { "state.route": "complete.product-pass", "state.layer0": "current", "state.capabilities": "current", "state.expected": 0 }, judged: { "request.kind": "none" }, expect: { stage: null, status: "DONE", effects: [] } }),
   scenario("compatible-feedback-write-arch", { s: { "state.route": "marker.compatible-feedback", "compatible.owner": "arch", "compatible.landing": "pending" }, expect: { stage: "compatible-feedback", row: "write-arch", status: "WAIT", effects: ["WRITE", "WAIT"] }, cover: ["stage:compatible-feedback", "row:compatibleFeedback/write-arch", "branch:compatibleFeedback/write-arch"] }),
   scenario("compatible-feedback-write-capability", { s: { "state.route": "marker.compatible-feedback", "compatible.owner": "capability", "compatible.landing": "pending" }, expect: { stage: "compatible-feedback", row: "write-capability", status: "WAIT", effects: ["WRITE", "WAIT"] }, cover: ["stage:compatible-feedback", "row:compatibleFeedback/write-capability", "branch:compatibleFeedback/write-capability"] }),

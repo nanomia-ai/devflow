@@ -30,7 +30,7 @@
 ## 구조 한눈에
 
 ```
-Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증거는 adopt가 역산     Layer 1 (반복): split → work ⇄ verify
+Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증거는 adopt가 역산     Layer 1 (반복): direct → work ⇄ verify
 공통: resume, principles(규칙 정본)
 대상 프로젝트에 생기는 것: .devflow/{project/, tree/, journal.md, users/<id>/ 방}
 배포: Claude 플러그인(.claude-plugin) + Codex 네이티브 플러그인(.codex-plugin — codex/install.*가 등록)
@@ -45,12 +45,12 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증
 |---|---|---|---|
 | `principles` | 공통 규칙·커밋 규율을 소유하며 Principles로 들어온 요청만 분류하고 이름을 명시한 단계는 사전 분류하지 않음 | 일반 devflow 의도 → resume, 명시 단계와 역할 계약 → 이름 난 소유자 | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 |
 | `product` | 문제·정체성·능력·경계·성공 판정을 소유자와 확정 | 명시한 새 프로젝트·제품 기획 요청 → arch·design. 기존 프로젝트의 최초 역산은 Product를 거치지 않고 Adopt가 소유 | 기원 · DD-33 · DD-67 · DD-97 |
-| `arch` | 관리 프로젝트의 현재 기술 Layer 0·stack·코드 구조·data·verify channel·glossary·능력 설계 구역을 확정하고 갱신 | product 또는 관리 상태 glossary·design·baseline 경로 → split·work·verify | DD-42 · DD-43 · DD-69 · DD-97 |
-| `design` | 선택적 UI 접근 방식·원천·token/component 전략·분해 축·검토 표면을 확정 | product·arch → arch 능력 설계와 split | DD-69 |
+| `arch` | 관리 프로젝트의 현재 기술 Layer 0·stack·코드 구조·data·verify channel·glossary·능력 설계 구역을 확정하고 갱신 | product 또는 관리 상태 glossary·design·baseline 경로 → direct·work·verify | DD-42 · DD-43 · DD-69 · DD-97 · DD-99 |
+| `design` | 선택적 UI 접근 방식·원천·token/component 전략·분해 축·검토 표면을 확정 | product·arch → arch 능력 설계와 direct | DD-69 · DD-99 |
 | `adopt` | 무관리 브라운필드의 모든 유지 자료를 Product·Architecture·해당 시 Design·code style·glossary·능력 설계 구역·완전한 영속 도메인 지식으로 명시적으로 투영 | 무관리 문서 및/또는 코드 → 확인된 관리 지식 표면, 그 뒤 정지 | DD-10 · DD-20 · DD-26 · DD-97 |
-| `split` | 한 층씩 task tree와 승인된 실행 제안을 만들어 구현 경계를 소유 | Layer 0·기록·현재 코드 → work | DD-25 · DD-50 · DD-67 |
+| `direct` | 기획 깊이와 실행 단위 크기를 판단하고 연구·작업 카드를 구체화해 실행 제안과 Work 인계를 승인받는 작업 방향을 소유하되 실제 에이전트 배치·감독은 하지 않음 | Layer 0·기록·현재 코드 → work | DD-25 · DD-50 · DD-67 · DD-99 |
 | `work` | 카드 하나의 코드·진행 로그·완료 신호·상위 문서 환류를 끝까지 운반 | 승인 카드·정본·baseline → verify 또는 다음 카드 | DD-09 · DD-48 · DD-56 |
-| `verify` | 실제 실행으로 능력·제품 verdict를 내리고 실패·감리·회고의 생존 경로를 소유 | 닫힌 코드·신호·baseline → split 수리 또는 폐쇄 | DD-21–DD-24 · DD-30 · DD-36 · DD-68 |
+| `verify` | 실제 실행으로 능력·제품 verdict를 내리고 실패·감리·회고의 생존 경로를 소유 | 닫힌 코드·신호·baseline → direct 수리 또는 폐쇄 | DD-21–DD-24 · DD-30 · DD-36 · DD-68 · DD-99 |
 | `resume` | 구조화된 디스크 상태를 단독으로 읽고 중단된 전이를 복구해 다음 단계로 라우팅 | Git·작업·지식 tree·journal·verify 투영 → 해당 entry skill | DD-11 · DD-25 · DD-26 · DD-44 · DD-92 |
 | predicate 동반 정본 | 여러 단계가 공유하는 baseline 판정을 한 곳에서 고정. 상태·검증 판정은 상태 도구로 옮겼다 | 명시된 소비자만 읽고 절차는 각 단계가 소유 | DD-28 · DD-42 · DD-56 · DD-80 · DD-92 |
 | 상태 도구 | 진입·술어·무결성 계산의 소유자, 읽기 전용이고 아무것도 고치지 않는다 | 디스크와 Git → 구역 열넷과 파생 한 줄 `next:`. 부름 하나, 소비자 여섯 | DD-11 · DD-25 · DD-39 · DD-80 |
@@ -83,7 +83,7 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증
 | `skills/<name>/spec.mjs` · `body.md` | P2 실행 작성 정본 — 영문 구조화 동작과 산문 본문 | P2 스킬 작성·생성·평가 시 |
 | `skills/<name>/SKILL.md` · `.generated.json` | 생성 배포물과 영수증 — 작성 정본에서 빌드된 런타임 진입점과 생성 정체성 | devflow 런타임과 빌드·릴리스 검증 시 |
 | `skills/<name>/references/**` | 정확 소비자 동반 자료와 이관 출처 — 런타임 참조는 이름 난 경로로 열고 `legacy-atoms/`는 작성 정본이 아닌 이관 계보로만 보존 | `spec.mjs`·`body.md`가 정확 소비자를 지목할 때. legacy atom은 이관 출처를 대조할 때 |
-| `skills/principles/references/planning/evidence-discipline.md` | 런타임 동반 자료 — 기획 증거 규율 | product·arch·adopt는 진입 시, split은 유지보수 기획 깊이 등급 판정 시 유계하게 |
+| `skills/principles/references/planning/evidence-discipline.md` | 런타임 동반 자료 — 기획 증거 규율 | product·arch·adopt는 진입 시, direct는 유지보수 기획 깊이 등급 판정 시 유계하게 |
 | `skills/principles/references/coordination/coordinator-contract.md` | 역할 계약 — devflow 위에서 다른 실행자를 디스패치하는 `coordinator`의 의무 | 첫 디스패치 전에 |
 
 두 상시 수단은 이 저장소를 고치는 세션이 **스스로** 여는 것이지 소유자가 브리핑하는 것이
@@ -118,7 +118,7 @@ devflow가 **막아 주지 않는다고 선언한** 자리는 별개의 목록�
 곧 위의 경계 밖이다. 무엇을 그 목록에 넣고 뺄지는 소유자가 정한다. 그 결정이 여기 결정을
 뒤집는 것과 같은 무게라는 성질은 그대로이며, 그 무게를 다는 것도 소유자다.
 
-## 결정 색인 — 생성된 투영을 전부 읽고, 이번 변경이 어느 것도 바꾸지 않는지 진술하라
+## 결정 색인 — 생성된 투영을 전부 읽고, 이번 변경이 움직이는 행을 진술하라
 
 결정의 유일한 집은 `design-decisions_ko.md`이고, 색인은 그 원문의 제목과 metadata에서
 생성되는 읽기 전용 투영이다. 이 문서는 색인을 손으로 싣지 않는다.

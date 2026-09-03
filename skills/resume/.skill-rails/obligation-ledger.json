@@ -1794,7 +1794,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -1824,7 +1824,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -1854,7 +1854,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -2326,7 +2326,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -2356,7 +2356,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -2386,7 +2386,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -4787,7 +4787,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -4817,7 +4817,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -4847,7 +4847,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -5319,7 +5319,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -5349,7 +5349,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"
@@ -5379,7 +5379,7 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "spec:TABLES/canonicalNext/ROUTE:split"
+        "spec:TABLES/canonicalNext/ROUTE:direct"
       ],
       "evidence": [
         "fixture:exceptions"

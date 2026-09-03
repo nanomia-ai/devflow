@@ -15,6 +15,27 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.22.0 — 2026-09-03 — Direct work direction
+
+The former `split` stage is now `direct` throughout the live system. The package, public skill id,
+routes, artifact ownership, planning commit receipt, generated adapters, deploy descriptions, and
+current repository checks use one name: `skills/direct`, `devflow:direct`, `ROUTE:direct`,
+`external.direct`, and `direct — ...`. No alias, fallback route, duplicate package, or migration
+branch remains because the owner confirmed that no project uses the former release.
+
+Direct's purpose now matches the work it already owns: determine planning depth and executable-unit
+size, decide which uncertainties need durable research, materialize research or task cards, carry
+dependencies, order, parallelism and model tiers, obtain one bundle approval, and hand the approved
+units to Work. Work still performs research or implementation, Verify judges results, Resume chooses
+the next stage from disk state, and only the external coordinator assigns or supervises agent
+processes. The reserved `re-split pending` marker remains the precise card-redecomposition action and
+routes to Direct; it is not a compatibility alias.
+
+DD-99 records the atomic vocabulary and boundary. Current design, maintenance, and use-case
+instruments use Direct, while historical CHANGELOG entries, rounds, blueprints, migration atoms, and
+the old generated-prompt cleanup filename preserve their evidence. The design decision-index heading
+was also corrected to require naming moved rows instead of claiming that every change moves none.
+
 ## 0.21.0 — 2026-09-03 — purpose-first brownfield adoption
 
 Explicit Adopt now enters the stage the user named and consumes the state tool's

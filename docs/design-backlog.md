@@ -88,7 +88,7 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
   friction) — if the transport lesson from testing recurs in practice, review the wording.
 - Whether the failure ladder's third rung (call the human) gets exhausted repeatedly in
   practice — if observed, re-evaluate competing attempts (2 independent implementations +
-  comparative selection) as an option in split's execution proposal. Grounds for
+comparative selection) as an option in Direct's execution proposal. Grounds for
   non-adoption: judge bias and cost (the 0.9.13 research plan).
 - The retrospective never firing on long-unclosed capabilities — when a capability stays
   open for a long stretch (extended research or maintenance), none of the retrospective's

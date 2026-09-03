@@ -114,7 +114,7 @@
       "status": "ROUTE",
       "effects": [
         "RUN",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -123,7 +123,7 @@
     ]
   },
   {
-    "id": "active-pre-product-research-routes-split",
+    "id": "active-pre-product-research-routes-direct",
     "s": {
       "entry.state": "existing",
       "product.file": "absent",

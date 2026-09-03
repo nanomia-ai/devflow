@@ -38,7 +38,7 @@
   includes foundation and research cards.
 - A baseline path directly under `.devflow/project/capabilities/` that remains in a card's
   `Read first` is legacy wiring. Do not open it or report its absence through that field;
-  select and shape-gate only through the number rule above. split puts no such path on a new
+  select and shape-gate only through the number rule above. direct puts no such path on a new
   card.
 - When the selected file has zero or multiple fixed boundaries, guess no zone and read no
   body. Report the bounded shape facts in one line and continue active work with reviewer's

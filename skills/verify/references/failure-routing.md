@@ -2,7 +2,7 @@
 
 Record each independently attempted non-pass scene once, retaining its directly observed
 signals in the same body and assigning a source id before routing. A pending failure or
-unverified result follows the canonical split-maintenance route; product results never make
+unverified result follows the canonical direct-maintenance route; product results never make
 a tree-root fix card. Repeated repair-lineage evidence remains pending for explicit human
 route selection rather than inventing another card or source id.
 

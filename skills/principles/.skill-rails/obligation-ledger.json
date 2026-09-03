@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:d8bf733639cf4a835ffc78e6774bb6eaf8243374f46d47860fdf23eabafb8710",
+  "intent_hash": "sha256:eae422dc9e5f312079efb5634e3bc3a51f682ce557e7a44eb3cb2dc8201811a1",
   "profile": "p2",
   "atoms": [
     {
@@ -517,7 +517,7 @@
     {
       "id": "external-dependencies-004",
       "source": "intent.external_dependencies[3]",
-      "text": "Stage-local devflow packages for product, adopt, arch, design, resume, split, work, and verify judgment and effects.",
+      "text": "Stage-local devflow packages for product, adopt, arch, design, resume, direct, work, and verify judgment and effects.",
       "candidate_class": "collector",
       "consequence": "medium",
       "disposition": "projected",

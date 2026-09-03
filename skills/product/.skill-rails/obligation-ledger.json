@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:f7495b2dd3f99c43dbcdd5c59698e300aae8a3d1da1ba61347a092ae50af5ba5",
+  "intent_hash": "sha256:cb6b70846bd36818212024e36e217d0ce6618b32ae70e436414f8fc116f28005",
   "profile": "p2",
   "atoms": [
     {
@@ -36,7 +36,7 @@
     {
       "id": "state-dependent-behaviors-001",
       "source": "intent.state_dependent_behaviors[0]",
-      "text": "Durable pre-product research records one origin and routes through split; it never creates or routes directly to implementation work.",
+      "text": "Durable pre-product research records one origin and routes through direct; it never creates or routes directly to implementation work.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",
@@ -47,7 +47,7 @@
       ],
       "evidence": [
         "fixture:durable-pre-product-research-route",
-        "fixture:active-pre-product-research-routes-split"
+        "fixture:active-pre-product-research-routes-direct"
       ]
     },
     {
@@ -81,7 +81,7 @@
     {
       "id": "judgment-points-001",
       "source": "intent.judgment_points[0]",
-      "text": "Research interruption and re-entry preserve the same split-owned origin and 00-project card.",
+      "text": "Research interruption and re-entry preserve the same direct-owned origin and 00-project card.",
       "candidate_class": "judgment/body",
       "consequence": "low",
       "disposition": "projected",

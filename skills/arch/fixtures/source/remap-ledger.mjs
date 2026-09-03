@@ -20,7 +20,7 @@ const homes = [
   { match: /component|boundary.*surviv|컴포넌트|구성 요소/i, target: "spec:STAGES/component-derivation", evidence: "fixture:derive-components" },
   { match: /proposal|approval|confirm|provisional|승인|제안|확정/i, target: "spec:STAGES/approval", evidence: "fixture:approval-refusal" },
   { match: /refresh|contradiction|re-run|갱신|모순/i, target: "spec:STAGES/refresh-check", evidence: "fixture:refresh-product-contradiction" },
-  { match: /route|next stage|design.*split|resume|라우팅|다음 단계/i, target: "spec:TABLES/capabilityRoute/approve-split", evidence: "fixture:route-after-commit-split" },
+  { match: /route|next stage|design.*direct|resume|라우팅|다음 단계/i, target: "spec:TABLES/capabilityRoute/approve-direct", evidence: "fixture:route-after-commit-direct" },
   { match: /prerequisite|entry|product\.md|journal|input|시작|전제|입력/i, target: "spec:STAGES/read-inputs", evidence: "fixture:read-product-glossary-inputs" },
   { match: /interrupt|failure|blocked|unavailable|중단|실패|차단/i, target: "spec:STAGES/proposal", evidence: "fixture:interrupted-proposal" },
   { match: /description:|name: arch|development planning|architecture design|개발 기획/i, target: "file:SKILL.md", evidence: "fixture:initial-architecture-creation" }

@@ -33,7 +33,7 @@ export const OWNERSHIP = {
   ".devflow/project/capabilities": "adopt",
   ".devflow/project/capabilities/**": "adopt",
   ".devflow/journal.md": "external.principles",
-  ".devflow/tree/**": "external.split"
+  ".devflow/tree/**": "external.direct"
 };
 
 export const GUARDS = [
@@ -62,13 +62,13 @@ export const STAGES = [
 ];
 
 export const ARTIFACTS = {
-  product: { path: ".devflow/project/product.md", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.split"], template: "product" },
-  architecture: { path: ".devflow/project/arch.md", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.split", "external.resume"], template: "architecture" },
+  product: { path: ".devflow/project/product.md", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.direct"], template: "product" },
+  architecture: { path: ".devflow/project/arch.md", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.direct", "external.resume"], template: "architecture" },
   codeStyle: { path: ".devflow/project/code-style.md", writer: "adopt", readers: ["stage.adoption", "external.work"], template: "codeStyle" },
-  design: { path: ".devflow/project/design.md", writer: "adopt", readers: ["stage.adoption", "external.design", "external.arch", "external.split", "external.resume"], template: "design" },
-  glossary: { path: ".devflow/project/glossary.md", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.split", "external.work"], template: "glossary" },
+  design: { path: ".devflow/project/design.md", writer: "adopt", readers: ["stage.adoption", "external.design", "external.arch", "external.direct", "external.resume"], template: "design" },
+  glossary: { path: ".devflow/project/glossary.md", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.direct", "external.work"], template: "glossary" },
   journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.adoption"] },
-  capabilityDesigns: { path: ".devflow/project/capabilities", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.split", "external.resume", "external.work"], template: "capabilityDesign" },
+  capabilityDesigns: { path: ".devflow/project/capabilities", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.direct", "external.resume", "external.work"], template: "capabilityDesign" },
   knowledgeNodes: { path: ".devflow/project", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.resume", "external.work"], template: "knowledgeNode" }
 };
 

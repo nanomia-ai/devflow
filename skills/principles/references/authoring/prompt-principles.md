@@ -12,6 +12,6 @@
 6. **Avoid off-the-shelf methodology terms.** Words like spec-driven, TDD, DDD drag in
    baggage you did not choose.
 7. **Repeat the identity.** Copy the identity paragraph from `product.md` verbatim into
-   every task card (exception: research cards — split's research card section).
+   every task card (exception: research cards — direct's research card section).
    This is the only duplication allowed — it costs one paragraph and
    buys "never getting lost."

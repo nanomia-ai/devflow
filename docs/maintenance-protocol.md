@@ -213,7 +213,7 @@ before 0.10.0 is in `docs/changelog-archive.md`.
 - [ ] inside that run, gate A — every canonical reserved journal line fed to the deployed
       parser — is green. It is not a separate command
 - [ ] when the release changes the verification contract, gate B has been passed once: one
-      capability carried through split → work → verify → closure in a real project
+      capability carried through direct → work → verify → closure in a real project
 - [ ] `docs/design.md` read in full and the generated decision index (`node scripts/decision-index.mjs`) read; reason read for every moved subject
 - [ ] when `skills/**` changes, matrix cells re-judged and new shapes checked
 - [ ] `_ko` changed first; fixed terms and ko/en structure and figures match
@@ -228,7 +228,7 @@ before 0.10.0 is in `docs/changelog-archive.md`.
 Gate B runs once by hand for every release that changes the verification contract.
 **Never automate it** — an automated gate B is one more harness inspecting itself, and while
 twenty-six releases through 0.18.8 passed on green tests alone, a new project stopped at its
-first split. The round record for that release owns gate B's specification and raw evidence.
+first Direct entry. The round record for that release owns gate B's specification and raw evidence.
 
 ## 9. Fixed terminology
 

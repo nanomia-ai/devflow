@@ -14,6 +14,6 @@ Human boundary: ask only irreducible decisions and contradictions, then obtain o
 
 Commit boundary: under the one approval, commit complete Layer 0 and any idempotent follow-on record as `adopt — layer 0`, with product.md written last; then use that landed commit as Design head, write the capability documents followed by their K nodes, validate every capsule, and commit both as `adopt — capabilities`. Before product.md is written an interruption remains unmanaged; a post-product pre-commit diff is owner-directed Git recovery; after the first commit and before second-boundary writes Resume routes the managed missing baseline to Arch.
 
-Consumers: Arch reads Layer 0 and capability zones; Split reads product and architecture; Work and Resume read capability and knowledge documents.
+Consumers: Arch reads Layer 0 and capability zones; Direct reads product and architecture; Work and Resume read capability and knowledge documents.
 
 Templates: templates/adoption-proposal.md, product.md, architecture.md, applicable design.md, code-style.md, glossary.md, capability-design.md, knowledge-node.md, and result.md.

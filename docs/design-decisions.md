@@ -858,13 +858,27 @@ This resolves the four conditions the v0.14.0 audit (finding 4.1) proved unsatis
 
 ### DD-69 · design confirms six Layer 0 decisions, split cards own the build, and only result facts enter design.md as upper-document feedback (v0.15.2)
 
-Subject: The task tree and its cards | Introduced: v0.15.2 | State: active
+Subject: The task tree and its cards | Introduced: v0.15.2 | State: active, partly corrected by DD-99 (v0.22.0)
 
 The former design was an optional stage that ran before the tree while requiring a token file and `/preview` as both the real output and the completion signal. An empty repository has neither an application to run nor a card that owns code output, so one skill split into two readings: the document plans, while the real artifacts are built. design's output is one design.md carrying six Layer 0 decisions — Approach, Design source, Token strategy, Component strategy, Decomposition axis, and Review surface — plus the Build scope. The six fields are Layer 0 regardless of file presence; `not used` and `none`, with their reasons, are also values. Once the user confirms the document, the stage ends with the existing `design — design.md` Layer 0 commit, and split cards and their execution proposal own the token, theme, component, and preview build.
 
 A first entry after the tree and a direction change use DD-50's single record-first path. split first lands the original request in `maintenance routing pending` and sends it to design through 2a. The line is preserved through the design commit and consumed when split plans cards and the execution proposal from the same source. Existing cards follow the upper-document change contract: keep them when they can remain true together, otherwise mark them `.stale.` and re-split. This creates no new state, commit kind, or progress ledger.
 
 When the build confirms a planned path, name, or command, the discovery→update table replaces exactly one line in design.md. When the direction of any of the six decisions changes, design confirmation runs again through the same record-first path. DR-12 recorded the reason table unification failed as “some wrong sides have no landing row in the table (design.md · an existing code-style line · a completion signal that runs but asserts the contradicted behavior).” This decision does not remove the existing document-hierarchy procedure for violations; it only adds design.md's missing landing row, so it does not re-propose the rejected design. It also does not add design.md to DD-43's freshness inputs.
+
+### DD-99 · `direct` names the work-direction stage; the old `split` name described only one technique inside its boundary (v0.22.0)
+
+Subject: The task tree and its cards | Introduced: v0.22.0 | State: active
+
+The stage did more than divide work: it judged planning depth and executable-unit size, decided which uncertainties required durable research, materialized research or task cards, carried dependencies, order, parallelism and model tiers, obtained one bundle approval, and handed those approved units to Work. Calling that whole boundary `split` made one technique look like the purpose and left the planning and handoff responsibilities hard to infer. The invariant “one concept, one word; skill name = artifact name = the single word” therefore requires the broader purpose name `direct`.
+
+The rename changes identity, routing and ownership together: `skills/direct`, `devflow:direct`, `ROUTE:direct`, `external.direct`, `project.direct-or-work`, and `direct — ...` planning receipts are one atomic vocabulary. Direct owns work direction only. Work still performs research or implementation, Verify judges results, Resume chooses a stage from disk state, and the external coordinator alone assigns and supervises agent processes under DD-70. The reserved `re-split pending` marker remains because it names the narrower repair act of decomposing stale cards again; its destination is Direct, and it is neither a stage alias nor a compatibility route.
+
+The owner confirmed that no project uses the former release, so an alias, duplicate package, fallback route, or migration branch would create two names and two possible truths without a consumer. Historical CHANGELOG, rounds, blueprints, legacy atoms, and the old generated-prompt cleanup filename keep their original evidence. Keeping `split` with a longer description was rejected because identity would still contradict purpose; `plan` was rejected because Product, Arch, and Design also plan; `coordinate` and `orchestrate` were rejected because they collide with DD-70's external role; renaming `re-split` merely to remove the token was rejected because it would broaden the data grammar while losing a precise action.
+
+Affected coordinates: all authored P2 package routes, readers, writers, fixtures, and generated adapters; the component and flow maps; deploy manifests and current repository checks; DD-69's stage-name wording; and the current maintenance instruments. DD-25's disk approval boundary, DD-69's document-versus-build separation, and DD-70's external coordinator boundary otherwise remain in force.
+
+Revisit when Direct begins assigning or supervising processes, Work can no longer consume its approved units without another planning owner, `re-split pending` is observed to act as a package alias rather than a card-repair action, or a real installed project requiring migration is produced.
 
 ### DD-90 · A T-low card carries its bounded code basis and essential constraint, and a task-specific completion signal owns its named fixture (v0.19.0)
 

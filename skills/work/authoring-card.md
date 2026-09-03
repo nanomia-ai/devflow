@@ -17,12 +17,12 @@ Judgment inputs: implementation next point; review reduction after the anchored 
 upper-document feedback class and its parser-validated complete owner/source/coordinate set; one exact closed-history basis; and whether a committed
 research synthesis names one Arch owner now.
 
-Owners: principles owns route and state facts; split owns card contract; work owns progress,
+Owners: principles owns route and state facts; direct owns card contract; work owns progress,
 marker production, card status, and task boundary; reviewer owns clean judgment; Arch
 owns current promoted knowledge for managed projects; the named semantic owner owns compatible feedback.
 
 Terminals: BLOCK on unavailable structured state, malformed evidence, missing bounded input,
-premature marker, broad history, lost passengers, or broken review lineage; ROUTE split for
+premature marker, broad history, lost passengers, or broken review lineage; ROUTE direct for
 card authority; ROUTE resume for canonical non-work and marker landing; ASK for the third
 objection disposition; WAIT on remote evidence, blockade, or mid-task handoff; ROUTE verify
 only from the boundary effect plan; DONE only after card.done + boundary.complete are

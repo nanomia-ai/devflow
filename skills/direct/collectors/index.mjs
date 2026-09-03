@@ -42,7 +42,7 @@ async function canonicalState(context) {
   if (!cache.has(context)) cache.set(context, (async () => {
     const tool = await stateTool(context);
     const url = pathToFileURL(tool.path);
-    url.searchParams.set("split_collector", "canonical");
+    url.searchParams.set("direct_collector", "canonical");
     const module = await import(url.href);
     if (typeof module.calculateState !== "function") throw new Error("project-state does not export calculateState");
     const result = await module.calculateState({ root: tool.projectRoot });
@@ -178,7 +178,7 @@ function approvalIssue(state) {
 
 function planningReceipt(state) {
   const transaction = headTransaction(state);
-  if (!transaction.subject.startsWith("split — ") || !transaction.paths.includes(".devflow/journal.md") || !transaction.cards.length) return NONE;
+  if (!transaction.subject.startsWith("direct — ") || !transaction.paths.includes(".devflow/journal.md") || !transaction.cards.length) return NONE;
   const entries = projectedCardEntries(state);
   const details = transaction.cards.map(card => entries.find(entry => entry.file === card));
   if (details.some(detail => !detail || detail.approval !== "effective")) return NONE;

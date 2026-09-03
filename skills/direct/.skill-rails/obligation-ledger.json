@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:0613926162278935cb5c3cb215ad567179243c943e893ab42579146d745a6855",
+  "intent_hash": "sha256:aeaff68e04e5dc20a2c9b2a22fb83b250513c59843bb0b2dd7efeb2ac001adda",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Task decomposition and execution planning. Opens the task tree (.devflow/tree/) one layer at a time, creates task cards, and gets the execution proposal (order, parallelism, model tiers) approved by the user. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
+      "text": "Work direction. Determines planning depth and executable unit size, materializes research or task cards, and gets the execution proposal (order, parallelism, model tiers, Work handoff) approved by the user. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",
@@ -21,7 +21,7 @@
     {
       "id": "problem-001",
       "source": "intent.problem",
-      "text": "Preserve the behavior of immutable repository sources `skills/split/SKILL.md` and `skills/split/SKILL_ko.md`, identified by their recorded source hashes, without silently changing their obligations.",
+      "text": "Turn an accepted request into durable, user-approved units that Work can execute without losing request identity, duplicating planning, or letting planning perform execution or write current domain knowledge.",
       "candidate_class": "judgment/body",
       "consequence": "low",
       "disposition": "projected",
@@ -449,7 +449,7 @@
       "consequence": "high",
       "disposition": "projected",
       "targets": [
-        "spec:DECLARATIONS/splitWritesNoK"
+        "spec:DECLARATIONS/directWritesNoK"
       ],
       "evidence": [
         "fixture:several-independent-sibling-cards-remain-several"
@@ -1739,7 +1739,7 @@
       "consequence": "low",
       "disposition": "projected",
       "targets": [
-        "spec:DECLARATIONS/splitWritesNoK"
+        "spec:DECLARATIONS/directWritesNoK"
       ],
       "evidence": [
         "fixture:unrelated-old-project-research-does-not-bind"

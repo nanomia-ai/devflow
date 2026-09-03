@@ -33,7 +33,7 @@
 
 - ASK: product/component/stack/structure/channel/proposal/approval choices and bounded repairs.
 - WAIT: active external research or clean-context channel verification.
-- ROUTE: product, split, work, design, resume.
+- ROUTE: product, direct, work, design, resume.
 - BLOCK: state kernel unavailable, canonical integrity failure, or conflicted/unavailable blocking research.
 - DONE: explicit approval refusal or already complete state.
 - Evidence: scenario fixtures execute every guard, stage branch, and table row; source fixtures create Git-backed project states and run both simulate and stage; format fixtures round-trip exact line formats; template tests assert schema and K prohibitions.
@@ -44,7 +44,7 @@
 - Knowledge-landing consumer: task + `SKILL.md` + current Decision (including exact marker JSON) + `references/knowledge-landing.md` + the marker's exact committed card coordinate and named owner.
 - Capability-design consumer: task + `SKILL.md` + current Decision + `references/schemas.md` + product, glossary, architecture, cited decision records, and existing capability documents.
 - Channel verifier: its role section + proposed exact command + smallest representative target; it does not receive the authoring card.
-- Split/design/resume consumers: committed architecture and capability artifacts plus only the durable dependencies each artifact names.
+- Direct/design/resume consumers: committed architecture and capability artifacts plus only the durable dependencies each artifact names.
 
 ## Completion boundary
 

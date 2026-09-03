@@ -10,7 +10,7 @@ Each capability row identifies a stable number and name, the user outcome it ena
 
 ## why: evidence-boundary
 
-Raw repository, contract, and research facts inform a judgment but do not become product truth by themselves. Split owns durable `00-project` research and synthesis work; only an explicitly approved product write at its canonical binding boundary can replace the current plan.
+Raw repository, contract, and research facts inform a judgment but do not become product truth by themselves. Direct owns materializing and approving durable `00-project` research cards; Work executes approved research, and Product synthesizes settled evidence into product judgment. Only an explicitly approved product write at its canonical binding boundary can replace the current plan.
 
 ## guard: raw-state-unavailable
 
@@ -18,7 +18,7 @@ Stop when a required project-state read cannot establish product entry, product 
 
 ## guard: existing-project-research
 
-An observed pending or effective `00-project` research card carries its exact origin and path into the decision and routes to split. Product does not record a second origin or route that durable work to implementation.
+An observed pending or effective `00-project` research card carries its exact origin and path into the decision and routes to direct. Product does not record a second origin or route that durable work to implementation.
 
 ## guard: compatible-feedback-shape
 
@@ -38,7 +38,7 @@ Why: explicit unmanaged reconstruction remains Adopt's separate entry, while Res
 
 ## stage: research
 
-Judgment: research.need is one of inline, needed, blocked, settled. Judge only whether unresolved uncertainty materially changes a service-level option, scope boundary, or verifiability; a small same-session question may remain inline. The collector observes the durable origin, exact `00-project` card path, and pending/effective state: either existing state routes through split without recording again, or needed research records one durable origin and routes through split.
+Judgment: research.need is one of inline, needed, blocked, settled. Judge only whether unresolved uncertainty materially changes a service-level option, scope boundary, or verifiability; a small same-session question may remain inline. The collector observes the durable origin, exact `00-project` card path, and pending/effective state: either existing state routes through direct without recording again, or needed research records one durable origin and routes through direct.
 
 Why: High-consequence unresolved uncertainty needs a durable, resumable cycle instead of an invented answer.
 

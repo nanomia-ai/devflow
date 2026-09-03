@@ -34,7 +34,7 @@ Core philosophy — every modification must keep to it:
 ## Structure at a glance
 
 ```
-Layer 0 (once, or inherited): product → arch → [design] · existing project evidence: adopt back-derives     Layer 1 (loop): split → work ⇄ verify
+Layer 0 (once, or inherited): product → arch → [design] · existing project evidence: adopt back-derives     Layer 1 (loop): direct → work ⇄ verify
 Shared: resume, principles (canonical rules)
 Created in the target project: .devflow/{project/, tree/, journal.md, users/<id>/ rooms}
 Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugin — registered by codex/install.*)
@@ -50,12 +50,12 @@ points to from their actual sources.
 |---|---|---|---|
 | `principles` | owns common rules and commit discipline; it classifies only requests that enter Principles and does not preflight an explicitly named stage | general devflow intent → resume; explicit stages and role contracts enter their named owner | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 |
 | `product` | confirms the problem, identity, capabilities, boundary, and success criteria with the owner | explicit new-project or product-planning request → arch and design; initial existing-project reconstruction bypasses Product and belongs to Adopt | origin · DD-33 · DD-67 · DD-97 |
-| `arch` | confirms and refreshes current technical Layer 0, stack, code structure, data, verify channel, glossary, and capability design zones in managed projects | product or a managed glossary/design/baseline route → split, work, and verify | DD-42 · DD-43 · DD-69 · DD-97 |
-| `design` | optionally confirms UI approach, source, token/component strategies, decomposition axis, and review surface | product and arch → arch capability design and split | DD-69 |
+| `arch` | confirms and refreshes current technical Layer 0, stack, code structure, data, verify channel, glossary, and capability design zones in managed projects | product or a managed glossary/design/baseline route → direct, work, and verify | DD-42 · DD-43 · DD-69 · DD-97 · DD-99 |
+| `design` | optionally confirms UI approach, source, token/component strategies, decomposition axis, and review surface | product and arch → arch capability design and direct | DD-69 · DD-99 |
 | `adopt` | explicitly accounts for all maintained brownfield sources and projects them into Product, Architecture, applicable Design, code style, glossary, capability design zones, and complete durable domain knowledge | unmanaged documents and/or code → a confirmed managed planning and knowledge surface, then stop | DD-10 · DD-20 · DD-26 · DD-97 |
-| `split` | owns implementation boundaries by opening one task-tree layer and approving an execution proposal | Layer 0, records, and current code → work | DD-25 · DD-50 · DD-67 |
+| `direct` | owns work direction by judging planning depth and executable-unit size, materializing research or task cards, and approving their execution proposal and Work handoff; it does not assign or supervise agent processes | Layer 0, records, and current code → work | DD-25 · DD-50 · DD-67 · DD-99 |
 | `work` | carries one card's code, progress log, completion signal, and upper-document feedback to completion | approved card, canon, and baseline → verify or the next card | DD-09 · DD-48 · DD-56 |
-| `verify` | executes capability and product verdicts and owns survival paths for failure, audit, and retrospective events | closed code, signals, and baseline → repair through split or closure | DD-21–DD-24 · DD-30 · DD-36 · DD-68 |
+| `verify` | executes capability and product verdicts and owns survival paths for failure, audit, and retrospective events | closed code, signals, and baseline → repair through direct or closure | DD-21–DD-24 · DD-30 · DD-36 · DD-68 · DD-99 |
 | `resume` | solely reads structured disk state, recovers interrupted transitions, and routes the next stage | Git, work and knowledge trees, journal, and verify projection → the applicable entry skill | DD-11 · DD-25 · DD-26 · DD-44 · DD-92 |
 | predicate companions | fix the shared baseline judgment in one place; state and verification judgments moved to the state tool | only named consumers read them; each stage owns its procedure | DD-28 · DD-42 · DD-56 · DD-80 · DD-92 |
 | state tool | owns the entry, predicate, and integrity computation, read-only and repairing nothing | disk and Git → fourteen zones and a derived `next:` line; one call, six consumers | DD-11 · DD-25 · DD-39 · DD-80 |
@@ -88,7 +88,7 @@ judged from source and repository checks.
 | `skills/<name>/spec.mjs` · `body.md` | P2 executable authored canon — English structured behavior and prose body | when authoring, generating, or evaluating a P2 skill |
 | `skills/<name>/SKILL.md` · `.generated.json` | generated deploy artifact and receipt — the runtime entry built from authored canon and its generation identity | at devflow runtime and during build or release verification |
 | `skills/<name>/references/**` | exact-consumer companions and migration provenance — runtime references open by named path; `legacy-atoms/` preserves migration lineage and is not authored canon | when `spec.mjs` or `body.md` names the exact consumer; legacy atoms when migration provenance is inspected |
-| `skills/principles/references/planning/evidence-discipline.md` | runtime companion — planning evidence discipline | on entry for product, arch, and adopt; boundedly when split judges the maintenance planning depth grade |
+| `skills/principles/references/planning/evidence-discipline.md` | runtime companion — planning evidence discipline | on entry for product, arch, and adopt; boundedly when direct judges the maintenance planning depth grade |
 | `skills/principles/references/coordination/coordinator-contract.md` | role contract — duties of the `coordinator` that dispatches other executors above devflow | before the first dispatch |
 
 The two standing instruments are opened by the session changing this repository **itself**,
@@ -128,7 +128,7 @@ person's document — that is, beyond the boundary above. The owner decides what
 leaves it. That such a decision carries the same weight as overturning a decision here is
 unchanged, and the owner is the one who weighs it.
 
-## Decision index — read all of the generated projection, then state that this change moves none of them
+## Decision index — read all of the generated projection, then state which rows this change moves
 
 The one home of a decision is `design-decisions.md`, and the index is a read-only projection
 generated from that source's titles and metadata. This document does not carry the index by hand.

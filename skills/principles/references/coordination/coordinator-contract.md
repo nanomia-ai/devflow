@@ -5,8 +5,8 @@ in the hook and the document map. This contract names no particular tool; it def
 duties only through cards, claims, gates, the integration branch, and completion signals.
 
 Rules:
-1. Before assigning parallel implementation workers, have one split worker mint the layer's
-   child numbers in a `split — begin <parent>` commit, then land the cards, `Approval`, and
+1. Before assigning parallel implementation workers, have one Direct worker mint the layer's
+   child numbers in a `direct — begin <parent>` commit, then land the cards, `Approval`, and
    layer structure on the integration branch in a planning commit. Do not attach an
    implementation worker to a layer that is unopened or whose execution proposal has not
    been approved. Assign one implementation worker to a card at a time, and name the task-card

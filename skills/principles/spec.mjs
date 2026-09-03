@@ -45,7 +45,7 @@ export const OWNERSHIP = {
   ".devflow/project/code-style.md": "project.arch",
   ".devflow/project/glossary.md": "project.product",
   ".devflow/project/capabilities/**": "project.arch-or-adopt",
-  ".devflow/tree/**": "project.split-or-work",
+  ".devflow/tree/**": "project.direct-or-work",
   ".devflow/journal.md": "project.stage-owner",
   ".git/**": "external.git"
 };
@@ -122,10 +122,10 @@ export const DECLARATIONS = {
   state_api: { value: "calculateState -> devflow/project-state/2; CLI text is compatibility only", consumer: "resume|stages" },
   stateful_route: { value: "Every stateful, status, or project-read-only request that enters Principles routes exactly once to resume; explicit stage invocations use that stage's guards.", consumer: "resume|explicit stages" },
   tweak_lane: { value: "Conversation all-no gate, bounded preflight, one edit/check/diff sequence, exactly one tweak commit; card=0, K=0, journal=0.", consumer: "all devflow entries" },
-  mixed_items: { value: "Route only failing items through normal flow, retain accepted interruption scope, then re-enter remaining tweak items without loss or a route loop.", consumer: "resume|split" },
+  mixed_items: { value: "Route only failing items through normal flow, retain accepted interruption scope, then re-enter remaining tweak items without loss or a route loop.", consumer: "resume|direct" },
   role_bypass: { value: "Role-contract invocation bypasses request classification and project-state collection.", consumer: "roles" },
   knowledge_landing: { value: "marker.knowledge-landing uses owner, arch|adopt provenance writer, and card-path@full-commit source; Arch consumes both writers and current Work produces arch only; no residual object, route, token, or batch concept.", consumer: "project-state|arch|work" },
-  research_entry: { value: "Ordinary 00-project cards are research-only when their canonical heading is '# NN.N Research: ...'; active or pending research outranks setup.no-product.", consumer: "project-state|resume|split|work" },
+  research_entry: { value: "Ordinary 00-project cards are research-only when their canonical heading is '# NN.N Research: ...'; active or pending research outranks setup.no-product.", consumer: "project-state|resume|direct|work" },
   closed_history: { value: "Legacy closed-history descent remains exact and no automatic migration is added.", consumer: "work|verify|resume" },
   package_portability: { value: "Every runtime and policy reference resolves inside the copied package.", consumer: "build|runtime" }
   ,canonical_format_ownership: { value: "Every immutable journal/progress form has exactly one owner: a native FORMAT when its parser can preserve the canonical byte order, otherwise the mandatory canonicalJournalProgressGrammar template plus project-state parser.", consumer: "principles|project-state|stages" }

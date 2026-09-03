@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:41744730ec45da9d6c2ca79ac46fe0888431e59d19dc71d2e5aa6eb9819d18ee",
+  "intent_hash": "sha256:f4d3b9c84d1e8a81efe612208560a3d8601ba69ded5fd2205d85456e8b11a744",
   "profile": "p2",
   "atoms": [
     {
@@ -328,7 +328,7 @@
     {
       "id": "state-dependent-behaviors-005",
       "source": "intent.state_dependent_behaviors[4]",
-      "text": "Approved adoption stops after reporting and does not synthesize another route or automatically opt into Split, Arch, or Resume.",
+      "text": "Approved adoption stops after reporting and does not synthesize another route or automatically opt into Direct, Arch, or Resume.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",
@@ -426,7 +426,7 @@
     {
       "id": "external-dependencies-004",
       "source": "intent.external_dependencies[3]",
-      "text": "Arch, Split, Work, and Resume as readers of the canonical artifacts; none is automatically invoked on completion.",
+      "text": "Arch, Direct, Work, and Resume as readers of the canonical artifacts; none is automatically invoked on completion.",
       "candidate_class": "collector",
       "consequence": "medium",
       "disposition": "projected",

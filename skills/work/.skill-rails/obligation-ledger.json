@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:d3cd8b25e3f683d64211b6d84649851099c7bbe1383da57b99750bb23bcd288b",
+  "intent_hash": "sha256:ba37075d17746f7033cc45c4bf19235421db5af93aeffc56d250bb9c51be5da4",
   "profile": "p2",
   "atoms": [
     {
@@ -114,7 +114,7 @@
     {
       "id": "near-misses-002",
       "source": "intent.near_misses[1]",
-      "text": "Planning or repairing the card contract; split owns it.",
+      "text": "Planning or repairing the card contract; direct owns it.",
       "candidate_class": "guard",
       "consequence": "medium",
       "disposition": "projected",
@@ -122,7 +122,7 @@
         "spec:GUARDS/non-work-route"
       ],
       "evidence": [
-        "fixture:invalid-card-routes-split"
+        "fixture:invalid-card-routes-direct"
       ]
     },
     {
@@ -231,7 +231,7 @@
     {
       "id": "outputs-003",
       "source": "intent.outputs[2]",
-      "text": "A route to split, resume, Arch through resume, or verify when that owner is next.",
+      "text": "A route to direct, resume, Arch through resume, or verify when that owner is next.",
       "candidate_class": "artifact",
       "consequence": "medium",
       "disposition": "projected",
@@ -483,7 +483,7 @@
     {
       "id": "external-dependencies-003",
       "source": "intent.external_dependencies[2]",
-      "text": "Split, Resume, Arch, Verify, the clean reviewer role, and the person at their owned boundaries.",
+      "text": "Direct, Resume, Arch, Verify, the clean reviewer role, and the person at their owned boundaries.",
       "candidate_class": "collector",
       "consequence": "medium",
       "disposition": "projected",

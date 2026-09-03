@@ -138,7 +138,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -457,7 +457,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -474,7 +474,7 @@
     }
   },
   {
-    "id": "capability-not-applicable-is-routed-to-split",
+    "id": "capability-not-applicable-is-routed-to-direct",
     "s": {
       "projection.transition": "none",
       "projection.channel": "available",
@@ -490,7 +490,7 @@
       "status": "ROUTE",
       "effects": [
         "REPORT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -507,7 +507,7 @@
     }
   },
   {
-    "id": "blocked-capability-closure-records-and-routes-to-split",
+    "id": "blocked-capability-closure-records-and-routes-to-direct",
     "s": {
       "projection.transition": "none",
       "projection.channel": "available",
@@ -524,7 +524,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -716,7 +716,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [],

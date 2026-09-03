@@ -38,7 +38,7 @@ Resume selects the owning stage or stopping terminal; downstream skills own thei
 
 ## why: planning-boundaries
 
-Planning repairs and tree openings retain their existing split owner, request scope, and recorded boundary rather than widening resume into planning.
+Planning repairs and tree openings retain their existing direct owner, request scope, and recorded boundary rather than widening resume into planning.
 
 ## why: recovery-policy
 

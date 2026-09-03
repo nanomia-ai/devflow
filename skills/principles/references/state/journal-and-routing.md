@@ -53,7 +53,7 @@ always match exactly one actual folder. Two or more matches are an integrity ano
 either case.
 
 Before creating a layer's first child or folder, land its layer-opening record together
-with any uncommitted source record in a `split — begin <parent>` commit. When one source
+with any uncommitted source record in a `direct — begin <parent>` commit. When one source
 spans several depth-1 units, write one layer-opening marker per affected parent, all
 carrying the same `source-json` value and landing in one begin commit — that locator is the
 bundle's identity, so no separate bundle identifier is created. `<parent>` is then those

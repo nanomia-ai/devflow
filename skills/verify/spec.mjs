@@ -44,7 +44,7 @@ export const OWNERSHIP = {
   ".devflow/tree/**/verify.md": "verify",
   ".devflow/tree/verify.md": "verify",
   ".devflow/journal.md": "external.principles",
-  "repair cards and re-split markers": "external.split",
+  "repair cards and re-split markers": "external.direct",
   "capability baseline closure": "external.arch-or-adopt"
 };
 
@@ -75,12 +75,12 @@ export const STAGES = [
     pending: [["REPORT", { template: "route" }], "WAIT"],
     "pass-record": [["WRITE", { artifact: "record", template: "record" }], ["COMMIT", { authority: "external.principles", transition: "verification-result" }], "NEXT"],
     "await-execution-evidence": [["REPORT", { template: "route" }], "WAIT"],
-    fail: [["WRITE", { artifact: "record", template: "record" }], ["COMMIT", { authority: "external.principles", transition: "verification-result" }], "ROUTE:split"],
-    unverified: [["WRITE", { artifact: "record", template: "record" }], ["COMMIT", { authority: "external.principles", transition: "verification-result" }], "ROUTE:split"]
+    fail: [["WRITE", { artifact: "record", template: "record" }], ["COMMIT", { authority: "external.principles", transition: "verification-result" }], "ROUTE:direct"],
+    unverified: [["WRITE", { artifact: "record", template: "record" }], ["COMMIT", { authority: "external.principles", transition: "verification-result" }], "ROUTE:direct"]
   }, body: "stage: result-routing" },
   { id: "capability-closure", reads: ["verification.layer", "record.execution", "closure.capability"], acceptsUnknown: [], done: s => (s.closure.capability === "closed" && s.record.execution === "current") || s.verification.layer !== "capability", table: "capability", reentry: "rejudge", branches: {
-    "not-applicable": [["REPORT", { template: "route" }], "ROUTE:split"],
-    blocked: [["WRITE", { artifact: "record", template: "record" }], ["COMMIT", {}], "ROUTE:split"],
+    "not-applicable": [["REPORT", { template: "route" }], "ROUTE:direct"],
+    blocked: [["WRITE", { artifact: "record", template: "record" }], ["COMMIT", {}], "ROUTE:direct"],
     ready: [["READ", { artifact: "baselines" }], ["WRITE", { artifact: "record", template: "record" }], ["COMMIT", {}], "ROUTE:arch"]
   }, body: "stage: capability-closure" },
   { id: "product-stop", reads: ["verification.layer", "record.execution", "closure.product"], acceptsUnknown: [], done: s => (s.closure.product === "stop" && s.record.execution === "current") || s.verification.layer !== "product", table: "product", reentry: "rejudge", branches: {

@@ -62,7 +62,7 @@ export const OWNERSHIP = {
   ".devflow/journal.md#remote-evidence-finalizing": "work",
   ".devflow/project/<semantic-owner>.md#compatible-upper-feedback": "semantic owner",
   "task card and progress lifecycle": "work",
-  "task card contract": "split",
+  "task card contract": "direct",
   "Git and devflow route facts": "principles.calculateState",
   "clean review judgment": "reviewer",
   "knowledge marker producer": "work",
@@ -103,7 +103,7 @@ export const GUARDS = [
   { id: "knowledge-landing-before-closure", reads: ["knowledge.marker", "research.checkpoint"], acceptsUnknown: [], when: s => s.knowledge.marker === "current-source" && s.research.checkpoint === "committed", then: "ROUTE:resume", body: "guard: knowledge-landing-before-closure" },
   { id: "compatible-feedback-set-required", reads: ["card.target", "feedback.action", "feedback.pendingSetStatus", "feedback.lifecycleAction", "feedback.lifecycles", "feedback.pendingSet", "feedback.eligibleSet"], acceptsUnknown: ["feedback.action", "feedback.pendingSetStatus", "feedback.lifecycleAction", "feedback.pendingSet", "feedback.eligibleSet"], when: s => compatibleFeedbackSetInvalid(s), then: "BLOCK", body: "guard: compatible-feedback-set-required" },
   { id: "compatible-feedback-before-closure", reads: ["feedback.marker"], acceptsUnknown: [], when: s => s.feedback.marker === "current-source", then: "ROUTE:resume", body: "guard: compatible-feedback-before-closure" },
-  { id: "invalid-card", reads: ["card.phase", "card.contract"], acceptsUnknown: [], when: s => s.card.phase === "invalid" || s.card.contract === "invalid", then: "ROUTE:split", body: "guard: invalid-card" },
+  { id: "invalid-card", reads: ["card.phase", "card.contract"], acceptsUnknown: [], when: s => s.card.phase === "invalid" || s.card.contract === "invalid", then: "ROUTE:direct", body: "guard: invalid-card" },
   { id: "missing-bounded-basis", reads: ["card.basis"], acceptsUnknown: [], when: s => s.card.basis === "missing" || s.card.basis === "invalid", then: "BLOCK", body: "guard: missing-bounded-basis" },
   { id: "closed-history-refusal", reads: ["history.basis"], acceptsUnknown: [], when: s => s.history.basis === "broad" || s.history.basis === "invalid", then: "BLOCK", body: "guard: closed-history-refusal" },
   { id: "invalid-progress-evidence", reads: ["completion.state", "review.state", "carry.state", "remote.state"], acceptsUnknown: [], when: s => s.completion.state === "invalid" || s.review.state === "invalid" || s.carry.state === "invalid" || s.remote.state === "invalid", then: "BLOCK", body: "guard: invalid-progress-evidence" },
@@ -174,7 +174,7 @@ export const STAGES = [
     unverified: [["REPORT", { scope: "remote-evidence-unverified" }], "WAIT"]
   }, body: "stage: remote-evidence" },
   { id: "implement-and-signal", reads: ["completion.state", "remote.state"], needs: ["implementation.action", "history.basis"], acceptsUnknown: [], done: s => s.completion.state === "pass" || s.remote.state === "pass" || s.remote.state === "finalizing", table: "implementation", reentry: "rejudge", branches: {
-    "scope-escape": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: blocking reason" }], "ROUTE:split"],
+    "scope-escape": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: blocking reason" }], "ROUTE:direct"],
     park: [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: stopping" }], ["WRITE", { artifact: "activeCard", scope: "release-claim" }], "ROUTE:work"],
     handoff: [["REPORT", { scope: "mid-task-handoff-refused" }], "WAIT"],
     repair: [["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: nonpass anchor" }], ["READ", { scope: "declared inputs and exact authorized closed-history target only" }], ["WRITE", { artifact: "activeCard", scope: "card destination repair" }], ["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["RUN", { scope: "completion-signal" }], ["WRITE", { artifact: "activeCard", template: "completionSignalResult" }], "WAIT"],
@@ -182,7 +182,7 @@ export const STAGES = [
     continue: [["READ", { scope: "declared inputs and exact authorized closed-history target only" }], ["WRITE", { artifact: "activeCard", scope: "card destination" }], ["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["REPORT", { scope: "next-implementation-point" }], "NEXT"]
   }, body: "stage: implement-and-signal" },
   { id: "review-reduction", reads: ["remote.state", "review.state"], needs: ["review.action"], acceptsUnknown: [], done: s => s.review.state === "pass" || s.review.state === "waived" || s.review.state === "not-applicable" || s.remote.state === "finalizing", table: "review", reentry: "rejudge", branches: {
-    "contract-route": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: card contract" }], ["WRITE", { artifact: "activeCard", scope: "release-claim" }], "ROUTE:split"],
+    "contract-route": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: card contract" }], ["WRITE", { artifact: "activeCard", scope: "release-claim" }], "ROUTE:direct"],
     "ask-disposition": ["ASK"],
     "apply-disposition": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: review disposition" }], ["WRITE", { artifact: "activeCard", scope: "person-directed repair" }], ["RUN", { scope: "completion-signal" }], ["WRITE", { artifact: "activeCard", template: "completionSignalResult" }], ["READ", { artifact: "reviewerContract" }], ["DISPATCH", { role: "reviewer" }], "WAIT"],
     "block-nonpass": [["REPORT", { scope: "spent-disposition-nonpass" }], "BLOCK"],

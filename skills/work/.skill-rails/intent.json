@@ -10,7 +10,7 @@
   ],
   "near_misses": [
     "A passing tweak; principles completes it and never invokes work.",
-    "Planning or repairing the card contract; split owns it.",
+    "Planning or repairing the card contract; direct owns it.",
     "Writing current promoted knowledge; Arch owns it for every managed project.",
     "Capability or product verification; verify owns it."
   ],
@@ -22,7 +22,7 @@
   "outputs": [
     "One fail-closed Decision with the next ordered work effect plan.",
     "Canonical progress, marker, commit, handoff, feedback, and status effects owned by work.",
-    "A route to split, resume, Arch through resume, or verify when that owner is next."
+    "A route to direct, resume, Arch through resume, or verify when that owner is next."
   ],
   "irreversible_boundaries": [
     "Publishing the claim, task, knowledge-marker, integration, or boundary commit.",
@@ -46,7 +46,7 @@
   "external_dependencies": [
     "Git for shared truth, full commit IDs, checkpoints, ancestry, and card identity.",
     "The sibling principles package for calculateState schema devflow/project-state/2.",
-    "Split, Resume, Arch, Verify, the clean reviewer role, and the person at their owned boundaries."
+    "Direct, Resume, Arch, Verify, the clean reviewer role, and the person at their owned boundaries."
   ],
   "completion_evidence": [
     "Every legacy atom has resolving forward and reverse provenance with zero review-required or DEFERRED entries.",

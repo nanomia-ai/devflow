@@ -26,7 +26,7 @@
       "status": "ROUTE",
       "effects": [
         "REPORT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -133,7 +133,7 @@
       "effects": [
         "RUN",
         "COMMIT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -141,7 +141,7 @@
     ]
   },
   {
-    "id": "recorded-maintenance-resumes-through-split",
+    "id": "recorded-maintenance-resumes-through-direct",
     "s": {
       "input.product": "present",
       "input.arch": "present",
@@ -325,7 +325,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
@@ -390,7 +390,7 @@
       "status": "ROUTE",
       "effects": [
         "RUN",
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [

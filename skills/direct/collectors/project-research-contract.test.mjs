@@ -16,7 +16,7 @@ function git(root, ...args) {
 }
 
 async function project() {
-  const root = await mkdtemp(join(tmpdir(), "split-project-state-"));
+  const root = await mkdtemp(join(tmpdir(), "direct-project-state-"));
   await mkdir(join(root, ".devflow", "project"), { recursive: true });
   await mkdir(join(root, ".devflow", "tree", "01-foundation"), { recursive: true });
   await mkdir(join(root, ".devflow", "users", "jmp"), { recursive: true });
@@ -43,9 +43,9 @@ test("00-project accepts only the canonical research heading", () => {
 });
 
 test("collector accepts the schema-2 core without a compatibility projection", async () => {
-  const fixtureRoot = mkdtempSync(join(tmpdir(), "devflow-split-core-state-"));
+  const fixtureRoot = mkdtempSync(join(tmpdir(), "devflow-direct-core-state-"));
   try {
-    const skillRoot = join(fixtureRoot, "split");
+    const skillRoot = join(fixtureRoot, "direct");
     const projectRoot = join(fixtureRoot, "project");
     const toolRoot = join(fixtureRoot, "principles", "scripts");
     mkdirSync(skillRoot, { recursive: true });

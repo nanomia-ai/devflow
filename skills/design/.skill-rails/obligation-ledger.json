@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:ec6e09072eaf237b871a066d0643b92893427de9c9b5f8e8316164ec226cbb4c",
+  "intent_hash": "sha256:550df3bd3c245f8d944e730ca49081559ed148f0b89c1521dea3e6a15914ac04",
   "profile": "p2",
   "atoms": [
     {
@@ -36,7 +36,7 @@
     {
       "id": "state-dependent-behaviors-001",
       "source": "intent.state_dependent_behaviors[0]",
-      "text": "A maintenance direction records its origin through split before ordinary design planning; durable research resumes through that same origin/card.",
+      "text": "A maintenance direction records its origin through direct before ordinary design planning; durable research resumes through that same origin/card.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",
@@ -47,7 +47,7 @@
         "body:stage: research"
       ],
       "evidence": [
-        "fixture:recorded-maintenance-resumes-through-split",
+        "fixture:recorded-maintenance-resumes-through-direct",
         "fixture:interrupted-design-research"
       ]
     },
@@ -63,7 +63,7 @@
         "body:stage: research"
       ],
       "evidence": [
-        "fixture:recorded-maintenance-resumes-through-split",
+        "fixture:recorded-maintenance-resumes-through-direct",
         "fixture:interrupted-design-research"
       ]
     },

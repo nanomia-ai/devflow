@@ -280,12 +280,12 @@
       "stage": "scope-entry",
       "status": "ROUTE",
       "effects": [
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": [
-      "row:canonicalNext/ROUTE:split",
-      "branch:canonicalNext/ROUTE:split"
+      "row:canonicalNext/ROUTE:direct",
+      "branch:canonicalNext/ROUTE:direct"
     ]
   },
   {
@@ -667,7 +667,7 @@
     "cover": []
   },
   {
-    "id": "split-planning-routes",
+    "id": "direct-planning-routes",
     "s": {
       "state.canonicalNext": "claim.needs-reapproval",
       "state.compatibleWriter": "none"
@@ -679,7 +679,7 @@
       "stage": "scope-entry",
       "status": "ROUTE",
       "effects": [
-        "ROUTE:split"
+        "ROUTE:direct"
       ]
     },
     "cover": []

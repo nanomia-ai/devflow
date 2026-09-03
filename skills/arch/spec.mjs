@@ -37,7 +37,7 @@ export const OBSERVATIONS = {
   "capacity.state": { judged: true, domain: ["enough", "warned"] },
   "approval.action": { decided: true, domain: ["ask", "approve", "refuse"] },
   "capability.action": { decided: true, domain: ["ask", "approve"] },
-  "route.after": { decided: true, domain: ["design", "split", "resume"] },
+  "route.after": { decided: true, domain: ["design", "direct", "resume"] },
   "repair.action": { decided: true, domain: ["ask", "commit"] }
 };
 
@@ -140,7 +140,7 @@ export const TABLES = {
     { state: "ask", reads: ["capability.action"], acceptsUnknown: [], when: s => s.capability.action === "ask" },
     { state: "approve-design", reads: ["capability.action", "route.after", "state.frontend"], acceptsUnknown: [], when: s => s.capability.action === "approve" && s.route.after === "design" && s.state.frontend === "needed" },
     { state: "approve-resume", reads: ["capability.action", "route.after"], acceptsUnknown: [], when: s => s.capability.action === "approve" && s.route.after === "resume" },
-    { state: "approve-split", reads: [], acceptsUnknown: [], when: () => true }
+    { state: "approve-direct", reads: [], acceptsUnknown: [], when: () => true }
   ] }
 };
 
@@ -187,7 +187,7 @@ export const STAGES = [
   }, body: "stage: component-derivation" },
 
   { id: "candidate-research", reads: ["research.state"], acceptsUnknown: [], done: s => s.research.state === "none" || s.research.state === "settled", needs: ["research.state"], reentry: "rejudge", branches: {
-    needed: [["REPORT", { template: "proposal" }], "ROUTE:split"],
+    needed: [["REPORT", { template: "proposal" }], "ROUTE:direct"],
     active: [["REPORT", { template: "result" }], "ROUTE:work"],
     blocked: [["REPORT", { template: "result" }], "WAIT"],
     conflicted: [["REPORT", { template: "result" }], "BLOCK"],
@@ -231,19 +231,19 @@ export const STAGES = [
     ask: [["REPORT", { template: "capabilityDesign", countFrom: "state.expected" }], "ASK"],
     "approve-design": [["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode" }], ["COMMIT", { boundary: "capability-design" }], "ROUTE:design"],
     "approve-resume": [["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode" }], ["COMMIT", { boundary: "capability-design" }], "ROUTE:resume"],
-    "approve-split": [["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode" }], ["COMMIT", { boundary: "capability-design" }], "ROUTE:split"]
+    "approve-direct": [["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode" }], ["COMMIT", { boundary: "capability-design" }], "ROUTE:direct"]
   }, body: "stage: capability-design" }
 ];
 
 export const ARTIFACTS = {
-  product: { path: ".devflow/project/product.md", writer: "external.product", readers: ["stage.read-inputs", "stage.capability-design", "external.split"] },
-  glossary: { path: ".devflow/project/glossary.md", writer: "arch", readers: ["stage.glossary-term", "stage.read-inputs", "stage.capability-design", "external.split"], template: "glossary" },
-  architecture: { path: ".devflow/project/arch.md", writer: "arch", readers: ["stage.compatible-feedback", "stage.repair-layer0-fields", "stage.read-inputs", "stage.approval", "stage.capability-design", "external.design", "external.split", "external.resume"], template: "architecture" },
-  codeStyle: { path: ".devflow/project/code-style.md", writer: "arch", readers: ["stage.read-inputs", "stage.approval", "external.split", "external.work"], template: "codeStyle" },
+  product: { path: ".devflow/project/product.md", writer: "external.product", readers: ["stage.read-inputs", "stage.capability-design", "external.direct"] },
+  glossary: { path: ".devflow/project/glossary.md", writer: "arch", readers: ["stage.glossary-term", "stage.read-inputs", "stage.capability-design", "external.direct"], template: "glossary" },
+  architecture: { path: ".devflow/project/arch.md", writer: "arch", readers: ["stage.compatible-feedback", "stage.repair-layer0-fields", "stage.read-inputs", "stage.approval", "stage.capability-design", "external.design", "external.direct", "external.resume"], template: "architecture" },
+  codeStyle: { path: ".devflow/project/code-style.md", writer: "arch", readers: ["stage.read-inputs", "stage.approval", "external.direct", "external.work"], template: "codeStyle" },
   compatibleFeedbackMarker: { path: ".devflow/journal.md#compatible-feedback-pending", writer: "arch", readers: ["stage.compatible-feedback"] },
   journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.compatible-feedback", "stage.glossary-term", "stage.design-marker", "stage.knowledge-landing", "stage.read-inputs", "external.resume"] },
   decisionRecords: { path: ".devflow/project/decisions", writer: "arch", readers: ["stage.read-inputs", "stage.approval", "stage.capability-design", "external.work"], template: "adr" },
-  capabilityDesignZones: { path: ".devflow/project/capabilities", writer: "arch", readers: ["stage.compatible-feedback", "stage.glossary-term", "stage.design-marker", "stage.capability-design", "external.split", "external.work", "external.verify", "external.resume"], template: "capabilityDesign" },
+  capabilityDesignZones: { path: ".devflow/project/capabilities", writer: "arch", readers: ["stage.compatible-feedback", "stage.glossary-term", "stage.design-marker", "stage.capability-design", "external.direct", "external.work", "external.verify", "external.resume"], template: "capabilityDesign" },
   knowledgeOwnerScope: { path: ".devflow/project", writer: "arch", readers: ["stage.knowledge-landing", "external.resume"] },
   knowledgeNodes: { path: ".devflow/project", writer: "arch", readers: ["stage.knowledge-landing", "stage.capability-design", "external.work", "external.resume"], template: "knowledgeNode" }
 };

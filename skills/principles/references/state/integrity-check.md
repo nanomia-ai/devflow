@@ -2,7 +2,7 @@
 
 ## Integrity Check
 
-Run at the gates that open the tree (start of split and resume). A tweak entry opens no
+Run at the gates that open the tree (start of direct and resume). A tweak entry opens no
 tree, so it is not such a gate — a disk anomaly is caught by the next full session's check.
 **Report anomalies — do not fix them.** Auto-correction that misjudges accelerates
 corruption. Correct only after user approval.
@@ -37,7 +37,7 @@ resolution, and the `Covered cards` comparison.
    canonical commit that releases that claim during a user-authorized reassignment,
    departure, or planning transition. Inspect neither pre-claim commits nor earlier claim
    intervals.
-9. Does a pending task card omit an `Approval` or `Review` field defined by split, or carry a
+9. Does a pending task card omit an `Approval` or `Review` field defined by direct, or carry a
    value outside those formats?
 10. Is a foundation, capability, or intermediate folder empty with no active
     layer-opening marker?

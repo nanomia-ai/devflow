@@ -79,7 +79,7 @@ existing room's id; a line whose token names no existing room is likewise ordina
 unrouted. Only a line in this exact attributed form and present in HEAD is routed by the tool.
 `capability` is the owner the statement actually belongs to, never
 the number of the current card — one card carrying the work of several capabilities is not
-split to land it. `card-json` is where the confirmation happened, not a snapshot basis, so the
+direct to land it. `card-json` is where the confirmation happened, not a snapshot basis, so the
 line stands even after that card closes, and it carries neither code paths nor a commit basis.
 
 Important project-term promotion has one definition-free transport form:
@@ -116,7 +116,7 @@ forever. Zero lines retire as they are. With one or more, put the user's chosen 
 reassignment to foundation or an exact non-retired capability number, in the same
 retirement commit; when the user defers, the retirement defers too. product editing those
 lines is the sanctioned exception to journal ownership, and automatic discard is forbidden.
-split deletes the marker when the replacement cards' planning commit lands.
+direct deletes the marker when the replacement cards' planning commit lands.
 
 `Needs replacement work` has one test. It is needed when the changed upper-document
 statement cannot be true together with the card's Destination, Forbidden, Completion

@@ -32,11 +32,11 @@ Architecture provides the UI boundary that makes the optional design decision me
 
 ## guard: existing-design-research
 
-An observed pending or effective `00-project` research card is internally matched to its exact durable origin and path, then returns to split without another record or a route to work.
+An observed pending or effective `00-project` research card is internally matched to its exact durable origin and path, then returns to direct without another record or a route to work.
 
 ## guard: existing-maintenance-origin
 
-Current maintenance state means the request already has a durable identity. Return to split so it consumes that identity once instead of recording a duplicate.
+Current maintenance state means the request already has a durable identity. Return to direct so it consumes that identity once instead of recording a duplicate.
 
 ## guard: source-choice-required
 
@@ -56,15 +56,15 @@ Why: A project with no UI does not acquire a design-state artifact merely by pas
 
 ## stage: record-first
 
-Judgment: request.kind describes only the requested design delta. When maintenance state is current, route through split without recording another. With no current state, record it through split before ordinary design planning. The record is the durable identity of the request; design neither manufactures nor consumes it.
+Judgment: request.kind describes only the requested design delta. When maintenance state is current, route through direct without recording another. With no current state, record it through direct before ordinary design planning. The record is the durable identity of the request; design neither manufactures nor consumes it.
 
-Why: an interrupted design change must resume the same request and let split consume it with the matching build cards.
+Why: an interrupted design change must resume the same request and let direct consume it with the matching build cards.
 
 ## stage: research
 
-Judgment: research.state is one of none, needed, blocked, settled. The collector exposes only pending/effective state after internally verifying the exact durable origin and `00-project` card path; an existing card returns to split without a new record. Durable research records an exact origin only when no card exists, then split materializes the card rather than routing directly to work.
+Judgment: research.state is one of none, needed, blocked, settled. The collector exposes only pending/effective state after internally verifying the exact durable origin and `00-project` card path; an existing card returns to direct without a new record. Durable research records an exact origin only when no card exists, then direct materializes the card rather than routing directly to work.
 
-Why: Research that must survive interruption is split-owned work. An interrupted design entry returns to that work rather than inventing a design fact.
+Why: Research that must survive interruption is direct-owned work. An interrupted design entry returns to that work rather than inventing a design fact.
 
 ## stage: proposal
 

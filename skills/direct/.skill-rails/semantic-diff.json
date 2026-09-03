@@ -1,0 +1,42 @@
+{
+  "schema": "skill-rails/semantic-diff/1",
+  "spec_hash": {
+    "before": "sha256:5c300cdd7d73b8eb4878f69138a7af98cc3f3b5b65aae8962649f2f723d939e5",
+    "after": "sha256:5c300cdd7d73b8eb4878f69138a7af98cc3f3b5b65aae8962649f2f723d939e5"
+  },
+  "changed": false,
+  "any_changed": false,
+  "source_changes": {
+    "behavior_source": false,
+    "observation_source": false,
+    "context": false
+  },
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:5c300cdd7d73b8eb4878f69138a7af98cc3f3b5b65aae8962649f2f723d939e5",
+      "after_hash": "sha256:5c300cdd7d73b8eb4878f69138a7af98cc3f3b5b65aae8962649f2f723d939e5",
+      "source": "behavior_source"
+    }
+  ],
+  "groups": {
+    "observations": [],
+    "guards": [],
+    "stages": [],
+    "tables": [],
+    "formats": [],
+    "templates": [],
+    "template_content": [],
+    "body": [],
+    "references": [],
+    "ownership": [],
+    "artifacts": [],
+    "roles": [],
+    "declarations": [],
+    "deferred": []
+  },
+  "change_id": "v0.22.0-direct-hard-rename",
+  "intent": "Regenerate and validate this P2 package after the owner-approved atomic Split-to-Direct vocabulary change.",
+  "impact": {}
+}

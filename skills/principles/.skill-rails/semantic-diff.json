@@ -1,135 +1,23 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:c5e92922c327811cf98f499c0a7fc4b35b7b58be42c18c7cfab1c769fd5f7dca",
-    "after": "sha256:a2c06d9ffc37aa0fd1568a4b1d71e46b6130f8beea7a1cbfc8bd3e3e353ffd3f"
+    "before": "sha256:5ea385b525f2225c0348b59c36cfa380104c755c0d3fdd59b956c4d0ca75d94f",
+    "after": "sha256:5ea385b525f2225c0348b59c36cfa380104c755c0d3fdd59b956c4d0ca75d94f"
   },
-  "changed": true,
-  "any_changed": true,
+  "changed": false,
+  "any_changed": false,
   "source_changes": {
-    "behavior_source": true,
+    "behavior_source": false,
     "observation_source": false,
-    "context": true
+    "context": false
   },
   "artifact_receipts": [
     {
       "kind": "spec",
       "path": "spec.mjs",
-      "before_hash": "sha256:c5e92922c327811cf98f499c0a7fc4b35b7b58be42c18c7cfab1c769fd5f7dca",
-      "after_hash": "sha256:a2c06d9ffc37aa0fd1568a4b1d71e46b6130f8beea7a1cbfc8bd3e3e353ffd3f",
+      "before_hash": "sha256:5ea385b525f2225c0348b59c36cfa380104c755c0d3fdd59b956c4d0ca75d94f",
+      "after_hash": "sha256:5ea385b525f2225c0348b59c36cfa380104c755c0d3fdd59b956c4d0ca75d94f",
       "source": "behavior_source"
-    },
-    {
-      "kind": "reference",
-      "path": "references/authoring/prompt-principles.md",
-      "before_hash": "sha256:43e72bc2be9c95b940eb70e44d6794ffcba14e597d1444805ef2bfedb3531192",
-      "after_hash": "sha256:da32a4c8385a9b76c5e848348a0294b4ef6fef2f678a2e7648598e8a33de1240",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/coordination/coordinator-contract.md",
-      "before_hash": "sha256:742ecdf1f9e7e3fd4fdcbc3e74a52a25c1338beff4270e3ad4f2aa095dd4fd2a",
-      "after_hash": "sha256:fd0532a7d9ea07c7ccc63986adc080d88a1d59e09960bbda0cbc6999f1ad04d2",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/delivery/commit-and-verification.md",
-      "before_hash": "sha256:a9cde8d0eda3cca2755da5ace226e63692c312f9412f29dc8615c9b59df2bb6b",
-      "after_hash": "sha256:20dfde0404efaf0d2a0b04247bad58f5678654bb61ba3cc574f56a450306fdc5",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/delivery/status-and-tweak.md",
-      "before_hash": "sha256:20399bc467ce7f0186223113b9c7dfd168357a58df2e1dd16d026a7520ae9c7b",
-      "after_hash": "sha256:abe648ae602a255fc2dcdb0872c2eff916fe95500c2e575fe78247b7b1d660d6",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/knowledge/baseline-contract.md",
-      "before_hash": "sha256:03a01ecea4be3a7f134048b2f33e98927a6372f91049d4eba1921e7a2b1fd3e2",
-      "after_hash": "sha256:82059a02eb803006a174ec5ebb6541012e557d9fda25e7e6886f24784c84ed44",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/knowledge/capsules-and-provenance.md",
-      "before_hash": "sha256:0f160e5d394fbc1aa37ea46fb270e724fb47736065f6ba8d2b81b6d1c8ece3be",
-      "after_hash": "sha256:c71a8fd63e16155a9195512cee669b61d96d7d2e33d56d16842c4d0c1e052b19",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/knowledge/inputs-and-entry.md",
-      "before_hash": "sha256:cf9445a1fcd3cb515bbcf2d516f08d223fbb22c0b6f37a23921b15eae035fa26",
-      "after_hash": "sha256:3434585f82348c0bf6ea8d2a7078d5bed2161514c1003caa85345a0698df92af",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/knowledge/opening-and-freshness.md",
-      "before_hash": "sha256:d16650bf4d33b3a07abc8bf8f58ca3ba07b628b1e242b6f189f8e24b5a30db5e",
-      "after_hash": "sha256:e8ae2882138d8aa7f798fe1694abc0c1c28c6946d6dc8ce73be2470e6b0b1067",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/knowledge/writers-and-migration.md",
-      "before_hash": "sha256:5c9a33fc6f96181e9569ce31580f9c554bb76a4411d345a039f14109702642bd",
-      "after_hash": "sha256:1189d6e5c897e48c6042e4b5f054ad57cced9b496c3392f2444e635fb62cb284",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/state/core-document-ownership.md",
-      "before_hash": "sha256:1151ab028ab4dd5b0f5ac1fc9fcf5f2ab7d511f06b4c74b3745f17adb4aaa26d",
-      "after_hash": "sha256:1b8ecba0af0e8f7ea0233147f4dd8f65324462d3d76f1f8242a7082bdc61971d",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/state/identity-and-rooms.md",
-      "before_hash": "sha256:e2f49b592ef15aa673a99e111e36f4680b0130de9e2de424d9781393dd5e1161",
-      "after_hash": "sha256:78d60573f6f9dd2049b722ad0a85750e50b32b3193c3e533eb2f921eb713fe1b",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/state/integrity-check.md",
-      "before_hash": "sha256:03ddb2caa0694755a81d1ce875c4aa9b378c5d42ae1e10d066315788e3c9d55a",
-      "after_hash": "sha256:f7e7c93b85b351021c3060a1da246133116d3320a26f9412149c5e6ff57bb500",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/state/journal-and-routing.md",
-      "before_hash": "sha256:ec391def6e23d320595567e5de860a1edf76f2219f47ca2d5ab520a178d1fbac",
-      "after_hash": "sha256:13ba499454b8491cade989e91f645ce53005a59ab535b0c9e7035ca34f6b6c74",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/state/journal-grammar.md",
-      "before_hash": "sha256:f59230366b8c1c5cc3269704e58f3dda3227a7562cd097fb4f9c9a1b5bf69b0c",
-      "after_hash": "sha256:6264e97f155c47eba4d4dda4134c0f87caef629dcd72057b86466df0cdfd58d1",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/state/task-card-predicates.md",
-      "before_hash": "sha256:67a6d49e13e5e53489b59fb10fd86ecaf3e3bd29f596bf1847c5501422e9a756",
-      "after_hash": "sha256:13b09695b24aab24cceeed4fcb0cc4e01cd07d549cab58d49e00cafc976d02f9",
-      "source": "context"
-    },
-    {
-      "kind": "reference",
-      "path": "references/verification/revision-predicates.md",
-      "before_hash": "sha256:3f529b4165131f1abd3d74f395ea1385b1907de457092b9c221797d7474c09d0",
-      "after_hash": "sha256:20647ad6d8c0103ed08cccc458b92a5a2a55b4c716c1583cb1d4842f51ac4811",
-      "source": "context"
     }
   ],
   "groups": {
@@ -139,130 +27,16 @@
     "tables": [],
     "formats": [],
     "templates": [],
-    "template_content": [
-      {
-        "id": "canonicalJournalProgressGrammar",
-        "change": "modified",
-        "before": "sha256:e393cdff34fbf00fc63d7f9964edea62279e1babe6c052334cef57529f8f7099",
-        "after": "sha256:e82da7c536a6f0d08e0663d84f96c9b566887d6c77a95a476a380d291a1e7da9"
-      }
-    ],
+    "template_content": [],
     "body": [],
-    "references": [
-      {
-        "id": "templates/canonical-journal-progress-grammar.md",
-        "change": "modified",
-        "before": "sha256:e393cdff34fbf00fc63d7f9964edea62279e1babe6c052334cef57529f8f7099",
-        "after": "sha256:e82da7c536a6f0d08e0663d84f96c9b566887d6c77a95a476a380d291a1e7da9"
-      }
-    ],
-    "ownership": [
-      {
-        "id": ".devflow/journal.md",
-        "change": "added",
-        "after": "project.stage-owner"
-      },
-      {
-        "id": ".devflow/project/arch.md",
-        "change": "added",
-        "after": "project.arch"
-      },
-      {
-        "id": ".devflow/project/capabilities/**",
-        "change": "added",
-        "after": "project.arch-or-adopt"
-      },
-      {
-        "id": ".devflow/project/code-style.md",
-        "change": "added",
-        "after": "project.arch"
-      },
-      {
-        "id": ".devflow/project/design.md",
-        "change": "added",
-        "after": "project.design"
-      },
-      {
-        "id": ".devflow/project/glossary.md",
-        "change": "added",
-        "after": "project.product"
-      },
-      {
-        "id": ".devflow/project/product.md",
-        "change": "added",
-        "after": "project.product"
-      },
-      {
-        "id": ".devflow/tree/**",
-        "change": "added",
-        "after": "project.split-or-work"
-      },
-      {
-        "id": "devflow/journal.md",
-        "change": "removed",
-        "before": "project.stage-owner"
-      },
-      {
-        "id": "devflow/project/arch.md",
-        "change": "removed",
-        "before": "project.arch"
-      },
-      {
-        "id": "devflow/project/capabilities/**",
-        "change": "removed",
-        "before": "project.arch-or-adopt"
-      },
-      {
-        "id": "devflow/project/code-style.md",
-        "change": "removed",
-        "before": "project.arch"
-      },
-      {
-        "id": "devflow/project/design.md",
-        "change": "removed",
-        "before": "project.design"
-      },
-      {
-        "id": "devflow/project/glossary.md",
-        "change": "removed",
-        "before": "project.product"
-      },
-      {
-        "id": "devflow/project/product.md",
-        "change": "removed",
-        "before": "project.product"
-      },
-      {
-        "id": "devflow/tree/**",
-        "change": "removed",
-        "before": "project.split-or-work"
-      }
-    ],
+    "references": [],
+    "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "dot-devflow-root-principles",
-  "intent": "Move the target-project state and knowledge root to .devflow without compatibility branches, while preserving devflow namespace identifiers.",
-  "impact": {
-    "template_content": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
-    "references": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
-    "ownership": {
-      "total": 16,
-      "added": 8,
-      "removed": 8,
-      "modified": 0
-    }
-  }
+  "change_id": "direct-rename-repair-principles-prose",
+  "intent": "Rebuild after restoring ordinary English damaged by the bounded rename.",
+  "impact": {}
 }

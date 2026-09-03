@@ -258,7 +258,7 @@ test("a 3-way journal merge drops the consumed line and keeps both additions", (
   // side A consumes the request (its planning commit deletes the line)
   write(".devflow/journal.md", "");
   git("add", "-A");
-  git("commit", "-qm", "a split — plan consumes the request");
+  git("commit", "-qm", "a direct — plan consumes the request");
   // side B, forked before the consumption, appends an adjacent observation
   git("checkout", "-q", "-b", "flow-b", base);
   write(
@@ -307,7 +307,7 @@ test("three same-unit claims land as three clean path-scoped commits", (t) => {
     write(`.devflow/tree/04-listing/04.${n}-part.md`, `# 04.${n} part\n`);
   }
   git("add", "-A");
-  git("commit", "-qm", "a split — 04 layer");
+  git("commit", "-qm", "a direct — 04 layer");
   for (const n of ["1", "2", "3"]) {
     const from = `.devflow/tree/04-listing/04.${n}-part.md`;
     const to = `.devflow/tree/04-listing/04.${n}-part.wip-a.md`;
@@ -353,7 +353,7 @@ test("a progress result anchors to its first-introducing commit and joins the cu
   const head = "# 02.1 card\nDestination: fixture becomes true\nForbidden: none\nCompletion signal: node --test\n\n## Progress log\n";
   write(pending, head);
   git("add", "-A");
-  git("commit", "-qm", "a split — 02-x");
+  git("commit", "-qm", "a direct — 02-x");
   fs.renameSync(path.join(root, pending), path.join(root, card));
   git("add", "-A");
   git("commit", "-qm", "a 02.1 claim");

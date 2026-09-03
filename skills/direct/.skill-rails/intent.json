@@ -1,0 +1,20 @@
+{
+  "name": "direct",
+  "description": "Work direction. Determines planning depth and executable unit size, materializes research or task cards, and gets the execution proposal (order, parallelism, model tiers, Work handoff) approved by the user. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
+  "problem": "Turn an accepted request into durable, user-approved units that Work can execute without losing request identity, duplicating planning, or letting planning perform execution or write current domain knowledge.",
+  "use_cases": [],
+  "near_misses": [],
+  "inputs": [],
+  "outputs": [],
+  "irreversible_boundaries": [],
+  "state_dependent_behaviors": [
+    "00-project materializes only canonical Research cards; all other scopes materialize task cards with one identity and progress-log contract."
+  ],
+  "exact_formats": [],
+  "external_dependencies": [],
+  "completion_evidence": [],
+  "judgment_points": [
+    "A noncanonical 00-project heading, task-card spoof, or missing/duplicate progress boundary is rejected rather than treated as executable work."
+  ],
+  "deterministic_helpers": []
+}
