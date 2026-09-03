@@ -3,22 +3,22 @@
   "skill_id": "verify",
   "profile": "p2",
   "built_at": null,
-  "build_id": "sha256:b48441c5d6695ef2969bdae0bb9e93ee497520ececbeef6ceb61ac8150e4da00",
-  "spec_hash": "sha256:9d0634cb6807b9ed7f60615291041026c6cbaa70dccb6f698f3d5e15addc2e7b",
+  "build_id": "sha256:2b2364c32cf5b29dfd4b59146aa9ed833765bc8d4c16cea2970c2caf87e613c8",
+  "spec_hash": "sha256:7da9d8f7b43e3a5685f51dd6fc15c9705c12668af4cc30b53de942d88e937350",
   "dsl_hash": "sha256:e8d77b180b886db5cf0474682c7ea2dfea19065561a015878c70efe1441694e6",
   "runtime_hash": "sha256:5af2d9272f953e9f99cb3bba366ce4f421aba2c4560164ed198fd3c67a45fed8",
   "validator_hash": "sha256:70eb557f897034321626ef52408bdd96549c5eeef92ab44618f54af6af8cd53a",
-  "content_hash": "sha256:c81af834f8eea507a460451a47e8dcfe39e002931f02a5c67f708ad70ce1ee71",
+  "content_hash": "sha256:bf1c75e5ca61266b5ea2c23bd7a6cbccd269e7f1175413390a9faa9967f64fc5",
   "content": {
-    "SKILL.md": "sha256:d4b8c47f3f4e7e5301bcdeee3c48aac2346ffbc20028cc751bdf5a6de7783fe9",
-    "body.md": "sha256:44839d62b8c8832c0757ea2aa2e8b4ce892ca33df307e89e1334bbf47fdb0eb9",
-    "collectors/fixtures.test.mjs": "sha256:3cc0e6cea31739a2009649fddd18dbceefad07290754b02307e1a045abe5f466",
-    "collectors/index.mjs": "sha256:44080d52250feffbac79cc17d81cdd5d64c5f9c09ebf8e7a4c83cbc9012f0bd0",
-    "fixtures/formats.json": "sha256:2106e6d4b5adce609da31c30851f9c0fb8443d3ee437f3d830da85f0454effd1",
+    "SKILL.md": "sha256:d6054b32afc135ff398299f14db78ee9fc87f86908e359a28c48f25ee3a390cc",
+    "body.md": "sha256:538f6319f55a048c44787acf7e948fccc76351035f88944a395aaa98261b6653",
+    "collectors/fixtures.test.mjs": "sha256:6b8cc11064718e83424055a21561090864164abb27f04fdd02967aa10a1e3a41",
+    "collectors/index.mjs": "sha256:979c90cb1a4a6fe830fdafacce872c0fe659a26299629bfb3dfeebc577ae53a3",
+    "fixtures/formats.json": "sha256:deb0cee4695dd2e1fa88b0a58ae60b822165e304156101b42c5ae301269963db",
     "fixtures/lint/manifest.json": "sha256:7e63b4b60f9d85b72a2fb1e7040a3a28cffe59246ceedf69f0aee2290d826eed",
     "fixtures/post-repair.test.mjs": "sha256:8d11b1a47955268fe64690ec264a43713bae7aa443949094d9bbb5c7cc82b1f3",
     "fixtures/principles-record-grammar.seam.test.mjs": "sha256:075348f3be3f177189fcd5bd72b0ba2ff13464069d5339e4e36557a3704e175f",
-    "fixtures/scenarios.json": "sha256:4eae77e3cb1fa2df7007967303b739d4d28490b59dbb90af9ef58beade788b6d",
+    "fixtures/scenarios.json": "sha256:0c3f3989e361b22d9b93aa32cb72922c12c077d27eec91662e3d4c1ec18022c8",
     "references/audit-events.md": "sha256:748f398e3138a46f8f64562a0b94ca72bfa0ba4600398dbbf8280714e9e041e0",
     "references/auditor-role.md": "sha256:47a089e7afe766a7dacd1bd464f54d0a3c02deb81f2f8d4ed921069e4ceb6f5b",
     "references/canonical-projections.md": "sha256:7fa24667764a98126ef7a34de97026b35d4fcbc1e8622b7620f1b746e2a375b3",
@@ -30,7 +30,7 @@
     "references/product-stop.md": "sha256:8755d4e96c418fa8c60006a6d08603a72ff8c6dd662ed24ed1e880571046ecea",
     "references/purpose.md": "sha256:0dc9d98be3daa4e482972ef424d8b422fe2019de6bfd435c690c10c9b6252710",
     "references/record-grammar.md": "sha256:a8ffd7e78290ab06f4f5dec3f20b526a8f525b2a8830ba7692d1e088e2dfe280",
-    "references/recovery-completion.md": "sha256:f03fdff8a074c7b1448b9a3dd2be16486f88d6680660a2d70c5721127a7379e5",
+    "references/recovery-completion.md": "sha256:e6d6b11a3204aaee6f53a2a1a88c8c17cc15b970246ee87ed21dac7c2190b5e2",
     "references/retrospective-events.md": "sha256:d39aea20253845cf32ec7dd8c43240ef01679f3aac631abdabe0e3d3ad925e57",
     "references/retrospector-role.md": "sha256:6b64b3aabe5cbf8f08e358e995693fa544831cabc413a0d787e5576206d5724b",
     "references/verification-boundary.md": "sha256:837e8c8b2d67d97bc48117dbbf137bf8fb8f4072c27b4ea7958192e7efdbac2b",
@@ -84,7 +84,7 @@
   "minimum_node_major": 20,
   "generated_files": {
     ".gitattributes": "sha256:705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
-    "SKILL.md": "sha256:d4b8c47f3f4e7e5301bcdeee3c48aac2346ffbc20028cc751bdf5a6de7783fe9",
+    "SKILL.md": "sha256:d6054b32afc135ff398299f14db78ee9fc87f86908e359a28c48f25ee3a390cc",
     "agents/openai.yaml": "sha256:865b40dec28d830c86943fff462b052dc5e24f87abd67a02b5051221d0d36a02",
     "schemas/decision.schema.json": "sha256:d475892037887713a110b9a3f9bd3207c033c53b9013cc4f2c3ea2e3bc15d353",
     "schemas/trace-event.schema.json": "sha256:8e59643b838b1da7a49220981f010767e1eff63248a9916b68138c736b615631",
@@ -332,8 +332,8 @@
       ]
     },
     "fixtures": {
-      "passed": 28,
-      "total": 28,
+      "passed": 29,
+      "total": 29,
       "deterministic_repeats": 5,
       "mismatches": 0,
       "predicate_evaluations": 35,
@@ -344,8 +344,8 @@
       }
     },
     "formats": {
-      "passed": 4,
-      "total": 4,
+      "passed": 5,
+      "total": 5,
       "results": [
         {
           "id": "productVerificationRunning",
@@ -354,6 +354,11 @@
         },
         {
           "id": "productVerificationResult",
+          "round_trips": 256,
+          "crlf_rejected": true
+        },
+        {
+          "id": "capabilityClosing",
           "round_trips": 256,
           "crlf_rejected": true
         },

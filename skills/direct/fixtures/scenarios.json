@@ -4,6 +4,7 @@
     "s": {
       "project.product": "unknown",
       "request.current": "NONE",
+      "request.phase": "none",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -30,6 +31,7 @@
         "source": "journal:2026-08-30T00:00:00Z maintenance routing pending: request-json: \"build login\"",
         "request": "build login"
       },
+      "request.phase": "committed",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -60,6 +62,7 @@
     "s": {
       "project.product": "present",
       "request.current": "NONE",
+      "request.phase": "none",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -93,6 +96,7 @@
         "source": "journal:2026-08-30T00:00:01Z maintenance routing pending: request-json: \"research auth\"",
         "request": "research auth"
       },
+      "request.phase": "committed",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -135,6 +139,7 @@
     "s": {
       "project.product": "missing",
       "request.current": "NONE",
+      "request.phase": "none",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": {
@@ -177,6 +182,7 @@
         "source": "journal:2026-08-30T00:00:02Z maintenance routing pending: request-json: \"research modal\"",
         "request": "research modal"
       },
+      "request.phase": "committed",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -215,6 +221,7 @@
     "s": {
       "project.product": "present",
       "request.current": "NONE",
+      "request.phase": "none",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -245,6 +252,7 @@
     "s": {
       "project.product": "present",
       "request.current": "NONE",
+      "request.phase": "none",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -283,6 +291,7 @@
         "source": "journal:2026-08-30T00:01:00Z maintenance routing pending: request-json: \"new modal\"",
         "request": "new modal"
       },
+      "request.phase": "committed",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -329,6 +338,7 @@
         "source": "journal:2026-08-30T00:01:01Z maintenance routing pending: request-json: \"split modal work\"",
         "request": "split modal work"
       },
+      "request.phase": "committed",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -384,6 +394,7 @@
         "source": "journal:2026-08-30T00:01:02Z maintenance routing pending: request-json: \"shared contract\"",
         "request": "shared contract"
       },
+      "request.phase": "committed",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -424,6 +435,7 @@
     "s": {
       "project.product": "present",
       "request.current": "NONE",
+      "request.phase": "none",
       "origin.active": {
         "origin": "core:.devflow/project/arch.md#Components",
         "scopes": [
@@ -485,6 +497,7 @@
         "source": "journal:2026-08-30T00:01:03Z maintenance routing pending: request-json: \"unclear work\"",
         "request": "unclear work"
       },
+      "request.phase": "committed",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -519,6 +532,7 @@
         "source": "journal:2026-08-30T00:02:00Z maintenance routing pending: request-json: \"multi scope\"",
         "request": "multi scope"
       },
+      "request.phase": "committed",
       "origin.active": {
         "origin": "journal:2026-08-30T00:02:00Z maintenance routing pending: request-json: \"multi scope\"",
         "scopes": [
@@ -564,6 +578,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
+        "REPORT",
         "WAIT"
       ]
     },
@@ -579,6 +594,7 @@
         "source": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "request": "approve work"
       },
+      "request.phase": "committed",
       "origin.active": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
@@ -612,6 +628,7 @@
       "row": "ASK:proposal-decision",
       "status": "ASK",
       "effects": [
+        "REPORT",
         "ASK"
       ]
     },
@@ -629,6 +646,7 @@
         "source": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "request": "approve work"
       },
+      "request.phase": "committed",
       "origin.active": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
@@ -662,9 +680,9 @@
       "row": "approve-plan",
       "status": "WAIT",
       "effects": [
-        "REPORT",
         "WRITE",
         "COMMIT",
+        "REPORT",
         "WAIT"
       ]
     },
@@ -681,6 +699,7 @@
         "source": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "request": "approve work"
       },
+      "request.phase": "committed",
       "origin.active": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
@@ -730,6 +749,7 @@
         "source": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "request": "approve work"
       },
+      "request.phase": "committed",
       "origin.active": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
@@ -775,10 +795,71 @@
     ]
   },
   {
+    "id": "withdraw-with-approved-drafts-reuses-cancel-plan",
+    "s": {
+      "project.product": "present",
+      "request.current": {
+        "source": "journal:2026-09-03T00:03:01Z maintenance routing pending: request-json: \"drop approved design work\"",
+        "request": "drop approved design work"
+      },
+      "request.phase": "design-confirmed",
+      "origin.active": {
+        "origin": "journal:2026-09-03T00:03:01Z maintenance routing pending: request-json: \"drop approved design work\"",
+        "scopes": [
+          ".devflow/tree/03-ui"
+        ],
+        "children": [
+          "03.4"
+        ]
+      },
+      "origin.drafts": {
+        "origin": "journal:2026-09-03T00:03:01Z maintenance routing pending: request-json: \"drop approved design work\"",
+        "scopes": [
+          ".devflow/tree/03-ui"
+        ],
+        "cards": [
+          ".devflow/tree/03-ui/03.4-refresh-checkout.md"
+        ]
+      },
+      "origin.projectResearch": "NONE",
+      "approval.boundary": {
+        "origin": "journal:2026-09-03T00:03:01Z maintenance routing pending: request-json: \"drop approved design work\"",
+        "values": [
+          {
+            "card": ".devflow/tree/03-ui/03.4-refresh-checkout.md",
+            "value": "effective"
+          }
+        ],
+        "cards": [
+          ".devflow/tree/03-ui/03.4-refresh-checkout.md"
+        ]
+      },
+      "approval.issue": "NONE",
+      "planning.receipt": "NONE",
+      "projectResearch.approval": "none"
+    },
+    "judged": {
+      "request.classification": "withdraw",
+      "proposal.decision": "cancel"
+    },
+    "expect": {
+      "stage": "propose",
+      "row": "cancel-plan",
+      "status": "WAIT",
+      "effects": [
+        "WRITE",
+        "WRITE",
+        "COMMIT",
+        "WAIT"
+      ]
+    }
+  },
+  {
     "id": "stale-approval-is-repaired-before-reapproval",
     "s": {
       "project.product": "present",
       "request.current": "NONE",
+      "request.phase": "none",
       "origin.active": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
@@ -834,6 +915,7 @@
     "s": {
       "project.product": "present",
       "request.current": "NONE",
+      "request.phase": "none",
       "origin.active": "NONE",
       "origin.drafts": "NONE",
       "origin.projectResearch": "NONE",
@@ -868,6 +950,7 @@
         "source": "journal:2026-08-30T00:04:00Z maintenance routing pending: request-json: \"research storage\"",
         "request": "research storage"
       },
+      "request.phase": "committed",
       "origin.active": {
         "origin": "journal:2026-08-30T00:04:00Z maintenance routing pending: request-json: \"research storage\"",
         "scopes": [
@@ -904,12 +987,163 @@
       "row": "ASK:proposal-decision",
       "status": "ASK",
       "effects": [
+        "REPORT",
         "ASK"
       ]
     },
     "cover": [
       "row:proposalSelector/ASK:proposal-decision",
       "branch:proposalSelector/ASK:proposal-decision"
+    ]
+  },
+  {
+    "id": "recorded-design-change-routes-owner-before-cards",
+    "s": {
+      "project.product": "present",
+      "request.current": {
+        "source": "journal:2026-09-03T00:00:00Z maintenance routing pending: request-json: \"refresh design\"",
+        "request": "refresh design"
+      },
+      "request.phase": "uncommitted",
+      "origin.active": "NONE",
+      "origin.drafts": "NONE",
+      "origin.projectResearch": "NONE",
+      "approval.boundary": "NONE",
+      "approval.issue": "NONE",
+      "planning.receipt": "NONE",
+      "projectResearch.approval": "none"
+    },
+    "judged": {
+      "request.classification": "design-change"
+    },
+    "expect": {
+      "stage": "intake",
+      "row": "route-design",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:design"
+      ]
+    },
+    "cover": [
+      "row:intakeSelector/route-design",
+      "branch:intakeSelector/route-design"
+    ]
+  },
+  {
+    "id": "design-confirmed-request-proceeds-to-materialize",
+    "s": {
+      "project.product": "present",
+      "request.current": {
+        "source": "journal:2026-09-03T00:00:01Z maintenance routing pending: request-json: \"build confirmed design\"",
+        "request": "build confirmed design"
+      },
+      "request.phase": "design-confirmed",
+      "origin.active": "NONE",
+      "origin.drafts": "NONE",
+      "origin.projectResearch": "NONE",
+      "approval.boundary": "NONE",
+      "approval.issue": "NONE",
+      "planning.receipt": "NONE",
+      "projectResearch.approval": "none"
+    },
+    "judged": {
+      "request.classification": "design-change",
+      "bundle.contract": "ready",
+      "bundle.units": [
+        {
+          "scope": ".devflow/tree/03-ui",
+          "kind": "task",
+          "owners": [
+            "03-ui"
+          ]
+        }
+      ]
+    },
+    "expect": {
+      "stage": "materialize",
+      "row": "begin-request-bundle",
+      "status": "NEXT",
+      "effects": [
+        "WRITE",
+        "COMMIT",
+        "WRITE",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "row:materializeSelector/begin-request-bundle",
+      "branch:materializeSelector/begin-request-bundle"
+    ]
+  },
+  {
+    "id": "withdraw-uncommitted-request-removes-line",
+    "s": {
+      "project.product": "present",
+      "request.current": {
+        "source": "journal:2026-09-03T00:00:02Z maintenance routing pending: request-json: \"drop design refresh\"",
+        "request": "drop design refresh"
+      },
+      "request.phase": "uncommitted",
+      "origin.active": "NONE",
+      "origin.drafts": "NONE",
+      "origin.projectResearch": "NONE",
+      "approval.boundary": "NONE",
+      "approval.issue": "NONE",
+      "planning.receipt": "NONE",
+      "projectResearch.approval": "none"
+    },
+    "judged": {
+      "request.classification": "withdraw"
+    },
+    "expect": {
+      "stage": "intake",
+      "row": "withdraw-uncommitted",
+      "status": "DONE",
+      "effects": [
+        "WRITE",
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "row:intakeSelector/withdraw-uncommitted",
+      "branch:intakeSelector/withdraw-uncommitted"
+    ]
+  },
+  {
+    "id": "withdraw-committed-request-commits-removal",
+    "s": {
+      "project.product": "present",
+      "request.current": {
+        "source": "journal:2026-09-03T00:00:03Z maintenance routing pending: request-json: \"drop committed design refresh\"",
+        "request": "drop committed design refresh"
+      },
+      "request.phase": "committed",
+      "origin.active": "NONE",
+      "origin.drafts": "NONE",
+      "origin.projectResearch": "NONE",
+      "approval.boundary": "NONE",
+      "approval.issue": "NONE",
+      "planning.receipt": "NONE",
+      "projectResearch.approval": "none"
+    },
+    "judged": {
+      "request.classification": "withdraw"
+    },
+    "expect": {
+      "stage": "intake",
+      "row": "withdraw-committed",
+      "status": "DONE",
+      "effects": [
+        "WRITE",
+        "COMMIT",
+        "REPORT",
+        "DONE"
+      ]
+    },
+    "cover": [
+      "row:intakeSelector/withdraw-committed",
+      "branch:intakeSelector/withdraw-committed"
     ]
   }
 ]

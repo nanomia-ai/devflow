@@ -42,8 +42,7 @@
       "approval.action": "ask"
     },
     "judged": {
-      "research.need": "inline",
-      "plan.disposition": "new"
+      "research.need": "inline"
     },
     "expect": {
       "stage": "propose-and-confirm",
@@ -55,7 +54,8 @@
     },
     "cover": [
       "stage:propose-and-confirm",
-      "branch:propose-and-confirm/ask"
+      "row:confirmationRoute/ask",
+      "branch:confirmationRoute/ask"
     ]
   },
   {
@@ -75,21 +75,21 @@
       "approval.action": "commit"
     },
     "judged": {
-      "research.need": "inline",
-      "plan.disposition": "new"
+      "research.need": "inline"
     },
     "expect": {
       "stage": "propose-and-confirm",
-      "status": "NEXT",
+      "status": "ROUTE",
       "effects": [
         "WRITE",
         "WRITE",
         "COMMIT",
-        "NEXT"
+        "ROUTE:arch"
       ]
     },
     "cover": [
-      "branch:propose-and-confirm/commit"
+      "row:confirmationRoute/commit-initial",
+      "branch:confirmationRoute/commit-initial"
     ]
   },
   {
@@ -243,11 +243,11 @@
     },
     "expect": {
       "stage": "glossary",
-      "status": "NEXT",
+      "status": "ROUTE",
       "effects": [
         "WRITE",
         "COMMIT",
-        "NEXT"
+        "ROUTE:resume"
       ]
     },
     "cover": [
@@ -302,8 +302,7 @@
       "approval.action": "ask"
     },
     "judged": {
-      "research.need": "inline",
-      "plan.disposition": "revised"
+      "research.need": "inline"
     },
     "expect": {
       "stage": "propose-and-confirm",
@@ -315,7 +314,8 @@
     },
     "cover": [
       "stage:propose-and-confirm",
-      "branch:propose-and-confirm/ask"
+      "row:confirmationRoute/ask",
+      "branch:confirmationRoute/ask"
     ]
   },
   {
@@ -335,21 +335,51 @@
       "approval.action": "commit"
     },
     "judged": {
-      "research.need": "inline",
-      "plan.disposition": "revised"
+      "research.need": "inline"
     },
     "expect": {
       "stage": "propose-and-confirm",
-      "status": "NEXT",
+      "status": "ROUTE",
       "effects": [
         "WRITE",
         "WRITE",
+        "RUN",
         "COMMIT",
-        "NEXT"
+        "ROUTE:resume"
       ]
     },
     "cover": [
-      "branch:propose-and-confirm/commit"
+      "row:confirmationRoute/commit-rerun",
+      "branch:confirmationRoute/commit-rerun"
+    ]
+  },
+  {
+    "id": "confirmation-state-mismatch-blocks",
+    "s": {
+      "entry.state": "new",
+      "product.file": "absent",
+      "glossary.state": "missing",
+      "product.request": "product-re-run",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {
+      "approval.action": "commit"
+    },
+    "judged": {
+      "research.need": "inline"
+    },
+    "expect": {
+      "stage": "propose-and-confirm",
+      "status": "BLOCK",
+      "effects": []
+    },
+    "cover": [
+      "row:confirmationRoute/BLOCK:confirmation-state",
+      "branch:confirmationRoute/BLOCK:confirmation-state"
     ]
   },
   {
@@ -394,8 +424,7 @@
       "approval.action": "ask"
     },
     "judged": {
-      "research.need": "inline",
-      "plan.disposition": "new"
+      "research.need": "inline"
     },
     "expect": {
       "stage": "compatible-feedback",
@@ -429,8 +458,7 @@
       "approval.action": "ask"
     },
     "judged": {
-      "research.need": "inline",
-      "plan.disposition": "new"
+      "research.need": "inline"
     },
     "expect": {
       "stage": "compatible-feedback",
@@ -464,8 +492,7 @@
       "approval.action": "ask"
     },
     "judged": {
-      "research.need": "inline",
-      "plan.disposition": "new"
+      "research.need": "inline"
     },
     "expect": {
       "stage": "compatible-feedback",
@@ -500,8 +527,7 @@
       "approval.action": "ask"
     },
     "judged": {
-      "research.need": "inline",
-      "plan.disposition": "new"
+      "research.need": "inline"
     },
     "expect": {
       "guard": "compatible-feedback-shape",

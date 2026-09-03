@@ -34,10 +34,6 @@ Architecture provides the UI boundary that makes the optional design decision me
 
 An observed pending or effective `00-project` research card is internally matched to its exact durable origin and path, then returns to direct without another record or a route to work.
 
-## guard: existing-maintenance-origin
-
-Current maintenance state means the request already has a durable identity. Return to direct so it consumes that identity once instead of recording a duplicate.
-
 ## guard: source-choice-required
 
 A design source is a scope-specific authority, not a repository-wide default. A stale source or unresolved conflict needs a choice before a proposal can be trusted.
@@ -56,9 +52,9 @@ Why: A project with no UI does not acquire a design-state artifact merely by pas
 
 ## stage: record-first
 
-Judgment: request.kind describes only the requested design delta. When maintenance state is current, route through direct without recording another. With no current state, record it through direct before ordinary design planning. The record is the durable identity of the request; design neither manufactures nor consumes it.
+Judgment: request.kind describes only the requested design delta. When maintenance state is current, reuse it and continue without recording another. With no current state, route through Direct so it records the exact request before ordinary design planning. The record is the durable identity of the request; Design neither manufactures nor consumes it.
 
-Why: an interrupted design change must resume the same request and let direct consume it with the matching build cards.
+Why: an interrupted design change must resume the same request, while Direct consumes it only after the matching design decision and build cards are ready.
 
 ## stage: research
 
@@ -76,4 +72,4 @@ Why: The six decisions may stay compact for a small project, but every decision 
 
 Judgment: approval.action is one of ask, commit, reject.
 
-Why: A report is provisional. Rejection preserves the current owner; explicit approval makes the new design current and routes the next build planning exactly once.
+Why: A report is provisional. Rejection preserves the current owner and leaves a recorded maintenance request resumable rather than silently cancelling it; explicit approval makes the new design current, carries the pending request line in the same canonical design commit, and routes the next build planning exactly once.

@@ -1099,56 +1099,6 @@
     ]
   },
   {
-    "id": "refresh-capability-only-change",
-    "s": {
-      "state.kernel": "available",
-      "state.route": "setup.layer0-incomplete",
-      "state.brownfield": "no",
-      "state.code": "none",
-      "state.frontend": "needed",
-      "state.worktrees": "one",
-      "state.layer0": "incomplete",
-      "state.capabilities": "missing",
-      "state.expected": 3,
-      "marker.knowledge": "none",
-      "marker.knowledgeCount": 0,
-      "compatible.owner": "none",
-      "compatible.landing": "none"
-    },
-    "judged": {
-      "request.kind": "refresh",
-      "glossary.phase": "definition",
-      "landing.mode": "compact",
-      "inputs.status": "read",
-      "refresh.result": "capability-only",
-      "components.status": "confirmed",
-      "research.state": "settled",
-      "stack.status": "confirmed",
-      "project.shape": "confirmed",
-      "verification.state": "confirmed",
-      "proposal.state": "ready",
-      "capacity.state": "enough"
-    },
-    "decided": {
-      "approval.action": "ask",
-      "capability.action": "ask",
-      "route.after": "direct",
-      "repair.action": "ask"
-    },
-    "expect": {
-      "stage": "refresh-check",
-      "status": "ROUTE",
-      "effects": [
-        "REPORT",
-        "ROUTE:resume"
-      ]
-    },
-    "cover": [
-      "stage:refresh-check",
-      "branch:refresh-check/capability-only"
-    ]
-  },
-  {
     "id": "derive-components",
     "s": {
       "state.kernel": "available",

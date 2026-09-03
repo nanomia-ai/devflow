@@ -93,16 +93,9 @@ the local signal or manufacturing a second task commit.
 
 ## stage: implement-and-signal
 
-Judgment: implementation.action continue signal-ready repair scope-escape park handoff; history.basis none named-card nonpass-repair current-k-source current-trap-source broad invalid. `implementation.action` is exactly `continue`, `signal-ready`, `repair`,
-`scope-escape`, `park`, or `handoff`; `history.basis` is exactly `none`, `named-card`,
-`nonpass-repair`, `current-k-source`, `current-trap-source`, `broad`, or `invalid`. Work only
-inside the card destination and exact bounded inputs. `continue` means the
-next named implementation point is not yet signal-ready; `repair` answers anchored non-pass
-evidence; scope escape belongs to direct; parking requires an explicit request; a mid-task
-handoff waits at the next boundary. For closed history, choose only one allowed exact basis.
+Judgment: `implementation.action` is exactly `continue`, `signal-ready`, `repair`, `scope-escape`, `park`, or `handoff`; `history.basis` is exactly `none`, `named-card`, `nonpass-repair`, `current-k-source`, `current-trap-source`, `broad`, or `invalid`. Work only inside the card destination and exact bounded inputs. `continue` means the next named implementation point is not yet signal-ready; `repair` answers anchored non-pass evidence; scope escape belongs to direct; parking requires an explicit request; a mid-task handoff waits at the next boundary. For closed history, choose only one allowed exact basis.
 
-Why: current progress survives interruption, while scope and historical context stay bounded
-to authority the card or present evidence actually names.
+Why: current progress survives interruption, while scope and historical context stay bounded to authority the card or present evidence actually names.
 
 ## stage: review-reduction
 

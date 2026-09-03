@@ -3084,7 +3084,8 @@ function evaluateZones(snapshot) {
   });
   for (const entry of glossary.routes) addEntry(zones, "marker", "glossary-term", entry);
   for (const { form, ...entry } of design.routes) addEntry(zones, "marker", form === "open-item" ? "design-open-item" : "design-note", entry);
-  for (const line of snapshot.journal.filter((item) => item.kind === "capability-closing" && gitFile(snapshot.root, "HEAD", ".devflow/journal.md")?.includes(item.raw))) {
+  const headJournal = parseJournal(gitFile(snapshot.root, "HEAD", ".devflow/journal.md"));
+  for (const line of headJournal.filter((item) => item.kind === "capability-closing")) {
     addEntry(zones, "marker", "capability-closure", { marker: line.raw, folder: line.folder, head: line.head });
   }
   for (const line of snapshot.journal.filter((item) => item.kind === "re-split")) addEntry(zones, "marker", "re-split", { marker: line.raw, folder: line.folder, stale: line.stale });

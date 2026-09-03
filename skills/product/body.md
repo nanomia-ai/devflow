@@ -50,6 +50,6 @@ Why: Completing the language canon does not reopen a confirmed product judgment.
 
 ## stage: propose-and-confirm
 
-Judgment: plan.disposition is new or revised; approval.action is ask or commit. Combine settled evidence and owner choices into a complete proposed six-judgment product and glossary delta, then report it and ask for explicit approval without writing a canonical product. After an explicit decided approval, write the legacy-compatible product schema with no Approval field and the glossary atomically, then commit: the initial run is the Layer 0 boundary, while a canonical product-re-run request uses the principles binding-decision boundary and its required update routing.
+Judgment: approval.action is ask or commit; the initial or re-run boundary is selected only by the collected product file and re-run request state. Combine settled evidence and owner choices into a complete proposed six-judgment product and glossary delta, then report it and ask for explicit approval without writing a canonical product. After an explicit decided approval, write the legacy-compatible product schema with no Approval field and the glossary atomically, then commit: the initial run is the Layer 0 boundary, while a canonical product-re-run request uses the principles binding-decision boundary and its required update routing.
 
 Why: A card, source, or research answer is evidence, not a substitute for current truth. Approval and its commit make a durable planning boundary; they are not implied by a draft or by product.md existing.

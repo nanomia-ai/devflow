@@ -19,6 +19,11 @@ async function repository() {
   return root;
 }
 
+async function requestProductVerification(root) {
+  await mkdir(join(root, ".devflow"), { recursive: true });
+  await writeFile(join(root, ".devflow", "journal.md"), "2026-09-03T00:00:00Z product verification requested\n");
+}
+
 test("collectors consume the canonical projection and zones at an explicit project root", async () => {
   const root = await repository();
   try {
@@ -41,6 +46,9 @@ test("collector reads exact canonical record state without invented execution gr
   const counterfeit = await repository();
   const ambiguous = await repository();
   try {
+    await requestProductVerification(root);
+    await requestProductVerification(withoutExecution);
+    await requestProductVerification(counterfeit);
     const recordPath = join(root, ".devflow", "tree", "verify.md");
     await mkdir(join(root, ".devflow", "tree"), { recursive: true });
     const revisions = (await calculateState({ root })).compatibility.snapshot.revisions;
@@ -74,7 +82,7 @@ test("collector reads exact canonical record state without invented execution gr
     await mkdir(join(ambiguous, ".devflow", "tree", "02-capability.done"), { recursive: true });
     await writeFile(join(ambiguous, ".devflow", "tree", "verify.md"), base().replace("Executed:", "Executed: root execution"));
     await writeFile(join(ambiguous, ".devflow", "tree", "02-capability.done", "verify.md"), base().replace("Executed:", "Executed: capability execution"));
-    assert.equal(await collectors["verify/record.current"]({ projectRoot: ambiguous }), "mismatched");
+    assert.equal(await collectors["verify/record.current"]({ projectRoot: ambiguous }), "missing");
     assert.equal(await collectors["verify/record.execution-evidence"]({ projectRoot: ambiguous }), "missing");
   } finally {
     await rm(root, { recursive: true, force: true });

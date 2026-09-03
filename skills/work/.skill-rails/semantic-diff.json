@@ -1,13 +1,13 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:328be218917dfacce1a3cad557ec07851c07c172a0b3c6c698b635a3054f02d9",
-    "after": "sha256:328be218917dfacce1a3cad557ec07851c07c172a0b3c6c698b635a3054f02d9"
+    "before": "sha256:76c3570c92f41103f67a0b255b42e267df8b3079f6a344bf1fc6a0880bcb3085",
+    "after": "sha256:14cade6e574a9b5606e3306726ee63df795c048684b6fa87b2e625fa44772723"
   },
-  "changed": false,
-  "any_changed": false,
+  "changed": true,
+  "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
     "context": false
   },
@@ -15,15 +15,782 @@
     {
       "kind": "spec",
       "path": "spec.mjs",
-      "before_hash": "sha256:328be218917dfacce1a3cad557ec07851c07c172a0b3c6c698b635a3054f02d9",
-      "after_hash": "sha256:328be218917dfacce1a3cad557ec07851c07c172a0b3c6c698b635a3054f02d9",
+      "before_hash": "sha256:76c3570c92f41103f67a0b255b42e267df8b3079f6a344bf1fc6a0880bcb3085",
+      "after_hash": "sha256:14cade6e574a9b5606e3306726ee63df795c048684b6fa87b2e625fa44772723",
       "source": "behavior_source"
     }
   ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "implement-and-signal",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "completion.state",
+            "remote.state"
+          ],
+          "needs": [
+            "implementation.action",
+            "history.basis"
+          ],
+          "table": "implementation",
+          "branches": [
+            "scope-escape",
+            "park",
+            "handoff",
+            "repair",
+            "signal-ready",
+            "continue"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "continue": [
+                [
+                  "READ",
+                  {
+                    "scope": "declared inputs and exact authorized closed-history target only"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "card destination"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "REPORT",
+                  {
+                    "scope": "next-implementation-point"
+                  }
+                ],
+                "NEXT"
+              ],
+              "handoff": [
+                [
+                  "REPORT",
+                  {
+                    "scope": "mid-task-handoff-refused"
+                  }
+                ],
+                "WAIT"
+              ],
+              "park": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "release-claim"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "branch": "integration",
+                    "scope": "checkpoint-and-binding-release",
+                    "subject": "<id> <NN.N> wip: stopping"
+                  }
+                ],
+                "ROUTE:work"
+              ],
+              "repair": [
+                [
+                  "COMMIT",
+                  {
+                    "scope": "checkpoint",
+                    "subject": "<id> <NN.N> wip: nonpass anchor"
+                  }
+                ],
+                [
+                  "READ",
+                  {
+                    "scope": "declared inputs and exact authorized closed-history target only"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "card destination repair"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "scope": "completion-signal"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "completionSignalResult"
+                  }
+                ],
+                "WAIT"
+              ],
+              "scope-escape": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "checkpoint",
+                    "subject": "<id> <NN.N> wip: blocking reason"
+                  }
+                ],
+                "ROUTE:direct"
+              ],
+              "signal-ready": [
+                [
+                  "READ",
+                  {
+                    "scope": "declared inputs and exact authorized closed-history target only"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "scope": "completion-signal"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "completionSignalResult"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: implement-and-signal",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "completion.state",
+            "remote.state"
+          ],
+          "needs": [
+            "implementation.action",
+            "history.basis"
+          ],
+          "table": "implementation",
+          "branches": [
+            "scope-escape",
+            "park",
+            "handoff",
+            "repair",
+            "signal-ready",
+            "continue"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "continue": [
+                [
+                  "READ",
+                  {
+                    "scope": "declared inputs and exact authorized closed-history target only"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "card destination"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "REPORT",
+                  {
+                    "scope": "next-implementation-point"
+                  }
+                ],
+                "NEXT"
+              ],
+              "handoff": [
+                [
+                  "REPORT",
+                  {
+                    "scope": "mid-task-handoff-refused"
+                  }
+                ],
+                "WAIT"
+              ],
+              "park": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "checkpoint",
+                    "subject": "<id> <NN.N> wip: stopping"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "release-claim"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "authority": "external.principles",
+                    "branch": "integration",
+                    "files": "release rename only",
+                    "scope": "binding-release",
+                    "subject": "<id> <NN.N> release"
+                  }
+                ],
+                "ROUTE:work"
+              ],
+              "repair": [
+                [
+                  "COMMIT",
+                  {
+                    "scope": "checkpoint",
+                    "subject": "<id> <NN.N> wip: nonpass anchor"
+                  }
+                ],
+                [
+                  "READ",
+                  {
+                    "scope": "declared inputs and exact authorized closed-history target only"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "card destination repair"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "scope": "completion-signal"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "completionSignalResult"
+                  }
+                ],
+                "WAIT"
+              ],
+              "scope-escape": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "checkpoint",
+                    "subject": "<id> <NN.N> wip: blocking reason"
+                  }
+                ],
+                "ROUTE:direct"
+              ],
+              "signal-ready": [
+                [
+                  "READ",
+                  {
+                    "scope": "declared inputs and exact authorized closed-history target only"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "scope": "completion-signal"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "completionSignalResult"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: implement-and-signal",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      },
+      {
+        "id": "review-reduction",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "remote.state",
+            "review.state"
+          ],
+          "needs": [
+            "review.action"
+          ],
+          "table": "review",
+          "branches": [
+            "contract-route",
+            "ask-disposition",
+            "apply-disposition",
+            "block-nonpass",
+            "repair",
+            "dispatch"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "apply-disposition": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "checkpoint",
+                    "subject": "<id> <NN.N> wip: review disposition"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "person-directed repair"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "scope": "completion-signal"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "completionSignalResult"
+                  }
+                ],
+                [
+                  "READ",
+                  {
+                    "artifact": "reviewerContract"
+                  }
+                ],
+                [
+                  "DISPATCH",
+                  {
+                    "role": "reviewer"
+                  }
+                ],
+                "WAIT"
+              ],
+              "ask-disposition": [
+                "ASK"
+              ],
+              "block-nonpass": [
+                [
+                  "REPORT",
+                  {
+                    "scope": "spent-disposition-nonpass"
+                  }
+                ],
+                "BLOCK"
+              ],
+              "contract-route": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "release-claim"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "branch": "integration",
+                    "scope": "checkpoint-and-binding-release",
+                    "subject": "<id> <NN.N> wip: card contract"
+                  }
+                ],
+                "ROUTE:direct"
+              ],
+              "dispatch": [
+                [
+                  "READ",
+                  {
+                    "artifact": "reviewerContract"
+                  }
+                ],
+                [
+                  "READ",
+                  {
+                    "artifact": "activeCard"
+                  }
+                ],
+                [
+                  "DISPATCH",
+                  {
+                    "role": "reviewer"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "reviewResult"
+                  }
+                ],
+                "WAIT"
+              ],
+              "repair": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "reviewResult"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "checkpoint",
+                    "subject": "<id> <NN.N> wip: review objections"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "review repair"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "scope": "completion-signal"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "completionSignalResult"
+                  }
+                ],
+                [
+                  "READ",
+                  {
+                    "artifact": "reviewerContract"
+                  }
+                ],
+                [
+                  "DISPATCH",
+                  {
+                    "role": "reviewer"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: review-reduction",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "remote.state",
+            "review.state"
+          ],
+          "needs": [
+            "review.action"
+          ],
+          "table": "review",
+          "branches": [
+            "contract-route",
+            "ask-disposition",
+            "apply-disposition",
+            "block-nonpass",
+            "repair",
+            "dispatch"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "apply-disposition": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "checkpoint",
+                    "subject": "<id> <NN.N> wip: review disposition"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "person-directed repair"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "scope": "completion-signal"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "completionSignalResult"
+                  }
+                ],
+                [
+                  "READ",
+                  {
+                    "artifact": "reviewerContract"
+                  }
+                ],
+                [
+                  "DISPATCH",
+                  {
+                    "role": "reviewer"
+                  }
+                ],
+                "WAIT"
+              ],
+              "ask-disposition": [
+                "ASK"
+              ],
+              "block-nonpass": [
+                [
+                  "REPORT",
+                  {
+                    "scope": "spent-disposition-nonpass"
+                  }
+                ],
+                "BLOCK"
+              ],
+              "contract-route": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "progressSnippet"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "checkpoint",
+                    "subject": "<id> <NN.N> wip: card contract"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "release-claim"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "authority": "external.principles",
+                    "branch": "integration",
+                    "files": "release rename only",
+                    "scope": "binding-release",
+                    "subject": "<id> <NN.N> release"
+                  }
+                ],
+                "ROUTE:direct"
+              ],
+              "dispatch": [
+                [
+                  "READ",
+                  {
+                    "artifact": "reviewerContract"
+                  }
+                ],
+                [
+                  "READ",
+                  {
+                    "artifact": "activeCard"
+                  }
+                ],
+                [
+                  "DISPATCH",
+                  {
+                    "role": "reviewer"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "reviewResult"
+                  }
+                ],
+                "WAIT"
+              ],
+              "repair": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "reviewResult"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "checkpoint",
+                    "subject": "<id> <NN.N> wip: review objections"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "review repair"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "scope": "completion-signal"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "completionSignalResult"
+                  }
+                ],
+                [
+                  "READ",
+                  {
+                    "artifact": "reviewerContract"
+                  }
+                ],
+                [
+                  "DISPATCH",
+                  {
+                    "role": "reviewer"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: review-reduction",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
@@ -36,7 +803,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "v0.22.0-direct-intent-projection",
-  "intent": null,
-  "impact": {}
+  "change_id": "v0.23.0-separate-checkpoint-and-release",
+  "intent": "Keep task progress on the working branch and make the release rename its own binding integration decision.",
+  "impact": {
+    "stages": {
+      "total": 2,
+      "added": 0,
+      "removed": 0,
+      "modified": 2
+    }
+  }
 }

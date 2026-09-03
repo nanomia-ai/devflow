@@ -3,22 +3,22 @@
   "skill_id": "direct",
   "profile": "p2",
   "built_at": null,
-  "build_id": "sha256:eb4fb45a38d0e92fe686df3cdf3b20356a78ab923c99f455af3786ee0d9c340a",
-  "spec_hash": "sha256:5c300cdd7d73b8eb4878f69138a7af98cc3f3b5b65aae8962649f2f723d939e5",
+  "build_id": "sha256:505a661cab1c6afddd47bb6e48b51c98e6a0d750fdd403a85c3144e4f197d4d3",
+  "spec_hash": "sha256:c06c7091026332a0eb908da68dd7cdf74d12cd683503d0cf2aaedf45aaad8552",
   "dsl_hash": "sha256:e8d77b180b886db5cf0474682c7ea2dfea19065561a015878c70efe1441694e6",
   "runtime_hash": "sha256:5af2d9272f953e9f99cb3bba366ce4f421aba2c4560164ed198fd3c67a45fed8",
   "validator_hash": "sha256:70eb557f897034321626ef52408bdd96549c5eeef92ab44618f54af6af8cd53a",
-  "content_hash": "sha256:39726fb31f3a57e6c45fdac0466c41922cab95f8c1bc0d3901c12c13093a8161",
+  "content_hash": "sha256:0f91501ba4178652552cc1d39fd8ae36f20a617edb8904b2fda76ee118a456b1",
   "content": {
-    "SKILL.md": "sha256:2012695aeb2cf0782ebbf190861d82979415b1c553baab80d575b9923e6f9455",
-    "body.md": "sha256:4f96f3b9827ccbdca296e056f93a360480a321426d65882cb70757df10f7075a",
-    "collectors/index.mjs": "sha256:80fbd7a9a71c5559e978cb1b96c16e5d77d667f5b38ef5e6871ba15f9cb00a46",
-    "collectors/project-research-contract.test.mjs": "sha256:24caa8a0a1e505dd0141c38eb61ba9a0a2c702d57b370ee77447d1bd641c1f20",
+    "SKILL.md": "sha256:ffeb47a6eca21be959569483d0310a31d2351cd5e1028732d49c7fa4684f4887",
+    "body.md": "sha256:f6cbb041c11d3249e31f797104391a66ab4cb69aa91b7212f44547eab275ecab",
+    "collectors/index.mjs": "sha256:4aece9aef42468d93d9aa578b280a0da04097dcbbd023488bebe0750b79984e5",
+    "collectors/project-research-contract.test.mjs": "sha256:87172b340ee2d74c1af982fa76a4a5c7d30fbed677431f74977b8ca6c02efef1",
     "fixtures/card-contract-negatives.json": "sha256:9d1e85df4c0cefe6d22192208d0715d446f47e3823d8858d9f5e4f98cca28d8f",
-    "fixtures/formats.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "fixtures/formats.json": "sha256:8796b5cdca5fcd07ab00f7b0b13daa5cffebe1ff29ba2734247084758a4d24af",
     "fixtures/lint/manifest.json": "sha256:7e63b4b60f9d85b72a2fb1e7040a3a28cffe59246ceedf69f0aee2290d826eed",
     "fixtures/project-research-source-cases.json": "sha256:09a6540bf86b8e3fd8b7b959e06ca3c395c8dfd4ef1662c28ada2bd7bd4a29be",
-    "fixtures/scenarios.json": "sha256:da90e86ad08722996e12b654c2865dbde3065ffc21fe5211c36002298e27917b",
+    "fixtures/scenarios.json": "sha256:3a02dbd1c09e4cc6b9b7b32fee587be485f8957172166d1af8f1524eb95d3376",
     "references/purpose.md": "sha256:de7d5a3f192f7a7cf7ea8624f908a85322d25c4c8ddfa4e3bb413fd53167aede",
     "templates/execution-proposal.md": "sha256:93335fb045f8579d0bcb1c164854140d06a5017e4361c864008b881868c9518e",
     "templates/research-card.md": "sha256:1f1e52e374f037e1b55095e456ea525be90412b6b7494959effde77f52e67f6b",
@@ -69,7 +69,7 @@
   "minimum_node_major": 20,
   "generated_files": {
     ".gitattributes": "sha256:705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
-    "SKILL.md": "sha256:2012695aeb2cf0782ebbf190861d82979415b1c553baab80d575b9923e6f9455",
+    "SKILL.md": "sha256:ffeb47a6eca21be959569483d0310a31d2351cd5e1028732d49c7fa4684f4887",
     "agents/openai.yaml": "sha256:7250c7ab017b537ecbf0cf307695794937a8d2aa4490e9921065c7361f675278",
     "schemas/decision.schema.json": "sha256:d475892037887713a110b9a3f9bd3207c033c53b9013cc4f2c3ea2e3bc15d353",
     "schemas/trace-event.schema.json": "sha256:8e59643b838b1da7a49220981f010767e1eff63248a9916b68138c736b615631",
@@ -303,8 +303,8 @@
       ]
     },
     "fixtures": {
-      "passed": 21,
-      "total": 21,
+      "passed": 26,
+      "total": 26,
       "deterministic_repeats": 5,
       "mismatches": 0,
       "predicate_evaluations": 5,
@@ -315,9 +315,15 @@
       }
     },
     "formats": {
-      "passed": 0,
-      "total": 0,
-      "results": []
+      "passed": 1,
+      "total": 1,
+      "results": [
+        {
+          "id": "maintenanceRoutingPending",
+          "round_trips": 256,
+          "crlf_rejected": false
+        }
+      ]
     },
     "isolated_import": true,
     "build_timestamp": null

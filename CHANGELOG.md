@@ -15,6 +15,41 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.0 — 2026-09-03 — usable stage handoffs and closure
+
+The Product, Arch, Design, Direct, Work, and Verify contracts now preserve the intended stage
+flow instead of stopping, bouncing, or leaving binding state dirty at their transition edges.
+Product routes confirmed initial planning to Arch and re-planning or glossary-only work through
+Resume, using the canonical product and re-run facts rather than a duplicate model judgment. A
+confirmed re-run now applies its matching discovery updates and consumes only the addressed re-run
+lines in the same binding commit, so Resume cannot reopen the same Product decision. Arch treats
+capability-only work as an ordinary compatible Layer 0 refresh so its request
+kind can reach capability design. Design and Direct now share one request-recording owner, including
+an explicit design-change route, and Direct's projected example preserves the required JSON-string
+request shape. Direct distinguishes an uncommitted or precommitted request awaiting Design from the
+same request after the canonical `design — design.md` commit, and each such commit confirms only
+the oldest maintenance request actually present in its journal snapshot before Direct proceeds to
+cards. Explicit withdrawal removes a request-only record or reuses the existing cancellation plan
+for its drafts and markers, while Design rejection keeps the request resumable.
+
+Direct shows its execution proposal before asking for approval and, after the approved planning
+commit, reports the Work handoff while leaving process assignment to the external coordinator.
+Work checkpoints progress on the working branch and then releases a claim in a separate rename-only
+binding commit on integration. Verify binds the canonical byte-first ready capability (or an explicit
+eligible target), rejects foreign-record fallback, and closes it with an explicit baseline, journal
+marker, sweep, folder transition, and Resume route rather than cycling through Arch. If interruption
+occurs after the begin commit, Verify reads that marker explicitly from HEAD and resumes only its
+remaining closure suffix. The state projection keeps committed closing markers visible from HEAD
+through an uncommitted journal deletion and removes them only after the closure commit, preventing a
+repeated begin boundary.
+
+All generated adapters now obey the Skill Rails terminal-prefix contract: a final ASK, WAIT, BLOCK,
+DONE, or ROUTE stops only after every preceding effect has been processed. This common generator
+repair is projected into all nine devflow skills, including unchanged Adopt, Resume, and Principles,
+so literal Codex execution cannot discard required REPORT, WRITE, COMMIT, or DISPATCH effects.
+The Principles entry contract also describes the shipped runtime adapter accurately instead of
+claiming that the platform hook invokes the stage directly.
+
 ## 0.22.0 — 2026-09-03 — Direct work direction
 
 The former `split` stage is now `direct` throughout the live system. The package, public skill id,

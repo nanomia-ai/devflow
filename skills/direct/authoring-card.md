@@ -1,11 +1,11 @@
 # authoring card — direct
 Purpose: convert one approved planning origin into an approved execution proposal and materialized research or implementation cards without mixing the knowledge and work trees.
 Failure scene: direct invents a missing plan, creates implementation cards under 00-project, writes knowledge markers, performs work, supervises agent processes, or materializes stale/unapproved work.
-Observations: product and current request; active/draft/project-research origins; project-research approval; approval boundary/issue; planning receipt; request classification; bundle contract/units; proposal decision.
-Terminals: BLOCK when canonical state or project-research approval is unsafe; ASK for origin/bundle/approval choices; WAIT with a durable proposal; ROUTE to work after materialization; DONE on explicit cancellation cleanup.
+Observations: product and current request plus its Git-backed phase; active/draft/project-research origins; project-research approval; approval boundary/issue; planning receipt; request classification; bundle contract/units; proposal decision.
+Terminals: BLOCK when canonical state or project-research approval is unsafe; ASK after showing the execution proposal; WAIT after the planning commit and explicit approved-Work handoff; ROUTE to Design before card planning when its Layer 0 decision is still unresolved, and ROUTE to Work only for an already approved research card; DONE only for a genuine zero-tree request.
 Guards: canonical-state-required; approved-project-research.
-Stages: intake; propose; carry-approval; materialize.
-Effects: read the chosen origin, write proposal/approval artifacts, create one bounded card bundle, append only owned journal records, or remove only the exact cancelled draft bundle.
+Stages: intake; materialize; carry-approval; propose.
+Effects: read the chosen origin, show the proposal before approval, write proposal/approval artifacts, create one bounded card bundle, report its exact Work handoff after commit, append only owned journal records, withdraw only the exact current request, or remove only the exact cancelled draft bundle and its origin records.
 Passengers: chosen origin and source revision, affected owners, dependency/parallel order, model tiers, completion signals, and approval freshness.
 Artifacts: product, journal, layer-opening bundle, card bundle, approval bundle/repair, and exact cancellation cleanup artifacts, with readers declared in the spec.
 Templates: task card (with Identity and exactly one `## Progress log`), research card, execution proposal, and result.

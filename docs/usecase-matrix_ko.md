@@ -761,3 +761,5 @@ Product/Design 진입·simultaneous shared-folder write는 미실행이며, 그 
 분해하는 수리 동작으로 유지되고 Direct로 라우팅된다. 소유자 확인상 구버전 사용 프로젝트가 없어
 호환 분기와 이관 칸은 만들지 않았다. **새 H·A 행 0, 새 교차 셀 0, 새 공백 0.** 설치 후 실제
 Direct 호출과 전 구간 인계는 사용자가 재실행하기 전까지 **미검증**이다.
+
+0.23.0 재판정 결과: 기존 진입 표의 새 행은 필요하지 않다. 이번 변경은 managed maintenance의 기존 Product→Arch, Design↔Direct, Direct→Work, Work→Verify, Verify→Resume 소비 경계를 복구하며, 새 범용 진입이나 unmanaged 자동 활성화를 만들지 않는다. 여러 완료 capability 중 Verify 대상은 정본 바이트 순서로 하나를 결속하고 명시적 target은 같은 ready 집합 안에서만 선택하므로 기존 H/A 좌표의 의미를 바꾸지 않는다. 새 H·A 행 0, 새 공백 0. 실사용과 수동 Gate B는 미검증이다.

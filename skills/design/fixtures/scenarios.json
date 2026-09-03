@@ -131,8 +131,6 @@
       "stage": "record-first",
       "status": "ROUTE",
       "effects": [
-        "RUN",
-        "COMMIT",
         "ROUTE:direct"
       ]
     },
@@ -156,15 +154,26 @@
       "compatible.owner": "none",
       "compatible.landing": "none"
     },
-    "judged": {},
+    "judged": {
+      "request.kind": "refresh",
+      "source.choice": "settled",
+      "research.state": "settled",
+      "proposal.completeness": "ready"
+    },
+    "decided": {
+      "approval.action": "ask"
+    },
     "expect": {
-      "stage": null,
-      "status": "ROUTE",
-      "guard": "existing-maintenance-origin",
-      "effects": []
+      "stage": "confirmation",
+      "status": "ASK",
+      "effects": [
+        "REPORT",
+        "ASK"
+      ]
     },
     "cover": [
-      "guard:existing-maintenance-origin"
+      "stage:confirmation",
+      "branch:confirmation/ask"
     ]
   },
   {

@@ -1,8 +1,11 @@
+import { line } from "./scripts/skill-rails/dsl.mjs";
+
 export const SPEC = { version: "5", id: "direct", profile: "single", imports: [] };
 
 export const OBSERVATIONS = {
   "project.product": { collector: "state.project.product", domain: ["present", "missing", "unknown"] },
   "request.current": { collector: "state.request.current", domain: { source: "text", request: "text" } },
+  "request.phase": { collector: "state.request.phase", domain: ["none", "uncommitted", "committed", "design-confirmed"] },
   "origin.active": { collector: "state.origin.active", domain: { origin: "text", scopes: "json", children: "json" } },
   "origin.drafts": { collector: "state.origin.drafts", domain: { origin: "text", scopes: "json", cards: "json" } },
   "origin.projectResearch": { collector: "state.origin.project-research", domain: { origin: "text", path: "path" } },
@@ -10,13 +13,15 @@ export const OBSERVATIONS = {
   "approval.boundary": { collector: "state.approval.boundary", domain: { origin: "text", values: "json", cards: "json" } },
   "approval.issue": { collector: "state.approval.issue", domain: { origin: "text", cards: "json", reasons: "json" } },
   "planning.receipt": { collector: "state.planning.receipt", domain: { origin: "text", scopes: "json", cards: "json", commit: "text" } },
-  "request.classification": { judged: true, domain: ["pre-product-research", "tree-work", "small-work", "unknown"] },
+  "request.classification": { judged: true, domain: ["pre-product-research", "design-change", "tree-work", "small-work", "withdraw", "unknown"] },
   "bundle.contract": { judged: true, domain: ["ready", "ask"] },
   "bundle.units": { judged: true, domain: "json" },
   "proposal.decision": { judged: true, domain: ["approve", "revise", "cancel", "ask"] }
 };
 
-export const FORMATS = {};
+export const FORMATS = {
+  maintenanceRoutingPending: line("maintenance routing pending", { "request-json": "json" })
+};
 export const TEMPLATES = {
   taskCard: { file: "templates/task-card.md", fields: { address: "line", identity: "block", number: "line", title: "line", destination: "block", why: "block", forbidden: "list", signal: "block", depends: "line", reads: "list", tier: "line", owners: "list", review: "line" }, sections: ["## Progress log"] },
   researchCard: { file: "templates/research-card.md", fields: { origin: "line", address: "line", number: "line", question: "line", destination: "block", signal: "block", depends: "line", reads: "list", owners: "list" }, sections: [] },
@@ -38,15 +43,18 @@ export const OWNERSHIP = {
 };
 
 export const GUARDS = [
-  { id: "canonical-state-required", reads: ["project.product", "request.current", "origin.active", "origin.drafts", "origin.projectResearch", "projectResearch.approval", "approval.boundary", "approval.issue", "planning.receipt"], acceptsUnknown: [], when: s => s.project.product === "unknown" || (s.project.product === "present" && s.project.product === "missing") || (s.request.current === "NONE" && s.request.current !== "NONE") || (s.origin.active === "NONE" && s.origin.active !== "NONE") || (s.origin.drafts === "NONE" && s.origin.drafts !== "NONE") || (s.origin.projectResearch === "NONE" && s.origin.projectResearch !== "NONE") || (s.projectResearch.approval === "none" && s.projectResearch.approval !== "none") || (s.approval.boundary === "NONE" && s.approval.boundary !== "NONE") || (s.approval.issue === "NONE" && s.approval.issue !== "NONE") || (s.planning.receipt === "NONE" && s.planning.receipt !== "NONE"), then: "BLOCK", body: "guard: canonical-state-required" },
+  { id: "canonical-state-required", reads: ["project.product"], acceptsUnknown: [], when: s => s.project.product === "unknown", then: "BLOCK", body: "guard: canonical-state-required" },
   { id: "approved-project-research", reads: ["origin.projectResearch", "projectResearch.approval"], acceptsUnknown: [], when: s => s.origin.projectResearch !== "NONE" && s.projectResearch.approval === "effective", then: "ROUTE:work", body: "guard: approved-project-research" }
 ];
 
 export const TABLES = {
   intakeSelector: { exclusive: true, rows: [
     { state: "route-product", reads: ["project.product", "request.classification"], acceptsUnknown: ["request.classification"], when: s => s.project.product === "missing" && s.request.classification === "tree-work" },
+    { state: "withdraw-uncommitted", reads: ["request.classification", "request.current", "request.phase", "origin.drafts"], acceptsUnknown: ["request.classification"], when: s => s.request.classification === "withdraw" && s.request.current !== "NONE" && s.request.phase === "uncommitted" && s.origin.drafts === "NONE" },
+    { state: "withdraw-committed", reads: ["request.classification", "request.current", "request.phase", "origin.drafts"], acceptsUnknown: ["request.classification"], when: s => s.request.classification === "withdraw" && s.request.current !== "NONE" && s.request.phase !== "uncommitted" && s.origin.drafts === "NONE" },
     { state: "small-no-tree-delta", reads: ["request.classification"], acceptsUnknown: ["request.classification"], when: s => s.request.classification === "small-work" },
-    { state: "record-request", reads: ["project.product", "request.classification", "request.current", "origin.active"], acceptsUnknown: ["request.classification"], when: s => s.project.product === "present" && s.request.classification === "tree-work" && s.request.current === "NONE" && s.origin.active === "NONE" },
+    { state: "record-request", reads: ["project.product", "request.classification", "request.current", "origin.active"], acceptsUnknown: ["request.classification"], when: s => s.project.product === "present" && (s.request.classification === "tree-work" || s.request.classification === "design-change") && s.request.current === "NONE" && s.origin.active === "NONE" },
+    { state: "route-design", reads: ["request.classification", "request.current", "request.phase"], acceptsUnknown: [], when: s => s.request.classification === "design-change" && s.request.current !== "NONE" && s.request.phase !== "design-confirmed" },
     { state: "ASK:intake-uncertain", reads: [], acceptsUnknown: [], when: () => true }
   ] },
   materializeSelector: { exclusive: true, rows: [
@@ -64,10 +72,13 @@ export const TABLES = {
 };
 
 export const STAGES = [
-  { id: "intake", reads: ["planning.receipt", "request.classification", "project.product", "request.current", "origin.active", "origin.projectResearch"], acceptsUnknown: ["request.classification"], done: s => s.planning.receipt !== "NONE" || (s.request.classification === "tree-work" && s.project.product === "present" && (s.request.current !== "NONE" || s.origin.active !== "NONE")) || (s.request.classification === "pre-product-research" && (s.request.current !== "NONE" || s.origin.active !== "NONE" || s.origin.projectResearch !== "NONE")), needs: ["request.classification"], table: "intakeSelector", reentry: "rejudge", branches: {
+  { id: "intake", reads: ["planning.receipt", "request.classification", "project.product", "request.current", "request.phase", "origin.active", "origin.drafts", "origin.projectResearch"], acceptsUnknown: ["request.classification"], done: s => s.planning.receipt !== "NONE" || (s.request.classification === "withdraw" && s.origin.drafts !== "NONE") || (s.request.classification === "tree-work" && s.project.product === "present" && (s.request.current !== "NONE" || s.origin.active !== "NONE")) || (s.request.classification === "design-change" && s.project.product === "present" && s.request.current !== "NONE" && s.request.phase === "design-confirmed") || (s.request.classification === "pre-product-research" && (s.request.current !== "NONE" || s.origin.active !== "NONE" || s.origin.projectResearch !== "NONE")), needs: ["request.classification"], table: "intakeSelector", reentry: "rejudge", branches: {
     "route-product": ["ROUTE:product"],
+    "withdraw-uncommitted": [["WRITE", { artifact: "cancelMarkerCleanup", target: "current-request-line", value: "remove" }], ["REPORT", { template: "result" }], "DONE"],
+    "withdraw-committed": [["WRITE", { artifact: "cancelMarkerCleanup", target: "current-request-line", value: "remove" }], ["COMMIT", { authority: "external.principles", scope: "current-request-withdrawal", branch: "integration", files: "request line removal only" }], ["REPORT", { template: "result" }], "DONE"],
     "small-no-tree-delta": [["REPORT", { template: "result" }], "DONE"],
-    "record-request": [["WRITE", { artifact: "requestRecord", target: ".devflow/journal.md", line: "maintenance routing pending", "request-json": "<the whole user request as one JSON string>" }], "NEXT"],
+    "record-request": [["WRITE", { artifact: "requestRecord", target: ".devflow/journal.md", format: "maintenanceRoutingPending", "request-json": "<the whole user request as one JSON string>" }], "NEXT"],
+    "route-design": ["ROUTE:design"],
     "ASK:intake-uncertain": ["ASK"]
   }, body: "stage: intake" },
   { id: "materialize", reads: ["planning.receipt", "origin.drafts"], acceptsUnknown: [], done: s => s.planning.receipt !== "NONE" || s.origin.drafts !== "NONE", needs: ["bundle.contract", "bundle.units"], table: "materializeSelector", reentry: "rejudge", branches: {
@@ -75,13 +86,13 @@ export const STAGES = [
     "begin-request-bundle": [["WRITE", { artifact: "layerOpeningBundle", target: ".devflow/journal.md", source: "request.current.source", scopes: "bundle.units" }], ["COMMIT", { scope: "layer-opening-bundle", message: "direct — begin <parent>" }], ["WRITE", { artifact: "cardBundle", target: "<exact-active-scopes>/<one-or-more-sibling-card-addresses>", units: "bundle.units", templates: "00-project=researchCard; all-other-scopes=taskCard", forbiddenTemplates: "taskCard@00-project" }], "NEXT"],
     "ASK:bundle-uncertain": ["ASK"]
   }, body: "stage: materialize" },
-  { id: "carry-approval", reads: ["planning.receipt", "approval.boundary", "origin.drafts"], acceptsUnknown: [], done: s => s.planning.receipt !== "NONE" || s.approval.boundary === "NONE" || s.origin.drafts === "NONE", effects: [["WRITE", { artifact: "approvalBundle", target: "origin.drafts.cards", source: "approval.boundary.values" }], ["COMMIT", { scope: "current-origin-planning-pass", consumes: "settled-layer-opening-markers" }], "WAIT"], reentry: "rejudge", body: "stage: carry-approval" },
+  { id: "carry-approval", reads: ["planning.receipt", "approval.boundary", "origin.drafts", "request.classification"], acceptsUnknown: ["request.classification"], done: s => s.planning.receipt !== "NONE" || s.approval.boundary === "NONE" || s.origin.drafts === "NONE" || s.request.classification === "withdraw", effects: [["WRITE", { artifact: "approvalBundle", target: "origin.drafts.cards", source: "approval.boundary.values" }], ["COMMIT", { scope: "current-origin-planning-pass", consumes: "settled-layer-opening-markers" }], ["REPORT", { template: "proposal", scope: "approved-work-handoff" }], "WAIT"], reentry: "rejudge", body: "stage: carry-approval" },
   { id: "propose", reads: ["planning.receipt"], acceptsUnknown: [], done: s => s.planning.receipt !== "NONE", needs: ["proposal.decision"], table: "proposalSelector", reentry: "rejudge", branches: {
     "repair-stale-approval": [["WRITE", { artifact: "approvalRepair", target: "approval.issue.cards", value: "pending" }], "ASK"],
-    "approve-plan": [["REPORT", { template: "proposal" }], ["WRITE", { artifact: "approvalBundle", target: "origin.drafts.cards", value: "principles-fresh-approval" }], ["COMMIT", { scope: "current-origin-planning-pass", consumes: "settled-layer-opening-markers-and-request" }], "WAIT"],
+    "approve-plan": [["WRITE", { artifact: "approvalBundle", target: "origin.drafts.cards", value: "principles-fresh-approval" }], ["COMMIT", { scope: "current-origin-planning-pass", consumes: "settled-layer-opening-markers-and-request" }], ["REPORT", { template: "proposal", scope: "approved-work-handoff" }], "WAIT"],
     "revise-plan": ["ASK"],
-    "cancel-plan": [["WRITE", { artifact: "cancelDraftCleanup", target: "current-origin-drafts", value: "remove" }], ["WRITE", { artifact: "cancelMarkerCleanup", target: "current-origin-markers", value: "remove" }], ["COMMIT", { scope: "current-origin-cancellation" }], "WAIT"],
-    "ASK:proposal-decision": ["ASK"]
+    "cancel-plan": [["WRITE", { artifact: "cancelDraftCleanup", target: "current-origin-drafts", value: "remove" }], ["WRITE", { artifact: "cancelMarkerCleanup", target: "current-origin-request-line-and-layer-opening-markers", value: "remove" }], ["COMMIT", { scope: "current-origin-cancellation" }], "WAIT"],
+    "ASK:proposal-decision": [["REPORT", { template: "proposal", scope: "approval-request" }], "ASK"]
   }, body: "stage: propose" }
 ];
 
@@ -94,7 +105,7 @@ export const ARTIFACTS = {
   approvalBundle: { path: ".devflow/tree/<current-origin-card-paths>.md", writer: "direct", readers: ["stage.carry-approval", "stage.propose"] },
   approvalRepair: { path: ".devflow/tree/<approval-invalid-current-origin-card-paths>.md", writer: "direct", readers: ["stage.propose"] },
   cancelDraftCleanup: { path: ".devflow/tree/<current-origin-drafts>", writer: "direct", readers: ["stage.propose"] },
-  cancelMarkerCleanup: { path: ".devflow/journal.md", writer: "direct", readers: ["stage.propose"] }
+  cancelMarkerCleanup: { path: ".devflow/journal.md", writer: "direct", readers: ["stage.intake", "stage.propose"] }
 };
 
 export const ROLES = {};

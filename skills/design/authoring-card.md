@@ -2,10 +2,10 @@
 Purpose: Optionally settle one coherent current UI design direction from confirmed product and architecture inputs.
 Failure scene: record-first duplicates a maintenance request, active research skips its durable card, local exceptions replace the current direction, or design writes K directly.
 Observations: product/arch/frontend/design/tree state, exact maintenance origin, and exact 00-project research origin/card path/state are raw durable facts; request scope, source choice, research need, and proposal quality remain judgment.
-Terminals: ROUTE:product or ROUTE:arch when an input is absent; ROUTE:direct for an observed maintenance origin or research card; WAIT for blocked research; DONE after confirmed current design.
-Guards: raw-state-unavailable; product-required; arch-required; existing-design-research; existing-maintenance-origin; source-choice-required.
+Terminals: ROUTE:product or ROUTE:arch when an input is absent; ROUTE:direct to record a new maintenance request or for an observed research card; WAIT for blocked research; DONE after confirmed current design.
+Guards: raw-state-unavailable; product-required; arch-required; existing-design-research; source-choice-required.
 Stages: input, record-first, research, proposal, confirmation.
-Effects: report a design proposal, record a missing maintenance/research origin only before routing direct, and write/commit design.md only after approval.
+Effects: report a design proposal, route direct to record a missing maintenance request, record a missing research origin only before routing direct, and after approval write design.md while carrying the already-recorded request through the canonical design commit.
 Passengers: the exact origin/card state follows the Decision into direct; matching routing records are consumed once by direct, never design.
 Artifacts: product.md, arch.md, glossary.md, journal, tree, and design.md.
 Templates: proposal.md and result.md.

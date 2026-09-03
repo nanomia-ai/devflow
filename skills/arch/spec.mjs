@@ -27,7 +27,7 @@ export const OBSERVATIONS = {
   "glossary.phase": { judged: true, domain: ["definition", "align-capabilities"] },
   "landing.mode": { judged: true, domain: ["compact", "recursive", "partial-compact", "partial-recursive", "multi-mixed"] },
   "inputs.status": { judged: true, domain: ["needed", "read"] },
-  "refresh.result": { judged: true, domain: ["compatible", "product-contradiction", "capability-only"] },
+  "refresh.result": { judged: true, domain: ["compatible", "product-contradiction"] },
   "components.status": { judged: true, domain: ["derive", "proposed", "confirmed"] },
   "research.state": { judged: true, domain: ["none", "needed", "active", "blocked", "settled", "conflicted", "unavailable"] },
   "stack.status": { judged: true, domain: ["propose", "needs-choice", "confirmed"] },
@@ -177,8 +177,7 @@ export const STAGES = [
   }, body: "stage: read-inputs" },
 
   { id: "refresh-check", reads: ["refresh.result"], acceptsUnknown: [], done: s => s.refresh.result === "compatible", needs: ["refresh.result"], reentry: "rejudge", branches: {
-    "product-contradiction": [["REPORT", { template: "result" }], "ROUTE:product"],
-    "capability-only": [["REPORT", { template: "result" }], "ROUTE:resume"]
+    "product-contradiction": [["REPORT", { template: "result" }], "ROUTE:product"]
   }, body: "stage: refresh-check" },
 
   { id: "component-derivation", reads: ["components.status"], acceptsUnknown: [], done: s => s.components.status === "confirmed", needs: ["components.status"], reentry: "rejudge", branches: {

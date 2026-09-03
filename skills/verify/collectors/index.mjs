@@ -36,41 +36,68 @@ function entries(state, zone, kind = null) {
   return kind === null ? value : value.filter((entry) => entry.kind === kind);
 }
 
-function allEntries(state) {
-  return Object.values(state?.zones ?? {}).flatMap((zone) => Array.isArray(zone?.entries) ? zone.entries : []);
-}
-
 function canonicalVerify(state) {
   return state?.compatibility?.evaluated?.verify ?? null;
 }
 
-function selectedRecord(state) {
+function productLayer(state) {
+  return entries(state, "transition", "product-running").length || entries(state, "transition", "product-result").length
+    || entries(state, "event", "product-requested").length;
+}
+
+function folderSelection(state, context) {
+  const markerFolders = entries(state, "marker", "capability-closure").map((entry) => entry.folder).filter((folder) => typeof folder === "string");
+  const readyFolders = entries(state, "layer", "children-done").map((entry) => entry.folder).filter((folder) => typeof folder === "string");
+  const candidates = [...new Set(markerFolders.length ? markerFolders : readyFolders)];
+  const explicit = context?.targetPath;
+  if (typeof explicit === "string") {
+    const folder = candidates.find((candidate) => explicit === candidate || explicit === `${candidate}/verify.md`);
+    return folder ? { state: "selected", folder } : { state: "invalid", folder: null };
+  }
+  return candidates.length ? { state: "selected", folder: candidates[0] } : { state: "none", folder: null };
+}
+
+function capabilityNumber(folder) {
+  const match = /^\.devflow\/tree\/(\d+)(?:[-/]|$)/.exec(folder ?? "");
+  return match ? Number(match[1]) : null;
+}
+
+function selectedRecord(state, context) {
   const verify = canonicalVerify(state);
   const records = verify?.records ?? [];
   if (records.length === 0) return { state: "missing", record: null };
-
-  const recordPaths = new Set(records.map((record) => record.path));
-  const selectedPaths = new Set(verify.prepared.map((item) => item.path));
-  const selectedTargets = new Set();
-  for (const entry of allEntries(state)) {
-    if (recordPaths.has(entry.path)) selectedPaths.add(entry.path);
-    if (entry.target === "product" || Number.isInteger(entry.target)) selectedTargets.add(entry.target);
+  if (productLayer(state)) {
+    const prepared = new Set((verify?.prepared ?? []).map((item) => item.path));
+    const selected = records.filter((record) => record.target === "product" || prepared.has(record.path));
+    if (selected.length === 1) return { state: "selected", record: selected[0] };
+    return { state: selected.length === 0 ? "missing" : "mismatched", record: null };
   }
-  const selected = records.filter((record) => selectedPaths.has(record.path) || selectedTargets.has(record.target));
+  const selection = folderSelection(state, context);
+  if (selection.state !== "selected") return { state: "missing", record: null };
+  const number = capabilityNumber(selection.folder);
+  const selected = records.filter((record) => record.target === number || record.path === `${selection.folder}/verify.md`);
   if (selected.length === 1) return { state: "selected", record: selected[0] };
-  if (selected.length > 1) return { state: "mismatched", record: null };
-  if (records.length === 1) return { state: "selected", record: records[0] };
-  return { state: "mismatched", record: null };
+  return { state: selected.length === 0 ? "missing" : "mismatched", record: null };
 }
 
-function layer(state) {
-  if (entries(state, "transition", "product-running").length || entries(state, "transition", "product-result").length
-    || entries(state, "event", "product-requested").length) return "product";
-  if (entries(state, "marker", "capability-closure").length) return "capability";
-  return "invalid";
+function layer(state, context) {
+  if (productLayer(state)) return "product";
+  const selection = folderSelection(state, context);
+  if (selection.state === "invalid") return unknown("target-not-a-verifiable-capability");
+  return selection.state === "selected" ? "capability" : "invalid";
+}
+
+function closureTarget(state, context) {
+  if (productLayer(state)) return "NONE";
+  const selection = folderSelection(state, context);
+  if (selection.state === "invalid") return unknown("target-not-a-verifiable-capability");
+  if (selection.state !== "selected") return "NONE";
+  const number = capabilityNumber(selection.folder);
+  return number === null ? unknown("capability-number-unavailable") : { folder: selection.folder, number: String(number) };
 }
 function transition(state) {
   if (canonicalVerify(state)?.prepared.length) return "prepared-route";
+  if (entries(state, "marker", "capability-closure").length) return "closing-suffix";
   if (entries(state, "transition", "interrupted").length) return "partial-write";
   if (entries(state, "transition", "product-running").length || entries(state, "transition", "product-result").length) return "interrupted-result";
   return "none";
@@ -84,19 +111,19 @@ function pendingEvent(state) {
 function residual(state) { return entries(state, "marker", "knowledge-landing").length ? "owner-marker" : "none"; }
 
 async function recordCurrent(context) {
-  const selected = selectedRecord(await stateFor(context));
+  const selected = selectedRecord(await stateFor(context), context);
   if (selected.state !== "selected") return selected.state;
   return selected.record.current === true ? "current" : "stale";
 }
 
 async function recordFreshness(context) {
-  const selected = selectedRecord(await stateFor(context));
+  const selected = selectedRecord(await stateFor(context), context);
   if (selected.state === "missing") return "current";
   return selected.state === "selected" && selected.record.current === true ? "current" : "stale";
 }
 
 async function executionEvidence(context) {
-  const selected = selectedRecord(await stateFor(context));
+  const selected = selectedRecord(await stateFor(context), context);
   if (selected.state !== "selected") return "missing";
   return selected.record.current === true && selected.record.verdict === "pass" && selected.record.executed.trim().length > 0
     ? "current"
@@ -104,7 +131,8 @@ async function executionEvidence(context) {
 }
 
 export const collectors = Object.freeze({
-  "verify/principles.verification-layer": async (context) => layer(await stateFor(context)),
+  "verify/principles.verification-layer": async (context) => layer(await stateFor(context), context),
+  "verify/principles.closure-target": async (context) => closureTarget(await stateFor(context), context),
   "verify/principles.transition": async (context) => transition(await stateFor(context)),
   "verify/principles.channel": async (context) => {
     const state = await stateFor(context);

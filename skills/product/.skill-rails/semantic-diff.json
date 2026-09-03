@@ -1,75 +1,268 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:864220d568c1d15966b6a180ea3a03c30c455a5b44c9b24e1f3fa4eabe79e96a",
-    "after": "sha256:ad4213809917da2de53e363e8b11aca4c9570a53ebaa74e469b5418fdb67f966"
+    "before": "sha256:37360858c4468156f59f480a7ab2888459358515381f0056593beee573aaccc4",
+    "after": "sha256:110640e78afc565ecac04b300657dffb052119e3881cc900fa46638a64e789ee"
   },
   "changed": true,
   "any_changed": true,
   "source_changes": {
     "behavior_source": true,
     "observation_source": false,
-    "context": true
+    "context": false
   },
   "artifact_receipts": [
     {
       "kind": "spec",
       "path": "spec.mjs",
-      "before_hash": "sha256:864220d568c1d15966b6a180ea3a03c30c455a5b44c9b24e1f3fa4eabe79e96a",
-      "after_hash": "sha256:ad4213809917da2de53e363e8b11aca4c9570a53ebaa74e469b5418fdb67f966",
+      "before_hash": "sha256:37360858c4468156f59f480a7ab2888459358515381f0056593beee573aaccc4",
+      "after_hash": "sha256:110640e78afc565ecac04b300657dffb052119e3881cc900fa46638a64e789ee",
       "source": "behavior_source"
     }
   ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "propose-and-confirm",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "product.file",
+            "glossary.state",
+            "product.request"
+          ],
+          "needs": [
+            "approval.action"
+          ],
+          "table": "confirmationRoute",
+          "branches": [
+            "ask",
+            "commit-initial",
+            "commit-rerun",
+            "BLOCK:confirmation-state"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ask": [
+                [
+                  "REPORT",
+                  {
+                    "template": "productProposal"
+                  }
+                ],
+                "ASK"
+              ],
+              "BLOCK:confirmation-state": [
+                "BLOCK"
+              ],
+              "commit-initial": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "template": "productConfirmed"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "artifact": "product",
+                    "boundary": "confirmed-layer-0"
+                  }
+                ],
+                "ROUTE:arch"
+              ],
+              "commit-rerun": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "template": "productConfirmed"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "artifact": "product",
+                    "boundary": "product-rerun-binding"
+                  }
+                ],
+                "ROUTE:resume"
+              ]
+            }
+          },
+          "body": "stage: propose-and-confirm",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "product.file",
+            "glossary.state",
+            "product.request"
+          ],
+          "needs": [
+            "approval.action"
+          ],
+          "table": "confirmationRoute",
+          "branches": [
+            "ask",
+            "commit-initial",
+            "commit-rerun",
+            "BLOCK:confirmation-state"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ask": [
+                [
+                  "REPORT",
+                  {
+                    "template": "productProposal"
+                  }
+                ],
+                "ASK"
+              ],
+              "BLOCK:confirmation-state": [
+                "BLOCK"
+              ],
+              "commit-initial": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "template": "productConfirmed"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "artifact": "product",
+                    "boundary": "confirmed-layer-0"
+                  }
+                ],
+                "ROUTE:arch"
+              ],
+              "commit-rerun": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "template": "productConfirmed"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "apply every matching canonical discovery-update action and delete only the addressed product re-run pending lines; preserve unaddressed lines"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "authority": "external.principles",
+                    "boundary": "product-rerun-binding",
+                    "touches": [
+                      ".devflow/project/product.md",
+                      ".devflow/project/glossary.md",
+                      ".devflow/journal.md",
+                      "matching canonical discovery-update targets"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ]
+            }
+          },
+          "body": "stage: propose-and-confirm",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [
+    "body": [],
+    "references": [],
+    "ownership": [
       {
-        "id": "why: evidence-boundary",
-        "change": "modified",
-        "before": "sha256:fcd1fd9712fae216b51b79814d810e715905e08ac8985ad09af41fdf67b4c126",
-        "after": "sha256:41f10bdc2b8b659bc77141562ee0d16ab6a0bf8d1fc41d250fca194d8386b4e3"
+        "id": ".devflow/journal.md#product-re-run-pending",
+        "change": "added",
+        "after": "product-on-addressed-binding"
       }
     ],
-    "references": [],
-    "ownership": [],
-    "artifacts": [],
-    "roles": [],
-    "declarations": [
+    "artifacts": [
       {
-        "id": "projectResearch",
-        "change": "modified",
-        "before": {
-          "value": "00-project research and synthesis are direct-owned; product neither writes that tree nor implementation cards.",
-          "consumer": "stage:research"
-        },
+        "id": "productRerunMarker",
+        "change": "added",
         "after": {
-          "value": "00-project research-card planning and approval are direct-owned; work executes approved research, and product synthesizes settled evidence into product judgment. Product writes neither that tree nor implementation cards.",
-          "consumer": "stage:research"
+          "path": ".devflow/journal.md#product-re-run-pending",
+          "writer": "product",
+          "readers": [
+            "stage.propose-and-confirm"
+          ]
         }
       }
     ],
+    "roles": [],
+    "declarations": [],
     "deferred": []
   },
-  "change_id": "direct-work-research-boundary",
-  "intent": "Remove the implication that direct executes or synthesizes research; preserve direct planning, Work execution, and Product judgment ownership.",
+  "change_id": "v0.23.0-product-rerun-consumption",
+  "intent": "Make the addressed product re-run update and request-line consumption reachable in the generated Decision without adding duplicate state.",
   "impact": {
-    "body": {
+    "stages": {
       "total": 1,
       "added": 0,
       "removed": 0,
       "modified": 1
     },
-    "declarations": {
+    "ownership": {
       "total": 1,
-      "added": 0,
+      "added": 1,
       "removed": 0,
-      "modified": 1
+      "modified": 0
+    },
+    "artifacts": {
+      "total": 1,
+      "added": 1,
+      "removed": 0,
+      "modified": 0
     }
   }
 }

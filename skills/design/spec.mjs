@@ -35,7 +35,6 @@ export const GUARDS = [
   { id: "product-required", reads: ["input.product"], acceptsUnknown: [], when: s => s.input.product === "absent", then: "ROUTE:product", body: "guard: product-required" },
   { id: "arch-required", reads: ["input.arch"], acceptsUnknown: [], when: s => s.input.arch === "absent", then: "ROUTE:arch", body: "guard: arch-required" },
   { id: "existing-design-research", reads: ["research.card.state"], acceptsUnknown: [], when: s => s.research.card.state === "pending" || s.research.card.state === "effective", then: "ROUTE:direct", body: "guard: existing-design-research" },
-  { id: "existing-maintenance-origin", reads: ["maintenance.state"], acceptsUnknown: [], when: s => s.maintenance.state === "current", then: "ROUTE:direct", body: "guard: existing-maintenance-origin" },
   { id: "source-choice-required", reads: ["source.choice"], acceptsUnknown: [], when: s => s.source.choice === "stale" || s.source.choice === "needs-choice", then: "ASK", body: "guard: source-choice-required" }
 ];
 export const STAGES = [
@@ -44,13 +43,13 @@ export const STAGES = [
     land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: [".devflow/project/design.md", ".devflow/journal.md"] }], "ROUTE:resume"]
   }, body: "stage: compatible-feedback" },
   { id: "input", reads: ["input.frontend"], acceptsUnknown: [], done: s => s.input.frontend === "needed", needs: ["entry.action"], reentry: "rejudge", branches: { skip: [["REPORT", { template: "result" }], "ROUTE:direct"] }, body: "stage: input" },
-  { id: "record-first", reads: ["current.tree", "request.kind"], acceptsUnknown: ["request.kind"], done: s => s.current.tree === "absent" || s.request.kind === "initial" || s.request.kind === "none" || s.request.kind === "tiny-no-delta", effects: [["RUN", { action: "record-maintenance-routing-request" }], ["COMMIT", { boundary: "request-recorded" }], "ROUTE:direct"], reentry: "rejudge", body: "stage: record-first" },
+  { id: "record-first", reads: ["current.tree", "maintenance.state", "request.kind"], acceptsUnknown: ["request.kind"], done: s => s.current.tree === "absent" || s.maintenance.state === "current" || s.request.kind === "initial" || s.request.kind === "none" || s.request.kind === "tiny-no-delta", effects: ["ROUTE:direct"], reentry: "rejudge", body: "stage: record-first" },
   { id: "research", reads: ["research.state"], acceptsUnknown: [], done: s => s.research.state === "none" || s.research.state === "settled", needs: ["research.state"], reentry: "rejudge", branches: { needed: [["RUN", { action: "record-durable-design-research-origin" }], "ROUTE:direct"], blocked: ["WAIT"] }, body: "stage: research" },
   { id: "proposal", reads: ["proposal.completeness"], acceptsUnknown: [], done: s => s.proposal.completeness === "ready", needs: ["proposal.completeness"], reentry: "rejudge", branches: { "needs-choice": [["REPORT", { template: "proposal" }], "ASK"] }, body: "stage: proposal" },
   { id: "confirmation", reads: ["current.design", "request.kind"], acceptsUnknown: [], done: s => s.current.design === "present" && (s.request.kind === "none" || s.request.kind === "tiny-no-delta"), needs: ["approval.action"], reentry: "rejudge", branches: {
     ask: [["REPORT", { template: "proposal" }], "ASK"],
     reject: [["REPORT", { template: "result" }], "DONE"],
-    commit: [["WRITE", { artifact: "design", template: "proposal" }], ["COMMIT", { artifact: "design", boundary: "confirmed-design-current" }], "ROUTE:direct"]
+    commit: [["WRITE", { artifact: "design", template: "proposal" }], ["COMMIT", { artifact: "design", boundary: "confirmed-design-current", subject: "<id> design — design.md", touches: [".devflow/project/design.md", ".devflow/journal.md"] }], "ROUTE:direct"]
   }, body: "stage: confirmation" }
 ];
 export const TABLES = { compatibleFeedback: { exclusive: true, rows: [
@@ -64,8 +63,8 @@ export const ARTIFACTS = {
   capabilityDesignZones: { path: ".devflow/project/capabilities", writer: "external.arch-or-adopt", readers: ["stage.proposal", "stage.confirmation"] },
   glossary: { path: ".devflow/project/glossary.md", writer: "external.product", readers: ["stage.proposal", "stage.confirmation"] },
   compatibleFeedbackMarker: { path: ".devflow/journal.md#compatible-feedback-pending", writer: "design", readers: ["stage.compatible-feedback"] },
-  journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.compatible-feedback", "stage.record-first", "stage.research", "guard.existing-maintenance-origin", "guard.existing-design-research"] },
-  tree: { path: ".devflow/tree", writer: "external.direct", readers: ["stage.record-first", "stage.research", "guard.existing-maintenance-origin", "guard.existing-design-research"] },
+  journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.compatible-feedback", "stage.record-first", "stage.research", "stage.confirmation", "guard.existing-design-research"] },
+  tree: { path: ".devflow/tree", writer: "external.direct", readers: ["stage.record-first", "stage.research", "guard.existing-design-research"] },
   design: { path: ".devflow/project/design.md", writer: "design", readers: ["stage.compatible-feedback", "stage.confirmation", "external.arch", "external.direct", "external.resume"], template: "proposal" }
 };
 export const ROLES = {};

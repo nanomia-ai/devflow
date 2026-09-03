@@ -80,6 +80,58 @@ test("uncommitted canonical request record is the current request on rejudge", a
   }
 });
 
+test("request phase follows the request introduction and canonical design commit", async () => {
+  const fixture = await project();
+  try {
+    const line = '2026-09-03T00:00:00Z maintenance routing pending: request-json: "refresh the design"';
+    writeFileSync(join(fixture.root, ".devflow", "journal.md"), `# Journal\n${line}\n`, "utf8");
+    assert.equal(await collectors["state.request.phase"]({ skillRoot: root, projectRoot: fixture.root }), "uncommitted");
+
+    git(fixture.root, "add", ".devflow/journal.md");
+    git(fixture.root, "commit", "-m", "jmp 01.1 wip: design discovery");
+    assert.equal(await collectors["state.request.phase"]({ skillRoot: root, projectRoot: fixture.root }), "committed");
+
+    writeFileSync(join(fixture.root, ".devflow", "project", "design.md"), "# Design\n", "utf8");
+    git(fixture.root, "add", ".devflow/project/design.md");
+    git(fixture.root, "commit", "-m", "jmp design — design.md");
+    assert.equal(await collectors["state.request.phase"]({ skillRoot: root, projectRoot: fixture.root }), "design-confirmed");
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
+test("each design commit confirms only the oldest request present in its journal", async () => {
+  const fixture = await project();
+  try {
+    const first = '2026-09-03T00:00:00Z maintenance routing pending: request-json: "refresh navigation"';
+    const second = '2026-09-03T00:00:01Z maintenance routing pending: request-json: "refresh checkout"';
+    writeFileSync(join(fixture.root, ".devflow", "journal.md"), `# Journal\n${first}\n${second}\n`, "utf8");
+    git(fixture.root, "add", ".devflow/journal.md");
+    git(fixture.root, "commit", "-m", "jmp 01.1 wip: two design discoveries");
+
+    writeFileSync(join(fixture.root, ".devflow", "project", "design.md"), "# Design\n\nNavigation confirmed.\n", "utf8");
+    git(fixture.root, "add", ".devflow/project/design.md");
+    git(fixture.root, "commit", "-m", "jmp design — design.md");
+    assert.equal(await collectors["state.request.phase"]({ skillRoot: root, projectRoot: fixture.root }), "design-confirmed");
+
+    writeFileSync(join(fixture.root, ".devflow", "journal.md"), `# Journal\n${second}\n`, "utf8");
+    git(fixture.root, "add", ".devflow/journal.md");
+    git(fixture.root, "commit", "-m", "jmp direct — navigation plan");
+    assert.deepEqual(await collectors["state.request.current"]({ skillRoot: root, projectRoot: fixture.root }), {
+      source: `journal:${second}`,
+      request: "refresh checkout"
+    });
+    assert.equal(await collectors["state.request.phase"]({ skillRoot: root, projectRoot: fixture.root }), "committed");
+
+    writeFileSync(join(fixture.root, ".devflow", "project", "design.md"), "# Design\n\nCheckout confirmed.\n", "utf8");
+    git(fixture.root, "add", ".devflow/project/design.md");
+    git(fixture.root, "commit", "-m", "jmp design — design.md");
+    assert.equal(await collectors["state.request.phase"]({ skillRoot: root, projectRoot: fixture.root }), "design-confirmed");
+  } finally {
+    await rm(fixture.root, { recursive: true, force: true });
+  }
+});
+
 test("task cards retain identity and one progress-log boundary", () => {
   const template = readFileSync(join(root, "templates", "task-card.md"), "utf8");
   assert.match(template, /^Coordinates: \{\{address\}\}$/m);

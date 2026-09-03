@@ -70,13 +70,13 @@ A residual owner marker routes to its canonical owner and prevents closure until
 
 ## stage: recover
 
-Judgment: projection.transition is one of none, prepared-route, interrupted-result, partial-write.
+Judgment: projection.transition is one of none, prepared-route, interrupted-result, partial-write, or closing-suffix. A committed closing-suffix reads the stored marker from HEAD, then applies only its remaining sweep, exact line deletion, and folder rename.
 
-Why: Finish each declared recovery boundary once before re-entry; never repeat a prepared transition or commit a partial record as evidence.
+Why: The working journal line may already be absent during suffix recovery; finish each declared committed boundary once before re-entry without repeating a prepared transition or treating a partial record as evidence.
 
 ## stage: dispatch-verifier
 
-Judgment: verifier.dispatch is one of ready, returned.
+Judgment: verifier.dispatch is one of ready, returned. For a capability, the collector binds the exact target folder from the committed marker or canonical byte-first children-done entry; the agent never chooses another folder, and an explicit target is accepted only inside that set.
 
 Why: A fresh verifier must execute the bounded scenario before a result can exist.
 
@@ -88,7 +88,7 @@ Why: Every returned verdict, including pass, first lands a current record; raw e
 
 ## stage: capability-closure
 
-Judgment: closure.capability is one of not-applicable, blocked, ready, closed.
+Judgment: closure.capability is one of not-applicable, blocked, ready, closed. Every record, baseline, marker, sweep, and rename uses the same collected closure.target.
 
 Why: Standards and Provisional gates and exact current execution evidence must be current before a capability verified state can close.
 

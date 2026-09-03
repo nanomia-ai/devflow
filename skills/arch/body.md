@@ -96,9 +96,9 @@ Why: Current product language, prior technical choices, attributed decisions, an
 
 ## stage: refresh-check
 
-Judgment: refresh.result is compatible, product-contradiction, or capability-only.
+Judgment: refresh.result is compatible or product-contradiction. Compatible means the current Product boundary still holds, including when only a capability design zone needs refresh; request.kind separately keeps that work out of the Layer 0 approval branch.
 
-Why: A lower technical plan cannot silently reinterpret a changed product boundary, while a pure design-zone refresh need not repeat the interview.
+Why: A lower technical plan cannot silently reinterpret a changed product boundary, while a pure capability refresh continues to its existing design-zone owner instead of routing back to the same Arch entry.
 
 ## stage: component-derivation
 

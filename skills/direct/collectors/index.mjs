@@ -52,13 +52,18 @@ async function canonicalState(context) {
   return cache.get(context);
 }
 
-function currentRequest(state) {
+function currentRequestLine(state) {
   if (!Array.isArray(state.facts.existingRequests)) throw new Error("project-state existing request facts are unavailable");
   const lines = state.facts.existingRequests.map((line, index) => ({ line, index }))
     .filter(({ line }) => typeof line === "string" && /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ maintenance routing pending: request-json:/.test(line));
   if (lines.length !== state.facts.existingRequests.length) throw new Error("project-state existing request fact is malformed");
   if (!lines.length) return NONE;
-  const raw = lines.sort((left, right) => left.line.slice(0, 20).localeCompare(right.line.slice(0, 20)) || left.index - right.index)[0].line;
+  return lines.sort((left, right) => left.line.slice(0, 20).localeCompare(right.line.slice(0, 20)) || left.index - right.index)[0].line;
+}
+
+function currentRequest(state) {
+  const raw = currentRequestLine(state);
+  if (raw === NONE) return NONE;
   const match = /request-json: (.+)$/.exec(raw);
   if (match === null) throw new Error("project-state current request is incomplete");
   let request;
@@ -137,6 +142,42 @@ function git(state, args) {
   return decoder.decode(run.stdout);
 }
 
+function gitOptional(state, args) {
+  const run = spawnSync("git", ["-C", state.projectRoot, ...args], { encoding: "buffer", windowsHide: true });
+  if (run.error) throw new Error(`git ${args[0]} failed to start`);
+  return run.status === 0 ? decoder.decode(run.stdout) : null;
+}
+
+function gitAncestry(state, ancestor, descendant) {
+  const run = spawnSync("git", ["-C", state.projectRoot, "merge-base", "--is-ancestor", ancestor, descendant], { encoding: "buffer", windowsHide: true });
+  if (run.error || ![0, 1].includes(run.status)) throw new Error(`git merge-base failed with status ${run.status ?? "spawn"}`);
+  return run.status === 0;
+}
+
+function requestPhase(state) {
+  const raw = currentRequestLine(state);
+  if (raw === NONE) return "none";
+  const introductions = git(state, ["log", "--reverse", "--format=%H", `-S${raw}`, "--", ".devflow/journal.md"]).split(/\r?\n/).filter(Boolean);
+  const introduced = introductions[0];
+  if (!introduced) return "uncommitted";
+  const designCommits = git(state, ["log", "--format=%H%x1f%s", "--", ".devflow/project/design.md"]).split(/\r?\n/).filter(Boolean);
+  for (const record of designCommits) {
+    const separator = record.indexOf("\x1f");
+    if (separator < 0) throw new Error("design commit history is malformed");
+    const commit = record.slice(0, separator);
+    const subject = record.slice(separator + 1).trim();
+    if (subject !== "design — design.md" && !/^[^\s]+ design — design\.md$/.test(subject)) continue;
+    if (!gitAncestry(state, introduced, commit)) continue;
+    const journal = gitOptional(state, ["show", `${commit}:.devflow/journal.md`]);
+    if (journal === null) throw new Error("design commit does not contain the canonical journal passenger");
+    const requests = journal.split(/\r?\n/).map((line, index) => ({ line, index }))
+      .filter(({ line }) => /^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ maintenance routing pending: request-json:/.test(line))
+      .sort((left, right) => left.line.slice(0, 20).localeCompare(right.line.slice(0, 20)) || left.index - right.index);
+    if (requests[0]?.line === raw) return "design-confirmed";
+  }
+  return "committed";
+}
+
 function headTransaction(state) {
   const head = state.metadata.head;
   if (!/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(head)) throw new Error("project-state HEAD is unavailable");
@@ -194,6 +235,7 @@ function planningReceipt(state) {
 export const collectors = Object.freeze({
   "state.project.product": async context => (await canonicalState(context)).zones.setup.entries.some(entry => entry.kind === "no-product") ? "missing" : "present",
   "state.request.current": async context => currentRequest(await canonicalState(context)),
+  "state.request.phase": async context => requestPhase(await canonicalState(context)),
   "state.origin.active": async context => activeOrigin(await canonicalState(context)),
   "state.origin.drafts": async context => draftBundle(await canonicalState(context)),
   "state.origin.project-research": async context => { const value = await projectResearch(await canonicalState(context)); return value === NONE ? NONE : { origin: value.origin, path: value.path }; },

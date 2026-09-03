@@ -7,6 +7,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "missing",
       "event.pending": "none"
     },
@@ -34,6 +35,44 @@
     }
   },
   {
+    "id": "committed-closing-marker-finishes-suffix",
+    "s": {
+      "projection.transition": "closing-suffix",
+      "projection.channel": "available",
+      "projection.freshness": "current",
+      "landing.residual": "none",
+      "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
+      "result.record": "current",
+      "record.execution": "current",
+      "event.pending": "none"
+    },
+    "expect": {
+      "stage": "recover",
+      "status": "ROUTE",
+      "effects": [
+        "READ",
+        "RUN",
+        "COMMIT",
+        "ROUTE:resume"
+      ]
+    },
+    "cover": [
+      "row:recovery/closing-suffix",
+      "branch:recovery/closing-suffix"
+    ],
+    "decided": {
+      "verifier.dispatch": "ready",
+      "verifier.verdict": "pass",
+      "closure.capability": "ready",
+      "closure.product": "not-applicable",
+      "history.basis": "none"
+    }
+  },
+  {
     "id": "partial-record-is-not-committed-as-evidence",
     "s": {
       "projection.transition": "partial-write",
@@ -41,6 +80,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "missing",
       "event.pending": "none"
     },
@@ -74,6 +117,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "missing",
       "event.pending": "none"
     },
@@ -101,6 +148,10 @@
       "projection.freshness": "current",
       "landing.residual": "owner-marker",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "current",
       "event.pending": "none"
     },
@@ -128,6 +179,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "missing",
       "record.execution": "missing",
       "event.pending": "none"
@@ -162,6 +217,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "missing",
       "record.execution": "missing",
       "event.pending": "none"
@@ -196,6 +255,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "current",
       "record.execution": "current",
       "event.pending": "none"
@@ -206,8 +269,12 @@
       "effects": [
         "READ",
         "WRITE",
+        "WRITE",
+        "WRITE",
         "COMMIT",
-        "ROUTE:arch"
+        "RUN",
+        "COMMIT",
+        "ROUTE:resume"
       ]
     },
     "cover": [
@@ -231,6 +298,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "current",
       "record.execution": "current",
       "event.pending": "audit"
@@ -264,6 +332,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "current",
       "record.execution": "current",
       "event.pending": "none"
@@ -290,6 +362,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "current",
       "record.execution": "current",
       "event.pending": "none"
@@ -316,6 +389,7 @@
       "projection.freshness": "stale",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "missing",
       "event.pending": "none"
     },
@@ -344,6 +418,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "missing",
       "event.pending": "none"
     },
@@ -378,6 +453,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "missing",
       "event.pending": "none"
     },
@@ -414,6 +490,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "missing",
       "record.execution": "missing",
       "event.pending": "none"
@@ -447,6 +524,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "missing",
       "record.execution": "missing",
       "event.pending": "none"
@@ -481,6 +559,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "current",
       "record.execution": "current",
       "event.pending": "none"
@@ -514,6 +596,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "current",
       "record.execution": "current",
       "event.pending": "none"
@@ -548,6 +634,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "current",
       "record.execution": "current",
       "event.pending": "none"
@@ -581,6 +668,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "current",
       "record.execution": "current",
       "event.pending": "none"
@@ -615,6 +703,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "current",
       "record.execution": "current",
       "event.pending": "retrospective"
@@ -648,6 +737,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "invalid",
+      "closure.target": "NONE",
       "result.record": "missing",
       "record.execution": "missing",
       "event.pending": "none"
@@ -677,6 +767,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "missing",
       "record.execution": "missing",
       "event.pending": "none"
@@ -706,6 +800,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "missing",
       "record.execution": "missing",
       "event.pending": "none"
@@ -736,6 +834,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "current",
       "record.execution": "missing",
       "event.pending": "none"
@@ -769,6 +871,7 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "stale",
       "record.execution": "missing",
       "event.pending": "none"
@@ -802,6 +905,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "mismatched",
       "record.execution": "missing",
       "event.pending": "none"
@@ -835,6 +942,7 @@
       "projection.freshness": "stale",
       "landing.residual": "none",
       "verification.layer": "product",
+      "closure.target": "NONE",
       "result.record": "stale",
       "record.execution": "missing",
       "event.pending": "none"
@@ -862,6 +970,10 @@
       "projection.freshness": "current",
       "landing.residual": "none",
       "verification.layer": "capability",
+      "closure.target": {
+        "folder": ".devflow/tree/02-capability",
+        "number": "2"
+      },
       "result.record": "missing",
       "record.execution": "missing",
       "event.pending": "none"

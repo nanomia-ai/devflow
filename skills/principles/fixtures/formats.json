@@ -3,27 +3,23 @@
     "id": "golden-maintenanceRoutingPending",
     "format": "maintenanceRoutingPending",
     "values": {
-      "request-json": {
-        "kind": "maintenance"
-      }
+      "request-json": "fix rounding in the 02 report"
     },
     "context": {
       "timestamp": "2026-08-30T00:00:00.000Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z maintenance routing pending: request-json: {\"kind\":\"maintenance\"}"
+    "expect": "2026-08-30T00:00:00.000Z maintenance routing pending: request-json: \"fix rounding in the 02 report\""
   },
   {
     "id": "golden-productReRunPending",
     "format": "productReRunPending",
     "values": {
-      "statement-json": {
-        "reason": "changed"
-      }
+      "statement-json": "the service boundary changed"
     },
     "context": {
       "timestamp": "2026-08-30T00:00:00.000Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z product re-run pending: statement-json: {\"reason\":\"changed\"}"
+    "expect": "2026-08-30T00:00:00.000Z product re-run pending: statement-json: \"the service boundary changed\""
   },
   {
     "id": "golden-productVerificationRequested",

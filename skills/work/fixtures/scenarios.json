@@ -585,6 +585,7 @@
         "WRITE",
         "COMMIT",
         "WRITE",
+        "COMMIT",
         "ROUTE:work"
       ]
     },
@@ -773,6 +774,7 @@
         "WRITE",
         "COMMIT",
         "WRITE",
+        "COMMIT",
         "ROUTE:direct"
       ]
     },

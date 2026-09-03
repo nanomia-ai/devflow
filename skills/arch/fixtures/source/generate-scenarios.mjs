@@ -90,7 +90,6 @@ const cases = [
   branch("repair-layer0-commit", "repair-layer0-fields", "commit", "ROUTE", ["WRITE", "COMMIT", "ROUTE:resume"], { s: { "state.route": "setup.integration-config" }, decided: { "repair.action": "commit" } }),
   branch("read-product-glossary-inputs", "read-inputs", "needed", "NEXT", ["READ", "READ", "READ", "READ", "READ", "READ", "READ", "NEXT"], { judged: { "inputs.status": "needed" } }),
   branch("refresh-product-contradiction", "refresh-check", "product-contradiction", "ROUTE", ["REPORT", "ROUTE:product"], { judged: { "request.kind": "refresh", "refresh.result": "product-contradiction" } }),
-  branch("refresh-capability-only-change", "refresh-check", "capability-only", "ROUTE", ["REPORT", "ROUTE:resume"], { judged: { "request.kind": "refresh", "refresh.result": "capability-only" } }),
   branch("derive-components", "component-derivation", "derive", "ASK", ["REPORT", "ASK"], { judged: { "components.status": "derive" } }),
   branch("confirm-component-proposal", "component-derivation", "proposed", "ASK", ["REPORT", "ASK"], { judged: { "components.status": "proposed" } }),
   branch("candidate-research-route", "candidate-research", "needed", "ROUTE", ["REPORT", "ROUTE:direct"], { judged: { "research.state": "needed" } }),

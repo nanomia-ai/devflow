@@ -2,33 +2,135 @@
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
     "before": "sha256:eb66221dcbbb563067f50a7004ec57c6f416277cba3f5e6471f20419244913a3",
-    "after": "sha256:eb66221dcbbb563067f50a7004ec57c6f416277cba3f5e6471f20419244913a3"
+    "after": "sha256:367fe3b66746a3aabfbc430153262587e5092b7f15a07dd5dd051b5c19022e1e"
   },
-  "changed": false,
-  "any_changed": false,
+  "changed": true,
+  "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
-    "context": false
+    "context": true
   },
   "artifact_receipts": [
     {
       "kind": "spec",
       "path": "spec.mjs",
       "before_hash": "sha256:eb66221dcbbb563067f50a7004ec57c6f416277cba3f5e6471f20419244913a3",
-      "after_hash": "sha256:eb66221dcbbb563067f50a7004ec57c6f416277cba3f5e6471f20419244913a3",
+      "after_hash": "sha256:367fe3b66746a3aabfbc430153262587e5092b7f15a07dd5dd051b5c19022e1e",
       "source": "behavior_source"
     }
   ],
   "groups": {
-    "observations": [],
+    "observations": [
+      {
+        "id": "refresh.result",
+        "change": "modified",
+        "before": {
+          "judged": true,
+          "domain": [
+            "compatible",
+            "product-contradiction",
+            "capability-only"
+          ]
+        },
+        "after": {
+          "judged": true,
+          "domain": [
+            "compatible",
+            "product-contradiction"
+          ]
+        }
+      }
+    ],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "refresh-check",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "refresh.result"
+          ],
+          "needs": [
+            "refresh.result"
+          ],
+          "table": null,
+          "branches": [
+            "product-contradiction",
+            "capability-only"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "capability-only": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "product-contradiction": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "ROUTE:product"
+              ]
+            }
+          },
+          "body": "stage: refresh-check",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "refresh.result"
+          ],
+          "needs": [
+            "refresh.result"
+          ],
+          "table": null,
+          "branches": [
+            "product-contradiction"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "product-contradiction": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "ROUTE:product"
+              ]
+            }
+          },
+          "body": "stage: refresh-check",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [],
+    "body": [
+      {
+        "id": "stage: refresh-check",
+        "change": "modified",
+        "before": "sha256:78cd91ae8de642a9e1ba2934219a39c4650b7fe94b4af9b48e7d0170d95d917e",
+        "after": "sha256:4f9f1ad8e21ef011eb71dbeeb4ad1611c0c9644de08dca0e441315c7e7426fe5"
+      }
+    ],
     "references": [],
     "ownership": [],
     "artifacts": [],
@@ -36,7 +138,26 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "v0.22.0-direct-hard-rename",
-  "intent": "Regenerate and validate this P2 package after the owner-approved atomic Split-to-Direct vocabulary change.",
-  "impact": {}
+  "change_id": "v0.23.0-arch-practical-flow",
+  "intent": "Treat a capability-only refresh as Layer-0-compatible and continue to the existing capability-design boundary instead of bouncing through Resume.",
+  "impact": {
+    "observations": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "stages": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "body": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
 }

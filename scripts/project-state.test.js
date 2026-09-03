@@ -2120,6 +2120,28 @@ test("R3 an added capability-closing line remains a verification output prefix",
   assert.equal(nextOf(result.stdout), "transition.interrupted", result.stdout);
 });
 
+test("R3 HEAD capability-closing markers survive an uncommitted deletion and disappear after its commit", async (t) => {
+  const root = makeRepo(t, { capabilities: ["capability", "second"] });
+  write(root, ".devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
+  const checkpoint = git(root, "rev-parse", "HEAD");
+  const first = `2026-08-20T00:00:00Z capability closing: folder: .devflow/tree/02-capability; head: ${checkpoint}; product: ${checkpoint}; verification: ${checkpoint}; capability: ${checkpoint}`;
+  const second = `2026-08-20T00:00:01Z capability closing: folder: .devflow/tree/03-second; head: ${checkpoint}; product: ${checkpoint}; verification: ${checkpoint}; capability: ${checkpoint}`;
+  write(root, ".devflow/journal.md", `${first}\n${second}\n`);
+  commit(root, "jmp boundary — begin 02+03");
+
+  write(root, ".devflow/journal.md", "");
+  const module = await registry();
+  const interrupted = await module.calculateState({ root });
+  assert.deepEqual(
+    interrupted.zones.marker.entries.filter((entry) => entry.kind === "capability-closure").map((entry) => entry.folder),
+    [".devflow/tree/02-capability", ".devflow/tree/03-second"]
+  );
+
+  commit(root, "jmp boundary — close 02+03");
+  const closed = await module.calculateState({ root });
+  assert.equal(closed.zones.marker.entries.some((entry) => entry.kind === "capability-closure"), false);
+});
+
 test("R3 an unrelated source change alone does not invent an interrupted transition", (t) => {
   const root = makeRepo(t);
   write(root, "src/x.js", "export const x = 1;\n");

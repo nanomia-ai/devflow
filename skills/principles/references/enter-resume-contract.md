@@ -1,11 +1,11 @@
 # Enter and resume contract
 
-Contract: `principles-entry-classifier/2`.
+Contract: `principles-entry-classifier/3`.
 
-SessionStart invokes this package's runtime with `enter`, then requests the `classify` stage.
-Enter returns only purpose, this contract, and the bounded local policy index. Role-contract
-invocations bypass classification. The classifier judges conversation items only; it does not
-open project state.
+When Principles is selected, its generated adapter invokes this package's runtime with `enter`,
+then requests the `classify` stage. Enter returns only purpose, this contract, and the bounded
+local policy index. Explicit stage and role-contract invocations bypass classification. The
+classifier judges conversation items only; it does not open project state.
 
 Stateful, status, domain, and project-read-only requests route exactly once to resume. Resume
 calls calculateState and uses its structured `route`; the CLI text is compatibility output.
