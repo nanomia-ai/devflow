@@ -5,11 +5,11 @@
     "after": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54"
   },
   "changed": false,
-  "any_changed": true,
+  "any_changed": false,
   "source_changes": {
     "behavior_source": false,
     "observation_source": false,
-    "context": true
+    "context": false
   },
   "artifact_receipts": [],
   "groups": {
@@ -20,14 +20,7 @@
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [
-      {
-        "id": "why: purpose",
-        "change": "modified",
-        "before": "sha256:1803b3ad20d213f55d2e7e55a23b58e8062e18fcd494be0c4cff9d07becc8fc0",
-        "after": "sha256:1bce10f99913bfad3adab5ed16fc1d4f895c54fe587a2895ec3540a654458036"
-      }
-    ],
+    "body": [],
     "references": [],
     "ownership": [],
     "artifacts": [],
@@ -35,14 +28,7 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "principles-entry-separation-0.23.1",
-  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
-  "impact": {
-    "body": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    }
-  }
+  "change_id": "resume-selector-purpose-compact",
+  "intent": "Keep the approved Resume selector semantics while removing words that do not change its selection or ownership boundary.",
+  "impact": {}
 }

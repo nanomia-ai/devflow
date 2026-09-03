@@ -15,6 +15,21 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.2 — 2026-09-03 — Resume purpose at the selector boundary
+
+Resume's selector now leads with its actual state-aware role: it re-enters an existing managed
+project from canonical disk state, recovers an interrupted transition, and either reports the
+current position or routes to the one stage that owns the next step. Its bounded domain-entry
+branch remains able to open one capability document by number or name without taking over that
+owner's work.
+
+The selector now also states the shared direct-entry boundary: when a request names another
+devflow stage, that stage enters directly. This closes the old catch-all reading of “work in an
+existing devflow-managed project” without adding request-specific exclusions. Explicit Resume,
+cross-stage routing, managed-project activation, unmanaged read-only termination, state predicates,
+route priority, orchestration, and worktree behavior are unchanged. Skill Rails regenerated only
+Resume's selector projections and receipts; both plugin manifests ship the result as 0.23.2.
+
 ## 0.23.1 — 2026-09-03 — Principles entry without policy loss
 
 Principles now activates from positive current-project devflow intent instead of acting as the
