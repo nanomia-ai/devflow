@@ -3,7 +3,7 @@ export async function calculateState() {
   const origin = `journal:${raw}`;
   return {
     schema: "devflow/project-state/2", route: {},
-    zones: { marker: { entries: [] }, ready: { entries: [{ file: "devflow/tree/00-project/00.1-research.md", origin, approval: "effective" }] }, claim: { entries: [] } },
+    zones: { marker: { entries: [] }, ready: { entries: [{ file: ".devflow/tree/00-project/00.1-research.md", origin, approval: "effective" }] }, claim: { entries: [] } },
     facts: { existingRequests: [raw] }, metadata: {}
   };
 }

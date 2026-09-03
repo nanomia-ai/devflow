@@ -17,15 +17,15 @@ function git(root, ...args) {
 
 async function project() {
   const root = await mkdtemp(join(tmpdir(), "split-project-state-"));
-  await mkdir(join(root, "devflow", "project"), { recursive: true });
-  await mkdir(join(root, "devflow", "tree", "01-foundation"), { recursive: true });
-  await mkdir(join(root, "devflow", "users", "jmp"), { recursive: true });
-  await writeFile(join(root, "devflow", "project", "product.md"), "# Product\n\nService: fixture\n\n## Capabilities\n\n- foundation\n", "utf8");
-  await writeFile(join(root, "devflow", "project", "arch.md"), "# Architecture\n\nIntegration branch: main\n", "utf8");
-  await writeFile(join(root, "devflow", "journal.md"), "# Journal\n", "utf8");
-  await writeFile(join(root, "devflow", "users", "jmp", "owner.md"), "id: jmp\ngit: Fixture, fixture@example.invalid\n", "utf8");
-  await writeFile(join(root, "devflow", "users", "jmp", "HANDOFF.md"), "", "utf8");
-  await writeFile(join(root, "devflow", "users", "jmp", "digest.md"), "none\n", "utf8");
+  await mkdir(join(root, ".devflow", "project"), { recursive: true });
+  await mkdir(join(root, ".devflow", "tree", "01-foundation"), { recursive: true });
+  await mkdir(join(root, ".devflow", "users", "jmp"), { recursive: true });
+  await writeFile(join(root, ".devflow", "project", "product.md"), "# Product\n\nService: fixture\n\n## Capabilities\n\n- foundation\n", "utf8");
+  await writeFile(join(root, ".devflow", "project", "arch.md"), "# Architecture\n\nIntegration branch: main\n", "utf8");
+  await writeFile(join(root, ".devflow", "journal.md"), "# Journal\n", "utf8");
+  await writeFile(join(root, ".devflow", "users", "jmp", "owner.md"), "id: jmp\ngit: Fixture, fixture@example.invalid\n", "utf8");
+  await writeFile(join(root, ".devflow", "users", "jmp", "HANDOFF.md"), "", "utf8");
+  await writeFile(join(root, ".devflow", "users", "jmp", "digest.md"), "none\n", "utf8");
   git(root, "init", "-b", "main");
   git(root, "config", "user.email", "fixture@example.invalid");
   git(root, "config", "user.name", "Fixture");
@@ -38,7 +38,7 @@ test("00-project accepts only the canonical research heading", () => {
   const collector = readFileSync(join(root, "collectors", "index.mjs"), "utf8");
   assert.match(collector, /\^# \\d\+\\\.\\d\+ Research:/);
   assert.match(collector, /00-project card is not a canonical research card/);
-  assert.match(collector, /devflow\/project-state\/2/);
+  assert.match(collector, /\.devflow\/project-state\/2/);
   assert.doesNotMatch(collector, /state\.compatibility\.(?:snapshot|evaluated)/);
 });
 
@@ -70,7 +70,7 @@ test("uncommitted canonical request record is the current request on rejudge", a
   const fixture = await project();
   try {
     const line = '2026-08-31T00:00:00Z maintenance routing pending: request-json: "repair the intake"';
-    writeFileSync(join(fixture.root, "devflow", "journal.md"), `# Journal\n${line}\n`, "utf8");
+    writeFileSync(join(fixture.root, ".devflow", "journal.md"), `# Journal\n${line}\n`, "utf8");
     assert.deepEqual(await collectors["state.request.current"]({ skillRoot: root, projectRoot: fixture.root }), {
       source: `journal:${line}`,
       request: "repair the intake"

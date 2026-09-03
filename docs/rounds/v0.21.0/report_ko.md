@@ -23,9 +23,15 @@ Principles 사전 분류를 거쳤고, Adopt는 정작 `setup.unmanaged`를 받�
 ## 적용한 경계
 
 명시한 devflow 단계는 그 단계로 바로 들어간다. Principles는 Principles로 들어온 일반 devflow
-의도만 분류한다. SessionStart는 현재 `devflow/project/product.md`가 있을 때만 안내하므로 빈 폴더나
-추적되지 않은 일부 `devflow/` 경로는 관리 상태를 만들지 못한다. Git index나 이력에 남은 devflow
+의도만 분류한다. SessionStart는 현재 `.devflow/project/product.md`가 있을 때만 안내하므로 빈 폴더나
+추적되지 않은 일부 `.devflow/` 경로는 관리 상태를 만들지 못한다. Git index나 이력에 남은 `.devflow`
 경로는 중단 복구 증거로 유지한다.
+
+대상 프로젝트의 정본 루트는 `.devflow/` 하나로 바꿨다. SessionStart, 정본 상태·지식 도구,
+Git pathspec, journal·카드 좌표와 아홉 스킬의 reader/writer를 같은 표기로 함께 옮겼다. 실제 사용 중인
+관리 프로젝트가 없고 시험 프로젝트도 다시 만든다는 소유자 확인에 따라 구 경로 별칭·이중 판정·
+자동 이관은 만들지 않았다. `devflow:` 스킬 이름, plugin 이름, wire schema는 프로젝트 경로가 아니므로
+그대로 두고 과거 round·CHANGELOG·blueprint·legacy atom의 당시 좌표도 다시 쓰지 않았다.
 
 명시 Adopt는 무관리 저장소에 devflow 이전의 유지할 프로젝트 자료가 문서 또는 코드로 하나라도
 있으면 역산을 시작한다. 그런 자료가 전혀 없는 저장소만 Product로 보낸다. 모든 유지 구현·테스트·
@@ -95,12 +101,13 @@ Adopt 사이를 순환하지 않는다.
 
 ## 검증과 제한
 
-Skill Rails로 아홉 P2 패키지의 현재 영수증과 정본 byte를 대조했다. 모두 `L-full:pass`이고 fixture는
-합계 281/281이다. 최종 경계 수정이 직접 닿은 Adopt·Arch·Principles는 각각 build
-`ae31f70e50db`, `2111348615e9`, `a6e93404990e`에서 9/9·55/55·10/10을 5회 반복해 불일치 0이며,
-Adopt의 별도 유계 eval도 9/9, 5회, 불일치 0이다. 한·영 결정 색인 생성, 상태·SessionStart 소스의
-구문 검사, Adopt/Arch architecture template byte 동일성, 설치기의 UTF-8 BOM,
-`git diff --check`도 통과했다.
+Skill Rails runtime 0.3.2와 validator 0.4.2로 아홉 P2 패키지를 현재 작성 정본에서 다시 생성했다.
+모든 영수증은 `L-full:pass`이고 fixture 합계 281/281을 5회 반복해 불일치 0이다. 한·영 결정 색인
+생성, SessionStart·정본 상태·지식 도구의 구문 검사, 현재 source/generated 표면의 구 경로 잔류 검색,
+두 지식 도구의 줄바꿈 정규화 후 byte 동일성, `git diff --check`도 통과했다. wire schema·plugin·skill
+이름과 과거 기록 좌표가 경로 치환에 섞이지 않았는지도 별도로 대조했다. 경로가 함께 바뀐 Split의
+기존 project-research source fixture에서 잘못된 따옴표 escape를 발견해 의미 변화 없이 JSON 구문만
+고쳤고, 변경 JSON 33개를 다시 파싱해 오류 0건을 확인했다.
 
 독립 Fable 감사는 두 단계로 했다. 구현 감사가 진입·라우팅·자료 처분·writer 소유권·중단 복구와
 모든 생성 영수증을 대조했고, 목적 감사가 JGNote 규모의 구현 명세·구속 기획·탐색 리서치·대체 문서·
@@ -112,6 +119,12 @@ Adopt의 별도 유계 eval도 9/9, 5회, 불일치 0이다. 한·영 결정 색
 writer 생애를 명시한 뒤 재독해 0건으로 닫았다. 첫 커밋에 임시 소유자를 만들기, 검사기를 약하게
 하기, 전체를 한 커밋에 넣기, 도입을 Arch에 미루기는 각각 지식 검증·Design head·역산 목적을
 깨므로 더 단순한 자연스러운 대안이 아니었다.
+
+`.devflow/` 하드 전환 뒤에는 기존 Sol과 Fable 컨텍스트를 다시 사용해 현재 main을 읽기 전용으로
+교차 감사했다. Sol은 상태 도구의 membership·Git pathspec·journal 좌표, 아홉 생성 영수증과 타 스킬
+간섭을 대조해 차단 0건을 냈다. Fable은 실제 diff 감사와 Adopt 목적 감사를 다시 분리해 수행했고,
+구 대상 경로 잔류·schema/name 오치환·역사 기록 변조·Split 권한 증식·Adopt 본질 훼손을 모두 0건으로
+확인했다. 둘 다 이 감사에서 파일을 편집하지 않았다.
 
 소유자가 빠른 반복을 요청했으므로 전체 `node --test "scripts/*.test.js"`와 설치 뒤 실제 Codex·Claude
 행동은 실행하지 않았다. 따라서 Gate A와 실제 세션 행동은 **미검증**이며 통과로 쓰지 않는다.

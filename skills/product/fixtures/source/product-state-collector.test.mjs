@@ -38,8 +38,8 @@ test("product collector fails closed when canonical state is unavailable", async
 test("product collector internally verifies exact durable lineage and exposes only approval state", async () => {
   const projectRoot = mkdtempSync(join(tmpdir(), "devflow-product-state-"));
   try {
-    mkdirSync(join(projectRoot, "devflow/tree/00-project"), { recursive: true });
-    writeFileSync(join(projectRoot, "devflow/tree/00-project/00.1-research.md"), "# 00.1 Research: product\n");
+    mkdirSync(join(projectRoot, ".devflow/tree/00-project"), { recursive: true });
+    writeFileSync(join(projectRoot, ".devflow/tree/00-project/00.1-research.md"), "# 00.1 Research: product\n");
     const context = {
       projectRoot,
       projectStateTool: join(here, "project-state-research.mjs")

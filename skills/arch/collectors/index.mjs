@@ -126,8 +126,8 @@ async function compatible(context) {
   if (!Array.isArray(entries)) return { owner: "invalid", landing: "invalid" };
   const marker = entries.find((entry) => entry?.kind === "compatible-feedback" && entry?.writer === "arch");
   if (!marker) return { owner: "none", landing: "none" };
-  const owner = marker.owner === "devflow/project/arch.md" ? "arch"
-    : /^devflow\/project\/capabilities\/[0-9]+-[^/]+\.md$/.test(marker.owner) ? "capability" : "invalid";
+  const owner = marker.owner === ".devflow/project/arch.md" ? "arch"
+    : /^\.devflow\/project\/capabilities\/[0-9]+-[^/]+\.md$/.test(marker.owner) ? "capability" : "invalid";
   const landing = marker.landing === "satisfied" ? "satisfied" : marker.landing === "pending" ? "pending" : "invalid";
   return { owner, landing };
 }

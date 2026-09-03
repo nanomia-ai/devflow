@@ -3,7 +3,7 @@
 **Canonical candidate order** is a selection order among candidates, not a comparison order
 for paths or card numbers.
 
-A candidate's **depth-1 unit** is the first path component below `devflow/tree/`, or the
+A candidate's **depth-1 unit** is the first path component below `.devflow/tree/`, or the
 number on an unopened capability's waiting file.
 
 The **session unit** is the depth-1 unit the user named in the current conversation. The

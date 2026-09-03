@@ -20,10 +20,20 @@ Entries for 0.10.0 and later are here; older ones are in
 Explicit Adopt now enters the stage the user named and consumes the state tool's
 `setup.unmanaged` result directly; Principles remains the classifier for requests that actually
 enter Principles. SessionStart, the Codex fallback, and installer guidance carry the same entry
-topology. SessionStart now requires `devflow/project/product.md`; an empty `devflow/` directory
+topology. SessionStart now requires `.devflow/project/product.md`; an empty `.devflow/` directory
 cannot activate managed-project guidance or change canonical unmanaged state unless Git's index or
 history contains devflow evidence. Explicit Adopt accepts maintained pre-devflow material in either
 documents or code; only a repository with no such material routes to Product.
+
+The canonical target-project root is now `.devflow/`. SessionStart, state and knowledge tools,
+Git pathspecs, journal and task-card coordinates, and all nine skills read and write that one
+spelling. The skill namespace, plugin name, and wire schemas remain `devflow`; historical release
+records and migration atoms retain their original paths. Because the owner confirmed there are no
+managed projects to migrate and test projects will be recreated, this is a hard cut with no alias,
+dual-root state, or migration code. Split's description now names both task decomposition and
+execution planning; its lifecycle semantics are unchanged.
+One pre-existing malformed quote escape in Split's project-research source fixture was corrected
+while that fixture's canonical path was moved; no runtime branch was added.
 
 Adopt now performs one evidence-led reconstruction instead of asking the model to self-report a
 sequence of phase statuses. It inventories every maintained code and documentary source with an

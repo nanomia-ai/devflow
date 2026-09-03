@@ -3,7 +3,7 @@
 ## Document Hierarchy (the contract)
 
 Whenever a canonical procedure says to write or append a journal line, create
-`devflow/journal.md` first when it is absent.
+`.devflow/journal.md` first when it is absent.
 
 ### Exact journal formats
 
@@ -31,14 +31,14 @@ suffixes by ASCII bytes. When all shared components are equal, the number with f
 components comes first; break any remaining tie by the full number's UTF-8 bytes.
 
 ```text
-YYYY-MM-DDTHH:MM:SSZ layer opening: parent: <devflow/tree or folder path with status suffixes removed>; children: <number+number>; source-json: <JSON string containing the exact durable source locator>
-YYYY-MM-DDTHH:MM:SSZ re-split pending: folder: <direct parent folder path with status suffixes removed>; stale: <number+number>; source: <devflow/project file path>#<heading>
+YYYY-MM-DDTHH:MM:SSZ layer opening: parent: <.devflow/tree or folder path with status suffixes removed>; children: <number+number>; source-json: <JSON string containing the exact durable source locator>
+YYYY-MM-DDTHH:MM:SSZ re-split pending: folder: <direct parent folder path with status suffixes removed>; stale: <number+number>; source: <.devflow/project file path>#<heading>
 YYYY-MM-DDTHH:MM:SSZ maintenance routing pending: request-json: <JSON string containing the whole user request>
 YYYY-MM-DDTHH:MM:SSZ product re-run pending: statement-json: <JSON string containing the whole disproved identity or success-criterion text>
 YYYY-MM-DDTHH:MM:SSZ product verification requested
 YYYY-MM-DDTHH:MM:SSZ product verification running: trigger: requested | automatic; product: <Product revision>; verification: <Verification revision>; code: <Code revision>
 YYYY-MM-DDTHH:MM:SSZ product verification result: trigger: requested | automatic; product: <Product revision>; verification: <Verification revision>; code: <Code revision>; verdict: pass | fail | unverified
-YYYY-MM-DDTHH:MM:SSZ capability closing: folder: <devflow/tree/capability folder path with status suffixes removed>; head: <git rev-parse HEAD>; product: <Product revision>; verification: <Verification revision>; capability: <Capability revision>
+YYYY-MM-DDTHH:MM:SSZ capability closing: folder: <.devflow/tree/capability folder path with status suffixes removed>; head: <git rev-parse HEAD>; product: <Product revision>; verification: <Verification revision>; capability: <Capability revision>
 YYYY-MM-DDTHH:MM:SSZ capability note: capability: <NN>; note-json: <JSON string containing the whole observation>
 YYYY-MM-DDTHH:MM:SSZ capability note: capability: <NN>; note-json: <JSON string containing the whole confirmed statement>; card-json: <JSON string containing the whole task-card path>; code-json: <JSON array of the exact code paths>
 YYYY-MM-DDTHH:MM:SSZ audit requested: <capability number|product>

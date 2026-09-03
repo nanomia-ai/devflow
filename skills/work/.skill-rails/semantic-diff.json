@@ -2,47 +2,688 @@
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
     "before": "sha256:b2ac7a85b043b8f9f4f2e43287064a24af7d43fd260ee38a41ab17887dd9e8fc",
-    "after": "sha256:b2ac7a85b043b8f9f4f2e43287064a24af7d43fd260ee38a41ab17887dd9e8fc"
+    "after": "sha256:2ea2aaf7c1c3d6a39d4fa035ffa41c335daee7b7a9d289350da8acf2a0130cdd"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
-    "observation_source": false,
-    "context": true
+    "behavior_source": true,
+    "observation_source": true,
+    "context": false
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:b2ac7a85b043b8f9f4f2e43287064a24af7d43fd260ee38a41ab17887dd9e8fc",
+      "after_hash": "sha256:2ea2aaf7c1c3d6a39d4fa035ffa41c335daee7b7a9d289350da8acf2a0130cdd",
+      "source": "behavior_source"
+    },
+    {
+      "kind": "collector",
+      "path": "collectors/index.mjs",
+      "before_hash": "sha256:c572b3949a2ee3607ca7c45d66322a0693775cd84b41afd5e640bfefc809cd6e",
+      "after_hash": "sha256:ba6626578ee06c2d71de9d819038fa673dccf76ab0aaa81d87cacd461f53c7a2",
+      "source": "observation_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "boundary",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "boundary.state",
+            "card.phase",
+            "knowledge.marker",
+            "feedback.marker"
+          ],
+          "needs": [
+            "feedback.action"
+          ],
+          "table": "boundary",
+          "branches": [
+            "compatible",
+            "compatible-settled-carry",
+            "compatible-settled",
+            "plain",
+            "late-carry",
+            "late-anchor",
+            "pending"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "compatible": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "compatibleFeedbackTransport",
+                    "atomic": true,
+                    "entries": "feedback.eligibleSet.bytes",
+                    "grammar": "external.principles.compatibleFeedbackPending",
+                    "touches": [
+                      "devflow/journal.md"
+                    ]
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "compatible-marker",
+                    "subject": "<id> boundary: compatible feedback",
+                    "touches": [
+                      "devflow/journal.md"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "compatible-settled": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "canonical claim-done move"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "boundary",
+                    "subject": "<id> boundary: task closure"
+                  }
+                ],
+                "ROUTE:verify"
+              ],
+              "compatible-settled-carry": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "carry"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "canonical claim-done move"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "boundary",
+                    "subject": "<id> boundary: task closure"
+                  }
+                ],
+                "ROUTE:verify"
+              ],
+              "late-anchor": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "canonical claim-done move"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "boundary",
+                    "subject": "<id> boundary: task closure"
+                  }
+                ],
+                "ROUTE:verify"
+              ],
+              "late-carry": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "carry"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "canonical claim-done move"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "boundary",
+                    "subject": "<id> boundary: task closure"
+                  }
+                ],
+                "ROUTE:verify"
+              ],
+              "pending": [
+                [
+                  "REPORT",
+                  {
+                    "scope": "reobserve-finish-boundary"
+                  }
+                ],
+                "WAIT"
+              ],
+              "plain": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "canonical claim-done move"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "boundary",
+                    "subject": "<id> boundary: task closure"
+                  }
+                ],
+                "ROUTE:verify"
+              ]
+            }
+          },
+          "body": "stage: boundary",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "boundary.state",
+            "card.phase",
+            "knowledge.marker",
+            "feedback.marker"
+          ],
+          "needs": [
+            "feedback.action"
+          ],
+          "table": "boundary",
+          "branches": [
+            "compatible",
+            "compatible-settled-carry",
+            "compatible-settled",
+            "plain",
+            "late-carry",
+            "late-anchor",
+            "pending"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "compatible": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "compatibleFeedbackTransport",
+                    "atomic": true,
+                    "entries": "feedback.eligibleSet.bytes",
+                    "grammar": "external.principles.compatibleFeedbackPending",
+                    "touches": [
+                      ".devflow/journal.md"
+                    ]
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "compatible-marker",
+                    "subject": "<id> boundary: compatible feedback",
+                    "touches": [
+                      ".devflow/journal.md"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "compatible-settled": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "canonical claim-done move"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "boundary",
+                    "subject": "<id> boundary: task closure"
+                  }
+                ],
+                "ROUTE:verify"
+              ],
+              "compatible-settled-carry": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "carry"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "canonical claim-done move"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "boundary",
+                    "subject": "<id> boundary: task closure"
+                  }
+                ],
+                "ROUTE:verify"
+              ],
+              "late-anchor": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "canonical claim-done move"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "boundary",
+                    "subject": "<id> boundary: task closure"
+                  }
+                ],
+                "ROUTE:verify"
+              ],
+              "late-carry": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "template": "carry"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "canonical claim-done move"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "boundary",
+                    "subject": "<id> boundary: task closure"
+                  }
+                ],
+                "ROUTE:verify"
+              ],
+              "pending": [
+                [
+                  "REPORT",
+                  {
+                    "scope": "reobserve-finish-boundary"
+                  }
+                ],
+                "WAIT"
+              ],
+              "plain": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "activeCard",
+                    "scope": "canonical claim-done move"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "boundary",
+                    "subject": "<id> boundary: task closure"
+                  }
+                ],
+                "ROUTE:verify"
+              ]
+            }
+          },
+          "body": "stage: boundary",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [
+    "body": [],
+    "references": [],
+    "ownership": [
       {
-        "id": "stage: boundary",
-        "change": "modified",
-        "before": "sha256:c30de66b5564960a32757d1e666a1dbdd526f5433fb03ffb80ff9677f7c4d774",
-        "after": "sha256:4e133cb2f372cb56199ec2bf427dfaf2b7b80ab60239d1bba8671a776d5c9b10"
+        "id": ".devflow/journal.md#compatible-feedback-pending",
+        "change": "added",
+        "after": "work"
+      },
+      {
+        "id": ".devflow/journal.md#knowledge-landing-pending",
+        "change": "added",
+        "after": "work"
+      },
+      {
+        "id": ".devflow/journal.md#remote-evidence-finalizing",
+        "change": "added",
+        "after": "work"
+      },
+      {
+        "id": ".devflow/project/<semantic-owner>.md#compatible-upper-feedback",
+        "change": "added",
+        "after": "semantic owner"
+      },
+      {
+        "id": ".devflow/tree/**.md",
+        "change": "added",
+        "after": "work"
+      },
+      {
+        "id": ".devflow/users/<id>/HANDOFF.md",
+        "change": "added",
+        "after": "work"
+      },
+      {
+        "id": "devflow/journal.md#compatible-feedback-pending",
+        "change": "removed",
+        "before": "work"
+      },
+      {
+        "id": "devflow/journal.md#knowledge-landing-pending",
+        "change": "removed",
+        "before": "work"
+      },
+      {
+        "id": "devflow/journal.md#remote-evidence-finalizing",
+        "change": "removed",
+        "before": "work"
+      },
+      {
+        "id": "devflow/project/<semantic-owner>.md#compatible-upper-feedback",
+        "change": "removed",
+        "before": "semantic owner"
+      },
+      {
+        "id": "devflow/tree/**.md",
+        "change": "removed",
+        "before": "work"
+      },
+      {
+        "id": "devflow/users/<id>/HANDOFF.md",
+        "change": "removed",
+        "before": "work"
       }
     ],
-    "references": [],
-    "ownership": [],
-    "artifacts": [],
+    "artifacts": [
+      {
+        "id": "activeCard",
+        "change": "modified",
+        "before": {
+          "path": "devflow/tree/**.md",
+          "writer": "work",
+          "readers": [
+            "stage.claim-or-reenter",
+            "stage.implement-and-signal",
+            "stage.review-reduction",
+            "stage.research-checkpoint",
+            "stage.task-finalization",
+            "stage.boundary"
+          ]
+        },
+        "after": {
+          "path": ".devflow/tree/**.md",
+          "writer": "work",
+          "readers": [
+            "stage.claim-or-reenter",
+            "stage.implement-and-signal",
+            "stage.review-reduction",
+            "stage.research-checkpoint",
+            "stage.task-finalization",
+            "stage.boundary"
+          ]
+        }
+      },
+      {
+        "id": "arch",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/arch.md",
+          "writer": "project.arch",
+          "readers": [
+            "stage.implement-and-signal",
+            "role.reviewer"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/arch.md",
+          "writer": "project.arch",
+          "readers": [
+            "stage.implement-and-signal",
+            "role.reviewer"
+          ]
+        }
+      },
+      {
+        "id": "codeStyle",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/code-style.md",
+          "writer": "project.arch",
+          "readers": [
+            "stage.implement-and-signal",
+            "role.reviewer"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/code-style.md",
+          "writer": "project.arch",
+          "readers": [
+            "stage.implement-and-signal",
+            "role.reviewer"
+          ]
+        }
+      },
+      {
+        "id": "compatibleFeedbackTransport",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md#compatible-feedback-pending",
+          "writer": "work",
+          "readers": [
+            "stage.task-finalization",
+            "stage.boundary",
+            "guard.compatible-feedback-before-closure"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md#compatible-feedback-pending",
+          "writer": "work",
+          "readers": [
+            "stage.task-finalization",
+            "stage.boundary",
+            "guard.compatible-feedback-before-closure"
+          ]
+        }
+      },
+      {
+        "id": "design",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/design.md",
+          "writer": "project.design",
+          "readers": [
+            "stage.implement-and-signal",
+            "role.reviewer"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/design.md",
+          "writer": "project.design",
+          "readers": [
+            "stage.implement-and-signal",
+            "role.reviewer"
+          ]
+        }
+      },
+      {
+        "id": "glossary",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/glossary.md",
+          "writer": "project.product",
+          "readers": [
+            "stage.implement-and-signal",
+            "role.reviewer"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/glossary.md",
+          "writer": "project.product",
+          "readers": [
+            "stage.implement-and-signal",
+            "role.reviewer"
+          ]
+        }
+      },
+      {
+        "id": "journal",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.implement-and-signal",
+            "stage.knowledge-marker",
+            "stage.task-finalization",
+            "role.reviewer"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.implement-and-signal",
+            "stage.knowledge-marker",
+            "stage.task-finalization",
+            "role.reviewer"
+          ]
+        }
+      },
+      {
+        "id": "knowledgeMarkerTransport",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md#knowledge-landing-pending",
+          "writer": "work",
+          "readers": [
+            "stage.knowledge-marker"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md#knowledge-landing-pending",
+          "writer": "work",
+          "readers": [
+            "stage.knowledge-marker"
+          ]
+        }
+      },
+      {
+        "id": "product",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/product.md",
+          "writer": "project.product",
+          "readers": [
+            "stage.implement-and-signal",
+            "role.reviewer"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/product.md",
+          "writer": "project.product",
+          "readers": [
+            "stage.implement-and-signal",
+            "role.reviewer"
+          ]
+        }
+      },
+      {
+        "id": "remoteFinalizingTransport",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md#remote-evidence-finalizing",
+          "writer": "work",
+          "readers": [
+            "stage.task-finalization"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md#remote-evidence-finalizing",
+          "writer": "work",
+          "readers": [
+            "stage.task-finalization"
+          ]
+        }
+      },
+      {
+        "id": "roomHandoff",
+        "change": "modified",
+        "before": {
+          "path": "devflow/users/<id>/HANDOFF.md",
+          "writer": "work",
+          "readers": [
+            "stage.handoff"
+          ]
+        },
+        "after": {
+          "path": ".devflow/users/<id>/HANDOFF.md",
+          "writer": "work",
+          "readers": [
+            "stage.handoff"
+          ]
+        }
+      }
+    ],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "v0.21-compatible-owner-language",
-  "intent": "Name current managed semantic owners without implying an Adopt re-entry path.",
+  "change_id": "dot-devflow-root-work",
+  "intent": "Move the target-project state and knowledge root to .devflow without compatibility branches, while preserving devflow namespace identifiers.",
   "impact": {
-    "body": {
+    "stages": {
       "total": 1,
       "added": 0,
       "removed": 0,
       "modified": 1
+    },
+    "ownership": {
+      "total": 12,
+      "added": 6,
+      "removed": 6,
+      "modified": 0
+    },
+    "artifacts": {
+      "total": 11,
+      "added": 0,
+      "removed": 0,
+      "modified": 11
     }
   }
 }

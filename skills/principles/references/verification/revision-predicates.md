@@ -6,12 +6,12 @@ this companion.
 
 ## Verification revision predicates
 
-- Product revision: output of `git hash-object devflow/project/product.md`.
+- Product revision: output of `git hash-object .devflow/project/product.md`.
 - Verification revision: give `git ls-tree -r -z --full-tree HEAD --` exactly
-  `devflow/project/arch.md`, `devflow/project/code-style.md`, and
-  `devflow/project/glossary.md` when present. Pass its raw stdout bytes unchanged to the
+  `.devflow/project/arch.md`, `.devflow/project/code-style.md`, and
+  `.devflow/project/glossary.md` when present. Pass its raw stdout bytes unchanged to the
   stdin of `git hash-object --stdin`.
-- Code revision: output of `git log -1 --format=%H -- . ':(exclude)devflow/**'`; use `none`
+- Code revision: output of `git log -1 --format=%H -- . ':(exclude).devflow/**'`; use `none`
   when it has no output.
 - Capability revision: capability layer only. In HEAD, find exactly one folder whose path
   normalized by removing status suffixes equals the target capability-folder locator.

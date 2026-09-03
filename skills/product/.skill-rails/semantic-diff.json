@@ -1,34 +1,389 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:4210eb9bfaf024311292f421180c19b7a6f293b5f0243d44d9f2ac8394c976f6",
-    "after": "sha256:4210eb9bfaf024311292f421180c19b7a6f293b5f0243d44d9f2ac8394c976f6"
+    "before": "sha256:16fb3ddd1d5e1cb6a4d8df88aaedef650a8a7b8a568d9cf4a4ab2479c0f9b846",
+    "after": "sha256:d268b1e136b709ddcc85c90804724814c18b26cb972c84598ccd76b88daf4e5c"
   },
-  "changed": false,
-  "any_changed": false,
+  "changed": true,
+  "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
-    "observation_source": false,
+    "behavior_source": true,
+    "observation_source": true,
     "context": false
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:16fb3ddd1d5e1cb6a4d8df88aaedef650a8a7b8a568d9cf4a4ab2479c0f9b846",
+      "after_hash": "sha256:d268b1e136b709ddcc85c90804724814c18b26cb972c84598ccd76b88daf4e5c",
+      "source": "behavior_source"
+    },
+    {
+      "kind": "collector",
+      "path": "collectors/index.mjs",
+      "before_hash": "sha256:d80805a749d605e925a69d88d699d9b53252c3b5255d1dd57af7c1f438e2125a",
+      "after_hash": "sha256:2bfe2743c9346728d9e157a4d66b6f63e4202ec19c805195bbf1a1266f71c349",
+      "source": "observation_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "compatible-feedback",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "compatible.owner"
+          ],
+          "needs": [],
+          "table": "compatibleFeedback",
+          "branches": [
+            "write-product",
+            "write-glossary",
+            "land"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "land": [
+                [
+                  "RUN",
+                  {
+                    "action": "delete-byte-identical-compatible-feedback-marker"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "compatible-feedback-owner-and-marker",
+                    "touches": [
+                      "compatible.owner",
+                      "devflow/journal.md"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "write-glossary": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "preserves": [
+                      "source",
+                      "background",
+                      "why",
+                      "conclusion",
+                      "implication"
+                    ],
+                    "source": "compatible-feedback exact coordinates"
+                  }
+                ],
+                "WAIT"
+              ],
+              "write-product": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "preserves": [
+                      "source",
+                      "background",
+                      "why",
+                      "conclusion",
+                      "implication"
+                    ],
+                    "source": "compatible-feedback exact coordinates"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: compatible-feedback",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "compatible.owner"
+          ],
+          "needs": [],
+          "table": "compatibleFeedback",
+          "branches": [
+            "write-product",
+            "write-glossary",
+            "land"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "land": [
+                [
+                  "RUN",
+                  {
+                    "action": "delete-byte-identical-compatible-feedback-marker"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "compatible-feedback-owner-and-marker",
+                    "touches": [
+                      "compatible.owner",
+                      ".devflow/journal.md"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "write-glossary": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "preserves": [
+                      "source",
+                      "background",
+                      "why",
+                      "conclusion",
+                      "implication"
+                    ],
+                    "source": "compatible-feedback exact coordinates"
+                  }
+                ],
+                "WAIT"
+              ],
+              "write-product": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "preserves": [
+                      "source",
+                      "background",
+                      "why",
+                      "conclusion",
+                      "implication"
+                    ],
+                    "source": "compatible-feedback exact coordinates"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: compatible-feedback",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
     "body": [],
     "references": [],
-    "ownership": [],
-    "artifacts": [],
+    "ownership": [
+      {
+        "id": ".devflow/journal.md#compatible-feedback-pending",
+        "change": "added",
+        "after": "product-on-exact-owner-landing"
+      },
+      {
+        "id": ".devflow/project/capabilities/**",
+        "change": "added",
+        "after": "external.arch"
+      },
+      {
+        "id": ".devflow/project/glossary.md",
+        "change": "added",
+        "after": "product"
+      },
+      {
+        "id": ".devflow/project/product.md",
+        "change": "added",
+        "after": "product"
+      },
+      {
+        "id": ".devflow/tree/00-project",
+        "change": "added",
+        "after": "external.split"
+      },
+      {
+        "id": "devflow/journal.md#compatible-feedback-pending",
+        "change": "removed",
+        "before": "product-on-exact-owner-landing"
+      },
+      {
+        "id": "devflow/project/capabilities/**",
+        "change": "removed",
+        "before": "external.arch"
+      },
+      {
+        "id": "devflow/project/glossary.md",
+        "change": "removed",
+        "before": "product"
+      },
+      {
+        "id": "devflow/project/product.md",
+        "change": "removed",
+        "before": "product"
+      },
+      {
+        "id": "devflow/tree/00-project",
+        "change": "removed",
+        "before": "external.split"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "compatibleFeedbackMarker",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md#compatible-feedback-pending",
+          "writer": "product",
+          "readers": [
+            "stage.compatible-feedback"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md#compatible-feedback-pending",
+          "writer": "product",
+          "readers": [
+            "stage.compatible-feedback"
+          ]
+        }
+      },
+      {
+        "id": "glossary",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/glossary.md",
+          "writer": "product",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.glossary",
+            "stage.propose-and-confirm",
+            "external.arch"
+          ],
+          "template": "glossary"
+        },
+        "after": {
+          "path": ".devflow/project/glossary.md",
+          "writer": "product",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.glossary",
+            "stage.propose-and-confirm",
+            "external.arch"
+          ],
+          "template": "glossary"
+        }
+      },
+      {
+        "id": "journal",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.research",
+            "stage.propose-and-confirm",
+            "guard.existing-project-research"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.research",
+            "stage.propose-and-confirm",
+            "guard.existing-project-research"
+          ]
+        }
+      },
+      {
+        "id": "product",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/product.md",
+          "writer": "product",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.propose-and-confirm",
+            "external.arch",
+            "external.design"
+          ],
+          "template": "productConfirmed"
+        },
+        "after": {
+          "path": ".devflow/project/product.md",
+          "writer": "product",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.propose-and-confirm",
+            "external.arch",
+            "external.design"
+          ],
+          "template": "productConfirmed"
+        }
+      },
+      {
+        "id": "projectResearch",
+        "change": "modified",
+        "before": {
+          "path": "devflow/tree/00-project",
+          "writer": "external.split",
+          "readers": [
+            "stage.research",
+            "guard.existing-project-research",
+            "external.split"
+          ]
+        },
+        "after": {
+          "path": ".devflow/tree/00-project",
+          "writer": "external.split",
+          "readers": [
+            "stage.research",
+            "guard.existing-project-research",
+            "external.split"
+          ]
+        }
+      }
+    ],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "product-lifecycle-ownership",
-  "intent": "Return partial managed state to Resume instead of entering Adopt.",
-  "impact": {}
+  "change_id": "dot-devflow-root-product",
+  "intent": "Move the target-project state and knowledge root to .devflow without compatibility branches, while preserving devflow namespace identifiers.",
+  "impact": {
+    "stages": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "ownership": {
+      "total": 10,
+      "added": 5,
+      "removed": 5,
+      "modified": 0
+    },
+    "artifacts": {
+      "total": 5,
+      "added": 0,
+      "removed": 0,
+      "modified": 5
+    }
+  }
 }

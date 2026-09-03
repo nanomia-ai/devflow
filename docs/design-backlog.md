@@ -522,7 +522,7 @@ The items below are what v0.18.9 — the repair of the first field test — left
   reports both source texts and coordinates, but a report that goes only into conversation evaporates.
   In the first field test the 20 "sentences whose meaning could not be settled" evaporated exactly that
   way — they survived only because the test demanded a separate log, and in normal use nothing in
-  `devflow/` would hold them. Fixing it now would create **a new record kind**, and that is the last
+  `.devflow/` would hold them. Fixing it now would create **a new record kind**, and that is the last
   resort. **Adopt on this measure: among the items a record-comprehension measurement returns as
   "cannot tell" or "read it wrong", how many would this report have filled?** That count sets what a
   new place is worth.
@@ -589,7 +589,7 @@ The items below are what v0.18.9 — the repair of the first field test — left
   `ready.digest-behind`). **What real use still owns**: if a session is observed failing to close the
   boundary after detection exists, a separate writer reopens then — that is DD-83's recorded condition.
 - **★ Whether the record alone lets a new session take over — measured by running it** — a clean session
-  was given only `devflow/` (no git, no product code, no canon) and answered eight questions, then
+  was given only `.devflow/` (no git, no product code, no canon) and answered eight questions, then
   reconciled against git and the code (`REPORT-15-comprehension-{claude,codex}.md`). **Claude: zero
   "wrong"** — it nearly had one at HANDOFF, and what prevented it was not the document but a manual
   comparison of card timestamps. **Codex: one "wrong"** — it followed that same HANDOFF into an
@@ -604,7 +604,7 @@ The items below are what v0.18.9 — the repair of the first field test — left
   **The two best-working things are kept**: how a block is recorded (call name, timeout value, the refuted
   hypothesis, what not to do next, the "this is not a product defect" classification) and recording the
   rejected alternative and its cost beside every decision (*"Q4 was the easiest cell in this measurement,
-  because the documents left an argument rather than a conclusion"*). And **nothing inside `devflow/` says
+  because the documents left an argument rather than a conclusion"*). And **nothing inside `.devflow/` says
   where a first reader should start.** **Partly adopted — v0.19.0's DD-83.** The first gap is closed by
   **projecting from existing facts** rather than by an `Origin:` field on the card (the card's creating
   commit and the request or layer-opening marker it deleted → `report: origin=…`, `none` when there was

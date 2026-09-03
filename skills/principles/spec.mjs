@@ -39,14 +39,14 @@ export const ORDERS = {
 };
 
 export const OWNERSHIP = {
-  "devflow/project/product.md": "project.product",
-  "devflow/project/arch.md": "project.arch",
-  "devflow/project/design.md": "project.design",
-  "devflow/project/code-style.md": "project.arch",
-  "devflow/project/glossary.md": "project.product",
-  "devflow/project/capabilities/**": "project.arch-or-adopt",
-  "devflow/tree/**": "project.split-or-work",
-  "devflow/journal.md": "project.stage-owner",
+  ".devflow/project/product.md": "project.product",
+  ".devflow/project/arch.md": "project.arch",
+  ".devflow/project/design.md": "project.design",
+  ".devflow/project/code-style.md": "project.arch",
+  ".devflow/project/glossary.md": "project.product",
+  ".devflow/project/capabilities/**": "project.arch-or-adopt",
+  ".devflow/tree/**": "project.split-or-work",
+  ".devflow/journal.md": "project.stage-owner",
   ".git/**": "external.git"
 };
 

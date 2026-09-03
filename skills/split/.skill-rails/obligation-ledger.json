@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:5dad288696b507de8c91b168fd765d98427ace1a93bde725d06cc58cbc00f157",
+  "intent_hash": "sha256:0613926162278935cb5c3cb215ad567179243c943e893ab42579146d745a6855",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Task splitting. Opens the task tree (devflow/tree/) one layer at a time, creates task cards, and gets the execution proposal (order, parallelism, model tiers) approved by the user. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
+      "text": "Task decomposition and execution planning. Opens the task tree (.devflow/tree/) one layer at a time, creates task cards, and gets the execution proposal (order, parallelism, model tiers) approved by the user. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",

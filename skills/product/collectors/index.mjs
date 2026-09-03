@@ -9,7 +9,7 @@ const readState = (ctx, read) => {
 };
 const file = (root, path) => existsSync(join(root, path));
 const productIsCurrent = (root) => {
-  const path = join(root, "devflow/project/product.md");
+  const path = join(root, ".devflow/project/product.md");
   if (!existsSync(path)) return "absent";
   const text = readFileSync(path, "utf8");
   const required = ["# ", "## Problem", "## Approach", "## Capabilities", "## Boundary", "## Success criteria", "## Screens & access points", "## Open questions", "interface:"];
@@ -56,7 +56,7 @@ const projectResearch = async (ctx, root) => {
     const entries = [...(result.zones.ready?.entries ?? []), ...(result.zones.claim?.entries ?? [])];
     const matches = entries.filter(entry => {
       const path = entry.file ?? entry.path;
-      return typeof path === "string" && path.startsWith("devflow/tree/00-project/") && entry.origin === origin
+      return typeof path === "string" && path.startsWith(".devflow/tree/00-project/") && entry.origin === origin
         && /^# \d+\.\d+ Research:/.test(readFileSync(join(root, path), "utf8"));
     });
     if (matches.length > 1) return "unknown";
@@ -70,14 +70,14 @@ const compatible = async (ctx, root) => {
   if (!Array.isArray(entries)) return { owner: "invalid", landing: "invalid" };
   const marker = entries.find(entry => entry?.kind === "compatible-feedback" && entry?.writer === "product");
   if (!marker) return { owner: "none", landing: "none" };
-  const owner = marker.owner === "devflow/project/product.md" ? "product" : marker.owner === "devflow/project/glossary.md" ? "glossary" : "invalid";
+  const owner = marker.owner === ".devflow/project/product.md" ? "product" : marker.owner === ".devflow/project/glossary.md" ? "glossary" : "invalid";
   const landing = marker.landing === "satisfied" ? "satisfied" : marker.landing === "pending" ? "pending" : "invalid";
   return { owner, landing };
 };
 export const collectors = Object.freeze({
-  "state.product-entry": ctx => readState(ctx, root => (!file(root, "devflow/project/product.md") && file(root, "devflow/project/arch.md") ? "brownfield-no-product" : file(root, "devflow/project/product.md") ? "existing" : "new")),
+  "state.product-entry": ctx => readState(ctx, root => (!file(root, ".devflow/project/product.md") && file(root, ".devflow/project/arch.md") ? "brownfield-no-product" : file(root, ".devflow/project/product.md") ? "existing" : "new")),
   "state.product-file": ctx => readState(ctx, productIsCurrent),
-  "state.glossary": ctx => readState(ctx, root => file(root, "devflow/project/glossary.md") ? "current" : "missing"),
+  "state.glossary": ctx => readState(ctx, root => file(root, ".devflow/project/glossary.md") ? "current" : "missing"),
   "state.product-request": ctx => readState(ctx, root => productRequest(ctx, root)),
   "state.project-research-state": ctx => readState(ctx, async root => projectResearch(ctx, root)),
   "state.compatible-owner": ctx => readState(ctx, async root => (await compatible(ctx, root)).owner),

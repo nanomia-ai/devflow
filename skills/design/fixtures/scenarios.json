@@ -83,7 +83,7 @@
       "maintenance.origin": "2026-08-30T00:00:00Z maintenance routing pending: request-json: design",
       "maintenance.state": "current",
       "research.origin": "2026-08-30T00:00:00Z maintenance routing pending: request-json: design",
-      "research.card.path": "devflow/tree/00-project/00.1-research.md",
+      "research.card.path": ".devflow/tree/00-project/00.1-research.md",
       "research.card.state": "pending",
       "compatible.owner": "none",
       "compatible.landing": "none"

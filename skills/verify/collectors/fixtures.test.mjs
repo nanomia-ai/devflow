@@ -41,8 +41,8 @@ test("collector reads exact canonical record state without invented execution gr
   const counterfeit = await repository();
   const ambiguous = await repository();
   try {
-    const recordPath = join(root, "devflow", "tree", "verify.md");
-    await mkdir(join(root, "devflow", "tree"), { recursive: true });
+    const recordPath = join(root, ".devflow", "tree", "verify.md");
+    await mkdir(join(root, ".devflow", "tree"), { recursive: true });
     const revisions = (await calculateState({ root })).compatibility.snapshot.revisions;
     const base = (values = revisions) => [
       "# Verification",
@@ -58,22 +58,22 @@ test("collector reads exact canonical record state without invented execution gr
     assert.equal(await collectors["verify/record.current"](context), "current");
     assert.equal(await collectors["verify/record.execution-evidence"](context), "current");
 
-    const missingExecutionPath = join(withoutExecution, "devflow", "tree", "verify.md");
-    await mkdir(join(withoutExecution, "devflow", "tree"), { recursive: true });
+    const missingExecutionPath = join(withoutExecution, ".devflow", "tree", "verify.md");
+    await mkdir(join(withoutExecution, ".devflow", "tree"), { recursive: true });
     const withoutExecutionRevisions = (await calculateState({ root: withoutExecution })).compatibility.snapshot.revisions;
     await writeFile(missingExecutionPath, base(withoutExecutionRevisions));
     assert.equal(await collectors["verify/record.current"]({ projectRoot: withoutExecution }), "current");
     assert.equal(await collectors["verify/record.execution-evidence"]({ projectRoot: withoutExecution }), "missing");
 
-    await mkdir(join(counterfeit, "devflow", "tree"), { recursive: true });
-    await writeFile(join(counterfeit, "devflow", "tree", "verify.md"), base({ product: "p", verification: "v", code: "c" }).replace("Executed:", "Executed: claimed success"));
+    await mkdir(join(counterfeit, ".devflow", "tree"), { recursive: true });
+    await writeFile(join(counterfeit, ".devflow", "tree", "verify.md"), base({ product: "p", verification: "v", code: "c" }).replace("Executed:", "Executed: claimed success"));
     assert.equal(await collectors["verify/record.freshness"]({ projectRoot: counterfeit }), "stale");
     assert.equal(await collectors["verify/record.current"]({ projectRoot: counterfeit }), "stale");
     assert.equal(await collectors["verify/record.execution-evidence"]({ projectRoot: counterfeit }), "missing");
 
-    await mkdir(join(ambiguous, "devflow", "tree", "02-capability.done"), { recursive: true });
-    await writeFile(join(ambiguous, "devflow", "tree", "verify.md"), base().replace("Executed:", "Executed: root execution"));
-    await writeFile(join(ambiguous, "devflow", "tree", "02-capability.done", "verify.md"), base().replace("Executed:", "Executed: capability execution"));
+    await mkdir(join(ambiguous, ".devflow", "tree", "02-capability.done"), { recursive: true });
+    await writeFile(join(ambiguous, ".devflow", "tree", "verify.md"), base().replace("Executed:", "Executed: root execution"));
+    await writeFile(join(ambiguous, ".devflow", "tree", "02-capability.done", "verify.md"), base().replace("Executed:", "Executed: capability execution"));
     assert.equal(await collectors["verify/record.current"]({ projectRoot: ambiguous }), "mismatched");
     assert.equal(await collectors["verify/record.execution-evidence"]({ projectRoot: ambiguous }), "missing");
   } finally {

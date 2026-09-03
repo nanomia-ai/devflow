@@ -41,9 +41,9 @@ export const ORDERS = {
 
 export const OWNERSHIP = {
   "project-state and verification predicates": "external.principles",
-  "devflow/tree/**/verify.md": "verify",
-  "devflow/tree/verify.md": "verify",
-  "devflow/journal.md": "external.principles",
+  ".devflow/tree/**/verify.md": "verify",
+  ".devflow/tree/verify.md": "verify",
+  ".devflow/journal.md": "external.principles",
   "repair cards and re-split markers": "external.split",
   "capability baseline closure": "external.arch-or-adopt"
 };
@@ -94,13 +94,13 @@ export const STAGES = [
 ];
 
 export const ARTIFACTS = {
-  product: { path: "devflow/project/product.md", writer: "project.product", readers: ["stage.dispatch-verifier", "stage.product-stop"] },
-  arch: { path: "devflow/project/arch.md", writer: "project.arch", readers: ["stage.dispatch-verifier", "stage.capability-closure"] },
-  codeStyle: { path: "devflow/project/code-style.md", writer: "project.arch", readers: ["stage.dispatch-verifier", "stage.capability-closure"] },
-  glossary: { path: "devflow/project/glossary.md", writer: "project.product", readers: ["stage.dispatch-verifier"] },
-  journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.recover", "stage.event-routing"] },
-  record: { path: "devflow/tree/**/verify.md", writer: "verify", readers: ["stage.recover", "stage.result-routing", "stage.event-routing"] },
-  baselines: { path: "devflow/project/capabilities", writer: "external.arch-or-adopt", readers: ["stage.capability-closure"] }
+  product: { path: ".devflow/project/product.md", writer: "project.product", readers: ["stage.dispatch-verifier", "stage.product-stop"] },
+  arch: { path: ".devflow/project/arch.md", writer: "project.arch", readers: ["stage.dispatch-verifier", "stage.capability-closure"] },
+  codeStyle: { path: ".devflow/project/code-style.md", writer: "project.arch", readers: ["stage.dispatch-verifier", "stage.capability-closure"] },
+  glossary: { path: ".devflow/project/glossary.md", writer: "project.product", readers: ["stage.dispatch-verifier"] },
+  journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.recover", "stage.event-routing"] },
+  record: { path: ".devflow/tree/**/verify.md", writer: "verify", readers: ["stage.recover", "stage.result-routing", "stage.event-routing"] },
+  baselines: { path: ".devflow/project/capabilities", writer: "external.arch-or-adopt", readers: ["stage.capability-closure"] }
 };
 
 export const TABLES = {

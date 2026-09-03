@@ -20,14 +20,14 @@
 
 ## Static artifacts
 
-- `devflow/project/product.md`: read by input and capability-design stages.
-- `devflow/project/glossary.md`: read by input/capability stages; written only on the glossary marker route.
-- `devflow/project/arch.md`: read or written by repair, input, approval, and capability stages.
-- `devflow/project/code-style.md`: read or written by input and approval stages.
-- `devflow/project/decisions`: read or written by input, approval, and capability stages.
-- `devflow/project/capabilities`: written by design-marker, glossary alignment, and capability-design stages.
-- `devflow/journal.md`: read by marker/input stages; exact selected-line deletion is a routed effect.
-- `devflow/project`: dynamic marker owners and owner-adjacent K targets are named exactly by the structured marker payload.
+- `.devflow/project/product.md`: read by input and capability-design stages.
+- `.devflow/project/glossary.md`: read by input/capability stages; written only on the glossary marker route.
+- `.devflow/project/arch.md`: read or written by repair, input, approval, and capability stages.
+- `.devflow/project/code-style.md`: read or written by input and approval stages.
+- `.devflow/project/decisions`: read or written by input, approval, and capability stages.
+- `.devflow/project/capabilities`: written by design-marker, glossary alignment, and capability-design stages.
+- `.devflow/journal.md`: read by marker/input stages; exact selected-line deletion is a routed effect.
+- `.devflow/project`: dynamic marker owners and owner-adjacent K targets are named exactly by the structured marker payload.
 
 ## Terminals and evidence
 

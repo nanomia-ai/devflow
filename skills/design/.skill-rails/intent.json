@@ -1,6 +1,6 @@
 {
   "name": "design",
-  "description": "Design planning (optional stage). Decides the UI approach, source, token and component strategies, decomposition axis, and review surface, and creates devflow/project/design.md. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
+  "description": "Design planning (optional stage). Decides the UI approach, source, token and component strategies, decomposition axis, and review surface, and creates .devflow/project/design.md. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
   "problem": "Preserve the behavior of immutable repository sources `skills/design/SKILL.md` and `skills/design/SKILL_ko.md`, identified by their recorded source hashes, without silently changing their obligations.",
   "use_cases": [],
   "near_misses": [],

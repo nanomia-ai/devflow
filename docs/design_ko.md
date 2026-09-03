@@ -32,7 +32,7 @@
 ```
 Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증거는 adopt가 역산     Layer 1 (반복): split → work ⇄ verify
 공통: resume, principles(규칙 정본)
-대상 프로젝트에 생기는 것: devflow/{project/, tree/, journal.md, users/<id>/ 방}
+대상 프로젝트에 생기는 것: .devflow/{project/, tree/, journal.md, users/<id>/ 방}
 배포: Claude 플러그인(.claude-plugin) + Codex 네이티브 플러그인(.codex-plugin — codex/install.*가 등록)
 ```
 

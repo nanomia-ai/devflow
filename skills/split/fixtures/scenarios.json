@@ -106,7 +106,7 @@
       "bundle.contract": "ready",
       "bundle.units": [
         {
-          "scope": "devflow/tree/00-project",
+          "scope": ".devflow/tree/00-project",
           "cardKind": "research",
           "address": "00.1-auth-research",
           "question": "research auth",
@@ -139,7 +139,7 @@
       "origin.drafts": "NONE",
       "origin.projectResearch": {
         "origin": "journal:2026-08-30T00:00:01Z maintenance routing pending: request-json: \"research auth\"",
-        "path": "devflow/tree/00-project/00.1-auth-research.md"
+        "path": ".devflow/tree/00-project/00.1-auth-research.md"
       },
       "projectResearch.approval": "effective",
       "approval.boundary": "NONE",
@@ -147,10 +147,10 @@
       "planning.receipt": {
         "origin": "journal:2026-08-30T00:00:01Z maintenance routing pending: request-json: \"research auth\"",
         "scopes": [
-          "devflow/tree/00-project"
+          ".devflow/tree/00-project"
         ],
         "cards": [
-          "devflow/tree/00-project/00.1-auth-research.md"
+          ".devflow/tree/00-project/00.1-auth-research.md"
         ],
         "commit": "0123456789012345678901234567890123456789"
       }
@@ -168,7 +168,7 @@
   {
     "id": "unrelated-old-project-research-does-not-bind",
     "given": {
-      "unrelatedOldCard": "devflow/tree/00-project/00.1-payments-research.md",
+      "unrelatedOldCard": ".devflow/tree/00-project/00.1-payments-research.md",
       "oldOrigin": "journal:older request"
     },
     "s": {
@@ -190,7 +190,7 @@
       "bundle.contract": "ready",
       "bundle.units": [
         {
-          "scope": "devflow/tree/00-project",
+          "scope": ".devflow/tree/00-project",
           "cardKind": "research",
           "address": "00.2-modal-research",
           "question": "research modal",
@@ -273,8 +273,8 @@
     "id": "unrelated-old-cards-do-not-select-current-bundle",
     "given": {
       "unrelatedOldCards": [
-        "devflow/tree/01-foundation/01.9-old.md",
-        "devflow/tree/02-auth/02.1-old.md"
+        ".devflow/tree/01-foundation/01.9-old.md",
+        ".devflow/tree/02-auth/02.1-old.md"
       ]
     },
     "s": {
@@ -296,7 +296,7 @@
       "bundle.contract": "ready",
       "bundle.units": [
         {
-          "scope": "devflow/tree/03-ui/modal",
+          "scope": ".devflow/tree/03-ui/modal",
           "kind": "task",
           "owners": [
             "03-ui"
@@ -342,21 +342,21 @@
       "bundle.contract": "ready",
       "bundle.units": [
         {
-          "scope": "devflow/tree/03-ui/modal",
+          "scope": ".devflow/tree/03-ui/modal",
           "kind": "task",
           "owners": [
             "03-ui"
           ]
         },
         {
-          "scope": "devflow/tree/03-ui/modal",
+          "scope": ".devflow/tree/03-ui/modal",
           "kind": "task",
           "owners": [
             "03-ui"
           ]
         },
         {
-          "scope": "devflow/tree/03-ui/modal",
+          "scope": ".devflow/tree/03-ui/modal",
           "kind": "research",
           "owners": [
             "03-ui"
@@ -397,7 +397,7 @@
       "bundle.contract": "ready",
       "bundle.units": [
         {
-          "scope": "devflow/tree/01-foundation/contracts",
+          "scope": ".devflow/tree/01-foundation/contracts",
           "kind": "task",
           "owners": [
             "01-foundation",
@@ -425,10 +425,10 @@
       "project.product": "present",
       "request.current": "NONE",
       "origin.active": {
-        "origin": "core:devflow/project/arch.md#Components",
+        "origin": "core:.devflow/project/arch.md#Components",
         "scopes": [
-          "devflow/tree/01-foundation/modal",
-          "devflow/tree/03-ui/modal"
+          ".devflow/tree/01-foundation/modal",
+          ".devflow/tree/03-ui/modal"
         ],
         "children": [
           "01.7",
@@ -447,7 +447,7 @@
       "bundle.contract": "ready",
       "bundle.units": [
         {
-          "scope": "devflow/tree/01-foundation/modal",
+          "scope": ".devflow/tree/01-foundation/modal",
           "kind": "task",
           "owners": [
             "01-foundation",
@@ -455,7 +455,7 @@
           ]
         },
         {
-          "scope": "devflow/tree/03-ui/modal",
+          "scope": ".devflow/tree/03-ui/modal",
           "kind": "task",
           "owners": [
             "03-ui"
@@ -522,7 +522,7 @@
       "origin.active": {
         "origin": "journal:2026-08-30T00:02:00Z maintenance routing pending: request-json: \"multi scope\"",
         "scopes": [
-          "devflow/tree/03-ui"
+          ".devflow/tree/03-ui"
         ],
         "children": [
           "03.8"
@@ -531,10 +531,10 @@
       "origin.drafts": {
         "origin": "journal:2026-08-30T00:02:00Z maintenance routing pending: request-json: \"multi scope\"",
         "scopes": [
-          "devflow/tree/03-ui"
+          ".devflow/tree/03-ui"
         ],
         "cards": [
-          "devflow/tree/03-ui/03.8-modal.md"
+          ".devflow/tree/03-ui/03.8-modal.md"
         ]
       },
       "origin.projectResearch": "NONE",
@@ -542,12 +542,12 @@
         "origin": "journal:2026-08-30T00:02:00Z maintenance routing pending: request-json: \"multi scope\"",
         "values": [
           {
-            "card": "devflow/tree/02-auth/02.9-contract.md",
+            "card": ".devflow/tree/02-auth/02.9-contract.md",
             "value": "2026-08-30T00:05:00Z; parallel: none"
           }
         ],
         "cards": [
-          "devflow/tree/02-auth/02.9-contract.md"
+          ".devflow/tree/02-auth/02.9-contract.md"
         ]
       },
       "approval.issue": "NONE",
@@ -582,7 +582,7 @@
       "origin.active": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "children": [
           "02.7"
@@ -591,10 +591,10 @@
       "origin.drafts": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "cards": [
-          "devflow/tree/02-auth/02.7-login.md"
+          ".devflow/tree/02-auth/02.7-login.md"
         ]
       },
       "origin.projectResearch": "NONE",
@@ -632,7 +632,7 @@
       "origin.active": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "children": [
           "02.7"
@@ -641,10 +641,10 @@
       "origin.drafts": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "cards": [
-          "devflow/tree/02-auth/02.7-login.md"
+          ".devflow/tree/02-auth/02.7-login.md"
         ]
       },
       "origin.projectResearch": "NONE",
@@ -684,7 +684,7 @@
       "origin.active": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "children": [
           "02.7"
@@ -693,10 +693,10 @@
       "origin.drafts": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "cards": [
-          "devflow/tree/02-auth/02.7-login.md"
+          ".devflow/tree/02-auth/02.7-login.md"
         ]
       },
       "origin.projectResearch": "NONE",
@@ -733,7 +733,7 @@
       "origin.active": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "children": [
           "02.7"
@@ -742,10 +742,10 @@
       "origin.drafts": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "cards": [
-          "devflow/tree/02-auth/02.7-login.md"
+          ".devflow/tree/02-auth/02.7-login.md"
         ]
       },
       "origin.projectResearch": "NONE",
@@ -782,7 +782,7 @@
       "origin.active": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "children": [
           "02.7"
@@ -791,10 +791,10 @@
       "origin.drafts": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "cards": [
-          "devflow/tree/02-auth/02.7-login.md"
+          ".devflow/tree/02-auth/02.7-login.md"
         ]
       },
       "origin.projectResearch": "NONE",
@@ -802,7 +802,7 @@
       "approval.issue": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "cards": [
-          "devflow/tree/02-auth/02.7-login.md"
+          ".devflow/tree/02-auth/02.7-login.md"
         ],
         "reasons": [
           "diff"
@@ -842,10 +842,10 @@
       "planning.receipt": {
         "origin": "journal:2026-08-30T00:03:00Z maintenance routing pending: request-json: \"approve work\"",
         "scopes": [
-          "devflow/tree/02-auth"
+          ".devflow/tree/02-auth"
         ],
         "cards": [
-          "devflow/tree/02-auth/02.7-login.md"
+          ".devflow/tree/02-auth/02.7-login.md"
         ],
         "commit": "0123456789012345678901234567890123456789"
       },
@@ -871,7 +871,7 @@
       "origin.active": {
         "origin": "journal:2026-08-30T00:04:00Z maintenance routing pending: request-json: \"research storage\"",
         "scopes": [
-          "devflow/tree/00-project"
+          ".devflow/tree/00-project"
         ],
         "children": [
           "00.3"
@@ -880,15 +880,15 @@
       "origin.drafts": {
         "origin": "journal:2026-08-30T00:04:00Z maintenance routing pending: request-json: \"research storage\"",
         "scopes": [
-          "devflow/tree/00-project"
+          ".devflow/tree/00-project"
         ],
         "cards": [
-          "devflow/tree/00-project/00.3-storage-research.md"
+          ".devflow/tree/00-project/00.3-storage-research.md"
         ]
       },
       "origin.projectResearch": {
         "origin": "journal:2026-08-30T00:04:00Z maintenance routing pending: request-json: \"research storage\"",
-        "path": "devflow/tree/00-project/00.3-storage-research.md"
+        "path": ".devflow/tree/00-project/00.3-storage-research.md"
       },
       "projectResearch.approval": "pending",
       "approval.boundary": "NONE",

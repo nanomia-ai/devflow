@@ -290,7 +290,7 @@ function currentPathEvidence(root, relative) {
 }
 
 function indexedDevflowEvidence(root) {
-  const indexed = gitRun(root, ["ls-files", "-z", "--", "devflow"], { allowFailure: true });
+  const indexed = gitRun(root, ["ls-files", "-z", "--", ".devflow"], { allowFailure: true });
   if (indexed.status !== 0) return "unknown";
   try {
     return decodeUtf8(indexed.stdout, "indexed devflow paths").split("\0").some(Boolean) ? "present" : "absent";
@@ -300,7 +300,7 @@ function indexedDevflowEvidence(root) {
 }
 
 function devflowHistoryEvidence(root) {
-  const history = gitRun(root, ["log", "-1", "--format=%H", "--all", "--", "devflow"], { allowFailure: true });
+  const history = gitRun(root, ["log", "-1", "--format=%H", "--all", "--", ".devflow"], { allowFailure: true });
   if (history.status !== 0) return "unknown";
   let commit;
   try {
@@ -323,7 +323,7 @@ function devflowHistoryEvidence(root) {
 }
 
 function devflowMembershipEvidence(root) {
-  const current = currentPathEvidence(root, "devflow/project/product.md");
+  const current = currentPathEvidence(root, ".devflow/project/product.md");
   if (current !== "absent") return { current, indexed: "not-checked", history: "not-checked", unmanaged: false };
 
   const indexed = indexedDevflowEvidence(root);
@@ -334,7 +334,7 @@ function devflowMembershipEvidence(root) {
 }
 
 function nonDevflowMaterialEvidence(root) {
-  const listed = gitRun(root, ["ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", ".", ":(exclude)devflow/**"], { allowFailure: true });
+  const listed = gitRun(root, ["ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", ".", ":(exclude).devflow/**"], { allowFailure: true });
   if (listed.status !== 0 || !Buffer.isBuffer(listed.stdout)) return "unknown";
   return listed.stdout.length === 0 ? "none" : "present";
 }
@@ -561,7 +561,7 @@ function parseReadFirst(plan) {
 
 function parseOwners(root) {
   const owners = [];
-  for (const relative of listFiles(root, "devflow/users")) {
+  for (const relative of listFiles(root, ".devflow/users")) {
     if (!/\/owner\.md$/.test(relative)) continue;
     const ownerFields = fields(readFile(root, relative));
     const id = ownerFields.get("id") ?? path.posix.basename(path.posix.dirname(relative));
@@ -595,7 +595,7 @@ function parseProduct(text) {
   const service = /^#\s+(.+)$/.exec(lines.find((line) => /^#\s+/.test(line)) ?? "")?.[1]?.trim() ?? "unknown";
   const start = headingIndex(lines, "## Capabilities");
   const anomalies = text !== null && start < 0
-    ? [{ path: "devflow/project/product.md", zone: "product", detail: "capabilities-heading-missing" }]
+    ? [{ path: ".devflow/project/product.md", zone: "product", detail: "capabilities-heading-missing" }]
     : [];
   const body = start < 0 ? [] : lines.slice(start + 1, lines.findIndex((line, index) => index > start && /^##\s+/.test(line)) < 0
     ? lines.length : lines.findIndex((line, index) => index > start && /^##\s+/.test(line)));
@@ -627,7 +627,7 @@ function parseProduct(text) {
   for (const capability of capabilities) counts.set(capability.number, (counts.get(capability.number) ?? 0) + 1);
   for (const [number, count] of counts) {
     if (count > 1) anomalies.push({
-      path: "devflow/project/product.md",
+      path: ".devflow/project/product.md",
       zone: "product",
       detail: `duplicate-capability-number:${number}`,
     });
@@ -691,7 +691,7 @@ function parseGlossary(text) {
     if (line === "" || line === "None." || line.startsWith("#")) continue;
     const match = /^([^:]+):\s+(.+)$/.exec(line);
     if (!match || match[1].trim() === "" || definitions.has(match[1].trim())) {
-      anomalies.push({ path: "devflow/project/glossary.md", zone: "glossary", detail: `term-line:${index + 1}` });
+      anomalies.push({ path: ".devflow/project/glossary.md", zone: "glossary", detail: `term-line:${index + 1}` });
       continue;
     }
     definitions.set(match[1].trim(), match[2].trim());
@@ -763,13 +763,13 @@ function capabilityShape(text, relative, number, glossaryDefinitions = new Map()
 function bindingAdrStatus(root, text) {
   const body = extractSection(text, "## Binding ADRs");
   if (body === null || body === "None." || body === "") return [];
-  const paths = [...body.matchAll(/devflow\/project\/decisions\/[A-Za-z0-9._/-]+\.md/g)].map((match) => match[0]);
+  const paths = [...body.matchAll(/\.devflow\/project\/decisions\/[A-Za-z0-9._/-]+\.md/g)].map((match) => match[0]);
   return [...new Set(paths)].sort(byteCompare).map((relative) => ({ path: relative, exists: readFile(root, relative) !== null }));
 }
 
 async function designHead(root) {
   return gitLine(root, ["log", "-1", "--format=%H", "--",
-    "devflow/project/product.md", "devflow/project/arch.md", "devflow/project/glossary.md"], { allowFailure: true });
+    ".devflow/project/product.md", ".devflow/project/arch.md", ".devflow/project/glossary.md"], { allowFailure: true });
 }
 
 function literalPathspec(relative) {
@@ -807,7 +807,7 @@ function baselineExpected(snapshot) {
   }
   return result.map((item) => ({
     ...item,
-    path: `devflow/project/capabilities/${String(item.number).padStart(2, "0")}-${item.name}.md`,
+    path: `.devflow/project/capabilities/${String(item.number).padStart(2, "0")}-${item.name}.md`,
   }));
 }
 
@@ -869,7 +869,7 @@ async function baselineProjection(snapshot, capabilityFilter) {
       && Number(folderIdentity(snapshot.depth1Folders.find((folder) => card.path.startsWith(`${folder}/`)) ?? "")?.number) === item.number);
     const consumedSection = extractSection(text, "### Consumed contracts");
     const relationPaths = consumedSection === null || consumedSection === "None." ? []
-      : [...consumedSection.matchAll(/(?:^|\|)\s*([^|\n]+)\s*\|/gm)].map((match) => match[1].trim()).filter((value) => value.startsWith("devflow/") || value.includes("/"));
+      : [...consumedSection.matchAll(/(?:^|\|)\s*([^|\n]+)\s*\|/gm)].map((match) => match[1].trim()).filter((value) => value.startsWith(".devflow/") || value.includes("/"));
     const verifiedReasons = [];
     if ((vf.get("Verified at") ?? "none") === "none") verifiedReasons.push("verified-at-none");
     if (scopeUnion.length === 0) verifiedReasons.push("empty-scope");
@@ -999,10 +999,10 @@ function glossaryTermFields(line) {
   } };
 }
 
-const KNOWLEDGE_OWNER = /^(?:devflow\/project\/(?:product|arch|design)\.md|devflow\/project\/capabilities\/[0-9]+-[^/]+\.md)$/;
-const KNOWLEDGE_SOURCE = new RegExp(`^(?<card>devflow/tree/[^@\\r\\n]+\\.md)@(?<hash>[0-9a-f]{40,64})$`);
+const KNOWLEDGE_OWNER = /^(?:\.devflow\/project\/(?:product|arch|design)\.md|\.devflow\/project\/capabilities\/[0-9]+-[^/]+\.md)$/;
+const KNOWLEDGE_SOURCE = new RegExp(`^(?<card>\\.devflow/tree/[^@\\r\\n]+\\.md)@(?<hash>[0-9a-f]{40,64})$`);
 const KNOWLEDGE_LANDING_BYTES = Buffer.from("knowledge landing pending:", "utf8");
-const COMPATIBLE_OWNER = /^(?:devflow\/project\/(?:product|glossary|design|arch)\.md|devflow\/project\/capabilities\/[0-9]+-[^/]+\.md)$/;
+const COMPATIBLE_OWNER = /^(?:\.devflow\/project\/(?:product|glossary|design|arch)\.md|\.devflow\/project\/capabilities\/[0-9]+-[^/]+\.md)$/;
 const COMPATIBLE_FEEDBACK_BYTES = Buffer.from("compatible feedback pending:", "utf8");
 const COMPATIBLE_COORDINATE_KEYS = ["target", "background", "why", "conclusion", "implication"];
 
@@ -1064,11 +1064,11 @@ function compatibleFeedbackFields(line, start) {
 function parseJournalLine(line, lineNumber) {
   const out = { raw: line, line: lineNumber, kind: "other", valid: true };
   let match;
-  if ((match = new RegExp(`^${TIMESTAMP} layer opening: parent: (?<parent>devflow/tree(?:/[^;]+)?); children: (?<children>${FOLDER_NUMBER}(?:\\+${FOLDER_NUMBER})*); source-json: (?<sourceJson>.+)$`).exec(line))) {
+  if ((match = new RegExp(`^${TIMESTAMP} layer opening: parent: (?<parent>\\.devflow/tree(?:/[^;]+)?); children: (?<children>${FOLDER_NUMBER}(?:\\+${FOLDER_NUMBER})*); source-json: (?<sourceJson>.+)$`).exec(line))) {
     const source = parseJsonValue(match.groups.sourceJson);
     return { ...out, kind: "layer-opening", ...match.groups, source: source.value, valid: source.ok && typeof source.value === "string" };
   }
-  if ((match = new RegExp(`^${TIMESTAMP} re-split pending: folder: (?<folder>devflow/tree/[^;]+); stale: (?<stale>${CARD_NUMBER}(?:\\+${CARD_NUMBER})*); source: (?<source>devflow/project/[^#]+#.+)$`).exec(line))) {
+  if ((match = new RegExp(`^${TIMESTAMP} re-split pending: folder: (?<folder>\\.devflow/tree/[^;]+); stale: (?<stale>${CARD_NUMBER}(?:\\+${CARD_NUMBER})*); source: (?<source>\\.devflow/project/[^#]+#.+)$`).exec(line))) {
     return { ...out, kind: "re-split", ...match.groups };
   }
   if ((match = new RegExp(`^${TIMESTAMP} maintenance routing pending: request-json: (?<requestJson>.+)$`).exec(line))) {
@@ -1082,7 +1082,7 @@ function parseJournalLine(line, lineNumber) {
   if ((match = new RegExp(`^${TIMESTAMP} product verification requested$`).exec(line))) return { ...out, kind: "product-requested", ...match.groups };
   if ((match = new RegExp(`^${TIMESTAMP} product verification running: trigger: (?<trigger>requested|automatic); product: (?<product>[^;]+); verification: (?<verification>[^;]+); code: (?<code>[^;]+)$`).exec(line))) return { ...out, kind: "product-running", ...match.groups };
   if ((match = new RegExp(`^${TIMESTAMP} product verification result: trigger: (?<trigger>requested|automatic); product: (?<product>[^;]+); verification: (?<verification>[^;]+); code: (?<code>[^;]+); verdict: (?<verdict>pass|fail|unverified)$`).exec(line))) return { ...out, kind: "product-result", ...match.groups };
-  if ((match = new RegExp(`^${TIMESTAMP} capability closing: folder: (?<folder>devflow/tree/[^;]+); head: (?<head>[0-9a-f]{40,64}); product: (?<product>[^;]+); verification: (?<verification>[^;]+); capability: (?<capability>[^;]+)$`).exec(line))) return { ...out, kind: "capability-closing", ...match.groups };
+  if ((match = new RegExp(`^${TIMESTAMP} capability closing: folder: (?<folder>\\.devflow/tree/[^;]+); head: (?<head>[0-9a-f]{40,64}); product: (?<product>[^;]+); verification: (?<verification>[^;]+); capability: (?<capability>[^;]+)$`).exec(line))) return { ...out, kind: "capability-closing", ...match.groups };
   // One kind, two forms: the bare observation another capability's closure harvests, and the
   // design form a confirmed Intent or Invariant of the capability being worked on carries —
   // the same statement plus the exact card and the exact code paths. No commit basis is
@@ -1175,20 +1175,20 @@ function addedCompatibleFeedback(beforeText, afterText) {
 }
 
 function knowledgeJournalAt(root, ref, markerBytes = KNOWLEDGE_LANDING_BYTES) {
-  const listed = gitRun(root, ["ls-tree", "-z", "--name-only", ref, "--", "devflow/journal.md"], { allowFailure: true });
+  const listed = gitRun(root, ["ls-tree", "-z", "--name-only", ref, "--", ".devflow/journal.md"], { allowFailure: true });
   if (listed.status !== 0) return { state: "failure", text: null };
   let paths;
   try {
-    paths = decodeUtf8(listed.stdout, `${ref}:devflow/journal.md tree entry`).split("\0").filter(Boolean);
+    paths = decodeUtf8(listed.stdout, `${ref}:.devflow/journal.md tree entry`).split("\0").filter(Boolean);
   } catch {
     return { state: "failure", text: null };
   }
-  if (!paths.includes("devflow/journal.md")) return { state: "absent", text: "" };
-  const shown = gitRun(root, ["show", `${ref}:devflow/journal.md`], { allowFailure: true });
+  if (!paths.includes(".devflow/journal.md")) return { state: "absent", text: "" };
+  const shown = gitRun(root, ["show", `${ref}:.devflow/journal.md`], { allowFailure: true });
   if (shown.status !== 0) return { state: "failure", text: null };
   if (!shown.stdout.includes(markerBytes)) return { state: "present", text: "" };
   try {
-    return { state: "present", text: normalizeFileText(decodeUtf8(shown.stdout, `${ref}:devflow/journal.md`)) };
+    return { state: "present", text: normalizeFileText(decodeUtf8(shown.stdout, `${ref}:.devflow/journal.md`)) };
   } catch {
     return { state: "undecodable", text: null };
   }
@@ -1240,7 +1240,7 @@ function knowledgeLandingState(snapshot) {
     if (!reason && !knowledgeOwnerExists(snapshot, line.owner)) reason = "knowledge-owner-unresolved";
     if (!reason && !committedKnowledgeSource(snapshot, line)) reason = "knowledge-source-unresolved";
     if (!reason && pairs.has(pair)) reason = "knowledge-owner-source-duplicate";
-    if (reason) issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", line: line.line, reason });
+    if (reason) issues.push({ item: "knowledge-landing", blocking: true, path: ".devflow/journal.md", line: line.line, reason });
     else { pairs.add(pair); accepted.push(line); }
   }
 
@@ -1249,7 +1249,7 @@ function knowledgeLandingState(snapshot) {
     const directory = `${knowledgeOwnerDirectory(line.owner)}/`;
     const kChanged = [...changed].filter((relative) => relative.startsWith(directory) && /(?:^|\/)K-[0-9]{3}-[^/]+\.md$/.test(relative));
     if (!ownerChanged && kChanged.length === 0) {
-      issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", line: line.line, commit, reason: "knowledge-marker-unauthorized-deletion" });
+      issues.push({ item: "knowledge-landing", blocking: true, path: ".devflow/journal.md", line: line.line, commit, reason: "knowledge-marker-unauthorized-deletion" });
       return;
     }
     for (const relative of kChanged) {
@@ -1264,7 +1264,7 @@ function knowledgeLandingState(snapshot) {
   const workingChanged = new Set(snapshot.status.map((item) => item.path));
   const effectiveLifecycles = new Set(current.filter((line) => line.valid).map((line) => line.raw));
   if (["failure", "undecodable"].includes(headJournal.state)) {
-    issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", reason: "knowledge-head-undecodable" });
+    issues.push({ item: "knowledge-landing", blocking: true, path: ".devflow/journal.md", reason: "knowledge-head-undecodable" });
   } else {
     for (const line of removedKnowledgeLandings(headJournal.text, snapshot.journalText ?? "")) {
       validateConsumption(line, workingChanged, null);
@@ -1273,7 +1273,7 @@ function knowledgeLandingState(snapshot) {
   }
 
   const history = gitRun(snapshot.root,
-    ["log", "--text", "--no-textconv", "--format=%H", "-G", "knowledge landing pending:", "--", "devflow/journal.md"],
+    ["log", "--text", "--no-textconv", "--format=%H", "-G", "knowledge landing pending:", "--", ".devflow/journal.md"],
     { allowFailure: true });
   let journalCommits = null;
   if (history.status === 0) {
@@ -1285,7 +1285,7 @@ function knowledgeLandingState(snapshot) {
     }
   }
   if (journalCommits === null) {
-    issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", reason: "knowledge-history-undecodable" });
+    issues.push({ item: "knowledge-landing", blocking: true, path: ".devflow/journal.md", reason: "knowledge-history-undecodable" });
     return { accepted, issues };
   }
   for (const commit of journalCommits) {
@@ -1299,7 +1299,7 @@ function knowledgeLandingState(snapshot) {
       }
     }
     if (!lineage || lineage[0] !== commit || lineage.some((hash) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(hash))) {
-      issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", commit, reason: "knowledge-history-undecodable" });
+      issues.push({ item: "knowledge-landing", blocking: true, path: ".devflow/journal.md", commit, reason: "knowledge-history-undecodable" });
       continue;
     }
     if (lineage.length === 1) continue;
@@ -1307,7 +1307,7 @@ function knowledgeLandingState(snapshot) {
     const before = knowledgeJournalAt(snapshot.root, parent);
     const after = knowledgeJournalAt(snapshot.root, commit);
     if ([before.state, after.state].some((state) => ["failure", "undecodable"].includes(state))) {
-      issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", commit, reason: "knowledge-history-undecodable" });
+      issues.push({ item: "knowledge-landing", blocking: true, path: ".devflow/journal.md", commit, reason: "knowledge-history-undecodable" });
       continue;
     }
     const removed = removedKnowledgeLandings(before.text, after.text);
@@ -1322,7 +1322,7 @@ function knowledgeLandingState(snapshot) {
       }
     }
     if (changed === null) {
-      issues.push({ item: "knowledge-landing", blocking: true, path: "devflow/journal.md", commit, reason: "knowledge-history-undecodable" });
+      issues.push({ item: "knowledge-landing", blocking: true, path: ".devflow/journal.md", commit, reason: "knowledge-history-undecodable" });
       continue;
     }
     for (const line of removed) {
@@ -1335,9 +1335,9 @@ function knowledgeLandingState(snapshot) {
 }
 
 function compatibleFeedbackWriter(snapshot, owner) {
-  if (owner === "devflow/project/product.md" || owner === "devflow/project/glossary.md") return "product";
-  if (owner === "devflow/project/design.md") return "design";
-  if (owner === "devflow/project/arch.md" || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(owner)) return "arch";
+  if (owner === ".devflow/project/product.md" || owner === ".devflow/project/glossary.md") return "product";
+  if (owner === ".devflow/project/design.md") return "design";
+  if (owner === ".devflow/project/arch.md" || /^\.devflow\/project\/capabilities\/[^/]+\.md$/.test(owner)) return "arch";
   return null;
 }
 
@@ -1361,7 +1361,7 @@ function compatibleFeedbackLandedAt(snapshot, line, ref) {
 
 function hasCompatibleFeedbackTransition(snapshot, base, ref) {
   const history = gitRun(snapshot.root,
-    ["log", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", `${base}..${ref}`, "--", "devflow/journal.md"],
+    ["log", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", `${base}..${ref}`, "--", ".devflow/journal.md"],
     { allowFailure: true });
   if (history.status !== 0) return null;
   try {
@@ -1420,7 +1420,7 @@ function compatibleFeedbackState(snapshot) {
   const issues = blockedBy ? [{
     item: "compatible-feedback",
     blocking: true,
-    path: "devflow/journal.md",
+    path: ".devflow/journal.md",
     reason: "compatible-feedback-integration-behind",
     head: snapshot.head,
     integration: authority.commit,
@@ -1440,7 +1440,7 @@ function compatibleFeedbackState(snapshot) {
     if (!reason && writer === null) reason = "compatible-writer-unresolved";
     if (!reason && !committedKnowledgeSource(snapshot, line)) reason = "compatible-source-unresolved";
     if (!reason && pairs.has(pair)) reason = "compatible-owner-source-duplicate";
-    if (reason) issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", line: line.line, reason });
+    if (reason) issues.push({ item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", line: line.line, reason });
     else {
       pairs.add(pair);
       accepted.push({ ...line, writer, landing: authority.overlayWorking && compatibleFeedbackLanded(snapshot, line) ? "satisfied" : "pending" });
@@ -1460,10 +1460,10 @@ function compatibleFeedbackState(snapshot) {
   };
   const validateConsumption = (line, changed, commit = null) => {
     if (!changed.has(line.owner)) {
-      issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", line: line.line, commit, reason: "compatible-marker-unauthorized-deletion" });
+      issues.push({ item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", line: line.line, commit, reason: "compatible-marker-unauthorized-deletion" });
       return false;
     } else if (commit === null ? !compatibleFeedbackLanded(snapshot, line) : !compatibleFeedbackLandedAt(snapshot, line, commit)) {
-      issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", line: line.line, commit, reason: "compatible-semantic-landing-missing" });
+      issues.push({ item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", line: line.line, commit, reason: "compatible-semantic-landing-missing" });
       return false;
     }
     return true;
@@ -1473,11 +1473,11 @@ function compatibleFeedbackState(snapshot) {
   const workingChanged = new Set(authority.overlayWorking ? snapshot.status.map((item) => item.path) : []);
   const effectiveLifecycles = new Set(current.filter((line) => line.valid).map((line) => line.raw));
   if (!headReadable) {
-    issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", reason: "compatible-head-undecodable" });
+    issues.push({ item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", reason: "compatible-head-undecodable" });
   }
 
   const history = gitRun(snapshot.root,
-    ["log", "--topo-order", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", authority.ref, "--", "devflow/journal.md"],
+    ["log", "--topo-order", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", authority.ref, "--", ".devflow/journal.md"],
     { allowFailure: true });
   let journalCommits = null;
   if (history.status === 0) {
@@ -1487,7 +1487,7 @@ function compatibleFeedbackState(snapshot) {
     } catch { journalCommits = null; }
   }
   if (journalCommits === null) {
-    issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", reason: "compatible-history-undecodable" });
+    issues.push({ item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", reason: "compatible-history-undecodable" });
     return { accepted, issues, lifecycles: [...lifecycles.values()].sort((left, right) => byteCompare(left.identity, right.identity)), blockedBy, localTransition: authority.localTransition };
   }
   const transitions = [];
@@ -1496,7 +1496,7 @@ function compatibleFeedbackState(snapshot) {
     let lineage = null;
     try { if (ancestry.status === 0) lineage = decodeUtf8(ancestry.stdout, "compatible feedback ancestry").trim().split(/\s+/).filter(Boolean); } catch { lineage = null; }
     if (!lineage || lineage[0] !== commit || lineage.some((hash) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(hash))) {
-      issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", commit, reason: "compatible-history-undecodable" });
+      issues.push({ item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", commit, reason: "compatible-history-undecodable" });
       continue;
     }
     const parent = lineage[1] ?? null;
@@ -1506,7 +1506,7 @@ function compatibleFeedbackState(snapshot) {
     const after = knowledgeJournalAt(snapshot.root, commit, COMPATIBLE_FEEDBACK_BYTES);
     if ([before.state, after.state].some((state) => ["failure", "undecodable"].includes(state))) {
       if (!(commit === authority.commit && !headReadable)) {
-        issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", commit, reason: "compatible-history-undecodable" });
+        issues.push({ item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", commit, reason: "compatible-history-undecodable" });
       }
       continue;
     }
@@ -1522,7 +1522,7 @@ function compatibleFeedbackState(snapshot) {
       if (!seal) continue;
       reopened.add(line.raw);
       issues.push({
-        item: "compatible-feedback", blocking: true, path: "devflow/journal.md", line: line.line, commit,
+        item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", line: line.line, commit,
         reason: seal.identities.has(line.payloadJson)
           ? "compatible-feedback-member-reopened"
           : "compatible-feedback-set-reopened",
@@ -1543,7 +1543,7 @@ function compatibleFeedbackState(snapshot) {
       const sources = new Set(entries.filter((line) => line.valid).map((line) => line.source));
       if (working && sources.size > 1) {
         issues.push({
-          item: "compatible-feedback", blocking: true, path: "devflow/journal.md", commit,
+          item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", commit,
           reason: "compatible-feedback-set-source-mismatch",
           working: true,
         });
@@ -1584,7 +1584,7 @@ function compatibleFeedbackState(snapshot) {
     let changed = null;
     try { if (changedRun.status === 0) changed = new Set(decodeUtf8(changedRun.stdout, "compatible feedback changed paths").split("\0").filter(Boolean)); } catch { changed = null; }
     if (changed === null) {
-      issues.push({ item: "compatible-feedback", blocking: true, path: "devflow/journal.md", commit, reason: "compatible-history-undecodable" });
+      issues.push({ item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", commit, reason: "compatible-history-undecodable" });
       continue;
     }
     for (const line of removed) {
@@ -1601,13 +1601,13 @@ function compatibleFeedbackState(snapshot) {
 function parseHandoff(snapshot) {
   const { root, room } = snapshot;
   if (!room) return { date: null, stale: true, nextStep: null, openItems: [] };
-  const relative = `devflow/users/${room.id}/HANDOFF.md`;
+  const relative = `.devflow/users/${room.id}/HANDOFF.md`;
   const text = readFile(root, relative);
   if (text === null || text.trim() === "") return { date: null, stale: false, nextStep: null, openItems: [] };
   const lines = text.split("\n");
   const date = /^# HANDOFF · (\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z)$/.exec(lines[0] ?? "")?.[1] ?? null;
   const nextBody = extractSection(text, "## Next single step") ?? "";
-  const pathMatch = /devflow\/tree\/[A-Za-z0-9._/ -]+\.md/.exec(nextBody);
+  const pathMatch = /\.devflow\/tree\/[A-Za-z0-9._/ -]+\.md/.exec(nextBody);
   const parsedNextStep = pathMatch?.[0]?.trim() ?? nextBody.split("\n").find((line) => line.trim())?.trim() ?? null;
   const nextStep = parsedNextStep === "none" ? null : parsedNextStep;
   const legacy = extractSection(text, "## Open decisions");
@@ -1618,7 +1618,7 @@ function parseHandoff(snapshot) {
   // a HANDOFF written a moment ago.
   const claimed = [...new Set([
     ...snapshot.cards.filter((card) => card.claimant === room.id).map((card) => card.path),
-    ...gitNulList(root, ["ls-tree", "-r", "--name-only", "-z", "HEAD", "--", "devflow/tree"])
+    ...gitNulList(root, ["ls-tree", "-r", "--name-only", "-z", "HEAD", "--", ".devflow/tree"])
       .filter((relative) => {
         const card = cardIdentity(relative);
         return card?.status === "claimed" && card.claimant === room.id;
@@ -1684,21 +1684,21 @@ function openGitOperation(root) {
 }
 
 function directBaselineFiles(root) {
-  const base = path.join(root, "devflow", "project", "capabilities");
+  const base = path.join(root, ".devflow", "project", "capabilities");
   if (!fs.existsSync(base) || !fs.statSync(base).isDirectory()) return [];
   return fs.readdirSync(base, { withFileTypes: true })
     .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
-    .map((entry) => `devflow/project/capabilities/${entry.name}`)
+    .map((entry) => `.devflow/project/capabilities/${entry.name}`)
     .sort(byteCompare);
 }
 
 function directTree(root) {
-  const base = path.join(root, "devflow", "tree");
+  const base = path.join(root, ".devflow", "tree");
   if (!fs.existsSync(base) || !fs.statSync(base).isDirectory()) return { folders: [], files: [] };
   const entries = fs.readdirSync(base, { withFileTypes: true });
   return {
-    folders: entries.filter((entry) => entry.isDirectory()).map((entry) => `devflow/tree/${entry.name}`).sort(byteCompare),
-    files: entries.filter((entry) => entry.isFile()).map((entry) => `devflow/tree/${entry.name}`).sort(byteCompare),
+    folders: entries.filter((entry) => entry.isDirectory()).map((entry) => `.devflow/tree/${entry.name}`).sort(byteCompare),
+    files: entries.filter((entry) => entry.isFile()).map((entry) => `.devflow/tree/${entry.name}`).sort(byteCompare),
   };
 }
 
@@ -1733,14 +1733,14 @@ async function capabilityRevision(snapshot, capabilityNumber) {
 }
 
 async function revisions(snapshot, capabilityNumber) {
-  const product = readFile(snapshot.root, "devflow/project/product.md") === null ? "none"
-    : revisionFromGit(gitRun(snapshot.root, ["hash-object", "devflow/project/product.md"], { allowFailure: true }), "unresolved");
+  const product = readFile(snapshot.root, ".devflow/project/product.md") === null ? "none"
+    : revisionFromGit(gitRun(snapshot.root, ["hash-object", ".devflow/project/product.md"], { allowFailure: true }), "unresolved");
   const verificationPaths = [
-    "devflow/project/arch.md", "devflow/project/code-style.md", "devflow/project/glossary.md",
+    ".devflow/project/arch.md", ".devflow/project/code-style.md", ".devflow/project/glossary.md",
   ].filter((relative) => gitPathExists(snapshot.root, "HEAD", relative));
   const verification = await nativeBinaryHash(snapshot.root, "HEAD", verificationPaths) ?? "unresolved";
   const code = revisionFromGit(gitRun(snapshot.root,
-    ["log", "-1", "--format=%H", "--", ".", ":(exclude)devflow/**"], { allowFailure: true }), "none");
+    ["log", "-1", "--format=%H", "--", ".", ":(exclude).devflow/**"], { allowFailure: true }), "none");
   const capability = await capabilityRevision(snapshot, capabilityNumber);
   return { product, verification, code, capability };
 }
@@ -1749,24 +1749,24 @@ async function loadSnapshot(options) {
   const root = options.root;
   const head = gitLine(root, ["rev-parse", "--verify", "HEAD"], { allowFailure: true }) || "none";
   const branch = gitLine(root, ["symbolic-ref", "--quiet", "--short", "HEAD"], { allowFailure: true }) || null;
-  const productText = readFile(root, "devflow/project/product.md");
+  const productText = readFile(root, ".devflow/project/product.md");
   const devflowMembership = devflowMembershipEvidence(root);
-  const archText = readFile(root, "devflow/project/arch.md");
+  const archText = readFile(root, ".devflow/project/arch.md");
   const tree = directTree(root);
   const closedDepth1 = tree.folders.filter((relative) => ["done", "stale"].includes(folderIdentity(relative)?.status));
-  const cardPaths = listFiles(root, "devflow/tree").filter((relative) => relative.endsWith(".md") && cardIdentity(relative));
+  const cardPaths = listFiles(root, ".devflow/tree").filter((relative) => relative.endsWith(".md") && cardIdentity(relative));
   const cards = cardPaths.map((relative) => parseCard(root, relative,
     closedDepth1.some((folder) => relative.startsWith(`${folder}/`))))
     .filter(Boolean).sort((a, b) => canonicalCardCompare(a.number, b.number) || byteCompare(a.path, b.path));
-  const directories = listDirectories(root, "devflow/tree");
+  const directories = listDirectories(root, ".devflow/tree");
   const owners = parseOwners(root);
   const room = currentRoom(root, owners);
   const integration = resolveIntegration(root, archText, head, branch);
-  const glossaryText = gitFile(root, integration.ref, "devflow/project/glossary.md");
+  const glossaryText = gitFile(root, integration.ref, ".devflow/project/glossary.md");
   const status = parseStatus(root);
-  const journalText = readFile(root, "devflow/journal.md");
+  const journalText = readFile(root, ".devflow/journal.md");
   const journal = parseJournal(journalText);
-  const verifyFiles = listFiles(root, "devflow/tree").filter((relative) => path.posix.basename(relative) === "verify.md");
+  const verifyFiles = listFiles(root, ".devflow/tree").filter((relative) => path.posix.basename(relative) === "verify.md");
   const depth1Folders = tree.folders;
   const waitingFiles = tree.files.filter((relative) => relative.endsWith(".md") && !relative.endsWith("verify.md") && cardIdentity(relative) === null);
   const baselineFiles = directBaselineFiles(root);
@@ -1784,7 +1784,7 @@ async function loadSnapshot(options) {
     glossary: parseGlossary(glossaryText),
     archText,
     archFields: fields(archText),
-    treePresent: fs.existsSync(path.join(root, "devflow", "tree")) && fs.statSync(path.join(root, "devflow", "tree")).isDirectory(),
+    treePresent: fs.existsSync(path.join(root, ".devflow", "tree")) && fs.statSync(path.join(root, ".devflow", "tree")).isDirectory(),
     depth1Folders,
     closedDepth1,
     directories,
@@ -1877,13 +1877,13 @@ function preparedScopeReason(object) {
   }
   if (object.result.startsWith("routing: documents ")) {
     const documents = parseJsonArray(object.result.slice("routing: documents ".length));
-    if (!documents || documents.length === 0 || documents.some((relative) => typeof relative !== "string" || !relative.startsWith("devflow/project/"))) return "prepared-scope-documents";
+    if (!documents || documents.length === 0 || documents.some((relative) => typeof relative !== "string" || !relative.startsWith(".devflow/project/"))) return "prepared-scope-documents";
     const changed = object.operations.flatMap((operation) => operation.op === "move" ? [operation.from, operation.to] : [operation.path]);
     if (documents.some((relative) => !changed.includes(relative))) return "prepared-scope-documents";
     return null;
   }
   const timestamp = /^routing: product re-run (.+)$/.exec(object.result)?.[1];
-  if (timestamp && !object.operations.some((operation) => operation.op === "write" && operation.path === "devflow/journal.md"
+  if (timestamp && !object.operations.some((operation) => operation.op === "write" && operation.path === ".devflow/journal.md"
       && operation.content.includes(`${timestamp} product re-run pending:`))) return "prepared-scope-product-rerun";
   return null;
 }
@@ -1948,7 +1948,7 @@ function validatePreparedObject(snapshot, relative, raw, lineNumber) {
     if (expected === null || JSON.stringify(keys) !== JSON.stringify(expected)) return { ok: false, reason: "operation-schema" };
     const paths = operation.op === "move" ? [operation.from, operation.to] : [operation.path];
     if (operation.op !== "move") for (const value of paths) candidatePaths.add(value);
-    if (paths.some((value) => typeof value !== "string" || !value.startsWith("devflow/") || value.split("/").includes(".."))) return { ok: false, reason: "operation-path" };
+    if (paths.some((value) => typeof value !== "string" || !value.startsWith(".devflow/") || value.split("/").includes(".."))) return { ok: false, reason: "operation-path" };
     if (["write", "delete"].includes(operation.op) && operation.path === relative) return { ok: false, reason: "operation-current-verify" };
     if (operation.op === "write") {
       if (typeof operation.content !== "string") return { ok: false, reason: "operation-write-content" };
@@ -1990,7 +1990,7 @@ function validatePreparedObject(snapshot, relative, raw, lineNumber) {
 }
 
 function verificationTarget(relative) {
-  if (relative === "devflow/tree/verify.md") return "product";
+  if (relative === ".devflow/tree/verify.md") return "product";
   const folder = relative.split("/").slice(0, 3).join("/");
   const folderInfo = folderIdentity(folder);
   return folderInfo ? Number(folderInfo.number) : null;
@@ -2085,7 +2085,7 @@ function verifyProjection(snapshot) {
         }
       }
     }
-    if (relative === "devflow/tree/verify.md") {
+    if (relative === ".devflow/tree/verify.md") {
       result.root = {
         path: relative,
         verdict: recordFields.get("Verdict") ?? null,
@@ -2190,25 +2190,25 @@ function verifyLocatorResolutionCount(snapshot, verify, relative, preparedMatche
 
 function locatorResolutionCount(snapshot, verify, locator) {
   let match;
-  if ((match = /^core:(devflow\/[^#]+)#(.+)$/.exec(locator))) {
+  if ((match = /^core:(\.devflow\/[^#]+)#(.+)$/.exec(locator))) {
     const countInText = (text) => (text ?? "").split("\n")
       .filter((line) => normalizedHeading(line).replace(/^#{1,6}\s+/, "") === match[2]).length;
     return resolutionCountWithHead(snapshot, match[1], readFile(snapshot.root, match[1]), countInText);
   }
-  if ((match = /^card:(devflow\/[^@]+)@([0-9a-f]{40,64})$/.exec(locator))) {
+  if ((match = /^card:(\.devflow\/[^@]+)@([0-9a-f]{40,64})$/.exec(locator))) {
     return gitFile(snapshot.root, match[2], match[1]) === null ? 0 : 1;
   }
   if ((match = /^journal:(.+)$/.exec(locator))) {
     const countInText = (text) => (text ?? "").split("\n").filter((line) => line === match[1]).length;
-    return resolutionCountWithHead(snapshot, "devflow/journal.md", snapshot.journalText, countInText);
+    return resolutionCountWithHead(snapshot, ".devflow/journal.md", snapshot.journalText, countInText);
   }
-  if ((match = /^verify:(devflow\/[^#]+)#Failure history@(\d+)$/.exec(locator))) {
+  if ((match = /^verify:(\.devflow\/[^#]+)#Failure history@(\d+)$/.exec(locator))) {
     const countInText = (text) => verificationRecordParts(text).find((item) => item.name === "Failure history")
       ?.lines.filter((line) => new RegExp(`\\bsource id:\\s*${match[2]}\\s*(?:[;·]|$)`).test(line)).length ?? 0;
     return verifyLocatorResolutionCount(snapshot, verify, match[1],
       (item) => item.sourceSection === "Failure history" && item.sourceId === Number(match[2]), countInText);
   }
-  if ((match = /^verify:(devflow\/[^#]+)#(Audit|Retrospective)@(\d+)\/(\d+)$/.exec(locator))) {
+  if ((match = /^verify:(\.devflow\/[^#]+)#(Audit|Retrospective)@(\d+)\/(\d+)$/.exec(locator))) {
     const countInText = (text) => {
       const part = verificationRecordParts(text).find((item) => item.name === match[2]);
       if (!part) return 0;
@@ -2258,7 +2258,7 @@ function integrity(snapshot, verify) {
     if (matches.length !== 1) report(5, false, { path: snapshot.handoff.nextStep, reason: `handoff-path-resolves-${matches.length}` });
   }
   for (const card of snapshot.cards.filter((item) => item.bare)) report(6, false, { path: card.path, reason: "bare-wip" });
-  if (readFile(snapshot.root, "devflow/HANDOFF.md") !== null) report(6, false, { path: "devflow/HANDOFF.md", reason: "root-handoff" });
+  if (readFile(snapshot.root, ".devflow/HANDOFF.md") !== null) report(6, false, { path: ".devflow/HANDOFF.md", reason: "root-handoff" });
   const identityOwners = new Map();
   for (const owner of snapshot.owners) {
     const key = `${owner.name}\0${owner.email}`;
@@ -2297,16 +2297,16 @@ function integrity(snapshot, verify) {
     }
   }
   for (const line of snapshot.journal.filter((item) => !item.valid)) {
-    report(12, true, { path: "devflow/journal.md", line: line.raw, expected: "canonical reserved journal format", reason: reasonForJournal(line) });
+    report(12, true, { path: ".devflow/journal.md", line: line.raw, expected: "canonical reserved journal format", reason: reasonForJournal(line) });
   }
   for (const line of snapshot.journal.filter((item) => item.kind === "layer-opening" && item.valid)) {
     const count = locatorResolutionCount(snapshot, verify, line.source);
-    if (count !== 1) report(12, true, { path: "devflow/journal.md", line: line.raw, expected: "canonical source locator resolving to exactly one source", reason: `source-resolves-${count}` });
+    if (count !== 1) report(12, true, { path: ".devflow/journal.md", line: line.raw, expected: "canonical source locator resolving to exactly one source", reason: `source-resolves-${count}` });
   }
   for (const line of snapshot.journal.filter((item) => ["evidence-wait", "evidence-finalizing"].includes(item.kind))) {
     if (snapshot.closedDepth1.some((folder) => line.card?.startsWith(`${folder}/`))) continue;
     const reason = evidenceIntegrityReason(snapshot, line);
-    if (reason) report(13, true, { path: "devflow/journal.md", line: line.raw, expected: "valid evidence line naming one claimed card with matching checkpoint subject, path, and check JSON", reason });
+    if (reason) report(13, true, { path: ".devflow/journal.md", line: line.raw, expected: "valid evidence line naming one claimed card with matching checkpoint subject, path, and check JSON", reason });
   }
   for (const invalid of verify.invalidPrepared) report(14, true, { path: invalid.path, line: invalid.raw, expected: "canonical routing prepared object", reason: invalid.reason });
   for (const [relative, text] of snapshot.verifyTexts) {
@@ -2338,11 +2338,11 @@ function integrity(snapshot, verify) {
   const counts = new Map();
   for (const line of activeProduct) counts.set(line.kind, (counts.get(line.kind) ?? 0) + 1);
   if (counts.size > 1 || [...counts.values()].some((count) => count > 1)) {
-    report(15, true, { path: "devflow/journal.md", line: activeProduct.map((line) => line.raw).join(" | "), expected: "one active product-verification state kind", reason: "product-state-cardinality" });
+    report(15, true, { path: ".devflow/journal.md", line: activeProduct.map((line) => line.raw).join(" | "), expected: "one active product-verification state kind", reason: "product-state-cardinality" });
   }
   const productResult = activeProduct.find((line) => line.kind === "product-result");
   if (productResult && verify.root && ["product", "verification", "code", "verdict"].some((key) => productResult[key] !== verify.root[key])) {
-    report(15, true, { path: "devflow/journal.md", line: productResult.raw, expected: "result fields equal root verify.md", reason: "product-result-mismatch" });
+    report(15, true, { path: ".devflow/journal.md", line: productResult.raw, expected: "result fields equal root verify.md", reason: "product-result-mismatch" });
   }
   return anomalies;
 }
@@ -2355,8 +2355,8 @@ function approvalState(snapshot, card) {
   if (!APPROVAL_RE.test(card.approval ?? "")) return { value: "invalid", reasons: ["format"] };
   if (!gitPathExists(snapshot.root, snapshot.integration.ref, card.path)) return { value: "invalid", reasons: ["authority-path-missing"] };
   const changed = new Set([
-    ...gitNulList(snapshot.root, ["diff", "--name-only", "-z", "--no-renames", "--", "devflow/tree"]),
-    ...gitNulList(snapshot.root, ["diff", "--cached", "--name-only", "-z", "--no-renames", snapshot.integration.ref, "--", "devflow/tree"]),
+    ...gitNulList(snapshot.root, ["diff", "--name-only", "-z", "--no-renames", "--", ".devflow/tree"]),
+    ...gitNulList(snapshot.root, ["diff", "--cached", "--name-only", "-z", "--no-renames", snapshot.integration.ref, "--", ".devflow/tree"]),
   ]);
   if (!changed.has(card.path)) return { value: "effective", reasons: [] };
   // Only a card Git already reports as moved costs the three reads below.
@@ -2390,11 +2390,11 @@ function cardJudgment(snapshot, card) {
 }
 
 function addedJournalEntries(snapshot) {
-  const shown = gitRun(snapshot.root, ["show", "HEAD:devflow/journal.md"], { allowFailure: true });
+  const shown = gitRun(snapshot.root, ["show", "HEAD:.devflow/journal.md"], { allowFailure: true });
   if (shown.status !== 0) return [];
   let head;
   try {
-    head = parseJournal(normalizeFileText(decodeUtf8(shown.stdout, "HEAD:devflow/journal.md")));
+    head = parseJournal(normalizeFileText(decodeUtf8(shown.stdout, "HEAD:.devflow/journal.md")));
   } catch {
     return [];
   }
@@ -2411,13 +2411,13 @@ function addedJournalEntries(snapshot) {
 function classifyWorkingTransition(snapshot, designPrefix) {
   // A bounded writer prefix owns its own route, so it is never also a generic output prefix.
   if (["design-only", "glossary-only"].includes(designPrefix)) return null;
-  const paths = snapshot.status.map((entry) => entry.path).filter((relative) => relative === "devflow/journal.md"
-    || /(?:^|\/)verify\.md$/.test(relative) || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
+  const paths = snapshot.status.map((entry) => entry.path).filter((relative) => relative === ".devflow/journal.md"
+    || /(?:^|\/)verify\.md$/.test(relative) || /^\.devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
   if (paths.length === 0) return null;
   if (snapshot.verifyTexts.size === 0) return null;
   const changedOutput = paths.some((relative) => /(?:^|\/)verify\.md$/.test(relative)
-    || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
-  const journalOutput = paths.includes("devflow/journal.md")
+    || /^\.devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
+  const journalOutput = paths.includes(".devflow/journal.md")
     && addedJournalEntries(snapshot).some((line) => ["capability-closing", "product-running", "product-result"].includes(line.kind));
   if (!changedOutput && !journalOutput) return null;
   return { paths, state: "working-tree", case: "canonical-output-prefix" };
@@ -2574,7 +2574,7 @@ function progressShapeAnomalies(snapshot) {
 // ahead of the claim instead of disappearing into it.
 function designNoteAnchor(snapshot, line) {
   const exactLine = `^${line.raw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`;
-  const found = gitRun(snapshot.root, ["log", "--reverse", "-G", exactLine, "--format=%H", "--", "devflow/journal.md"], { allowFailure: true });
+  const found = gitRun(snapshot.root, ["log", "--reverse", "-G", exactLine, "--format=%H", "--", ".devflow/journal.md"], { allowFailure: true });
   if (found.status !== 0) return { reason: "anchor-unavailable" };
   let candidates;
   try {
@@ -2585,7 +2585,7 @@ function designNoteAnchor(snapshot, line) {
   let first = null;
   for (const candidate of candidates) {
     if (!/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(candidate)) return { reason: "anchor-invalid" };
-    const blob = gitRun(snapshot.root, ["show", `${candidate}:devflow/journal.md`], { allowFailure: true });
+    const blob = gitRun(snapshot.root, ["show", `${candidate}:.devflow/journal.md`], { allowFailure: true });
     if (blob.status !== 0) continue;
     let lines;
     try {
@@ -2635,14 +2635,14 @@ function designNoteRoutes(snapshot) {
   const unresolved = (reason) => ({ form: "note", marker: "unresolved", reason, recovery: "external" });
   const working = snapshot.journal.filter(routable);
   const changed = snapshot.status.map((entry) => entry.path);
-  const journalChanged = changed.includes("devflow/journal.md");
-  const shown = gitRun(snapshot.root, ["show", "HEAD:devflow/journal.md"], { allowFailure: true });
+  const journalChanged = changed.includes(".devflow/journal.md");
+  const shown = gitRun(snapshot.root, ["show", "HEAD:.devflow/journal.md"], { allowFailure: true });
   if (shown.status !== 0) {
-    const listed = gitRun(snapshot.root, ["ls-tree", "--name-only", "HEAD", "--", "devflow/journal.md"], { allowFailure: true });
+    const listed = gitRun(snapshot.root, ["ls-tree", "--name-only", "HEAD", "--", ".devflow/journal.md"], { allowFailure: true });
     let headOwnsJournal = null;
     if (listed.status === 0) {
       try {
-        headOwnsJournal = decodeUtf8(listed.stdout, "HEAD journal tree entry").split("\n").includes("devflow/journal.md");
+        headOwnsJournal = decodeUtf8(listed.stdout, "HEAD journal tree entry").split("\n").includes(".devflow/journal.md");
       } catch {
         headOwnsJournal = null;
       }
@@ -2654,7 +2654,7 @@ function designNoteRoutes(snapshot) {
   }
   let headLines;
   try {
-    headLines = normalizeFileText(decodeUtf8(shown.stdout, "HEAD:devflow/journal.md")).split("\n");
+    headLines = normalizeFileText(decodeUtf8(shown.stdout, "HEAD:.devflow/journal.md")).split("\n");
   } catch {
     const routes = working.map((line) => project(line, { reason: "head-journal-undecodable" }));
     if (routes.length === 0 && journalChanged) routes.push(unresolved("head-journal-undecodable"));
@@ -2680,8 +2680,8 @@ function designNoteRoutes(snapshot) {
     // The canon's design-only prefix: HEAD's journal with exactly this one occurrence removed.
     const remainder = headLines.filter((_, position) => position !== index).join("\n");
     const capability = String(Number(line.design ? line.design.capability : line.capability)).padStart(2, "0");
-    const targetZone = new RegExp(`^devflow/project/capabilities/${capability}-[^/]+(?:\\.md|(?:/K-\\d{3}-[^/]+)+\\.md)$`);
-    const pathsAllowed = changed.includes("devflow/journal.md") && changed.every((relative) => relative === "devflow/journal.md"
+    const targetZone = new RegExp(`^\\.devflow/project/capabilities/${capability}-[^/]+(?:\\.md|(?:/K-\\d{3}-[^/]+)+\\.md)$`);
+    const pathsAllowed = changed.includes(".devflow/journal.md") && changed.every((relative) => relative === ".devflow/journal.md"
       || targetZone.test(relative));
     if (!pathsAllowed || remainder !== (snapshot.journalText ?? "")) {
       routes.push(project(line, { reason: "prefix-mismatch" }));
@@ -2713,11 +2713,11 @@ function glossaryTermRoutes(snapshot, verify) {
     };
   };
   const working = snapshot.journal.filter(owned);
-  const shown = gitRun(snapshot.root, ["show", "HEAD:devflow/journal.md"], { allowFailure: true });
+  const shown = gitRun(snapshot.root, ["show", "HEAD:.devflow/journal.md"], { allowFailure: true });
   if (shown.status !== 0) return { routes: [], prefix: null };
   let headText;
   try {
-    headText = normalizeFileText(decodeUtf8(shown.stdout, "HEAD:devflow/journal.md"));
+    headText = normalizeFileText(decodeUtf8(shown.stdout, "HEAD:.devflow/journal.md"));
   } catch {
     return {
       routes: working.map((line) => project(line, { reason: "head-journal-undecodable" })),
@@ -2732,8 +2732,8 @@ function glossaryTermRoutes(snapshot, verify) {
     const line = raw === "" ? null : parseJournalLine(raw, 0);
     if (!line || !owned(line) || snapshot.journal.some((item) => item.raw === raw)) continue;
     const remainder = headLines.filter((_, position) => position !== index).join("\n");
-    const allowed = changed.includes("devflow/journal.md") && changed.every((relative) => relative === "devflow/journal.md"
-      || relative === "devflow/project/glossary.md" || /^devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
+    const allowed = changed.includes(".devflow/journal.md") && changed.every((relative) => relative === ".devflow/journal.md"
+      || relative === ".devflow/project/glossary.md" || /^\.devflow\/project\/capabilities\/[^/]+\.md$/.test(relative));
     if (!allowed || remainder !== (snapshot.journalText ?? "")) {
       routes.push(project(line, { reason: "prefix-mismatch" }));
       continue;
@@ -2818,7 +2818,7 @@ function cardOrigin(snapshot, card, shallow) {
   }
   // The creation diff is the one read that decides whether this card has an origin at all, so
   // a command that could not answer is not the answer `none`.
-  const shown = gitRun(snapshot.root, ["show", "--format=", "--unified=0", "--no-ext-diff", creation, "--", "devflow/journal.md"], { allowFailure: true });
+  const shown = gitRun(snapshot.root, ["show", "--format=", "--unified=0", "--no-ext-diff", creation, "--", ".devflow/journal.md"], { allowFailure: true });
   if (shown.status !== 0) return { origin: "unknown", originReason: "creation-diff-unavailable" };
   let diff;
   try {
@@ -2892,7 +2892,7 @@ export function digestRecords(text) {
 
 function digestLag(snapshot) {
   if (!snapshot.room) return null;
-  const relative = `devflow/users/${snapshot.room.id}/digest.md`;
+  const relative = `.devflow/users/${snapshot.room.id}/digest.md`;
   const markerText = readFile(snapshot.root, relative);
   if (markerText === null) return null;
   const marker = markerText.trim();
@@ -2966,7 +2966,7 @@ function evaluateZones(snapshot) {
     ? { accepted: [], issues: [], lifecycles: [] }
     : compatibleFeedbackState(snapshot);
   const projectResearchIssues = snapshot.cards
-    .filter((card) => card.path.startsWith("devflow/tree/00-project/")
+    .filter((card) => card.path.startsWith(".devflow/tree/00-project/")
       && !new RegExp(`^# ${card.number.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} Research: \\S`).test(card.text ?? ""))
     .map((card) => ({
       item: "project-research-card",
@@ -2977,7 +2977,7 @@ function evaluateZones(snapshot) {
   const productCapabilityIssues = snapshot.product.capabilityRowsUnparsed ? [{
     item: "product-capability-rows",
     blocking: true,
-    path: "devflow/project/product.md",
+    path: ".devflow/project/product.md",
     reason: "capability-rows-unparsed",
   }] : [];
   const integrityItems = [...integrity(snapshot, verify), ...productCapabilityIssues, ...projectResearchIssues, ...landings.issues, ...compatibleFeedback.issues];
@@ -2991,10 +2991,10 @@ function evaluateZones(snapshot) {
   ];
 
   const changedOnBranch = snapshot.integration.hash
-    ? gitNulList(snapshot.root, ["diff", "--name-only", "-z", `${snapshot.integration.ref}..HEAD`, "--", "devflow/tree", "devflow/journal.md"])
-      .filter((relative) => relative === "devflow/journal.md" || cardIdentity(relative))
+    ? gitNulList(snapshot.root, ["diff", "--name-only", "-z", `${snapshot.integration.ref}..HEAD`, "--", ".devflow/tree", ".devflow/journal.md"])
+      .filter((relative) => relative === ".devflow/journal.md" || cardIdentity(relative))
     : [];
-  const outsideDiff = snapshot.status.filter((item) => !item.path.startsWith("devflow/"));
+  const outsideDiff = snapshot.status.filter((item) => !item.path.startsWith(".devflow/"));
   const chosen = firstMine(snapshot);
   const design = designNoteRoutes(snapshot);
   const glossary = glossaryTermRoutes(snapshot, verify);
@@ -3029,10 +3029,10 @@ function evaluateZones(snapshot) {
     addEntry(zones, "transition", "layer-opening", { parent: line.parent, children: line.children, sourceJson: line.source, timestamp: line.timestamp });
   }
   for (const line of snapshot.journal.filter((item) => item.kind === "product-running")) addEntry(zones, "transition", "product-running", {
-    path: "devflow/tree/verify.md", product: line.product, verification: line.verification, code: line.code, trigger: line.trigger,
+    path: ".devflow/tree/verify.md", product: line.product, verification: line.verification, code: line.code, trigger: line.trigger,
   });
   for (const line of snapshot.journal.filter((item) => item.kind === "product-result")) addEntry(zones, "transition", "product-result", {
-    path: "devflow/tree/verify.md", product: line.product, verification: line.verification, code: line.code, verdict: line.verdict, trigger: line.trigger,
+    path: ".devflow/tree/verify.md", product: line.product, verification: line.verification, code: line.code, verdict: line.verdict, trigger: line.trigger,
   });
   const invalidIntegration = snapshot.integration.configuration === "integration-not-a-ref";
   for (const line of snapshot.journal.filter((item) => ["evidence-wait", "evidence-finalizing"].includes(item.kind) && item.card)) {
@@ -3084,17 +3084,17 @@ function evaluateZones(snapshot) {
   });
   for (const entry of glossary.routes) addEntry(zones, "marker", "glossary-term", entry);
   for (const { form, ...entry } of design.routes) addEntry(zones, "marker", form === "open-item" ? "design-open-item" : "design-note", entry);
-  for (const line of snapshot.journal.filter((item) => item.kind === "capability-closing" && gitFile(snapshot.root, "HEAD", "devflow/journal.md")?.includes(item.raw))) {
+  for (const line of snapshot.journal.filter((item) => item.kind === "capability-closing" && gitFile(snapshot.root, "HEAD", ".devflow/journal.md")?.includes(item.raw))) {
     addEntry(zones, "marker", "capability-closure", { marker: line.raw, folder: line.folder, head: line.head });
   }
   for (const line of snapshot.journal.filter((item) => item.kind === "re-split")) addEntry(zones, "marker", "re-split", { marker: line.raw, folder: line.folder, stale: line.stale });
 
   const missing = [];
-  if (snapshot.productText !== null && readFile(snapshot.root, "devflow/project/glossary.md") === null) missing.push("devflow/project/glossary.md");
-  if (snapshot.productText !== null && snapshot.archText === null) missing.push("devflow/project/arch.md");
-  if (snapshot.productText !== null && readFile(snapshot.root, "devflow/project/code-style.md") === null) missing.push("devflow/project/code-style.md");
+  if (snapshot.productText !== null && readFile(snapshot.root, ".devflow/project/glossary.md") === null) missing.push(".devflow/project/glossary.md");
+  if (snapshot.productText !== null && snapshot.archText === null) missing.push(".devflow/project/arch.md");
+  if (snapshot.productText !== null && readFile(snapshot.root, ".devflow/project/code-style.md") === null) missing.push(".devflow/project/code-style.md");
   if (snapshot.productText === null && snapshot.devflowMembership.unmanaged) addEntry(zones, "setup", "unmanaged");
-  else if (snapshot.productText === null) addEntry(zones, "setup", "no-product", { missing: ["devflow/project/product.md"] });
+  else if (snapshot.productText === null) addEntry(zones, "setup", "no-product", { missing: [".devflow/project/product.md"] });
   else if (missing.length > 0) addEntry(zones, "setup", "layer0-incomplete", { missing });
   else if (!snapshot.archFields.has("Brownfield")) addEntry(zones, "setup", "brownfield-field", { missing: ["Brownfield"] });
   else if (!snapshot.archFields.has("integration") || !snapshot.archFields.has("merge") || invalidIntegration) addEntry(zones, "setup", "integration-config", {
@@ -3102,8 +3102,8 @@ function evaluateZones(snapshot) {
     ...(invalidIntegration ? { reason: snapshot.integration.configuration } : {}),
     worktreeCount: snapshot.worktrees,
   });
-  if (snapshot.cards.some((card) => card.bare) || readFile(snapshot.root, "devflow/HANDOFF.md") !== null) addEntry(zones, "setup", "room-upgrade", {
-    paths: [...snapshot.cards.filter((card) => card.bare).map((card) => card.path), ...(readFile(snapshot.root, "devflow/HANDOFF.md") !== null ? ["devflow/HANDOFF.md"] : [])],
+  if (snapshot.cards.some((card) => card.bare) || readFile(snapshot.root, ".devflow/HANDOFF.md") !== null) addEntry(zones, "setup", "room-upgrade", {
+    paths: [...snapshot.cards.filter((card) => card.bare).map((card) => card.path), ...(readFile(snapshot.root, ".devflow/HANDOFF.md") !== null ? [".devflow/HANDOFF.md"] : [])],
   });
 
   const claimSummary = { mine: 0, others: 0 };
@@ -3162,7 +3162,7 @@ function evaluateZones(snapshot) {
     if (!keys.has(request.timestamp)) newEvents.push({ role: request.kind === "audit-requested" ? "Audit" : "Retrospective", target, key: request.timestamp });
   }
   zones.event.summary = { productRequested: productRequested.length, pending: pendingEvents.length, new: newEvents.length };
-  for (const line of productRequested) addEntry(zones, "event", "product-requested", { path: "devflow/journal.md", key: line.timestamp });
+  for (const line of productRequested) addEntry(zones, "event", "product-requested", { path: ".devflow/journal.md", key: line.timestamp });
   for (const item of pendingEvents) addEntry(zones, "event", "pending", item);
   for (const item of newEvents) addEntry(zones, "event", "new", item);
 
@@ -3345,7 +3345,7 @@ function zoneOrder(treePresent, zones) {
   return [...ZONE_DEFINITIONS].sort((left, right) => {
     const rank = (definition) => {
       const actual = zones[definition.zone].entries.filter((entry) => entry.kind).map((entry) => {
-        if (["claim", "ready"].includes(definition.zone) && String(entry.path ?? entry.file ?? entry.card ?? "").startsWith("devflow/tree/00-project/")) return 4.5;
+        if (["claim", "ready"].includes(definition.zone) && String(entry.path ?? entry.file ?? entry.card ?? "").startsWith(".devflow/tree/00-project/")) return 4.5;
         return ROUTE_RANK.get(`${definition.zone}.${entry.kind}`)?.[treePresent ? "present" : "absent"];
       }).filter((value) => value !== null && value !== undefined);
       return actual.length > 0 ? Math.min(...actual) : treePresent ? definition.present : definition.absent;
@@ -3380,9 +3380,9 @@ function firstRoute(order, zones, treePresent) {
 function capabilityFromValue(snapshot, value) {
   if (typeof value === "number") return value;
   if (typeof value !== "string") return null;
-  const tree = /^devflow\/tree\/([^/]+)/.exec(value);
-  if (tree) return Number(folderIdentity(`devflow/tree/${tree[1]}`)?.number) || null;
-  const baseline = /^devflow\/project\/capabilities\/(\d+)-/.exec(value);
+  const tree = /^\.devflow\/tree\/([^/]+)/.exec(value);
+  if (tree) return Number(folderIdentity(`.devflow/tree/${tree[1]}`)?.number) || null;
+  const baseline = /^\.devflow\/project\/capabilities\/(\d+)-/.exec(value);
   if (baseline) return Number(baseline[1]);
   const card = new RegExp(`^(${CARD_NUMBER})(?:$|[-.])`).exec(value);
   if (card) return Number(/^\d+/.exec(card[1])?.[0]) || null;

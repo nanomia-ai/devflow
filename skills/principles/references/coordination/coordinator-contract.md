@@ -33,6 +33,6 @@ Rules:
    database, or port. Do not dispatch verify while there are uncommitted changes in the
    revision inputs `product.md`, `arch.md`, `code-style.md`, or `glossary.md`; in the
    capability layer's target capability folder or direct-dependency cards; or on any path
-   outside `devflow/`.
+   outside `.devflow/`.
 9. Every worker inherits the owner's id and is distinguished only by assignment. Create no
    worker-specific id or room.

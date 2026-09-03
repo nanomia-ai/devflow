@@ -75,7 +75,7 @@ function activeOrigin(state) {
   if (typeof origin !== "string" || origin.length === 0) throw new Error("project-state layer-opening origin is unavailable");
   const bundle = markers.filter(marker => marker.sourceJson === origin);
   const scopes = unique(bundle.map(marker => marker.parent));
-  if (!scopes.length || scopes.some(scope => typeof scope !== "string" || !scope.startsWith("devflow/tree"))) throw new Error("project-state active scope is invalid");
+  if (!scopes.length || scopes.some(scope => typeof scope !== "string" || !scope.startsWith(".devflow/tree"))) throw new Error("project-state active scope is invalid");
   return { origin, scopes, children: unique(bundle.flatMap(marker => String(marker.children).split("+"))) };
 }
 
@@ -104,7 +104,7 @@ function draftBundle(state) {
   const active = activeOrigin(state);
   if (active === NONE) return NONE;
   const cardPaths = new Set(projectedCardEntries(state).map(entry => entry.file));
-  const addedTreeCards = newCardPaths(state).filter(path => path.startsWith("devflow/tree/") && path.endsWith(".md"));
+  const addedTreeCards = newCardPaths(state).filter(path => path.startsWith(".devflow/tree/") && path.endsWith(".md"));
   const unparsed = addedTreeCards.filter(path => !cardPaths.has(path));
   if (unparsed.length) throw new Error(`new task-tree cards are not recognized by project-state: ${unparsed.join(",")}`);
   const outside = addedTreeCards.filter(path => !pathInScopes(path, active.scopes));
@@ -115,12 +115,12 @@ function draftBundle(state) {
 
 async function projectResearch(state) {
   const receipt = planningReceipt(state);
-  const receiptCards = receipt === NONE ? [] : receipt.cards.filter(path => path.startsWith("devflow/tree/00-project/"));
+  const receiptCards = receipt === NONE ? [] : receipt.cards.filter(path => path.startsWith(".devflow/tree/00-project/"));
   const active = activeOrigin(state);
   const request = currentRequest(state);
   const origin = receiptCards.length > 0 ? receipt.origin : active !== NONE ? active.origin : request !== NONE ? request.source : null;
   if (origin === null) return NONE;
-  const matches = projectedCardEntries(state).filter(card => card.file.startsWith("devflow/tree/00-project/")
+  const matches = projectedCardEntries(state).filter(card => card.file.startsWith(".devflow/tree/00-project/")
     && card.origin === origin && (receiptCards.length === 0 || receiptCards.includes(card.file)));
   if (matches.length > 1) throw new Error(`exact origin has multiple 00-project research cards: ${origin}`);
   if (matches.length === 0) return NONE;
@@ -142,7 +142,7 @@ function headTransaction(state) {
   if (!/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(head)) throw new Error("project-state HEAD is unavailable");
   git(state, ["rev-parse", "--verify", `${head}^`]);
   const subject = git(state, ["log", "-1", "--format=%s", head]).trim();
-  const paths = git(state, ["diff-tree", "--no-commit-id", "--name-only", "-r", "-z", `${head}^`, head, "--", "devflow/tree", "devflow/journal.md"]).split("\0").filter(Boolean);
+  const paths = git(state, ["diff-tree", "--no-commit-id", "--name-only", "-r", "-z", `${head}^`, head, "--", ".devflow/tree", ".devflow/journal.md"]).split("\0").filter(Boolean);
   const knownCards = new Set(projectedCardEntries(state).map(card => card.file));
   return { head, subject, paths, cards: paths.filter(path => knownCards.has(path)) };
 }
@@ -178,7 +178,7 @@ function approvalIssue(state) {
 
 function planningReceipt(state) {
   const transaction = headTransaction(state);
-  if (!transaction.subject.startsWith("split — ") || !transaction.paths.includes("devflow/journal.md") || !transaction.cards.length) return NONE;
+  if (!transaction.subject.startsWith("split — ") || !transaction.paths.includes(".devflow/journal.md") || !transaction.cards.length) return NONE;
   const entries = projectedCardEntries(state);
   const details = transaction.cards.map(card => entries.find(entry => entry.file === card));
   if (details.some(detail => !detail || detail.approval !== "effective")) return NONE;

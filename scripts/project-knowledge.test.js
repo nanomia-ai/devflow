@@ -48,7 +48,7 @@ function writeSource(root, text = "source one\nsource two\nsource three\n") {
 
 function writeCapsule(root, value = header(), content = body(), number = "006", directory = "02-property") {
   if (!fs.existsSync(path.join(root, "docs", "source.md"))) writeSource(root);
-  const base = path.join(root, "devflow", "project", "capabilities");
+  const base = path.join(root, ".devflow", "project", "capabilities");
   fs.mkdirSync(path.join(base, directory), { recursive: true });
   fs.writeFileSync(path.join(base, `${directory}.md`), `# ${directory}\n`, "utf8");
   const target = path.join(base, directory, `K-${number}-${value.topic}.md`);
@@ -58,7 +58,7 @@ function writeCapsule(root, value = header(), content = body(), number = "006", 
 
 function writeOwnerCapsule(root, owner, { parents = [], number = "006", value = header(), content = body() } = {}) {
   if (!fs.existsSync(path.join(root, "docs", "source.md"))) writeSource(root);
-  const project = path.join(root, "devflow", "project");
+  const project = path.join(root, ".devflow", "project");
   const base = owner === "capability" ? path.join(project, "capabilities", "02-property") : path.join(project, owner);
   const entrance = owner === "capability" ? path.join(project, "capabilities", "02-property.md") : path.join(project, `${owner}.md`);
   fs.mkdirSync(base, { recursive: true });
@@ -118,7 +118,7 @@ test("project emits the first two lines, costs, and marker counts without bodies
   assert.match(result.stdout, /project: capsules=1 bodies=0/);
   assert.doesNotMatch(result.stdout, /^body:/m);
   const projected = JSON.parse(/^projection: (.+)$/m.exec(result.stdout)[1]);
-  assert.equal(projected.path, "devflow/project/capabilities/02-property/K-006-location-trust.md");
+  assert.equal(projected.path, ".devflow/project/capabilities/02-property/K-006-location-trust.md");
   assert.match(projected.heading, /^# .* · .*$/);
   assert.equal(projected.about, "\uB4F1\uB85D, \uC9C0\uC624\uCF54\uB529, \uC704\uCE58 \uC2E0\uB8B0\uB3C4");
   assert.deepEqual(projected.markers, { synthesis: 1, code: 1, conjecture: 1, dispute: 1 });
@@ -159,9 +159,9 @@ test("the canonical call takes the zero-padded number the canon writes on disk",
 
 test("validate rejects headers outside the two-line prose format", (t) => {
   const malformedRoot = fixture(t);
-  const malformedDir = path.join(malformedRoot, "devflow", "project", "capabilities", "02-property");
+  const malformedDir = path.join(malformedRoot, ".devflow", "project", "capabilities", "02-property");
   fs.mkdirSync(malformedDir, { recursive: true });
-  fs.writeFileSync(path.join(malformedRoot, "devflow", "project", "capabilities", "02-property.md"), "# P\n");
+  fs.writeFileSync(path.join(malformedRoot, ".devflow", "project", "capabilities", "02-property.md"), "# P\n");
   fs.writeFileSync(path.join(malformedDir, "K-006-location-trust.md"), "knowledge: {no}\n# X\n");
   const malformed = run(malformedRoot, "validate");
   assert.equal(malformed.status, 1);
@@ -494,7 +494,7 @@ test("a capability folder keeps the product's own capability name, and only its 
     assertOk(result);
     assert.match(result.stdout, /project: capsules=1 bodies=0/, directory);
     const projected = JSON.parse(/^projection: (.+)$/m.exec(result.stdout)[1]);
-    assert.equal(projected.path, `devflow/project/capabilities/${directory}/K-006-location-trust.md`);
+    assert.equal(projected.path, `.devflow/project/capabilities/${directory}/K-006-location-trust.md`);
   }
 });
 
@@ -561,8 +561,8 @@ test("A2 recursive K folders accept depths one through three", (t) => {
 test("A3 --under projects, disputes, and validates direct children only", (t) => {
   const root = fixture(t);
   const leaf = writeOwnerCapsule(root, "product", { parents: ["K-001-root"], number: "002" });
-  const owner = "devflow/project/product.md";
-  const node = "devflow/project/product/K-001-root.md";
+  const owner = ".devflow/project/product.md";
+  const node = ".devflow/project/product/K-001-root.md";
   for (const command of ["project", "disputes", "validate"]) {
     const top = run(root, command, "--under", owner);
     assertOk(top);
@@ -591,8 +591,8 @@ test("A5 duplicate K numbers in one owner subtree are rejected", (t) => {
 
 test("A6 a K folder without its same-stem parent is invalid", (t) => {
   const root = fixture(t);
-  fs.mkdirSync(path.join(root, "devflow", "project", "product", "K-001-orphan"), { recursive: true });
-  fs.writeFileSync(path.join(root, "devflow", "project", "product.md"), "# product\n", "utf8");
+  fs.mkdirSync(path.join(root, ".devflow", "project", "product", "K-001-orphan"), { recursive: true });
+  fs.writeFileSync(path.join(root, ".devflow", "project", "product.md"), "# product\n", "utf8");
   const result = run(root, "validate");
   assert.equal(result.status, 1);
   assert.match(result.stderr, /same-stem parent .* is missing/);
@@ -631,7 +631,7 @@ test("A10 presence sees an arch-only artifact across HEAD and the working tree",
   writeOwnerCapsule(root, "arch");
   assert.equal(presenceOf(root).value, "present");
   commit(root, "arch capsule");
-  fs.rmSync(path.join(root, "devflow", "project", "arch"), { recursive: true, force: true });
+  fs.rmSync(path.join(root, ".devflow", "project", "arch"), { recursive: true, force: true });
   assert.equal(presenceOf(root).value, "present");
 });
 
@@ -652,7 +652,7 @@ test("A12 one owner can hold one hundred direct children through the compact ind
     const number = String(index).padStart(3, "0");
     writeOwnerCapsule(root, "product", { number, value: header({ topic: `direct-${number}`, about: `direct ${number} `.repeat(4).trim() }) });
   }
-  const result = run(root, "project", "--under", "devflow/project/product.md");
+  const result = run(root, "project", "--under", ".devflow/project/product.md");
   assertOk(result);
   assert.match(result.stdout, /capsules=100 bodies=0 form=compact/);
 });
@@ -662,7 +662,7 @@ test("A13 direct --under leaves an untouched nested sibling corpus bounded", (t)
   writeOwnerCapsule(root, "product", { number: "001" });
   const broken = writeOwnerCapsule(root, "product", { parents: ["K-002-sibling"], number: "003" });
   fs.writeFileSync(broken, "# malformed\n", "utf8");
-  assertOk(run(root, "project", "--under", "devflow/project/product.md"));
+  assertOk(run(root, "project", "--under", ".devflow/project/product.md"));
   const global = run(root, "validate");
   assert.equal(global.status, 1);
   assert.match(global.stderr, /capsule header format anomaly/);
@@ -693,13 +693,13 @@ function presenceOf(root) {
 
 test("presence answers absent only when no capsule artifact exists in HEAD or the working tree", (t) => {
   const root = repo(t);
-  fs.mkdirSync(path.join(root, "devflow", "project", "capabilities"), { recursive: true });
+  fs.mkdirSync(path.join(root, ".devflow", "project", "capabilities"), { recursive: true });
   fs.writeFileSync(path.join(root, "seed.txt"), "seed\n", "utf8");
   commit(root, "seed");
   assert.equal(presenceOf(root).value, "absent", "empty capabilities folder");
 
   // A capability document is a file beside the capsule folders; it is not a capsule artifact.
-  fs.writeFileSync(path.join(root, "devflow", "project", "capabilities", "02-property.md"), "# 02\n", "utf8");
+  fs.writeFileSync(path.join(root, ".devflow", "project", "capabilities", "02-property.md"), "# 02\n", "utf8");
   commit(root, "capability document");
   assert.equal(presenceOf(root).value, "absent", "capability document only");
 
@@ -717,14 +717,14 @@ test("presence reports present from the working tree alone and from HEAD alone",
   const headOnly = repo(t);
   writeCapsule(headOnly);
   commit(headOnly, "capsule");
-  fs.rmSync(path.join(headOnly, "devflow", "project", "capabilities", "02-property"),
+  fs.rmSync(path.join(headOnly, ".devflow", "project", "capabilities", "02-property"),
     { recursive: true, force: true });
   assert.equal(presenceOf(headOnly).value, "present", "deleted here, still in HEAD");
 });
 
 test("presence counts a capsule folder whose name the capability pattern rejects", (t) => {
   const root = repo(t);
-  const base = path.join(root, "devflow", "project", "capabilities", "property");
+  const base = path.join(root, ".devflow", "project", "capabilities", "property");
   fs.mkdirSync(base, { recursive: true });
   fs.writeFileSync(path.join(base, "K-001-settlement.md"), "# body\n", "utf8");
   commit(root, "odd folder");
@@ -737,23 +737,23 @@ test("presence counts a capsule folder whose name the capability pattern rejects
   assert.equal(presenceOf(root).value, "present", "presence sees the artifact project skipped");
 
   const empty = repo(t);
-  fs.mkdirSync(path.join(empty, "devflow", "project", "capabilities", "02-property"), { recursive: true });
+  fs.mkdirSync(path.join(empty, ".devflow", "project", "capabilities", "02-property"), { recursive: true });
   assert.equal(presenceOf(empty).value, "present", "an empty capsule folder is not proof of absence");
 });
 
 test("presence falls to unknown on every uncertainty, and unknown is not absent", (t) => {
   const notARepository = fixture(t);
-  fs.mkdirSync(path.join(notARepository, "devflow", "project", "capabilities"), { recursive: true });
+  fs.mkdirSync(path.join(notARepository, ".devflow", "project", "capabilities"), { recursive: true });
   assert.equal(presenceOf(notARepository).value, "unknown", "no git history to read");
 
   const notADirectory = repo(t);
-  fs.mkdirSync(path.join(notADirectory, "devflow", "project"), { recursive: true });
-  fs.writeFileSync(path.join(notADirectory, "devflow", "project", "capabilities"), "x\n", "utf8");
+  fs.mkdirSync(path.join(notADirectory, ".devflow", "project"), { recursive: true });
+  fs.writeFileSync(path.join(notADirectory, ".devflow", "project", "capabilities"), "x\n", "utf8");
   commit(notADirectory, "capabilities is a file");
   assert.equal(presenceOf(notADirectory).value, "unknown", "capabilities is not a directory");
 
   // An unborn HEAD is proof, not uncertainty: nothing has ever been committed.
   const unborn = repo(t);
-  fs.mkdirSync(path.join(unborn, "devflow", "project", "capabilities"), { recursive: true });
+  fs.mkdirSync(path.join(unborn, ".devflow", "project", "capabilities"), { recursive: true });
   assert.equal(presenceOf(unborn).value, "absent", "a repository with no commit holds no capsule");
 });

@@ -51,7 +51,7 @@ async function researchState(ctx, projectRoot) {
     const entries = [...(state.zones.ready?.entries ?? []), ...(state.zones.claim?.entries ?? [])];
     const matches = entries.filter(entry => {
       const path = entry.file ?? entry.path;
-      return typeof path === "string" && path.startsWith("devflow/tree/00-project/") && entry.origin === origin
+      return typeof path === "string" && path.startsWith(".devflow/tree/00-project/") && entry.origin === origin
         && /^# \d+\.\d+ Research:/.test(text(join(projectRoot, path)) ?? "");
     });
     if (matches.length > 1) return "unknown";
@@ -65,7 +65,7 @@ async function compatible(ctx, projectRoot) {
   if (!Array.isArray(entries)) return { owner: "invalid", landing: "invalid" };
   const marker = entries.find(entry => entry?.kind === "compatible-feedback" && entry?.writer === "design");
   if (!marker) return { owner: "none", landing: "none" };
-  const owner = marker.owner === "devflow/project/design.md" ? "design" : "invalid";
+  const owner = marker.owner === ".devflow/project/design.md" ? "design" : "invalid";
   const landing = marker.landing === "satisfied" ? "satisfied" : marker.landing === "pending" ? "pending" : "invalid";
   return { owner, landing };
 }
@@ -75,12 +75,12 @@ function fileState(ctx, local) {
 }
 
 export const collectors = Object.freeze({
-  "state.design-product": ctx => fileState(ctx, "devflow/project/product.md"),
-  "state.design-arch": ctx => fileState(ctx, "devflow/project/arch.md"),
-  "state.design-current": ctx => fileState(ctx, "devflow/project/design.md"),
+  "state.design-product": ctx => fileState(ctx, ".devflow/project/product.md"),
+  "state.design-arch": ctx => fileState(ctx, ".devflow/project/arch.md"),
+  "state.design-current": ctx => fileState(ctx, ".devflow/project/design.md"),
   "state.design-tree": ctx => {
     const projectRoot = root(ctx);
-    return projectRoot === null ? "unknown" : existsSync(join(projectRoot, "devflow/tree")) ? "present" : "absent";
+    return projectRoot === null ? "unknown" : existsSync(join(projectRoot, ".devflow/tree")) ? "present" : "absent";
   },
   "state.design-request-state": async ctx => {
     const projectRoot = root(ctx);
@@ -101,7 +101,7 @@ export const collectors = Object.freeze({
   "state.design-frontend": ctx => {
     const projectRoot = root(ctx);
     if (projectRoot === null) return "unknown";
-    const arch = text(join(projectRoot, "devflow/project/arch.md"));
+    const arch = text(join(projectRoot, ".devflow/project/arch.md"));
     if (arch === null) return "unknown";
     return /^frontend:\s*none\s*$/mi.test(arch) ? "none" : "needed";
   }

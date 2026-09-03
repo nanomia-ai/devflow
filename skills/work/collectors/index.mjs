@@ -153,7 +153,7 @@ async function basis(context) {
   if (paths.length === 0) return "complete";
   for (const item of paths) {
     if (item.startsWith("/") || item.includes("\\") || item.split("/").some(part => part === "" || part === "." || part === "..")) return "invalid";
-    if (/^devflow\/project\/capabilities\/[^/]+\.md$/.test(item)) return "invalid";
+    if (/^\.devflow\/project\/capabilities\/[^/]+\.md$/.test(item)) return "invalid";
     const target = resolve(card.projectRoot, ...item.split("/"));
     if (!existsSync(target)) return "missing";
     let physical;

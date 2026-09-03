@@ -6,8 +6,8 @@ devflow has one mode. Whether one person or several share the repository, every 
 works out of its own room.
 
 Resolve your id before writing to the tree, journal, or a core document
-(`devflow/project/*`), and before landing a tweak commit — read `git config user.name` and `git config user.email` and match
-each non-empty value against the `git:` line of each `devflow/users/*/owner.md`. An empty
+(`.devflow/project/*`), and before landing a tweak commit — read `git config user.name` and `git config user.email` and match
+each non-empty value against the `git:` line of each `.devflow/users/*/owner.md`. An empty
 value matches nothing, and a value that matches a room's `git:` line while the other
 value conflicts with that same line is not a match. Exactly one match is your room. With no room on
 disk, propose an id derived from that identity, or ask for one when both values are empty,
@@ -20,7 +20,7 @@ cannot put the question to a user (CI, bots), only reads.
 ids are lowercase `[a-z0-9]{2,8}`. Names devflow uses (project, tree, users, decisions)
 are forbidden; ids are never reused.
 
-Room = `devflow/users/<id>/` = owner.md + HANDOFF.md + digest.md. owner.md is two lines,
+Room = `.devflow/users/<id>/` = owner.md + HANDOFF.md + digest.md. owner.md is two lines,
 `id: <id>` and `git: <git user.name>, <git user.email>`. digest.md is one line holding the
 digest marker, an unabbreviated full commit object ID output by Git or `none`. Write only in
 your own room. Rooms are readable by the whole team — write with that premise.
@@ -49,7 +49,7 @@ integration branch needs no network command. In every ancestor test here, a comm
 own ancestor.
 
 **Shared truth is the integration branch.** Card status, tree numbers, verify source ids,
-`devflow/journal.md`, capability documents, and binding decisions are judged at the
+`.devflow/journal.md`, capability documents, and binding decisions are judged at the
 integration tip. Your own working tree and HEAD hold a transition still in progress, and the
 rules below name exactly when to read them. Every worktree of this repository shares one
 `.git`, so a commit made in one is visible from another with no fetch and no remote — but
@@ -99,7 +99,7 @@ transition now waiting. The cause is not repeated, and nothing waits unnamed —
 report carries the standing count.
 
 **Several hands in one working folder.** Several sessions may carry different cards at the
-same time. Change `devflow/journal.md` by appending — reading it and rewriting it whole
+same time. Change `.devflow/journal.md` by appending — reading it and rewriting it whole
 drops the lines another session appended meanwhile. Keep in HANDOFF only values the tree
 recomputes: an open decision that needs a person lands as one attributed journal line —
 its resolution follows the discovery→update table's open-item row. While another flow is alive, edit the part that changes instead of
@@ -109,8 +109,8 @@ uncommitted paths outside my card's own, report those exact paths before countin
 failure ladder. A worktree is not a safety device; it is the
 choice for isolating a build completely.
 
-Before routing, fetch integration and read this shared state at that tip: `devflow/project/`,
-`devflow/tree/`, `devflow/journal.md`, and resume's bounded verify projection.
+Before routing, fetch integration and read this shared state at that tip: `.devflow/project/`,
+`.devflow/tree/`, `.devflow/journal.md`, and resume's bounded verify projection.
 When the integration tip is not an ancestor of the current branch and, at
 that tip, journal or any verify.md contains an active marker, an active request or
 product-verification line, or an event `pending` or `routing` state, include the integration
@@ -141,10 +141,10 @@ Room transitions — joining and departure are each one commit; the upgrade spli
   from the shared documents, not from commit archaeology.
 - Upgrading from a version without rooms: arch adds `integration` and `merge` to arch.md, the identity resolution above creates
   the room, and work renames its own bare `.wip.` to `.wip-<id>.` and moves
-  `devflow/HANDOFF.md` into the room. In that same commit, replace with the new path the
+  `.devflow/HANDOFF.md` into the room. In that same commit, replace with the new path the
   `card-json` of every `evidence-wait` or `evidence-finalizing` line naming the exact path
   that rename changed, preserving its timestamp, checkpoint, and `check-json` byte for
-  byte. A bare `.wip.` or a root `devflow/HANDOFF.md` means
+  byte. A bare `.wip.` or a root `.devflow/HANDOFF.md` means
   the upgrade is incomplete — report, confirm the owner with the user, and finish it.
   Never guess.
 - Departure: the user declares it. Any remaining member — move any legacy `Open decisions`

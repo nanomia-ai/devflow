@@ -38,7 +38,7 @@ if (!root) process.exit(0);
 // This is the deliberately weaker, non-binding half of project-state's membership answer.
 // It gates only a fixed pointer, never a route or file body, and therefore uses current files
 // only: no index, history, project-state, or route lookup belongs in SessionStart.
-const currentProduct = fs.existsSync(path.join(root, "devflow", "project", "product.md"));
+const currentProduct = fs.existsSync(path.join(root, ".devflow", "project", "product.md"));
 if (!currentProduct) process.exit(0);
 
 const additionalContext = [

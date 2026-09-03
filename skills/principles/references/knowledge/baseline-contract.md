@@ -10,8 +10,8 @@ knowledge baselines are always on; there is no per-project switch.
 ## Identity and expected set
 
 - There is one baseline per depth-1 tree unit. The foundation uses
-  `devflow/project/capabilities/01-foundation.md`; a capability uses
-  `devflow/project/capabilities/NN-<capability-name>.md`. Only `.md` files directly
+  `.devflow/project/capabilities/01-foundation.md`; a capability uses
+  `.devflow/project/capabilities/NN-<capability-name>.md`. Only `.md` files directly
   below that folder are baselines; deeper paths are not.
 - The foundation number is `01`. A capability uses the number on a same-numbered tree
   folder, waiting file, or existing baseline when one exists. Different numbers claimed by
@@ -49,7 +49,7 @@ the boundary.
 | 3 | Concept model | design | table: concept / what the user gets / identifier / relation | soft | code fields, types, signatures |
 | 4 | Invariants | design | numbered list of falsifiable statements | soft | rules equally true of other capabilities |
 | 5 | Non-goals | design | bullet: item — one-clause reason | soft | things merely not built yet |
-| 6 | Binding ADRs | design | exact paths under `devflow/project/decisions/` of the legacy ADRs this capability document's design statements actually cite | soft | uncited paths and superseded records |
+| 6 | Binding ADRs | design | exact paths under `.devflow/project/decisions/` of the legacy ADRs this capability document's design statements actually cite | soft | uncited paths and superseded records |
 | 7 | Design metadata | design | the two `key: value` fields below | 2 fields | every other field |
 | — | `## Verified state` | boundary | fixed H2 heading | 1 line | — |
 | 8 | Main flow | verified | mermaid flowchart LR | soft | unimplemented paths |

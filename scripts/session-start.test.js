@@ -99,7 +99,7 @@ test("an unmanaged Git checkout exits silently", (t) => {
 });
 
 test("an empty devflow directory remains silent", (t) => {
-  const root = makeProject(t, { "devflow/.keep": "", "NOTES.md": "# Fixture\n" }, { git: true });
+  const root = makeProject(t, { ".devflow/.keep": "", "NOTES.md": "# Fixture\n" }, { git: true });
   const { raw, payload, context } = runHook(root, root, { input: sessionInput(root) });
   assert.equal(raw, "");
   assert.equal(payload, null);
@@ -107,7 +107,7 @@ test("an empty devflow directory remains silent", (t) => {
 });
 
 test("a current product file receives the byte-identical delayed instruction", (t) => {
-  const root = makeProject(t, { "devflow/project/product.md": "# Product\n" }, { git: true });
+  const root = makeProject(t, { ".devflow/project/product.md": "# Product\n" }, { git: true });
   const { raw, context } = runHook(root, root, { input: sessionInput(root) });
   assert.equal(raw, managedOutput);
   assert.match(context, /explicitly named devflow stage enters that stage directly/i);
@@ -116,7 +116,7 @@ test("a current product file receives the byte-identical delayed instruction", (
 });
 
 test("a role contract bypasses entry classification", (t) => {
-  const root = makeProject(t, { "devflow/project/product.md": "# Product\n" }, { git: true });
+  const root = makeProject(t, { ".devflow/project/product.md": "# Product\n" }, { git: true });
   const { context } = runHook(root, root, { input: sessionInput(root) });
   assert.match(context, /role contract.*follow that contract directly/i);
   assert.match(context, /do not re-enter through principles/i);
@@ -124,9 +124,9 @@ test("a role contract bypasses entry classification", (t) => {
 
 test("a subdirectory start resolves the checkout root with current-files checks only", (t) => {
   const root = makeProject(t, {
-    "devflow/project/product.md": "SECRET PROJECT\n",
-    "devflow/tree/02-domain/02.1-secret-task.wip-ab.md": "SECRET TASK\n",
-    "devflow/journal.md": "SECRET JOURNAL\n",
+    ".devflow/project/product.md": "SECRET PROJECT\n",
+    ".devflow/tree/02-domain/02.1-secret-task.wip-ab.md": "SECRET TASK\n",
+    ".devflow/journal.md": "SECRET JOURNAL\n",
     "src/deep/deeper/note.txt": "x\n",
   }, { git: true });
   const startDirectory = path.join(root, "src", "deep", "deeper");
@@ -142,13 +142,13 @@ test("a subdirectory start resolves the checkout root with current-files checks 
     { type: "read", target: hook },
     { type: "read", target: "0" },
     { type: "spawn", command: "git", args: ["rev-parse", "--show-toplevel"], cwd: startDirectory },
-    { type: "exists", target: path.join(root, "devflow", "project", "product.md") },
+    { type: "exists", target: path.join(root, ".devflow", "project", "product.md") },
   ]);
   assert.doesNotMatch(JSON.stringify(events), /project-state|resume|\"log\"|ls-files/i);
 });
 
 test("malformed or missing stdin falls back safely, while non-Git directories stay silent", (t) => {
-  const gitRoot = makeProject(t, { "devflow/project/product.md": "# Product\n" }, { git: true });
+  const gitRoot = makeProject(t, { ".devflow/project/product.md": "# Product\n" }, { git: true });
   assert.match(runHook(gitRoot, gitRoot, { input: "{not-json" }).context, /devflow:principles/);
   assert.match(runHook(gitRoot, gitRoot).context, /devflow:principles/);
 

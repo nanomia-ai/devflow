@@ -13,14 +13,14 @@ test("collectors isolate two supplied roots and cannot observe cwd without conte
   const first = await mkdtemp(join(tmpdir(), "design-collector-first-"));
   const second = await mkdtemp(join(tmpdir(), "design-collector-second-"));
   try {
-    await mkdir(join(first, "devflow/project"), { recursive: true });
-    await mkdir(join(first, "devflow/tree/00-project"), { recursive: true });
-    await writeFile(join(first, "devflow/project/product.md"), "product\n");
-    await writeFile(join(first, "devflow/project/arch.md"), "frontend: none\n");
-    await writeFile(join(first, "devflow/journal.md"), "2026-08-30T00:00:00Z maintenance routing pending: request-json: design\n");
-    await writeFile(join(first, "devflow/tree/00-project/00.1-research.md"), "# 00.1 Research: design\nOrigin: 2026-08-30T00:00:00Z maintenance routing pending: request-json: design\nApproval: pending\n");
-    await mkdir(join(second, "devflow/project"), { recursive: true });
-    await writeFile(join(second, "devflow/project/arch.md"), "frontend: needed\n");
+    await mkdir(join(first, ".devflow/project"), { recursive: true });
+    await mkdir(join(first, ".devflow/tree/00-project"), { recursive: true });
+    await writeFile(join(first, ".devflow/project/product.md"), "product\n");
+    await writeFile(join(first, ".devflow/project/arch.md"), "frontend: none\n");
+    await writeFile(join(first, ".devflow/journal.md"), "2026-08-30T00:00:00Z maintenance routing pending: request-json: design\n");
+    await writeFile(join(first, ".devflow/tree/00-project/00.1-research.md"), "# 00.1 Research: design\nOrigin: 2026-08-30T00:00:00Z maintenance routing pending: request-json: design\nApproval: pending\n");
+    await mkdir(join(second, ".devflow/project"), { recursive: true });
+    await writeFile(join(second, ".devflow/project/arch.md"), "frontend: needed\n");
 
     assert.equal(await collectors["state.design-product"]({ projectRoot: first }), "present");
     assert.equal(await collectors["state.design-product"]({ projectRoot: second }), "absent");

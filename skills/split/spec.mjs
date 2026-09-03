@@ -31,9 +31,9 @@ export const ORDERS = {
 };
 
 export const OWNERSHIP = {
-  "devflow/tree/**": "split",
-  "devflow/journal.md": "split",
-  "devflow/project/**": "external.layer0",
+  ".devflow/tree/**": "split",
+  ".devflow/journal.md": "split",
+  ".devflow/project/**": "external.layer0",
   ".git/**": "external.git"
 };
 
@@ -67,12 +67,12 @@ export const STAGES = [
   { id: "intake", reads: ["planning.receipt", "request.classification", "project.product", "request.current", "origin.active", "origin.projectResearch"], acceptsUnknown: ["request.classification"], done: s => s.planning.receipt !== "NONE" || (s.request.classification === "tree-work" && s.project.product === "present" && (s.request.current !== "NONE" || s.origin.active !== "NONE")) || (s.request.classification === "pre-product-research" && (s.request.current !== "NONE" || s.origin.active !== "NONE" || s.origin.projectResearch !== "NONE")), needs: ["request.classification"], table: "intakeSelector", reentry: "rejudge", branches: {
     "route-product": ["ROUTE:product"],
     "small-no-tree-delta": [["REPORT", { template: "result" }], "DONE"],
-    "record-request": [["WRITE", { artifact: "requestRecord", target: "devflow/journal.md", line: "maintenance routing pending", "request-json": "<the whole user request as one JSON string>" }], "NEXT"],
+    "record-request": [["WRITE", { artifact: "requestRecord", target: ".devflow/journal.md", line: "maintenance routing pending", "request-json": "<the whole user request as one JSON string>" }], "NEXT"],
     "ASK:intake-uncertain": ["ASK"]
   }, body: "stage: intake" },
   { id: "materialize", reads: ["planning.receipt", "origin.drafts"], acceptsUnknown: [], done: s => s.planning.receipt !== "NONE" || s.origin.drafts !== "NONE", needs: ["bundle.contract", "bundle.units"], table: "materializeSelector", reentry: "rejudge", branches: {
     "continue-active-bundle": [["WRITE", { artifact: "cardBundle", target: "<exact-active-scopes>/<one-or-more-sibling-card-addresses>", units: "bundle.units", templates: "00-project=researchCard; all-other-scopes=taskCard", forbiddenTemplates: "taskCard@00-project" }], "NEXT"],
-    "begin-request-bundle": [["WRITE", { artifact: "layerOpeningBundle", target: "devflow/journal.md", source: "request.current.source", scopes: "bundle.units" }], ["COMMIT", { scope: "layer-opening-bundle", message: "split — begin <parent>" }], ["WRITE", { artifact: "cardBundle", target: "<exact-active-scopes>/<one-or-more-sibling-card-addresses>", units: "bundle.units", templates: "00-project=researchCard; all-other-scopes=taskCard", forbiddenTemplates: "taskCard@00-project" }], "NEXT"],
+    "begin-request-bundle": [["WRITE", { artifact: "layerOpeningBundle", target: ".devflow/journal.md", source: "request.current.source", scopes: "bundle.units" }], ["COMMIT", { scope: "layer-opening-bundle", message: "split — begin <parent>" }], ["WRITE", { artifact: "cardBundle", target: "<exact-active-scopes>/<one-or-more-sibling-card-addresses>", units: "bundle.units", templates: "00-project=researchCard; all-other-scopes=taskCard", forbiddenTemplates: "taskCard@00-project" }], "NEXT"],
     "ASK:bundle-uncertain": ["ASK"]
   }, body: "stage: materialize" },
   { id: "carry-approval", reads: ["planning.receipt", "approval.boundary", "origin.drafts"], acceptsUnknown: [], done: s => s.planning.receipt !== "NONE" || s.approval.boundary === "NONE" || s.origin.drafts === "NONE", effects: [["WRITE", { artifact: "approvalBundle", target: "origin.drafts.cards", source: "approval.boundary.values" }], ["COMMIT", { scope: "current-origin-planning-pass", consumes: "settled-layer-opening-markers" }], "WAIT"], reentry: "rejudge", body: "stage: carry-approval" },
@@ -86,15 +86,15 @@ export const STAGES = [
 ];
 
 export const ARTIFACTS = {
-  product: { path: "devflow/project/product.md", writer: "external.product", readers: ["stage.intake"] },
-  journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.intake", "stage.materialize", "stage.carry-approval", "stage.propose"] },
-  requestRecord: { path: "devflow/journal.md", writer: "split", readers: ["stage.intake", "stage.materialize"] },
-  layerOpeningBundle: { path: "devflow/journal.md", writer: "split", readers: ["stage.materialize"] },
-  cardBundle: { path: "devflow/tree/<exact-active-scopes>/<one-or-more-sibling-card-addresses>.md", writer: "split", readers: ["stage.materialize"] },
-  approvalBundle: { path: "devflow/tree/<current-origin-card-paths>.md", writer: "split", readers: ["stage.carry-approval", "stage.propose"] },
-  approvalRepair: { path: "devflow/tree/<approval-invalid-current-origin-card-paths>.md", writer: "split", readers: ["stage.propose"] },
-  cancelDraftCleanup: { path: "devflow/tree/<current-origin-drafts>", writer: "split", readers: ["stage.propose"] },
-  cancelMarkerCleanup: { path: "devflow/journal.md", writer: "split", readers: ["stage.propose"] }
+  product: { path: ".devflow/project/product.md", writer: "external.product", readers: ["stage.intake"] },
+  journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.intake", "stage.materialize", "stage.carry-approval", "stage.propose"] },
+  requestRecord: { path: ".devflow/journal.md", writer: "split", readers: ["stage.intake", "stage.materialize"] },
+  layerOpeningBundle: { path: ".devflow/journal.md", writer: "split", readers: ["stage.materialize"] },
+  cardBundle: { path: ".devflow/tree/<exact-active-scopes>/<one-or-more-sibling-card-addresses>.md", writer: "split", readers: ["stage.materialize"] },
+  approvalBundle: { path: ".devflow/tree/<current-origin-card-paths>.md", writer: "split", readers: ["stage.carry-approval", "stage.propose"] },
+  approvalRepair: { path: ".devflow/tree/<approval-invalid-current-origin-card-paths>.md", writer: "split", readers: ["stage.propose"] },
+  cancelDraftCleanup: { path: ".devflow/tree/<current-origin-drafts>", writer: "split", readers: ["stage.propose"] },
+  cancelMarkerCleanup: { path: ".devflow/journal.md", writer: "split", readers: ["stage.propose"] }
 };
 
 export const ROLES = {};

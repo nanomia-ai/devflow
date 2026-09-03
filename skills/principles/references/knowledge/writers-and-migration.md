@@ -37,7 +37,7 @@
 - An uncommitted diff from a post-confirmation interrupted write is a capability-design
   commit prefix only when it touches current and final expected capability-document paths
   alone (a rename may delete the old same-numbered path and add the final path). In a
-  design-only entry, `devflow/journal.md` is the one exception only when its working bytes
+  design-only entry, `.devflow/journal.md` is the one exception only when its working bytes
   equal HEAD with exactly one byte-identical occurrence of the routed design line removed.
   It preserves each number-matched existing file's HEAD verified zone, gives each new file the initial
   scaffold below, and gives an exact v0.10 file the mechanical verified-zone transformation below. Use no

@@ -25,9 +25,9 @@ export const TEMPLATES = {
 };
 export const ORDERS = { refinement: ["compatible-feedback", "input", "record-first", "research", "proposal", "confirmation"] };
 export const OWNERSHIP = {
-  "devflow/project/design.md": "design",
-  "devflow/journal.md#compatible-feedback-pending": "design-on-exact-owner-landing",
-  "devflow/project/capabilities/**": "external.arch-or-adopt"
+  ".devflow/project/design.md": "design",
+  ".devflow/journal.md#compatible-feedback-pending": "design-on-exact-owner-landing",
+  ".devflow/project/capabilities/**": "external.arch-or-adopt"
 };
 export const GUARDS = [
   { id: "raw-state-unavailable", reads: ["input.product", "input.arch", "input.frontend", "current.design", "current.tree", "maintenance.state", "research.card.state"], acceptsUnknown: [], when: s => s.input.product === "unknown" || s.input.arch === "unknown" || s.input.frontend === "unknown" || s.current.design === "unknown" || s.current.tree === "unknown" || s.maintenance.state === "unknown" || s.research.card.state === "unknown", then: "BLOCK", body: "guard: raw-state-unavailable" },
@@ -41,7 +41,7 @@ export const GUARDS = [
 export const STAGES = [
   { id: "compatible-feedback", reads: ["compatible.owner"], acceptsUnknown: [], done: s => s.compatible.owner === "none", table: "compatibleFeedback", reentry: "rejudge", branches: {
     write: [["WRITE", { artifact: "design", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], "WAIT"],
-    land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: ["devflow/project/design.md", "devflow/journal.md"] }], "ROUTE:resume"]
+    land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: [".devflow/project/design.md", ".devflow/journal.md"] }], "ROUTE:resume"]
   }, body: "stage: compatible-feedback" },
   { id: "input", reads: ["input.frontend"], acceptsUnknown: [], done: s => s.input.frontend === "needed", needs: ["entry.action"], reentry: "rejudge", branches: { skip: [["REPORT", { template: "result" }], "ROUTE:split"] }, body: "stage: input" },
   { id: "record-first", reads: ["current.tree", "request.kind"], acceptsUnknown: ["request.kind"], done: s => s.current.tree === "absent" || s.request.kind === "initial" || s.request.kind === "none" || s.request.kind === "tiny-no-delta", effects: [["RUN", { action: "record-maintenance-routing-request" }], ["COMMIT", { boundary: "request-recorded" }], "ROUTE:split"], reentry: "rejudge", body: "stage: record-first" },
@@ -58,15 +58,15 @@ export const TABLES = { compatibleFeedback: { exclusive: true, rows: [
   { state: "land", reads: [], acceptsUnknown: [], when: () => true }
 ] } };
 export const ARTIFACTS = {
-  product: { path: "devflow/project/product.md", writer: "external.product", readers: ["stage.record-first", "stage.proposal", "stage.confirmation"] },
-  architecture: { path: "devflow/project/arch.md", writer: "external.arch", readers: ["stage.record-first", "stage.input", "stage.proposal", "stage.confirmation"] },
-  codeStyle: { path: "devflow/project/code-style.md", writer: "external.arch", readers: ["stage.proposal", "stage.confirmation"] },
-  capabilityDesignZones: { path: "devflow/project/capabilities", writer: "external.arch-or-adopt", readers: ["stage.proposal", "stage.confirmation"] },
-  glossary: { path: "devflow/project/glossary.md", writer: "external.product", readers: ["stage.proposal", "stage.confirmation"] },
-  compatibleFeedbackMarker: { path: "devflow/journal.md#compatible-feedback-pending", writer: "design", readers: ["stage.compatible-feedback"] },
-  journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.compatible-feedback", "stage.record-first", "stage.research", "guard.existing-maintenance-origin", "guard.existing-design-research"] },
-  tree: { path: "devflow/tree", writer: "external.split", readers: ["stage.record-first", "stage.research", "guard.existing-maintenance-origin", "guard.existing-design-research"] },
-  design: { path: "devflow/project/design.md", writer: "design", readers: ["stage.compatible-feedback", "stage.confirmation", "external.arch", "external.split", "external.resume"], template: "proposal" }
+  product: { path: ".devflow/project/product.md", writer: "external.product", readers: ["stage.record-first", "stage.proposal", "stage.confirmation"] },
+  architecture: { path: ".devflow/project/arch.md", writer: "external.arch", readers: ["stage.record-first", "stage.input", "stage.proposal", "stage.confirmation"] },
+  codeStyle: { path: ".devflow/project/code-style.md", writer: "external.arch", readers: ["stage.proposal", "stage.confirmation"] },
+  capabilityDesignZones: { path: ".devflow/project/capabilities", writer: "external.arch-or-adopt", readers: ["stage.proposal", "stage.confirmation"] },
+  glossary: { path: ".devflow/project/glossary.md", writer: "external.product", readers: ["stage.proposal", "stage.confirmation"] },
+  compatibleFeedbackMarker: { path: ".devflow/journal.md#compatible-feedback-pending", writer: "design", readers: ["stage.compatible-feedback"] },
+  journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.compatible-feedback", "stage.record-first", "stage.research", "guard.existing-maintenance-origin", "guard.existing-design-research"] },
+  tree: { path: ".devflow/tree", writer: "external.split", readers: ["stage.record-first", "stage.research", "guard.existing-maintenance-origin", "guard.existing-design-research"] },
+  design: { path: ".devflow/project/design.md", writer: "design", readers: ["stage.compatible-feedback", "stage.confirmation", "external.arch", "external.split", "external.resume"], template: "proposal" }
 };
 export const ROLES = {};
 export const READ_FIRST = [

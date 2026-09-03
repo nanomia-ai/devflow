@@ -1,29 +1,160 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:2d8cdfb98309ce4466135643cf20c9f3aae8a6510b3d7c80f28987b2562fd2ef",
-    "after": "sha256:4b9b2af0e43e38fcabe4a09f2f301afb440a3c45a9dab2b78708fd4e5eae1ed4"
+    "before": "sha256:77e503289b3e6b9d132a25294f4e890ffb1c3a4e6fd451d08c3900b792e0e380",
+    "after": "sha256:4197b8b59eaec7771971b695df947bbd1d265be3a1c217fd4c8cf4cef8ee484d"
   },
   "changed": true,
   "any_changed": true,
   "source_changes": {
     "behavior_source": true,
-    "observation_source": false,
+    "observation_source": true,
     "context": true
   },
   "artifact_receipts": [
     {
       "kind": "spec",
       "path": "spec.mjs",
-      "before_hash": "sha256:2d8cdfb98309ce4466135643cf20c9f3aae8a6510b3d7c80f28987b2562fd2ef",
-      "after_hash": "sha256:4b9b2af0e43e38fcabe4a09f2f301afb440a3c45a9dab2b78708fd4e5eae1ed4",
+      "before_hash": "sha256:77e503289b3e6b9d132a25294f4e890ffb1c3a4e6fd451d08c3900b792e0e380",
+      "after_hash": "sha256:4197b8b59eaec7771971b695df947bbd1d265be3a1c217fd4c8cf4cef8ee484d",
       "source": "behavior_source"
+    },
+    {
+      "kind": "collector",
+      "path": "collectors/index.mjs",
+      "before_hash": "sha256:0f92b4045e8ab075a23d319443f674793b207670361c517b6598712428b8b631",
+      "after_hash": "sha256:bde0898e8d3f835e813f6dc02401899c8711fdcd2a2a27bee9ac7b006274c5ef",
+      "source": "observation_source"
+    },
+    {
+      "kind": "reference",
+      "path": "references/ownership.md",
+      "before_hash": "sha256:e92264b89976683c7feadc86b172992945669ac9d4d89560c12a5ba280c6259b",
+      "after_hash": "sha256:306fadb2c8c7839436d0ea8afed2e5d7eb3776575a50775f87babe3f39b3498d",
+      "source": "context"
     }
   ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "compatible-feedback",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "compatible.owner"
+          ],
+          "needs": [],
+          "table": "compatibleFeedback",
+          "branches": [
+            "write",
+            "land"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "land": [
+                [
+                  "RUN",
+                  {
+                    "action": "delete-byte-identical-compatible-feedback-marker"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "compatible-feedback-owner-and-marker",
+                    "touches": [
+                      "devflow/project/design.md",
+                      "devflow/journal.md"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "write": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "design",
+                    "preserves": [
+                      "source",
+                      "background",
+                      "why",
+                      "conclusion",
+                      "implication"
+                    ],
+                    "source": "compatible-feedback exact coordinates"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: compatible-feedback",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "compatible.owner"
+          ],
+          "needs": [],
+          "table": "compatibleFeedback",
+          "branches": [
+            "write",
+            "land"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "land": [
+                [
+                  "RUN",
+                  {
+                    "action": "delete-byte-identical-compatible-feedback-marker"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "compatible-feedback-owner-and-marker",
+                    "touches": [
+                      ".devflow/project/design.md",
+                      ".devflow/journal.md"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "write": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "design",
+                    "preserves": [
+                      "source",
+                      "background",
+                      "why",
+                      "conclusion",
+                      "implication"
+                    ],
+                    "source": "compatible-feedback exact coordinates"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: compatible-feedback",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
@@ -33,43 +164,276 @@
       {
         "id": "references/ownership.md",
         "change": "modified",
-        "before": "sha256:9231a88c4af90bc792d29ec233133ac80b9afd2a5ab8e29932b9992e924d70b7",
-        "after": "sha256:3de52275f4769b769552d7dc5d964c0b144432d561eb9f6e870ca8daef32ebd0"
+        "before": "sha256:e92264b89976683c7feadc86b172992945669ac9d4d89560c12a5ba280c6259b",
+        "after": "sha256:306fadb2c8c7839436d0ea8afed2e5d7eb3776575a50775f87babe3f39b3498d"
       }
     ],
-    "ownership": [],
-    "artifacts": [],
-    "roles": [],
-    "declarations": [
+    "ownership": [
       {
-        "id": "knowledgeLanding",
+        "id": ".devflow/journal.md#compatible-feedback-pending",
+        "change": "added",
+        "after": "design-on-exact-owner-landing"
+      },
+      {
+        "id": ".devflow/project/capabilities/**",
+        "change": "added",
+        "after": "external.arch-or-adopt"
+      },
+      {
+        "id": ".devflow/project/design.md",
+        "change": "added",
+        "after": "design"
+      },
+      {
+        "id": "devflow/journal.md#compatible-feedback-pending",
+        "change": "removed",
+        "before": "design-on-exact-owner-landing"
+      },
+      {
+        "id": "devflow/project/capabilities/**",
+        "change": "removed",
+        "before": "external.arch-or-adopt"
+      },
+      {
+        "id": "devflow/project/design.md",
+        "change": "removed",
+        "before": "design"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "architecture",
         "change": "modified",
         "before": {
-          "value": "Only later confirmed work or research synthesis may emit the canonical knowledge-landing marker; arch or adopt is the sole recursive capability knowledge writer.",
-          "consumer": "external.arch-or-adopt"
+          "path": "devflow/project/arch.md",
+          "writer": "external.arch",
+          "readers": [
+            "stage.record-first",
+            "stage.input",
+            "stage.proposal",
+            "stage.confirmation"
+          ]
         },
         "after": {
-          "value": "Only later confirmed work or research synthesis may emit the canonical knowledge-landing marker; Arch is the sole managed recursive capability knowledge writer. Adopt remains only as initial artifact provenance from the unmanaged projection.",
-          "consumer": "external.arch-or-adopt"
+          "path": ".devflow/project/arch.md",
+          "writer": "external.arch",
+          "readers": [
+            "stage.record-first",
+            "stage.input",
+            "stage.proposal",
+            "stage.confirmation"
+          ]
+        }
+      },
+      {
+        "id": "capabilityDesignZones",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/capabilities",
+          "writer": "external.arch-or-adopt",
+          "readers": [
+            "stage.proposal",
+            "stage.confirmation"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/capabilities",
+          "writer": "external.arch-or-adopt",
+          "readers": [
+            "stage.proposal",
+            "stage.confirmation"
+          ]
+        }
+      },
+      {
+        "id": "codeStyle",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/code-style.md",
+          "writer": "external.arch",
+          "readers": [
+            "stage.proposal",
+            "stage.confirmation"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/code-style.md",
+          "writer": "external.arch",
+          "readers": [
+            "stage.proposal",
+            "stage.confirmation"
+          ]
+        }
+      },
+      {
+        "id": "compatibleFeedbackMarker",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md#compatible-feedback-pending",
+          "writer": "design",
+          "readers": [
+            "stage.compatible-feedback"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md#compatible-feedback-pending",
+          "writer": "design",
+          "readers": [
+            "stage.compatible-feedback"
+          ]
+        }
+      },
+      {
+        "id": "design",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/design.md",
+          "writer": "design",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.confirmation",
+            "external.arch",
+            "external.split",
+            "external.resume"
+          ],
+          "template": "proposal"
+        },
+        "after": {
+          "path": ".devflow/project/design.md",
+          "writer": "design",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.confirmation",
+            "external.arch",
+            "external.split",
+            "external.resume"
+          ],
+          "template": "proposal"
+        }
+      },
+      {
+        "id": "glossary",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/glossary.md",
+          "writer": "external.product",
+          "readers": [
+            "stage.proposal",
+            "stage.confirmation"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/glossary.md",
+          "writer": "external.product",
+          "readers": [
+            "stage.proposal",
+            "stage.confirmation"
+          ]
+        }
+      },
+      {
+        "id": "journal",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.record-first",
+            "stage.research",
+            "guard.existing-maintenance-origin",
+            "guard.existing-design-research"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.record-first",
+            "stage.research",
+            "guard.existing-maintenance-origin",
+            "guard.existing-design-research"
+          ]
+        }
+      },
+      {
+        "id": "product",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/product.md",
+          "writer": "external.product",
+          "readers": [
+            "stage.record-first",
+            "stage.proposal",
+            "stage.confirmation"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/product.md",
+          "writer": "external.product",
+          "readers": [
+            "stage.record-first",
+            "stage.proposal",
+            "stage.confirmation"
+          ]
+        }
+      },
+      {
+        "id": "tree",
+        "change": "modified",
+        "before": {
+          "path": "devflow/tree",
+          "writer": "external.split",
+          "readers": [
+            "stage.record-first",
+            "stage.research",
+            "guard.existing-maintenance-origin",
+            "guard.existing-design-research"
+          ]
+        },
+        "after": {
+          "path": ".devflow/tree",
+          "writer": "external.split",
+          "readers": [
+            "stage.record-first",
+            "stage.research",
+            "guard.existing-maintenance-origin",
+            "guard.existing-design-research"
+          ]
         }
       }
     ],
+    "roles": [],
+    "declarations": [],
     "deferred": []
   },
-  "change_id": "v0.21-managed-knowledge-owner",
-  "intent": "Remove stale managed-state Adopt routing and preserve Adopt only as initial artifact provenance.",
+  "change_id": "dot-devflow-root-design",
+  "intent": "Move the target-project state and knowledge root to .devflow without compatibility branches, while preserving devflow namespace identifiers.",
   "impact": {
+    "stages": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
     "references": {
       "total": 1,
       "added": 0,
       "removed": 0,
       "modified": 1
     },
-    "declarations": {
-      "total": 1,
+    "ownership": {
+      "total": 6,
+      "added": 3,
+      "removed": 3,
+      "modified": 0
+    },
+    "artifacts": {
+      "total": 9,
       "added": 0,
       "removed": 0,
-      "modified": 1
+      "modified": 9
     }
   }
 }

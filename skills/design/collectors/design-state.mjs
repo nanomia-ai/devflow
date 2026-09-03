@@ -4,7 +4,7 @@ export async function calculateState() {
     schema: "devflow/project-state/2",
     route: {},
     zones: {
-      ready: { entries: [{ file: "devflow/tree/00-project/00.1-research.md", origin: `journal:${raw}`, approval: "pending" }] },
+      ready: { entries: [{ file: ".devflow/tree/00-project/00.1-research.md", origin: `journal:${raw}`, approval: "pending" }] },
       claim: { entries: [] }
     },
     facts: { existingRequests: [raw] },

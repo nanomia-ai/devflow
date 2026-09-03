@@ -75,7 +75,7 @@ Scope head: <output of the Scope head command | none>
   sources for `Design head`.
 
   ```text
-  git log -1 --format=%H -- devflow/project/product.md devflow/project/arch.md devflow/project/glossary.md
+  git log -1 --format=%H -- .devflow/project/product.md .devflow/project/arch.md .devflow/project/glossary.md
   ```
 - The **Scope head command** takes the duplicate-free union of `Scope paths ∪ Consumed
   paths` in canonical path order, turns each member into one `:(literal)` pathspec, passes

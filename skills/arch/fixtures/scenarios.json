@@ -638,7 +638,7 @@
       "state.layer0": "incomplete",
       "state.capabilities": "missing",
       "state.expected": 3,
-      "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}]",
+      "marker.knowledge": "[{\"owner\":\".devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\".devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}]",
       "marker.knowledgeCount": 1,
       "compatible.owner": "none",
       "compatible.landing": "none"
@@ -691,7 +691,7 @@
       "state.layer0": "incomplete",
       "state.capabilities": "missing",
       "state.expected": 3,
-      "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"adopt\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
+      "marker.knowledge": "[{\"owner\":\".devflow/project/capabilities/01-auth.md\",\"writer\":\"adopt\",\"source\":\".devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
       "marker.knowledgeCount": 1,
       "compatible.owner": "none",
       "compatible.landing": "none"
@@ -744,7 +744,7 @@
       "state.layer0": "incomplete",
       "state.capabilities": "missing",
       "state.expected": 3,
-      "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
+      "marker.knowledge": "[{\"owner\":\".devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\".devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\".devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\".devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
       "marker.knowledgeCount": 2,
       "compatible.owner": "none",
       "compatible.landing": "none"
@@ -797,7 +797,7 @@
       "state.layer0": "incomplete",
       "state.capabilities": "missing",
       "state.expected": 3,
-      "marker.knowledge": "[{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"},{\"owner\":\"devflow/project/capabilities/02-billing.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/09-card.md@cccccccccccccccccccccccccccccccccccccccc\"}]",
+      "marker.knowledge": "[{\"owner\":\".devflow/project/capabilities/01-auth.md\",\"writer\":\"arch\",\"source\":\".devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"},{\"owner\":\".devflow/project/capabilities/02-billing.md\",\"writer\":\"arch\",\"source\":\".devflow/tasks/09-card.md@cccccccccccccccccccccccccccccccccccccccc\"}]",
       "marker.knowledgeCount": 2,
       "compatible.owner": "none",
       "compatible.landing": "none"
@@ -850,7 +850,7 @@
       "state.layer0": "incomplete",
       "state.capabilities": "missing",
       "state.expected": 3,
-      "marker.knowledge": "[{\"owner\":\"devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\"devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\"devflow/project/capabilities/01-auth.md\",\"writer\":\"adopt\",\"source\":\"devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
+      "marker.knowledge": "[{\"owner\":\".devflow/project/arch.md\",\"writer\":\"arch\",\"source\":\".devflow/tasks/01-card.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"},{\"owner\":\".devflow/project/capabilities/01-auth.md\",\"writer\":\"adopt\",\"source\":\".devflow/tasks/07-card.md@bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}]",
       "marker.knowledgeCount": 2,
       "compatible.owner": "none",
       "compatible.landing": "none"

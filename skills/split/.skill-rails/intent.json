@@ -1,6 +1,6 @@
 {
   "name": "split",
-  "description": "Task splitting. Opens the task tree (devflow/tree/) one layer at a time, creates task cards, and gets the execution proposal (order, parallelism, model tiers) approved by the user. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
+  "description": "Task decomposition and execution planning. Opens the task tree (.devflow/tree/) one layer at a time, creates task cards, and gets the execution proposal (order, parallelism, model tiers) approved by the user. Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.",
   "problem": "Preserve the behavior of immutable repository sources `skills/split/SKILL.md` and `skills/split/SKILL_ko.md`, identified by their recorded source hashes, without silently changing their obligations.",
   "use_cases": [],
   "near_misses": [],

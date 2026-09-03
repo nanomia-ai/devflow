@@ -12,8 +12,8 @@ const CAPSULE_STEM = /^(?!000)[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 // product.md unchanged and in the project's own language. Only the number before the first
 // `-` is read, so the rest keeps its own bytes and a Korean capability keeps its folder.
 const CAPABILITY_NAME = /^(?<number>0*[1-9][0-9]*)-(?<name>.+)$/;
-const CAPSULE_BASE = "devflow/project/capabilities";
-const PROJECT_BASE = "devflow/project";
+const CAPSULE_BASE = ".devflow/project/capabilities";
+const PROJECT_BASE = ".devflow/project";
 const COORDINATE = /^(?<file>[^@:\r\n]+(?:\/[^@:\r\n]+)*?)(?:@(?<revision>[0-9a-f]{7,40}))?:(?<start>[1-9][0-9]*)(?:-(?<end>[1-9][0-9]*))?$/;
 const SOFT_LINES = 120;
 const HARD_LINES = 240;
@@ -379,7 +379,7 @@ function ownerDirectories(root, capability) {
     : [];
   const base = path.join(root, ...CAPSULE_BASE.split("/"));
   if (!fs.existsSync(base)) return owners;
-  if (!fs.statSync(base).isDirectory()) fail("devflow/project/capabilities is not a directory");
+  if (!fs.statSync(base).isDirectory()) fail(".devflow/project/capabilities is not a directory");
   for (const entry of fs.readdirSync(base, { withFileTypes: true })) {
     const match = entry.isDirectory() ? CAPABILITY_NAME.exec(entry.name) : null;
     if (!match || (capability !== undefined && Number(match.groups.number) !== Number(capability))) continue;
@@ -566,7 +566,7 @@ function emitBoundedIndex(command, summary, prefix, values, compactOf) {
 }
 
 // `presence` answers one question and opens no body: does any capsule artifact exist under
-// devflow/project/capabilities? It reads HEAD as well as the working tree, because a capsule
+// .devflow/project/capabilities? It reads HEAD as well as the working tree, because a capsule
 // committed on the integration branch is real while this checkout has not written it yet, and
 // a capsule deleted in the working tree is still reachable in HEAD. It counts a direct child
 // *directory* whatever its name — matching the name here is exactly how v0.18.4 reported a

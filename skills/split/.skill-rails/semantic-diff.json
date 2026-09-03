@@ -2,33 +2,551 @@
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
     "before": "sha256:8807e5c9fc2a63d632fe0e342d0c1d2895eb8b905f824f7d3a3d263366931506",
-    "after": "sha256:8807e5c9fc2a63d632fe0e342d0c1d2895eb8b905f824f7d3a3d263366931506"
+    "after": "sha256:608e3da4d084aef3ae417e62f4553795afd1e7e4c64062572283c927f83c4e78"
   },
-  "changed": false,
-  "any_changed": false,
+  "changed": true,
+  "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
-    "observation_source": false,
-    "context": false
+    "behavior_source": true,
+    "observation_source": true,
+    "context": true
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:8807e5c9fc2a63d632fe0e342d0c1d2895eb8b905f824f7d3a3d263366931506",
+      "after_hash": "sha256:608e3da4d084aef3ae417e62f4553795afd1e7e4c64062572283c927f83c4e78",
+      "source": "behavior_source"
+    },
+    {
+      "kind": "collector",
+      "path": "collectors/index.mjs",
+      "before_hash": "sha256:9c4c2e7c0da4e10e187f5674f7531f5639dcb1a99fad00f31e1383a7e0323814",
+      "after_hash": "sha256:244b891c0110d06fe0b2980654a61aa0da0c8260b4fad13d64ea038cdf8a980e",
+      "source": "observation_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "intake",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "planning.receipt",
+            "request.classification",
+            "project.product",
+            "request.current",
+            "origin.active",
+            "origin.projectResearch"
+          ],
+          "needs": [
+            "request.classification"
+          ],
+          "table": "intakeSelector",
+          "branches": [
+            "route-product",
+            "small-no-tree-delta",
+            "record-request",
+            "ASK:intake-uncertain"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ASK:intake-uncertain": [
+                "ASK"
+              ],
+              "record-request": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "requestRecord",
+                    "line": "maintenance routing pending",
+                    "request-json": "<the whole user request as one JSON string>",
+                    "target": "devflow/journal.md"
+                  }
+                ],
+                "NEXT"
+              ],
+              "route-product": [
+                "ROUTE:product"
+              ],
+              "small-no-tree-delta": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ]
+            }
+          },
+          "body": "stage: intake",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "planning.receipt",
+            "request.classification",
+            "project.product",
+            "request.current",
+            "origin.active",
+            "origin.projectResearch"
+          ],
+          "needs": [
+            "request.classification"
+          ],
+          "table": "intakeSelector",
+          "branches": [
+            "route-product",
+            "small-no-tree-delta",
+            "record-request",
+            "ASK:intake-uncertain"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ASK:intake-uncertain": [
+                "ASK"
+              ],
+              "record-request": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "requestRecord",
+                    "line": "maintenance routing pending",
+                    "request-json": "<the whole user request as one JSON string>",
+                    "target": ".devflow/journal.md"
+                  }
+                ],
+                "NEXT"
+              ],
+              "route-product": [
+                "ROUTE:product"
+              ],
+              "small-no-tree-delta": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ]
+            }
+          },
+          "body": "stage: intake",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      },
+      {
+        "id": "materialize",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "planning.receipt",
+            "origin.drafts"
+          ],
+          "needs": [
+            "bundle.contract",
+            "bundle.units"
+          ],
+          "table": "materializeSelector",
+          "branches": [
+            "continue-active-bundle",
+            "begin-request-bundle",
+            "ASK:bundle-uncertain"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ASK:bundle-uncertain": [
+                "ASK"
+              ],
+              "begin-request-bundle": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "layerOpeningBundle",
+                    "scopes": "bundle.units",
+                    "source": "request.current.source",
+                    "target": "devflow/journal.md"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "message": "split — begin <parent>",
+                    "scope": "layer-opening-bundle"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "cardBundle",
+                    "forbiddenTemplates": "taskCard@00-project",
+                    "target": "<exact-active-scopes>/<one-or-more-sibling-card-addresses>",
+                    "templates": "00-project=researchCard; all-other-scopes=taskCard",
+                    "units": "bundle.units"
+                  }
+                ],
+                "NEXT"
+              ],
+              "continue-active-bundle": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "cardBundle",
+                    "forbiddenTemplates": "taskCard@00-project",
+                    "target": "<exact-active-scopes>/<one-or-more-sibling-card-addresses>",
+                    "templates": "00-project=researchCard; all-other-scopes=taskCard",
+                    "units": "bundle.units"
+                  }
+                ],
+                "NEXT"
+              ]
+            }
+          },
+          "body": "stage: materialize",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "planning.receipt",
+            "origin.drafts"
+          ],
+          "needs": [
+            "bundle.contract",
+            "bundle.units"
+          ],
+          "table": "materializeSelector",
+          "branches": [
+            "continue-active-bundle",
+            "begin-request-bundle",
+            "ASK:bundle-uncertain"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ASK:bundle-uncertain": [
+                "ASK"
+              ],
+              "begin-request-bundle": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "layerOpeningBundle",
+                    "scopes": "bundle.units",
+                    "source": "request.current.source",
+                    "target": ".devflow/journal.md"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "message": "split — begin <parent>",
+                    "scope": "layer-opening-bundle"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "cardBundle",
+                    "forbiddenTemplates": "taskCard@00-project",
+                    "target": "<exact-active-scopes>/<one-or-more-sibling-card-addresses>",
+                    "templates": "00-project=researchCard; all-other-scopes=taskCard",
+                    "units": "bundle.units"
+                  }
+                ],
+                "NEXT"
+              ],
+              "continue-active-bundle": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "cardBundle",
+                    "forbiddenTemplates": "taskCard@00-project",
+                    "target": "<exact-active-scopes>/<one-or-more-sibling-card-addresses>",
+                    "templates": "00-project=researchCard; all-other-scopes=taskCard",
+                    "units": "bundle.units"
+                  }
+                ],
+                "NEXT"
+              ]
+            }
+          },
+          "body": "stage: materialize",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [],
+    "body": [
+      {
+        "id": "stage: intake",
+        "change": "modified",
+        "before": "sha256:9a1981ec7eeacbde2d8ccc4ffac7313ae81f80d933679eff1abeb9a3610146f2",
+        "after": "sha256:0798821a182cca39110974efd3f6f53b71bea55acb1263655fc1c9936bd7a6de"
+      },
+      {
+        "id": "stage: materialize",
+        "change": "modified",
+        "before": "sha256:fea1689138505d0ec9b237646ef1d6f167516a62cb98f363f03defe8eb8f7d9e",
+        "after": "sha256:fa6b24a93453a686a8205f6faeea64f5636ef5b8e881309b74b6f91ddc8f41df"
+      }
+    ],
     "references": [],
-    "ownership": [],
-    "artifacts": [],
+    "ownership": [
+      {
+        "id": ".devflow/journal.md",
+        "change": "added",
+        "after": "split"
+      },
+      {
+        "id": ".devflow/project/**",
+        "change": "added",
+        "after": "external.layer0"
+      },
+      {
+        "id": ".devflow/tree/**",
+        "change": "added",
+        "after": "split"
+      },
+      {
+        "id": "devflow/journal.md",
+        "change": "removed",
+        "before": "split"
+      },
+      {
+        "id": "devflow/project/**",
+        "change": "removed",
+        "before": "external.layer0"
+      },
+      {
+        "id": "devflow/tree/**",
+        "change": "removed",
+        "before": "split"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "approvalBundle",
+        "change": "modified",
+        "before": {
+          "path": "devflow/tree/<current-origin-card-paths>.md",
+          "writer": "split",
+          "readers": [
+            "stage.carry-approval",
+            "stage.propose"
+          ]
+        },
+        "after": {
+          "path": ".devflow/tree/<current-origin-card-paths>.md",
+          "writer": "split",
+          "readers": [
+            "stage.carry-approval",
+            "stage.propose"
+          ]
+        }
+      },
+      {
+        "id": "approvalRepair",
+        "change": "modified",
+        "before": {
+          "path": "devflow/tree/<approval-invalid-current-origin-card-paths>.md",
+          "writer": "split",
+          "readers": [
+            "stage.propose"
+          ]
+        },
+        "after": {
+          "path": ".devflow/tree/<approval-invalid-current-origin-card-paths>.md",
+          "writer": "split",
+          "readers": [
+            "stage.propose"
+          ]
+        }
+      },
+      {
+        "id": "cancelDraftCleanup",
+        "change": "modified",
+        "before": {
+          "path": "devflow/tree/<current-origin-drafts>",
+          "writer": "split",
+          "readers": [
+            "stage.propose"
+          ]
+        },
+        "after": {
+          "path": ".devflow/tree/<current-origin-drafts>",
+          "writer": "split",
+          "readers": [
+            "stage.propose"
+          ]
+        }
+      },
+      {
+        "id": "cancelMarkerCleanup",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md",
+          "writer": "split",
+          "readers": [
+            "stage.propose"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md",
+          "writer": "split",
+          "readers": [
+            "stage.propose"
+          ]
+        }
+      },
+      {
+        "id": "cardBundle",
+        "change": "modified",
+        "before": {
+          "path": "devflow/tree/<exact-active-scopes>/<one-or-more-sibling-card-addresses>.md",
+          "writer": "split",
+          "readers": [
+            "stage.materialize"
+          ]
+        },
+        "after": {
+          "path": ".devflow/tree/<exact-active-scopes>/<one-or-more-sibling-card-addresses>.md",
+          "writer": "split",
+          "readers": [
+            "stage.materialize"
+          ]
+        }
+      },
+      {
+        "id": "journal",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.intake",
+            "stage.materialize",
+            "stage.carry-approval",
+            "stage.propose"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.intake",
+            "stage.materialize",
+            "stage.carry-approval",
+            "stage.propose"
+          ]
+        }
+      },
+      {
+        "id": "layerOpeningBundle",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md",
+          "writer": "split",
+          "readers": [
+            "stage.materialize"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md",
+          "writer": "split",
+          "readers": [
+            "stage.materialize"
+          ]
+        }
+      },
+      {
+        "id": "product",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/product.md",
+          "writer": "external.product",
+          "readers": [
+            "stage.intake"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/product.md",
+          "writer": "external.product",
+          "readers": [
+            "stage.intake"
+          ]
+        }
+      },
+      {
+        "id": "requestRecord",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md",
+          "writer": "split",
+          "readers": [
+            "stage.intake",
+            "stage.materialize"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md",
+          "writer": "split",
+          "readers": [
+            "stage.intake",
+            "stage.materialize"
+          ]
+        }
+      }
+    ],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "activation-gate-descriptions",
-  "intent": "Prevent ambient selection in unmanaged repositories while preserving explicit, routed, and managed-project entry.",
-  "impact": {}
+  "change_id": "dot-devflow-root-split",
+  "intent": "Move the target-project state and knowledge root to .devflow without compatibility branches, while preserving devflow namespace identifiers.",
+  "impact": {
+    "stages": {
+      "total": 2,
+      "added": 0,
+      "removed": 0,
+      "modified": 2
+    },
+    "body": {
+      "total": 2,
+      "added": 0,
+      "removed": 0,
+      "modified": 2
+    },
+    "ownership": {
+      "total": 6,
+      "added": 3,
+      "removed": 3,
+      "modified": 0
+    },
+    "artifacts": {
+      "total": 9,
+      "added": 0,
+      "removed": 0,
+      "modified": 9
+    }
+  }
 }

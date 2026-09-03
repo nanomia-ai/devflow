@@ -1,17 +1,25 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:085588f1e671a0ec7a31a6210b988cf92ad454f272237f86b69f37f2ee883b34",
-    "after": "sha256:085588f1e671a0ec7a31a6210b988cf92ad454f272237f86b69f37f2ee883b34"
+    "before": "sha256:f0e809c8745ba4475e2b9d77fb53721b397aeec290761c68c27a1869cd81f6d1",
+    "after": "sha256:d6dea75634fc40e6db3573b0391b961052eb3e68348bd44ad3a6b130cd61ee66"
   },
-  "changed": false,
-  "any_changed": false,
+  "changed": true,
+  "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
     "context": false
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:f0e809c8745ba4475e2b9d77fb53721b397aeec290761c68c27a1869cd81f6d1",
+      "after_hash": "sha256:d6dea75634fc40e6db3573b0391b961052eb3e68348bd44ad3a6b130cd61ee66",
+      "source": "behavior_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
@@ -22,13 +30,326 @@
     "template_content": [],
     "body": [],
     "references": [],
-    "ownership": [],
-    "artifacts": [],
+    "ownership": [
+      {
+        "id": ".devflow/journal.md",
+        "change": "added",
+        "after": "external.principles"
+      },
+      {
+        "id": ".devflow/project",
+        "change": "added",
+        "after": "adopt"
+      },
+      {
+        "id": ".devflow/project/arch.md",
+        "change": "added",
+        "after": "adopt"
+      },
+      {
+        "id": ".devflow/project/capabilities",
+        "change": "added",
+        "after": "adopt"
+      },
+      {
+        "id": ".devflow/project/capabilities/**",
+        "change": "added",
+        "after": "adopt"
+      },
+      {
+        "id": ".devflow/project/code-style.md",
+        "change": "added",
+        "after": "adopt"
+      },
+      {
+        "id": ".devflow/project/design.md",
+        "change": "added",
+        "after": "adopt"
+      },
+      {
+        "id": ".devflow/project/glossary.md",
+        "change": "added",
+        "after": "adopt"
+      },
+      {
+        "id": ".devflow/project/product.md",
+        "change": "added",
+        "after": "adopt"
+      },
+      {
+        "id": ".devflow/tree/**",
+        "change": "added",
+        "after": "external.split"
+      },
+      {
+        "id": "devflow/journal.md",
+        "change": "removed",
+        "before": "external.principles"
+      },
+      {
+        "id": "devflow/project",
+        "change": "removed",
+        "before": "adopt"
+      },
+      {
+        "id": "devflow/project/arch.md",
+        "change": "removed",
+        "before": "adopt"
+      },
+      {
+        "id": "devflow/project/capabilities",
+        "change": "removed",
+        "before": "adopt"
+      },
+      {
+        "id": "devflow/project/capabilities/**",
+        "change": "removed",
+        "before": "adopt"
+      },
+      {
+        "id": "devflow/project/code-style.md",
+        "change": "removed",
+        "before": "adopt"
+      },
+      {
+        "id": "devflow/project/design.md",
+        "change": "removed",
+        "before": "adopt"
+      },
+      {
+        "id": "devflow/project/glossary.md",
+        "change": "removed",
+        "before": "adopt"
+      },
+      {
+        "id": "devflow/project/product.md",
+        "change": "removed",
+        "before": "adopt"
+      },
+      {
+        "id": "devflow/tree/**",
+        "change": "removed",
+        "before": "external.split"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "architecture",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/arch.md",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.arch",
+            "external.split",
+            "external.resume"
+          ],
+          "template": "architecture"
+        },
+        "after": {
+          "path": ".devflow/project/arch.md",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.arch",
+            "external.split",
+            "external.resume"
+          ],
+          "template": "architecture"
+        }
+      },
+      {
+        "id": "capabilityDesigns",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/capabilities",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.arch",
+            "external.split",
+            "external.resume",
+            "external.work"
+          ],
+          "template": "capabilityDesign"
+        },
+        "after": {
+          "path": ".devflow/project/capabilities",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.arch",
+            "external.split",
+            "external.resume",
+            "external.work"
+          ],
+          "template": "capabilityDesign"
+        }
+      },
+      {
+        "id": "codeStyle",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/code-style.md",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.work"
+          ],
+          "template": "codeStyle"
+        },
+        "after": {
+          "path": ".devflow/project/code-style.md",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.work"
+          ],
+          "template": "codeStyle"
+        }
+      },
+      {
+        "id": "design",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/design.md",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.design",
+            "external.arch",
+            "external.split",
+            "external.resume"
+          ],
+          "template": "design"
+        },
+        "after": {
+          "path": ".devflow/project/design.md",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.design",
+            "external.arch",
+            "external.split",
+            "external.resume"
+          ],
+          "template": "design"
+        }
+      },
+      {
+        "id": "glossary",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/glossary.md",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.arch",
+            "external.split",
+            "external.work"
+          ],
+          "template": "glossary"
+        },
+        "after": {
+          "path": ".devflow/project/glossary.md",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.arch",
+            "external.split",
+            "external.work"
+          ],
+          "template": "glossary"
+        }
+      },
+      {
+        "id": "journal",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.adoption"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.adoption"
+          ]
+        }
+      },
+      {
+        "id": "knowledgeNodes",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.arch",
+            "external.resume",
+            "external.work"
+          ],
+          "template": "knowledgeNode"
+        },
+        "after": {
+          "path": ".devflow/project",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.arch",
+            "external.resume",
+            "external.work"
+          ],
+          "template": "knowledgeNode"
+        }
+      },
+      {
+        "id": "product",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/product.md",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.arch",
+            "external.split"
+          ],
+          "template": "product"
+        },
+        "after": {
+          "path": ".devflow/project/product.md",
+          "writer": "adopt",
+          "readers": [
+            "stage.adoption",
+            "external.arch",
+            "external.split"
+          ],
+          "template": "product"
+        }
+      }
+    ],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "adopt-k-owner-validation-boundary",
-  "intent": "Keep each capsule with its capability owner so canonical validation can run, while preserving the source evidence needed for interruption recovery without temporary owners or validator exceptions.",
-  "impact": {}
+  "change_id": "dot-devflow-root-adopt",
+  "intent": "Move the target-project state and knowledge root to .devflow without compatibility branches, while preserving devflow namespace identifiers.",
+  "impact": {
+    "ownership": {
+      "total": 20,
+      "added": 10,
+      "removed": 10,
+      "modified": 0
+    },
+    "artifacts": {
+      "total": 8,
+      "added": 0,
+      "removed": 0,
+      "modified": 8
+    }
+  }
 }

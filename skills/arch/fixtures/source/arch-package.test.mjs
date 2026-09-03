@@ -80,16 +80,16 @@ function makeProject(t) {
   git(root, "config", "core.autocrlf", "false");
   git(root, "config", "user.name", "Arch Fixture");
   git(root, "config", "user.email", "arch@example.test");
-  write(root, "devflow/project/product.md", product());
-  write(root, "devflow/project/arch.md", architecture());
-  write(root, "devflow/project/glossary.md", "# Glossary\n\nNone.\n");
-  write(root, "devflow/project/code-style.md", "# Code Style\n\nNone.\n");
-  write(root, "devflow/users/jmp/owner.md", "id: jmp\ngit: Arch Fixture, arch@example.test\n");
-  write(root, "devflow/users/jmp/HANDOFF.md", "");
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/project/product.md", product());
+  write(root, ".devflow/project/arch.md", architecture());
+  write(root, ".devflow/project/glossary.md", "# Glossary\n\nNone.\n");
+  write(root, ".devflow/project/code-style.md", "# Code Style\n\nNone.\n");
+  write(root, ".devflow/users/jmp/owner.md", "id: jmp\ngit: Arch Fixture, arch@example.test\n");
+  write(root, ".devflow/users/jmp/HANDOFF.md", "");
+  write(root, ".devflow/journal.md", "");
   write(root, "seed.txt", "seed\n");
   commit(root, "jmp layer 0");
-  const card = "devflow/tree/00-project/00.1-source.done.md";
+  const card = ".devflow/tree/00-project/00.1-source.done.md";
   write(root, card, `# 00.1 Research: durable source
 Coordinates: project research
 Identity: durable source.
@@ -136,8 +136,8 @@ function stageProject(t, root, ...answers) {
 
 test("collector consumes only the context-bound structured calculateState contract", async (t) => {
   const fixture = makeProject(t);
-  const line = marker("devflow/project/arch.md", "arch", fixture.source);
-  write(fixture.root, "devflow/journal.md", `${line}\n`);
+  const line = marker(".devflow/project/arch.md", "arch", fixture.source);
+  write(fixture.root, ".devflow/journal.md", `${line}\n`);
   commit(fixture.root, "jmp boundary — knowledge landing");
   const collectors = await currentContractCollectors(t);
   const context = Object.freeze({ projectRoot: fixture.root });
@@ -146,7 +146,7 @@ test("collector consumes only the context-bound structured calculateState contra
   assert.equal(await collectors["knowledge.arch-marker-count"](context), 1);
   const payload = JSON.parse(await collectors["knowledge.arch-markers"](context));
   assert.deepEqual(payload.map(({ owner, writer, source }) => ({ owner, writer, source })), [
-    { owner: "devflow/project/arch.md", writer: "arch", source: fixture.source }
+    { owner: ".devflow/project/arch.md", writer: "arch", source: fixture.source }
   ]);
   const decision = stageProject(t, fixture.root, ["judged", "landing.mode=compact"]);
   assert.equal(decision.stage, "knowledge-landing");
@@ -155,7 +155,7 @@ test("collector consumes only the context-bound structured calculateState contra
 
 test("legacy adopt writer is consumed by arch while non-JSON source remains rejected", async (t) => {
   const legacyWriter = makeProject(t);
-  write(legacyWriter.root, "devflow/journal.md", `${marker("devflow/project/arch.md", "adopt", legacyWriter.source)}\n`);
+  write(legacyWriter.root, ".devflow/journal.md", `${marker(".devflow/project/arch.md", "adopt", legacyWriter.source)}\n`);
   commit(legacyWriter.root, "jmp boundary — legacy writer");
   let collectors = await currentContractCollectors(t);
   const legacyContext = { projectRoot: legacyWriter.root };
@@ -167,9 +167,9 @@ test("legacy adopt writer is consumed by arch while non-JSON source remains reje
   assert.equal(legacyDecision.stage, "knowledge-landing");
 
   const rawSource = makeProject(t);
-  const validPrefix = marker("devflow/project/arch.md", "arch", rawSource.source);
+  const validPrefix = marker(".devflow/project/arch.md", "arch", rawSource.source);
   const malformed = `${validPrefix.slice(0, validPrefix.indexOf("source-json: ") + "source-json: ".length)}${rawSource.source}`;
-  write(rawSource.root, "devflow/journal.md", `${malformed}\n`);
+  write(rawSource.root, ".devflow/journal.md", `${malformed}\n`);
   commit(rawSource.root, "jmp boundary — invalid source JSON");
   collectors = await currentContractCollectors(t);
   assert.equal(await collectors["state.arch-route"]({ projectRoot: rawSource.root }), "integrity.blocking");
@@ -181,18 +181,18 @@ test("legacy adopt writer is consumed by arch while non-JSON source remains reje
 test("structured multi-owner markers preserve exact owner/source pairs", async (t) => {
   const fixture = makeProject(t);
   const lines = [
-    marker("devflow/project/arch.md", "arch", fixture.source),
-    marker("devflow/project/product.md", "adopt", fixture.source, "2026-08-29T01:01:00Z")
+    marker(".devflow/project/arch.md", "arch", fixture.source),
+    marker(".devflow/project/product.md", "adopt", fixture.source, "2026-08-29T01:01:00Z")
   ];
-  write(fixture.root, "devflow/journal.md", `${lines.join("\n")}\n`);
+  write(fixture.root, ".devflow/journal.md", `${lines.join("\n")}\n`);
   commit(fixture.root, "jmp boundary — multi-owner knowledge landing");
   const collectors = await currentContractCollectors(t);
   const context = { projectRoot: fixture.root };
   assert.equal(await collectors["knowledge.arch-marker-count"](context), 2);
   const payload = JSON.parse(await collectors["knowledge.arch-markers"](context));
   assert.deepEqual(payload.map(({ owner, writer }) => ({ owner, writer })), [
-    { owner: "devflow/project/arch.md", writer: "arch" },
-    { owner: "devflow/project/product.md", writer: "adopt" }
+    { owner: ".devflow/project/arch.md", writer: "arch" },
+    { owner: ".devflow/project/product.md", writer: "adopt" }
   ]);
   const decision = stageProject(t, fixture.root, ["judged", "landing.mode=partial-compact"]);
   assert.equal(decision.stage, "knowledge-landing");

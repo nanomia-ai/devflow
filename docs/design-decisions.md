@@ -8,9 +8,10 @@ This file is the one home of a decision, and the decision index is generated fro
 
 ### DD-01 · Output folder named `devflow/` (not docs/)
 
-Subject: Identity, packaging, platforms | Introduced: origin | State: active
+Subject: Identity, packaging, platforms | Introduced: origin | State: active, partly corrected by DD-98 (v0.21.0)
 
-Avoid collision with existing projects' docs/
+Avoid collision with existing projects' docs/. DD-98 preserves this reason while narrowing
+the current output-root spelling to `.devflow/`.
 
 ### DD-02 · Name is devflow — Claude uses the `devflow:` namespace, Codex uses the `devflow-` filename prefix
 
@@ -516,7 +517,7 @@ managed-project flow remain unchanged. Partial, deleted, shallow-history, or fai
 states are never falsely declared unmanaged.
 
 Chosen boundary: after finding the Git root, SessionStart cheaply checks only the current
-`devflow` path and `devflow/project/product.md`. When neither exists it exits 0 with no output;
+`.devflow` path and `.devflow/project/product.md`. When neither exists it exits 0 with no output;
 when either exists it emits the existing injection byte-for-byte. This is a weaker, non-binding
 eligibility check that gates a fixed pointer only: it reads no index, history, state tool, zone,
 or route. The Arch, Design, Split, Work, Verify, and Resume descriptions admit only explicit
@@ -525,7 +526,7 @@ Product and Adopt admit only explicit devflow intent: direct invocation, naming 
 requesting devflow-shaped artifacts such as Layer 0 and devflow capability documents.
 
 The one action-owning decision remains in `project-state.mjs`. It emits `setup.unmanaged` only
-when current and indexed devflow evidence are absent and full history proves that no devflow path
+when current and indexed `.devflow` evidence are absent and full history proves that no `.devflow` path
 ever existed. Historical evidence remains `setup.no-product`; shallow history, Git failure,
 undecodable output, and uncertainty conservatively fall back to the same existing
 `setup.no-product`. Resume preserves domain orientation first, then ends `setup.unmanaged` with
@@ -557,6 +558,47 @@ Revisit when a current devflow project is silenced by the hook, explicit Product
 undiscoverable, an ordinary unmanaged request again selects a downstream skill, the intentional
 weak-hook/authoritative-state disagreement changes an action rather than a pointer, or
 SessionStart latency rises materially.
+
+### DD-98 · The canonical target-project root is `.devflow/` and only `.devflow/` (v0.21.0)
+
+Subject: Identity, packaging, platforms | Introduced: v0.21.0 | State: active
+
+Observed problem: the undotted `devflow/` directory sits beside product code and product
+documents, visually mixing devflow's auxiliary knowledge and progress state with the product's
+own artifacts. More importantly, the path is distributed across the state tool, SessionStart,
+serialized journal coordinates, Git pathspecs, the K validator, and nine skills' read/write
+contracts. A partial rename makes those consumers observe different project states.
+
+Desired behavior: people and AI recognize the devflow knowledge and progress root immediately as
+an auxiliary project-management surface while reading and writing Product, Architecture, Design,
+glossary, capability documents, K, and task cards normally. Every current reader and writer sees
+one root.
+
+Chosen boundary: `.devflow/` is the sole canonical root created in a target project. Current-state
+and history observation, SessionStart, the knowledge validator, journal and card path grammars,
+and every P2 artifact and ownership declaration read and write only this spelling. The `devflow:`
+skill namespace, wire schemas such as `devflow/project-state/2`, and the plugin name are not
+project paths and do not change. Historical rounds, CHANGELOG entries, blueprints, and legacy
+atoms keep the spelling that was true for their recorded moment or migration source.
+
+No compatibility root, automatic move, or alias is created. The owner confirmed that no managed
+project is in use and that test projects will be recreated after installation; a dual root would
+therefore split judgment and writes without preserving useful state. The leading dot is a naming
+signal, not a permission or hidden-access policy, and does not weaken the human or AI read/write
+contract.
+
+Why the boundary is needed: DD-01's reason—avoiding collision with an existing docs tree—still
+holds, and `.devflow/` expresses the separation more directly. A one-root hard cut keeps path
+constants, regexes, and Git exclusions moving together without growing compatibility machinery or
+dividing managed-state and knowledge ownership.
+
+Affected coordinates: `scripts/session-start.js`, `scripts/project-knowledge.mjs`,
+`skills/principles/scripts/{project-state,project-knowledge}.mjs`, the authored canon and generated
+projections of all nine P2 packages, current design and matrix documents, the v0.21.0 report, and
+CHANGELOG. No state, marker, document layer, or migration stage is added.
+
+Revisit when deployed `.devflow/` prevents ordinary human or supported-platform reads or writes,
+or a current reader and writer are reproduced observing different roots.
 
 ## Verification and roles
 
@@ -806,7 +848,7 @@ The draft had a duplicate number move a completed card to the mid-insertion form
 
 Subject: The task tree and its cards | Introduced: v0.14.0 | State: active, partly corrected by DD-66 (v0.14.2)
 
-The recorded reason in the v0.13.0 row's "'too small to record' is never created" — one unrecorded path becomes the default path — is refuted thus: a commit IS a record. This lane does not skip recording; it changes the recording layer, and the owner corrected the direction personally (a button label or a border colour is fully recorded by its diff and almost never revisited). Only when all three gate questions are "no" and none is uncertain — does it change a precondition-to-outcome transition the user sees; does it produce a design decision or conflict with one (design tokens, ADRs); does it leave a trap the next worker must know — the change runs without a card, journal line, or review: read the existing Layer 0 documents, edit, run the cheapest check that touches the changed files once, and land one `tweak` commit. No `devflow/` path is touched. Knowledge-bearing changes are routed to the document layer by the gate, and the discovery→update table applies regardless of change size. A fresh session holding only a tweak request skips state restoration — the lane consumes no prior record and changes no shared state, so bypassing the nets breaks nothing, and it is the first landing of the owner's requirement that inferring from code alone is sometimes exactly right. When the verdict flips mid-change, stop and switch to the ordinary path. The one remaining risk is misclassification — a field observation item (corrected 2026-08-13: "bypassing the nets breaks nothing" was partly refuted by reproduction in the v0.14.0 audit — a tweak commit still advances HEAD, which turns a `routing prepared` recovery pinned to a base commit id into an integrity anomaly, and a stale checkout's documents produce a "no" that conflicts with the latest decision on integration. DD-66's landing checks close this; skipping state restoration itself stands. The judgment inputs gained the existing glossary.md when an item could touch a name or term — term decisions live only there, and nearby code shows a spelling without showing it is a decision)
+The recorded reason in the v0.13.0 row's "'too small to record' is never created" — one unrecorded path becomes the default path — is refuted thus: a commit IS a record. This lane does not skip recording; it changes the recording layer, and the owner corrected the direction personally (a button label or a border colour is fully recorded by its diff and almost never revisited). Only when all three gate questions are "no" and none is uncertain — does it change a precondition-to-outcome transition the user sees; does it produce a design decision or conflict with one (design tokens, ADRs); does it leave a trap the next worker must know — the change runs without a card, journal line, or review: read the existing Layer 0 documents, edit, run the cheapest check that touches the changed files once, and land one `tweak` commit. No `.devflow/` path is touched. Knowledge-bearing changes are routed to the document layer by the gate, and the discovery→update table applies regardless of change size. A fresh session holding only a tweak request skips state restoration — the lane consumes no prior record and changes no shared state, so bypassing the nets breaks nothing, and it is the first landing of the owner's requirement that inferring from code alone is sometimes exactly right. When the verdict flips mid-change, stop and switch to the ordinary path. The one remaining risk is misclassification — a field observation item (corrected 2026-08-13: "bypassing the nets breaks nothing" was partly refuted by reproduction in the v0.14.0 audit — a tweak commit still advances HEAD, which turns a `routing prepared` recovery pinned to a base commit id into an integrity anomaly, and a stale checkout's documents produce a "no" that conflicts with the latest decision on integration. DD-66's landing checks close this; skipping state restoration itself stands. The judgment inputs gained the existing glossary.md when an item could touch a name or term — term decisions live only there, and nearby code shows a spelling without showing it is a decision)
 
 ### DD-65 · A mixed request records only its gate-failing items — a passing item enters no journal line (v0.14.2)
 
@@ -1390,7 +1432,7 @@ Impact coordinates: the exact design-open-item paragraph in
 `skills/principles/scripts/project-state.mjs`, the C fixture in
 `scripts/project-state.test.js`, and matrix cell 3.21.
 Revisit when: an existing-room line is observed failing to route, or room identity itself moves
-out of `devflow/users/*/owner.md`.
+out of `.devflow/users/*/owner.md`.
 
 ### DD-56 · Reading is bounded to open work: a depth-1 folder carrying `.done` is read by name (v0.13.0)
 
@@ -1441,7 +1483,7 @@ Subject: The knowledge layer and capability documents | Introduced: v0.17.0 | St
 
 The diagnosis separates three intervals. Commits and resume preserve the boundary between one confirmed Layer 0 document and the next. During confirmation of one document there is no cheap intermediate landing because the contract forbids changing a core-document path before approval. The defect is the third interval: a run could end after arch.md and code-style.md landed while producing none of arch's final output, the capability documents. DD-43 requires domain boundaries and concepts before the first card, but arch had no context boundary before its biggest single output and split did not stop a zero-document tree opening.
 
-Five boundaries close it. product's `Approach` now also owns which goal wins when two collide — two canonical consumers require that value (`arch:72`'s candidate tie-break and `planning-evidence:67`'s pre-commitment review) while no producer wrote it, and synky's `product.md:18` consequently cited a speed-and-cost principle defined nowhere as its ground for discarding an approach. Inside the capability-document section, arch first states the expected document count; when the harness warns about context, it stops at the confirmed Layer 0 commit and says that this run is not arch's completion. With no card claimed, the next session enters through resume and runs only that section. At the first tree opening, split checks for `01` and for each non-retired capability number in product.md whether a lowercase `.md` whose leading token before the first `-` is exactly that number exists directly below `devflow/project/capabilities/`, stops when any is missing, and directs the user back through `resume`. Each piece of the predicate closes a measured bypass: matching the token rather than a prefix because with `10` and `100` both expected a lone `100-*.md` masked the missing `10`; looking only at number-led files because one `.gitkeep` passed the gate; checking per-number existence rather than a count because partial creation passed and then work's `baseline missing` and verify's `baseline no-op` allow a closure with no knowledge document, and because under a count the preserved retired documents and any excess or duplicate file masked a missing number; `directly below` because a recursive reading was satisfied by a number-led file in a subfolder; and lowercase because a case-insensitive environment matched `.MD`. The expected numbers come from the product.md capability list split already reads, whose rows carry retirement marking, so its read set does not grow. The route goes through resume rather than a direct skill call because arch's capability-document-only branch opens only on resume routing, and that recovery holds when no card of the user's is claimed. A deferred run skips this gate together with the rest. Immediately before confirmation of arch.md, arch enumerates every decision that passes the three ADR conditions and confirms whether each is recorded. When a Components or Stack reason rests on an external-contract fact, its exact source stays on the same line. That ADR-screening sentence sits inside the range adopt reads as its output-format reference, so a brownfield receives the same screening — that coordinate is the only ground for brownfield coverage, so moving it refutes this reason first. The value of this boundary is that after landing there is no canonical route back to an unrecorded ADR.
+Five boundaries close it. product's `Approach` now also owns which goal wins when two collide — two canonical consumers require that value (`arch:72`'s candidate tie-break and `planning-evidence:67`'s pre-commitment review) while no producer wrote it, and synky's `product.md:18` consequently cited a speed-and-cost principle defined nowhere as its ground for discarding an approach. Inside the capability-document section, arch first states the expected document count; when the harness warns about context, it stops at the confirmed Layer 0 commit and says that this run is not arch's completion. With no card claimed, the next session enters through resume and runs only that section. At the first tree opening, split checks for `01` and for each non-retired capability number in product.md whether a lowercase `.md` whose leading token before the first `-` is exactly that number exists directly below `.devflow/project/capabilities/`, stops when any is missing, and directs the user back through `resume`. Each piece of the predicate closes a measured bypass: matching the token rather than a prefix because with `10` and `100` both expected a lone `100-*.md` masked the missing `10`; looking only at number-led files because one `.gitkeep` passed the gate; checking per-number existence rather than a count because partial creation passed and then work's `baseline missing` and verify's `baseline no-op` allow a closure with no knowledge document, and because under a count the preserved retired documents and any excess or duplicate file masked a missing number; `directly below` because a recursive reading was satisfied by a number-led file in a subfolder; and lowercase because a case-insensitive environment matched `.MD`. The expected numbers come from the product.md capability list split already reads, whose rows carry retirement marking, so its read set does not grow. The route goes through resume rather than a direct skill call because arch's capability-document-only branch opens only on resume routing, and that recovery holds when no card of the user's is claimed. A deferred run skips this gate together with the rest. Immediately before confirmation of arch.md, arch enumerates every decision that passes the three ADR conditions and confirms whether each is recorded. When a Components or Stack reason rests on an external-contract fact, its exact source stays on the same line. That ADR-screening sentence sits inside the range adopt reads as its output-format reference, so a brownfield receives the same screening — that coordinate is the only ground for brownfield coverage, so moving it refutes this reason first. The value of this boundary is that after landing there is no canonical route back to an unrecorded ADR.
 
 This catches absence at the first tree entrance even when an active claim would preempt resume's capability-document row, while a brownfield keeps the same lifecycle under adopt. In the synky measurement, eight of ten ADR-qualified decisions were unrecorded and all eleven Stack lines carried zero external-contract sources. The plan first set this gate at zero files and left partial creation to resume and the baseline predicates. Simulation refuted that reason: under a self-claim `resume:219` preempts the missing-expected row, and work and verify both continue, so a capability could close with no knowledge document. Per-number existence closes it; a count comparison did not, because preserved retired documents and any excess or duplicate file masked a missing number. Reopen this boundary if an unrecorded ADR is still discovered after this review step, or if requiring one document per non-retired product.md number proves wrong for a project whose capability list and document set legitimately differ.
 
@@ -1902,7 +1944,7 @@ Observed problem: three clean existing-code worktrees invoked Adopt explicitly, 
 entry text told Codex to enter Principles first and Adopt did not accept the state tool's
 `setup.unmanaged` route. Principles therefore sent the request to Resume, which correctly ended
 the unmanaged state without writing; one more-active model escaped only by inspecting runtime
-source and creating an empty `devflow/` directory, the second-home marker DD-95 rejected. Even
+source and creating an empty `.devflow/` directory, the second-home marker DD-95 rejected. Even
 after the missing route was added, Adopt's inherited phase fields asked the model to report that
 it had read, inspected, derived, and prepared instead of doing the work. Filename-shaped document
 selection and “code exists” stood in for documentary and representative-flow evidence. Its broad
@@ -1920,9 +1962,9 @@ implementation predates devflow.
 
 Chosen boundary: an explicitly named devflow stage is its own entry. Principles classifies only
 requests that entered Principles; SessionStart and the Codex fallback state this same topology.
-SessionStart remains silent unless `devflow/project/product.md` exists. In canonical state, an
-untracked empty or partial `devflow/` directory is likewise not managed-project evidence; indexed
-or historical devflow paths remain recovery evidence. A folder alone cannot activate Resume
+SessionStart remains silent unless `.devflow/project/product.md` exists. In canonical state, an
+untracked empty or partial `.devflow/` directory is likewise not managed-project evidence; indexed
+or historical `.devflow` paths remain recovery evidence. A folder alone cannot activate Resume
 guidance or change explicit Adopt's unmanaged route.
 Explicit Adopt consumes `setup.unmanaged` directly when any maintained pre-devflow project source is
 present and sends only a repository with no such material to Product. Its collector observes

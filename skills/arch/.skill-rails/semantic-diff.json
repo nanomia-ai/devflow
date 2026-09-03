@@ -2,47 +2,574 @@
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
     "before": "sha256:b9b562a0620bb36d0d85326969d932cf987848d652428766284935d70f9d7b7e",
-    "after": "sha256:b9b562a0620bb36d0d85326969d932cf987848d652428766284935d70f9d7b7e"
+    "after": "sha256:0a711419f2db4b16d22121457a8e39c9ba79b0b31f23610b0cf3d1c48dd14d68"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
-    "observation_source": false,
-    "context": true
+    "behavior_source": true,
+    "observation_source": true,
+    "context": false
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:b9b562a0620bb36d0d85326969d932cf987848d652428766284935d70f9d7b7e",
+      "after_hash": "sha256:0a711419f2db4b16d22121457a8e39c9ba79b0b31f23610b0cf3d1c48dd14d68",
+      "source": "behavior_source"
+    },
+    {
+      "kind": "collector",
+      "path": "collectors/index.mjs",
+      "before_hash": "sha256:f4a1a5a6312fe26c6f3213b1573ca0fc2fb0a4c0ff39a564535094ddc57743d6",
+      "after_hash": "sha256:21f2700362ece7fb7651498fec0c333d8b4917c92045d5418b4adb34b168ecf8",
+      "source": "observation_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "compatible-feedback",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "compatible.owner"
+          ],
+          "needs": [],
+          "table": "compatibleFeedback",
+          "branches": [
+            "write-arch",
+            "write-capability",
+            "land"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "land": [
+                [
+                  "RUN",
+                  {
+                    "action": "delete-byte-identical-compatible-feedback-marker"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "compatible-feedback-owner-and-marker",
+                    "touches": [
+                      "compatible.owner",
+                      "devflow/journal.md"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "write-arch": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "architecture",
+                    "preserves": [
+                      "source",
+                      "background",
+                      "why",
+                      "conclusion",
+                      "implication"
+                    ],
+                    "source": "compatible-feedback exact coordinates"
+                  }
+                ],
+                "WAIT"
+              ],
+              "write-capability": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "capabilityDesignZones",
+                    "preserves": [
+                      "source",
+                      "background",
+                      "why",
+                      "conclusion",
+                      "implication"
+                    ],
+                    "source": "compatible-feedback exact coordinates",
+                    "target": "exact compatible-feedback owner"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: compatible-feedback",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "compatible.owner"
+          ],
+          "needs": [],
+          "table": "compatibleFeedback",
+          "branches": [
+            "write-arch",
+            "write-capability",
+            "land"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "land": [
+                [
+                  "RUN",
+                  {
+                    "action": "delete-byte-identical-compatible-feedback-marker"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "compatible-feedback-owner-and-marker",
+                    "touches": [
+                      "compatible.owner",
+                      ".devflow/journal.md"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "write-arch": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "architecture",
+                    "preserves": [
+                      "source",
+                      "background",
+                      "why",
+                      "conclusion",
+                      "implication"
+                    ],
+                    "source": "compatible-feedback exact coordinates"
+                  }
+                ],
+                "WAIT"
+              ],
+              "write-capability": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "capabilityDesignZones",
+                    "preserves": [
+                      "source",
+                      "background",
+                      "why",
+                      "conclusion",
+                      "implication"
+                    ],
+                    "source": "compatible-feedback exact coordinates",
+                    "target": "exact compatible-feedback owner"
+                  }
+                ],
+                "WAIT"
+              ]
+            }
+          },
+          "body": "stage: compatible-feedback",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
     "body": [],
-    "references": [
+    "references": [],
+    "ownership": [
       {
-        "id": "references/workflow.md",
-        "change": "modified",
-        "before": "sha256:3dd123cf27e64e703053d35b2f45a269e4c3ea677ab4daaa404b1fa3f2501481",
-        "after": "sha256:353e723a6afa9dc9acfb4e5c77e5ba0aa7987deac0d0aa34f9d551c85701f0a0"
+        "id": ".devflow/journal.md",
+        "change": "added",
+        "after": "external.principles"
+      },
+      {
+        "id": ".devflow/journal.md#compatible-feedback-pending",
+        "change": "added",
+        "after": "arch-on-exact-owner-landing"
+      },
+      {
+        "id": ".devflow/project",
+        "change": "added",
+        "after": "arch"
+      },
+      {
+        "id": ".devflow/project/arch.md",
+        "change": "added",
+        "after": "arch"
+      },
+      {
+        "id": ".devflow/project/capabilities",
+        "change": "added",
+        "after": "arch"
+      },
+      {
+        "id": ".devflow/project/code-style.md",
+        "change": "added",
+        "after": "arch"
+      },
+      {
+        "id": ".devflow/project/decisions",
+        "change": "added",
+        "after": "arch"
+      },
+      {
+        "id": ".devflow/project/glossary.md",
+        "change": "added",
+        "after": "arch"
+      },
+      {
+        "id": ".devflow/project/product.md",
+        "change": "added",
+        "after": "external.product"
+      },
+      {
+        "id": "devflow/journal.md",
+        "change": "removed",
+        "before": "external.principles"
+      },
+      {
+        "id": "devflow/journal.md#compatible-feedback-pending",
+        "change": "removed",
+        "before": "arch-on-exact-owner-landing"
+      },
+      {
+        "id": "devflow/project",
+        "change": "removed",
+        "before": "arch"
+      },
+      {
+        "id": "devflow/project/arch.md",
+        "change": "removed",
+        "before": "arch"
+      },
+      {
+        "id": "devflow/project/capabilities",
+        "change": "removed",
+        "before": "arch"
+      },
+      {
+        "id": "devflow/project/code-style.md",
+        "change": "removed",
+        "before": "arch"
+      },
+      {
+        "id": "devflow/project/decisions",
+        "change": "removed",
+        "before": "arch"
+      },
+      {
+        "id": "devflow/project/glossary.md",
+        "change": "removed",
+        "before": "arch"
+      },
+      {
+        "id": "devflow/project/product.md",
+        "change": "removed",
+        "before": "external.product"
       }
     ],
-    "ownership": [],
-    "artifacts": [],
+    "artifacts": [
+      {
+        "id": "architecture",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/arch.md",
+          "writer": "arch",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.repair-layer0-fields",
+            "stage.read-inputs",
+            "stage.approval",
+            "stage.capability-design",
+            "external.design",
+            "external.split",
+            "external.resume"
+          ],
+          "template": "architecture"
+        },
+        "after": {
+          "path": ".devflow/project/arch.md",
+          "writer": "arch",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.repair-layer0-fields",
+            "stage.read-inputs",
+            "stage.approval",
+            "stage.capability-design",
+            "external.design",
+            "external.split",
+            "external.resume"
+          ],
+          "template": "architecture"
+        }
+      },
+      {
+        "id": "capabilityDesignZones",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/capabilities",
+          "writer": "arch",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.glossary-term",
+            "stage.design-marker",
+            "stage.capability-design",
+            "external.split",
+            "external.work",
+            "external.verify",
+            "external.resume"
+          ],
+          "template": "capabilityDesign"
+        },
+        "after": {
+          "path": ".devflow/project/capabilities",
+          "writer": "arch",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.glossary-term",
+            "stage.design-marker",
+            "stage.capability-design",
+            "external.split",
+            "external.work",
+            "external.verify",
+            "external.resume"
+          ],
+          "template": "capabilityDesign"
+        }
+      },
+      {
+        "id": "codeStyle",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/code-style.md",
+          "writer": "arch",
+          "readers": [
+            "stage.read-inputs",
+            "stage.approval",
+            "external.split",
+            "external.work"
+          ],
+          "template": "codeStyle"
+        },
+        "after": {
+          "path": ".devflow/project/code-style.md",
+          "writer": "arch",
+          "readers": [
+            "stage.read-inputs",
+            "stage.approval",
+            "external.split",
+            "external.work"
+          ],
+          "template": "codeStyle"
+        }
+      },
+      {
+        "id": "compatibleFeedbackMarker",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md#compatible-feedback-pending",
+          "writer": "arch",
+          "readers": [
+            "stage.compatible-feedback"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md#compatible-feedback-pending",
+          "writer": "arch",
+          "readers": [
+            "stage.compatible-feedback"
+          ]
+        }
+      },
+      {
+        "id": "decisionRecords",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/decisions",
+          "writer": "arch",
+          "readers": [
+            "stage.read-inputs",
+            "stage.approval",
+            "stage.capability-design",
+            "external.work"
+          ],
+          "template": "adr"
+        },
+        "after": {
+          "path": ".devflow/project/decisions",
+          "writer": "arch",
+          "readers": [
+            "stage.read-inputs",
+            "stage.approval",
+            "stage.capability-design",
+            "external.work"
+          ],
+          "template": "adr"
+        }
+      },
+      {
+        "id": "glossary",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/glossary.md",
+          "writer": "arch",
+          "readers": [
+            "stage.glossary-term",
+            "stage.read-inputs",
+            "stage.capability-design",
+            "external.split"
+          ],
+          "template": "glossary"
+        },
+        "after": {
+          "path": ".devflow/project/glossary.md",
+          "writer": "arch",
+          "readers": [
+            "stage.glossary-term",
+            "stage.read-inputs",
+            "stage.capability-design",
+            "external.split"
+          ],
+          "template": "glossary"
+        }
+      },
+      {
+        "id": "journal",
+        "change": "modified",
+        "before": {
+          "path": "devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.glossary-term",
+            "stage.design-marker",
+            "stage.knowledge-landing",
+            "stage.read-inputs",
+            "external.resume"
+          ]
+        },
+        "after": {
+          "path": ".devflow/journal.md",
+          "writer": "external.principles",
+          "readers": [
+            "stage.compatible-feedback",
+            "stage.glossary-term",
+            "stage.design-marker",
+            "stage.knowledge-landing",
+            "stage.read-inputs",
+            "external.resume"
+          ]
+        }
+      },
+      {
+        "id": "knowledgeNodes",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project",
+          "writer": "arch",
+          "readers": [
+            "stage.knowledge-landing",
+            "stage.capability-design",
+            "external.work",
+            "external.resume"
+          ],
+          "template": "knowledgeNode"
+        },
+        "after": {
+          "path": ".devflow/project",
+          "writer": "arch",
+          "readers": [
+            "stage.knowledge-landing",
+            "stage.capability-design",
+            "external.work",
+            "external.resume"
+          ],
+          "template": "knowledgeNode"
+        }
+      },
+      {
+        "id": "knowledgeOwnerScope",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project",
+          "writer": "arch",
+          "readers": [
+            "stage.knowledge-landing",
+            "external.resume"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project",
+          "writer": "arch",
+          "readers": [
+            "stage.knowledge-landing",
+            "external.resume"
+          ]
+        }
+      },
+      {
+        "id": "product",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/product.md",
+          "writer": "external.product",
+          "readers": [
+            "stage.read-inputs",
+            "stage.capability-design",
+            "external.split"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/product.md",
+          "writer": "external.product",
+          "readers": [
+            "stage.read-inputs",
+            "stage.capability-design",
+            "external.split"
+          ]
+        }
+      }
+    ],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "v0.21.0-phase1-arch-workflow-alignment",
-  "intent": "Align Arch's mandatory workflow guidance with its guards and qualify its write-free interruption promise to the pre-approval boundary.",
+  "change_id": "dot-devflow-root-arch",
+  "intent": "Move the target-project state and knowledge root to .devflow without compatibility branches, while preserving devflow namespace identifiers.",
   "impact": {
-    "references": {
+    "stages": {
       "total": 1,
       "added": 0,
       "removed": 0,
       "modified": 1
+    },
+    "ownership": {
+      "total": 18,
+      "added": 9,
+      "removed": 9,
+      "modified": 0
+    },
+    "artifacts": {
+      "total": 10,
+      "added": 0,
+      "removed": 0,
+      "modified": 10
     }
   }
 }

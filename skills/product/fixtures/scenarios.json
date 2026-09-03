@@ -130,7 +130,7 @@
       "glossary.state": "missing",
       "product.request": "none",
       "research.origin": "journal:2026-08-30T00:00:00Z maintenance routing pending: request-json: product",
-      "research.card.path": "devflow/tree/00-project/00.1-research.md",
+      "research.card.path": ".devflow/tree/00-project/00.1-research.md",
       "research.card.state": "pending",
       "compatible.owner": "none",
       "compatible.landing": "none"
@@ -155,7 +155,7 @@
       "glossary.state": "missing",
       "product.request": "none",
       "research.origin": "journal:2026-08-30T00:00:00Z maintenance routing pending: request-json: product",
-      "research.card.path": "devflow/tree/00-project/00.1-research.md",
+      "research.card.path": ".devflow/tree/00-project/00.1-research.md",
       "research.card.state": "effective",
       "compatible.owner": "none",
       "compatible.landing": "none"

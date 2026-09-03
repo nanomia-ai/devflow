@@ -96,15 +96,15 @@ export const ORDERS = {
 };
 
 export const OWNERSHIP = {
-  "devflow/project/arch.md": "arch",
-  "devflow/project/code-style.md": "arch",
-  "devflow/project/glossary.md": "arch",
-  "devflow/project/decisions": "arch",
-  "devflow/project/capabilities": "arch",
-  "devflow/project": "arch",
-  "devflow/project/product.md": "external.product",
-  "devflow/journal.md#compatible-feedback-pending": "arch-on-exact-owner-landing",
-  "devflow/journal.md": "external.principles"
+  ".devflow/project/arch.md": "arch",
+  ".devflow/project/code-style.md": "arch",
+  ".devflow/project/glossary.md": "arch",
+  ".devflow/project/decisions": "arch",
+  ".devflow/project/capabilities": "arch",
+  ".devflow/project": "arch",
+  ".devflow/project/product.md": "external.product",
+  ".devflow/journal.md#compatible-feedback-pending": "arch-on-exact-owner-landing",
+  ".devflow/journal.md": "external.principles"
 };
 
 export const GUARDS = [
@@ -148,7 +148,7 @@ export const STAGES = [
   { id: "compatible-feedback", reads: ["compatible.owner"], acceptsUnknown: [], done: s => s.compatible.owner === "none", table: "compatibleFeedback", reentry: "rejudge", branches: {
     "write-arch": [["WRITE", { artifact: "architecture", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], "WAIT"],
     "write-capability": [["WRITE", { artifact: "capabilityDesignZones", target: "exact compatible-feedback owner", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], "WAIT"],
-    land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: ["compatible.owner", "devflow/journal.md"] }], "ROUTE:resume"]
+    land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: ["compatible.owner", ".devflow/journal.md"] }], "ROUTE:resume"]
   }, body: "stage: compatible-feedback" },
   { id: "glossary-term", reads: ["state.route"], acceptsUnknown: [], done: s => s.state.route !== "marker.glossary-term", needs: ["glossary.phase"], reentry: "rejudge", branches: {
     definition: [["READ", { path: "references/workflow.md" }], ["WRITE", { artifact: "glossary", template: "glossary" }], ["COMMIT", { boundary: "glossary-definition-marker-retained" }], "NEXT"],
@@ -236,16 +236,16 @@ export const STAGES = [
 ];
 
 export const ARTIFACTS = {
-  product: { path: "devflow/project/product.md", writer: "external.product", readers: ["stage.read-inputs", "stage.capability-design", "external.split"] },
-  glossary: { path: "devflow/project/glossary.md", writer: "arch", readers: ["stage.glossary-term", "stage.read-inputs", "stage.capability-design", "external.split"], template: "glossary" },
-  architecture: { path: "devflow/project/arch.md", writer: "arch", readers: ["stage.compatible-feedback", "stage.repair-layer0-fields", "stage.read-inputs", "stage.approval", "stage.capability-design", "external.design", "external.split", "external.resume"], template: "architecture" },
-  codeStyle: { path: "devflow/project/code-style.md", writer: "arch", readers: ["stage.read-inputs", "stage.approval", "external.split", "external.work"], template: "codeStyle" },
-  compatibleFeedbackMarker: { path: "devflow/journal.md#compatible-feedback-pending", writer: "arch", readers: ["stage.compatible-feedback"] },
-  journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.compatible-feedback", "stage.glossary-term", "stage.design-marker", "stage.knowledge-landing", "stage.read-inputs", "external.resume"] },
-  decisionRecords: { path: "devflow/project/decisions", writer: "arch", readers: ["stage.read-inputs", "stage.approval", "stage.capability-design", "external.work"], template: "adr" },
-  capabilityDesignZones: { path: "devflow/project/capabilities", writer: "arch", readers: ["stage.compatible-feedback", "stage.glossary-term", "stage.design-marker", "stage.capability-design", "external.split", "external.work", "external.verify", "external.resume"], template: "capabilityDesign" },
-  knowledgeOwnerScope: { path: "devflow/project", writer: "arch", readers: ["stage.knowledge-landing", "external.resume"] },
-  knowledgeNodes: { path: "devflow/project", writer: "arch", readers: ["stage.knowledge-landing", "stage.capability-design", "external.work", "external.resume"], template: "knowledgeNode" }
+  product: { path: ".devflow/project/product.md", writer: "external.product", readers: ["stage.read-inputs", "stage.capability-design", "external.split"] },
+  glossary: { path: ".devflow/project/glossary.md", writer: "arch", readers: ["stage.glossary-term", "stage.read-inputs", "stage.capability-design", "external.split"], template: "glossary" },
+  architecture: { path: ".devflow/project/arch.md", writer: "arch", readers: ["stage.compatible-feedback", "stage.repair-layer0-fields", "stage.read-inputs", "stage.approval", "stage.capability-design", "external.design", "external.split", "external.resume"], template: "architecture" },
+  codeStyle: { path: ".devflow/project/code-style.md", writer: "arch", readers: ["stage.read-inputs", "stage.approval", "external.split", "external.work"], template: "codeStyle" },
+  compatibleFeedbackMarker: { path: ".devflow/journal.md#compatible-feedback-pending", writer: "arch", readers: ["stage.compatible-feedback"] },
+  journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.compatible-feedback", "stage.glossary-term", "stage.design-marker", "stage.knowledge-landing", "stage.read-inputs", "external.resume"] },
+  decisionRecords: { path: ".devflow/project/decisions", writer: "arch", readers: ["stage.read-inputs", "stage.approval", "stage.capability-design", "external.work"], template: "adr" },
+  capabilityDesignZones: { path: ".devflow/project/capabilities", writer: "arch", readers: ["stage.compatible-feedback", "stage.glossary-term", "stage.design-marker", "stage.capability-design", "external.split", "external.work", "external.verify", "external.resume"], template: "capabilityDesign" },
+  knowledgeOwnerScope: { path: ".devflow/project", writer: "arch", readers: ["stage.knowledge-landing", "external.resume"] },
+  knowledgeNodes: { path: ".devflow/project", writer: "arch", readers: ["stage.knowledge-landing", "stage.capability-design", "external.work", "external.resume"], template: "knowledgeNode" }
 };
 
 export const ROLES = {

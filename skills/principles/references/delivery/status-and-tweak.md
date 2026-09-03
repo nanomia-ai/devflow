@@ -74,7 +74,7 @@ failed the gate. A recorded request line is consumed whole by the card planning 
 a passing item mixed into that line would be consumed with neither a card nor a record and
 vanish without trace on interruption.
 A tweak's diff is its complete record. So it runs with no card, no journal line, and no
-review. This lane presupposes a repository devflow has entered — with no `devflow/` at the
+review. This lane presupposes a repository devflow has entered — with no `.devflow/` at the
 repository root, do not tweak: the lane would plant a room in a repository that never
 chose adoption, so the no-tree exception's adoption question comes first.
 First confirm by machine that this lane's commit has a safe place to land:
@@ -136,7 +136,7 @@ number is the depth-1 unit canonical recognition resolves when applied to that i
 text — not to the whole conversation: a conversation whose two items each name a different
 unit resolves to a set of two, which selects no unit — or `01` when none resolves.
 Several tweak items in one request bundle into one commit per depth-1 unit. Beyond that,
-no `devflow/` path
+no `.devflow/` path
 is touched — the moment one would be needed, the item is not a tweak. This lane is not
 routing — the pre-routing integration read and state restoration do not apply here (the
 machine checks above are not restoration but this commit's landing preconditions). When

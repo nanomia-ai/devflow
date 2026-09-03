@@ -7,7 +7,7 @@ topic, opened only when needed. Measured basis: one real brownfield capability's
 source ran to 3,699 lines — pressed into a 185-line vessel as summary, what survives is
 confidence, not understanding.
 
-- The root path is `devflow/project/capabilities/<number>-<name suffix>/K-<three digits, zero-padded>-<topic slug>.md`.
+- The root path is `.devflow/project/capabilities/<number>-<name suffix>/K-<three digits, zero-padded>-<topic slug>.md`.
   The folder name equals the same-numbered capability document's filename without `.md`. A
   child capsule lives in its parent's same-stem folder. K numbers are immutable and unique
   across the whole subtree under the capability's folder, not merely the immediate folder.
@@ -116,7 +116,7 @@ The contract for the form is not a checker but the two capsules below. The first
 words; the second uses two — what "write only the ones that apply" means is visible in the
 second. In both, most sentences are unmarked.
 
-**One — `devflow/project/capabilities/04-settlement/K-002-payout-hold.md`**
+**One — `.devflow/project/capabilities/04-settlement/K-002-payout-hold.md`**
 
 ```text
 # When a settlement payout is held and how the hold is released · open on a "the payout never arrived" inquiry
@@ -173,7 +173,7 @@ path.)
 Source basis: ["docs/ops/settlement-runbook.md@a41c9f2:80-170", "docs/ops/risk-review.md@a41c9f2:1-58", "docs/finance/close-policy.md@a41c9f2:40-96", "src/settlement/payout_state.py:1-120"]
 ```
 
-**Two — `devflow/project/capabilities/06-notification/K-001-delivery-retry.md`**
+**Two — `.devflow/project/capabilities/06-notification/K-001-delivery-retry.md`**
 
 This capsule has no dropped direction and no open question. One concept and one number are all
 of it, so it has two sections: `## Decisions` and `## Unknowns` are absent rather than standing

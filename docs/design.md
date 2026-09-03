@@ -36,7 +36,7 @@ Core philosophy — every modification must keep to it:
 ```
 Layer 0 (once, or inherited): product → arch → [design] · existing project evidence: adopt back-derives     Layer 1 (loop): split → work ⇄ verify
 Shared: resume, principles (canonical rules)
-Created in the target project: devflow/{project/, tree/, journal.md, users/<id>/ rooms}
+Created in the target project: .devflow/{project/, tree/, journal.md, users/<id>/ rooms}
 Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugin — registered by codex/install.*)
 ```
 

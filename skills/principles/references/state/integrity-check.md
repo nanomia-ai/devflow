@@ -19,7 +19,7 @@ statuses, and one body inside is opened only when an item reports an anomaly at 
 path. The same name set serves next-number derivation, the ban on number reuse, locator
 resolution, and the `Covered cards` comparison.
 
-1. Does a claimed card carry an `<id>` that matches no `devflow/users/*/owner.md` room
+1. Does a claimed card carry an `<id>` that matches no `.devflow/users/*/owner.md` room
    (an orphan claim — the residue of a departed member or a typo; a bare `.wip.` belongs
    to item 6 and is not counted here)?
 2. Are any numbers duplicated?
@@ -28,7 +28,7 @@ resolution, and the `Covered cards` comparison.
    exactly one card existing for every dependency number?
 5. Does a path referenced by HANDOFF fail to match exactly one existing path when every
    component's status suffix is removed from both sides of the comparison?
-6. Is there a bare `.wip.` or a root `devflow/HANDOFF.md` (an ownerless claim, or an incomplete upgrade)?
+6. Is there a bare `.wip.` or a root `.devflow/HANDOFF.md` (an ownerless claim, or an incomplete upgrade)?
 7. Do two or more owner.md files claim the same git identity?
 8. A bare `.wip.` has no claimant, so item 6 covers it and this item skips it. For every
    other currently claimed card, from the current claim commit that created its

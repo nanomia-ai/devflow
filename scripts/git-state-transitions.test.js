@@ -24,7 +24,7 @@ function makeRepo(t) {
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.writeFileSync(target, content);
   };
-  write("devflow/journal.md", "");
+  write(".devflow/journal.md", "");
   git("add", "-A");
   git("commit", "-qm", "base");
   return { root, git, gitBytes, gitTry, write };
@@ -113,7 +113,7 @@ test("a branch ahead of integration is an ancestor case that still holds uninteg
   const { git, gitTry, write } = makeRepo(t);
   git("branch", "integration");
   git("checkout", "-qb", "flow");
-  write("devflow/tree/02-x/02.1-card.md", "# 02.1 card\n");
+  write(".devflow/tree/02-x/02.1-card.md", "# 02.1 card\n");
   git("add", "-A");
   git("commit", "-qm", "a boundary — request recorded");
   assert.equal(
@@ -122,7 +122,7 @@ test("a branch ahead of integration is an ancestor case that still holds uninteg
   );
   assert.equal(git("rev-list", "--count", "integration..HEAD"), "1");
   const changed = git("diff", "--name-only", "integration..HEAD").split("\n").filter(Boolean);
-  assert.ok(changed.includes("devflow/tree/02-x/02.1-card.md"), "the card path shows in the commit set");
+  assert.ok(changed.includes(".devflow/tree/02-x/02.1-card.md"), "the card path shows in the commit set");
 });
 
 // The physical limit the tweak lane's target-path check stands on: a pathspec commit
@@ -159,7 +159,7 @@ test("a commit on a detached HEAD lands in no branch", (t) => {
 // The canonical state predicates' approval-freshness judgment, computed once per tree.
 test("the tree-wide approval judgment matches the per-card judgment on hostile paths", (t) => {
   const { root, git, gitBytes, gitTry, write } = makeRepo(t);
-  const TREE = "devflow/tree";
+  const TREE = ".devflow/tree";
   const cards = {
     clean: `${TREE}/02-x/02.1-clean.md`,
     worktreeEdit: `${TREE}/02-x/02.2-worktree edit.md`,
@@ -212,7 +212,7 @@ test("the tree-wide approval judgment matches the per-card judgment on hostile p
 // The capability-closing sweep deletes only the lines its marker snapshot held.
 test("a journal blob at a recorded head keeps lines appended after it", (t) => {
   const { root, git } = makeRepo(t);
-  const journal = path.join(root, "devflow", "journal.md");
+  const journal = path.join(root, ".devflow", "journal.md");
   fs.appendFileSync(journal, "2026-01-01T00:00:00Z capability note: capability: 03; note-json: \"one\"\n");
   git("add", "-A");
   git("commit", "-qm", "a note one");
@@ -221,7 +221,7 @@ test("a journal blob at a recorded head keeps lines appended after it", (t) => {
   git("add", "-A");
   git("commit", "-qm", "b note two");
 
-  const snapshot = git("show", `${head}:devflow/journal.md`).split("\n").filter(Boolean);
+  const snapshot = git("show", `${head}:.devflow/journal.md`).split("\n").filter(Boolean);
   const current = fs.readFileSync(journal, "utf8").split("\n").filter(Boolean);
   const remaining = current.filter((line) => !snapshot.includes(line));
   assert.deepEqual(remaining, ['2026-01-02T00:00:00Z capability note: capability: 03; note-json: "two"']);
@@ -230,7 +230,7 @@ test("a journal blob at a recorded head keeps lines appended after it", (t) => {
 // Four flows appending to one journal in one working tree lose nothing.
 test("concurrent appends to journal keep every line intact", (t) => {
   const { root } = makeRepo(t);
-  const journal = path.join(root, "devflow", "journal.md");
+  const journal = path.join(root, ".devflow", "journal.md");
   const flows = ["w", "x", "y", "z"];
   const script = path.join(root, "append.js");
   fs.writeFileSync(script, `const fs=require("fs");
@@ -249,20 +249,20 @@ for (let i = 0; i < 5; i += 1) fs.appendFileSync(process.argv[2], process.argv[3
 test("a 3-way journal merge drops the consumed line and keeps both additions", (t) => {
   const { root, git, gitTry, write } = makeRepo(t);
   write(
-    "devflow/journal.md",
+    ".devflow/journal.md",
     "2026-01-01T00:00:00Z maintenance routing pending: request-json: \"fix rounding\"\n",
   );
   git("add", "-A");
   git("commit", "-qm", "a boundary — request recorded");
   const base = git("rev-parse", "HEAD");
   // side A consumes the request (its planning commit deletes the line)
-  write("devflow/journal.md", "");
+  write(".devflow/journal.md", "");
   git("add", "-A");
   git("commit", "-qm", "a split — plan consumes the request");
   // side B, forked before the consumption, appends an adjacent observation
   git("checkout", "-q", "-b", "flow-b", base);
   write(
-    "devflow/journal.md",
+    ".devflow/journal.md",
     "2026-01-01T00:00:00Z maintenance routing pending: request-json: \"fix rounding\"\n" +
       "2026-01-02T00:00:00Z capability note: capability: 03; note-json: \"list sort is server-side\"\n",
   );
@@ -270,23 +270,23 @@ test("a 3-way journal merge drops the consumed line and keeps both additions", (
   git("commit", "-qm", "b boundary — note appended");
   const merge = gitTry("merge", "--no-edit", "main");
   // a delete-vs-adjacent-append IS a conflict (measurement 13); the canon resolves it 3-way
-  const baseLines = git("show", `${base}:devflow/journal.md`).split("\n").filter(Boolean);
+  const baseLines = git("show", `${base}:.devflow/journal.md`).split("\n").filter(Boolean);
   if (merge.status !== 0) {
-    const ours = git("show", ":2:devflow/journal.md").split("\n").filter(Boolean);
-    const theirs = git("show", ":3:devflow/journal.md").split("\n").filter(Boolean);
+    const ours = git("show", ":2:.devflow/journal.md").split("\n").filter(Boolean);
+    const theirs = git("show", ":3:.devflow/journal.md").split("\n").filter(Boolean);
     const resolved = [
       ...baseLines.filter((l) => ours.includes(l) && theirs.includes(l)),
       ...ours.filter((l) => !baseLines.includes(l)),
       ...theirs.filter((l) => !baseLines.includes(l)),
     ];
     fs.writeFileSync(
-      path.join(root, "devflow/journal.md"),
+      path.join(root, ".devflow/journal.md"),
       resolved.length ? resolved.join("\n") + "\n" : "",
     );
-    git("add", "-A", "--", "devflow/journal.md");
+    git("add", "-A", "--", ".devflow/journal.md");
     git("commit", "-qm", "b boundary — journal merge resolved 3-way");
   }
-  const merged = fs.readFileSync(path.join(root, "devflow/journal.md"), "utf8");
+  const merged = fs.readFileSync(path.join(root, ".devflow/journal.md"), "utf8");
   const mergedLines = merged.split("\n").filter(Boolean);
   // the consumed request (present in base, deleted on one side) must not revive
   for (const line of baseLines) {
@@ -304,13 +304,13 @@ test("a 3-way journal merge drops the consumed line and keeps both additions", (
 test("three same-unit claims land as three clean path-scoped commits", (t) => {
   const { root, git, write } = makeRepo(t);
   for (const n of ["1", "2", "3"]) {
-    write(`devflow/tree/04-listing/04.${n}-part.md`, `# 04.${n} part\n`);
+    write(`.devflow/tree/04-listing/04.${n}-part.md`, `# 04.${n} part\n`);
   }
   git("add", "-A");
   git("commit", "-qm", "a split — 04 layer");
   for (const n of ["1", "2", "3"]) {
-    const from = `devflow/tree/04-listing/04.${n}-part.md`;
-    const to = `devflow/tree/04-listing/04.${n}-part.wip-a.md`;
+    const from = `.devflow/tree/04-listing/04.${n}-part.md`;
+    const to = `.devflow/tree/04-listing/04.${n}-part.wip-a.md`;
     fs.renameSync(path.join(root, from), path.join(root, to));
     git("add", "-A", "--", from, to);
     git("commit", "-qm", `a 04.${n} claim`, "--", from, to);
@@ -348,8 +348,8 @@ test("a progress result anchors to its first-introducing commit and joins the cu
   const { root, git, write } = makeRepo(t);
   ownsResultFormats();
 
-  const pending = "devflow/tree/02-x/02.1-card.md";
-  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  const pending = ".devflow/tree/02-x/02.1-card.md";
+  const card = ".devflow/tree/02-x/02.1-card.wip-a.md";
   const head = "# 02.1 card\nDestination: fixture becomes true\nForbidden: none\nCompletion signal: node --test\n\n## Progress log\n";
   write(pending, head);
   git("add", "-A");
@@ -373,7 +373,7 @@ test("a progress result anchors to its first-introducing commit and joins the cu
   const firstCheckpoint = git("rev-parse", "HEAD");
 
   // Another flow's boundary lands between the two attempts.
-  write("devflow/journal.md", "2026-01-01T00:00:00Z capability note: capability: 03; note-json: \"x\"\n");
+  write(".devflow/journal.md", "2026-01-01T00:00:00Z capability note: capability: 03; note-json: \"x\"\n");
   git("add", "-A");
   git("commit", "-qm", "a boundary — room upgrade");
   const boundary = git("rev-parse", "HEAD");
@@ -414,7 +414,7 @@ test("a progress result anchors to its first-introducing commit and joins the cu
   assert.ok(!pathsOf(secondCheckpoint).includes("src/a.txt"));
   const union = new Set(through.flatMap(pathsOf));
   for (const p of ["src/a.txt", "src/b.txt", "src/c.txt", card]) assert.ok(union.has(p), `missing ${p}`);
-  assert.ok(!union.has("devflow/journal.md"), "the boundary commit's paths are not task diff");
+  assert.ok(!union.has(".devflow/journal.md"), "the boundary commit's paths are not task diff");
 });
 
 // Adopted finding 1: between the run and the anchor, another flow's commit moves HEAD. The
@@ -423,7 +423,7 @@ test("two results sharing one anchor keep the separate bases they ran against", 
   const { root, git, write } = makeRepo(t);
   ownsResultFormats();
 
-  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  const card = ".devflow/tree/02-x/02.1-card.wip-a.md";
   write(card, "# 02.1 card\nForbidden: none\n\n## Progress log\n");
   git("add", "-A");
   git("commit", "-qm", "a 02.1 claim");
@@ -435,8 +435,8 @@ test("two results sharing one anchor keep the separate bases they ran against", 
   append(`2026-01-01T00:00:01Z completion signal result: head: ${signalBase}; verdict: fail; detail-json: "one"`);
 
   // Another flow lands its own boundary while this card is still uncommitted.
-  write("devflow/journal.md", "2026-01-01T00:00:00Z capability note: capability: 03; note-json: \"x\"\n");
-  git("add", "--", "devflow/journal.md");
+  write(".devflow/journal.md", "2026-01-01T00:00:00Z capability note: capability: 03; note-json: \"x\"\n");
+  git("add", "--", ".devflow/journal.md");
   git("commit", "-qm", "b boundary — room upgrade");
   const foreign = git("rev-parse", "HEAD");
   assert.notEqual(foreign, signalBase);
@@ -464,7 +464,7 @@ test("two results sharing one anchor keep the separate bases they ran against", 
     .map(([hash]) => hash);
   assert.deepEqual(taskCommits, [anchor]);
   assert.ok(!taskCommits.includes(foreign), "another flow's boundary commit is not task diff");
-  assert.ok(!git("show", "--name-only", "--format=", anchor).includes("devflow/journal.md"));
+  assert.ok(!git("show", "--name-only", "--format=", anchor).includes(".devflow/journal.md"));
 });
 
 // Adopted finding 3: on the remote-evidence path the clean review runs before the
@@ -473,7 +473,7 @@ test("a remote-path clean review anchors to the evidence-wait checkpoint", (t) =
   const { root, git, write } = makeRepo(t);
   ownsResultFormats();
 
-  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  const card = ".devflow/tree/02-x/02.1-card.wip-a.md";
   write(card, "# 02.1 card\nReview: required\n\n## Progress log\n");
   git("add", "-A");
   git("commit", "-qm", "a 02.1 claim");
@@ -509,7 +509,7 @@ test("a disposition binds to its objection by checkpoint and line order, and the
   const { root, git, write } = makeRepo(t);
   ownsResultFormats();
 
-  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  const card = ".devflow/tree/02-x/02.1-card.wip-a.md";
   write(card, "# 02.1 card\nReview: required\n\n## Progress log\n");
   git("add", "-A");
   git("commit", "-qm", "a 02.1 claim");
@@ -571,7 +571,7 @@ test("a third objection anchored alone cannot be joined by a later disposition c
   assert.match(work.replace(/\s+/g, " "),
     /a disposition written anywhere else is not one/);
 
-  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  const card = ".devflow/tree/02-x/02.1-card.wip-a.md";
   write(card, "# 02.1 card\nReview: required\n\n## Progress log\n");
   git("add", "-A");
   git("commit", "-qm", "a 02.1 claim");
@@ -617,7 +617,7 @@ test("the first result after a disposition is its consumer, and a later result d
   assert.match(work.replace(/\s+/g, " "),
     /[Aa] valid disposition with two or more settled `review result` lines after it/);
 
-  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  const card = ".devflow/tree/02-x/02.1-card.wip-a.md";
   write(card, "# 02.1 card\nReview: required\n\n## Progress log\n");
   git("add", "-A");
   git("commit", "-qm", "a 02.1 claim");
@@ -664,7 +664,7 @@ test("a signal result is current until a later commit changes this card's task d
     /Current means both fresh and a verdict: its completion inputs and this card's task diff are unchanged since it ran, and the line carries one of the three verdicts/,
     "work must fix what makes a recorded signal current");
 
-  const card = "devflow/tree/02-x/02.1-card.wip-a.md";
+  const card = ".devflow/tree/02-x/02.1-card.wip-a.md";
   write(card, "# 02.1 card\nCompletion signal: node --test\n\n## Progress log\n");
   write("src/a.txt", "one\n");
   git("add", "-A");
@@ -677,7 +677,7 @@ test("a signal result is current until a later commit changes this card's task d
 
   const codePaths = ["src"];
   // Another flow's boundary commit is not this card's task diff.
-  write("devflow/journal.md", "2026-01-01T00:00:00Z capability note: capability: 03; note-json: \"x\"\n");
+  write(".devflow/journal.md", "2026-01-01T00:00:00Z capability note: capability: 03; note-json: \"x\"\n");
   git("add", "-A");
   git("commit", "-qm", "a boundary — room upgrade");
   assert.equal(git("diff", "--name-only", `${anchor}..HEAD`, "--", ...codePaths), "",

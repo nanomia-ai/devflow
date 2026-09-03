@@ -28,16 +28,16 @@ function remoteLine(check, detail) {
 
 async function project(progress) {
   const root = await mkdtemp(join(tmpdir(), "work-project-state-"));
-  await mkdir(join(root, "devflow", "project"), { recursive: true });
-  await mkdir(join(root, "devflow", "tree", "01-foundation"), { recursive: true });
-  await mkdir(join(root, "devflow", "users", "jmp"), { recursive: true });
-  await writeFile(join(root, "devflow", "project", "product.md"), "# Product\n\nService: fixture\n\n## Capabilities\n\n- foundation\n", "utf8");
-  await writeFile(join(root, "devflow", "project", "arch.md"), "# Architecture\n\nIntegration branch: main\n", "utf8");
-  await writeFile(join(root, "devflow", "journal.md"), "# Journal\n", "utf8");
-  await writeFile(join(root, "devflow", "users", "jmp", "owner.md"), "id: jmp\ngit: Fixture, fixture@example.invalid\n", "utf8");
-  await writeFile(join(root, "devflow", "users", "jmp", "HANDOFF.md"), "", "utf8");
-  await writeFile(join(root, "devflow", "users", "jmp", "digest.md"), "none\n", "utf8");
-  const cardPath = "devflow/tree/01-foundation/01.1-remote.wip-jmp.md";
+  await mkdir(join(root, ".devflow", "project"), { recursive: true });
+  await mkdir(join(root, ".devflow", "tree", "01-foundation"), { recursive: true });
+  await mkdir(join(root, ".devflow", "users", "jmp"), { recursive: true });
+  await writeFile(join(root, ".devflow", "project", "product.md"), "# Product\n\nService: fixture\n\n## Capabilities\n\n- foundation\n", "utf8");
+  await writeFile(join(root, ".devflow", "project", "arch.md"), "# Architecture\n\nIntegration branch: main\n", "utf8");
+  await writeFile(join(root, ".devflow", "journal.md"), "# Journal\n", "utf8");
+  await writeFile(join(root, ".devflow", "users", "jmp", "owner.md"), "id: jmp\ngit: Fixture, fixture@example.invalid\n", "utf8");
+  await writeFile(join(root, ".devflow", "users", "jmp", "HANDOFF.md"), "", "utf8");
+  await writeFile(join(root, ".devflow", "users", "jmp", "digest.md"), "none\n", "utf8");
+  const cardPath = ".devflow/tree/01-foundation/01.1-remote.wip-jmp.md";
   await writeFile(join(root, ...cardPath.split("/")), `# 01.1 Remote\nCoordinates: fixture / foundation / 01.1\nIdentity: fixture\n\nDestination: fixture\nWhy: fixture\nCompletion signal: observe fixture\nDepends: none\nRead first: none\nApproval: 2026-08-30T00:00:00Z; parallel: none\nReview: required\n\n## Progress log\n${progress}\n`, "utf8");
   git(root, "init", "-b", "main");
   git(root, "config", "user.email", "fixture@example.invalid");
@@ -85,8 +85,8 @@ test("compatible feedback transport preserves the pre-title H1 and post-title ca
   }
 
   const boundary = STAGES.find((stage) => stage.id === "boundary").branches.compatible;
-  assert.deepEqual(boundary[0][1].touches, ["devflow/journal.md"]);
-  assert.deepEqual(boundary[1][1].touches, ["devflow/journal.md"]);
+  assert.deepEqual(boundary[0][1].touches, [".devflow/journal.md"]);
+  assert.deepEqual(boundary[1][1].touches, [".devflow/journal.md"]);
   assert.equal(boundary.some((effect) => JSON.stringify(effect).includes("activeCard")), false);
 
   const guard = GUARDS.find((item) => item.id === "compatible-feedback-before-closure");
@@ -119,17 +119,17 @@ function feedbackSet(...entries) {
     bytes: JSON.stringify(entries),
     count: entries.length,
     source,
-    sourceCard: source.includes("@") ? source.slice(0, source.lastIndexOf("@")) : "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+    sourceCard: source.includes("@") ? source.slice(0, source.lastIndexOf("@")) : ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
     sourceCount: sources.length,
     uniqueCount: new Set(entries.map((entry) => JSON.stringify(entry))).size,
   };
 }
 
 test("compatible feedback guard mechanically binds first production and established closure", async (t) => {
-  const card = "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md";
+  const card = ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md";
   const source = `${card}@${"1".repeat(40)}`;
-  const consumed = feedbackEntry("devflow/project/arch.md", source);
-  const current = feedbackEntry("devflow/project/product.md", source);
+  const consumed = feedbackEntry(".devflow/project/arch.md", source);
+  const current = feedbackEntry(".devflow/project/product.md", source);
   const guard = GUARDS.find((item) => item.id === "compatible-feedback-set-required");
   const snapshot = (feedback) => ({ card: { target: card }, feedback });
   const initial = {
@@ -145,7 +145,7 @@ test("compatible feedback guard mechanically binds first production and establis
   const sealed = {
     action: "compatible",
     lifecycles: [feedbackLifecycle(consumed, "consumed"), feedbackLifecycle(current, "current")],
-    pendingSet: feedbackSet(feedbackEntry("devflow/project/design.md", `${card}@${"9".repeat(40)}`)),
+    pendingSet: feedbackSet(feedbackEntry(".devflow/project/design.md", `${card}@${"9".repeat(40)}`)),
     eligibleSet: feedbackSet(),
     pendingSetStatus: "complete",
     lifecycleAction: "settled",
@@ -157,7 +157,7 @@ test("compatible feedback guard mechanically binds first production and establis
   assert.equal(guard.when(snapshot({ ...initial, eligibleSet: feedbackSet(current, consumed) })), true);
   const mixedSource = { ...current, source: `${card}@${"2".repeat(40)}` };
   assert.equal(guard.when(snapshot({ ...initial, pendingSet: feedbackSet(consumed, mixedSource), eligibleSet: feedbackSet(consumed, mixedSource), pendingSetStatus: "invalid" })), true);
-  const foreign = feedbackEntry("devflow/project/product.md", `devflow/tree/01-foundation/01.2-other.wip-jmp.md@${"1".repeat(40)}`);
+  const foreign = feedbackEntry(".devflow/project/product.md", `.devflow/tree/01-foundation/01.2-other.wip-jmp.md@${"1".repeat(40)}`);
   assert.equal(guard.when(snapshot({ ...initial, pendingSet: feedbackSet(foreign), eligibleSet: feedbackSet(foreign) })), true);
   assert.equal(guard.when(snapshot({ ...initial, pendingSet: feedbackSet(consumed, consumed), eligibleSet: feedbackSet(consumed, consumed), pendingSetStatus: "invalid" })), true);
   assert.equal(guard.when(snapshot({ ...initial, pendingSet: feedbackSet(), eligibleSet: feedbackSet() })), true);
@@ -180,7 +180,7 @@ test("compatible feedback guard mechanically binds first production and establis
   const fixture = await project("");
   try {
     const exactSource = `${fixture.cardPath}@${git(fixture.root, "rev-parse", "HEAD")}`;
-    const exact = feedbackEntry("devflow/project/arch.md", exactSource);
+    const exact = feedbackEntry(".devflow/project/arch.md", exactSource);
     const decision = await stageProject(t, fixture.root, fixture.cardPath, [
       "feedback.action=compatible",
       `feedback.pendingSet=${JSON.stringify(feedbackSet(exact))}`,
@@ -217,17 +217,17 @@ test("all-consumed compatible reentry takes closure without a marker or exact-H1
 test("compatible lifecycle collector isolates another card", async () => {
   const fixture = await project("");
   try {
-    const other = "devflow/tree/01-foundation/01.2-other.wip-jmp.md";
+    const other = ".devflow/tree/01-foundation/01.2-other.wip-jmp.md";
     const first = await readFile(join(fixture.root, ...fixture.cardPath.split("/")), "utf8");
     await writeFile(join(fixture.root, ...other.split("/")), first
       .replace("# 01.1 Remote", "# 01.2 Other")
       .replace("Coordinates: fixture / foundation / 01.1", "Coordinates: fixture / foundation / 01.2"), "utf8");
-    await writeFile(join(fixture.root, "devflow", "project", "arch.md"), "# Architecture\n\nBrownfield: no\nIntegration branch: main\n", "utf8");
+    await writeFile(join(fixture.root, ".devflow", "project", "arch.md"), "# Architecture\n\nBrownfield: no\nIntegration branch: main\n", "utf8");
     git(fixture.root, "add", ".");
     git(fixture.root, "commit", "-m", "other compatible source");
     const source = `${other}@${git(fixture.root, "rev-parse", "HEAD")}`;
-    const entry = feedbackEntry("devflow/project/arch.md", source);
-    await writeFile(join(fixture.root, "devflow", "journal.md"), `2026-08-30T01:00:00Z compatible feedback pending: payload-json: ${JSON.stringify(entry)}\n`, "utf8");
+    const entry = feedbackEntry(".devflow/project/arch.md", source);
+    await writeFile(join(fixture.root, ".devflow", "journal.md"), `2026-08-30T01:00:00Z compatible feedback pending: payload-json: ${JSON.stringify(entry)}\n`, "utf8");
     git(fixture.root, "add", ".");
     git(fixture.root, "commit", "-m", "compatible marker for other card");
 
@@ -286,7 +286,7 @@ for (const [name, check, detail] of [
 test("public target selects one of two simultaneous claims and becomes a Decision fact", async (t) => {
   const fixture = await project(remoteLine(JSON.stringify("https://ci.example/run/2"), JSON.stringify("waiting")));
   try {
-    const secondPath = "devflow/tree/01-foundation/01.2-local.wip-jmp.md";
+    const secondPath = ".devflow/tree/01-foundation/01.2-local.wip-jmp.md";
     const first = await readFile(join(fixture.root, ...fixture.cardPath.split("/")), "utf8");
     await writeFile(join(fixture.root, ...secondPath.split("/")), first
       .replace("# 01.1 Remote", "# 01.2 Local")
@@ -349,8 +349,8 @@ test("direct card collector rejects lexical escapes before reading outside the p
 test("direct card collector accepts a canonical spaced relative path", async () => {
   const fixture = await project("");
   try {
-    const targetPath = "devflow/tree/02-Swatch collection/02.1-Swatch Shelf first slice.wip-jmp.md";
-    await mkdir(join(fixture.root, "devflow", "tree", "02-Swatch collection"), { recursive: true });
+    const targetPath = ".devflow/tree/02-Swatch collection/02.1-Swatch Shelf first slice.wip-jmp.md";
+    await mkdir(join(fixture.root, ".devflow", "tree", "02-Swatch collection"), { recursive: true });
     await writeFile(join(fixture.root, ...targetPath.split("/")), await readFile(join(fixture.root, ...fixture.cardPath.split("/")), "utf8"), "utf8");
     assert.equal(await collectors["work/card.contract"]({ projectRoot: fixture.root, targetPath }), "valid");
   } finally {
@@ -361,12 +361,12 @@ test("direct card collector accepts a canonical spaced relative path", async () 
 test("direct card collector rejects a physical symlink or junction escape before reading outside the project", async () => {
   const fixture = await project("");
   const outside = await mkdtemp(join(tmpdir(), "work-collector-physical-outside-"));
-  const link = join(fixture.root, "devflow", "tree", "escape");
+  const link = join(fixture.root, ".devflow", "tree", "escape");
   try {
     const cardText = await readFile(join(fixture.root, ...fixture.cardPath.split("/")), "utf8");
     await writeFile(join(outside, "outside.md"), cardText, "utf8");
     await symlink(outside, link, process.platform === "win32" ? "junction" : "dir");
-    const targetPath = "devflow/tree/escape/outside.md";
+    const targetPath = ".devflow/tree/escape/outside.md";
     assert.equal(await collectors["work/card.contract"]({ projectRoot: fixture.root, targetPath }), "invalid");
   } finally {
     await rm(fixture.root, { recursive: true, force: true });

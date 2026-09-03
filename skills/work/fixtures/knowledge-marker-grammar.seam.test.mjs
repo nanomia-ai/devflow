@@ -31,11 +31,11 @@ test("knowledge marker producer and parser project the principles format owner",
 test("knowledge marker source remains a JSON string, not bare prose or an object", () => {
   const rendered = template
     .replace("{{timestamp}}", "2026-08-30T00:00:00Z")
-    .replace("{{owner}}", "devflow/project/capabilities/01-face.md")
+    .replace("{{owner}}", ".devflow/project/capabilities/01-face.md")
     .replace("{{writer}}", "arch")
-    .replace("{{sourceJson}}", JSON.stringify("devflow/tree/01-face/01.1.done.md@0123456789012345678901234567890123456789"));
+    .replace("{{sourceJson}}", JSON.stringify(".devflow/tree/01-face/01.1.done.md@0123456789012345678901234567890123456789"));
   assert.equal(
     rendered,
-    "2026-08-30T00:00:00Z knowledge landing pending: owner: devflow/project/capabilities/01-face.md; writer: arch; source-json: \"devflow/tree/01-face/01.1.done.md@0123456789012345678901234567890123456789\"",
+    "2026-08-30T00:00:00Z knowledge landing pending: owner: .devflow/project/capabilities/01-face.md; writer: arch; source-json: \".devflow/tree/01-face/01.1.done.md@0123456789012345678901234567890123456789\"",
   );
 });

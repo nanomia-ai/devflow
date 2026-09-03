@@ -2,7 +2,7 @@
   {
     "id": "state-kernel-gap",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "unavailable",
       "state.route": "unavailable",
       "card.phase": "invalid",
@@ -70,7 +70,7 @@
   {
     "id": "happy-implementation",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -116,7 +116,7 @@
   {
     "id": "happy-implementation-spaced-card-path",
     "s": {
-      "card.target": "devflow/tree/02-Swatch collection/02.01-Swatch Shelf first slice.md",
+      "card.target": ".devflow/tree/02-Swatch collection/02.01-Swatch Shelf first slice.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -158,7 +158,7 @@
   {
     "id": "research-synthesis-checkpoint-first",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -201,7 +201,7 @@
   {
     "id": "research-synthesis-marker-timing",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -247,7 +247,7 @@
   {
     "id": "premature-marker-refusal",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "marker.knowledge-landing",
       "card.phase": "claimed",
@@ -285,7 +285,7 @@
   {
     "id": "partial-multi-owner-blocking",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "marker.knowledge-landing",
       "card.phase": "claimed",
@@ -323,7 +323,7 @@
   {
     "id": "exact-history-descent",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -371,7 +371,7 @@
   {
     "id": "broad-history-refused",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -409,7 +409,7 @@
   {
     "id": "nonpass-repair",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -458,7 +458,7 @@
   {
     "id": "continue-progress-has-effects",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -505,7 +505,7 @@
   {
     "id": "scope-escape-checkpoint",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -550,7 +550,7 @@
   {
     "id": "park-checkpoint-and-release",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -596,7 +596,7 @@
   {
     "id": "mid-task-handoff-waits",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -640,7 +640,7 @@
   {
     "id": "review-dispatch-before-close",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -688,7 +688,7 @@
   {
     "id": "review-code-repair-lineage",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -738,7 +738,7 @@
   {
     "id": "review-contract-routes-split",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -784,7 +784,7 @@
   {
     "id": "third-review-objection-asks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -827,7 +827,7 @@
   {
     "id": "disposition-repair-reruns-review",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -877,7 +877,7 @@
   {
     "id": "spent-disposition-nonpass-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -921,7 +921,7 @@
   {
     "id": "remote-evidence-wait",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.remote-evidence",
       "card.phase": "claimed",
@@ -967,7 +967,7 @@
   {
     "id": "remote-evidence-fail-recovery",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.remote-evidence",
       "card.phase": "claimed",
@@ -1012,7 +1012,7 @@
   {
     "id": "remote-evidence-pending",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.remote-evidence",
       "card.phase": "claimed",
@@ -1056,7 +1056,7 @@
   {
     "id": "remote-evidence-unverified",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.remote-evidence",
       "card.phase": "claimed",
@@ -1100,7 +1100,7 @@
   {
     "id": "remote-pass-final-task",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.remote-evidence",
       "card.phase": "claimed",
@@ -1146,7 +1146,7 @@
   {
     "id": "staling-feedback-cannot-close",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -1191,7 +1191,7 @@
   {
     "id": "design-note-routes-writer",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -1236,7 +1236,7 @@
   {
     "id": "task-commit-must-integrate",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1282,7 +1282,7 @@
   {
     "id": "integration-blockade-waits",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1326,7 +1326,7 @@
   {
     "id": "handoff-before-boundary",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1369,7 +1369,7 @@
   {
     "id": "missing-nonhandoff-passenger-closes-on-late-anchor",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1414,7 +1414,7 @@
   {
     "id": "missing-carry-closes-on-late-carry",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1460,7 +1460,7 @@
   {
     "id": "late-compatible-feedback-keeps-pending-owner-path",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1486,19 +1486,19 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
       "feedback.pendingSetStatus": "complete",
       "feedback.eligibleSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -1522,7 +1522,7 @@
   {
     "id": "late-unknown-feedback-needs-judgment",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1560,7 +1560,7 @@
   {
     "id": "post-title-review-repair-commit-is-restricted",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1599,7 +1599,7 @@
   {
     "id": "post-title-review-dispatch-remains-reachable",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1643,7 +1643,7 @@
   {
     "id": "remote-finalizing-with-review-absent-stays-pending",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1684,7 +1684,7 @@
   {
     "id": "late-current-source-marker-preempts-boundary-recovery",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "marker.knowledge-landing",
       "card.phase": "claimed",
@@ -1720,7 +1720,7 @@
   {
     "id": "missing-boundary-with-waived-review-closes-on-late-anchor",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1762,7 +1762,7 @@
   {
     "id": "unrenamed-wip-cannot-complete",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1808,7 +1808,7 @@
   {
     "id": "ready-boundary-unknown-feedback-needs-judgment",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1846,7 +1846,7 @@
   {
     "id": "compatible-feedback-routes-semantic-owner",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -1872,19 +1872,19 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
       "feedback.pendingSetStatus": "complete",
       "feedback.eligibleSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -1908,7 +1908,7 @@
   {
     "id": "no-tiny-branch-work-not-entered",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "other",
       "card.phase": "ready",
@@ -1946,7 +1946,7 @@
   {
     "id": "observed-closed-card-is-done",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "other",
       "card.phase": "done",
@@ -1983,7 +1983,7 @@
   {
     "id": "invalid-card-routes-split",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "invalid",
@@ -2021,7 +2021,7 @@
   {
     "id": "missing-bounded-basis-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -2059,7 +2059,7 @@
   {
     "id": "malformed-progress-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -2097,7 +2097,7 @@
   {
     "id": "ready-card-claim-is-effectful",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "ready.ready",
       "card.phase": "ready",
@@ -2141,7 +2141,7 @@
   {
     "id": "research-evidence-stays-in-card",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -2185,7 +2185,7 @@
   {
     "id": "remote-compatible-carry-finalization",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.remote-evidence",
       "card.phase": "claimed",
@@ -2211,19 +2211,19 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
       "feedback.pendingSetStatus": "complete",
       "feedback.eligibleSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -2250,7 +2250,7 @@
   {
     "id": "remote-compatible-finalization",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.remote-evidence",
       "card.phase": "claimed",
@@ -2276,19 +2276,19 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
       "feedback.pendingSetStatus": "complete",
       "feedback.eligibleSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -2314,7 +2314,7 @@
   {
     "id": "remote-plain-finalization",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.remote-evidence",
       "card.phase": "claimed",
@@ -2359,7 +2359,7 @@
   {
     "id": "compatible-feedback-adds-carry",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -2385,19 +2385,19 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
       "feedback.pendingSetStatus": "complete",
       "feedback.eligibleSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -2423,7 +2423,7 @@
   {
     "id": "compatible-feedback-finalization",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -2449,19 +2449,19 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
       "feedback.pendingSetStatus": "complete",
       "feedback.eligibleSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -2486,7 +2486,7 @@
   {
     "id": "plain-final-task-commit",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -2531,7 +2531,7 @@
   {
     "id": "remote-finalizing-continues-to-integration",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -2573,7 +2573,7 @@
   {
     "id": "boundary-pending-waits",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -2617,7 +2617,7 @@
   {
     "id": "compatible-feedback-established-produce-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "research.checkpoint": "not-applicable",
       "knowledge.marker": "none",
@@ -2626,7 +2626,7 @@
           "identity": "sealed-a",
           "state": "consumed",
           "entry": {
-            "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+            "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
             "id": "A"
           }
         }
@@ -2638,15 +2638,15 @@
         "bytes": "[]",
         "count": 0,
         "source": "",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 0,
         "uniqueCount": 0
       },
       "feedback.eligibleSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -2662,7 +2662,7 @@
   {
     "id": "compatible-feedback-established-nonempty-eligible-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "research.checkpoint": "not-applicable",
       "knowledge.marker": "none",
@@ -2671,7 +2671,7 @@
           "identity": "sealed-a",
           "state": "consumed",
           "entry": {
-            "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+            "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
             "id": "A"
           }
         }
@@ -2683,15 +2683,15 @@
         "bytes": "[\"ignored-established-pending\"]",
         "count": 1,
         "source": "",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
       "feedback.eligibleSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -2707,7 +2707,7 @@
   {
     "id": "compatible-feedback-first-set-partial-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "research.checkpoint": "not-applicable",
       "knowledge.marker": "none",
@@ -2716,18 +2716,18 @@
     "judged": {
       "feedback.action": "compatible",
       "feedback.pendingSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"B\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"B\"}]",
         "count": 2,
-        "source": "devflow/tree/01-fou…629 tokens truncated…on/01.1-fixture.wip-jmp.md",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-fou…629 tokens truncated…on/01.1-fixture.wip-jmp.md",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 2
       },
       "feedback.eligibleSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -2743,7 +2743,7 @@
   {
     "id": "compatible-feedback-first-set-reordered-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "research.checkpoint": "not-applicable",
       "knowledge.marker": "none",
@@ -2752,18 +2752,18 @@
     "judged": {
       "feedback.action": "compatible",
       "feedback.pendingSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"B\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"B\"}]",
         "count": 2,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 2
       },
       "feedback.eligibleSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"B\"},{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"B\"},{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
         "count": 2,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 2
       },
@@ -2779,7 +2779,7 @@
   {
     "id": "compatible-feedback-first-set-mixed-source-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "research.checkpoint": "not-applicable",
       "knowledge.marker": "none",
@@ -2788,18 +2788,18 @@
     "judged": {
       "feedback.action": "compatible",
       "feedback.pendingSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@2222222222222222222222222222222222222222\",\"id\":\"B\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@2222222222222222222222222222222222222222\",\"id\":\"B\"}]",
         "count": 2,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 2,
         "uniqueCount": 2
       },
       "feedback.eligibleSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@2222222222222222222222222222222222222222\",\"id\":\"B\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@2222222222222222222222222222222222222222\",\"id\":\"B\"}]",
         "count": 2,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 2,
         "uniqueCount": 2
       },
@@ -2815,7 +2815,7 @@
   {
     "id": "compatible-feedback-first-set-foreign-source-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "research.checkpoint": "not-applicable",
       "knowledge.marker": "none",
@@ -2824,18 +2824,18 @@
     "judged": {
       "feedback.action": "compatible",
       "feedback.pendingSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.2-other.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.2-other.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.2-other.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.2-other.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.2-other.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.2-other.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
       "feedback.eligibleSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.2-other.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.2-other.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.2-other.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.2-other.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.2-other.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.2-other.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -2851,7 +2851,7 @@
   {
     "id": "compatible-feedback-first-set-duplicate-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "research.checkpoint": "not-applicable",
       "knowledge.marker": "none",
@@ -2860,18 +2860,18 @@
     "judged": {
       "feedback.action": "compatible",
       "feedback.pendingSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
         "count": 2,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
       "feedback.eligibleSet": {
-        "bytes": "[{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
+        "bytes": "[{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"},{\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"id\":\"A\"}]",
         "count": 2,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -2887,7 +2887,7 @@
   {
     "id": "compatible-feedback-first-set-empty-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "research.checkpoint": "not-applicable",
       "knowledge.marker": "none",
@@ -2899,7 +2899,7 @@
         "bytes": "[]",
         "count": 0,
         "source": "",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 0,
         "uniqueCount": 0
       },
@@ -2907,7 +2907,7 @@
         "bytes": "[]",
         "count": 0,
         "source": "",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 0,
         "uniqueCount": 0
       },
@@ -2923,7 +2923,7 @@
   {
     "id": "compatible-feedback-invalid-lifecycle-collector-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "research.checkpoint": "not-applicable",
       "knowledge.marker": "none",
@@ -2935,7 +2935,7 @@
         "bytes": "[]",
         "count": 0,
         "source": "",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 0,
         "uniqueCount": 0
       },
@@ -2943,7 +2943,7 @@
         "bytes": "[]",
         "count": 0,
         "source": "",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 0,
         "uniqueCount": 0
       },
@@ -2959,7 +2959,7 @@
   {
     "id": "compatible-feedback-malformed-set-blocks",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -2985,19 +2985,19 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
       "feedback.pendingSetStatus": "invalid",
       "feedback.eligibleSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -3014,7 +3014,7 @@
   {
     "id": "compatible-feedback-current-card-routes-before-closure",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "marker.compatible-feedback",
       "card.phase": "claimed",
@@ -3033,13 +3033,13 @@
       "feedback.marker": "current-source",
       "feedback.lifecycles": [
         {
-          "identity": "{\"owner\":\"devflow/project/arch.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/arch.md#Compatible boundary\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}",
+          "identity": "{\"owner\":\".devflow/project/arch.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/arch.md#Compatible boundary\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}",
           "state": "consumed",
           "entry": {
-            "owner": "devflow/project/arch.md",
-            "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+            "owner": ".devflow/project/arch.md",
+            "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
             "coordinates": {
-              "target": "devflow/project/arch.md#Compatible boundary",
+              "target": ".devflow/project/arch.md#Compatible boundary",
               "background": "review observed reusable compatible context",
               "why": "evidence explains the durable choice",
               "conclusion": "retain the compatible behavior",
@@ -3048,13 +3048,13 @@
           }
         },
         {
-          "identity": "{\"owner\":\"devflow/project/design.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/design.md#Compatible boundary\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}",
+          "identity": "{\"owner\":\".devflow/project/design.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/design.md#Compatible boundary\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}",
           "state": "current",
           "entry": {
-            "owner": "devflow/project/design.md",
-            "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+            "owner": ".devflow/project/design.md",
+            "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
             "coordinates": {
-              "target": "devflow/project/design.md#Compatible boundary",
+              "target": ".devflow/project/design.md#Compatible boundary",
               "background": "review observed reusable compatible context",
               "why": "evidence explains the durable choice",
               "conclusion": "retain the compatible behavior",
@@ -3071,10 +3071,10 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/arch.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/arch.md#Compatible boundary\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}},{\"owner\":\"devflow/project/design.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/design.md#Compatible boundary\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/arch.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/arch.md#Compatible boundary\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}},{\"owner\":\".devflow/project/design.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/design.md#Compatible boundary\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 2,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 2
       },
@@ -3083,7 +3083,7 @@
         "bytes": "[]",
         "count": 0,
         "source": "",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 0,
         "uniqueCount": 0
       },
@@ -3100,7 +3100,7 @@
   {
     "id": "compatible-feedback-other-card-does-not-hijack",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "marker.compatible-feedback",
       "card.phase": "claimed",
@@ -3145,7 +3145,7 @@
   {
     "id": "compatible-feedback-all-consumed-closes-without-marker",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -3164,13 +3164,13 @@
       "feedback.marker": "none",
       "feedback.lifecycles": [
         {
-          "identity": "{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}",
+          "identity": "{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}",
           "state": "consumed",
           "entry": {
-            "owner": "devflow/project/product.md",
-            "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+            "owner": ".devflow/project/product.md",
+            "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
             "coordinates": {
-              "target": "devflow/project/product.md#Approach",
+              "target": ".devflow/project/product.md#Approach",
               "background": "review observed reusable compatible context",
               "why": "evidence explains the durable choice",
               "conclusion": "retain the compatible behavior",
@@ -3187,10 +3187,10 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -3199,7 +3199,7 @@
         "bytes": "[]",
         "count": 0,
         "source": "",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 0,
         "uniqueCount": 0
       },
@@ -3223,7 +3223,7 @@
   {
     "id": "compatible-feedback-all-consumed-late-carry-closes",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "transition.finish-boundary",
       "card.phase": "claimed",
@@ -3242,13 +3242,13 @@
       "feedback.marker": "none",
       "feedback.lifecycles": [
         {
-          "identity": "{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}",
+          "identity": "{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}",
           "state": "consumed",
           "entry": {
-            "owner": "devflow/project/product.md",
-            "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+            "owner": ".devflow/project/product.md",
+            "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
             "coordinates": {
-              "target": "devflow/project/product.md#Approach",
+              "target": ".devflow/project/product.md#Approach",
               "background": "review observed reusable compatible context",
               "why": "evidence explains the durable choice",
               "conclusion": "retain the compatible behavior",
@@ -3265,10 +3265,10 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },
@@ -3277,7 +3277,7 @@
         "bytes": "[]",
         "count": 0,
         "source": "",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 0,
         "uniqueCount": 0
       },
@@ -3302,7 +3302,7 @@
   {
     "id": "compatible-feedback-consumed-owner-rejects-coordinate-paraphrase",
     "s": {
-      "card.target": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+      "card.target": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
       "state.kernel": "available",
       "state.route": "claim.mine",
       "card.phase": "claimed",
@@ -3321,13 +3321,13 @@
       "feedback.marker": "none",
       "feedback.lifecycles": [
         {
-          "identity": "{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}",
+          "identity": "{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}}",
           "state": "consumed",
           "entry": {
-            "owner": "devflow/project/product.md",
-            "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+            "owner": ".devflow/project/product.md",
+            "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
             "coordinates": {
-              "target": "devflow/project/product.md#Approach",
+              "target": ".devflow/project/product.md#Approach",
               "background": "review observed reusable compatible context",
               "why": "evidence explains the durable choice",
               "conclusion": "retain the compatible behavior",
@@ -3344,19 +3344,19 @@
       "history.basis": "none",
       "knowledge.action": "none",
       "feedback.pendingSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}},{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Compatible boundary revised\",\"background\":\"review observed reusable compatible context revised\",\"why\":\"evidence explains the durable choice revised\",\"conclusion\":\"retain the compatible behavior revised\",\"implication\":\"future work reuses this boundary revised\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Approach\",\"background\":\"review observed reusable compatible context\",\"why\":\"evidence explains the durable choice\",\"conclusion\":\"retain the compatible behavior\",\"implication\":\"future work reuses this boundary\"}},{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Compatible boundary revised\",\"background\":\"review observed reusable compatible context revised\",\"why\":\"evidence explains the durable choice revised\",\"conclusion\":\"retain the compatible behavior revised\",\"implication\":\"future work reuses this boundary revised\"}}]",
         "count": 2,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 2
       },
       "feedback.pendingSetStatus": "complete",
       "feedback.eligibleSet": {
-        "bytes": "[{\"owner\":\"devflow/project/product.md\",\"source\":\"devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\"devflow/project/product.md#Compatible boundary revised\",\"background\":\"review observed reusable compatible context revised\",\"why\":\"evidence explains the durable choice revised\",\"conclusion\":\"retain the compatible behavior revised\",\"implication\":\"future work reuses this boundary revised\"}}]",
+        "bytes": "[{\"owner\":\".devflow/project/product.md\",\"source\":\".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111\",\"coordinates\":{\"target\":\".devflow/project/product.md#Compatible boundary revised\",\"background\":\"review observed reusable compatible context revised\",\"why\":\"evidence explains the durable choice revised\",\"conclusion\":\"retain the compatible behavior revised\",\"implication\":\"future work reuses this boundary revised\"}}]",
         "count": 1,
-        "source": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
-        "sourceCard": "devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
+        "source": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md@1111111111111111111111111111111111111111",
+        "sourceCard": ".devflow/tree/01-foundation/01.1-fixture.wip-jmp.md",
         "sourceCount": 1,
         "uniqueCount": 1
       },

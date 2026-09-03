@@ -3,7 +3,7 @@
 ## The 7 Prompt Principles
 
 1. **One concept, one word.** No synonyms. Register project-specific terms in
-   `devflow/project/glossary.md` and use the same word everywhere, to the end.
+   `.devflow/project/glossary.md` and use the same word everywhere, to the end.
 2. **Destination over instruction.** Write "what must become true," not "what to do."
 3. **Rich direction, short prohibitions.** Give context, intent, and the "why" generously.
    Keep the harness (prohibitions) to 3 lines or fewer.

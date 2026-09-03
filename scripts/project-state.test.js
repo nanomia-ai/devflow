@@ -243,21 +243,21 @@ function makeRepo(t, options = {}) {
   git(root, "config", "core.autocrlf", "false");
   git(root, "config", "user.name", "Jmp");
   git(root, "config", "user.email", "jmp@example.test");
-  if (options.product !== false) write(root, "devflow/project/product.md", product(options.capabilities ?? []));
-  if (options.arch !== false) write(root, "devflow/project/arch.md", arch(options));
-  if (options.glossary !== false) write(root, "devflow/project/glossary.md", options.glossaryText ?? "# Glossary\n\nNone.\n");
-  if (options.codeStyle !== false) write(root, "devflow/project/code-style.md", "# Code Style\n\nNone.\n");
-  write(root, "devflow/users/jmp/owner.md", "id: jmp\ngit: Jmp, jmp@example.test\n");
-  write(root, "devflow/users/jmp/HANDOFF.md", "");
-  write(root, "devflow/journal.md", "");
-  if (options.tree !== false) fs.mkdirSync(path.join(root, "devflow", "tree"), { recursive: true });
+  if (options.product !== false) write(root, ".devflow/project/product.md", product(options.capabilities ?? []));
+  if (options.arch !== false) write(root, ".devflow/project/arch.md", arch(options));
+  if (options.glossary !== false) write(root, ".devflow/project/glossary.md", options.glossaryText ?? "# Glossary\n\nNone.\n");
+  if (options.codeStyle !== false) write(root, ".devflow/project/code-style.md", "# Code Style\n\nNone.\n");
+  write(root, ".devflow/users/jmp/owner.md", "id: jmp\ngit: Jmp, jmp@example.test\n");
+  write(root, ".devflow/users/jmp/HANDOFF.md", "");
+  write(root, ".devflow/journal.md", "");
+  if (options.tree !== false) fs.mkdirSync(path.join(root, ".devflow", "tree"), { recursive: true });
   write(root, "seed.txt", "seed\n");
   commit(root, "jmp layer 0");
-  const designHead = git(root, "log", "-1", "--format=%H", "--", "devflow/project/product.md", "devflow/project/arch.md", "devflow/project/glossary.md");
+  const designHead = git(root, "log", "-1", "--format=%H", "--", ".devflow/project/product.md", ".devflow/project/arch.md", ".devflow/project/glossary.md");
   if (options.baseline !== false && options.product !== false) {
-    write(root, "devflow/project/capabilities/01-foundation.md", baseline(1, "foundation", designHead));
+    write(root, ".devflow/project/capabilities/01-foundation.md", baseline(1, "foundation", designHead));
     for (let index = 0; index < (options.capabilities ?? []).length; index += 1) {
-      write(root, `devflow/project/capabilities/${String(index + 2).padStart(2, "0")}-${options.capabilities[index]}.md`, baseline(index + 2, options.capabilities[index], designHead));
+      write(root, `.devflow/project/capabilities/${String(index + 2).padStart(2, "0")}-${options.capabilities[index]}.md`, baseline(index + 2, options.capabilities[index], designHead));
     }
     commit(root, "jmp arch — capabilities");
   }
@@ -324,14 +324,14 @@ function assertReadOnly(root, before) {
 }
 
 function writeClaim(root, { number = "02.1", status = "wip-jmp", depends = "none", approval, review, progress, commitSubject = "fixture claim" } = {}) {
-  const relative = `devflow/tree/02-capability/${number}-fixture.${status}.md`;
+  const relative = `.devflow/tree/02-capability/${number}-fixture.${status}.md`;
   write(root, relative, cardText(number, { depends, approval, review, progress }));
   commit(root, commitSubject);
   return relative;
 }
 
 function writePending(root, { number = "02.1", depends = "none", approval, review, omit = [] } = {}) {
-  const relative = `devflow/tree/02-capability/${number}-fixture.md`;
+  const relative = `.devflow/tree/02-capability/${number}-fixture.md`;
   write(root, relative, cardText(number, { depends, approval, review, omit }));
   commit(root, "jmp split — fixture");
   return relative;
@@ -340,7 +340,7 @@ function writePending(root, { number = "02.1", depends = "none", approval, revie
 function prepareFinalizingMove(t, options = {}) {
   const root = makeRepo(t);
   const check = "https://example.test/check";
-  const claimed = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const claimed = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
   const waiting = `2026-08-20T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: unrun; detail-json: ""`;
   write(root, claimed, cardText("02.1", { progress: waiting }));
   if (options.checkpointTouchesCard === false) {
@@ -352,7 +352,7 @@ function prepareFinalizingMove(t, options = {}) {
   const carry = "2026-08-20T00:01:00Z carry: remote evidence passed";
   write(root, claimed, cardText("02.1", { progress: `${passed}\n${carry}` }));
   const journalCheck = options.journalCheck ?? check;
-  write(root, "devflow/journal.md", `2026-08-20T00:02:00Z evidence-finalizing: card-json: ${JSON.stringify(claimed)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify(journalCheck)}\n`);
+  write(root, ".devflow/journal.md", `2026-08-20T00:02:00Z evidence-finalizing: card-json: ${JSON.stringify(claimed)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify(journalCheck)}\n`);
   commit(root, "jmp boundary — evidence finalizing 02.1");
   const done = claimed.replace(".wip-jmp.md", ".done.md");
   git(root, "mv", claimed, done);
@@ -361,11 +361,11 @@ function prepareFinalizingMove(t, options = {}) {
 }
 
 function currentRevisions(root) {
-  const productRevision = git(root, "hash-object", "devflow/project/product.md");
-  const present = ["devflow/project/arch.md", "devflow/project/code-style.md", "devflow/project/glossary.md"];
+  const productRevision = git(root, "hash-object", ".devflow/project/product.md");
+  const present = [".devflow/project/arch.md", ".devflow/project/code-style.md", ".devflow/project/glossary.md"];
   const tree = execFileSync("git", ["ls-tree", "-r", "-z", "--full-tree", "HEAD", "--", ...present], { cwd: root });
   const verificationRevision = execFileSync("git", ["hash-object", "--stdin"], { cwd: root, input: tree, encoding: "utf8" }).trim();
-  const codeRevision = git(root, "log", "-1", "--format=%H", "--", ".", ":(exclude)devflow/**") || "none";
+  const codeRevision = git(root, "log", "-1", "--format=%H", "--", ".", ":(exclude).devflow/**") || "none";
   return { productRevision, verificationRevision, codeRevision };
 }
 
@@ -376,7 +376,7 @@ function pathSetRevision(root, paths) {
 
 function rootVerify(root, verdict, { events = true, executed = null } = {}) {
   const revisions = currentRevisions(root);
-  write(root, "devflow/tree/verify.md", `# Verification · product
+  write(root, ".devflow/tree/verify.md", `# Verification · product
 Product revision: ${revisions.productRevision}
 Verification revision: ${revisions.verificationRevision}
 Code revision: ${revisions.codeRevision}
@@ -426,8 +426,8 @@ async function registry() {
 
 function completedRepo(t, verdict = null) {
   const root = makeRepo(t, { brownfield: "no" });
-  fs.mkdirSync(path.join(root, "devflow", "tree", "01-foundation.done"), { recursive: true });
-  write(root, "devflow/tree/01-foundation.done/01.1-fixture.done.md", cardText("01.1"));
+  fs.mkdirSync(path.join(root, ".devflow", "tree", "01-foundation.done"), { recursive: true });
+  write(root, ".devflow/tree/01-foundation.done/01.1-fixture.done.md", cardText("01.1"));
   commit(root, "jmp boundary — foundation");
   if (verdict) rootVerify(root, verdict, verdict === "pass" ? { executed: "fixture" } : undefined);
   return root;
@@ -436,7 +436,7 @@ function completedRepo(t, verdict = null) {
 function mappingScene(t, number) {
   if (number === 14) {
     const glossaryRoot = makeRepo(t, { capabilities: ["records", "review"] });
-    write(glossaryRoot, "devflow/journal.md", `${glossaryTermLine()}\n`);
+    write(glossaryRoot, ".devflow/journal.md", `${glossaryTermLine()}\n`);
     commit(glossaryRoot, "jmp 02.1 wip: glossary term");
     return glossaryRoot;
   }
@@ -446,11 +446,11 @@ function mappingScene(t, number) {
   if (sceneNumber === 52) return makeRepo(t, { brownfield: "no", tree: false });
   let root = makeRepo(t);
   const journal = (line, subject = "jmp boundary — journal") => {
-    write(root, "devflow/journal.md", `${line}\n`);
+    write(root, ".devflow/journal.md", `${line}\n`);
     commit(root, subject);
   };
   const verify = (text, subject = "jmp boundary — verify fixture") => {
-    write(root, "devflow/tree/02-capability/verify.md", text);
+    write(root, ".devflow/tree/02-capability/verify.md", text);
     commit(root, subject);
   };
   switch (sceneNumber) {
@@ -466,20 +466,20 @@ function mappingScene(t, number) {
     }
     case 2: {
       const pending = "# Verification\nFailure history:\n- source id: 1; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n";
-      write(root, "devflow/tree/02-capability/verify.md", pending);
+      write(root, ".devflow/tree/02-capability/verify.md", pending);
       commit(root, "jmp boundary — verify pending");
       const base = git(root, "rev-parse", "HEAD");
-      write(root, "devflow/tree/02-capability/verify.md", pending.replace("routing: pending", `routing prepared: ${JSON.stringify({ base, result: "routing: fix cards 02.1", operations: [{ op: "write", path: "devflow/tree/02-capability/02.1-fix.md", content: "# fix\\n" }] })}`));
+      write(root, ".devflow/tree/02-capability/verify.md", pending.replace("routing: pending", `routing prepared: ${JSON.stringify({ base, result: "routing: fix cards 02.1", operations: [{ op: "write", path: ".devflow/tree/02-capability/02.1-fix.md", content: "# fix\\n" }] })}`));
       break;
     }
     case 3:
-      write(root, "devflow/tree/02-capability/verify.md", "# Verification\nVerdict: fail\nFailure history:\nNone.\n## Audit\n- not run\n## Retrospective\n- not run\n");
+      write(root, ".devflow/tree/02-capability/verify.md", "# Verification\nVerdict: fail\nFailure history:\nNone.\n## Audit\n- not run\n## Retrospective\n- not run\n");
       break;
     case 4:
       verify("# Verification\nFailure history:\n- timestamp: 2026-08-20T00:00:00Z; failure: fixture; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n");
       break;
     case 5:
-      journal(`2026-08-20T00:00:00Z layer opening: parent: devflow/tree; children: 02+03+04+05; source-json: ${JSON.stringify("core:devflow/project/product.md#Capabilities")}`);
+      journal(`2026-08-20T00:00:00Z layer opening: parent: .devflow/tree; children: 02+03+04+05; source-json: ${JSON.stringify("core:.devflow/project/product.md#Capabilities")}`);
       break;
     case 6: {
       const r = currentRevisions(root);
@@ -518,25 +518,25 @@ function mappingScene(t, number) {
       break;
     case 14: {
       const head = git(root, "rev-parse", "HEAD");
-      journal(`2026-08-20T00:00:00Z capability closing: folder: devflow/tree/02-capability; head: ${head}; product: p; verification: v; capability: c`);
+      journal(`2026-08-20T00:00:00Z capability closing: folder: .devflow/tree/02-capability; head: ${head}; product: p; verification: v; capability: c`);
       break;
     }
     case 15:
-      journal("2026-08-20T00:00:00Z re-split pending: folder: devflow/tree/02-capability; stale: 02.1; source: devflow/project/product.md#Capabilities");
+      journal("2026-08-20T00:00:00Z re-split pending: folder: .devflow/tree/02-capability; stale: 02.1; source: .devflow/project/product.md#Capabilities");
       break;
     case 16:
-      write(root, "devflow/project/arch.md", arch({ includeBrownfield: false }));
+      write(root, ".devflow/project/arch.md", arch({ includeBrownfield: false }));
       commit(root, "jmp arch — Brownfield missing");
       break;
     case 17:
-      write(root, "devflow/project/arch.md", arch({ includeIntegration: false }));
+      write(root, ".devflow/project/arch.md", arch({ includeIntegration: false }));
       commit(root, "jmp arch — config missing");
       break;
     case 18:
       writeClaim(root, { status: "wip" });
       break;
     case 19:
-      fs.rmSync(path.join(root, "devflow", "project", "glossary.md"));
+      fs.rmSync(path.join(root, ".devflow", "project", "glossary.md"));
       commit(root, "jmp glossary missing");
       break;
     case 20:
@@ -546,11 +546,11 @@ function mappingScene(t, number) {
       writeClaim(root, { approval: "pending" });
       break;
     case 22:
-      write(root, "devflow/tree/02-capability/02.0-prereq.wip-other.md", cardText("02.0"));
-      write(root, "devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
-      write(root, "devflow/users/other/HANDOFF.md", "");
-      write(root, "devflow/users/other/digest.md", "none\n");
-      write(root, "devflow/tree/02-capability/02.1-fixture.wip-jmp.md", cardText("02.1", { depends: "02.0" }));
+      write(root, ".devflow/tree/02-capability/02.0-prereq.wip-other.md", cardText("02.0"));
+      write(root, ".devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
+      write(root, ".devflow/users/other/HANDOFF.md", "");
+      write(root, ".devflow/users/other/digest.md", "none\n");
+      write(root, ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md", cardText("02.1", { depends: "02.0" }));
       commit(root, "jmp claims");
       break;
     case 23:
@@ -561,16 +561,16 @@ function mappingScene(t, number) {
       writeClaim(root);
       break;
     case 25: {
-      write(root, "devflow/project/capabilities/01-foundation.md", legacyBaseline());
+      write(root, ".devflow/project/capabilities/01-foundation.md", legacyBaseline());
       commit(root, "jmp legacy baseline");
       break;
     }
     case 26:
-      fs.rmSync(path.join(root, "devflow", "project", "capabilities", "01-foundation.md"));
+      fs.rmSync(path.join(root, ".devflow", "project", "capabilities", "01-foundation.md"));
       commit(root, "jmp baseline missing");
       break;
     case 28: {
-      const relative = "devflow/project/capabilities/01-foundation.md";
+      const relative = ".devflow/project/capabilities/01-foundation.md";
       write(root, relative, read(root, relative).replace("## Verified state\n", ""));
       commit(root, "jmp baseline boundary anomaly");
       break;
@@ -585,14 +585,14 @@ function mappingScene(t, number) {
       rootVerify(root, "pass", { events: false, executed: "fixture execution observed" });
       break;
     case 32:
-      fs.mkdirSync(path.join(root, "devflow", "tree", "02-capability"), { recursive: true });
+      fs.mkdirSync(path.join(root, ".devflow", "tree", "02-capability"), { recursive: true });
       break;
     case 33:
-      write(root, "devflow/tree/02-capability/02.1-group/02.1.1-child.done.md", cardText("02.1.1"));
+      write(root, ".devflow/tree/02-capability/02.1-group/02.1.1-child.done.md", cardText("02.1.1"));
       commit(root, "jmp child done");
       break;
     case 34:
-      write(root, "devflow/tree/02-capability/02.1-child.done.md", cardText("02.1"));
+      write(root, ".devflow/tree/02-capability/02.1-child.done.md", cardText("02.1"));
       commit(root, "jmp child done");
       break;
     case 35:
@@ -614,28 +614,28 @@ function mappingScene(t, number) {
       writePending(root);
       break;
     case 41:
-      write(root, "devflow/tree/02-capability.md", "capability\n");
+      write(root, ".devflow/tree/02-capability.md", "capability\n");
       commit(root, "jmp waiting capability");
       break;
     case 42:
       verify("# Verification\nFailure history:\nNone.\n## Audit\n- pending · source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key: product\n## Retrospective\n- not run\n");
-      write(root, "devflow/tree/02-capability/02.1-placeholder.stale.md", cardText("02.1"));
+      write(root, ".devflow/tree/02-capability/02.1-placeholder.stale.md", cardText("02.1"));
       commit(root, "jmp stale placeholder");
       write(root, "outside.txt", "uncommitted\n");
       break;
     case 43:
-      write(root, "devflow/tree/02-capability/02.0-prereq.wip-other.md", cardText("02.0"));
-      write(root, "devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
-      write(root, "devflow/users/other/HANDOFF.md", "");
-      write(root, "devflow/users/other/digest.md", "none\n");
-      write(root, "devflow/tree/02-capability/02.1-fixture.md", cardText("02.1", { depends: "02.0" }));
+      write(root, ".devflow/tree/02-capability/02.0-prereq.wip-other.md", cardText("02.0"));
+      write(root, ".devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
+      write(root, ".devflow/users/other/HANDOFF.md", "");
+      write(root, ".devflow/users/other/digest.md", "none\n");
+      write(root, ".devflow/tree/02-capability/02.1-fixture.md", cardText("02.1", { depends: "02.0" }));
       commit(root, "jmp blocked dependency");
       break;
     case 44:
-      write(root, "devflow/tree/02-capability/02.1-fixture.wip-other.md", cardText("02.1"));
-      write(root, "devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
-      write(root, "devflow/users/other/HANDOFF.md", "");
-      write(root, "devflow/users/other/digest.md", "none\n");
+      write(root, ".devflow/tree/02-capability/02.1-fixture.wip-other.md", cardText("02.1"));
+      write(root, ".devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
+      write(root, ".devflow/users/other/HANDOFF.md", "");
+      write(root, ".devflow/users/other/digest.md", "none\n");
       commit(root, "other claim");
       break;
     case 45:
@@ -652,7 +652,7 @@ function mappingScene(t, number) {
       break;
     case 53: {
       const marker = git(root, "rev-parse", "HEAD");
-      write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+      write(root, ".devflow/users/jmp/digest.md", `${marker}\n`);
       commit(root, "jmp boundary — digest marker");
       break;
     }
@@ -672,13 +672,13 @@ test("E channel-unavailable results wait for an explicit verification request", 
   const reason = "unverified: channel unavailable — browser attach; timeout=30s";
 
   const capabilityRoot = mappingScene(t, 34);
-  capabilityVerify(capabilityRoot, "devflow/tree/02-capability/verify.md", {
+  capabilityVerify(capabilityRoot, ".devflow/tree/02-capability/verify.md", {
     verdict: "unverified",
     executed: reason,
   });
   const capability = run(capabilityRoot); ok(capability);
   assert.equal(hasKind(capability.stdout, "layer", "children-done"), false, capability.stdout);
-  assertFragment(capability.stdout, "blocked: kind=channel", "path=devflow/tree/02-capability/verify.md");
+  assertFragment(capability.stdout, "blocked: kind=channel", "path=.devflow/tree/02-capability/verify.md");
   assertFragment(capability.stdout, "blocked: kind=channel", "target=2");
   assertFragment(capability.stdout, "blocked: kind=channel", "command=\"browser attach\"");
   assertFragment(capability.stdout, "blocked: kind=channel", "timeout=30s");
@@ -689,13 +689,13 @@ test("E channel-unavailable results wait for an explicit verification request", 
   const product = run(productRoot); ok(product);
   assert.equal(hasKind(product.stdout, "product", "unverified"), false, product.stdout);
   assert.equal(hasKind(product.stdout, "event", "new"), false, product.stdout);
-  assertFragment(product.stdout, "blocked: kind=channel", "path=devflow/tree/verify.md");
+  assertFragment(product.stdout, "blocked: kind=channel", "path=.devflow/tree/verify.md");
   assertFragment(product.stdout, "blocked: kind=channel", "target=product");
   assertFragment(product.stdout, "blocked: kind=channel", "command=\"browser attach\"");
   assertFragment(product.stdout, "blocked: kind=channel", "timeout=30s");
   assert.equal(nextOf(product.stdout), "blocked.channel", product.stdout);
 
-  write(productRoot, "devflow/journal.md", "2026-08-23T00:00:00Z product verification requested\n");
+  write(productRoot, ".devflow/journal.md", "2026-08-23T00:00:00Z product verification requested\n");
   commit(productRoot, "jmp boundary — product verification requested");
   const requested = run(productRoot); ok(requested);
   assert.equal(hasKind(requested.stdout, "event", "product-requested"), true, requested.stdout);
@@ -706,7 +706,7 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
   const timestamp = "2026-08-21T00:00:00Z";
   const root = makeRepo(t, { capabilities: ["capability"] });
   rootVerify(root, "pass");
-  capabilityVerify(root, "devflow/tree/02-capability/verify.md");
+  capabilityVerify(root, ".devflow/tree/02-capability/verify.md");
   const check = "https://example.test/check";
   const card = writeClaim(root, {
     commitSubject: "jmp 02.1 wip: evidence-wait",
@@ -716,13 +716,13 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
   const revisions = currentRevisions(root);
   const valid = [
     { name: "layer opening (root)", head: "layer opening:", batch: "root",
-      line: `${timestamp} layer opening: parent: devflow/tree; children: 02+03+04+05; source-json: ${JSON.stringify("core:devflow/project/product.md#Capabilities")}`,
-      zone: "transition", kind: "layer-opening", fragment: "parent=devflow/tree children=02+03+04+05" },
+      line: `${timestamp} layer opening: parent: .devflow/tree; children: 02+03+04+05; source-json: ${JSON.stringify("core:.devflow/project/product.md#Capabilities")}`,
+      zone: "transition", kind: "layer-opening", fragment: "parent=.devflow/tree children=02+03+04+05" },
     { name: "layer opening (nested)", head: "layer opening:", batch: "base",
-      line: `${timestamp} layer opening: parent: devflow/tree/01-foundation; children: 01.1+01.2; source-json: ${JSON.stringify("core:devflow/project/arch.md#Components")}`,
-      zone: "transition", kind: "layer-opening", fragment: "parent=devflow/tree/01-foundation children=01.1+01.2" },
+      line: `${timestamp} layer opening: parent: .devflow/tree/01-foundation; children: 01.1+01.2; source-json: ${JSON.stringify("core:.devflow/project/arch.md#Components")}`,
+      zone: "transition", kind: "layer-opening", fragment: "parent=.devflow/tree/01-foundation children=01.1+01.2" },
     { name: "re-split pending", head: "re-split pending:", batch: "base",
-      line: `${timestamp} re-split pending: folder: devflow/tree/02-capability; stale: 02.1; source: devflow/project/product.md#Capabilities`,
+      line: `${timestamp} re-split pending: folder: .devflow/tree/02-capability; stale: 02.1; source: .devflow/project/product.md#Capabilities`,
       zone: "marker", kind: "re-split", fragment: "stale=02.1" },
     { name: "maintenance routing pending", head: "maintenance routing pending:", batch: "base",
       line: `${timestamp} maintenance routing pending: request-json: ${JSON.stringify("rename the third column")}`,
@@ -740,8 +740,8 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
       line: `${timestamp} product verification result: trigger: requested; product: ${revisions.productRevision}; verification: ${revisions.verificationRevision}; code: ${revisions.codeRevision}; verdict: pass`,
       zone: "transition", kind: "product-result", fragment: "verdict=pass" },
     { name: "capability closing", head: "capability closing:", batch: "base",
-      line: `${timestamp} capability closing: folder: devflow/tree/02-capability; head: ${checkpoint}; product: ${revisions.productRevision}; verification: ${revisions.verificationRevision}; capability: ${checkpoint}`,
-      zone: "marker", kind: "capability-closure", fragment: "folder=devflow/tree/02-capability" },
+      line: `${timestamp} capability closing: folder: .devflow/tree/02-capability; head: ${checkpoint}; product: ${revisions.productRevision}; verification: ${revisions.verificationRevision}; capability: ${checkpoint}`,
+      zone: "marker", kind: "capability-closure", fragment: "folder=.devflow/tree/02-capability" },
     { name: "capability note", head: "capability note:", batch: "base",
       line: `${timestamp} capability note: capability: 02; note-json: ${JSON.stringify("the column names are display-only")}` },
     { name: "capability note (design)", head: "capability note:", batch: "base",
@@ -762,21 +762,21 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
       line: `${timestamp} evidence-finalizing: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify(check)}`,
       zone: "transition", kind: "remote-evidence", fragment: "state=evidence-finalizing" },
     { name: "knowledge landing pending", head: "knowledge landing pending:", batch: "base",
-      line: `${timestamp} knowledge landing pending: owner: devflow/project/capabilities/02-capability.md; writer: adopt; source-json: ${JSON.stringify(`${card}@${checkpoint}`)}`,
+      line: `${timestamp} knowledge landing pending: owner: .devflow/project/capabilities/02-capability.md; writer: adopt; source-json: ${JSON.stringify(`${card}@${checkpoint}`)}`,
       zone: "marker", kind: "knowledge-landing", fragment: `source=${card}@${checkpoint}` },
     { name: "compatible feedback pending", head: "compatible feedback pending:", batch: "base",
-      line: `${timestamp} compatible feedback pending: payload-json: ${JSON.stringify({ owner: "devflow/project/product.md", source: `${card}@${checkpoint}`, coordinates: { target: "devflow/project/product.md#Compatible boundary", background: "review observed reusable context", why: "evidence explains the durable choice", conclusion: "retain the compatible behavior", implication: "future work reuses this boundary" } })}`,
-      zone: "marker", kind: "compatible-feedback", fragment: "owner=devflow/project/product.md" },
+      line: `${timestamp} compatible feedback pending: payload-json: ${JSON.stringify({ owner: ".devflow/project/product.md", source: `${card}@${checkpoint}`, coordinates: { target: ".devflow/project/product.md#Compatible boundary", background: "review observed reusable context", why: "evidence explains the durable choice", conclusion: "retain the compatible behavior", implication: "future work reuses this boundary" } })}`,
+      zone: "marker", kind: "compatible-feedback", fragment: "owner=.devflow/project/product.md" },
   ];
   const invalid = [
-    { name: "layer opening", head: "layer opening:", line: `${timestamp} layer opening: parent: devflow/tree; children: 02+03+04+05` },
-    { name: "re-split pending", head: "re-split pending:", line: `${timestamp} re-split pending: folder: devflow/tree/02-capability; stale: 02; source: devflow/project/product.md#Capabilities` },
+    { name: "layer opening", head: "layer opening:", line: `${timestamp} layer opening: parent: .devflow/tree; children: 02+03+04+05` },
+    { name: "re-split pending", head: "re-split pending:", line: `${timestamp} re-split pending: folder: .devflow/tree/02-capability; stale: 02; source: .devflow/project/product.md#Capabilities` },
     { name: "maintenance routing pending", head: "maintenance routing pending:", line: `${timestamp} maintenance routing pending: request-json:` },
     { name: "product re-run pending", head: "product re-run pending:", line: `${timestamp} product re-run pending: statement-json:` },
     { name: "product verification requested", head: "product verification requested", line: `${timestamp} product verification requested: extra` },
     { name: "product verification running", head: "product verification running:", line: `${timestamp} product verification running: trigger: requested; product: p; verification: v` },
     { name: "product verification result", head: "product verification result:", line: `${timestamp} product verification result: trigger: requested; product: p; verification: v; code: c` },
-    { name: "capability closing", head: "capability closing:", line: `${timestamp} capability closing: folder: devflow/tree/02-capability; head: ${checkpoint}; product: p; verification: v` },
+    { name: "capability closing", head: "capability closing:", line: `${timestamp} capability closing: folder: .devflow/tree/02-capability; head: ${checkpoint}; product: p; verification: v` },
     { name: "capability note", head: "capability note:", line: `${timestamp} capability note: capability: 02` },
     { name: "capability note (design)", head: "capability note:", line: `${timestamp} capability note: capability: 02; note-json: ${JSON.stringify("a statement")}; card-json: ${JSON.stringify(card)}; code-json: ${JSON.stringify("src/export/contract.ts")}` },
     { name: "audit requested", head: "audit requested:", line: `${timestamp} audit requested: 02x` },
@@ -818,7 +818,7 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
     const batchRoot = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "devflow-gate-a-")));
     t.after(() => fs.rmSync(batchRoot, { recursive: true, force: true }));
     fs.cpSync(root, batchRoot, { recursive: true });
-    write(batchRoot, "devflow/journal.md", `${lines.join("\n")}\n`);
+    write(batchRoot, ".devflow/journal.md", `${lines.join("\n")}\n`);
     commit(batchRoot, subject);
     const before = snapshot(batchRoot);
     const result = await new Promise((resolve, reject) => {
@@ -897,7 +897,7 @@ for (let index = 0; index < ROUTE_MAP.length; index += 1) {
       assert.equal(nextOf(result.stdout), `${zone}.${kind}`, result.stdout);
       if (number === 5) {
         assertFragment(result.stdout, "integrity:", "blocking=0");
-        assertFragment(result.stdout, "transition: kind=layer-opening", "parent=devflow/tree children=02+03+04+05");
+        assertFragment(result.stdout, "transition: kind=layer-opening", "parent=.devflow/tree children=02+03+04+05");
       }
     }
     assertReadOnly(root, before);
@@ -961,23 +961,23 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
 
   await t.test("an untracked partial devflow path remains unmanaged", () => {
     const root = makePlainRepo(t);
-    write(root, "devflow/partial.txt", "partial\n");
+    write(root, ".devflow/partial.txt", "partial\n");
     assertSetup(root, "unmanaged");
   });
 
   await t.test("indexed devflow path remains no-product when absent from the worktree", () => {
     const root = makePlainRepo(t);
-    write(root, "devflow/partial.txt", "partial\n");
-    git(root, "add", "devflow/partial.txt");
-    fs.rmSync(path.join(root, "devflow"), { recursive: true, force: true });
+    write(root, ".devflow/partial.txt", "partial\n");
+    git(root, "add", ".devflow/partial.txt");
+    fs.rmSync(path.join(root, ".devflow"), { recursive: true, force: true });
     assertSetup(root, "no-product");
   });
 
   await t.test("deleted historical devflow path remains no-product", () => {
     const root = makePlainRepo(t);
-    write(root, "devflow/partial.txt", "partial\n");
+    write(root, ".devflow/partial.txt", "partial\n");
     commit(root, "jmp add devflow");
-    fs.rmSync(path.join(root, "devflow"), { recursive: true, force: true });
+    fs.rmSync(path.join(root, ".devflow"), { recursive: true, force: true });
     commit(root, "jmp remove devflow");
     assertSetup(root, "no-product");
   });
@@ -1008,7 +1008,7 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
   await t.test("linked worktree sees devflow history on another current ref", () => {
     const root = makePlainRepo(t);
     const seed = git(root, "rev-parse", "HEAD");
-    write(root, "devflow/partial.txt", "partial\n");
+    write(root, ".devflow/partial.txt", "partial\n");
     commit(root, "jmp add devflow on main");
     const linked = `${root}-linked`;
     t.after(() => fs.rmSync(linked, { recursive: true, force: true }));
@@ -1052,7 +1052,7 @@ test("T2 overlap open Git and my claim keeps both and routes Git first", (t) => 
 test("T2 overlap product rerun marker and my claim keeps both and routes marker first", (t) => {
   const root = makeRepo(t);
   const card = writeClaim(root, { commitSubject: "jmp 02.1 claim" });
-  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z product re-run pending: statement-json: ${JSON.stringify("identity is disproved")}\n`);
+  write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z product re-run pending: statement-json: ${JSON.stringify("identity is disproved")}\n`);
   commit(root, "jmp boundary — marker");
   const result = run(root);
   ok(result);
@@ -1072,13 +1072,13 @@ test("T2 overlap remote evidence and ordinary claim keeps both and routes transi
 
 test("T2 overlap preserves ineffective card A and ready card B exact predicates", (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/tree/02-capability/02.1-a.md", cardText("02.1", { approval: "invalid" }));
-  write(root, "devflow/tree/02-capability/02.2-b.md", cardText("02.2"));
+  write(root, ".devflow/tree/02-capability/02.1-a.md", cardText("02.1", { approval: "invalid" }));
+  write(root, ".devflow/tree/02-capability/02.2-b.md", cardText("02.2"));
   commit(root, "jmp split — two cards");
   const result = run(root);
   ok(result);
-  assertFragment(result.stdout, "ready: kind=approval-invalid", "file=devflow/tree/02-capability/02.1-a.md");
-  assertFragment(result.stdout, "ready: kind=ready", "file=devflow/tree/02-capability/02.2-b.md");
+  assertFragment(result.stdout, "ready: kind=approval-invalid", "file=.devflow/tree/02-capability/02.1-a.md");
+  assertFragment(result.stdout, "ready: kind=ready", "file=.devflow/tree/02-capability/02.2-b.md");
   assert.equal(nextOf(result.stdout), "ready.approval-invalid");
 });
 
@@ -1088,36 +1088,36 @@ function integrityFixture(t, item, bad) {
   const head = git(root, "rev-parse", "HEAD");
   switch (item) {
     case 1:
-      write(root, "devflow/tree/02-capability/02.1-fixture.wip-ghost.md", cardText("02.1")); commit(root, "ghost claim"); break;
+      write(root, ".devflow/tree/02-capability/02.1-fixture.wip-ghost.md", cardText("02.1")); commit(root, "ghost claim"); break;
     case 2:
-      write(root, "devflow/tree/02-a/02.1-first.md", cardText("02.1")); write(root, "devflow/tree/03-b/02.1-second.md", cardText("02.1")); commit(root, "duplicate card"); break;
+      write(root, ".devflow/tree/02-a/02.1-first.md", cardText("02.1")); write(root, ".devflow/tree/03-b/02.1-second.md", cardText("02.1")); commit(root, "duplicate card"); break;
     case 3:
-      write(root, "devflow/tree/02-capability.done/02.1-active.md", cardText("02.1")); commit(root, "active under done"); break;
+      write(root, ".devflow/tree/02-capability.done/02.1-active.md", cardText("02.1")); commit(root, "active under done"); break;
     case 4:
-      write(root, "devflow/tree/02-capability/02.1-fixture.md", cardText("02.1", { depends: "02.9 prose" })); commit(root, "bad depends"); break;
+      write(root, ".devflow/tree/02-capability/02.1-fixture.md", cardText("02.1", { depends: "02.9 prose" })); commit(root, "bad depends"); break;
     case 5:
-      write(root, "devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step\ndevflow/tree/99-missing/99.1-no.md\n"); commit(root, "bad handoff"); break;
+      write(root, ".devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step\n.devflow/tree/99-missing/99.1-no.md\n"); commit(root, "bad handoff"); break;
     case 6:
-      write(root, "devflow/HANDOFF.md", "legacy\n"); commit(root, "root handoff"); break;
+      write(root, ".devflow/HANDOFF.md", "legacy\n"); commit(root, "root handoff"); break;
     case 7:
-      write(root, "devflow/users/twin/owner.md", "id: twin\ngit: Jmp, jmp@example.test\n"); write(root, "devflow/users/twin/HANDOFF.md", ""); write(root, "devflow/users/twin/digest.md", "none\n"); commit(root, "duplicate identity"); break;
+      write(root, ".devflow/users/twin/owner.md", "id: twin\ngit: Jmp, jmp@example.test\n"); write(root, ".devflow/users/twin/HANDOFF.md", ""); write(root, ".devflow/users/twin/digest.md", "none\n"); commit(root, "duplicate identity"); break;
     case 8:
-      write(root, "devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n"); write(root, "devflow/users/other/HANDOFF.md", ""); write(root, "devflow/users/other/digest.md", "none\n"); write(root, "devflow/tree/02-capability/02.1-fixture.wip-other.md", cardText("02.1")); commit(root, "mismatched author"); break;
+      write(root, ".devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n"); write(root, ".devflow/users/other/HANDOFF.md", ""); write(root, ".devflow/users/other/digest.md", "none\n"); write(root, ".devflow/tree/02-capability/02.1-fixture.wip-other.md", cardText("02.1")); commit(root, "mismatched author"); break;
     case 9:
-      write(root, "devflow/tree/02-capability/02.1-fixture.md", cardText("02.1", { omit: ["Approval", "Review"] })); commit(root, "missing fields"); break;
+      write(root, ".devflow/tree/02-capability/02.1-fixture.md", cardText("02.1", { omit: ["Approval", "Review"] })); commit(root, "missing fields"); break;
     case 10:
-      fs.mkdirSync(path.join(root, "devflow", "tree", "02-empty"), { recursive: true }); break;
+      fs.mkdirSync(path.join(root, ".devflow", "tree", "02-empty"), { recursive: true }); break;
     case 11:
-      write(root, "devflow/tree/02-capability/02.1-group/02.1.1-child.done.md", cardText("02.1.1")); commit(root, "open completed folder"); break;
+      write(root, ".devflow/tree/02-capability/02.1-group/02.1.1-child.done.md", cardText("02.1.1")); commit(root, "open completed folder"); break;
     case 12:
-      write(root, "devflow/journal.md", "product verification running: malformed\n"); break;
+      write(root, ".devflow/journal.md", "product verification running: malformed\n"); break;
     case 13:
-      write(root, "devflow/journal.md", `2026-08-20T00:00:00Z evidence-wait: card-json: ${JSON.stringify("devflow/tree/02-capability/02.1-missing.wip-jmp.md")}; checkpoint: 02.1 wip: ${head}; check-json: ${JSON.stringify("https://example.test/check")}\n`); break;
+      write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z evidence-wait: card-json: ${JSON.stringify(".devflow/tree/02-capability/02.1-missing.wip-jmp.md")}; checkpoint: 02.1 wip: ${head}; check-json: ${JSON.stringify("https://example.test/check")}\n`); break;
     case 14:
-      write(root, "devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\n- source id: 1; timestamp: 2026-08-20T00:00:00Z; failure: one; routing: pending\n- source id: 1; timestamp: 2026-08-20T00:00:01Z; failure: two; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n"); break;
+      write(root, ".devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\n- source id: 1; timestamp: 2026-08-20T00:00:00Z; failure: one; routing: pending\n- source id: 1; timestamp: 2026-08-20T00:00:01Z; failure: two; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n"); break;
     case 15: {
       const r = currentRevisions(root);
-      write(root, "devflow/journal.md", `2026-08-20T00:00:00Z product verification requested\n2026-08-20T00:00:01Z product verification running: trigger: automatic; product: ${r.productRevision}; verification: ${r.verificationRevision}; code: ${r.codeRevision}\n`); break;
+      write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z product verification requested\n2026-08-20T00:00:01Z product verification running: trigger: automatic; product: ${r.productRevision}; verification: ${r.verificationRevision}; code: ${r.codeRevision}\n`); break;
     }
     default: throw new Error(`unknown integrity item ${item}`);
   }
@@ -1169,7 +1169,7 @@ test("T4 Adopt product projection matches Product and is Product-current", async
 
   const canonical = fs.readFileSync(PRODUCT_TEMPLATE, "utf8").replace(/\{\{\w+\}\}/g,
     (placeholder) => (placeholder === "{{capabilityRows}}" ? "None." : "x"));
-  write(root, "devflow/project/product.md", canonical);
+  write(root, ".devflow/project/product.md", canonical);
   assert.equal(await productCollectors.collectors["state.product-file"]({ projectRoot: root }), "current");
 });
 
@@ -1204,7 +1204,7 @@ test("T4 glossary projections match Product and a rendered glossary is canon", a
   const rendered = template.replace("{{terms}}", "Alpha: fixture definition");
   assert.doesNotMatch(rendered, /\{\{/);
   const root = makeRepo(t, { capabilities: ["Alpha"], glossaryText: rendered });
-  setCapabilityConcepts(root, "devflow/project/capabilities/02-Alpha.md", ["Alpha"]);
+  setCapabilityConcepts(root, ".devflow/project/capabilities/02-Alpha.md", ["Alpha"]);
   commit(root, "jmp arch — capability concepts");
 
   const result = run(root); ok(result);
@@ -1221,7 +1221,7 @@ test("T4 glossary projections match Product and a rendered glossary is canon", a
 
 test("T4 legacy circled Product heading remains supported explicitly", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha"] });
-  write(root, "devflow/project/product.md", legacyProduct(["Alpha"]));
+  write(root, ".devflow/project/product.md", legacyProduct(["Alpha"]));
   commit(root, "legacy product grammar");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "baseline:", "expected=2");
@@ -1231,7 +1231,7 @@ test("T4 legacy circled Product heading remains supported explicitly", (t) => {
 test("T4 product arbitrary heading suffix stays rejected and visible", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha"] });
   const current = legacyProduct(["Alpha"]);
-  write(root, "devflow/project/product.md", current.replace(
+  write(root, ".devflow/project/product.md", current.replace(
     "## Capabilities        <!-- ① ② ③ number + name + user outcome + why that outcome is needed for success -->",
     "## Capabilities of the old plan",
   ));
@@ -1246,7 +1246,7 @@ test("T4 product arbitrary heading suffix stays rejected and visible", (t) => {
 test("T4 product prose beginning with bold circled numbers is not a capability", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha", "Beta", "Gamma", "Delta"] });
   const current = legacyProduct(["Alpha", "Beta", "Gamma", "Delta"]);
-  write(root, "devflow/project/product.md", current.replace(
+  write(root, ".devflow/project/product.md", current.replace(
     "- **④ Delta** — Fixture user outcome because success needs it.\n## Boundary",
     "- **④ Delta** — Fixture user outcome because success needs it.\n**①② are the MVP.** ③④ support that flow.\n## Boundary",
   ));
@@ -1259,7 +1259,7 @@ test("T4 product prose beginning with bold circled numbers is not a capability",
 test("T4 product prose beginning with one circled number is a named duplicate anomaly", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha", "Beta", "Gamma", "Delta"] });
   const current = legacyProduct(["Alpha", "Beta", "Gamma", "Delta"]);
-  write(root, "devflow/project/product.md", current.replace(
+  write(root, ".devflow/project/product.md", current.replace(
     "- **④ Delta** — Fixture user outcome because success needs it.\n## Boundary",
     "- **④ Delta** — Fixture user outcome because success needs it.\n**④ Work surface recovery comes later.**\n## Boundary",
   ));
@@ -1272,8 +1272,8 @@ test("T4 product prose beginning with one circled number is a named duplicate an
 
 test("T4 canonical Product C rows preserve count and foundation offset", (t) => {
   const root = makeRepo(t, { brownfield: "no", capabilities: ["Alpha", "Beta"], baseline: false });
-  fs.mkdirSync(path.join(root, "devflow", "tree", "01-foundation"), { recursive: true });
-  write(root, "devflow/tree/01-foundation/.gitkeep", "");
+  fs.mkdirSync(path.join(root, ".devflow", "tree", "01-foundation"), { recursive: true });
+  write(root, ".devflow/tree/01-foundation/.gitkeep", "");
   commit(root, "foundation tree only");
 
   const result = run(root); ok(result);
@@ -1285,10 +1285,10 @@ test("T4 canonical Product C rows preserve count and foundation offset", (t) => 
 
 test("T4 mixed canonical Product C1 and bullet C2 rows lose no capability", (t) => {
   const root = makeRepo(t, { brownfield: "no", capabilities: ["Alpha", "Beta"], baseline: false });
-  fs.mkdirSync(path.join(root, "devflow", "tree", "01-foundation"), { recursive: true });
-  write(root, "devflow/tree/01-foundation/.gitkeep", "");
+  fs.mkdirSync(path.join(root, ".devflow", "tree", "01-foundation"), { recursive: true });
+  write(root, ".devflow/tree/01-foundation/.gitkeep", "");
   const canonicalC2 = "C2 Beta — User outcome: Fixture user outcome. — Needed for success: Fixture success needs it.";
-  write(root, "devflow/project/product.md", read(root, "devflow/project/product.md").replace(canonicalC2, `- ${canonicalC2}`));
+  write(root, ".devflow/project/product.md", read(root, ".devflow/project/product.md").replace(canonicalC2, `- ${canonicalC2}`));
   commit(root, "mixed canonical product grammar");
 
   const result = run(root); ok(result);
@@ -1300,7 +1300,7 @@ test("T4 mixed canonical Product C1 and bullet C2 rows lose no capability", (t) 
 
 test("T4 substantive unparsed Product capability rows block instead of disappearing", (t) => {
   const root = makeRepo(t, { brownfield: "no", baseline: false });
-  write(root, "devflow/project/product.md", read(root, "devflow/project/product.md").replace(
+  write(root, ".devflow/project/product.md", read(root, ".devflow/project/product.md").replace(
     `${PRODUCT_CAPABILITY_ROW_COMMENT}\nNone.\n## Boundary`,
     `${PRODUCT_CAPABILITY_ROW_COMMENT}\nCapability 1: Alpha\n## Boundary`,
   ));
@@ -1309,7 +1309,7 @@ test("T4 substantive unparsed Product capability rows block instead of disappear
   const result = run(root); ok(result);
   assertFragment(result.stdout, "baseline:", "expected=1");
   assertFragment(result.stdout, "integrity:", "blocking=1");
-  assertFragment(result.stdout, "integrity: kind=blocking", "path=devflow/project/product.md");
+  assertFragment(result.stdout, "integrity: kind=blocking", "path=.devflow/project/product.md");
   assertFragment(result.stdout, "integrity: kind=blocking", "reason=capability-rows-unparsed");
   assert.equal(nextOf(result.stdout), "integrity.blocking");
 });
@@ -1336,7 +1336,7 @@ test("T4 report uncommittedUnattributed is the exact path outside my claim", (t)
 
 test("T4 openItems round-trips punctuation without parsing the prose", (t) => {
   const root = makeRepo(t); const open = "2026-08-20T01:02:03Z jmp: decide A=B; or keep C";
-  write(root, "devflow/journal.md", `${open}\n`); commit(root, "jmp note");
+  write(root, ".devflow/journal.md", `${open}\n`); commit(root, "jmp note");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "report:", "openItems=1");
   assert.match(result.stdout, new RegExp(`^open-item: ${open.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "m"));
@@ -1344,7 +1344,7 @@ test("T4 openItems round-trips punctuation without parsing the prose", (t) => {
 
 test("T4 human journal prose mentioning a reserved head is outside machine ownership", (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/journal.md", "# Journal\nThis is a human notebook line.\n- Today I documented how a line beginning with audit requested: is written.\n");
+  write(root, ".devflow/journal.md", "# Journal\nThis is a human notebook line.\n- Today I documented how a line beginning with audit requested: is written.\n");
   commit(root, "human journal prose");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "integrity:", "blocking=0");
@@ -1354,7 +1354,7 @@ test("T4 human journal prose mentioning a reserved head is outside machine owner
 
 test("T4 timestamp-less reserved journal head after a list marker remains blocking", (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/journal.md", "  - audit requested: product\n");
+  write(root, ".devflow/journal.md", "  - audit requested: product\n");
   commit(root, "reserved journal head without timestamp");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "integrity:", "blocking=1");
@@ -1364,7 +1364,7 @@ test("T4 timestamp-less reserved journal head after a list marker remains blocki
 
 test("T4 selection reason exposes a valid HANDOFF exact path", (t) => {
   const root = makeRepo(t); const card = writeClaim(root);
-  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${card}\n`); commit(root, "jmp handoff");
+  write(root, ".devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${card}\n`); commit(root, "jmp handoff");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "report:", "selectionReason=last-handoff");
   assertFragment(result.stdout, "handoff:", `date=2099-01-01T00:00:00Z stale=0 nextStep=${card}`);
@@ -1372,9 +1372,9 @@ test("T4 selection reason exposes a valid HANDOFF exact path", (t) => {
 
 test("T4 HANDOFF waiting capability path is live and selected", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha"] });
-  const waiting = "devflow/tree/02-Alpha.md";
+  const waiting = ".devflow/tree/02-Alpha.md";
   write(root, waiting, "# 02 Alpha\n");
-  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
+  write(root, ".devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
   commit(root, "jmp waiting capability handoff");
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("handoff-path-resolves-0"), false, result.stdout);
@@ -1386,7 +1386,7 @@ test("T4 HANDOFF waiting capability path is live and selected", (t) => {
 
 test("T4 HANDOFF none is a canonical sentinel, not a path or stale cause", (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\nnone\n");
+  write(root, ".devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\nnone\n");
   commit(root, "jmp none handoff");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "handoff:", "date=2099-01-01T00:00:00Z stale=0 nextStep=none");
@@ -1395,7 +1395,7 @@ test("T4 HANDOFF none is a canonical sentinel, not a path or stale cause", (t) =
 
 test("T4 selection reason rejects a stale HANDOFF and exposes its stale fact", (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step\ndevflow/tree/99-missing/99.1-no.md\n"); commit(root, "jmp stale handoff");
+  write(root, ".devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step\n.devflow/tree/99-missing/99.1-no.md\n"); commit(root, "jmp stale handoff");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "report:", "selectionReason=canonical-order");
   assertFragment(result.stdout, "handoff:", "stale=1");
@@ -1409,7 +1409,7 @@ test("T4 selection reason uses canonical order when no HANDOFF points", (t) => {
 
 test("T4 revisions project product verification code and the selected capability on one line", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha"] });
-  const card = "devflow/tree/02-Alpha/02.1-fixture.done.md";
+  const card = ".devflow/tree/02-Alpha/02.1-fixture.done.md";
   write(root, card, cardText("02.1"));
   commit(root, "jmp 02.1 final");
   const expected = currentRevisions(root);
@@ -1441,7 +1441,7 @@ test("D5 closure an empty verification input set hashes empty bytes instead of t
 test("D5 closure a failed revision source cannot become a successful empty hash", async (t) => {
   const root = makeRepo(t);
   const { nativeBinaryHash, revisionFromGit } = await registry();
-  assert.equal(await nativeBinaryHash(root, "refs/heads/does-not-exist", ["devflow/project/product.md"]), null);
+  assert.equal(await nativeBinaryHash(root, "refs/heads/does-not-exist", [".devflow/project/product.md"]), null);
   const id = git(root, "rev-parse", "HEAD");
   assert.equal(revisionFromGit({ status: 1, stdout: Buffer.from(`${id}\n`) }, "none"), "unresolved");
   assert.equal(revisionFromGit({ status: 0, stdout: Buffer.from("not-an-object\n") }, "none"), "unresolved");
@@ -1454,9 +1454,9 @@ test("D5 closure a failed revision source cannot become a successful empty hash"
 // itself has to be skipped rather than asked wider.
 test("T4 a room with no claimed card is not staled by history it never claimed", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha"] });
-  const waiting = "devflow/tree/02-Alpha.md";
+  const waiting = ".devflow/tree/02-Alpha.md";
   write(root, waiting, "# 02 Alpha\n");
-  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
+  write(root, ".devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
   commit(root, "jmp waiting capability handoff");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "handoff:", `date=2000-01-01T00:00:00Z stale=0 nextStep=${waiting}`);
@@ -1468,48 +1468,48 @@ test("T4 a room with no claimed card is not staled by history it never claimed",
 // same subject, and the routable folder is what the layer route hands back.
 test("T4 a HANDOFF path survives its capability opening into the same-identity folder", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha"] });
-  const waiting = "devflow/tree/02-Alpha.md";
-  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
-  write(root, "devflow/tree/02-Alpha/02.1-fixture.done.md", cardText("02.1"));
+  const waiting = ".devflow/tree/02-Alpha.md";
+  write(root, ".devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
+  write(root, ".devflow/tree/02-Alpha/02.1-fixture.done.md", cardText("02.1"));
   commit(root, "jmp layer opening — 02 Alpha");
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("handoff-path-resolves-"), false, result.stdout);
   assertFragment(result.stdout, "handoff:", `stale=0 nextStep=${waiting}`);
   assertFragment(result.stdout, "report:", "selectionReason=last-handoff");
-  assertFragment(result.stdout, "layer: kind=children-done", "folder=devflow/tree/02-Alpha");
+  assertFragment(result.stdout, "layer: kind=children-done", "folder=.devflow/tree/02-Alpha");
 
   // the same identity written as the folder it now is, trailing separator and all
-  write(root, "devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\ndevflow/tree/02-Alpha/\n");
+  write(root, ".devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n.devflow/tree/02-Alpha/\n");
   const folderForm = run(root); ok(folderForm);
   assert.equal(folderForm.stdout.includes("handoff-path-resolves-"), false, folderForm.stdout);
-  assertFragment(folderForm.stdout, "handoff:", "stale=0 nextStep=devflow/tree/02-Alpha/");
+  assertFragment(folderForm.stdout, "handoff:", "stale=0 nextStep=.devflow/tree/02-Alpha/");
 
-  fs.renameSync(path.join(root, "devflow/tree/02-Alpha"), path.join(root, "devflow/tree/02-Alpha.done"));
+  fs.renameSync(path.join(root, ".devflow/tree/02-Alpha"), path.join(root, ".devflow/tree/02-Alpha.done"));
   const statusForm = run(root); ok(statusForm);
   assert.equal(statusForm.stdout.includes("handoff-path-resolves-"), false, statusForm.stdout);
-  assertFragment(statusForm.stdout, "handoff:", "stale=0 nextStep=devflow/tree/02-Alpha/");
+  assertFragment(statusForm.stdout, "handoff:", "stale=0 nextStep=.devflow/tree/02-Alpha/");
 });
 
 test("T4 a HANDOFF may preserve the exact verify path named by a product transition", (t) => {
   const root = completedRepo(t);
   rootVerify(root, "pass", { events: false });
-  write(root, "devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step\ndevflow/tree/verify.md\n");
+  write(root, ".devflow/users/jmp/HANDOFF.md", "# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step\n.devflow/tree/verify.md\n");
   commit(root, "jmp boundary — product verify handoff");
   const revisions = currentRevisions(root);
-  write(root, "devflow/journal.md",
+  write(root, ".devflow/journal.md",
     `2026-08-23T00:00:00Z product verification result: trigger: automatic; product: ${revisions.productRevision}; verification: ${revisions.verificationRevision}; code: ${revisions.codeRevision}; verdict: pass\n`);
   commit(root, "jmp boundary — product verification result");
   const result = run(root); ok(result);
-  assertFragment(result.stdout, "handoff:", "stale=0 nextStep=devflow/tree/verify.md");
-  assertFragment(result.stdout, "transition: kind=product-result", "path=devflow/tree/verify.md");
+  assertFragment(result.stdout, "handoff:", "stale=0 nextStep=.devflow/tree/verify.md");
+  assertFragment(result.stdout, "transition: kind=product-result", "path=.devflow/tree/verify.md");
 });
 
 test("T4 a waiting file and its folder at once is an ambiguity, not a match", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha"] });
-  const waiting = "devflow/tree/02-Alpha.md";
+  const waiting = ".devflow/tree/02-Alpha.md";
   write(root, waiting, "# 02 Alpha\n");
-  write(root, "devflow/tree/02-Alpha/02.1-fixture.md", cardText("02.1"));
-  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
+  write(root, ".devflow/tree/02-Alpha/02.1-fixture.md", cardText("02.1"));
+  write(root, ".devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
   commit(root, "jmp waiting file and folder at once");
   const result = run(root); ok(result);
   assert.ok(result.stdout.includes("reason=handoff-path-resolves-2"), result.stdout);
@@ -1523,14 +1523,14 @@ test("T4 a waiting file and its folder at once is an ambiguity, not a match", (t
 test("T4 a Unicode waiting path resolves through the raw-line fallback into its folder", (t) => {
   const name = "\uB2A5\uB825";
   const root = makeRepo(t, { capabilities: [name] });
-  const waiting = `devflow/tree/02-${name}.md`;
-  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
-  write(root, `devflow/tree/02-${name}/02.1-fixture.done.md`, cardText("02.1"));
+  const waiting = `.devflow/tree/02-${name}.md`;
+  write(root, ".devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2099-01-01T00:00:00Z\n## Next single step          <!-- one tree path | none -->\n${waiting}\n`);
+  write(root, `.devflow/tree/02-${name}/02.1-fixture.done.md`, cardText("02.1"));
   commit(root, "jmp layer opening — unicode capability");
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("handoff-path-resolves-"), false, result.stdout);
   assertFragment(result.stdout, "handoff:", `stale=0 nextStep=${waiting}`);
-  assertFragment(result.stdout, "layer: kind=children-done", `folder=devflow/tree/02-${name}`);
+  assertFragment(result.stdout, "layer: kind=children-done", `folder=.devflow/tree/02-${name}`);
 });
 
 test("T4 the claim-history query cannot run with an empty claimed path list", () => {
@@ -1544,14 +1544,14 @@ test("T4 the claim-history query cannot run with an empty claimed path list", ()
 });
 
 const BASELINE_FIELDS = [
-  ["expectedSet", () => [{ number: 1, path: "devflow/project/capabilities/01-foundation.md", retired: false }]],
-  ["pathState", () => ({ "devflow/project/capabilities/01-foundation.md": "present" })],
+  ["expectedSet", () => [{ number: 1, path: ".devflow/project/capabilities/01-foundation.md", retired: false }]],
+  ["pathState", () => ({ ".devflow/project/capabilities/01-foundation.md": "present" })],
   ["boundary", () => ({ count: 1, status: "ok" })],
   ["shapeValid", () => true],
   ["anomalies", () => []],
   ["noneSections", () => ["## Intent", "## Concept model", "## Invariants", "## Non-goals", "## Binding ADRs", "### Main flow", "### Lifecycle", "### Current behavior", "### Entrypoints", "### Consumed contracts", "### Traps", "### Verify"]],
   ["legacyV010", () => ({ value: false, reasons: [] })],
-  ["designHead", (root) => { const value = git(root, "log", "-1", "--format=%H", "--", "devflow/project/product.md", "devflow/project/arch.md", "devflow/project/glossary.md"); return { stored: value, current: value }; }],
+  ["designHead", (root) => { const value = git(root, "log", "-1", "--format=%H", "--", ".devflow/project/product.md", ".devflow/project/arch.md", ".devflow/project/glossary.md"); return { stored: value, current: value }; }],
   ["scopeHead", () => ({ stored: "none", current: "none", union: [] })],
   ["designFreshness", () => ({ value: "fresh", reason: null })],
   ["verifiedFreshness", () => ({ value: "hypothesis", reasons: ["verified-at-none", "empty-scope"] })],
@@ -1596,7 +1596,7 @@ test("output budget compact shortens only the non-routing progress hint, then re
 
   const refusedRoot = makeRepo(t);
   const refusedRows = Array.from({ length: 400 }, (_, index) => `2026-08-20T00:${String(index % 60).padStart(2, "0")}:00Z jmp: ${index}-${"x".repeat(100)}`);
-  write(refusedRoot, "devflow/journal.md", `${refusedRows.join("\n")}\n`);
+  write(refusedRoot, ".devflow/journal.md", `${refusedRows.join("\n")}\n`);
   const refused = run(refusedRoot);
   assert.equal(refused.status, 3, refused.stderr);
   assert.equal(refused.stderr, "");
@@ -1611,7 +1611,7 @@ test("compact integrity blocking keeps each whole repair payload distinguishable
   writeClaim(root, { progress: `2026-08-20T00:00:00Z ${"x".repeat(26000)}` });
   const shared = `2026-08-20T00:00:00Z product verification running: ${"same-prefix-".repeat(14)}`;
   const rows = [`${shared}A`, `${shared}B`];
-  write(root, "devflow/journal.md", `${rows.join("\n")}\n`);
+  write(root, ".devflow/journal.md", `${rows.join("\n")}\n`);
   const result = run(root); ok(result);
   assert.match(result.stdout, /^state: .* form=compact$/m);
   const repairItems = result.stdout.split(/\r?\n/).filter((line) => line.startsWith("integrity: kind=blocking"));
@@ -1625,7 +1625,7 @@ test("compact integrity blocking keeps each whole repair payload distinguishable
 
 test("adversarial F1 canonical Failure history without source id requires migration", (t) => {
   const root = makeRepo(t);
-  capabilityVerify(root, "devflow/tree/02-capability/verify.md", {
+  capabilityVerify(root, ".devflow/tree/02-capability/verify.md", {
     failures: "- timestamp: 2026-08-20T00:00:00Z; failure: canonical missing id; routing: pending",
   });
   const result = run(root); ok(result);
@@ -1637,7 +1637,7 @@ test("D6 an empty Failure history has zero list items and legacy dash-none inven
   for (const [label, failures] of [["canonical empty", ""], ["legacy dash-none", "- none"]]) {
     await t.test(label, () => {
       const root = makeRepo(t);
-      capabilityVerify(root, "devflow/tree/02-capability/verify.md", { failures });
+      capabilityVerify(root, ".devflow/tree/02-capability/verify.md", { failures });
       const result = run(root); ok(result);
       assert.equal(hasKind(result.stdout, "transition", "source-id-migration"), false, result.stdout);
       assert.equal(result.stdout.includes("reason=source-id"), false, result.stdout);
@@ -1647,7 +1647,7 @@ test("D6 an empty Failure history has zero list items and legacy dash-none inven
 
 test("adversarial F1 canonical Failure history duplicate source ids blocks", (t) => {
   const root = makeRepo(t);
-  capabilityVerify(root, "devflow/tree/02-capability/verify.md", {
+  capabilityVerify(root, ".devflow/tree/02-capability/verify.md", {
     failures: "- source id: 1; timestamp: 2026-08-20T00:00:00Z; failure: one; routing: pending\n- source id: 1; timestamp: 2026-08-20T00:00:01Z; failure: two; routing: pending",
   });
   const result = run(root); ok(result);
@@ -1657,17 +1657,17 @@ test("adversarial F1 canonical Failure history duplicate source ids blocks", (t)
 
 test("adversarial F1 canonical numbered event finding is projected verbatim", (t) => {
   const root = makeRepo(t);
-  capabilityVerify(root, "devflow/tree/02-capability/verify.md", {
+  capabilityVerify(root, ".devflow/tree/02-capability/verify.md", {
     audit: "- awaiting user decision · source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key: product\n  1. exact numbered finding",
   });
   const result = run(root); ok(result);
-  assert.match(result.stdout, /^finding: devflow\/tree\/02-capability\/verify\.md:\d+ 1\. exact numbered finding$/m);
+  assert.match(result.stdout, /^finding: \.devflow\/tree\/02-capability\/verify\.md:\d+ 1\. exact numbered finding$/m);
 });
 
 test("adversarial F2 product Audit request becomes a runnable event", (t) => {
   const root = makeRepo(t, { brownfield: "no" });
   rootVerify(root, "pass");
-  write(root, "devflow/journal.md", "2026-08-20T00:00:00Z audit requested: product\n");
+  write(root, ".devflow/journal.md", "2026-08-20T00:00:00Z audit requested: product\n");
   commit(root, "jmp audit request");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "event: kind=new", "role=Audit");
@@ -1677,8 +1677,8 @@ test("adversarial F2 product Audit request becomes a runnable event", (t) => {
 
 test("adversarial F2 capability Retrospective request becomes a runnable event", (t) => {
   const root = makeRepo(t, { brownfield: "no", capabilities: ["capability"] });
-  capabilityVerify(root, "devflow/tree/02-capability/verify.md");
-  write(root, "devflow/journal.md", "2026-08-20T00:00:00Z retrospective requested: 2\n");
+  capabilityVerify(root, ".devflow/tree/02-capability/verify.md");
+  write(root, ".devflow/journal.md", "2026-08-20T00:00:00Z retrospective requested: 2\n");
   commit(root, "jmp retrospective request");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "event: kind=new", "role=Retrospective");
@@ -1688,10 +1688,10 @@ test("adversarial F2 capability Retrospective request becomes a runnable event",
 
 test("adversarial F2 post-failure capability Audit is automatic", (t) => {
   const root = makeRepo(t, { brownfield: "no", capabilities: ["capability"] });
-  const card = "devflow/tree/02-capability.done/02.1-work.done.md";
+  const card = ".devflow/tree/02-capability.done/02.1-work.done.md";
   write(root, card, cardText("02.1"));
   commit(root, "jmp capability done");
-  capabilityVerify(root, "devflow/tree/02-capability.done/verify.md", {
+  capabilityVerify(root, ".devflow/tree/02-capability.done/verify.md", {
     failures: "- source id: 4; timestamp: 2026-08-20T00:00:00Z; failure: exact failure; routing: fixed",
     capabilityPaths: [card],
   });
@@ -1702,10 +1702,10 @@ test("adversarial F2 post-failure capability Audit is automatic", (t) => {
 
 test("adversarial F2 first capability closure Retrospective is automatic", (t) => {
   const root = makeRepo(t, { brownfield: "no", capabilities: ["capability"] });
-  const card = "devflow/tree/02-capability.done/02.1-work.done.md";
+  const card = ".devflow/tree/02-capability.done/02.1-work.done.md";
   write(root, card, cardText("02.1"));
   commit(root, "jmp capability done");
-  capabilityVerify(root, "devflow/tree/02-capability.done/verify.md", { capabilityPaths: [card] });
+  capabilityVerify(root, ".devflow/tree/02-capability.done/verify.md", { capabilityPaths: [card] });
   const result = run(root); ok(result);
   const events = result.stdout.split(/\r?\n/).filter((line) => line.startsWith("event: kind=new"));
   assert.ok(events.some((line) => line.includes("role=Retrospective") && line.includes('key="first closure 2"')), result.stdout);
@@ -1727,7 +1727,7 @@ test("adversarial F3 item 8 checks authors after my current claim commit", (t) =
 
 test("adversarial F3 item 12 rejects a timestamped malformed reserved line", (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/journal.md", "2026-08-20T00:00:00Z product verification running: malformed\n");
+  write(root, ".devflow/journal.md", "2026-08-20T00:00:00Z product verification running: malformed\n");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "integrity: kind=blocking", "item=12");
   assert.equal(nextOf(result.stdout), "integrity.blocking");
@@ -1735,10 +1735,10 @@ test("adversarial F3 item 12 rejects a timestamped malformed reserved line", (t)
 
 test("adversarial F3 item 13 checks checkpoint subject path and remote check JSON", (t) => {
   const root = makeRepo(t);
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
   write(root, card, `${cardText("02.1")}2026-08-20T00:00:00Z remote evidence check: check-json: ${JSON.stringify("https://example.test/actual")}; verdict: unrun; detail-json: ""\n`);
   const checkpoint = commit(root, "jmp 02.1 wip: evidence-wait");
-  write(root, "devflow/journal.md", `2026-08-20T00:00:01Z evidence-wait: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify("https://example.test/different")}\n`);
+  write(root, ".devflow/journal.md", `2026-08-20T00:00:01Z evidence-wait: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify("https://example.test/different")}\n`);
   commit(root, "jmp boundary — evidence-wait 02.1");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "integrity: kind=blocking", "item=13");
@@ -1747,8 +1747,8 @@ test("adversarial F3 item 13 checks checkpoint subject path and remote check JSO
 
 test("adversarial F3 prepared-route accepts CRLF payload content matching the working tree", (t) => {
   const root = makeRepo(t);
-  const verify = "devflow/tree/02-capability/verify.md";
-  const target = "devflow/tree/02-capability/02.1-fix.md";
+  const verify = ".devflow/tree/02-capability/verify.md";
+  const target = ".devflow/tree/02-capability/02.1-fix.md";
   const pending = "# Verification\nFailure history:\n- source id: 1; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n";
   write(root, verify, pending);
   commit(root, "jmp boundary — verify pending");
@@ -1766,8 +1766,8 @@ test("adversarial F3 prepared-route accepts CRLF payload content matching the wo
 
 test("adversarial F3 prepared-route treats CRLF payload matching the base as no change", (t) => {
   const root = makeRepo(t);
-  const verify = "devflow/tree/02-capability/verify.md";
-  const target = "devflow/tree/02-capability/02.1-fix.md";
+  const verify = ".devflow/tree/02-capability/verify.md";
+  const target = ".devflow/tree/02-capability/02.1-fix.md";
   const pending = "# Verification\nFailure history:\n- source id: 1; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n";
   const content = "# fix\r\n\r\nWindows payload\r\n";
   write(root, target, content);
@@ -1784,14 +1784,14 @@ test("adversarial F3 prepared-route treats CRLF payload matching the base as no 
 
 test("adversarial F3 prepared-route move resolves an Audit locator from its base", (t) => {
   const root = makeRepo(t, { capabilities: ["capability"] });
-  const closed = "devflow/tree/02-capability.done";
-  const open = "devflow/tree/02-capability";
+  const closed = ".devflow/tree/02-capability.done";
+  const open = ".devflow/tree/02-capability";
   const baseVerify = `${closed}/verify.md`;
   const currentVerify = `${open}/verify.md`;
   const pending = "# Verification\nFailure history:\nNone.\n## Audit\n- routing · source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key: capability:02 · 1 findings · 1 adopted\n  1. reopen exact finding\n     routing: pending\n## Retrospective\n- not run\n";
   const locator = `verify:${baseVerify}#Audit@1/1`;
   write(root, baseVerify, pending);
-  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: ${open}; children: 02.1; source-json: ${JSON.stringify(locator)}\n`);
+  write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: ${open}; children: 02.1; source-json: ${JSON.stringify(locator)}\n`);
   commit(root, "jmp boundary — closed Audit routing pending");
   const base = git(root, "rev-parse", "HEAD");
   const object = {
@@ -1813,10 +1813,10 @@ test("adversarial F3 prepared-route move resolves an Audit locator from its base
 
 test("adversarial F3 core locator falls back to HEAD when an uncommitted output deletes the file", (t) => {
   const root = makeRepo(t);
-  const locator = "core:devflow/project/product.md#Capabilities";
-  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
-  commit(root, "jmp split — begin devflow/tree");
-  fs.rmSync(path.join(root, "devflow", "project", "product.md"));
+  const locator = "core:.devflow/project/product.md#Capabilities";
+  write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
+  commit(root, "jmp split — begin .devflow/tree");
+  fs.rmSync(path.join(root, ".devflow", "project", "product.md"));
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
   assert.equal(hasKind(result.stdout, "transition", "layer-opening"), true, result.stdout);
@@ -1825,10 +1825,10 @@ test("adversarial F3 core locator falls back to HEAD when an uncommitted output 
 test("adversarial F3 journal locator falls back to HEAD when an uncommitted output deletes the line", (t) => {
   const root = makeRepo(t);
   const source = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact source")}`;
-  const marker = `2026-08-20T00:00:01Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(`journal:${source}`)}`;
-  write(root, "devflow/journal.md", `${source}\n${marker}\n`);
-  commit(root, "jmp split — begin devflow/tree");
-  write(root, "devflow/journal.md", `${marker}\n`);
+  const marker = `2026-08-20T00:00:01Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(`journal:${source}`)}`;
+  write(root, ".devflow/journal.md", `${source}\n${marker}\n`);
+  commit(root, "jmp split — begin .devflow/tree");
+  write(root, ".devflow/journal.md", `${marker}\n`);
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
   assert.equal(hasKind(result.stdout, "transition", "layer-opening"), true, result.stdout);
@@ -1836,12 +1836,12 @@ test("adversarial F3 journal locator falls back to HEAD when an uncommitted outp
 
 test("adversarial F3 Failure history locator falls back to HEAD after another uncommitted output transition", (t) => {
   const root = makeRepo(t);
-  const verify = "devflow/tree/02-capability/verify.md";
+  const verify = ".devflow/tree/02-capability/verify.md";
   const pending = "# Verification\nFailure history:\n- source id: 1; timestamp: 2026-08-20T00:00:00Z; failure: exact source; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n";
   const locator = `verify:${verify}#Failure history@1`;
   write(root, verify, pending);
-  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
-  commit(root, "jmp split — begin devflow/tree");
+  write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
+  commit(root, "jmp split — begin .devflow/tree");
   write(root, verify, pending.replace("- source id: 1; timestamp: 2026-08-20T00:00:00Z; failure: exact source; routing: pending", "None."));
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
@@ -1850,12 +1850,12 @@ test("adversarial F3 Failure history locator falls back to HEAD after another un
 
 test("adversarial F3 event locator falls back to HEAD after another uncommitted output transition", (t) => {
   const root = makeRepo(t);
-  const verify = "devflow/tree/02-capability/verify.md";
+  const verify = ".devflow/tree/02-capability/verify.md";
   const pending = "# Verification\nFailure history:\nNone.\n## Audit\n- not run\n## Retrospective\n- routing · source id: 1 · event timestamp: 2026-08-20T00:00:00Z · event key: capability:02 · 1 findings · 1 adopted\n  1. exact source\n     routing: pending\n";
   const locator = `verify:${verify}#Retrospective@1/1`;
   write(root, verify, pending);
-  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
-  commit(root, "jmp split — begin devflow/tree");
+  write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
+  commit(root, "jmp split — begin .devflow/tree");
   write(root, verify, pending.replace(/## Retrospective[\s\S]*$/, "## Retrospective\n- not run\n"));
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
@@ -1864,12 +1864,12 @@ test("adversarial F3 event locator falls back to HEAD after another uncommitted 
 
 test("adversarial F3 card locator remains anchored to its explicit commit hash", (t) => {
   const root = makeRepo(t);
-  const card = "devflow/tree/02-capability/02.1-source.md";
+  const card = ".devflow/tree/02-capability/02.1-source.md";
   write(root, card, cardText("02.1"));
   const hash = commit(root, "jmp 02.1 source");
   const locator = `card:${card}@${hash}`;
-  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
-  commit(root, "jmp split — begin devflow/tree");
+  write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(locator)}\n`);
+  commit(root, "jmp split — begin .devflow/tree");
   fs.rmSync(path.join(root, ...card.split("/")));
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reason=source-resolves-0"), false, result.stdout);
@@ -1879,11 +1879,11 @@ test("adversarial F3 card locator remains anchored to its explicit commit hash",
 test("adversarial F3 item 14 rejects delete of an absent prepared-route input", (t) => {
   const root = makeRepo(t);
   const pending = "# Verification\nFailure history:\n- source id: 1; routing: pending\n## Audit\n- not run\n## Retrospective\n- not run\n";
-  write(root, "devflow/tree/02-capability/verify.md", pending);
+  write(root, ".devflow/tree/02-capability/verify.md", pending);
   commit(root, "jmp boundary — verify pending");
   const base = git(root, "rev-parse", "HEAD");
-  const object = { base, result: "routing: fix cards 02.1", operations: [{ op: "delete", path: "devflow/tree/02-capability/02.1-missing.md" }] };
-  write(root, "devflow/tree/02-capability/verify.md", pending.replace("routing: pending", `routing prepared: ${JSON.stringify(object)}`));
+  const object = { base, result: "routing: fix cards 02.1", operations: [{ op: "delete", path: ".devflow/tree/02-capability/02.1-missing.md" }] };
+  write(root, ".devflow/tree/02-capability/verify.md", pending.replace("routing: pending", `routing prepared: ${JSON.stringify(object)}`));
   const result = run(root); ok(result);
   assertFragment(result.stdout, "integrity: kind=blocking", "item=14");
   assertFragment(result.stdout, "integrity: kind=blocking", "reason=operation-delete-input");
@@ -1892,17 +1892,17 @@ test("adversarial F3 item 14 rejects delete of an absent prepared-route input", 
 
 test("adversarial F4 foundation done children close a folder boundary, not a capability", (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  write(root, "devflow/tree/01-foundation/01.1-fixture.done.md", cardText("01.1"));
+  write(root, ".devflow/tree/01-foundation/01.1-fixture.done.md", cardText("01.1"));
   commit(root, "jmp foundation child done");
   const result = run(root); ok(result);
-  assertFragment(result.stdout, "layer: kind=folder-boundary", "folder=devflow/tree/01-foundation");
+  assertFragment(result.stdout, "layer: kind=folder-boundary", "folder=.devflow/tree/01-foundation");
   assert.equal(hasKind(result.stdout, "layer", "children-done"), false);
   assert.equal(nextOf(result.stdout), "layer.folder-boundary");
 });
 
 test("adversarial F5 nonblocking integrity uses advisory while shape retains zone semantics", (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/tree/02-capability/02.1-fixture.wip-ghost.md", cardText("02.1"));
+  write(root, ".devflow/tree/02-capability/02.1-fixture.wip-ghost.md", cardText("02.1"));
   commit(root, "ghost claim");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "integrity: kind=advisory", "item=1");
@@ -1918,7 +1918,7 @@ function integrityItemLines(output, item) {
 test("R1 closed-folder projection suppresses integrity 1, 4, 8, 9, and 13 while preserving item 3", async (t) => {
   await t.test("item 1 orphan claim", () => {
     const root = makeRepo(t);
-    write(root, "devflow/tree/02-capability.done/02.1-orphan.wip-ghost.md", cardText("02.1"));
+    write(root, ".devflow/tree/02-capability.done/02.1-orphan.wip-ghost.md", cardText("02.1"));
     commit(root, "ghost closed claim");
     const result = run(root); ok(result);
     assert.equal(integrityItemLines(result.stdout, 1).length, 0, result.stdout);
@@ -1927,7 +1927,7 @@ test("R1 closed-folder projection suppresses integrity 1, 4, 8, 9, and 13 while 
 
   await t.test("item 4 dependency body", () => {
     const root = makeRepo(t);
-    write(root, "devflow/tree/02-capability.done/02.1-dependency.done.md", cardText("02.1", { depends: "02.9 prose" }));
+    write(root, ".devflow/tree/02-capability.done/02.1-dependency.done.md", cardText("02.1", { depends: "02.9 prose" }));
     commit(root, "closed dependency history");
     const result = run(root); ok(result);
     assert.equal(integrityItemLines(result.stdout, 4).length, 0, result.stdout);
@@ -1935,10 +1935,10 @@ test("R1 closed-folder projection suppresses integrity 1, 4, 8, 9, and 13 while 
 
   await t.test("item 8 claimant author", () => {
     const root = makeRepo(t);
-    write(root, "devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
-    write(root, "devflow/users/other/HANDOFF.md", "");
-    write(root, "devflow/users/other/digest.md", "none\n");
-    write(root, "devflow/tree/02-capability.done/02.1-author.wip-other.md", cardText("02.1"));
+    write(root, ".devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
+    write(root, ".devflow/users/other/HANDOFF.md", "");
+    write(root, ".devflow/users/other/digest.md", "none\n");
+    write(root, ".devflow/tree/02-capability.done/02.1-author.wip-other.md", cardText("02.1"));
     commit(root, "mismatched closed author");
     const result = run(root); ok(result);
     assert.equal(integrityItemLines(result.stdout, 8).length, 0, result.stdout);
@@ -1947,7 +1947,7 @@ test("R1 closed-folder projection suppresses integrity 1, 4, 8, 9, and 13 while 
 
   await t.test("item 9 pending fields", () => {
     const root = makeRepo(t);
-    write(root, "devflow/tree/02-capability.done/02.1-fields.md", cardText("02.1", { omit: ["Approval", "Review"] }));
+    write(root, ".devflow/tree/02-capability.done/02.1-fields.md", cardText("02.1", { omit: ["Approval", "Review"] }));
     commit(root, "closed pending history");
     const result = run(root); ok(result);
     assert.equal(integrityItemLines(result.stdout, 9).length, 0, result.stdout);
@@ -1956,10 +1956,10 @@ test("R1 closed-folder projection suppresses integrity 1, 4, 8, 9, and 13 while 
 
   await t.test("item 13 remote evidence", () => {
     const root = makeRepo(t);
-    const card = "devflow/tree/02-capability.done/02.1-evidence.wip-jmp.md";
+    const card = ".devflow/tree/02-capability.done/02.1-evidence.wip-jmp.md";
     write(root, card, `${cardText("02.1")}2026-08-20T00:00:00Z remote evidence check: check-json: ${JSON.stringify("https://example.test/actual")}; verdict: unrun; detail-json: ""\n`);
     const checkpoint = commit(root, "jmp 02.1 wip: evidence-wait");
-    write(root, "devflow/journal.md", `2026-08-20T00:00:01Z evidence-wait: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify("https://example.test/different")}\n`);
+    write(root, ".devflow/journal.md", `2026-08-20T00:00:01Z evidence-wait: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify("https://example.test/different")}\n`);
     commit(root, "jmp boundary — closed evidence");
     const result = run(root); ok(result);
     assert.equal(integrityItemLines(result.stdout, 13).length, 0, result.stdout);
@@ -1969,7 +1969,7 @@ test("R1 closed-folder projection suppresses integrity 1, 4, 8, 9, and 13 while 
 
 test("R1 a done card body in a closed folder is never opened", (t) => {
   const root = makeRepo(t);
-  const relative = "devflow/tree/02-capability.done/02.1-history.done.md";
+  const relative = ".devflow/tree/02-capability.done/02.1-history.done.md";
   const target = path.join(root, ...relative.split("/"));
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, Buffer.from([0xff, 0xfe, 0xfd]));
@@ -1991,8 +1991,8 @@ test("R2 unstaged delete plus untracked done card is a bounded claim-done move",
 
 test("R2 a claim-done move still measures HANDOFF freshness against the claimed HEAD path", (t) => {
   const root = makeRepo(t);
-  const claimed = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step\n${claimed}\n`);
+  const claimed = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  write(root, ".devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step\n${claimed}\n`);
   commit(root, "jmp boundary — handoff before final task");
   const head = "a".repeat(40);
   writeClaim(root, {
@@ -2016,7 +2016,7 @@ test("R2 a similar untracked filename is not guessed to be a claim-done move", (
   const root = makeRepo(t);
   const claimed = writeClaim(root);
   fs.rmSync(path.join(root, ...claimed.split("/")));
-  write(root, "devflow/tree/02-capability/02.2-fixture.done.md", cardText("02.2"));
+  write(root, ".devflow/tree/02-capability/02.2-fixture.done.md", cardText("02.2"));
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("case=claim-done-move"), false, result.stdout);
 });
@@ -2090,20 +2090,20 @@ test("Phase 5B E2 evidence-finalizing keeps checkpoint check-json validation", (
 
 test("R3 unrelated source changes do not hide an interrupted canonical output", (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
-  write(root, "devflow/journal.md", "2026-08-20T00:00:00Z jmp: interrupted fixture\n");
+  write(root, ".devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
+  write(root, ".devflow/journal.md", "2026-08-20T00:00:00Z jmp: interrupted fixture\n");
   write(root, "src/x.js", "export const x = 1;\n");
   const result = run(root); ok(result);
-  assertFragment(result.stdout, "transition: kind=interrupted", 'paths=["devflow/journal.md","devflow/tree/02-capability/verify.md"]');
-  assertFragment(result.stdout, "report:", 'uncommittedUnattributed=["devflow/journal.md","devflow/tree/02-capability/verify.md","src/x.js"]');
+  assertFragment(result.stdout, "transition: kind=interrupted", 'paths=[".devflow/journal.md",".devflow/tree/02-capability/verify.md"]');
+  assertFragment(result.stdout, "report:", 'uncommittedUnattributed=[".devflow/journal.md",".devflow/tree/02-capability/verify.md","src/x.js"]');
 });
 
 test("R3 a work-owned capability note is not a verification output prefix", (t) => {
   const root = makeRepo(t, { capabilities: ["capability"] });
   const card = writeClaim(root, { commitSubject: "jmp 02.1 claim" });
-  write(root, "devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
+  write(root, ".devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
   commit(root, "jmp boundary — earlier capability verification");
-  write(root, "devflow/journal.md", `${designNote("02", "confirmed intent", card, ["src/x.js"])}\n`);
+  write(root, ".devflow/journal.md", `${designNote("02", "confirmed intent", card, ["src/x.js"])}\n`);
   write(root, "src/x.js", "export const x = 1;\n");
   const result = run(root); ok(result);
   assert.equal(hasKind(result.stdout, "transition", "interrupted"), false, result.stdout);
@@ -2112,11 +2112,11 @@ test("R3 a work-owned capability note is not a verification output prefix", (t) 
 
 test("R3 an added capability-closing line remains a verification output prefix", (t) => {
   const root = makeRepo(t, { capabilities: ["capability"] });
-  write(root, "devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
+  write(root, ".devflow/tree/02-capability/verify.md", "# Verification\nFailure history:\nNone.\n");
   commit(root, "jmp boundary — earlier capability verification");
-  write(root, "devflow/journal.md", `2026-08-20T00:00:00Z capability closing: folder: devflow/tree/02-capability; head: ${"a".repeat(40)}; product: product-revision; verification: verification-revision; capability: capability-revision\n`);
+  write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z capability closing: folder: .devflow/tree/02-capability; head: ${"a".repeat(40)}; product: product-revision; verification: verification-revision; capability: capability-revision\n`);
   const result = run(root); ok(result);
-  assertFragment(result.stdout, "transition: kind=interrupted", 'paths=["devflow/journal.md"]');
+  assertFragment(result.stdout, "transition: kind=interrupted", 'paths=[".devflow/journal.md"]');
   assert.equal(nextOf(result.stdout), "transition.interrupted", result.stdout);
 });
 
@@ -2129,8 +2129,8 @@ test("R3 an unrelated source change alone does not invent an interrupted transit
 
 test("R4 capability filtering keeps global judgment and adds only requested detail", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha", "Beta"] });
-  write(root, "devflow/tree/02-Alpha/02.1-alpha.md", cardText("02.1"));
-  write(root, "devflow/tree/03-Beta/03.1-beta.md", cardText("03.1"));
+  write(root, ".devflow/tree/02-Alpha/02.1-alpha.md", cardText("02.1"));
+  write(root, ".devflow/tree/03-Beta/03.1-beta.md", cardText("03.1"));
   commit(root, "jmp split — two capabilities");
   write(root, "outside.txt", "global diff\n");
   const full = run(root); ok(full);
@@ -2161,12 +2161,12 @@ test("R4 a capability filter with nothing to reduce reports narrow=none and stil
 
 test("R4 capability filtering projects aggregate blocked facts and counts to the selected capability", (t) => {
   const root = makeRepo(t, { capabilities: ["Alpha", "Beta"] });
-  write(root, "devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
-  write(root, "devflow/users/other/HANDOFF.md", "");
-  write(root, "devflow/tree/02-Alpha/02.1-prerequisite.wip-other.md", cardText("02.1"));
-  write(root, "devflow/tree/02-Alpha/02.2-work.md", cardText("02.2", { depends: "02.1" }));
-  write(root, "devflow/tree/03-Beta/03.1-prerequisite.wip-other.md", cardText("03.1"));
-  write(root, "devflow/tree/03-Beta/03.2-work.md", cardText("03.2", { depends: "03.1" }));
+  write(root, ".devflow/users/other/owner.md", "id: other\ngit: Other, other@example.test\n");
+  write(root, ".devflow/users/other/HANDOFF.md", "");
+  write(root, ".devflow/tree/02-Alpha/02.1-prerequisite.wip-other.md", cardText("02.1"));
+  write(root, ".devflow/tree/02-Alpha/02.2-work.md", cardText("02.2", { depends: "02.1" }));
+  write(root, ".devflow/tree/03-Beta/03.1-prerequisite.wip-other.md", cardText("03.1"));
+  write(root, ".devflow/tree/03-Beta/03.2-work.md", cardText("03.2", { depends: "03.1" }));
   commit(root, "jmp split — two blocked capabilities");
   const result = run(root, "--capability", "2"); ok(result);
   const blocked = result.stdout.split(/\r?\n/).find((line) => line.startsWith("blocked: kind=dependencies"));
@@ -2179,7 +2179,7 @@ test("R4 capability filtering projects aggregate blocked facts and counts to the
 });
 
 test("R4 the consumerless --card surface is rejected", (t) => {
-  const result = run(makeRepo(t), "--card", "devflow/tree/02-capability/02.1-fixture.md");
+  const result = run(makeRepo(t), "--card", ".devflow/tree/02-capability/02.1-fixture.md");
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /unknown option --card/);
   assert.equal(result.stdout, "");
@@ -2189,7 +2189,7 @@ test("an actual open card makes baseline verifiedFreshness report the open-card 
   for (const [status, expected] of [["", true], [".done", false]]) {
     await t.test(status === "" ? "open card" : "done card negative control", () => {
       const root = makeRepo(t, { capabilities: ["capability"] });
-      write(root, `devflow/tree/02-capability/02.1-fixture${status}.md`, cardText("02.1"));
+      write(root, `.devflow/tree/02-capability/02.1-fixture${status}.md`, cardText("02.1"));
       commit(root, `jmp ${status === "" ? "open" : "closed"} card freshness`);
       const result = run(root, "--capability", "2"); ok(result);
       const detail = result.stdout.split(/\r?\n/)
@@ -2203,7 +2203,7 @@ test("an actual open card makes baseline verifiedFreshness report the open-card 
 test("R5 digest lag is a ready fact and does not interrupt a current claim", (t) => {
   const root = makeRepo(t);
   const marker = git(root, "rev-parse", "HEAD");
-  write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+  write(root, ".devflow/users/jmp/digest.md", `${marker}\n`);
   commit(root, "jmp boundary — digest marker");
   git(root, "config", "user.name", "Other");
   git(root, "config", "user.email", "other@example.test");
@@ -2245,7 +2245,7 @@ for (const [label, makeMarker] of [
     const root = makeRepo(t);
     otherCommit(root, "other change");
     const marker = makeMarker(root);
-    write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+    write(root, ".devflow/users/jmp/digest.md", `${marker}\n`);
     commit(root, "jmp boundary — unresolvable digest marker");
     const result = run(root); ok(result);
     assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker || "invalid"}`);
@@ -2262,7 +2262,7 @@ test("R5 a digest marker that exists off the integration line is a non-ancestor 
   const marker = commit(root, "side-only");
   git(root, "checkout", "-q", "main");
   otherCommit(root, "other change");
-  write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+  write(root, ".devflow/users/jmp/digest.md", `${marker}\n`);
   commit(root, "jmp boundary — divergent digest marker");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker}`);
@@ -2273,7 +2273,7 @@ test("R5 a digest marker that exists off the integration line is a non-ancestor 
 
 test("R5 a none digest marker counts from the first integration commit", (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/users/jmp/digest.md", "none\n");
+  write(root, ".devflow/users/jmp/digest.md", "none\n");
   commit(root, "jmp boundary — initial digest marker");
   const count = git(root, "rev-list", "--count", "HEAD");
   const result = run(root); ok(result);
@@ -2297,7 +2297,7 @@ test("R5 a merge-base Git cannot answer is unavailable, not a non-ancestor verdi
   const unwalkable = otherCommit(root, "other change");
   write(root, "keep.txt", "keep\n");
   const marker = commit(root, "jmp tip");
-  write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+  write(root, ".devflow/users/jmp/digest.md", `${marker}\n`);
   commit(root, "jmp boundary — digest marker");
   breakHistoryWalk(root, unwalkable);
   assert.equal(gitTry(root, "merge-base", "--is-ancestor", marker, "main").status, 128, "the seam must make Git decline, not answer 1");
@@ -2313,7 +2313,7 @@ test("R5 a merge-base Git cannot answer is unavailable, not a non-ancestor verdi
 test("R5 a history walk Git cannot run is unavailable, not a suppressed zero", (t) => {
   const root = makeRepo(t);
   const unwalkable = otherCommit(root, "other change");
-  write(root, "devflow/users/jmp/digest.md", "none\n");
+  write(root, ".devflow/users/jmp/digest.md", "none\n");
   commit(root, "jmp boundary — initial digest marker");
   breakHistoryWalk(root, unwalkable);
   assert.equal(gitTry(root, "rev-list", "--count", "main").status, 128, "the seam must make the count decline");
@@ -2344,7 +2344,7 @@ test("R5 a digest history that will not decode is unavailable, not a dead tool",
   }).trim();
   git(root, "update-ref", "refs/heads/main", created);
   git(root, "reset", "-q", "--hard", "main");
-  write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+  write(root, ".devflow/users/jmp/digest.md", `${marker}\n`);
   commit(root, "jmp boundary — digest marker");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "ready: kind=digest-behind", `marker=${marker}`);
@@ -2382,7 +2382,7 @@ test("R5 the digest history reads exact triples closed by one trailing delimiter
 test("R5 an empty-subject commit keeps the records aligned and counts as unseen history", (t) => {
   const root = makeRepo(t);
   const marker = git(root, "rev-parse", "HEAD");
-  write(root, "devflow/users/jmp/digest.md", `${marker}\n`);
+  write(root, ".devflow/users/jmp/digest.md", `${marker}\n`);
   commit(root, "jmp boundary — digest marker");
   git(root, "commit", "-q", "--allow-empty", "-m", "jmp 02.1 wip: one");
   // mine by name and email and with no id prefix to start, so it is one unseen commit — and
@@ -2413,8 +2413,8 @@ test("R5 digestLag parses no Git output before that command's status is checked"
 
 test("R5 an unresolved integration ref is unavailable, not a count against local HEAD", async (t) => {
   const root = makeRepo(t);
-  write(root, "devflow/project/arch.md", arch({ integration: "never-created" }));
-  write(root, "devflow/users/jmp/digest.md", "none\n");
+  write(root, ".devflow/project/arch.md", arch({ integration: "never-created" }));
+  write(root, ".devflow/users/jmp/digest.md", "none\n");
   otherCommit(root, "other change");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "ready: kind=digest-behind", "marker=none");
@@ -2440,7 +2440,7 @@ test("C integration configuration routes malformed local prose to its existing A
   await t.test("current-branch prose is a repair cause, not HEAD or a network wait", async () => {
     const root = makeRepo(t);
     const configured = "current branch `main` (one worktree)";
-    write(root, "devflow/project/arch.md", arch({ integration: configured }));
+    write(root, ".devflow/project/arch.md", arch({ integration: configured }));
     const state = await module.calculateState({ root });
     assert.equal(state.route.id, "setup.integration-config");
     assert.deepEqual(state.metadata.integration, {
@@ -2456,7 +2456,7 @@ test("C integration configuration routes malformed local prose to its existing A
 
   await t.test("one-worktree none prose uses the same machine classification", async () => {
     const root = makeRepo(t);
-    write(root, "devflow/project/arch.md", arch({ integration: "none (single component, nothing to integrate)" }));
+    write(root, ".devflow/project/arch.md", arch({ integration: "none (single component, nothing to integrate)" }));
     const state = await module.calculateState({ root });
     assert.equal(state.route.id, "setup.integration-config");
     assert.equal(state.metadata.integration.configuration, "integration-not-a-ref");
@@ -2479,7 +2479,7 @@ test("C integration configuration routes malformed local prose to its existing A
 
   await t.test("missing integration and merge fields keep their existing repair shape", async () => {
     const integrationMissing = makeRepo(t);
-    write(integrationMissing, "devflow/project/arch.md", arch().replace("integration: main\n", ""));
+    write(integrationMissing, ".devflow/project/arch.md", arch().replace("integration: main\n", ""));
     let state = await module.calculateState({ root: integrationMissing });
     assert.equal(state.route.id, "setup.integration-config");
     assert.deepEqual(setupEntry(state)?.missing, ["integration"]);
@@ -2487,7 +2487,7 @@ test("C integration configuration routes malformed local prose to its existing A
     assert.equal(state.metadata.integration.configuration, "missing");
 
     const mergeMissing = makeRepo(t);
-    write(mergeMissing, "devflow/project/arch.md", arch().replace("merge: merge-commit\n", ""));
+    write(mergeMissing, ".devflow/project/arch.md", arch().replace("merge: merge-commit\n", ""));
     state = await module.calculateState({ root: mergeMissing });
     assert.equal(state.route.id, "setup.integration-config");
     assert.deepEqual(setupEntry(state)?.missing, ["merge"]);
@@ -2497,9 +2497,9 @@ test("C integration configuration routes malformed local prose to its existing A
 
   await t.test("same-card finish and evidence-finalizing boundaries stand down for repair", async () => {
     const root = makeRepo(t, { brownfield: "no" });
-    write(root, "devflow/project/arch.md", arch({ brownfield: "no", integration: "current branch `main` (one worktree)" }));
+    write(root, ".devflow/project/arch.md", arch({ brownfield: "no", integration: "current branch `main` (one worktree)" }));
     commit(root, "jmp arch fixture invalid integration");
-    const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+    const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
     const check = "https://example.test/check";
     const waiting = `2026-08-29T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: unrun; detail-json: ""`;
     write(root, card, cardText("02.1", { progress: waiting }));
@@ -2507,7 +2507,7 @@ test("C integration configuration routes malformed local prose to its existing A
     const passed = `2026-08-29T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: pass; detail-json: ${JSON.stringify("passed")}`;
     write(root, card, cardText("02.1", { progress: `${passed}\n2026-08-29T00:01:00Z carry: remote evidence passed` }));
     const transport = `evidence-finalizing: card-json: ${JSON.stringify(card)}; checkpoint: 02.1 wip: ${checkpoint}; check-json: ${JSON.stringify(check)}`;
-    write(root, "devflow/journal.md", `2026-08-29T00:02:00Z ${transport}\n`);
+    write(root, ".devflow/journal.md", `2026-08-29T00:02:00Z ${transport}\n`);
     commit(root, "jmp 02.1 fixture card");
 
     const state = await module.calculateState({ root });
@@ -2727,7 +2727,7 @@ test("R6 a stale HANDOFF remains a repairable boundary passenger", (t) => {
       "2026-08-20T00:01:00Z carry: exact trap",
     ].join("\n"),
   });
-  write(root, "devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step\n${card}\n`);
+  write(root, ".devflow/users/jmp/HANDOFF.md", `# HANDOFF · 2000-01-01T00:00:00Z\n## Next single step\n${card}\n`);
   const result = run(root); ok(result);
   assertFragment(result.stdout, "transition: kind=finish-boundary", 'missing=["handoff"]');
   assertFragment(result.stdout, "handoff:", "stale=1");
@@ -2735,8 +2735,8 @@ test("R6 a stale HANDOFF remains a repairable boundary passenger", (t) => {
 
 test("R6 capability closure projects only non-none carry facts", (t) => {
   const root = makeRepo(t, { capabilities: ["capability"] });
-  const first = "devflow/tree/02-capability/02.1-first.done.md";
-  const second = "devflow/tree/02-capability/02.2-second.done.md";
+  const first = ".devflow/tree/02-capability/02.1-first.done.md";
+  const second = ".devflow/tree/02-capability/02.2-second.done.md";
   write(root, first, cardText("02.1", { progress: `2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: exact trap\n2026-08-20T00:02:00Z review result: head: ${"a".repeat(40)}; verdict: pass; detail-json: ""` }));
   write(root, second, cardText("02.2", { progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: none" }));
   commit(root, "jmp completed capability children");
@@ -2747,7 +2747,7 @@ test("R6 capability closure projects only non-none carry facts", (t) => {
 
 test("R6 capability closure uses the last valid carry-kind fact", (t) => {
   const root = makeRepo(t, { capabilities: ["capability"] });
-  const card = "devflow/tree/02-capability/02.1-first.done.md";
+  const card = ".devflow/tree/02-capability/02.1-first.done.md";
   write(root, card, cardText("02.1", { progress: [
     "2026-08-20T00:00:00Z implemented",
     "2026-08-20T00:01:00Z carry: superseded trap",
@@ -2763,8 +2763,8 @@ test("R6 capability closure uses the last valid carry-kind fact", (t) => {
 
 test("R6 capability closure includes carry facts from done cards below promoted subfolders", (t) => {
   const root = makeRepo(t, { capabilities: ["capability"] });
-  const direct = "devflow/tree/02-capability/02.1-first.done.md";
-  const nested = "devflow/tree/02-capability/02.3-sub.done/02.3.1-nested.done.md";
+  const direct = ".devflow/tree/02-capability/02.1-first.done.md";
+  const nested = ".devflow/tree/02-capability/02.3-sub.done/02.3.1-nested.done.md";
   write(root, direct, cardText("02.1", { progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: none" }));
   write(root, nested, cardText("02.3.1", { progress: "2026-08-20T00:00:00Z implemented\n2026-08-20T00:01:00Z carry: nested trap" }));
   commit(root, "jmp completed nested capability children");
@@ -2776,11 +2776,11 @@ test("R6 capability closure includes carry facts from done cards below promoted 
 test("current claim origin is derived from the card-creation commit's deleted request", (t) => {
   const root = makeRepo(t);
   const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact request")}`;
-  write(root, "devflow/journal.md", `${request}\n`);
+  write(root, ".devflow/journal.md", `${request}\n`);
   commit(root, "jmp boundary — request recorded");
-  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp split — request planned");
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
@@ -2792,13 +2792,13 @@ test("current claim origin is derived from the card-creation commit's deleted re
 function claimFromMarkerOnlyBundle(t, sourceSetup) {
   const root = makeRepo(t);
   const { source, retainedJournal = "" } = sourceSetup(root);
-  const firstMarker = `2026-08-20T00:01:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(source)}`;
-  const secondMarker = `2026-08-20T00:02:00Z layer opening: parent: devflow/tree/02-capability; children: 02.1+02.2; source-json: ${JSON.stringify(source)}`;
-  write(root, "devflow/journal.md", `${retainedJournal}${firstMarker}\n${secondMarker}\n`);
+  const firstMarker = `2026-08-20T00:01:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(source)}`;
+  const secondMarker = `2026-08-20T00:02:00Z layer opening: parent: .devflow/tree/02-capability; children: 02.1+02.2; source-json: ${JSON.stringify(source)}`;
+  write(root, ".devflow/journal.md", `${retainedJournal}${firstMarker}\n${secondMarker}\n`);
   commit(root, "jmp split — marker-only bundle opened");
-  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
-  write(root, "devflow/journal.md", retainedJournal);
+  write(root, ".devflow/journal.md", retainedJournal);
   commit(root, "jmp split — marker-only bundle planned");
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
@@ -2808,12 +2808,12 @@ function claimFromMarkerOnlyBundle(t, sourceSetup) {
 
 const MARKER_ONLY_ORIGIN_SCENES = [
   ["verify source", (root) => {
-    capabilityVerify(root, "devflow/tree/02-capability/verify.md", {
+    capabilityVerify(root, ".devflow/tree/02-capability/verify.md", {
       failures: "- source id: 1; timestamp: 2026-08-20T00:00:00Z; failure: exact source; routing: pending",
     });
-    return { source: "verify:devflow/tree/02-capability/verify.md#Failure history@1" };
+    return { source: "verify:.devflow/tree/02-capability/verify.md#Failure history@1" };
   }],
-  ["core source", () => ({ source: "core:devflow/project/product.md#Capabilities" })],
+  ["core source", () => ({ source: "core:.devflow/project/product.md#Capabilities" })],
   ["journal source with its request retained outside the planning diff", () => {
     const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("retained request")}`;
     return { source: `journal:${request}`, retainedJournal: `${request}\n` };
@@ -2836,13 +2836,13 @@ test("Phase 5B E1 one deleted request and its same-source layer markers are one 
   const root = makeRepo(t);
   const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact request")}`;
   const source = `journal:${request}`;
-  const rootMarker = `2026-08-20T00:01:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(source)}`;
-  const childMarker = `2026-08-20T00:02:00Z layer opening: parent: devflow/tree/02-capability; children: 02.1+02.2; source-json: ${JSON.stringify(source)}`;
-  write(root, "devflow/journal.md", `${request}\n${rootMarker}\n${childMarker}\n`);
+  const rootMarker = `2026-08-20T00:01:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(source)}`;
+  const childMarker = `2026-08-20T00:02:00Z layer opening: parent: .devflow/tree/02-capability; children: 02.1+02.2; source-json: ${JSON.stringify(source)}`;
+  write(root, ".devflow/journal.md", `${request}\n${rootMarker}\n${childMarker}\n`);
   commit(root, "jmp split — request layers opened");
-  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp split — request planned");
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
@@ -2856,13 +2856,13 @@ test("Phase 5B E1 genuinely different deleted origin identities remain unknown",
   const root = makeRepo(t);
   const first = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("first request")}`;
   const second = `2026-08-20T00:00:01Z maintenance routing pending: request-json: ${JSON.stringify("second request")}`;
-  const firstMarker = `2026-08-20T00:01:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify(`journal:${first}`)}`;
-  const secondMarker = `2026-08-20T00:02:00Z layer opening: parent: devflow/tree/02-capability; children: 02.1; source-json: ${JSON.stringify(`journal:${second}`)}`;
-  write(root, "devflow/journal.md", `${first}\n${second}\n${firstMarker}\n${secondMarker}\n`);
+  const firstMarker = `2026-08-20T00:01:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify(`journal:${first}`)}`;
+  const secondMarker = `2026-08-20T00:02:00Z layer opening: parent: .devflow/tree/02-capability; children: 02.1; source-json: ${JSON.stringify(`journal:${second}`)}`;
+  write(root, ".devflow/journal.md", `${first}\n${second}\n${firstMarker}\n${secondMarker}\n`);
   commit(root, "jmp split — different origins opened");
-  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp split — different origins planned");
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
@@ -2874,18 +2874,18 @@ test("Phase 5B E1 genuinely different deleted origin identities remain unknown",
 
 test("Phase 5B E1 a single deleted layer marker keeps its exact legacy origin", (t) => {
   const root = makeRepo(t);
-  const marker = `2026-08-20T00:01:00Z layer opening: parent: devflow/tree; children: 02; source-json: ${JSON.stringify("core:devflow/project/product.md#Capabilities")}`;
-  write(root, "devflow/journal.md", `${marker}\n`);
+  const marker = `2026-08-20T00:01:00Z layer opening: parent: .devflow/tree; children: 02; source-json: ${JSON.stringify("core:.devflow/project/product.md#Capabilities")}`;
+  write(root, ".devflow/journal.md", `${marker}\n`);
   commit(root, "jmp split — legacy layer opened");
-  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp split — legacy layer planned");
   const claimed = pending.replace(".md", ".wip-jmp.md");
   git(root, "mv", pending, claimed);
   commit(root, "jmp 02.1 claim");
   const result = run(root); ok(result);
-  assertFragment(result.stdout, "report:", "origin=core:devflow/project/product.md#Capabilities");
+  assertFragment(result.stdout, "report:", "origin=core:.devflow/project/product.md#Capabilities");
 });
 
 test("Phase 5B E1 shallow history remains explicitly unknown", (t) => {
@@ -2908,7 +2908,7 @@ test("S2 an old product verify without event sections emits each existing event 
   const root = makeRepo(t, { brownfield: "no" });
   const revisions = currentRevisions(root);
   const oldVerify = `# Verification · product\nProduct revision: ${revisions.productRevision}\nVerification revision: ${revisions.verificationRevision}\nCode revision: ${revisions.codeRevision}\nCapability revision: not-applicable\nExecuted: cli smoke observed success\nVerdict: pass\nFailure history:\nNone.\n`;
-  const relative = "devflow/tree/verify.md";
+  const relative = ".devflow/tree/verify.md";
   write(root, relative, oldVerify);
   commit(root, "jmp old capability verify");
   const result = run(root); ok(result);
@@ -2924,7 +2924,7 @@ test("S2 an old product verify without event sections emits each existing event 
 
 test("S3 binary revision hashing uses the exact ls-tree bytes without a shell pipeline", async (t) => {
   const root = makeRepo(t);
-  const paths = ["devflow/project/arch.md", "devflow/project/code-style.md", "devflow/project/glossary.md"];
+  const paths = [".devflow/project/arch.md", ".devflow/project/code-style.md", ".devflow/project/glossary.md"];
   const tree = execFileSync("git", ["ls-tree", "-r", "-z", "--full-tree", "HEAD", "--", ...paths], { cwd: root });
   const nodeHash = execFileSync("git", ["hash-object", "--stdin"], { cwd: root, input: tree, encoding: "utf8" }).trim();
   const { nativeBinaryHash } = await registry();
@@ -3002,7 +3002,7 @@ test("D1 a duplicated Progress log heading fails closed", (t) => {
 // below it that happens to look like `Field: value` is the task's record, not the plan.
 test("D1 Progress prose shaped like plan fields does not override the plan", (t) => {
   const root = makeRepo(t);
-  const card = "devflow/tree/02-capability/02.2-fixture.md";
+  const card = ".devflow/tree/02-capability/02.2-fixture.md";
   write(root, card, cardText("02.2", {
     depends: "02.1",
     approval: "pending",
@@ -3023,7 +3023,7 @@ test("D1 Progress prose shaped like plan fields does not override the plan", (t)
 
 test("D1 a Review line only below the heading leaves the card legacy", (t) => {
   const root = makeRepo(t);
-  const card = "devflow/tree/02-capability/02.1-fixture.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, card, cardText("02.1", {
     omit: ["Review"],
     progress: "2026-01-02T00:00:00Z implemented exact fixture\nReview: waived",
@@ -3066,7 +3066,7 @@ function malformedCard(number, headings) {
 
 test("D1 a clean committed card with no Progress log heading is invalid, not ready", (t) => {
   const root = makeRepo(t);
-  const card = "devflow/tree/02-capability/02.1-fixture.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, card, malformedCard("02.1", 0));
   commit(root, "jmp split — fixture");
   const result = run(root);
@@ -3078,7 +3078,7 @@ test("D1 a clean committed card with no Progress log heading is invalid, not rea
 
 test("D1 a clean committed card with two Progress log headings is invalid, not ready", (t) => {
   const root = makeRepo(t);
-  const card = "devflow/tree/02-capability/02.1-fixture.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, card, malformedCard("02.1", 2));
   commit(root, "jmp split — fixture");
   const result = run(root);
@@ -3109,21 +3109,21 @@ function sameOriginPlan(t) {
   const root = makeRepo(t);
   const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("one request, three cards")}`;
   const other = `2026-08-20T00:00:01Z maintenance routing pending: request-json: ${JSON.stringify("another request")}`;
-  write(root, "devflow/journal.md", `${request}\n${other}\n`);
+  write(root, ".devflow/journal.md", `${request}\n${other}\n`);
   commit(root, "jmp boundary — two requests recorded");
 
-  const mineSource = "devflow/tree/02-capability/02.1-first.md";
-  const pending = "devflow/tree/02-capability/02.2-second.md";
-  const closingSource = "devflow/tree/02-capability/02.3-third.md";
+  const mineSource = ".devflow/tree/02-capability/02.1-first.md";
+  const pending = ".devflow/tree/02-capability/02.2-second.md";
+  const closingSource = ".devflow/tree/02-capability/02.3-third.md";
   write(root, mineSource, cardText("02.1"));
   write(root, pending, cardText("02.2"));
   write(root, closingSource, cardText("02.3"));
-  write(root, "devflow/journal.md", `${other}\n`);
+  write(root, ".devflow/journal.md", `${other}\n`);
   commit(root, "jmp split — first request planned");
 
-  const foreign = "devflow/tree/02-capability/02.4-fourth.md";
+  const foreign = ".devflow/tree/02-capability/02.4-fourth.md";
   write(root, foreign, cardText("02.4"));
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp split — second request planned");
 
   const claimed = mineSource.replace(".md", ".wip-jmp.md");
@@ -3151,15 +3151,15 @@ test("D7 every current candidate of one planning commit carries that origin and 
 test("D7 compact output never shortens the exact same-origin sibling paths", (t) => {
   const root = makeRepo(t);
   const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("one request with long sibling paths")}`;
-  write(root, "devflow/journal.md", `${request}\n`);
+  write(root, ".devflow/journal.md", `${request}\n`);
   commit(root, "jmp boundary — long sibling request recorded");
   const cards = [1, 2, 3].map((number) =>
-    `devflow/tree/02-capability/02.${number}-${"long-sibling-name-".repeat(3)}${number}.md`);
+    `.devflow/tree/02-capability/02.${number}-${"long-sibling-name-".repeat(3)}${number}.md`);
   for (let index = 0; index < cards.length; index += 1) {
     const progress = index === 0 ? `2026-08-22T00:00:00Z ${"x".repeat(26000)}` : undefined;
     write(root, cards[index], cardText(`02.${index + 1}`, { progress }));
   }
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp split — long sibling request planned");
   const claimed = cards[0].replace(/\.md$/, ".wip-jmp.md");
   git(root, "mv", cards[0], claimed);
@@ -3190,20 +3190,20 @@ function multiOwnerBundle(t, { finishSecondOwner = true } = {}) {
   const root = makeRepo(t, { capabilities: ["capability", "second"] });
   const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("one request, two owners")}`;
   const source = `journal:${request}`;
-  const first = `2026-08-20T00:01:00Z layer opening: parent: devflow/tree/02-capability; children: 02.1; source-json: ${JSON.stringify(source)}`;
-  const second = `2026-08-20T00:01:01Z layer opening: parent: devflow/tree/03-second; children: 03.1; source-json: ${JSON.stringify(source)}`;
-  write(root, "devflow/journal.md", `${request}\n${first}\n${second}\n`);
-  commit(root, "jmp split — begin devflow/tree/02-capability+devflow/tree/03-second");
+  const first = `2026-08-20T00:01:00Z layer opening: parent: .devflow/tree/02-capability; children: 02.1; source-json: ${JSON.stringify(source)}`;
+  const second = `2026-08-20T00:01:01Z layer opening: parent: .devflow/tree/03-second; children: 03.1; source-json: ${JSON.stringify(source)}`;
+  write(root, ".devflow/journal.md", `${request}\n${first}\n${second}\n`);
+  commit(root, "jmp split — begin .devflow/tree/02-capability+.devflow/tree/03-second");
 
-  const owned = "devflow/tree/02-capability/02.1-filter.md";
+  const owned = ".devflow/tree/02-capability/02.1-filter.md";
   write(root, owned, cardText("02.1", { readFirst: ["src/filter/date.ts", "src/filter/range.ts"] }));
-  write(root, "devflow/journal.md", `${request}\n${second}\n`);
+  write(root, ".devflow/journal.md", `${request}\n${second}\n`);
   commit(root, "jmp split — first owner planned");
 
-  const sibling = "devflow/tree/03-second/03.1-export.md";
+  const sibling = ".devflow/tree/03-second/03.1-export.md";
   if (finishSecondOwner) {
     write(root, sibling, cardText("03.1", { readFirst: "src/export/contract.ts" }));
-    write(root, "devflow/journal.md", "");
+    write(root, ".devflow/journal.md", "");
     commit(root, "jmp split — second owner planned");
   }
 
@@ -3243,7 +3243,7 @@ test("D8 an unfinished pass leaves the remaining owner's exact target and reads 
   const result = run(scene.root); ok(result);
   // The remaining owner is named exactly, with its minted numbers and the same source, so the
   // next pass continues without scanning the tree or recomputing the mapping.
-  assertFragment(result.stdout, "transition: kind=layer-opening", "parent=devflow/tree/03-second");
+  assertFragment(result.stdout, "transition: kind=layer-opening", "parent=.devflow/tree/03-second");
   assertFragment(result.stdout, "transition: kind=layer-opening", "children=03.1");
   assertFragment(result.stdout, "transition: kind=layer-opening", `sourceJson=${JSON.stringify(scene.source)}`);
   assert.equal(nextOf(result.stdout), "transition.layer-opening", result.stdout);
@@ -3265,21 +3265,21 @@ test("D7 a closed card from the same origin is not a current sibling", (t) => {
 
 test("D7 none and unknown origins never become a sibling bundle", (t) => {
   const root = makeRepo(t);
-  const noneA = "devflow/tree/02-capability/02.1-none-a.md";
-  const noneB = "devflow/tree/02-capability/02.2-none-b.md";
+  const noneA = ".devflow/tree/02-capability/02.1-none-a.md";
+  const noneB = ".devflow/tree/02-capability/02.2-none-b.md";
   write(root, noneA, cardText("02.1"));
   write(root, noneB, cardText("02.2"));
   commit(root, "jmp split — planned with no recorded input");
 
   const first = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("first request")}`;
   const second = `2026-08-20T00:00:01Z maintenance routing pending: request-json: ${JSON.stringify("second request")}`;
-  write(root, "devflow/journal.md", `${first}\n${second}\n`);
+  write(root, ".devflow/journal.md", `${first}\n${second}\n`);
   commit(root, "jmp boundary — two requests recorded");
-  const unknownA = "devflow/tree/02-capability/02.3-unknown-a.md";
-  const unknownB = "devflow/tree/02-capability/02.4-unknown-b.md";
+  const unknownA = ".devflow/tree/02-capability/02.3-unknown-a.md";
+  const unknownB = ".devflow/tree/02-capability/02.4-unknown-b.md";
   write(root, unknownA, cardText("02.3"));
   write(root, unknownB, cardText("02.4"));
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp split — two origins planned at once");
 
   const result = run(root); ok(result);
@@ -3303,12 +3303,12 @@ test("D7 none and unknown origins never become a sibling bundle", (t) => {
 function unreadableOriginPlan(t, breakJournal) {
   const root = makeRepo(t);
   const request = `2026-08-20T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact request")}`;
-  const journal = path.join(root, "devflow", "journal.md");
+  const journal = path.join(root, ".devflow", "journal.md");
   breakJournal.before(root, journal, request);
   commit(root, "jmp boundary — request recorded");
-  const pending = "devflow/tree/02-capability/02.1-fixture.md";
+  const pending = ".devflow/tree/02-capability/02.1-fixture.md";
   write(root, pending, cardText("02.1"));
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp split — request planned");
   breakJournal.after(root);
   return { root, pending };
@@ -3320,7 +3320,7 @@ test("D7 closure a creation diff Git cannot read is unknown, not none", (t) => {
     // scoped to the journal alone, so the card's own history and parent lookups still answer
     // and only the creation diff cannot run — a program by this name exists nowhere
     after: (root) => {
-      fs.writeFileSync(path.join(root, ".gitattributes"), "devflow/journal.md diff=devflow-absent-driver\n", "utf8");
+      fs.writeFileSync(path.join(root, ".gitattributes"), ".devflow/journal.md diff=devflow-absent-driver\n", "utf8");
       git(root, "config", "diff.devflow-absent-driver.textconv", "devflow-textconv-that-does-not-exist");
     },
   });
@@ -3367,7 +3367,7 @@ function designNoteScene(t, {
   // the canonical wip checkpoint that first holds the line is the anchor, and it holds this
   // card and this code in the same commit
   for (const relative of present ?? code) write(root, relative, `// ${relative}\n`);
-  write(root, "devflow/journal.md", `${line}\n`);
+  write(root, ".devflow/journal.md", `${line}\n`);
   const anchor = commitNote ? commit(root, checkpoint) : null;
   return { root, card, statement, code, line, anchor };
 }
@@ -3390,9 +3390,9 @@ test("C design a committed current-capability note preempts the claim and projec
 
 test("C design a line HEAD holds only inside a longer line is not that line", (t) => {
   const scene = designNoteScene(t, { commitNote: false });
-  write(scene.root, "devflow/journal.md", `${scene.line} and one more clause\n`);
+  write(scene.root, ".devflow/journal.md", `${scene.line} and one more clause\n`);
   commit(scene.root, "jmp 02.1 wip: a different line");
-  write(scene.root, "devflow/journal.md", `${scene.line}\n`);
+  write(scene.root, ".devflow/journal.md", `${scene.line}\n`);
   const result = run(scene.root); ok(result);
   assert.equal(hasKind(result.stdout, "marker", "design-note"), false, result.stdout);
   assert.equal(nextOf(result.stdout), "claim.mine", result.stdout);
@@ -3400,9 +3400,9 @@ test("C design a line HEAD holds only inside a longer line is not that line", (t
 
 test("C design an earlier longer line is not the exact-line anchor", (t) => {
   const scene = designNoteScene(t, { commitNote: false });
-  write(scene.root, "devflow/journal.md", `${scene.line} and one more clause\n`);
+  write(scene.root, ".devflow/journal.md", `${scene.line} and one more clause\n`);
   commit(scene.root, "jmp 02.1 wip: capability design note");
-  write(scene.root, "devflow/journal.md", `${scene.line}\n`);
+  write(scene.root, ".devflow/journal.md", `${scene.line}\n`);
   const exactAnchor = commit(scene.root, "jmp 02.1 wip: capability design note");
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-note", `anchor=${exactAnchor}`);
@@ -3413,7 +3413,7 @@ test("C design an anchor lookup Git cannot run fails closed ahead of the claim",
   const scene = designNoteScene(t);
   // the pickaxe walks every historical journal blob; removing one loose object is the
   // narrowest deterministic way to make that lookup impossible
-  const stale = git(scene.root, "rev-parse", "HEAD~1:devflow/journal.md");
+  const stale = git(scene.root, "rev-parse", "HEAD~1:.devflow/journal.md");
   fs.rmSync(path.join(scene.root, ".git", "objects", stale.slice(0, 2), stale.slice(2)));
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "integrity: kind=blocking", "reason=knowledge-history-undecodable");
@@ -3438,7 +3438,7 @@ test("C design a different-capability observation stays a closure harvest, not a
   const result = run(scene.root); ok(result);
   assert.equal(hasKind(result.stdout, "marker", "design-note"), false, result.stdout);
   assert.equal(nextOf(result.stdout), "claim.mine", result.stdout);
-  assert.equal(read(scene.root, "devflow/journal.md"), `${scene.line}\n`, "the observation stays for that capability's closure");
+  assert.equal(read(scene.root, ".devflow/journal.md"), `${scene.line}\n`, "the observation stays for that capability's closure");
   assertReadOnly(scene.root, before);
 });
 
@@ -3446,7 +3446,7 @@ test("C design a different-capability observation stays a closure harvest, not a
 // an ordinary observation to harvest, an interrupted design-only write is not a generic verify
 // prefix, and no Git read failure may end as silence.
 test("C design a committed design note with no live card blocks instead of vanishing", (t) => {
-  const scene = designNoteScene(t, { card: "devflow/tree/02-capability/02.9-absent.md" });
+  const scene = designNoteScene(t, { card: ".devflow/tree/02-capability/02.9-absent.md" });
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-note", "reason=card-absent");
   assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
@@ -3461,10 +3461,10 @@ test("C design a committed design note naming another capability blocks instead 
 
 function designOnlyPrefix(t, { verifyFile = false, unrelated = false } = {}) {
   const scene = designNoteScene(t);
-  if (verifyFile) capabilityVerify(scene.root, "devflow/tree/02-capability/verify.md");
-  write(scene.root, "devflow/project/capabilities/02-capability.md",
-    `${read(scene.root, "devflow/project/capabilities/02-capability.md")}\n`);
-  write(scene.root, "devflow/journal.md", "");
+  if (verifyFile) capabilityVerify(scene.root, ".devflow/tree/02-capability/verify.md");
+  write(scene.root, ".devflow/project/capabilities/02-capability.md",
+    `${read(scene.root, ".devflow/project/capabilities/02-capability.md")}\n`);
+  write(scene.root, ".devflow/journal.md", "");
   if (unrelated) write(scene.root, "src/unrelated.ts", "// unrelated\n");
   return scene;
 }
@@ -3480,8 +3480,8 @@ test("C design an interrupted design-only prefix routes back to the writer", (t)
 
 test("C1 design-only accepts repeated nested K segments and no other nested path", (t) => {
   const scene = designNoteScene(t);
-  write(scene.root, "devflow/project/capabilities/02-capability/K-001-parent/K-002-child.md", "# child\n");
-  write(scene.root, "devflow/journal.md", "");
+  write(scene.root, ".devflow/project/capabilities/02-capability/K-001-parent/K-002-child.md", "# child\n");
+  write(scene.root, ".devflow/journal.md", "");
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-note", "prefix=design-only");
   assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
@@ -3505,8 +3505,8 @@ test("C design a design-only prefix carrying an unrelated path blocks", (t) => {
 
 test("C design a design-only prefix changing another capability blocks", (t) => {
   const scene = designNoteScene(t);
-  write(scene.root, "devflow/project/capabilities/03-neighbour.md", "# Capability 03\n");
-  write(scene.root, "devflow/journal.md", "");
+  write(scene.root, ".devflow/project/capabilities/03-neighbour.md", "# Capability 03\n");
+  write(scene.root, ".devflow/journal.md", "");
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-note", "reason=prefix-mismatch");
   assert.equal(nextOf(result.stdout), "marker.design-note", result.stdout);
@@ -3535,7 +3535,7 @@ test("C design a statement carrying the field delimiters stays one short note", 
   writeClaim(root, { commitSubject: "jmp 02.1 claim" });
   const statement = "write it as ; card-json: <path> and ; code-json: [paths]";
   const line = `2026-08-21T00:00:00Z capability note: capability: 03; note-json: ${JSON.stringify(statement)}`;
-  write(root, "devflow/journal.md", `${line}\n`);
+  write(root, ".devflow/journal.md", `${line}\n`);
   commit(root, "jmp boundary — observation recorded");
   const result = run(root); ok(result);
   assert.equal(result.stdout.includes("reserved-format:capability note:"), false, result.stdout);
@@ -3545,7 +3545,7 @@ test("C design a statement carrying the field delimiters stays one short note", 
 
 test("C design an unreadable HEAD journal blocks instead of falling to the claim", (t) => {
   const scene = designNoteScene(t);
-  const blob = git(scene.root, "rev-parse", "HEAD:devflow/journal.md");
+  const blob = git(scene.root, "rev-parse", "HEAD:.devflow/journal.md");
   fs.rmSync(path.join(scene.root, ".git", "objects", blob.slice(0, 2), blob.slice(2)));
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "integrity: kind=blocking", "reason=knowledge-head-undecodable");
@@ -3556,7 +3556,7 @@ test("C design an unreadable HEAD journal blocks instead of falling to the claim
 
 test("C design an interrupted prefix with an unreadable HEAD journal still blocks", (t) => {
   const scene = designOnlyPrefix(t, { unrelated: true });
-  const blob = git(scene.root, "rev-parse", "HEAD:devflow/journal.md");
+  const blob = git(scene.root, "rev-parse", "HEAD:.devflow/journal.md");
   fs.rmSync(path.join(scene.root, ".git", "objects", blob.slice(0, 2), blob.slice(2)));
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "integrity: kind=blocking", "reason=knowledge-head-undecodable");
@@ -3567,9 +3567,9 @@ test("C design an interrupted prefix with an unreadable HEAD journal still block
 
 test("C design an undecodable HEAD journal classifies its unresolved route as external", (t) => {
   const root = makeRepo(t);
-  fs.writeFileSync(path.join(root, "devflow", "journal.md"), Buffer.from([0xff, 0xfe, 0x0a]));
+  fs.writeFileSync(path.join(root, ".devflow", "journal.md"), Buffer.from([0xff, 0xfe, 0x0a]));
   commit(root, "jmp fixture — undecodable HEAD journal");
-  write(root, "devflow/journal.md", "working journal changed\n");
+  write(root, ".devflow/journal.md", "working journal changed\n");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-note", "reason=head-journal-undecodable");
   assertFragment(result.stdout, "marker: kind=design-note", "recovery=external");
@@ -3589,11 +3589,11 @@ function designOpenItem(capability, statement, card, { id = "jmp", timestamp = "
 function designOpenItemScene(t, { capability = "03", line = null, card: named = null, commitLine = true } = {}) {
   const root = makeRepo(t, { capabilities: ["capability", "neighbour"] });
   const card = writePending(root);
-  write(root, "devflow/tree/03-neighbour.md", "neighbour\n");
+  write(root, ".devflow/tree/03-neighbour.md", "neighbour\n");
   commit(root, "jmp split — waiting capability 03");
   const statement = "an export always carries the tenant id";
   const raw = line ?? designOpenItem(capability, statement, named ?? card);
-  write(root, "devflow/journal.md", `${raw}\n`);
+  write(root, ".devflow/journal.md", `${raw}\n`);
   if (commitLine) commit(root, "jmp boundary — design open item recorded");
   return { root, card, statement, line: raw };
 }
@@ -3617,10 +3617,10 @@ test("C design an owner-named open item preempts ready work and carries its exac
 });
 
 test("C design an owner-named open item routes by the owner it names, not by the card's number", (t) => {
-  const scene = designOpenItemScene(t, { card: "devflow/tree/02-capability/02.9-composite.done.md" });
+  const scene = designOpenItemScene(t, { card: ".devflow/tree/02-capability/02.9-composite.done.md" });
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-open-item", "capability=03");
-  assertFragment(result.stdout, "marker: kind=design-open-item", "card=devflow/tree/02-capability/02.9-composite.done.md");
+  assertFragment(result.stdout, "marker: kind=design-open-item", "card=.devflow/tree/02-capability/02.9-composite.done.md");
   assertNoFragment(result.stdout, "marker: kind=design-open-item", "reason=");
   assert.equal(nextOf(result.stdout), "marker.design-open-item", result.stdout);
 });
@@ -3638,7 +3638,7 @@ test("C design a malformed owner-named open item stays a plain open item and sto
 
 test("C design an open item attributed to no existing room stays plain and cannot route", (t) => {
   const scene = designOpenItemScene(t, {
-    line: designOpenItem("03", "a person-owned line", "devflow/tree/02-capability/02.9-composite.done.md", { id: "ghost" }),
+    line: designOpenItem("03", "a person-owned line", ".devflow/tree/02-capability/02.9-composite.done.md", { id: "ghost" }),
   });
   const result = run(scene.root); ok(result);
   assert.equal(hasKind(result.stdout, "marker", "design-open-item"), false, result.stdout);
@@ -3656,9 +3656,9 @@ test("C design an uncommitted owner-named open item is not a durable route", (t)
 
 test("C design an interrupted owner-named landing routes back to its own writer", (t) => {
   const scene = designOpenItemScene(t);
-  write(scene.root, "devflow/project/capabilities/03-neighbour.md",
-    `${read(scene.root, "devflow/project/capabilities/03-neighbour.md")}\n`);
-  write(scene.root, "devflow/journal.md", "");
+  write(scene.root, ".devflow/project/capabilities/03-neighbour.md",
+    `${read(scene.root, ".devflow/project/capabilities/03-neighbour.md")}\n`);
+  write(scene.root, ".devflow/journal.md", "");
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-open-item", "prefix=design-only");
   assertFragment(result.stdout, "marker: kind=design-open-item", "capability=03");
@@ -3668,9 +3668,9 @@ test("C design an interrupted owner-named landing routes back to its own writer"
 
 test("C design an owner-named landing touching another capability blocks", (t) => {
   const scene = designOpenItemScene(t);
-  write(scene.root, "devflow/project/capabilities/02-capability.md",
-    `${read(scene.root, "devflow/project/capabilities/02-capability.md")}\n`);
-  write(scene.root, "devflow/journal.md", "");
+  write(scene.root, ".devflow/project/capabilities/02-capability.md",
+    `${read(scene.root, ".devflow/project/capabilities/02-capability.md")}\n`);
+  write(scene.root, ".devflow/journal.md", "");
   const result = run(scene.root); ok(result);
   assertFragment(result.stdout, "marker: kind=design-open-item", "reason=prefix-mismatch");
   assertFragment(result.stdout, "marker: kind=design-open-item", "recovery=external");
@@ -3684,7 +3684,7 @@ function setCapabilityConcepts(root, relative, concepts) {
 
 function glossaryTermLine({
   term = "tag rename", definition = "renames one tag everywhere", capabilities = ["02", "03"],
-  source = "core:devflow/project/product.md#Capabilities", id = "jmp",
+  source = "core:.devflow/project/product.md#Capabilities", id = "jmp",
 } = {}) {
   return `2026-08-23T00:00:00Z ${id} glossary term: term-json: ${JSON.stringify(term)}; definition-json: ${JSON.stringify(definition)}; capabilities-json: ${JSON.stringify(capabilities)}; source-json: ${JSON.stringify(source)}`;
 }
@@ -3694,19 +3694,19 @@ test("G glossary exact term discovery returns one, many, or root without opening
     capabilities: ["records", "review"],
     glossaryText: "# Glossary\n\narchive: hides without deleting\ntag rename: renames one tag everywhere\nDecision Deck: the project-wide decision collection\n",
   });
-  setCapabilityConcepts(root, "devflow/project/capabilities/02-records.md", ["archive", "tag rename"]);
-  setCapabilityConcepts(root, "devflow/project/capabilities/03-review.md", ["tag rename"]);
+  setCapabilityConcepts(root, ".devflow/project/capabilities/02-records.md", ["archive", "tag rename"]);
+  setCapabilityConcepts(root, ".devflow/project/capabilities/03-review.md", ["tag rename"]);
   commit(root, "jmp arch — capability concepts");
 
   const ordinary = run(root, "--term", "archive"); ok(ordinary);
   assertFragment(ordinary.stdout, "term:", "canonical=1");
   assertFragment(ordinary.stdout, "term:", "context=capability");
   assertFragment(ordinary.stdout, "term:", 'capabilities=["02"]');
-  assertFragment(ordinary.stdout, "term:", 'paths=["devflow/project/capabilities/02-records.md"]');
+  assertFragment(ordinary.stdout, "term:", 'paths=[".devflow/project/capabilities/02-records.md"]');
 
   const shared = run(root, "--term", "tag rename"); ok(shared);
   assertFragment(shared.stdout, "term:", 'capabilities=["02","03"]');
-  assertFragment(shared.stdout, "term:", 'paths=["devflow/project/capabilities/02-records.md","devflow/project/capabilities/03-review.md"]');
+  assertFragment(shared.stdout, "term:", 'paths=[".devflow/project/capabilities/02-records.md",".devflow/project/capabilities/03-review.md"]');
 
   const projectWide = run(root, "--term", "Decision Deck"); ok(projectWide);
   assertFragment(projectWide.stdout, "term:", "context=root");
@@ -3718,7 +3718,7 @@ test("G glossary exact term discovery returns one, many, or root without opening
 });
 
 test("G routing baseline accepts glossary-defined concepts and rejects undefined concepts", async (t) => {
-  const relative = "devflow/project/capabilities/02-records.md";
+  const relative = ".devflow/project/capabilities/02-records.md";
   const root = makeRepo(t, {
     capabilities: ["records"],
     glossaryText: "# Glossary\n\narchive: hides records without deleting them\n",
@@ -3757,7 +3757,7 @@ test("arch and adopt shipped capability templates round-trip through capabilityS
 
   for (const item of packages) {
     const root = makeRepo(t, { brownfield: item.id === "adopt" ? "yes" : "no" });
-    const designHead = git(root, "log", "-1", "--format=%H", "--", "devflow/project/product.md", "devflow/project/arch.md", "devflow/project/glossary.md");
+    const designHead = git(root, "log", "-1", "--format=%H", "--", ".devflow/project/product.md", ".devflow/project/arch.md", ".devflow/project/glossary.md");
     const specPath = path.resolve(__dirname, `../skills/${item.id}/spec.mjs`);
     const templatePath = path.resolve(__dirname, `../skills/${item.id}/templates/capability-design.md`);
     const spec = await import(`${pathToFileURL(specPath).href}?roundtrip=${item.id}`);
@@ -3777,7 +3777,7 @@ test("arch and adopt shipped capability templates round-trip through capabilityS
     });
     assert.match(rendered, new RegExp(`^Trust: .*${item.trust}`, "m"));
     assert.equal(rendered.includes("Design written at:"), false);
-    write(root, "devflow/project/capabilities/01-foundation.md", rendered);
+    write(root, ".devflow/project/capabilities/01-foundation.md", rendered);
     commit(root, `jmp ${item.id} ??capability template roundtrip`);
 
     const state = await stateModule.calculateState({ root });
@@ -3790,13 +3790,13 @@ test("arch and adopt shipped capability templates round-trip through capabilityS
 test("G a committed confirmed glossary term preempts composite work with every named capability", async (t) => {
   const root = makeRepo(t, { capabilities: ["records", "review"] });
   const line = glossaryTermLine();
-  write(root, "devflow/journal.md", `${line}\n`);
+  write(root, ".devflow/journal.md", `${line}\n`);
   commit(root, "jmp 02.1 wip: glossary term");
   const result = run(root); ok(result);
   assertFragment(result.stdout, "marker: kind=glossary-term", `term=${JSON.stringify("tag rename")}`);
   assertFragment(result.stdout, "marker: kind=glossary-term", `definition=${JSON.stringify("renames one tag everywhere")}`);
   assertFragment(result.stdout, "marker: kind=glossary-term", 'capabilities=["02","03"]');
-  assertFragment(result.stdout, "marker: kind=glossary-term", "source=core:devflow/project/product.md#Capabilities");
+  assertFragment(result.stdout, "marker: kind=glossary-term", "source=core:.devflow/project/product.md#Capabilities");
   assert.equal(nextOf(result.stdout), "marker.glossary-term", result.stdout);
   const module = await registry();
   for (const later of ["claim.mine", "ready.ready", "marker.design-note", "marker.re-split"]) {
@@ -3807,12 +3807,12 @@ test("G a committed confirmed glossary term preempts composite work with every n
 test("G an undecodable HEAD journal keeps a working glossary transition blocked by its owner", (t) => {
   const root = makeRepo(t, { capabilities: ["records", "review"] });
   const line = glossaryTermLine();
-  fs.writeFileSync(path.join(root, "devflow", "journal.md"), Buffer.concat([
+  fs.writeFileSync(path.join(root, ".devflow", "journal.md"), Buffer.concat([
     Buffer.from(`${line}\n`, "utf8"),
     Buffer.from([0xff]),
   ]));
   commit(root, "jmp fixture — undecodable glossary journal");
-  write(root, "devflow/journal.md", `${line}\n`);
+  write(root, ".devflow/journal.md", `${line}\n`);
   const result = run(root); ok(result);
   assertFragment(result.stdout, "marker: kind=glossary-term", "reason=head-journal-undecodable");
   assert.equal(nextOf(result.stdout), "marker.glossary-term", result.stdout);
@@ -3826,7 +3826,7 @@ test("G malformed, uncommitted, and ghost-attributed glossary term lines remain 
   ];
   for (const item of cases) {
     const root = makeRepo(t, { capabilities: ["records", "review"] });
-    write(root, "devflow/journal.md", `${item.line}\n`);
+    write(root, ".devflow/journal.md", `${item.line}\n`);
     if (item.commitLine) commit(root, "jmp boundary — plain glossary observation");
     const result = run(root); ok(result);
     assert.equal(hasKind(result.stdout, "marker", "glossary-term"), false, result.stdout);
@@ -3835,7 +3835,7 @@ test("G malformed, uncommitted, and ghost-attributed glossary term lines remain 
 });
 
 function researchSource(root, number = "00.1") {
-  const card = `devflow/tree/00-project/${number}-source.done.md`;
+  const card = `.devflow/tree/00-project/${number}-source.done.md`;
   const text = cardText(number, { progress: "2026-08-29T00:00:00Z durable research conclusion" })
     .replace(`# ${number} fixture card`, `# ${number} Research: durable source`);
   write(root, card, text);
@@ -3886,21 +3886,21 @@ function addLinkedWorktree(t, root, name, start = "HEAD") {
 
 test("compatible feedback linked worktree: a stale invocation sees only the integration residual", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const archOwner = "devflow/project/arch.md";
-  const productOwner = "devflow/project/product.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const archOwner = ".devflow/project/arch.md";
+  const productOwner = ".devflow/project/product.md";
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: linked compatible review")}`;
   const archCoordinates = compatibleCoordinates(archOwner, " linked arch");
   const productCoordinates = compatibleCoordinates(productOwner, " linked product");
   const archMarker = compatibleFeedback(archOwner, source, archCoordinates);
   const productMarker = compatibleFeedback(productOwner, source, productCoordinates, "2026-08-29T01:01:00Z");
-  write(root, "devflow/journal.md", `${archMarker}\n${productMarker}\n`);
+  write(root, ".devflow/journal.md", `${archMarker}\n${productMarker}\n`);
   commit(root, "jmp boundary: seal linked compatible set");
   const stale = addLinkedWorktree(t, root, "compatible-stale");
 
   landCompatibleOwner(root, archOwner, source, archCoordinates);
-  write(root, "devflow/journal.md", `${productMarker}\n`);
+  write(root, ".devflow/journal.md", `${productMarker}\n`);
   const integrationHead = commit(root, "jmp arch: consume linked compatible owner");
 
   const module = await registry();
@@ -3918,12 +3918,12 @@ test("compatible feedback linked worktree: a stale invocation sees only the inte
 
 test("compatible feedback linked worktree: a pre-seal invocation sees the integration marker", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const owner = "devflow/project/arch.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = ".devflow/project/arch.md";
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: pre-seal compatible review")}`;
   const stale = addLinkedWorktree(t, root, "compatible-pre-seal");
-  write(root, "devflow/journal.md", `${compatibleFeedback(owner, source, compatibleCoordinates(owner, " integration"))}\n`);
+  write(root, ".devflow/journal.md", `${compatibleFeedback(owner, source, compatibleCoordinates(owner, " integration"))}\n`);
   const integrationHead = commit(root, "jmp boundary: seal integration compatible marker");
 
   const module = await registry();
@@ -3938,13 +3938,13 @@ test("compatible feedback linked worktree: a pre-seal invocation sees the integr
 
 test("compatible feedback linked worktree: a local not-yet-integrated transition remains visible", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const owner = "devflow/project/arch.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = ".devflow/project/arch.md";
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: local compatible review")}`;
   const integrationHead = git(root, "rev-parse", "main");
   const linked = addLinkedWorktree(t, root, "compatible-local");
-  write(linked, "devflow/journal.md", `${compatibleFeedback(owner, source, compatibleCoordinates(owner, " local"))}\n`);
+  write(linked, ".devflow/journal.md", `${compatibleFeedback(owner, source, compatibleCoordinates(owner, " local"))}\n`);
   commit(linked, "jmp boundary: local compatible marker");
 
   const module = await registry();
@@ -3960,16 +3960,16 @@ test("compatible feedback linked worktree: a local not-yet-integrated transition
 
 test("compatible feedback linked worktree: divergent additions do not invent a union", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const archOwner = "devflow/project/arch.md";
-  const productOwner = "devflow/project/product.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const archOwner = ".devflow/project/arch.md";
+  const productOwner = ".devflow/project/product.md";
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: divergent compatible review")}`;
   const linked = addLinkedWorktree(t, root, "compatible-divergent");
 
-  write(root, "devflow/journal.md", `${compatibleFeedback(archOwner, source, compatibleCoordinates(archOwner, " integration"))}\n`);
+  write(root, ".devflow/journal.md", `${compatibleFeedback(archOwner, source, compatibleCoordinates(archOwner, " integration"))}\n`);
   commit(root, "jmp boundary: integration compatible addition");
-  write(linked, "devflow/journal.md", `${compatibleFeedback(productOwner, source, compatibleCoordinates(productOwner, " local"))}\n`);
+  write(linked, ".devflow/journal.md", `${compatibleFeedback(productOwner, source, compatibleCoordinates(productOwner, " local"))}\n`);
   commit(linked, "jmp boundary: local compatible addition");
 
   const module = await registry();
@@ -3978,15 +3978,15 @@ test("compatible feedback linked worktree: divergent additions do not invent a u
     state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").map((entry) => entry.owner),
     [archOwner],
   );
-  assert.deepEqual(state.facts.report.notYetOnIntegration, ["devflow/journal.md"]);
+  assert.deepEqual(state.facts.report.notYetOnIntegration, [".devflow/journal.md"]);
 });
 
 test("compatible feedback linked worktree: integration-behind blocks owner landing and local reproduction", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const integrationCard = "devflow/tree/02-capability/02.1-integration.wip-jmp.md";
-  const localCard = "devflow/tree/02-capability/02.2-local.wip-jmp.md";
-  const productOwner = "devflow/project/product.md";
-  const archOwner = "devflow/project/arch.md";
+  const integrationCard = ".devflow/tree/02-capability/02.1-integration.wip-jmp.md";
+  const localCard = ".devflow/tree/02-capability/02.2-local.wip-jmp.md";
+  const productOwner = ".devflow/project/product.md";
+  const archOwner = ".devflow/project/arch.md";
   write(root, integrationCard, cardText("02.1"));
   write(root, localCard, cardText("02.2"));
   const sourceCommit = commit(root, "jmp compatible integration-behind sources");
@@ -3996,14 +3996,14 @@ test("compatible feedback linked worktree: integration-behind blocks owner landi
   const localCoordinates = compatibleCoordinates(archOwner, " integration-behind local");
   const linked = addLinkedWorktree(t, root, "compatible-integration-behind");
 
-  write(root, "devflow/journal.md", `${compatibleFeedback(productOwner, integrationSource, productCoordinates)}\n`);
+  write(root, ".devflow/journal.md", `${compatibleFeedback(productOwner, integrationSource, productCoordinates)}\n`);
   const integrationHead = commit(root, "jmp boundary: integration-behind compatible marker");
   landCompatibleOwner(linked, productOwner, integrationSource, productCoordinates);
 
   const module = await registry();
   const landed = await stableCompatibleState(module, linked);
 
-  write(linked, "devflow/journal.md", `${compatibleFeedback(archOwner, localSource, localCoordinates, "2026-08-29T01:01:00Z")}\n`);
+  write(linked, ".devflow/journal.md", `${compatibleFeedback(archOwner, localSource, localCoordinates, "2026-08-29T01:01:00Z")}\n`);
   commit(linked, "jmp boundary: local marker while integration-behind");
   const local = await stableCompatibleState(module, linked);
   const lifecycleFor = (state, card) => Array.isArray(state.facts.compatibleFeedback.lifecycles)
@@ -4042,17 +4042,17 @@ test("compatible feedback linked worktree: integration-behind blocks owner landi
       localCardLifecycle: "invalid",
       blockedBy: "integration-behind",
       blockingReason: "compatible-feedback-integration-behind",
-      notYetOnIntegration: ["devflow/journal.md"],
+      notYetOnIntegration: [".devflow/journal.md"],
     },
   });
 });
 
 test("compatible feedback: a card's own marker outranks its finish boundary", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-spaced fixture.wip-jmp.md";
+  const card = ".devflow/tree/02-capability/02.1-spaced fixture.wip-jmp.md";
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: compatible review")}`;
-  write(root, "devflow/journal.md", `${compatibleFeedback("devflow/project/arch.md", source)}\n`);
+  write(root, ".devflow/journal.md", `${compatibleFeedback(".devflow/project/arch.md", source)}\n`);
   fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:01:00Z compatible feedback recorded\n", "utf8");
   commit(root, "jmp 02.1 fixture card");
 
@@ -4066,12 +4066,12 @@ test("compatible feedback: a card's own marker outranks its finish boundary", as
 
 test("compatible feedback: another card's marker does not block this card's finish boundary", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const sourceCard = "devflow/tree/02-capability/02.1-source.wip-jmp.md";
-  const currentCard = "devflow/tree/02-capability/02.2-current.wip-jmp.md";
+  const sourceCard = ".devflow/tree/02-capability/02.1-source.wip-jmp.md";
+  const currentCard = ".devflow/tree/02-capability/02.2-current.wip-jmp.md";
   write(root, sourceCard, cardText("02.1"));
   write(root, currentCard, cardText("02.2"));
   const source = `${sourceCard}@${commit(root, "jmp compatible source cards")}`;
-  write(root, "devflow/journal.md", `${compatibleFeedback("devflow/project/arch.md", source)}\n`);
+  write(root, ".devflow/journal.md", `${compatibleFeedback(".devflow/project/arch.md", source)}\n`);
   fs.appendFileSync(path.join(root, ...currentCard.split("/")), "2026-08-29T01:01:00Z final task state\n", "utf8");
   commit(root, "jmp 02.2 fixture card");
 
@@ -4086,9 +4086,9 @@ test("compatible feedback: another card's marker does not block this card's fini
 
 test("compatible feedback: the boundary returns when the last owner marker is consumed", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const archOwner = "devflow/project/arch.md";
-  const designOwner = "devflow/project/design.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const archOwner = ".devflow/project/arch.md";
+  const designOwner = ".devflow/project/design.md";
   write(root, designOwner, "# Design\n\nFixture design.\n");
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: compatible review")}`;
@@ -4096,7 +4096,7 @@ test("compatible feedback: the boundary returns when the last owner marker is co
   const designCoordinates = compatibleCoordinates(designOwner, " design");
   const archMarker = compatibleFeedback(archOwner, source, archCoordinates);
   const designMarker = compatibleFeedback(designOwner, source, designCoordinates, "2026-08-29T01:01:00Z");
-  write(root, "devflow/journal.md", `${archMarker}\n${designMarker}\n`);
+  write(root, ".devflow/journal.md", `${archMarker}\n${designMarker}\n`);
   fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:02:00Z compatible feedback recorded\n", "utf8");
   commit(root, "jmp 02.1 fixture card");
 
@@ -4107,7 +4107,7 @@ test("compatible feedback: the boundary returns when the last owner marker is co
   const module = await registry();
 
   land(archOwner, archCoordinates);
-  write(root, "devflow/journal.md", `${designMarker}\n`);
+  write(root, ".devflow/journal.md", `${designMarker}\n`);
   commit(root, "jmp arch: land one compatible owner");
   let state = await module.calculateState({ root });
   let boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary"
@@ -4120,7 +4120,7 @@ test("compatible feedback: the boundary returns when the last owner marker is co
   });
 
   land(designOwner, designCoordinates);
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp design: land last compatible owner");
   state = await module.calculateState({ root });
   boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary"
@@ -4139,18 +4139,18 @@ test("compatible feedback: the boundary returns when the last owner marker is co
 test("compatible feedback: first-set history blocks later card OID and coordinate paraphrase", async (t) => {
   const exercise = async (fixture, kind) => {
     const root = makeRepo(fixture, { brownfield: "no" });
-    const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-    const owner = "devflow/project/arch.md";
+    const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+    const owner = ".devflow/project/arch.md";
     write(root, card, cardText("02.1"));
     const sealSource = `${card}@${commit(root, "jmp 02.1 wip: compatible review")}`;
     const coordinates = compatibleCoordinates(owner, " sealed");
-    write(root, "devflow/journal.md", `${compatibleFeedback(owner, sealSource, coordinates)}\n`);
+    write(root, ".devflow/journal.md", `${compatibleFeedback(owner, sealSource, coordinates)}\n`);
     fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:01:00Z compatible feedback recorded\n", "utf8");
     const taskOid = commit(root, "jmp 02.1 fixture card");
 
     const heading = coordinates.target.slice(owner.length + 1);
     write(root, owner, `${read(root, owner)}\n## ${heading}\n${coordinates.background}\n${coordinates.why}\n${coordinates.conclusion}\n${coordinates.implication}\nSource: ${sealSource}\n`);
-    write(root, "devflow/journal.md", "");
+    write(root, ".devflow/journal.md", "");
     commit(root, "jmp arch: land sealed compatible owner");
 
     const module = await registry();
@@ -4169,7 +4169,7 @@ test("compatible feedback: first-set history blocks later card OID and coordinat
     const laterCoordinates = kind === "coordinate-paraphrase"
       ? compatibleCoordinates(owner, " paraphrased")
       : coordinates;
-    write(root, "devflow/journal.md", `${compatibleFeedback(owner, laterSource, laterCoordinates, "2026-08-29T02:00:00Z")}\n`);
+    write(root, ".devflow/journal.md", `${compatibleFeedback(owner, laterSource, laterCoordinates, "2026-08-29T02:00:00Z")}\n`);
     commit(root, `jmp boundary: reject later compatible ${kind}`);
 
     const blocked = await module.calculateState({ root });
@@ -4192,24 +4192,24 @@ test("compatible feedback: first-set history blocks later card OID and coordinat
 
 test("compatible feedback: an exact consumed member reintroduced later is a reopen, not current work", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const owner = "devflow/project/arch.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = ".devflow/project/arch.md";
   const coordinates = compatibleCoordinates(owner, " exact replay");
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: compatible exact replay")}`;
   const marker = compatibleFeedback(owner, source, coordinates);
-  write(root, "devflow/journal.md", `${marker}\n`);
+  write(root, ".devflow/journal.md", `${marker}\n`);
   fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:01:00Z compatible feedback recorded\n", "utf8");
   commit(root, "jmp 02.1 fixture card");
   landCompatibleOwner(root, owner, source, coordinates);
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp arch: consume exact compatible member");
 
   const module = await registry();
   const baseline = await stableCompatibleState(module, root);
   assert.equal(baseline.facts.compatibleFeedback.lifecycles[0]?.state, "consumed");
 
-  write(root, "devflow/journal.md", `${marker}\n`);
+  write(root, ".devflow/journal.md", `${marker}\n`);
   commit(root, "jmp boundary: replay exact compatible member");
   const replay = await stableCompatibleState(module, root);
   assert.ok(replay.zones.integrity.entries.some((entry) => entry.reason === "compatible-feedback-member-reopened"));
@@ -4219,9 +4219,9 @@ test("compatible feedback: an exact consumed member reintroduced later is a reop
 
 test("compatible feedback: a malformed third member defers the whole set until the after-state is acceptable", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const owners = ["devflow/project/arch.md", "devflow/project/design.md", "devflow/project/product.md"];
-  write(root, "devflow/project/design.md", "# Design\n\nFixture design.\n");
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owners = [".devflow/project/arch.md", ".devflow/project/design.md", ".devflow/project/product.md"];
+  write(root, ".devflow/project/design.md", "# Design\n\nFixture design.\n");
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: compatible three-owner review")}`;
   const coordinates = owners.map((owner, index) => compatibleCoordinates(owner, ` member ${index + 1}`));
@@ -4229,7 +4229,7 @@ test("compatible feedback: a malformed third member defers the whole set until t
   const malformedCoordinates = { ...coordinates[2] };
   delete malformedCoordinates.implication;
   const malformed = compatibleFeedback(owners[2], source, malformedCoordinates, "2026-08-29T01:02:00Z");
-  write(root, "devflow/journal.md", `${valid[0]}\n${valid[1]}\n${malformed}\n`);
+  write(root, ".devflow/journal.md", `${valid[0]}\n${valid[1]}\n${malformed}\n`);
   fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:03:00Z compatible feedback recorded\n", "utf8");
   commit(root, "jmp 02.1 fixture card");
 
@@ -4239,14 +4239,14 @@ test("compatible feedback: a malformed third member defers the whole set until t
   assert.equal(state.zones.marker.entries.some((entry) => entry.kind === "compatible-feedback"), false);
   assert.deepEqual(state.facts.compatibleFeedback.lifecycles, []);
 
-  write(root, "devflow/journal.md", `${valid.join("\n")}\n`);
+  write(root, ".devflow/journal.md", `${valid.join("\n")}\n`);
   commit(root, "jmp boundary: correct compatible three-owner set");
   state = await stableCompatibleState(module, root);
   assert.equal(state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").length, 3);
   assert.equal(state.facts.compatibleFeedback.lifecycles.length, 3);
 
   owners.forEach((owner, index) => landCompatibleOwner(root, owner, source, coordinates[index]));
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp boundary: consume compatible three-owner set");
   state = await stableCompatibleState(module, root);
   const boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary" && entry.card === card);
@@ -4257,10 +4257,10 @@ test("compatible feedback: a malformed third member defers the whole set until t
 
 test("compatible feedback: mixed source revisions remain correctable and report one current mismatch", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const archOwner = "devflow/project/arch.md";
-  const designOwner = "devflow/project/design.md";
-  write(root, "devflow/project/design.md", "# Design\n\nFixture design.\n");
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const archOwner = ".devflow/project/arch.md";
+  const designOwner = ".devflow/project/design.md";
+  write(root, ".devflow/project/design.md", "# Design\n\nFixture design.\n");
   write(root, card, cardText("02.1"));
   const firstSource = `${card}@${commit(root, "jmp 02.1 wip: first compatible revision")}`;
   fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T00:01:00Z later source revision\n", "utf8");
@@ -4269,7 +4269,7 @@ test("compatible feedback: mixed source revisions remain correctable and report 
   const designCoordinates = compatibleCoordinates(designOwner, " mixed design");
   const archMarker = compatibleFeedback(archOwner, firstSource, archCoordinates);
   const mixedDesignMarker = compatibleFeedback(designOwner, secondSource, designCoordinates, "2026-08-29T01:01:00Z");
-  write(root, "devflow/journal.md", `${archMarker}\n${mixedDesignMarker}\n`);
+  write(root, ".devflow/journal.md", `${archMarker}\n${mixedDesignMarker}\n`);
   fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T01:02:00Z compatible feedback recorded\n", "utf8");
   commit(root, "jmp 02.1 fixture card");
 
@@ -4280,14 +4280,14 @@ test("compatible feedback: mixed source revisions remain correctable and report 
   assert.deepEqual(state.facts.compatibleFeedback.lifecycles, []);
 
   const designMarker = compatibleFeedback(designOwner, firstSource, designCoordinates, "2026-08-29T01:01:00Z");
-  write(root, "devflow/journal.md", `${archMarker}\n${designMarker}\n`);
+  write(root, ".devflow/journal.md", `${archMarker}\n${designMarker}\n`);
   commit(root, "jmp boundary: align compatible source revision");
   state = await stableCompatibleState(module, root);
   assert.equal(state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").length, 2);
 
   landCompatibleOwner(root, archOwner, firstSource, archCoordinates);
   landCompatibleOwner(root, designOwner, firstSource, designCoordinates);
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp boundary: consume aligned compatible set");
   state = await stableCompatibleState(module, root);
   const boundary = state.zones.transition.entries.find((entry) => entry.kind === "finish-boundary" && entry.card === card);
@@ -4297,15 +4297,15 @@ test("compatible feedback: mixed source revisions remain correctable and report 
 
 test("compatible feedback: one owner using two revisions of the same card is duplicate ownership", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const owner = "devflow/project/arch.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = ".devflow/project/arch.md";
   write(root, card, cardText("02.1"));
   const firstSource = `${card}@${commit(root, "jmp 02.1 wip: first duplicate revision")}`;
   fs.appendFileSync(path.join(root, ...card.split("/")), "2026-08-29T00:01:00Z second duplicate revision\n", "utf8");
   const secondSource = `${card}@${commit(root, "jmp 02.1 wip: second duplicate revision")}`;
   const first = compatibleFeedback(owner, firstSource, compatibleCoordinates(owner, " duplicate first"));
   const second = compatibleFeedback(owner, secondSource, compatibleCoordinates(owner, " duplicate second"), "2026-08-29T01:01:00Z");
-  write(root, "devflow/journal.md", `${first}\n${second}\n`);
+  write(root, ".devflow/journal.md", `${first}\n${second}\n`);
   commit(root, "jmp boundary: duplicate compatible owner");
 
   const module = await registry();
@@ -4317,13 +4317,13 @@ test("compatible feedback: one owner using two revisions of the same card is dup
 
 test("compatible feedback: an unattributable malformed line defers another card's first seal", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const owner = "devflow/project/arch.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = ".devflow/project/arch.md";
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: attributable compatible review")}`;
   const marker = compatibleFeedback(owner, source);
   const malformed = "2026-08-29T01:01:00Z compatible feedback pending: payload-json: {";
-  write(root, "devflow/journal.md", `${marker}\n${malformed}\n`);
+  write(root, ".devflow/journal.md", `${marker}\n${malformed}\n`);
   commit(root, "jmp boundary: malformed compatible neighbor");
 
   const module = await registry();
@@ -4332,7 +4332,7 @@ test("compatible feedback: an unattributable malformed line defers another card'
   assert.equal(state.zones.marker.entries.some((entry) => entry.kind === "compatible-feedback"), false);
   assert.deepEqual(state.facts.compatibleFeedback.lifecycles, []);
 
-  write(root, "devflow/journal.md", `${marker}\n`);
+  write(root, ".devflow/journal.md", `${marker}\n`);
   commit(root, "jmp boundary: remove malformed compatible neighbor");
   state = await stableCompatibleState(module, root);
   assert.equal(state.zones.marker.entries.filter((entry) => entry.kind === "compatible-feedback").length, 1);
@@ -4341,12 +4341,12 @@ test("compatible feedback: an unattributable malformed line defers another card'
 
 test("compatible feedback: a missing allowed owner stays unsealed until the owner appears", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const owner = "devflow/project/capabilities/02-missing.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = ".devflow/project/capabilities/02-missing.md";
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: missing-owner compatible review")}`;
   const marker = compatibleFeedback(owner, source);
-  write(root, "devflow/journal.md", `${marker}\n`);
+  write(root, ".devflow/journal.md", `${marker}\n`);
   commit(root, "jmp boundary: missing compatible owner");
 
   const module = await registry();
@@ -4364,16 +4364,16 @@ test("compatible feedback: a missing allowed owner stays unsealed until the owne
 
 test("compatible feedback: an undecodable HEAD blocks comparison without fabricating a reopen", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
-  const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
-  const owner = "devflow/project/arch.md";
+  const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+  const owner = ".devflow/project/arch.md";
   write(root, card, cardText("02.1"));
   const source = `${card}@${commit(root, "jmp 02.1 wip: undecodable-head review")}`;
   const marker = compatibleFeedback(owner, source);
-  write(root, "devflow/journal.md", `${marker}\n`);
+  write(root, ".devflow/journal.md", `${marker}\n`);
   commit(root, "jmp boundary: seal compatible marker before undecodable head");
-  fs.writeFileSync(path.join(root, "devflow", "journal.md"), Buffer.concat([Buffer.from(`${marker}\n`, "utf8"), Buffer.from([0xff])]));
+  fs.writeFileSync(path.join(root, ".devflow", "journal.md"), Buffer.concat([Buffer.from(`${marker}\n`, "utf8"), Buffer.from([0xff])]));
   commit(root, "jmp boundary: undecodable compatible head");
-  write(root, "devflow/journal.md", `${marker}\n`);
+  write(root, ".devflow/journal.md", `${marker}\n`);
 
   const module = await registry();
   const state = await stableCompatibleState(module, root);
@@ -4385,7 +4385,7 @@ test("compatible feedback: an undecodable HEAD blocks comparison without fabrica
 test("compatible feedback: remote finalizing stands down while evidence-wait stays routable", async (t) => {
   const setup = (kind) => {
     const root = makeRepo(t, { brownfield: "no" });
-    const card = "devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
+    const card = ".devflow/tree/02-capability/02.1-fixture.wip-jmp.md";
     const check = "https://example.test/check";
     const waiting = `2026-08-29T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: unrun; detail-json: ""`;
     write(root, card, cardText("02.1", { progress: waiting }));
@@ -4395,7 +4395,7 @@ test("compatible feedback: remote finalizing stands down while evidence-wait sta
       const passed = `2026-08-29T00:00:00Z remote evidence check: check-json: ${JSON.stringify(check)}; verdict: pass; detail-json: ${JSON.stringify("passed")}`;
       write(root, card, cardText("02.1", { progress: `${passed}\n2026-08-29T00:01:00Z carry: remote evidence passed` }));
     }
-    write(root, "devflow/journal.md", `2026-08-29T00:02:00Z ${transport}\n${compatibleFeedback("devflow/project/arch.md", `${card}@${checkpoint}`)}\n`);
+    write(root, ".devflow/journal.md", `2026-08-29T00:02:00Z ${transport}\n${compatibleFeedback(".devflow/project/arch.md", `${card}@${checkpoint}`)}\n`);
     commit(root, kind === "evidence-finalizing" ? "jmp 02.1 fixture card" : "jmp boundary: evidence wait with compatible feedback");
     return { root, card };
   };
@@ -4420,12 +4420,12 @@ test("compatible feedback: remote finalizing stands down while evidence-wait sta
 test("compatible feedback grammar preserves escaped coordinates, closed ownership, and deterministic multiple markers", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
   const source = researchSource(root);
-  const archOwner = "devflow/project/arch.md";
-  const productOwner = "devflow/project/product.md";
+  const archOwner = ".devflow/project/arch.md";
+  const productOwner = ".devflow/project/product.md";
   const escaped = compatibleCoordinates(archOwner, `; quote \" exact`);
   const archMarker = compatibleFeedback(archOwner, source.source, escaped);
   const productMarker = compatibleFeedback(productOwner, source.source, compatibleCoordinates(productOwner), "2026-08-29T01:01:00Z");
-  write(root, "devflow/journal.md", `${productMarker}\n${archMarker}\n`);
+  write(root, ".devflow/journal.md", `${productMarker}\n${archMarker}\n`);
   commit(root, "jmp boundary: compatible feedback set");
 
   const module = await registry();
@@ -4438,17 +4438,17 @@ test("compatible feedback grammar preserves escaped coordinates, closed ownershi
   assert.equal(markers[0].landing, "pending");
 
   const malformed = compatibleFeedback(archOwner, source.source, { target: escaped.target, background: escaped.background, why: escaped.why, conclusion: escaped.conclusion });
-  write(root, "devflow/journal.md", `${malformed}\n`);
+  write(root, ".devflow/journal.md", `${malformed}\n`);
   state = await module.calculateState({ root });
   assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-coordinates-shape"));
 
-  write(root, "devflow/journal.md", `${compatibleFeedback("devflow/project/other.md", source.source, compatibleCoordinates("devflow/project/other.md"))}\n`);
+  write(root, ".devflow/journal.md", `${compatibleFeedback(".devflow/project/other.md", source.source, compatibleCoordinates(".devflow/project/other.md"))}\n`);
   state = await module.calculateState({ root });
   assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-owner"));
 
   const unknownWriter = makeRepo(t, { includeBrownfield: false });
   const unknownSource = researchSource(unknownWriter);
-  write(unknownWriter, "devflow/journal.md", `${compatibleFeedback(archOwner, unknownSource.source)}\n`);
+  write(unknownWriter, ".devflow/journal.md", `${compatibleFeedback(archOwner, unknownSource.source)}\n`);
   commit(unknownWriter, "jmp boundary: compatible writer unknown");
   state = await module.calculateState({ root: unknownWriter });
   assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-writer-unresolved"));
@@ -4457,10 +4457,10 @@ test("compatible feedback grammar preserves escaped coordinates, closed ownershi
 test("compatible feedback semantic replay rejects superficial diff and proves exact owner landing", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
   const source = researchSource(root);
-  const owner = "devflow/project/arch.md";
+  const owner = ".devflow/project/arch.md";
   const coordinates = compatibleCoordinates(owner);
   const marker = compatibleFeedback(owner, source.source, coordinates);
-  write(root, "devflow/journal.md", `${marker}\n`);
+  write(root, ".devflow/journal.md", `${marker}\n`);
   commit(root, "jmp boundary: compatible feedback");
   const module = await registry();
 
@@ -4480,12 +4480,12 @@ test("compatible feedback deletion requires semantic landing and preserves resid
   const module = await registry();
   const superficial = makeRepo(t, { brownfield: "no" });
   const superficialSource = researchSource(superficial);
-  const owner = "devflow/project/arch.md";
+  const owner = ".devflow/project/arch.md";
   const superficialMarker = compatibleFeedback(owner, superficialSource.source);
-  write(superficial, "devflow/journal.md", `${superficialMarker}\n`);
+  write(superficial, ".devflow/journal.md", `${superficialMarker}\n`);
   commit(superficial, "jmp boundary: compatible feedback");
   write(superficial, owner, `${read(superficial, owner)}\nUnrelated owner diff.\n`);
-  write(superficial, "devflow/journal.md", "");
+  write(superficial, ".devflow/journal.md", "");
   commit(superficial, "jmp arch: superficial compatible deletion");
   let state = await module.calculateState({ root: superficial });
   assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-semantic-landing-missing"));
@@ -4493,14 +4493,14 @@ test("compatible feedback deletion requires semantic landing and preserves resid
 
   const residual = makeRepo(t, { brownfield: "no" });
   const residualSource = researchSource(residual);
-  const productOwner = "devflow/project/product.md";
+  const productOwner = ".devflow/project/product.md";
   const archCoordinates = compatibleCoordinates(owner);
   const archMarker = compatibleFeedback(owner, residualSource.source, archCoordinates);
   const productMarker = compatibleFeedback(productOwner, residualSource.source, compatibleCoordinates(productOwner), "2026-08-29T01:01:00Z");
-  write(residual, "devflow/journal.md", `${archMarker}\n${productMarker}\n`);
+  write(residual, ".devflow/journal.md", `${archMarker}\n${productMarker}\n`);
   commit(residual, "jmp boundary: compatible feedback set");
   write(residual, owner, `${read(residual, owner)}\n## Compatible boundary\n${archCoordinates.background}\n${archCoordinates.why}\n${archCoordinates.conclusion}\n${archCoordinates.implication}\nSource: ${residualSource.source}\n`);
-  write(residual, "devflow/journal.md", `${productMarker}\n`);
+  write(residual, ".devflow/journal.md", `${productMarker}\n`);
   commit(residual, "jmp arch: land one compatible owner");
   state = await module.calculateState({ root: residual });
   assert.equal(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-semantic-landing-missing"), false);
@@ -4553,7 +4553,7 @@ test("K canonical verify records expose verdict and executed evidence to package
 test("K a root pass with a stale capability revision cannot complete or create product events", async (t) => {
   const root = completedRepo(t);
   rootVerify(root, "pass", { events: false, executed: "claimed browser success" });
-  const relative = "devflow/tree/verify.md";
+  const relative = ".devflow/tree/verify.md";
   const text = fs.readFileSync(path.join(root, ...relative.split("/")), "utf8");
   write(root, relative, text.replace(/^Capability revision: .*$/m, `Capability revision: ${"0".repeat(40)}`));
   commit(root, "jmp counterfeit stale verification record");
@@ -4588,8 +4588,8 @@ test("K a current root pass without meaningful Executed evidence cannot complete
 
 test("K a current completed-capability record without meaningful Executed evidence cannot create automatic events", async (t) => {
   const root = makeRepo(t, { brownfield: "no", capabilities: ["capability"] });
-  const card = "devflow/tree/02-capability.done/02.1-work.done.md";
-  const verify = "devflow/tree/02-capability.done/verify.md";
+  const card = ".devflow/tree/02-capability.done/02.1-work.done.md";
+  const verify = ".devflow/tree/02-capability.done/verify.md";
   write(root, card, cardText("02.1"));
   commit(root, "jmp capability done");
   capabilityVerify(root, verify, { executed: "   ", capabilityPaths: [card] });
@@ -4622,21 +4622,21 @@ test("K a current pass reporting an unavailable channel cannot complete the prod
 
 test("K C1 ordinary project research outranks missing product and rejects implementation cards", async (t) => {
   const pending = makeRepo(t, { product: false, baseline: false });
-  write(pending, "devflow/tree/00-project/00.1-discovery.md",
+  write(pending, ".devflow/tree/00-project/00.1-discovery.md",
     cardText("00.1").replace("# 00.1 fixture card", "# 00.1 Research: product boundary"));
   commit(pending, "jmp split ??project research");
   const pendingState = run(pending); ok(pendingState);
   assert.equal(nextOf(pendingState.stdout), "ready.ready", pendingState.stdout);
 
   const active = makeRepo(t, { product: false, baseline: false });
-  write(active, "devflow/tree/00-project/00.1-discovery.wip-jmp.md",
+  write(active, ".devflow/tree/00-project/00.1-discovery.wip-jmp.md",
     cardText("00.1").replace("# 00.1 fixture card", "# 00.1 Research: product boundary"));
   commit(active, "jmp 00.1 wip: project research");
   const activeState = run(active); ok(activeState);
   assert.equal(nextOf(activeState.stdout), "claim.mine", activeState.stdout);
 
   const forbidden = makeRepo(t, { product: false, baseline: false });
-  write(forbidden, "devflow/tree/00-project/00.2-research.md", cardText("00.2"));
+  write(forbidden, ".devflow/tree/00-project/00.2-research.md", cardText("00.2"));
   commit(forbidden, "jmp split ??spoofed project research");
   const forbiddenState = run(forbidden); ok(forbiddenState);
   assert.equal(nextOf(forbiddenState.stdout), "integrity.blocking", forbiddenState.stdout);
@@ -4648,40 +4648,40 @@ test("K C1 ordinary project research outranks missing product and rejects implem
 test("K exact knowledge landing marker preserves its declared writer, source, duplicate pair, and route", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
   const source = researchSource(root);
-  const valid = knowledgeLanding("devflow/project/arch.md", "arch", source.source);
-  write(root, "devflow/journal.md", `${valid}\n`);
+  const valid = knowledgeLanding(".devflow/project/arch.md", "arch", source.source);
+  write(root, ".devflow/journal.md", `${valid}\n`);
   commit(root, "jmp boundary ??knowledge landing");
   const accepted = run(root); ok(accepted);
   assert.equal(nextOf(accepted.stdout), "marker.knowledge-landing", accepted.stdout);
-  assertFragment(accepted.stdout, "marker: kind=knowledge-landing", "owner=devflow/project/arch.md");
+  assertFragment(accepted.stdout, "marker: kind=knowledge-landing", "owner=.devflow/project/arch.md");
   assertFragment(accepted.stdout, "marker: kind=knowledge-landing", `source=${source.source}`);
 
-  write(root, "devflow/journal.md", `${knowledgeLanding("devflow/project/arch.md", "adopt", source.source)}\n`);
+  write(root, ".devflow/journal.md", `${knowledgeLanding(".devflow/project/arch.md", "adopt", source.source)}\n`);
   const adoptWriter = run(root); ok(adoptWriter);
   assert.equal(nextOf(adoptWriter.stdout), "marker.knowledge-landing", adoptWriter.stdout);
   const module = await registry();
   let structured = await module.calculateState({ root });
   assert.equal(structured.zones.marker.entries.find((entry) => entry.kind === "knowledge-landing")?.writer, "adopt");
 
-  write(root, "devflow/journal.md", `${knowledgeLanding("devflow/project/arch.md", "arch", `${source.card}@${"0".repeat(40)}`)}\n`);
+  write(root, ".devflow/journal.md", `${knowledgeLanding(".devflow/project/arch.md", "arch", `${source.card}@${"0".repeat(40)}`)}\n`);
   const unresolved = run(root); ok(unresolved);
   assert.equal(nextOf(unresolved.stdout), "integrity.blocking", unresolved.stdout);
   structured = await module.calculateState({ root });
   assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-source-unresolved"));
 
-  write(root, "devflow/journal.md", `${valid}\n${valid}\n`);
+  write(root, ".devflow/journal.md", `${valid}\n${valid}\n`);
   const duplicate = run(root); ok(duplicate);
   assert.equal(nextOf(duplicate.stdout), "integrity.blocking", duplicate.stdout);
   structured = await module.calculateState({ root });
   assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-owner-source-duplicate"));
 
   const raw = `${valid.slice(0, valid.indexOf("source-json: ") + "source-json: ".length)}${source.source}`;
-  write(root, "devflow/journal.md", `${raw}\n`);
+  write(root, ".devflow/journal.md", `${raw}\n`);
   structured = await module.calculateState({ root });
   assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-source-json"));
 
   const objectValue = `${valid.slice(0, valid.indexOf("source-json: ") + "source-json: ".length)}${JSON.stringify({ source: source.source })}`;
-  write(root, "devflow/journal.md", `${objectValue}\n`);
+  write(root, ".devflow/journal.md", `${objectValue}\n`);
   structured = await module.calculateState({ root });
   assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-source-json"));
 });
@@ -4689,10 +4689,10 @@ test("K exact knowledge landing marker preserves its declared writer, source, du
 test("K knowledge landing deletion requires its owner or an exact K Source basis", async (t) => {
   const unauthorizedRoot = makeRepo(t, { brownfield: "no" });
   const unauthorizedSource = researchSource(unauthorizedRoot);
-  const unauthorizedMarker = knowledgeLanding("devflow/project/arch.md", "arch", unauthorizedSource.source);
-  write(unauthorizedRoot, "devflow/journal.md", `${unauthorizedMarker}\n`);
+  const unauthorizedMarker = knowledgeLanding(".devflow/project/arch.md", "arch", unauthorizedSource.source);
+  write(unauthorizedRoot, ".devflow/journal.md", `${unauthorizedMarker}\n`);
   commit(unauthorizedRoot, "jmp boundary ??knowledge landing");
-  write(unauthorizedRoot, "devflow/journal.md", "");
+  write(unauthorizedRoot, ".devflow/journal.md", "");
   const badDeletion = commit(unauthorizedRoot, "jmp boundary ??marker-only deletion");
   const unauthorized = run(unauthorizedRoot); ok(unauthorized);
   assert.equal(nextOf(unauthorized.stdout), "integrity.blocking", unauthorized.stdout);
@@ -4702,22 +4702,22 @@ test("K knowledge landing deletion requires its owner or an exact K Source basis
 
   const replacedRoot = makeRepo(t, { brownfield: "no" });
   const replacedSource = researchSource(replacedRoot);
-  const replacedMarker = knowledgeLanding("devflow/project/arch.md", "arch", replacedSource.source);
-  write(replacedRoot, "devflow/journal.md", `${replacedMarker}\n`);
+  const replacedMarker = knowledgeLanding(".devflow/project/arch.md", "arch", replacedSource.source);
+  write(replacedRoot, ".devflow/journal.md", `${replacedMarker}\n`);
   commit(replacedRoot, "jmp boundary · knowledge landing");
-  const replacementMarker = knowledgeLanding("devflow/project/product.md", "arch", replacedSource.source, "2026-08-29T02:00:00Z");
-  write(replacedRoot, "devflow/journal.md", `${replacementMarker}\n`);
+  const replacementMarker = knowledgeLanding(".devflow/project/product.md", "arch", replacedSource.source, "2026-08-29T02:00:00Z");
+  write(replacedRoot, ".devflow/journal.md", `${replacementMarker}\n`);
   const replacedAt = commit(replacedRoot, "jmp boundary · replace marker without consumption");
   structured = await module.calculateState({ root: replacedRoot });
   assert.ok(structured.zones.integrity.entries.some((entry) => entry.reason === "knowledge-marker-unauthorized-deletion" && entry.commit === replacedAt));
 
   const directRoot = makeRepo(t, { brownfield: "no" });
   const directSource = researchSource(directRoot);
-  const directMarker = knowledgeLanding("devflow/project/arch.md", "arch", directSource.source);
-  write(directRoot, "devflow/journal.md", `${directMarker}\n`);
+  const directMarker = knowledgeLanding(".devflow/project/arch.md", "arch", directSource.source);
+  write(directRoot, ".devflow/journal.md", `${directMarker}\n`);
   commit(directRoot, "jmp boundary ??knowledge landing");
-  write(directRoot, "devflow/journal.md", "");
-  write(directRoot, "devflow/project/arch.md", `${read(directRoot, "devflow/project/arch.md")}\nDirect compact landing.\n`);
+  write(directRoot, ".devflow/journal.md", "");
+  write(directRoot, ".devflow/project/arch.md", `${read(directRoot, ".devflow/project/arch.md")}\nDirect compact landing.\n`);
   commit(directRoot, "jmp arch: consume knowledge landing");
   const direct = run(directRoot); ok(direct);
   structured = await module.calculateState({ root: directRoot });
@@ -4725,11 +4725,11 @@ test("K knowledge landing deletion requires its owner or an exact K Source basis
 
   const kRoot = makeRepo(t, { brownfield: "no" });
   const kSource = researchSource(kRoot);
-  const kMarker = knowledgeLanding("devflow/project/arch.md", "arch", kSource.source);
-  write(kRoot, "devflow/journal.md", `${kMarker}\n`);
+  const kMarker = knowledgeLanding(".devflow/project/arch.md", "arch", kSource.source);
+  write(kRoot, ".devflow/journal.md", `${kMarker}\n`);
   commit(kRoot, "jmp boundary ??knowledge landing");
-  write(kRoot, "devflow/journal.md", "");
-  write(kRoot, "devflow/project/arch/K-001-research.md", `# Research\nSource basis: ["${kSource.source}:1-2"]\n`);
+  write(kRoot, ".devflow/journal.md", "");
+  write(kRoot, ".devflow/project/arch/K-001-research.md", `# Research\nSource basis: ["${kSource.source}:1-2"]\n`);
   commit(kRoot, "jmp arch: consume knowledge landing into K");
   const k = run(kRoot); ok(k);
   structured = await module.calculateState({ root: kRoot });
@@ -4738,11 +4738,11 @@ test("K knowledge landing deletion requires its owner or an exact K Source basis
 
   const impreciseRoot = makeRepo(t, { brownfield: "no" });
   const impreciseSource = researchSource(impreciseRoot);
-  const impreciseMarker = knowledgeLanding("devflow/project/arch.md", "arch", impreciseSource.source);
-  write(impreciseRoot, "devflow/journal.md", `${impreciseMarker}\n`);
+  const impreciseMarker = knowledgeLanding(".devflow/project/arch.md", "arch", impreciseSource.source);
+  write(impreciseRoot, ".devflow/journal.md", `${impreciseMarker}\n`);
   commit(impreciseRoot, "jmp boundary ??knowledge landing");
-  write(impreciseRoot, "devflow/journal.md", "");
-  write(impreciseRoot, "devflow/project/arch/K-001-research.md", `# Research\nSource basis: ["${impreciseSource.source}"]\n`);
+  write(impreciseRoot, ".devflow/journal.md", "");
+  write(impreciseRoot, ".devflow/project/arch/K-001-research.md", `# Research\nSource basis: ["${impreciseSource.source}"]\n`);
   commit(impreciseRoot, "jmp arch: imprecise knowledge landing");
   const imprecise = run(impreciseRoot); ok(imprecise);
   assert.equal(nextOf(imprecise.stdout), "integrity.blocking", imprecise.stdout);
@@ -4755,17 +4755,17 @@ test("K knowledge landing K consumption requires the final exact bounded Source 
   const scene = async (basis) => {
     const root = makeRepo(t, { brownfield: "no" });
     const source = researchSource(root);
-    const marker = knowledgeLanding("devflow/project/arch.md", "arch", source.source);
-    write(root, "devflow/journal.md", `${marker}\n`);
+    const marker = knowledgeLanding(".devflow/project/arch.md", "arch", source.source);
+    write(root, ".devflow/journal.md", `${marker}\n`);
     commit(root, "jmp boundary · knowledge landing");
-    write(root, "devflow/journal.md", "");
-    write(root, "devflow/project/arch/K-001-research.md", basis(source));
+    write(root, ".devflow/journal.md", "");
+    write(root, ".devflow/project/arch/K-001-research.md", basis(source));
     commit(root, "jmp arch: consume knowledge landing into K");
     return { root, source, state: await module.calculateState({ root }) };
   };
   const rejected = (state) => state.zones.integrity.entries.some((entry) => entry.reason === "knowledge-source-basis");
 
-  const multi = await scene((source) => `# Research\nSource basis: ["devflow/project/product.md:1-2", "${source.source}:1-2"]\n`);
+  const multi = await scene((source) => `# Research\nSource basis: [".devflow/project/product.md:1-2", "${source.source}:1-2"]\n`);
   assert.equal(rejected(multi.state), false, "a valid current source may coexist with other Source basis entries");
 
   const reversed = await scene((source) => `# Research\nSource basis: ["${source.source}:2-1"]\n`);
@@ -4774,7 +4774,7 @@ test("K knowledge landing K consumption requires the final exact bounded Source 
   const outOfBounds = await scene((source) => `# Research\nSource basis: ["${source.source}:1-9999"]\n`);
   assert.equal(rejected(outOfBounds.state), true, "a range beyond the cited card revision must not consume the marker");
 
-  const buried = await scene((source) => `# Research\nSource basis: ["${source.source}:1-2"]\n\nThe earlier line is not the capsule's file-level basis.\nSource basis: ["devflow/project/product.md:1-2"]\n`);
+  const buried = await scene((source) => `# Research\nSource basis: ["${source.source}:1-2"]\n\nThe earlier line is not the capsule's file-level basis.\nSource basis: [".devflow/project/product.md:1-2"]\n`);
   assert.equal(rejected(buried.state), true, "an earlier anchor cannot substitute for the final Source basis array");
 });
 
@@ -4783,7 +4783,7 @@ test("K knowledge journal observation separates absence and root boundary from G
   const reasons = (state) => state.zones.integrity.entries.map((entry) => entry.reason);
 
   const absent = makeRepo(t, { brownfield: "no" });
-  fs.rmSync(path.join(absent, "devflow", "journal.md"));
+  fs.rmSync(path.join(absent, ".devflow", "journal.md"));
   commit(absent, "jmp boundary · journal remains absent");
   let state = await module.calculateState({ root: absent });
   assert.equal(reasons(state).includes("knowledge-head-undecodable"), false);
@@ -4791,10 +4791,10 @@ test("K knowledge journal observation separates absence and root boundary from G
 
   const rootBoundary = makeRepo(t, { brownfield: "no" });
   const rootSource = researchSource(rootBoundary);
-  const rootMarker = knowledgeLanding("devflow/project/arch.md", "arch", rootSource.source);
+  const rootMarker = knowledgeLanding(".devflow/project/arch.md", "arch", rootSource.source);
   git(rootBoundary, "checkout", "--orphan", "knowledge-root");
-  write(rootBoundary, "devflow/project/arch.md", arch({ brownfield: "no", integration: "knowledge-root" }));
-  write(rootBoundary, "devflow/journal.md", `${rootMarker}\n`);
+  write(rootBoundary, ".devflow/project/arch.md", arch({ brownfield: "no", integration: "knowledge-root" }));
+  write(rootBoundary, ".devflow/journal.md", `${rootMarker}\n`);
   commit(rootBoundary, "jmp boundary · root knowledge landing");
   state = await module.calculateState({ root: rootBoundary });
   assert.equal(reasons(state).includes("knowledge-history-undecodable"), false);
@@ -4802,21 +4802,21 @@ test("K knowledge journal observation separates absence and root boundary from G
 
   const unreadableHead = makeRepo(t, { brownfield: "no" });
   const headSource = researchSource(unreadableHead);
-  write(unreadableHead, "devflow/journal.md", `${knowledgeLanding("devflow/project/arch.md", "arch", headSource.source)}\n`);
+  write(unreadableHead, ".devflow/journal.md", `${knowledgeLanding(".devflow/project/arch.md", "arch", headSource.source)}\n`);
   commit(unreadableHead, "jmp boundary · knowledge landing");
-  const headBlob = git(unreadableHead, "rev-parse", "HEAD:devflow/journal.md");
+  const headBlob = git(unreadableHead, "rev-parse", "HEAD:.devflow/journal.md");
   fs.rmSync(path.join(unreadableHead, ".git", "objects", headBlob.slice(0, 2), headBlob.slice(2)));
   state = await module.calculateState({ root: unreadableHead });
   assert.equal(reasons(state).includes("knowledge-head-undecodable"), true);
 
   const unreadableHistory = makeRepo(t, { brownfield: "no" });
   const historySource = researchSource(unreadableHistory);
-  const historyMarker = knowledgeLanding("devflow/project/arch.md", "arch", historySource.source);
-  write(unreadableHistory, "devflow/journal.md", `${historyMarker}\n`);
+  const historyMarker = knowledgeLanding(".devflow/project/arch.md", "arch", historySource.source);
+  write(unreadableHistory, ".devflow/journal.md", `${historyMarker}\n`);
   const markerCommit = commit(unreadableHistory, "jmp boundary · knowledge landing");
-  const historyBlob = git(unreadableHistory, "rev-parse", `${markerCommit}:devflow/journal.md`);
-  write(unreadableHistory, "devflow/journal.md", "");
-  write(unreadableHistory, "devflow/project/arch.md", `${read(unreadableHistory, "devflow/project/arch.md")}\nDirect compact landing.\n`);
+  const historyBlob = git(unreadableHistory, "rev-parse", `${markerCommit}:.devflow/journal.md`);
+  write(unreadableHistory, ".devflow/journal.md", "");
+  write(unreadableHistory, ".devflow/project/arch.md", `${read(unreadableHistory, ".devflow/project/arch.md")}\nDirect compact landing.\n`);
   commit(unreadableHistory, "jmp arch: consume knowledge landing");
   fs.rmSync(path.join(unreadableHistory, ".git", "objects", historyBlob.slice(0, 2), historyBlob.slice(2)));
   state = await module.calculateState({ root: unreadableHistory });
@@ -4826,36 +4826,36 @@ test("K knowledge journal observation separates absence and root boundary from G
 test("K knowledge landing permits partial multi-owner consumption", (t) => {
   const root = makeRepo(t, { brownfield: "no" });
   const source = researchSource(root);
-  const archMarker = knowledgeLanding("devflow/project/arch.md", "arch", source.source);
-  const productMarker = knowledgeLanding("devflow/project/product.md", "arch", source.source, "2026-08-29T01:01:00Z");
-  write(root, "devflow/journal.md", `${archMarker}\n${productMarker}\n`);
+  const archMarker = knowledgeLanding(".devflow/project/arch.md", "arch", source.source);
+  const productMarker = knowledgeLanding(".devflow/project/product.md", "arch", source.source, "2026-08-29T01:01:00Z");
+  write(root, ".devflow/journal.md", `${archMarker}\n${productMarker}\n`);
   commit(root, "jmp boundary ??multi-owner knowledge landing");
 
-  write(root, "devflow/journal.md", `${productMarker}\n`);
-  write(root, "devflow/project/arch.md", `${read(root, "devflow/project/arch.md")}\nDirect compact landing.\n`);
+  write(root, ".devflow/journal.md", `${productMarker}\n`);
+  write(root, ".devflow/project/arch.md", `${read(root, ".devflow/project/arch.md")}\nDirect compact landing.\n`);
   commit(root, "jmp arch: partial multi-owner landing");
   const state = run(root); ok(state);
   assert.equal(nextOf(state.stdout), "marker.knowledge-landing", state.stdout);
-  assertFragment(state.stdout, "marker: kind=knowledge-landing", "owner=devflow/project/product.md");
+  assertFragment(state.stdout, "marker: kind=knowledge-landing", "owner=.devflow/project/product.md");
   assertNoFragment(state.stdout, "integrity:", "reason=knowledge-marker-unauthorized-deletion");
 });
 
 test("K restored knowledge landing clears a bad deletion and may later consume atomically", async (t) => {
   const root = makeRepo(t, { brownfield: "no" });
   const source = researchSource(root);
-  const marker = knowledgeLanding("devflow/project/arch.md", "arch", source.source);
-  write(root, "devflow/journal.md", `${marker}\n`);
+  const marker = knowledgeLanding(".devflow/project/arch.md", "arch", source.source);
+  write(root, ".devflow/journal.md", `${marker}\n`);
   commit(root, "jmp boundary ??knowledge landing");
-  write(root, "devflow/journal.md", "");
+  write(root, ".devflow/journal.md", "");
   commit(root, "jmp boundary ??bad marker deletion");
 
-  write(root, "devflow/journal.md", `${marker}\n`);
+  write(root, ".devflow/journal.md", `${marker}\n`);
   commit(root, "jmp boundary ??restore knowledge landing");
   const restored = run(root); ok(restored);
   assert.equal(nextOf(restored.stdout), "marker.knowledge-landing", restored.stdout);
 
-  write(root, "devflow/journal.md", "");
-  write(root, "devflow/project/arch.md", `${read(root, "devflow/project/arch.md")}\nRecovered compact landing.\n`);
+  write(root, ".devflow/journal.md", "");
+  write(root, ".devflow/project/arch.md", `${read(root, ".devflow/project/arch.md")}\nRecovered compact landing.\n`);
   commit(root, "jmp arch: atomically consume restored landing");
   const consumed = run(root); ok(consumed);
   const module = await registry();

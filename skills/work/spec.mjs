@@ -55,12 +55,12 @@ export const ORDERS = {
 };
 
 export const OWNERSHIP = {
-  "devflow/tree/**.md": "work",
-  "devflow/users/<id>/HANDOFF.md": "work",
-  "devflow/journal.md#knowledge-landing-pending": "work",
-  "devflow/journal.md#compatible-feedback-pending": "work",
-  "devflow/journal.md#remote-evidence-finalizing": "work",
-  "devflow/project/<semantic-owner>.md#compatible-upper-feedback": "semantic owner",
+  ".devflow/tree/**.md": "work",
+  ".devflow/users/<id>/HANDOFF.md": "work",
+  ".devflow/journal.md#knowledge-landing-pending": "work",
+  ".devflow/journal.md#compatible-feedback-pending": "work",
+  ".devflow/journal.md#remote-evidence-finalizing": "work",
+  ".devflow/project/<semantic-owner>.md#compatible-upper-feedback": "semantic owner",
   "task card and progress lifecycle": "work",
   "task card contract": "split",
   "Git and devflow route facts": "principles.calculateState",
@@ -212,7 +212,7 @@ export const STAGES = [
   }, body: "stage: integration" },
   { id: "handoff", reads: ["task.integration", "handoff.state"], acceptsUnknown: [], done: s => s.task.integration !== "integrated" || s.handoff.state === "current", effects: [["WRITE", { artifact: "roomHandoff", template: "handoff" }], ["REPORT", { scope: "handoff-refresh" }], "NEXT"], reentry: "rejudge", body: "stage: handoff" },
   { id: "boundary", reads: ["boundary.state", "card.phase", "knowledge.marker", "feedback.marker"], needs: ["feedback.action"], acceptsUnknown: [], done: s => s.card.phase === "done" && s.boundary.state === "complete" && s.knowledge.marker !== "current-source" && s.feedback.marker !== "current-source", table: "boundary", reentry: "rejudge", branches: {
-    compatible: [["WRITE", { artifact: "compatibleFeedbackTransport", grammar: "external.principles.compatibleFeedbackPending", entries: "feedback.eligibleSet.bytes", atomic: true, touches: ["devflow/journal.md"] }], ["COMMIT", { scope: "compatible-marker", subject: "<id> boundary: compatible feedback", touches: ["devflow/journal.md"] }], "ROUTE:resume"],
+    compatible: [["WRITE", { artifact: "compatibleFeedbackTransport", grammar: "external.principles.compatibleFeedbackPending", entries: "feedback.eligibleSet.bytes", atomic: true, touches: [".devflow/journal.md"] }], ["COMMIT", { scope: "compatible-marker", subject: "<id> boundary: compatible feedback", touches: [".devflow/journal.md"] }], "ROUTE:resume"],
     "compatible-settled-carry": [["WRITE", { artifact: "activeCard", template: "carry" }], ["WRITE", { artifact: "activeCard", scope: "canonical claim-done move" }], ["COMMIT", { scope: "boundary", subject: "<id> boundary: task closure" }], "ROUTE:verify"],
     "compatible-settled": [["WRITE", { artifact: "activeCard", scope: "canonical claim-done move" }], ["COMMIT", { scope: "boundary", subject: "<id> boundary: task closure" }], "ROUTE:verify"],
     plain: [["WRITE", { artifact: "activeCard", scope: "canonical claim-done move" }], ["COMMIT", { scope: "boundary", subject: "<id> boundary: task closure" }], "ROUTE:verify"],
@@ -223,17 +223,17 @@ export const STAGES = [
 ];
 
 export const ARTIFACTS = {
-  activeCard: { path: "devflow/tree/**.md", writer: "work", readers: ["stage.claim-or-reenter", "stage.implement-and-signal", "stage.review-reduction", "stage.research-checkpoint", "stage.task-finalization", "stage.boundary"] },
-  product: { path: "devflow/project/product.md", writer: "project.product", readers: ["stage.implement-and-signal", "role.reviewer"] },
-  arch: { path: "devflow/project/arch.md", writer: "project.arch", readers: ["stage.implement-and-signal", "role.reviewer"] },
-  codeStyle: { path: "devflow/project/code-style.md", writer: "project.arch", readers: ["stage.implement-and-signal", "role.reviewer"] },
-  design: { path: "devflow/project/design.md", writer: "project.design", readers: ["stage.implement-and-signal", "role.reviewer"] },
-  glossary: { path: "devflow/project/glossary.md", writer: "project.product", readers: ["stage.implement-and-signal", "role.reviewer"] },
-  journal: { path: "devflow/journal.md", writer: "external.principles", readers: ["stage.implement-and-signal", "stage.knowledge-marker", "stage.task-finalization", "role.reviewer"] },
-  knowledgeMarkerTransport: { path: "devflow/journal.md#knowledge-landing-pending", writer: "work", readers: ["stage.knowledge-marker"] },
-  compatibleFeedbackTransport: { path: "devflow/journal.md#compatible-feedback-pending", writer: "work", readers: ["stage.task-finalization", "stage.boundary", "guard.compatible-feedback-before-closure"] },
-  remoteFinalizingTransport: { path: "devflow/journal.md#remote-evidence-finalizing", writer: "work", readers: ["stage.task-finalization"] },
-  roomHandoff: { path: "devflow/users/<id>/HANDOFF.md", writer: "work", readers: ["stage.handoff"] },
+  activeCard: { path: ".devflow/tree/**.md", writer: "work", readers: ["stage.claim-or-reenter", "stage.implement-and-signal", "stage.review-reduction", "stage.research-checkpoint", "stage.task-finalization", "stage.boundary"] },
+  product: { path: ".devflow/project/product.md", writer: "project.product", readers: ["stage.implement-and-signal", "role.reviewer"] },
+  arch: { path: ".devflow/project/arch.md", writer: "project.arch", readers: ["stage.implement-and-signal", "role.reviewer"] },
+  codeStyle: { path: ".devflow/project/code-style.md", writer: "project.arch", readers: ["stage.implement-and-signal", "role.reviewer"] },
+  design: { path: ".devflow/project/design.md", writer: "project.design", readers: ["stage.implement-and-signal", "role.reviewer"] },
+  glossary: { path: ".devflow/project/glossary.md", writer: "project.product", readers: ["stage.implement-and-signal", "role.reviewer"] },
+  journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.implement-and-signal", "stage.knowledge-marker", "stage.task-finalization", "role.reviewer"] },
+  knowledgeMarkerTransport: { path: ".devflow/journal.md#knowledge-landing-pending", writer: "work", readers: ["stage.knowledge-marker"] },
+  compatibleFeedbackTransport: { path: ".devflow/journal.md#compatible-feedback-pending", writer: "work", readers: ["stage.task-finalization", "stage.boundary", "guard.compatible-feedback-before-closure"] },
+  remoteFinalizingTransport: { path: ".devflow/journal.md#remote-evidence-finalizing", writer: "work", readers: ["stage.task-finalization"] },
+  roomHandoff: { path: ".devflow/users/<id>/HANDOFF.md", writer: "work", readers: ["stage.handoff"] },
   reviewerContract: { path: "references/reviewer-role.md", writer: "work", readers: ["stage.review-reduction", "role.reviewer"] },
 };
 

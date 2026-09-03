@@ -40,7 +40,7 @@
   the keys `base`, `result`, and `operations`, and no others. `base` is the unabbreviated full
   commit object ID output by Git for HEAD immediately before that replacement. `result` is one of `routing: fix
   cards <card number>(+<card number>)*`, `routing: documents <JSON array of exact
-  devflow/project paths>`, and `routing: product re-run <journal timestamp>`. In the first
+  .devflow/project paths>`, and `routing: product re-run <journal timestamp>`. In the first
   form, `*` is notation rather than a recorded character: write one or more exact card
   numbers, prefixing every number after the first with `+`.
 
@@ -48,7 +48,7 @@
   `{"op":"write","path":<path>,"content":<final UTF-8 string>}`,
   `{"op":"move","from":<path>,"to":<path>}`, and
   `{"op":"delete","path":<path>}`, with only the shown keys. Paths are repository-relative
-  `/` forms that begin with `devflow/` and are neither absolute nor contain `..`. A write or
+  `/` forms that begin with `.devflow/` and are neither absolute nor contain `..`. A write or
   delete never targets the current verify.md. A move may rename an ancestor status path of
   that file; the current verify.md path then follows beneath the new ancestor. A write
   creates required parent folders and creates or replaces a regular file. A move renames an
@@ -237,7 +237,7 @@
   capability-closing record; the baseline predicates govern that baseline file's regeneration
   before that commit lands. Outside a canonical capability-design commit, the canonical human-deletion exception,
   restoration of one complete one-boundary file from a user-identified Git revision to its current expected path, or this begin transition, any
-  `devflow/project/capabilities/` diff is an integrity anomaly.
+  `.devflow/project/capabilities/` diff is an integrity anomaly.
 - **git belongs to the main session.** Subagents implement and write the progress log —
   they never commit, rename, or push.
 - Prefix commit messages with your id — `<id> 02.2 signup API`,

@@ -67,7 +67,7 @@
     "id": "golden-capabilityClosing",
     "format": "capabilityClosing",
     "values": {
-      "folder": "devflow/tree/01",
+      "folder": ".devflow/tree/01",
       "head": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "product": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "verification": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -76,7 +76,7 @@
     "context": {
       "timestamp": "2026-08-30T00:00:00.000Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z capability closing: folder: devflow/tree/01; head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; capability: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    "expect": "2026-08-30T00:00:00.000Z capability closing: folder: .devflow/tree/01; head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; capability: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   },
   {
     "id": "golden-capabilityNote",
@@ -94,14 +94,14 @@
     "id": "golden-knowledgeLandingPending",
     "format": "knowledgeLandingPending",
     "values": {
-      "owner": "devflow/project/arch.md",
+      "owner": ".devflow/project/arch.md",
       "writer": "arch",
-      "source-json": "devflow/tree/00-project/00.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      "source-json": ".devflow/tree/00-project/00.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     },
     "context": {
       "timestamp": "2026-08-30T00:00:00.000Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z knowledge landing pending: owner: devflow/project/arch.md; writer: arch; source-json: \"devflow/tree/00-project/00.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\""
+    "expect": "2026-08-30T00:00:00.000Z knowledge landing pending: owner: .devflow/project/arch.md; writer: arch; source-json: \".devflow/tree/00-project/00.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\""
   },
   {
     "id": "golden-completionSignalResult",
@@ -134,10 +134,10 @@
     "format": "compatibleFeedbackPending",
     "values": {
       "payload-json": {
-        "owner": "devflow/project/arch.md",
-        "source": "devflow/tree/01-foundation/01.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "owner": ".devflow/project/arch.md",
+        "source": ".devflow/tree/01-foundation/01.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "coordinates": {
-          "target": "devflow/project/arch.md#Boundary",
+          "target": ".devflow/project/arch.md#Boundary",
           "background": "review observed",
           "why": "evidence explains choice",
           "conclusion": "retain behavior",
@@ -148,6 +148,6 @@
     "context": {
       "timestamp": "2026-08-30T00:00:00.000Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z compatible feedback pending: payload-json: {\"owner\":\"devflow/project/arch.md\",\"source\":\"devflow/tree/01-foundation/01.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"coordinates\":{\"target\":\"devflow/project/arch.md#Boundary\",\"background\":\"review observed\",\"why\":\"evidence explains choice\",\"conclusion\":\"retain behavior\",\"implication\":\"future work reuses it\"}}"
+    "expect": "2026-08-30T00:00:00.000Z compatible feedback pending: payload-json: {\"owner\":\".devflow/project/arch.md\",\"source\":\".devflow/tree/01-foundation/01.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"coordinates\":{\"target\":\".devflow/project/arch.md#Boundary\",\"background\":\"review observed\",\"why\":\"evidence explains choice\",\"conclusion\":\"retain behavior\",\"implication\":\"future work reuses it\"}}"
   }
 ]

@@ -1,5 +1,5 @@
 [
-  { "id": "00-project-task-spoof", "path": "devflow/tree/00-project/00.1-build.md", "heading": "# 00.1 build auth", "expect": "integrity-block" },
-  { "id": "missing-progress-log", "path": "devflow/tree/02-auth/02.1-build.md", "expect": "template-reject" },
-  { "id": "duplicate-progress-log", "path": "devflow/tree/02-auth/02.1-build.md", "expect": "template-reject" }
+  { "id": "00-project-task-spoof", "path": ".devflow/tree/00-project/00.1-build.md", "heading": "# 00.1 build auth", "expect": "integrity-block" },
+  { "id": "missing-progress-log", "path": ".devflow/tree/02-auth/02.1-build.md", "expect": "template-reject" },
+  { "id": "duplicate-progress-log", "path": ".devflow/tree/02-auth/02.1-build.md", "expect": "template-reject" }
 ]

@@ -16,11 +16,11 @@ export const ORDERS = {
 };
 export const OWNERSHIP = {
   "schema-2 project state": "external.principles",
-  "devflow/users/<id>/HANDOFF.md": "project.room-owner",
-  "devflow/users/<id>/digest.md": "project.room-owner",
-  "devflow/tree/**": "project.split-or-work",
-  "devflow/project/capabilities/**": "project.arch-or-adopt",
-  "devflow/journal.md": "external.principles"
+  ".devflow/users/<id>/HANDOFF.md": "project.room-owner",
+  ".devflow/users/<id>/digest.md": "project.room-owner",
+  ".devflow/tree/**": "project.split-or-work",
+  ".devflow/project/capabilities/**": "project.arch-or-adopt",
+  ".devflow/journal.md": "external.principles"
 };
 export const GUARDS = [
   { id: "unrecognized-state", reads: ["intent.scope", "state.canonicalNext"], when: s => s.intent.scope === "handoff-continuation" && s.state.canonicalNext === "unrecognized", then: "BLOCK", body: "guard: unrecognized-state" },
@@ -54,12 +54,12 @@ export const TABLES = { recovery: { reads: ["state.canonicalNext"], rows: [
   { state: "BLOCK:unrecognized", reads: [], acceptsUnknown: [], when: () => true }
 ] } };
 export const ARTIFACTS = {
-  glossary: { path: "devflow/project/glossary.md", writer: "project.product", readers: ["stage.scope-entry"] },
-  product: { path: "devflow/project/product.md", writer: "project.product", readers: ["stage.scope-entry"] },
-  capability: { path: "devflow/project/capabilities/**", writer: "project.arch-or-adopt", readers: ["stage.scope-entry"] },
-  cards: { path: "devflow/tree/**", writer: "project.split-or-work", readers: ["stage.recovery-action", "stage.scope-entry"] },
-  handoff: { path: "devflow/users/*/HANDOFF.md", writer: "project.room-owner", readers: ["stage.scope-entry"] },
-  digest: { path: "devflow/users/*/digest.md", writer: "project.room-owner", readers: ["stage.recovery-action", "stage.scope-entry"] }
+  glossary: { path: ".devflow/project/glossary.md", writer: "project.product", readers: ["stage.scope-entry"] },
+  product: { path: ".devflow/project/product.md", writer: "project.product", readers: ["stage.scope-entry"] },
+  capability: { path: ".devflow/project/capabilities/**", writer: "project.arch-or-adopt", readers: ["stage.scope-entry"] },
+  cards: { path: ".devflow/tree/**", writer: "project.split-or-work", readers: ["stage.recovery-action", "stage.scope-entry"] },
+  handoff: { path: ".devflow/users/*/HANDOFF.md", writer: "project.room-owner", readers: ["stage.scope-entry"] },
+  digest: { path: ".devflow/users/*/digest.md", writer: "project.room-owner", readers: ["stage.recovery-action", "stage.scope-entry"] }
 };
 export const ROLES = {};
 export const READ_FIRST = [

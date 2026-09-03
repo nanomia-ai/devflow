@@ -2,16 +2,24 @@
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
     "before": "sha256:c4e3abbeec0d848211ddf3758ebb6b06c507fc4e46930b7b7d80df6b0b2d7c5a",
-    "after": "sha256:c4e3abbeec0d848211ddf3758ebb6b06c507fc4e46930b7b7d80df6b0b2d7c5a"
+    "after": "sha256:1157bdc417a5d567ea7d14ee7e647042c893db5cb4455afa61c0b7091bca9d9b"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
-    "context": true
+    "context": false
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:c4e3abbeec0d848211ddf3758ebb6b06c507fc4e46930b7b7d80df6b0b2d7c5a",
+      "after_hash": "sha256:1157bdc417a5d567ea7d14ee7e647042c893db5cb4455afa61c0b7091bca9d9b",
+      "source": "behavior_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
@@ -20,48 +28,192 @@
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [
+    "body": [],
+    "references": [],
+    "ownership": [
       {
-        "id": "guard: compatible-feedback-owner-required",
-        "change": "modified",
-        "before": "sha256:fe66b50430b10ea5a240ef911b611539ca8e02d91ac4096d13f7f37fb12dd6df",
-        "after": "sha256:907c5a0112e4808bc9b2ddd1c5ef9719ae2706224e7960f46fbced4b59c897b1"
+        "id": ".devflow/journal.md",
+        "change": "added",
+        "after": "external.principles"
       },
       {
-        "id": "stage: scope-entry",
-        "change": "modified",
-        "before": "sha256:cc3e47a0246ef29163960df6561b4ecb1a5fbd62e78d0dd0db38668874863103",
-        "after": "sha256:b4a9f020f39210c321b00acd00cdf85c5204ec0880192349e2edd7eee4bf6334"
-      }
-    ],
-    "references": [
+        "id": ".devflow/project/capabilities/**",
+        "change": "added",
+        "after": "project.arch-or-adopt"
+      },
       {
-        "id": "references/canonical-routing.md",
-        "change": "modified",
-        "before": "sha256:98b0d0472b3376e59074791587e762beae4ebe7e4ce6148d7de35baa68567ca4",
-        "after": "sha256:7b77088f209df228a25eb26cfffbac19c70caee18ad3d0be4b58ac1319269744"
+        "id": ".devflow/tree/**",
+        "change": "added",
+        "after": "project.split-or-work"
+      },
+      {
+        "id": ".devflow/users/<id>/HANDOFF.md",
+        "change": "added",
+        "after": "project.room-owner"
+      },
+      {
+        "id": ".devflow/users/<id>/digest.md",
+        "change": "added",
+        "after": "project.room-owner"
+      },
+      {
+        "id": "devflow/journal.md",
+        "change": "removed",
+        "before": "external.principles"
+      },
+      {
+        "id": "devflow/project/capabilities/**",
+        "change": "removed",
+        "before": "project.arch-or-adopt"
+      },
+      {
+        "id": "devflow/tree/**",
+        "change": "removed",
+        "before": "project.split-or-work"
+      },
+      {
+        "id": "devflow/users/<id>/HANDOFF.md",
+        "change": "removed",
+        "before": "project.room-owner"
+      },
+      {
+        "id": "devflow/users/<id>/digest.md",
+        "change": "removed",
+        "before": "project.room-owner"
       }
     ],
-    "ownership": [],
-    "artifacts": [],
+    "artifacts": [
+      {
+        "id": "capability",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/capabilities/**",
+          "writer": "project.arch-or-adopt",
+          "readers": [
+            "stage.scope-entry"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/capabilities/**",
+          "writer": "project.arch-or-adopt",
+          "readers": [
+            "stage.scope-entry"
+          ]
+        }
+      },
+      {
+        "id": "cards",
+        "change": "modified",
+        "before": {
+          "path": "devflow/tree/**",
+          "writer": "project.split-or-work",
+          "readers": [
+            "stage.recovery-action",
+            "stage.scope-entry"
+          ]
+        },
+        "after": {
+          "path": ".devflow/tree/**",
+          "writer": "project.split-or-work",
+          "readers": [
+            "stage.recovery-action",
+            "stage.scope-entry"
+          ]
+        }
+      },
+      {
+        "id": "digest",
+        "change": "modified",
+        "before": {
+          "path": "devflow/users/*/digest.md",
+          "writer": "project.room-owner",
+          "readers": [
+            "stage.recovery-action",
+            "stage.scope-entry"
+          ]
+        },
+        "after": {
+          "path": ".devflow/users/*/digest.md",
+          "writer": "project.room-owner",
+          "readers": [
+            "stage.recovery-action",
+            "stage.scope-entry"
+          ]
+        }
+      },
+      {
+        "id": "glossary",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/glossary.md",
+          "writer": "project.product",
+          "readers": [
+            "stage.scope-entry"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/glossary.md",
+          "writer": "project.product",
+          "readers": [
+            "stage.scope-entry"
+          ]
+        }
+      },
+      {
+        "id": "handoff",
+        "change": "modified",
+        "before": {
+          "path": "devflow/users/*/HANDOFF.md",
+          "writer": "project.room-owner",
+          "readers": [
+            "stage.scope-entry"
+          ]
+        },
+        "after": {
+          "path": ".devflow/users/*/HANDOFF.md",
+          "writer": "project.room-owner",
+          "readers": [
+            "stage.scope-entry"
+          ]
+        }
+      },
+      {
+        "id": "product",
+        "change": "modified",
+        "before": {
+          "path": "devflow/project/product.md",
+          "writer": "project.product",
+          "readers": [
+            "stage.scope-entry"
+          ]
+        },
+        "after": {
+          "path": ".devflow/project/product.md",
+          "writer": "project.product",
+          "readers": [
+            "stage.scope-entry"
+          ]
+        }
+      }
+    ],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "v0.21-current-semantic-consumers",
-  "intent": "Remove a nonexistent managed Adopt route and distinguish current semantic consumers from retained legacy writer provenance.",
+  "change_id": "dot-devflow-root-resume",
+  "intent": "Move the target-project state and knowledge root to .devflow without compatibility branches, while preserving devflow namespace identifiers.",
   "impact": {
-    "body": {
-      "total": 2,
-      "added": 0,
-      "removed": 0,
-      "modified": 2
+    "ownership": {
+      "total": 10,
+      "added": 5,
+      "removed": 5,
+      "modified": 0
     },
-    "references": {
-      "total": 1,
+    "artifacts": {
+      "total": 6,
       "added": 0,
       "removed": 0,
-      "modified": 1
+      "modified": 6
     }
   }
 }

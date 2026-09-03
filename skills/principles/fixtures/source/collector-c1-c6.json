@@ -9,9 +9,9 @@
     {
       "id": "c1-reserved-project-research-card",
       "files": {
-        "devflow/project/product.md": "# Product\n\nBrownfield: no\n",
-        "devflow/journal.md": "# Journal\n",
-        "devflow/tree/00-project/00.1-research.md": "# 00.1 Research: settle project scope\nDestination: Answer exists\nCompletion signal: Answer + evidence recorded\nDepends: none\nRead first: none\nApproval: pending\nReview: not-applicable\n"
+        ".devflow/project/product.md": "# Product\n\nBrownfield: no\n",
+        ".devflow/journal.md": "# Journal\n",
+        ".devflow/tree/00-project/00.1-research.md": "# 00.1 Research: settle project scope\nDestination: Answer exists\nCompletion signal: Answer + evidence recorded\nDepends: none\nRead first: none\nApproval: pending\nReview: not-applicable\n"
       },
       "expectedActive": [
         "ready.approval-pending"
@@ -23,8 +23,8 @@
     {
       "id": "c2-nearest-owner-ambiguous",
       "files": {
-        "devflow/project/product.md": "# Product\n\nBrownfield: no\n",
-        "devflow/journal.md": "# Journal\n2026-08-30T00:00:00Z owner mapping pending: target: devflow/tree/shared/card.md; candidates: [\"devflow/tree/shared\",\"devflow/tree/shared\"]\n"
+        ".devflow/project/product.md": "# Product\n\nBrownfield: no\n",
+        ".devflow/journal.md": "# Journal\n2026-08-30T00:00:00Z owner mapping pending: target: .devflow/tree/shared/card.md; candidates: [\".devflow/tree/shared\",\".devflow/tree/shared\"]\n"
       },
       "expectedActive": [
         "marker.owner-mapping"
@@ -34,9 +34,9 @@
     {
       "id": "c3-canonical-capsule-presence",
       "files": {
-        "devflow/project/product.md": "# Product\n\nBrownfield: no\n",
-        "devflow/journal.md": "# Journal\n",
-        "devflow/project/capabilities/01-foundation/capsule.md": "# Capsule\n"
+        ".devflow/project/product.md": "# Product\n\nBrownfield: no\n",
+        ".devflow/journal.md": "# Journal\n",
+        ".devflow/project/capabilities/01-foundation/capsule.md": "# Capsule\n"
       },
       "expectedActive": [],
       "expectedAbsent": [
@@ -47,8 +47,8 @@
     {
       "id": "c4-arch-single-writer",
       "files": {
-        "devflow/project/product.md": "# Product\n\nBrownfield: no\n",
-        "devflow/journal.md": "# Journal\n2026-08-30T00:00:00Z knowledge landing pending: owner: devflow/project/arch.md; writer: adopt; source: {\"kind\":\"task\"}\n"
+        ".devflow/project/product.md": "# Product\n\nBrownfield: no\n",
+        ".devflow/journal.md": "# Journal\n2026-08-30T00:00:00Z knowledge landing pending: owner: .devflow/project/arch.md; writer: adopt; source: {\"kind\":\"task\"}\n"
       },
       "expectedActive": [
         "integrity.knowledge-writer"
@@ -58,8 +58,8 @@
     {
       "id": "c5-exact-closed-history",
       "files": {
-        "devflow/project/product.md": "# Product\n\nBrownfield: no\n",
-        "devflow/journal.md": "# Journal\n2026-08-30T00:00:00Z history descent pending: basis: named-card; target: devflow/tree/99-missing.md\n"
+        ".devflow/project/product.md": "# Product\n\nBrownfield: no\n",
+        ".devflow/journal.md": "# Journal\n2026-08-30T00:00:00Z history descent pending: basis: named-card; target: .devflow/tree/99-missing.md\n"
       },
       "expectedActive": [
         "blocked.closed-history"
@@ -69,8 +69,8 @@
     {
       "id": "c6-canonical-knowledge-landing",
       "files": {
-        "devflow/project/product.md": "# Product\n\nBrownfield: no\n",
-        "devflow/journal.md": "# Journal\n2026-08-30T00:00:00Z knowledge landing pending: owner: devflow/project/arch.md; writer: arch; source: {\"kind\":\"task\"}\n"
+        ".devflow/project/product.md": "# Product\n\nBrownfield: no\n",
+        ".devflow/journal.md": "# Journal\n2026-08-30T00:00:00Z knowledge landing pending: owner: .devflow/project/arch.md; writer: arch; source: {\"kind\":\"task\"}\n"
       },
       "expectedActive": [
         "marker.knowledge-landing"

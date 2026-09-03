@@ -31,12 +31,12 @@
 
 ## Automatic entry and role inputs
 
-- work parses the leading number of the depth-1 ancestor directly below `devflow/tree/` in
+- work parses the leading number of the depth-1 ancestor directly below `.devflow/tree/` in
   the claimed card path. Compare numbers as integers. When exactly one baseline has that
   number, read it independently
   of `Read first`. When zero or more than one match, report one line and do not guess. This
   includes foundation and research cards.
-- A baseline path directly under `devflow/project/capabilities/` that remains in a card's
+- A baseline path directly under `.devflow/project/capabilities/` that remains in a card's
   `Read first` is legacy wiring. Do not open it or report its absence through that field;
   select and shape-gate only through the number rule above. split puts no such path on a new
   card.
