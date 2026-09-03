@@ -1,6 +1,6 @@
 # v0.23.2 수리 보고 — Resume 선택 설명의 역할 복원
 
-상태: 구현·정적 검증·교차 검토 완료, 배포 대기  
+상태: 구현·정적 검증·교차 검토·배포 완료, 사용자 실사용 시험 대기  
 기준 커밋: `b2b8cad8180b6276a83bae15e661e6f5acb96b97`
 
 ## 범위와 원인
@@ -80,5 +80,20 @@ Arch를 가로챌 수 있고, 반대로 관리 프로젝트 한정어를 모든 
 
 ## 배포 기록
 
-버전은 두 plugin manifest와 CHANGELOG에서 0.23.2로 올렸다. commit·push·Codex 및 Claude 설치와
-설치 캐시 대조 결과는 배포 뒤 이 절에 기록한다.
+버전은 두 plugin manifest와 CHANGELOG에서 0.23.2로 올렸다. 구현 commit `63039ab`을
+`origin/main`에 push한 뒤 Codex와 Claude에 설치했다.
+
+Codex 설치기는 Orca가 지정한 `CODEX_HOME`의
+`plugins/cache/nanomia/devflow/0.23.2`에 설치했다. `codex plugin list --marketplace nanomia
+--json`은 `devflow@nanomia` 0.23.2를 installed·enabled로, source를 이 저장소의 local 경로로
+보고했다. Claude는 `claude plugin update devflow@nanomia`로 0.23.1에서 0.23.2로 갱신됐고
+`~/.claude/plugins/cache/nanomia/devflow/0.23.2`에 설치됐으며 새 세션이 필요하다고 보고했다.
+
+두 설치 캐시 각각에서 release source와 manifest 둘, CHANGELOG, SessionStart, Resume의 intent·
+generated manifest·ledger·semantic receipt·SKILL·OpenAI metadata·spec·body·collector를 포함한
+핵심 13개 파일을 newline-normalized SHA-256으로 대조했다. 양쪽 모두 missing 0, mismatch 0이며
+설치된 Resume `SKILL.md` 해시는
+`2e3db9c7410839b87635519c73163afe1213ab3529a9ad28d39e923e030986ee`이다.
+
+Codex `/hooks` 화면의 native SessionStart trust와 새 Codex·Claude 세션의 실제 selector 행동은
+확인하지 않았다. 이 UI 확인과 시험 브랜치의 실사용은 사용자에게 남긴다.
