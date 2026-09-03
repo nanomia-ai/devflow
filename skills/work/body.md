@@ -6,6 +6,8 @@ Carry one approved card through implementation, current execution evidence, clea
 integration, durable feedback, and its observed boundary without replacing principles,
 direct, verify, or a semantic owner.
 
+Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+
 ## guard: card-target-required
 
 Supply the already selected project-relative card through the public `--target` stage option.

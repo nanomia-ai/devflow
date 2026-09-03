@@ -4,6 +4,8 @@ Direct turns an accepted request into durable, user-approved units that Work can
 
 Direct owns work direction, not execution management. Work performs the research or implementation, Verify judges the result, and the external coordinator assigns or supervises agent processes. Direct never selects a card by filename order, performs the work, writes current K knowledge, or treats tree-root existence as an active scope.
 
+Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+
 ## guard: canonical-state-required
 
 Any unavailable project-state, filesystem, containment, Git, origin, scope, or approval observation is unknown rather than absent. Stop before associating a request with a card or writing planning state.

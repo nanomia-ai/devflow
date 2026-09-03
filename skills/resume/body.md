@@ -4,6 +4,8 @@
 
 Interpret canonical project state at entry without duplicating its predicates, filename grammar, or status grammar.
 
+Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+
 ## why: entry-orientation
 
 Entry starts from the explicit-root schema-2 state and the shared glossary. It reports room, integrity, claim, HANDOFF, digest, integration, and blocking facts supplied by that state before selecting a single owner route.

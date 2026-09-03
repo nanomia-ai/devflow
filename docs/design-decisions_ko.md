@@ -1713,7 +1713,10 @@ arch가 개발 기획과 Layer 0 전체 역산이라는 두 개념을 한 이름
 거쳐서는 안 된다.
 
 채택 경계: 이름을 명시한 devflow 단계는 그 자체가 진입이다. Principles는 Principles로 들어온
-요청만 분류하며 SessionStart와 Codex fallback도 같은 위상을 말한다. 명시 Adopt는 devflow 이전의
+요청만 분류하며 SessionStart와 Codex fallback도 같은 위상을 말한다.
+**v0.23.1 경계 명료화:** 이름을 명시한 단계가 자체 진입의 항상 읽는 purpose에서 Principles의 공통 정책 색인을
+여는 것은 정책 소비이지 분류기 사전 진입이 아니다. 이로써 정책 정본 하나를 유지하면서도 명시
+단계의 목적 선택은 바꾸지 않는다. 명시 Adopt는 devflow 이전의
 유지할 프로젝트 자료가 문서 또는 코드로 존재할 때 `setup.unmanaged`를 직접 소비한다. SessionStart는 `.devflow/project/product.md`가 없으면
 침묵한다. 정본 상태에서도 추적되지 않은 빈 폴더나 일부 `.devflow/` 경로만으로는 관리 프로젝트가
 되지 않으며, index 또는 이력의 `.devflow` 경로만 복구 증거로 남는다. 폴더 하나는 Resume 안내를

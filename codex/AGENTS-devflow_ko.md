@@ -5,10 +5,11 @@
 
 ## devflow
 
-이 프로젝트는 devflow로 관리된다. 이름을 명시한 devflow 단계는 직접 실행한다. 그 밖의 devflow
-의도는 모델 호출이 가능한 `devflow:principles` 스킬로 분류하고 그 경로를 그대로 따른다. devflow 역할
-계약을 받았다면 principles로 재진입하지 않고 그 계약을 직접 따른다. principles가 정한 경로와
-필요한 승인 전에는 코드를 고치지 않는다.
+이 프로젝트는 devflow로 관리된다. 이름을 명시한 devflow 단계는 직접 실행하고 그 단계의 진입에서
+공유 정책을 읽는다. 사용자가 단계 이름 없이 이 프로젝트를 devflow로 운용·재개·복구·점검하려는
+경우에는 모델 호출이 가능한 `devflow:principles` 스킬로 분류하고 그 경로를 그대로 따른다. devflow
+역할 계약을 받았다면 principles나 일반 단계 진입을 거치지 않고 그 계약을 직접 따른다. principles가
+정한 경로와 필요한 승인 전에는 코드를 고치지 않는다.
 
 이 프로젝트에서 다른 에이전트에게 devflow 단계를 수행시키려면 첫 디스패치 전에 devflow의
 `coordinator` 역할 계약을 읽고 따른다.

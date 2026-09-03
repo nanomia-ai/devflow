@@ -1,290 +1,44 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:f1627281c41073ef01e5fbac18550b9fcc2699e25d60c6b6f73b6b939b873342",
+    "before": "sha256:7da9d8f7b43e3a5685f51dd6fc15c9705c12668af4cc30b53de942d88e937350",
     "after": "sha256:7da9d8f7b43e3a5685f51dd6fc15c9705c12668af4cc30b53de942d88e937350"
   },
-  "changed": true,
+  "changed": false,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": true,
+    "behavior_source": false,
     "observation_source": false,
     "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:f1627281c41073ef01e5fbac18550b9fcc2699e25d60c6b6f73b6b939b873342",
-      "after_hash": "sha256:7da9d8f7b43e3a5685f51dd6fc15c9705c12668af4cc30b53de942d88e937350",
-      "source": "behavior_source"
-    },
-    {
-      "kind": "reference",
-      "path": "references/recovery-completion.md",
-      "before_hash": "sha256:d8326d92985ed12d313afb5fe4389df998479d0a545454f77f95c72369ee506f",
-      "after_hash": "sha256:e6d6b11a3204aaee6f53a2a1a88c8c17cc15b970246ee87ed21dac7c2190b5e2",
-      "source": "context"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [
-      {
-        "id": "recover",
-        "change": "modified",
-        "before": {
-          "reads": [
-            "projection.transition"
-          ],
-          "needs": [],
-          "table": "recovery",
-          "branches": [
-            "prepared-route",
-            "interrupted-result",
-            "closing-suffix",
-            "partial-write"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "closing-suffix": [
-                [
-                  "READ",
-                  {
-                    "artifact": "closingMarker"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "finish the canonical verify.md and journal sweep for closure.target, delete that exact capability-closing line, and rename that folder to .done; write no record, baseline, or new closing line"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "authority": "external.principles",
-                    "boundary": "capability-closure"
-                  }
-                ],
-                "ROUTE:resume"
-              ],
-              "interrupted-result": [
-                [
-                  "READ",
-                  {
-                    "artifact": "record"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "validate the stored result and finish its exact durable record transition once"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "authority": "external.principles",
-                    "transition": "product-verification-result-completion"
-                  }
-                ],
-                "ROUTE:resume"
-              ],
-              "partial-write": [
-                [
-                  "READ",
-                  {
-                    "artifact": "record"
-                  }
-                ],
-                [
-                  "REPORT",
-                  {
-                    "template": "route"
-                  }
-                ],
-                "ROUTE:verify"
-              ],
-              "prepared-route": [
-                [
-                  "READ",
-                  {
-                    "artifact": "record"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "validate the prepared disk object and apply its remaining declared suffix exactly once"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "authority": "external.principles",
-                    "transition": "prepared-route-completion"
-                  }
-                ],
-                "ROUTE:resume"
-              ]
-            }
-          },
-          "body": "stage: recover",
-          "record": null,
-          "reentry": "rejudge"
-        },
-        "after": {
-          "reads": [
-            "projection.transition"
-          ],
-          "needs": [],
-          "table": "recovery",
-          "branches": [
-            "prepared-route",
-            "interrupted-result",
-            "closing-suffix",
-            "partial-write"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "closing-suffix": [
-                [
-                  "READ",
-                  {
-                    "artifact": "closingMarker",
-                    "ref": "HEAD"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "finish the canonical verify.md and journal sweep for closure.target, delete that exact capability-closing line, and rename that folder to .done; write no record, baseline, or new closing line"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "authority": "external.principles",
-                    "boundary": "capability-closure"
-                  }
-                ],
-                "ROUTE:resume"
-              ],
-              "interrupted-result": [
-                [
-                  "READ",
-                  {
-                    "artifact": "record"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "validate the stored result and finish its exact durable record transition once"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "authority": "external.principles",
-                    "transition": "product-verification-result-completion"
-                  }
-                ],
-                "ROUTE:resume"
-              ],
-              "partial-write": [
-                [
-                  "READ",
-                  {
-                    "artifact": "record"
-                  }
-                ],
-                [
-                  "REPORT",
-                  {
-                    "template": "route"
-                  }
-                ],
-                "ROUTE:verify"
-              ],
-              "prepared-route": [
-                [
-                  "READ",
-                  {
-                    "artifact": "record"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "validate the prepared disk object and apply its remaining declared suffix exactly once"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "authority": "external.principles",
-                    "transition": "prepared-route-completion"
-                  }
-                ],
-                "ROUTE:resume"
-              ]
-            }
-          },
-          "body": "stage: recover",
-          "record": null,
-          "reentry": "rejudge"
-        }
-      }
-    ],
+    "stages": [],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
     "body": [
       {
-        "id": "stage: recover",
+        "id": "why: purpose",
         "change": "modified",
-        "before": "sha256:c40ad2305f8655cbf98922002eec644927caff63c932f71fa50edb66451a2943",
-        "after": "sha256:166a7619a8d798ed31bc4ac7bbec43557f90e9b77fa74e3884c5ebf1dc0a91d3"
+        "before": "sha256:3f2ddf49e527bf0990e7ff6a9ecf1ad7acd2103d6dca47051e6b23cfe4c88758",
+        "after": "sha256:a733a45f16266c3814464ef4145c9ada391b16b8c5525d5554824c8fcac22874"
       }
     ],
-    "references": [
-      {
-        "id": "references/recovery-completion.md",
-        "change": "modified",
-        "before": "sha256:d8326d92985ed12d313afb5fe4389df998479d0a545454f77f95c72369ee506f",
-        "after": "sha256:e6d6b11a3204aaee6f53a2a1a88c8c17cc15b970246ee87ed21dac7c2190b5e2"
-      }
-    ],
+    "references": [],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "read-closing-marker-from-committed-boundary",
-  "intent": "Recover the closure suffix from the committed begin boundary even after its working journal line was deleted.",
+  "change_id": "principles-entry-separation-0.23.1",
+  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
   "impact": {
-    "stages": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
     "body": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
-    "references": {
       "total": 1,
       "added": 0,
       "removed": 0,

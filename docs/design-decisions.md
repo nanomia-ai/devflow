@@ -1976,6 +1976,9 @@ implementation predates devflow.
 
 Chosen boundary: an explicitly named devflow stage is its own entry. Principles classifies only
 requests that entered Principles; SessionStart and the Codex fallback state this same topology.
+**v0.23.1 boundary clarification:** when a named stage opens the shared Principles policy index from
+its own always-read purpose, it consumes policy rather than pre-entering the classifier. This keeps
+one policy canon without changing the stage purpose the user selected.
 SessionStart remains silent unless `.devflow/project/product.md` exists. In canonical state, an
 untracked empty or partial `.devflow/` directory is likewise not managed-project evidence; indexed
 or historical `.devflow` paths remain recovery evidence. A folder alone cannot activate Resume

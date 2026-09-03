@@ -8,6 +8,8 @@ Its migration provenance is the immutable repository sources `skills/product/SKI
 
 Each capability row identifies a stable number and name, the user outcome it enables, and why that outcome is needed for success. Responsibility and a success signal belong to different concerns and must not replace those fields.
 
+Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+
 ## why: evidence-boundary
 
 Raw repository, contract, and research facts inform a judgment but do not become product truth by themselves. Direct owns materializing and approving durable `00-project` research cards; Work executes approved research, and Product synthesizes settled evidence into product judgment. Only an explicitly approved product write at its canonical binding boundary can replace the current plan.

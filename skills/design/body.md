@@ -6,6 +6,8 @@ Design optionally settles the current UI direction without turning a stage into 
 
 Its migration provenance is the immutable repository sources `skills/design/SKILL.md` and `skills/design/SKILL_ko.md`, identified by their recorded source hashes.
 
+Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+
 ## why: ownership
 
 The design writer owns one current design document. It never writes recursive capability knowledge; when an approved design exposes durable subtopic knowledge, the later capability writer receives one landing request and decides the appropriate design zone.

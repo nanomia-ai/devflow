@@ -42,8 +42,9 @@ const currentProduct = fs.existsSync(path.join(root, ".devflow", "project", "pro
 if (!currentProduct) process.exit(0);
 
 const additionalContext = [
-  "[devflow] An explicitly named devflow stage enters that stage directly. For other devflow intent, run devflow:principles to classify the request and follow its route.",
-  "If you were handed a devflow role contract, follow that contract directly; do not re-enter through principles.",
+  "[devflow] A named devflow stage enters directly and reads shared policy from its own entry. When the user intends to operate, resume, recover, or inspect this project through devflow without naming a stage, run devflow:principles to classify the request and follow its route.",
+  "If you were handed a devflow role contract, follow that contract directly; do not re-enter through principles or generic stage entry.",
+  "Before dispatching another agent to perform a devflow stage in this project, read and follow devflow's `coordinator` role contract.",
 ].join("\n");
 
 process.stdout.write(JSON.stringify({

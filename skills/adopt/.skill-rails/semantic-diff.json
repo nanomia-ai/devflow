@@ -5,21 +5,13 @@
     "after": "sha256:ec093501eff0ead89e4a02315d14cbb409c436c1e07a86fb524a923ed2be4722"
   },
   "changed": false,
-  "any_changed": false,
+  "any_changed": true,
   "source_changes": {
     "behavior_source": false,
     "observation_source": false,
-    "context": false
+    "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:ec093501eff0ead89e4a02315d14cbb409c436c1e07a86fb524a923ed2be4722",
-      "after_hash": "sha256:ec093501eff0ead89e4a02315d14cbb409c436c1e07a86fb524a923ed2be4722",
-      "source": "behavior_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
@@ -28,15 +20,42 @@
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [],
-    "references": [],
+    "body": [
+      {
+        "id": "why: purpose",
+        "change": "modified",
+        "before": "sha256:29c89417a54e242e3453030c6d27af8118242a7e078f82dce80f27ce9e50e24b",
+        "after": "sha256:99b13c147898d1f26fefb48752aee3eb0b915743286c16d649409b31bceea1b2"
+      }
+    ],
+    "references": [
+      {
+        "id": "references/workflow.md",
+        "change": "modified",
+        "before": "sha256:17834f74380ce50fd934364925c85f01a339607b0289dddf1f2a92ff8b5b9027",
+        "after": "sha256:b0aed0cd92ce8433994566129f61ddd595664b8c151effa4d143d5b55727c7a8"
+      }
+    ],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "v0.22.0-direct-hard-rename",
-  "intent": "Regenerate and validate this P2 package after the owner-approved atomic Split-to-Direct vocabulary change.",
-  "impact": {}
+  "change_id": "principles-entry-separation-0.23.1",
+  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
+  "impact": {
+    "body": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "references": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
 }

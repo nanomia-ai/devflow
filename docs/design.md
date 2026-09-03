@@ -48,7 +48,7 @@ points to from their actual sources.
 
 | Component | Why it exists and what it owns | Input → next consumer | Design lineage |
 |---|---|---|---|
-| `principles` | owns common rules and commit discipline; it classifies only requests that enter Principles and does not preflight an explicitly named stage | general devflow intent → resume; explicit stages and role contracts enter their named owner | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 |
+| `principles` | owns the shared policy index and commit discipline; it state-free-classifies only current-project devflow requests that enter Principles. A named stage reads that index from its own entry without Principles preflight | unnamed current-project devflow intent → resume; named stage → shared policy index then its named owner; role contract → contract directly | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 |
 | `product` | confirms the problem, identity, capabilities, boundary, and success criteria with the owner | explicit new-project or product-planning request → arch and design; initial existing-project reconstruction bypasses Product and belongs to Adopt | origin · DD-33 · DD-67 · DD-97 |
 | `arch` | confirms and refreshes current technical Layer 0, stack, code structure, data, verify channel, glossary, and capability design zones in managed projects | product or a managed glossary/design/baseline route → direct, work, and verify | DD-42 · DD-43 · DD-69 · DD-97 · DD-99 |
 | `design` | optionally confirms UI approach, source, token/component strategies, decomposition axis, and review surface | product and arch → arch capability design and direct | DD-69 · DD-99 |

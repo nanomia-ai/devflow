@@ -11,8 +11,9 @@ const { test } = require("node:test");
 const hook = path.join(__dirname, "session-start.js");
 const workspace = path.resolve(__dirname, "..");
 const managedContext = [
-  "[devflow] An explicitly named devflow stage enters that stage directly. For other devflow intent, run devflow:principles to classify the request and follow its route.",
-  "If you were handed a devflow role contract, follow that contract directly; do not re-enter through principles.",
+  "[devflow] A named devflow stage enters directly and reads shared policy from its own entry. When the user intends to operate, resume, recover, or inspect this project through devflow without naming a stage, run devflow:principles to classify the request and follow its route.",
+  "If you were handed a devflow role contract, follow that contract directly; do not re-enter through principles or generic stage entry.",
+  "Before dispatching another agent to perform a devflow stage in this project, read and follow devflow's `coordinator` role contract.",
 ].join("\n");
 const managedOutput = JSON.stringify({
   hookSpecificOutput: {
@@ -110,7 +111,7 @@ test("a current product file receives the byte-identical delayed instruction", (
   const root = makeProject(t, { ".devflow/project/product.md": "# Product\n" }, { git: true });
   const { raw, context } = runHook(root, root, { input: sessionInput(root) });
   assert.equal(raw, managedOutput);
-  assert.match(context, /explicitly named devflow stage enters that stage directly/i);
+  assert.match(context, /named devflow stage enters directly and reads shared policy from its own entry/i);
   assert.match(context, /devflow:principles/);
   assert.doesNotMatch(context, /run (?:the )?devflow resume|project-state/i);
 });
@@ -119,7 +120,14 @@ test("a role contract bypasses entry classification", (t) => {
   const root = makeProject(t, { ".devflow/project/product.md": "# Product\n" }, { git: true });
   const { context } = runHook(root, root, { input: sessionInput(root) });
   assert.match(context, /role contract.*follow that contract directly/i);
-  assert.match(context, /do not re-enter through principles/i);
+  assert.match(context, /do not re-enter through principles or generic stage entry/i);
+});
+
+test("managed orchestration receives only the coordinator contract pointer", (t) => {
+  const root = makeProject(t, { ".devflow/project/product.md": "# Product\n" }, { git: true });
+  const { context } = runHook(root, root, { input: sessionInput(root) });
+  assert.match(context, /dispatching another agent.*devflow stage.*coordinator.*role contract/i);
+  assert.doesNotMatch(context, /coordinator-contract\.md|project-state/i);
 });
 
 test("a subdirectory start resolves the checkout root with current-files checks only", (t) => {
@@ -159,21 +167,33 @@ test("malformed or missing stdin falls back safely, while non-Git directories st
 
 test("generated trigger surfaces require managed routing or explicit devflow intent", () => {
   const downstream = ["arch", "design", "direct", "work", "verify", "resume"];
-  const activation = "Use when explicitly invoked, when another devflow skill routes here, or for work in an existing devflow-managed project.";
   for (const name of downstream) {
     const root = path.join(workspace, "skills", name);
     const description = JSON.parse(fs.readFileSync(path.join(root, ".skill-rails", "intent.json"), "utf8")).description;
-    assert.ok(description.endsWith(activation), `${name} intent must own the downstream activation clause`);
+    assert.match(description, /Use when explicitly invoked/);
+    assert.match(description, /existing devflow-managed project/);
+    if (name === "arch") assert.match(description, /Resume routes a managed marker or baseline refresh/);
+    else assert.match(description, /another devflow skill routes here/);
     assert.match(fs.readFileSync(path.join(root, "SKILL.md"), "utf8"), new RegExp(`^description: ${escapeRegExp(JSON.stringify(description))}$`, "m"));
     assert.match(fs.readFileSync(path.join(root, "agents", "openai.yaml"), "utf8"), new RegExp(`short_description: ${escapeRegExp(JSON.stringify(description))}`));
   }
 
-  for (const name of ["product", "adopt"]) {
+  for (const [name, boundary] of [
+    ["product", /Use only with direct Product invocation or explicit intent to plan a new project's product or service/],
+    ["adopt", /Use only when Adopt is directly invoked or named/],
+  ]) {
     const root = path.join(workspace, "skills", name);
     const description = JSON.parse(fs.readFileSync(path.join(root, ".skill-rails", "intent.json"), "utf8")).description;
-    assert.match(description, /Use only with explicit devflow intent/);
-    assert.match(description, /direct invocation/);
+    assert.match(description, boundary);
+    assert.doesNotMatch(description, /Principles owns generic entry/);
     assert.match(fs.readFileSync(path.join(root, "SKILL.md"), "utf8"), new RegExp(`^description: ${escapeRegExp(JSON.stringify(description))}$`, "m"));
     assert.match(fs.readFileSync(path.join(root, "agents", "openai.yaml"), "utf8"), /allow_implicit_invocation: true/);
   }
+
+  const principlesRoot = path.join(workspace, "skills", "principles");
+  const principlesDescription = JSON.parse(fs.readFileSync(path.join(principlesRoot, ".skill-rails", "intent.json"), "utf8")).description;
+  assert.match(principlesDescription, /current project through devflow without naming a stage/);
+  assert.match(principlesDescription, /shared workflow rules apply/);
+  assert.match(principlesDescription, /named stage enters directly and reads the shared policy index without a Principles preflight/i);
+  assert.match(fs.readFileSync(path.join(principlesRoot, "SKILL.md"), "utf8"), new RegExp(`^description: ${escapeRegExp(JSON.stringify(principlesDescription))}$`, "m"));
 });

@@ -69,7 +69,7 @@ if ($pluginInstalled) {
 
 Write-Host ""
 if ($pluginInstalled) {
-    Write-Host "Done. Codex enters an explicitly named devflow stage directly; other devflow intent goes through principles."
+    Write-Host "Done. Codex enters named devflow stages directly; unnamed current-project devflow work goes through principles."
     Write-Host "The native plugin delivers SessionStart. Enable [features] hooks = true in Codex config."
     Write-Host ""
     Write-Host "Next, and only you can do it: open /hooks in a Codex session and confirm the devflow"
@@ -82,5 +82,5 @@ if ($pluginInstalled) {
     Write-Host ""
     Write-Host "Only when hooks are disabled or unsupported, add codex/AGENTS-devflow.md to the project's AGENTS.md."
 } else {
-    Write-Host "Done - with no plugin, ask the model to invoke the explicitly named stage, or principles for other devflow intent."
+    Write-Host "Done - with no plugin, ask the model to invoke the named stage, or principles for unnamed current-project devflow work."
 }

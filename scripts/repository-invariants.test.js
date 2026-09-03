@@ -396,7 +396,7 @@ test("all promoted P2 packages share one Skill Rails runtime and validator versi
   }
 });
 
-test("P2 companion and role files stay package-local to their declared owners", () => {
+test("P2 stages enter one shared Principles policy index while companions and roles stay owner-local", () => {
   const companionHomes = new Map([
     ["principles", [
       "references/state/task-card-predicates.md",
@@ -421,6 +421,26 @@ test("P2 companion and role files stay package-local to their declared owners", 
       assert.deepEqual(foreignReferences, [], `${owner}/${relative} has an undeclared cross-package consumer`);
     }
   }
+  const sharedPolicyPointer = "../principles/references/policy-index.md";
+  const sharedPolicySentence = "Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.";
+  for (const packageName of P2_PACKAGES.filter((name) => name !== "principles")) {
+    const body = read(`skills/${packageName}/body.md`);
+    const pointers = body.match(/\.\.\/principles\/references\/policy-index\.md/g) ?? [];
+    assert.equal(pointers.length, 1, `${packageName} must enter the single shared Principles policy index exactly once`);
+    const purpose = body.match(/## why: purpose\r?\n\r?\n([\s\S]*?)(?:\r?\n## |\s*$)/)?.[1] ?? "";
+    assert.ok(purpose.includes(sharedPolicySentence),
+      `${packageName} must carry the byte-identical shared policy pointer in why: purpose`);
+    assert.match(read(`skills/${packageName}/spec.mjs`), /body:\s*"why: purpose"/,
+      `${packageName} must deliver the shared policy pointer through its always-read purpose`);
+    const directPolicyFiles = walk(path.join(root, "skills", packageName), (name) => name.endsWith(".md") || name.endsWith(".mjs"))
+      .filter((file) => !file.includes(`${path.sep}legacy-atoms${path.sep}`))
+      .flatMap((file) => [...fs.readFileSync(file, "utf8").matchAll(/\.\.\/principles\/references\/([a-zA-Z0-9._/-]+)/g)]
+        .map((match) => match[0]));
+    assert.deepEqual([...new Set(directPolicyFiles)], [sharedPolicyPointer],
+      `${packageName} must reach Principles policy through the single index, not a topic bypass`);
+  }
+  assert.ok(Object.hasOwn(JSON.parse(read("skills/principles/.generated.json")).content, "references/policy-index.md"),
+    "Principles generated package must carry the shared policy index");
   for (const [packageName, roles] of [["principles", ["coordinator"]], ["work", ["reviewer"]], ["verify", ["verifier", "auditor", "retrospector"]]]) {
     const spec = read(`skills/${packageName}/spec.mjs`);
     for (const role of roles) assert.match(spec, new RegExp(`\\b${role}\\s*:`), `${packageName} does not declare ${role}`);

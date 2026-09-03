@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:cb6b70846bd36818212024e36e217d0ce6618b32ae70e436414f8fc116f28005",
+  "intent_hash": "sha256:f720e19cd6fea4b6f31140e3b1806cb639a179d127fa3de2940ff771f94def84",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing .devflow/project/product.md. Use only with direct Product invocation or explicit intent to plan a new project's product or service, define its problem, capability composition, and boundary, or create .devflow/project/product.md. A generic devflow mention is not a Product trigger; Principles owns generic entry.",
+      "text": "Service-planning interview. Defines the problem, capability composition, and boundaries of a new project, producing .devflow/project/product.md. Use only with direct Product invocation or explicit intent to plan a new project's product or service, define its problem, capability composition, and boundary, or create .devflow/project/product.md.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",

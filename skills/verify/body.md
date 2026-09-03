@@ -4,6 +4,8 @@
 
 Verification records executed evidence at a capability or product boundary. Canonical principles projections own state, revisions, events, and completion facts; this package orders their use without replacing their grammar.
 
+Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+
 ## why: verification-boundary
 
 Use the bounded clean-verifier and channel-evidence policy before a verdict exists.

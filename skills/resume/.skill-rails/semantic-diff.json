@@ -5,21 +5,13 @@
     "after": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54"
   },
   "changed": false,
-  "any_changed": false,
+  "any_changed": true,
   "source_changes": {
     "behavior_source": false,
     "observation_source": false,
-    "context": false
+    "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54",
-      "after_hash": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54",
-      "source": "behavior_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
@@ -28,7 +20,14 @@
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [],
+    "body": [
+      {
+        "id": "why: purpose",
+        "change": "modified",
+        "before": "sha256:1803b3ad20d213f55d2e7e55a23b58e8062e18fcd494be0c4cff9d07becc8fc0",
+        "after": "sha256:1bce10f99913bfad3adab5ed16fc1d4f895c54fe587a2895ec3540a654458036"
+      }
+    ],
     "references": [],
     "ownership": [],
     "artifacts": [],
@@ -36,7 +35,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "v0.22.0-direct-hard-rename",
-  "intent": "Regenerate and validate this P2 package after the owner-approved atomic Split-to-Direct vocabulary change.",
-  "impact": {}
+  "change_id": "principles-entry-separation-0.23.1",
+  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
+  "impact": {
+    "body": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
 }

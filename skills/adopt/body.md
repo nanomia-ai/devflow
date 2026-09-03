@@ -4,6 +4,8 @@ Adopt is the explicit brownfield projection boundary. It reads an unmanaged repo
 
 The state tool remains the sole route owner. Explicit Adopt consumes `setup.unmanaged`; ordinary Resume, session-start, and state-tool behavior are unchanged. Only a repository with no maintained non-devflow project material routes to Product. Adopt is its own entry and does not run Principles as a preflight.
 
+Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+
 ## why: workflow
 
 Treat implementation paths, tests, APIs, schemas, configuration, operational records, specifications, and maintained documentation as evidence. Inventory every maintained source with project-relative coordinates. Record one authority status—implemented/current material, binding plan, exploratory research, superseded record, or unresolved conflict—and one separate disposition, exactly as the workflow defines. Grouping related sources is allowed; silently sampling or dropping the remainder is not. Use document-internal status and actual code, test, and operational evidence to judge authority; path/name context, Git history when available, and last-modified time are corroboration only and never decide authority alone. Resolve evidence-supported discrepancies with exact provenance. When competing sources leave current product intent genuinely undecidable, ask with both conflicting coordinates and the exact decision needed instead of inventing a resolution. Trace one representative flow for each code-backed capability candidate; for a document-derived candidate with no executable code, cite its documentary basis and mark executable flow as not applicable.

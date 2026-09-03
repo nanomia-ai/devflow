@@ -1,218 +1,44 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:3df675c8fa6443c486fb07650ad4f3526120e978fb8780167eca5afd99ce6612",
+    "before": "sha256:ea90ba14b02ba98f1d2418c1e04f2459613258742eef05dc26be2aa7aa2cf76c",
     "after": "sha256:ea90ba14b02ba98f1d2418c1e04f2459613258742eef05dc26be2aa7aa2cf76c"
   },
-  "changed": true,
+  "changed": false,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": true,
+    "behavior_source": false,
     "observation_source": false,
     "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:3df675c8fa6443c486fb07650ad4f3526120e978fb8780167eca5afd99ce6612",
-      "after_hash": "sha256:ea90ba14b02ba98f1d2418c1e04f2459613258742eef05dc26be2aa7aa2cf76c",
-      "source": "behavior_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [
-      {
-        "id": "confirmation",
-        "change": "modified",
-        "before": {
-          "reads": [
-            "current.design",
-            "request.kind"
-          ],
-          "needs": [
-            "approval.action"
-          ],
-          "table": null,
-          "branches": [
-            "ask",
-            "reject",
-            "commit"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "ask": [
-                [
-                  "REPORT",
-                  {
-                    "template": "proposal"
-                  }
-                ],
-                "ASK"
-              ],
-              "commit": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "design",
-                    "template": "proposal"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "artifact": "design",
-                    "boundary": "confirmed-design-current"
-                  }
-                ],
-                "ROUTE:direct"
-              ],
-              "reject": [
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ]
-            }
-          },
-          "body": "stage: confirmation",
-          "record": null,
-          "reentry": "rejudge"
-        },
-        "after": {
-          "reads": [
-            "current.design",
-            "request.kind"
-          ],
-          "needs": [
-            "approval.action"
-          ],
-          "table": null,
-          "branches": [
-            "ask",
-            "reject",
-            "commit"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "ask": [
-                [
-                  "REPORT",
-                  {
-                    "template": "proposal"
-                  }
-                ],
-                "ASK"
-              ],
-              "commit": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "design",
-                    "template": "proposal"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "artifact": "design",
-                    "boundary": "confirmed-design-current",
-                    "subject": "<id> design — design.md",
-                    "touches": [
-                      ".devflow/project/design.md",
-                      ".devflow/journal.md"
-                    ]
-                  }
-                ],
-                "ROUTE:direct"
-              ],
-              "reject": [
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ]
-            }
-          },
-          "body": "stage: confirmation",
-          "record": null,
-          "reentry": "rejudge"
-        }
-      }
-    ],
+    "stages": [],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
     "body": [
       {
-        "id": "stage: confirmation",
+        "id": "why: purpose",
         "change": "modified",
-        "before": "sha256:43bf17076ded575cc466ee61551c92187e84dfed3d68a373dd9d21cf21e85e15",
-        "after": "sha256:de5f561e2e72ae12040bcfd6239cdb08b5f0c86378815ca9d9ec7a46c06aedf3"
+        "before": "sha256:31cec2456994e51a87841b5e84c6020c23c700ae150c33c7f8609dfe874726a6",
+        "after": "sha256:71a22bac384c70df47492594ba4aa6408133b09ebef732e3a920cb7c601b1524"
       }
     ],
     "references": [],
     "ownership": [],
-    "artifacts": [
-      {
-        "id": "journal",
-        "change": "modified",
-        "before": {
-          "path": ".devflow/journal.md",
-          "writer": "external.principles",
-          "readers": [
-            "stage.compatible-feedback",
-            "stage.record-first",
-            "stage.research",
-            "guard.existing-design-research"
-          ]
-        },
-        "after": {
-          "path": ".devflow/journal.md",
-          "writer": "external.principles",
-          "readers": [
-            "stage.compatible-feedback",
-            "stage.record-first",
-            "stage.research",
-            "stage.confirmation",
-            "guard.existing-design-research"
-          ]
-        }
-      }
-    ],
+    "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "carry-request-through-design-confirmation",
-  "intent": "Bind the preserved Direct request to the existing canonical Design confirmation commit without creating another state record.",
+  "change_id": "principles-entry-separation-0.23.1",
+  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
   "impact": {
-    "stages": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
     "body": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
-    "artifacts": {
       "total": 1,
       "added": 0,
       "removed": 0,

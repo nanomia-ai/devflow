@@ -1,12 +1,12 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:eae422dc9e5f312079efb5634e3bc3a51f682ce557e7a44eb3cb2dc8201811a1",
+  "intent_hash": "sha256:d405529e65e7fa88a4cc3f9d411ebcea9fef2f8046a40ec3d57506d02bd4f147",
   "profile": "p2",
   "atoms": [
     {
       "id": "description-001",
       "source": "intent.description",
-      "text": "Canonical devflow mechanics and evidence boundaries for explicit routing or recovery questions, ownership, knowledge landing, commits, and verification; explicit stage invocations are their own entry and do not require Principles preflight.",
+      "text": "Shared devflow policy and state-free entry routing. Use when the user intends to operate, resume, recover, or inspect the current project through devflow without naming a stage, or asks how devflow's shared workflow rules apply. A named stage enters directly and reads the shared policy index without a Principles preflight.",
       "candidate_class": "trigger",
       "consequence": "low",
       "disposition": "projected",

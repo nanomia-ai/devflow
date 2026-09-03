@@ -43,7 +43,7 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증
 
 | 구성요소 | 존재 이유와 소유 범위 | 입력 → 다음 소비자 | 설계 계보 |
 |---|---|---|---|
-| `principles` | 공통 규칙·커밋 규율을 소유하며 Principles로 들어온 요청만 분류하고 이름을 명시한 단계는 사전 분류하지 않음 | 일반 devflow 의도 → resume, 명시 단계와 역할 계약 → 이름 난 소유자 | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 |
+| `principles` | 공통 정책 색인·커밋 규율을 소유하며 Principles로 들어온 현재 프로젝트 devflow 요청만 상태 없이 분류. 이름을 명시한 단계는 자체 진입에서 그 색인을 읽되 Principles 사전 분류는 하지 않음 | 단계 이름 없는 현재 프로젝트 devflow 의도 → resume, 명시 단계 → 공통 정책 색인 뒤 이름 난 소유자, 역할 계약 → 계약 직접 진입 | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 |
 | `product` | 문제·정체성·능력·경계·성공 판정을 소유자와 확정 | 명시한 새 프로젝트·제품 기획 요청 → arch·design. 기존 프로젝트의 최초 역산은 Product를 거치지 않고 Adopt가 소유 | 기원 · DD-33 · DD-67 · DD-97 |
 | `arch` | 관리 프로젝트의 현재 기술 Layer 0·stack·코드 구조·data·verify channel·glossary·능력 설계 구역을 확정하고 갱신 | product 또는 관리 상태 glossary·design·baseline 경로 → direct·work·verify | DD-42 · DD-43 · DD-69 · DD-97 · DD-99 |
 | `design` | 선택적 UI 접근 방식·원천·token/component 전략·분해 축·검토 표면을 확정 | product·arch → arch 능력 설계와 direct | DD-69 · DD-99 |

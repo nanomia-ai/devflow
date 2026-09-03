@@ -1,10 +1,10 @@
 # Local policy index
 
-This index is the mandatory policy entry. Open only the rows whose condition applies to the current Decision; do not scan the tree. The linked file and heading are the deploy-time owner. Korean legacy counterparts remain provenance in `.skill-rails/obligation-ledger.json`; runtime policy is English.
+This index is the mandatory shared-policy entry. A named stage opens it from its own entry without running Principles classification. Open the always-applicable row before the stage's first judgment. Before supplying a requested judgment or executing a returned Decision, open only newly applicable rows exposed by the request, selected stage, observed inputs, requested judgments, decided values, or ordered effects; do not scan the tree. The linked file and heading are the deploy-time owner. Korean legacy counterparts remain provenance in `.skill-rails/obligation-ledger.json`; runtime policy is English.
 
 | When deciding | Read |
 | --- | --- |
-| Every devflow invocation | [The 7 Prompt Principles](authoring/prompt-principles.md#the-7-prompt-principles) |
+| Every stage or Principles entry | [The 7 Prompt Principles](authoring/prompt-principles.md#the-7-prompt-principles) |
 | Identity, room, integration, or shared-write authority | [Identity and Rooms](state/identity-and-rooms.md#identity-and-rooms) |
 | Journal grammar, durable locators, document precedence, or discovery landing | [Exact journal formats](state/journal-grammar.md#exact-journal-formats), [Journal routing and source-resolution lifecycle](state/journal-and-routing.md#journal-routing-and-source-resolution-lifecycle), and [Document change routing](state/document-change-routing.md#document-change-routing) |
 | Core-document writer or draft boundary | [Core document ownership](state/core-document-ownership.md#core-document-ownership) |

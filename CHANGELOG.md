@@ -15,6 +15,25 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.1 — 2026-09-03 — Principles entry without policy loss
+
+Principles now activates from positive current-project devflow intent instead of acting as the
+owner of any generic devflow mention. Product no longer points unrelated package-information
+questions into Principles, while named Product, Arch, Design, Direct, Work, Verify, Resume, and
+Adopt entries still consume the same shared canon through one Principles policy index. The index
+owns when common policy is read: always-applicable guidance precedes the first judgment, and only
+rows exposed by the request, selected stage, observed inputs, requested judgments, decided values,
+or returned effects are added before that judgment or effect. Named stages do not re-enter the
+Principles classifier, and verbatim reviewer, verifier,
+auditor, and retrospector contracts keep their clean-context boundary.
+
+The managed-project SessionStart hook and Codex fallback now describe that same topology and point
+only an actual worker coordinator to its role contract. The hook remains silent without current
+`product.md`; project-state, memory formats, stage routes, and role-contract bodies are unchanged.
+Repository guards now require all eight named stages to carry the byte-identical shared-index entry
+and prohibit direct policy-topic bypasses. The Product and Principles selector projections, all
+affected Skill Rails receipts, the hook, Codex adapter and installer messages ship at 0.23.1.
+
 ## 0.23.0 — 2026-09-03 — usable stage handoffs and closure
 
 The Product, Arch, Design, Direct, Work, and Verify contracts now preserve the intended stage

@@ -5,21 +5,13 @@
     "after": "sha256:5ea385b525f2225c0348b59c36cfa380104c755c0d3fdd59b956c4d0ca75d94f"
   },
   "changed": false,
-  "any_changed": false,
+  "any_changed": true,
   "source_changes": {
     "behavior_source": false,
     "observation_source": false,
-    "context": false
+    "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:5ea385b525f2225c0348b59c36cfa380104c755c0d3fdd59b956c4d0ca75d94f",
-      "after_hash": "sha256:5ea385b525f2225c0348b59c36cfa380104c755c0d3fdd59b956c4d0ca75d94f",
-      "source": "behavior_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
@@ -29,14 +21,28 @@
     "templates": [],
     "template_content": [],
     "body": [],
-    "references": [],
+    "references": [
+      {
+        "id": "references/policy-index.md",
+        "change": "modified",
+        "before": "sha256:e4d94da3d3a56bac90cd25ce34fe1e085cd7eafe8c6ad4ce17d7b14587063cab",
+        "after": "sha256:af4e92c27f48eaf473e89c1643006a52b7c02657485ce8cb4430346de31f0bd6"
+      }
+    ],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "direct-rename-repair-principles-prose",
-  "intent": "Rebuild after restoring ordinary English damaged by the bounded rename.",
-  "impact": {}
+  "change_id": "principles-entry-separation-audit-followup-0.23.1",
+  "intent": "Align the shared-policy timing and always-applicable row with the actual stage and role entry contracts.",
+  "impact": {
+    "references": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
 }

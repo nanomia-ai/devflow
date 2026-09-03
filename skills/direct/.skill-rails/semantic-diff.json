@@ -1,358 +1,33 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:4d7121638c64d3a824c685d80f413f7d5feea6518564f5737d47e03e05b162c0",
+    "before": "sha256:c06c7091026332a0eb908da68dd7cdf74d12cd683503d0cf2aaedf45aaad8552",
     "after": "sha256:c06c7091026332a0eb908da68dd7cdf74d12cd683503d0cf2aaedf45aaad8552"
   },
-  "changed": true,
+  "changed": false,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": true,
-    "observation_source": true,
-    "context": false
+    "behavior_source": false,
+    "observation_source": false,
+    "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:4d7121638c64d3a824c685d80f413f7d5feea6518564f5737d47e03e05b162c0",
-      "after_hash": "sha256:c06c7091026332a0eb908da68dd7cdf74d12cd683503d0cf2aaedf45aaad8552",
-      "source": "behavior_source"
-    },
-    {
-      "kind": "collector",
-      "path": "collectors/index.mjs",
-      "before_hash": "sha256:7ddffeaec2e00535f1185f684a051ebbf16724f0808d6debbfaea29189b903d8",
-      "after_hash": "sha256:4aece9aef42468d93d9aa578b280a0da04097dcbbd023488bebe0750b79984e5",
-      "source": "observation_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [
-      {
-        "id": "carry-approval",
-        "change": "modified",
-        "before": {
-          "reads": [
-            "planning.receipt",
-            "approval.boundary",
-            "origin.drafts"
-          ],
-          "needs": [],
-          "table": null,
-          "branches": [],
-          "effects": [
-            "WRITE",
-            "COMMIT",
-            "REPORT",
-            "WAIT"
-          ],
-          "effect_plans": {
-            "default": [
-              [
-                "WRITE",
-                {
-                  "artifact": "approvalBundle",
-                  "source": "approval.boundary.values",
-                  "target": "origin.drafts.cards"
-                }
-              ],
-              [
-                "COMMIT",
-                {
-                  "consumes": "settled-layer-opening-markers",
-                  "scope": "current-origin-planning-pass"
-                }
-              ],
-              [
-                "REPORT",
-                {
-                  "scope": "approved-work-handoff",
-                  "template": "proposal"
-                }
-              ],
-              "WAIT"
-            ],
-            "branches": {}
-          },
-          "body": "stage: carry-approval",
-          "record": null,
-          "reentry": "rejudge"
-        },
-        "after": {
-          "reads": [
-            "planning.receipt",
-            "approval.boundary",
-            "origin.drafts",
-            "request.classification"
-          ],
-          "needs": [],
-          "table": null,
-          "branches": [],
-          "effects": [
-            "WRITE",
-            "COMMIT",
-            "REPORT",
-            "WAIT"
-          ],
-          "effect_plans": {
-            "default": [
-              [
-                "WRITE",
-                {
-                  "artifact": "approvalBundle",
-                  "source": "approval.boundary.values",
-                  "target": "origin.drafts.cards"
-                }
-              ],
-              [
-                "COMMIT",
-                {
-                  "consumes": "settled-layer-opening-markers",
-                  "scope": "current-origin-planning-pass"
-                }
-              ],
-              [
-                "REPORT",
-                {
-                  "scope": "approved-work-handoff",
-                  "template": "proposal"
-                }
-              ],
-              "WAIT"
-            ],
-            "branches": {}
-          },
-          "body": "stage: carry-approval",
-          "record": null,
-          "reentry": "rejudge"
-        }
-      },
-      {
-        "id": "intake",
-        "change": "modified",
-        "before": {
-          "reads": [
-            "planning.receipt",
-            "request.classification",
-            "project.product",
-            "request.current",
-            "request.phase",
-            "origin.active",
-            "origin.projectResearch"
-          ],
-          "needs": [
-            "request.classification"
-          ],
-          "table": "intakeSelector",
-          "branches": [
-            "route-product",
-            "withdraw-uncommitted",
-            "withdraw-committed",
-            "small-no-tree-delta",
-            "record-request",
-            "route-design",
-            "ASK:intake-uncertain"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "ASK:intake-uncertain": [
-                "ASK"
-              ],
-              "record-request": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "requestRecord",
-                    "format": "maintenanceRoutingPending",
-                    "request-json": "<the whole user request as one JSON string>",
-                    "target": ".devflow/journal.md"
-                  }
-                ],
-                "NEXT"
-              ],
-              "route-design": [
-                "ROUTE:design"
-              ],
-              "route-product": [
-                "ROUTE:product"
-              ],
-              "small-no-tree-delta": [
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ],
-              "withdraw-committed": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "cancelMarkerCleanup",
-                    "target": "current-request-line",
-                    "value": "remove"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "authority": "external.principles",
-                    "branch": "integration",
-                    "files": "request line removal only",
-                    "scope": "current-request-withdrawal"
-                  }
-                ],
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ],
-              "withdraw-uncommitted": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "cancelMarkerCleanup",
-                    "target": "current-request-line",
-                    "value": "remove"
-                  }
-                ],
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ]
-            }
-          },
-          "body": "stage: intake",
-          "record": null,
-          "reentry": "rejudge"
-        },
-        "after": {
-          "reads": [
-            "planning.receipt",
-            "request.classification",
-            "project.product",
-            "request.current",
-            "request.phase",
-            "origin.active",
-            "origin.drafts",
-            "origin.projectResearch"
-          ],
-          "needs": [
-            "request.classification"
-          ],
-          "table": "intakeSelector",
-          "branches": [
-            "route-product",
-            "withdraw-uncommitted",
-            "withdraw-committed",
-            "small-no-tree-delta",
-            "record-request",
-            "route-design",
-            "ASK:intake-uncertain"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "ASK:intake-uncertain": [
-                "ASK"
-              ],
-              "record-request": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "requestRecord",
-                    "format": "maintenanceRoutingPending",
-                    "request-json": "<the whole user request as one JSON string>",
-                    "target": ".devflow/journal.md"
-                  }
-                ],
-                "NEXT"
-              ],
-              "route-design": [
-                "ROUTE:design"
-              ],
-              "route-product": [
-                "ROUTE:product"
-              ],
-              "small-no-tree-delta": [
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ],
-              "withdraw-committed": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "cancelMarkerCleanup",
-                    "target": "current-request-line",
-                    "value": "remove"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "authority": "external.principles",
-                    "branch": "integration",
-                    "files": "request line removal only",
-                    "scope": "current-request-withdrawal"
-                  }
-                ],
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ],
-              "withdraw-uncommitted": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "cancelMarkerCleanup",
-                    "target": "current-request-line",
-                    "value": "remove"
-                  }
-                ],
-                [
-                  "REPORT",
-                  {
-                    "template": "result"
-                  }
-                ],
-                "DONE"
-              ]
-            }
-          },
-          "body": "stage: intake",
-          "record": null,
-          "reentry": "rejudge"
-        }
-      }
-    ],
+    "stages": [],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [],
+    "body": [
+      {
+        "id": "why: purpose",
+        "change": "modified",
+        "before": "sha256:69fa26d589a2351db3b32a011c581b100449f853274ee93b29ee551a96f768dd",
+        "after": "sha256:d1a92ca7aeba6c9e8265b4a9fb627f6a294c3d96d0e0df15c7bf7b563702e934"
+      }
+    ],
     "references": [],
     "ownership": [],
     "artifacts": [],
@@ -360,14 +35,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "close-direct-withdrawal-and-design-attribution",
-  "intent": "Reuse the existing cancellation plan for approved drafts and bind each Design commit to the oldest request it actually carried.",
+  "change_id": "principles-entry-separation-0.23.1",
+  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
   "impact": {
-    "stages": {
-      "total": 2,
+    "body": {
+      "total": 1,
       "added": 0,
       "removed": 0,
-      "modified": 2
+      "modified": 1
     }
   }
 }

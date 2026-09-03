@@ -4,7 +4,7 @@
 
 Take the canonical sibling state result as it stands. An absent product with no implementation routes to Product; existing implementation without a managed product definition routes to Resume for recovery, while direct Adopt remains the initial unmanaged reconstruction entry. Once the project is managed, design markers and baseline refresh routes remain in arch. Open Git operations and integrity failures stop before normal effects. Unrelated canonical routes return to resume.
 
-For initial or refresh planning, read the canonical rules and planning-evidence discipline from the sibling principles skill, then read product and glossary completely. Read existing architecture, code-style, journal, and direct legacy ADRs when present. For capability work, open the sibling capability baseline contract. Omit its knowledge-overflow topic until an actual named source is processed or the design-zone budget is about to overflow; uncertainty opens the whole contract.
+For initial or refresh planning, open the planning-evidence row selected through the shared policy index before deciding, then read product and glossary completely. Read existing architecture, code-style, journal, and direct legacy ADRs when present. For capability work, open the capability baseline or knowledge capsule row from that index before deciding. Omit its knowledge-overflow topic until an actual named source is processed or the design-zone budget is about to overflow; uncertainty opens the whole contract.
 
 ## Interview and research
 

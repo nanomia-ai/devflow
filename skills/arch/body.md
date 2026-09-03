@@ -4,6 +4,8 @@
 
 Arch turns an approved product definition into current technical Layer 0 and capability design zones for a devflow-managed project, including an adopted brownfield. Adopt owns only the initial reconstruction of an unmanaged codebase. Arch preserves the canonical Brownfield origin rather than using it to redirect managed refresh, preserves reasons and rejected alternatives, keeps uncertain optimization values visibly provisional, and leaves implementation method to later work.
 
+Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+
 ## why: workflow
 
 The ordered workflow is stateful because entry repair, research interruption, approval, capability generation, and marker consumption have different safe effects. The specification owns those branches; the workflow reference explains what a cold consumer must decide within them.

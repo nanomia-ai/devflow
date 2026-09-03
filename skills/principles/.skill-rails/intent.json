@@ -1,6 +1,6 @@
 {
   "name": "principles",
-  "description": "Canonical devflow mechanics and evidence boundaries for explicit routing or recovery questions, ownership, knowledge landing, commits, and verification; explicit stage invocations are their own entry and do not require Principles preflight.",
+  "description": "Shared devflow policy and state-free entry routing. Use when the user intends to operate, resume, recover, or inspect the current project through devflow without naming a stage, or asks how devflow's shared workflow rules apply. A named stage enters directly and reads the shared policy index without a Principles preflight.",
   "problem": "Keep devflow flexible for people while making mechanical state, recovery, evidence, ownership, and completion decisions deterministic for AI. Prevent prose drift, silent loss, duplicate authority, unbounded reading, and a check-passing workflow that no longer serves the user's development outcome.",
   "use_cases": [
     "Route a new or resumed devflow session from current Git and project state.",

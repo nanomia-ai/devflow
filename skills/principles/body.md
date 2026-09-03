@@ -10,7 +10,7 @@ Read [Enter and resume contract](references/enter-resume-contract.md#enter-and-r
 
 Principles classifies requests that entered Principles; stateful, status, and project-read-only work routes once
 to resume, whose only state input is calculateState. Role contracts bypass this classifier.
-An explicitly invoked stage is its own entry and does not use Principles as a preflight; its local guards route state recovery to Resume.
+An explicitly invoked stage is its own entry and does not use Principles as a preflight. Its always-read purpose points to this package's shared-policy index, while its local guards route state recovery to Resume.
 
 ## why: policy-index
 
