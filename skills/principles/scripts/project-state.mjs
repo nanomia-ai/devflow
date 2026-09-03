@@ -299,38 +299,16 @@ function indexedDevflowEvidence(root) {
   }
 }
 
-function devflowHistoryEvidence(root) {
-  const history = gitRun(root, ["log", "-1", "--format=%H", "--all", "--", ".devflow"], { allowFailure: true });
-  if (history.status !== 0) return "unknown";
-  let commit;
-  try {
-    commit = decodeUtf8(history.stdout, "devflow history").trim();
-  } catch {
-    return "unknown";
-  }
-  if (commit !== "") return /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit) ? "present" : "unknown";
-
-  const shallow = gitRun(root, ["rev-parse", "--is-shallow-repository"], { allowFailure: true });
-  if (shallow.status !== 0) return "unknown";
-  let value;
-  try {
-    value = decodeUtf8(shallow.stdout, "shallow repository state").trim();
-  } catch {
-    return "unknown";
-  }
-  if (value === "true") return "unknown";
-  return value === "false" ? "absent" : "unknown";
-}
-
+// Membership is current evidence only: a `.devflow` root in the working tree or a `.devflow`
+// path in this checkout's index. Commit history on any ref is Git-owned recovery, never a
+// membership claim, so a sibling branch in a shared object store cannot make an unmanaged
+// checkout look managed, and a committed total deletion leaves nothing devflow could overwrite.
 function devflowMembershipEvidence(root) {
-  const current = currentPathEvidence(root, ".devflow/project/product.md");
-  if (current !== "absent") return { current, indexed: "not-checked", history: "not-checked", unmanaged: false };
+  const current = currentPathEvidence(root, ".devflow");
+  if (current !== "absent") return { current, indexed: "not-checked", unmanaged: false };
 
   const indexed = indexedDevflowEvidence(root);
-  if (indexed !== "absent") return { current, indexed, history: "not-checked", unmanaged: false };
-
-  const history = devflowHistoryEvidence(root);
-  return { current, indexed, history, unmanaged: history === "absent" };
+  return { current, indexed, unmanaged: indexed === "absent" };
 }
 
 function nonDevflowMaterialEvidence(root) {

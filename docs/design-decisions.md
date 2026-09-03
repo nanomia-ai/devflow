@@ -501,7 +501,7 @@ Revisit when delayed guidance causes an action different from resume, a C1–C6 
 
 ### DD-95 · Globally installed devflow stays silent without current evidence; explicit intent and history-aware state preserve the adoption boundary (v0.20.0)
 
-Subject: Identity, packaging, platforms | Introduced: v0.20.0 | State: active, partly corrected by DD-97 (v0.21.0)
+Subject: Identity, packaging, platforms | Introduced: v0.20.0 | State: active, partly corrected by DD-97 (v0.21.0), DD-100 (v0.23.3)
 
 Observed problem: the globally installed plugin's SessionStart injected devflow guidance into
 every Git repository, and ordinary development language in the Arch, Design, Split, Work,
@@ -599,6 +599,55 @@ CHANGELOG. No state, marker, document layer, or migration stage is added.
 
 Revisit when deployed `.devflow/` prevents ordinary human or supported-platform reads or writes,
 or a current reader and writer are reproduced observing different roots.
+
+### DD-100 · Project membership is judged from current evidence only — with no current `.devflow` root or indexed path, a checkout is unmanaged regardless of any ref's history (v0.23.3)
+
+Subject: Identity, packaging, platforms | Introduced: v0.23.3 | State: active
+
+Observed problem: the state tool's membership predicate walked every ref of the shared object
+store with `git log --all -- .devflow`. A linked worktree whose own lineage never carried
+`.devflow` therefore read `setup.no-product` because a sibling branch had it, and explicit Adopt
+was pushed into Resume's setup question — the exact scene DD-95 meant to prevent. Narrowing
+history to the current HEAD lineage would add three Git calls to tell an unborn HEAD from a
+malformed current ref by exit code, keep the shallow branch, and still turn a committed total
+deletion into a "product.md missing" question rather than any real warning.
+
+Desired behavior: membership reads only this checkout's current evidence. A `.devflow` root in
+the working tree or a `.devflow` path in this checkout's index means managed or partial; when
+both are absent the checkout is `setup.unmanaged` regardless of sibling refs, past commits, or
+shallow history. A failed current-path or index observation is still never declared unmanaged.
+
+Chosen boundary: `devflowMembershipEvidence` keeps two observations — the current `.devflow`
+root lstat and `git ls-files -- .devflow` — and drops the history, shallow, and `--all`
+observations. An untracked partial `.devflow` folder is now something devflow could overwrite,
+so it is protected as `setup.no-product` instead of being unmanaged. SessionStart's single
+`product.md` check, Resume's unmanaged report-and-DONE, explicit Adopt's direct consumption of
+`setup.unmanaged`, and the `git.open-operation` and integrity priorities are unchanged.
+
+Why the boundary is needed: when both the current root and the index are empty, devflow has no
+artifact to overwrite and an unknown session has no disk marker to recover. Restoring a committed
+total deletion is Git's job (DD-07, DD-11, DD-49), and explicit Adopt is the owner choosing
+reconstruction. Using history as membership evidence conflates "some ref once had it" with "this
+checkout is managed" — a wrong predicate, and one that blocks explicit entry. Of DD-95's reason —
+partial, deleted, shallow-history, and failed-observation states are never falsely declared
+unmanaged — partial working-tree state and failed observation are preserved by current evidence,
+an unstaged working-tree deletion is preserved by the index, and only staged or committed
+deletions and shallow history leave the membership evidence.
+
+Rejected alternatives: a current-HEAD-lineage fallback adds calls and branches while preserving
+only a question, not a warning. Keeping `--all` and filtering hits with `merge-base
+--is-ancestor` reaches the same answer with more processes. Adding a HEAD-tree check reintroduces
+the unborn-versus-failure discrimination because `cat-file -e` returns one code for both.
+
+Affected coordinates: the membership predicate in `skills/principles/scripts/project-state.mjs`
+and the T2 membership tests in `scripts/project-state.test.js`; DD-95's full-history-proof clause
+and DD-97's clauses that an untracked partial `.devflow/` is not membership evidence and that
+historical paths remain recovery evidence are corrected; Resume's `stage: scope-entry` unmanaged
+report sentence; the scene wording of matrix §3.24. No new marker, state, zone, or mechanism.
+
+Revisit when a devflow artifact is actually overwritten in a checkout whose current root and
+index are both empty, when an unstaged working-tree deletion of `.devflow` reads unmanaged, or
+when a linked worktree's explicit Adopt is again pushed to Resume.
 
 ## Verification and roles
 
@@ -1952,7 +2001,7 @@ Nothing has been rejected under this subject yet.
 
 ### DD-97 · Explicit Adopt reconstructs an unmanaged brownfield once; managed technical refresh belongs to Arch (v0.21.0)
 
-Subject: Brownfield and entry | Introduced: v0.21.0 | State: active
+Subject: Brownfield and entry | Introduced: v0.21.0 | State: active, partly corrected by DD-100 (v0.23.3)
 
 Observed problem: three clean existing-code worktrees invoked Adopt explicitly, yet the installed
 entry text told Codex to enter Principles first and Adopt did not accept the state tool's

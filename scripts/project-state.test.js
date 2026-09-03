@@ -943,7 +943,7 @@ test("T2 priority structure has one canonical array position per zone", async ()
   assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 61);
 });
 
-test("T2 unmanaged activation needs absent current, index, and proven full history", async (t) => {
+test("T2 unmanaged activation needs an absent current .devflow root and index", async (t) => {
   const assertSetup = (root, kind) => {
     const result = run(root);
     ok(result);
@@ -951,18 +951,18 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
     assert.equal(nextOf(result.stdout), `setup.${kind}`, result.stdout);
   };
 
-  await t.test("full-history ordinary repository is unmanaged", () => {
+  await t.test("ordinary repository is unmanaged", () => {
     assertSetup(makePlainRepo(t), "unmanaged");
   });
 
-  await t.test("unborn full-history repository is unmanaged", () => {
+  await t.test("unborn repository is unmanaged", () => {
     assertSetup(makePlainRepo(t, { unborn: true }), "unmanaged");
   });
 
-  await t.test("an untracked partial devflow path remains unmanaged", () => {
+  await t.test("an untracked partial devflow path is protected as no-product", () => {
     const root = makePlainRepo(t);
     write(root, ".devflow/partial.txt", "partial\n");
-    assertSetup(root, "unmanaged");
+    assertSetup(root, "no-product");
   });
 
   await t.test("indexed devflow path remains no-product when absent from the worktree", () => {
@@ -973,25 +973,41 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
     assertSetup(root, "no-product");
   });
 
-  await t.test("deleted historical devflow path remains no-product", () => {
+  await t.test("staged total deletion of devflow is unmanaged without consulting HEAD", () => {
+    const root = makePlainRepo(t);
+    write(root, ".devflow/partial.txt", "partial\n");
+    commit(root, "jmp add devflow");
+    git(root, "rm", "-r", "-q", ".devflow");
+    assert.equal(gitTry(root, "cat-file", "-e", "HEAD:.devflow/partial.txt").status, 0);
+    assertSetup(root, "unmanaged");
+  });
+
+  await t.test("committed total deletion of devflow is unmanaged", () => {
     const root = makePlainRepo(t);
     write(root, ".devflow/partial.txt", "partial\n");
     commit(root, "jmp add devflow");
     fs.rmSync(path.join(root, ".devflow"), { recursive: true, force: true });
     commit(root, "jmp remove devflow");
-    assertSetup(root, "no-product");
+    assertSetup(root, "unmanaged");
   });
 
-  await t.test("empty shallow history is unknown and remains no-product", () => {
+  await t.test("shallow history does not decide membership", () => {
     const root = makePlainRepo(t);
     fs.writeFileSync(path.join(root, ".git", "shallow"), `${git(root, "rev-parse", "HEAD")}\n`, "utf8");
-    assertSetup(root, "no-product");
+    assertSetup(root, "unmanaged");
   });
 
-  await t.test("failed history inspection remains no-product", () => {
+  await t.test("a broken unrelated ref does not decide membership", () => {
     const root = makePlainRepo(t);
     write(root, ".git/refs/heads/broken", "not-an-object-id\n");
-    assert.notEqual(gitTry(root, "log", "-1", "--format=%H", "--all", "--", "devflow").status, 0);
+    assert.notEqual(gitTry(root, "log", "-1", "--format=%H", "--all", "--", ".devflow").status, 0);
+    assertSetup(root, "unmanaged");
+  });
+
+  await t.test("a failed index observation never becomes unmanaged", () => {
+    const root = makePlainRepo(t);
+    fs.writeFileSync(path.join(root, ".git", "index"), "not-an-index\n", "utf8");
+    assert.notEqual(gitTry(root, "ls-files", "-z", "--", ".devflow").status, 0);
     assertSetup(root, "no-product");
   });
 
@@ -1005,7 +1021,7 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
     assert.match(result.stdout, new RegExp(`root=${root.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
   });
 
-  await t.test("linked worktree sees devflow history on another current ref", () => {
+  await t.test("a linked worktree ignores devflow committed only on a sibling ref", () => {
     const root = makePlainRepo(t);
     const seed = git(root, "rev-parse", "HEAD");
     write(root, ".devflow/partial.txt", "partial\n");
@@ -1013,7 +1029,7 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
     const linked = `${root}-linked`;
     t.after(() => fs.rmSync(linked, { recursive: true, force: true }));
     git(root, "worktree", "add", "-q", "-b", "plain-linked", linked, seed);
-    assertSetup(linked, "no-product");
+    assertSetup(linked, "unmanaged");
   });
 
   const module = await registry();

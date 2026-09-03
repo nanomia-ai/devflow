@@ -5,11 +5,11 @@
     "after": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54"
   },
   "changed": false,
-  "any_changed": false,
+  "any_changed": true,
   "source_changes": {
     "behavior_source": false,
     "observation_source": false,
-    "context": false
+    "context": true
   },
   "artifact_receipts": [],
   "groups": {
@@ -20,7 +20,14 @@
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [],
+    "body": [
+      {
+        "id": "stage: scope-entry",
+        "change": "modified",
+        "before": "sha256:b4a9f020f39210c321b00acd00cdf85c5204ec0880192349e2edd7eee4bf6334",
+        "after": "sha256:bd4a24e35b64b72d252fa4edbd077b2eba25bdf65e4b8b15c36fcbd9a2935327"
+      }
+    ],
     "references": [],
     "ownership": [],
     "artifacts": [],
@@ -28,7 +35,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "resume-selector-purpose-compact",
-  "intent": "Keep the approved Resume selector semantics while removing words that do not change its selection or ownership boundary.",
-  "impact": {}
+  "change_id": "resume-unmanaged-report-current-evidence",
+  "intent": "Resume's unmanaged report states the current-evidence membership boundary (DD-100): no .devflow root in the working tree and no .devflow path in the current checkout's index. No other behavior changes.",
+  "impact": {
+    "body": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
 }

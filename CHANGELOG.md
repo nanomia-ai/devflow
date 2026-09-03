@@ -15,6 +15,30 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.3 — 2026-09-04 — Project membership from current evidence only
+
+The state tool's project-membership judgment no longer consults Git history. A checkout is
+managed or partial when a `.devflow` root exists in its working tree or a `.devflow` path exists
+in its index; when both are absent it is `setup.unmanaged`, whatever any other ref, past commit,
+or shallow clone contains. The previous predicate ran `git log --all -- .devflow`, so a linked
+worktree whose own lineage never carried `.devflow` read `setup.no-product` because a sibling
+branch in the shared object store had it, and explicit Adopt was pushed into Resume's setup
+question. An untracked partial `.devflow` folder is now protected as `setup.no-product` instead
+of being unmanaged, because it is something devflow could overwrite; a staged or committed total
+deletion is unmanaged, because its recovery belongs to Git and explicit Adopt is the owner
+choosing reconstruction. A failed current-root or index observation still never becomes
+unmanaged, and open Git operations and integrity findings keep their priority.
+
+Resume's unmanaged report now states that boundary — no `.devflow` root in the working tree and
+no `.devflow` path in the current checkout's index — instead of "no current or historical
+evidence". Skill Rails regenerated only that package's receipt and semantic diff, with zero
+behavior, guard, stage, or observation impact. DD-100 records the boundary and partly corrects
+DD-95 and DD-97; matrix §3.24 now names the current checkout. SessionStart, Adopt, Product,
+Arch, the zone table, and route priority are unchanged. Files: `skills/principles/scripts/project-state.mjs`,
+`scripts/project-state.test.js`, `skills/resume/body.md` with its generated receipts,
+`docs/design-decisions.md`, `docs/design-decisions_ko.md`, `docs/usecase-matrix_ko.md`, both
+plugin manifests, and `docs/rounds/v0.23.0/report-0.23.3_ko.md`.
+
 ## 0.23.2 — 2026-09-03 — Resume purpose at the selector boundary
 
 Resume's selector now leads with its actual state-aware role: it re-enters an existing managed
