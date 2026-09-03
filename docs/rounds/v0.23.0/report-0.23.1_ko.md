@@ -1,6 +1,6 @@
 # v0.23.1 수리 보고 — Principles 선택과 공통 정책 소비의 분리
 
-상태: 구현·정적 검증·교차 재감사 완료, 배포 및 사용자 실사용 시험 대기  
+상태: 구현·정적 검증·교차 재감사·배포 완료, 사용자 실사용 시험 대기  
 기준 커밋: `c22780bf2d1f57b848e087d1337c1b218c34bdee`
 
 ## 범위와 실제 실패
@@ -61,4 +61,10 @@ Fable이 실사용에서 특별히 관찰할 두 지점은 공통 규약 중 산
 
 ## 배포 기록
 
-버전은 두 플러그인 manifest와 CHANGELOG에서 0.23.1로 올렸다. 저장소 commit·push 뒤 Codex와 Claude에 설치하고 설치된 manifest와 핵심 정본 hash를 release source와 대조한 결과를 이 절에 추가한다.
+버전은 두 플러그인 manifest와 CHANGELOG에서 0.23.1로 올렸다. 구현 commit `9d80041`을 `origin/main`에 push한 뒤 Codex와 Claude에 설치했다.
+
+Codex 설치기는 Orca가 지정한 `CODEX_HOME`의 `plugins/cache/nanomia/devflow/0.23.1`에 설치했다. `codex plugin list --marketplace nanomia --json`은 `devflow@nanomia` 0.23.1을 enabled로, source를 이 저장소의 local 경로로 보고했다. Claude는 `claude plugin update devflow@nanomia`로 0.23.0에서 0.23.1로 갱신됐고 `~/.claude/plugins/cache/nanomia/devflow/0.23.1`을 enabled 설치로 보고했다.
+
+두 설치 캐시 각각에서 release source와 두 manifest, CHANGELOG, SessionStart, Codex fallback 양 언어, 아홉 단계 `body.md`, Product·Principles의 spec·intent·SKILL·OpenAI metadata·generated receipt, Principles의 purpose·진입 계약·정책 색인, Adopt·Arch workflow를 포함한 핵심 30개 파일을 newline-normalized SHA-256으로 대조했고 missing 0, mismatch 0이었다. Claude는 새 세션을 시작해야 갱신본이 적용된다.
+
+Codex `/hooks` 화면에서 native SessionStart command의 trust 상태를 사람이 확인하는 단계는 실행하지 않았고, 따라서 이전 global hook도 제거하지 않았다. 이 UI 확인과 깨끗한 새 Codex·Claude에서의 실제 선택·체이닝은 사용자 실사용 시험에 남긴다.
