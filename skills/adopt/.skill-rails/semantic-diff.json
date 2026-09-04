@@ -2,49 +2,403 @@
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
     "before": "sha256:ec093501eff0ead89e4a02315d14cbb409c436c1e07a86fb524a923ed2be4722",
-    "after": "sha256:ec093501eff0ead89e4a02315d14cbb409c436c1e07a86fb524a923ed2be4722"
+    "after": "sha256:223c4302de28ad0a79e4631873054858bc7a72027971e71fb7dec4b8694a45f5"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
     "context": true
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:ec093501eff0ead89e4a02315d14cbb409c436c1e07a86fb524a923ed2be4722",
+      "after_hash": "sha256:223c4302de28ad0a79e4631873054858bc7a72027971e71fb7dec4b8694a45f5",
+      "source": "behavior_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "adoption",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "state.route"
+          ],
+          "needs": [],
+          "table": "approval",
+          "branches": [
+            "prepare",
+            "refuse",
+            "approve"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "approve": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "architecture",
+                    "template": "architecture"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "design",
+                    "selection": "when-existing-product-evidence-has-a-design-surface",
+                    "template": "design",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "codeStyle",
+                    "template": "codeStyle"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "append-principles-maintenance-routing-pending-idempotently-with-the-whole-follow-on-request-when-adoption-includes-follow-on-work"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "ordering": "last-write-immediately-before-first-commit",
+                    "template": "product"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "boundary": "confirmed-brownfield-layer-zero",
+                    "staging": "only-layer-zero-and-follow-on-paths"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "calculate-canonical-design-head-from-the-landed-layer-zero-commit"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "capabilityDesigns",
+                    "fields": {
+                      "designHead": "canonical-design-head-output"
+                    },
+                    "template": "capabilityDesign"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeNodes",
+                    "selection": "every-approved-domain-body-that-needs-depth-beyond-its-always-read-owner; zero-only-when-source-dispositions-prove-none-is-needed",
+                    "template": "knowledgeNode",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "validate-every-written-knowledge-capsule-with-project-knowledge"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "boundary": "confirmed-brownfield-capabilities-and-knowledge",
+                    "staging": "only-capability-design-documents-and-their-knowledge-capsules"
+                  }
+                ],
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ],
+              "prepare": [
+                [
+                  "READ",
+                  {
+                    "path": "references/workflow.md"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "inventory-all-maintained-code-docs-specs-and-records-with-exact-coordinates-and-one-disposition-each"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "trace-one-executable-flow-per-code-backed-capability-candidate-and-record-documentary-basis-for-document-derived-candidates"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "reverse-derive-complete-layer-zero-applicable-design-capability-zones-glossary-and-all-required-owner-adjacent-knowledge"
+                  }
+                ],
+                [
+                  "REPORT",
+                  {
+                    "template": "adoptionProposal"
+                  }
+                ],
+                "ASK"
+              ],
+              "refuse": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ]
+            }
+          },
+          "body": "stage: adoption",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "state.route"
+          ],
+          "needs": [],
+          "table": "approval",
+          "branches": [
+            "prepare",
+            "refuse",
+            "approve"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "approve": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "architecture",
+                    "template": "architecture"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "design",
+                    "selection": "when-existing-product-evidence-has-a-design-surface",
+                    "template": "design",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "codeStyle",
+                    "template": "codeStyle"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "append-principles-maintenance-routing-pending-idempotently-with-the-whole-follow-on-request-when-adoption-includes-follow-on-work"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "ordering": "last-write-immediately-before-first-commit",
+                    "template": "product"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "boundary": "confirmed-brownfield-layer-zero",
+                    "staging": "only-layer-zero-and-follow-on-paths"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "calculate-canonical-design-head-from-the-landed-layer-zero-commit"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "capabilityDesigns",
+                    "fields": {
+                      "designHead": "canonical-design-head-output"
+                    },
+                    "template": "capabilityDesign"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeNodes",
+                    "selection": "every-approved-domain-body-that-needs-depth-beyond-its-always-read-owner; zero-only-when-source-dispositions-prove-none-is-needed",
+                    "template": "knowledgeNode",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "validate-every-written-knowledge-capsule-with-project-knowledge"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "boundary": "confirmed-brownfield-capabilities-and-knowledge",
+                    "staging": "only-capability-design-documents-and-their-knowledge-capsules"
+                  }
+                ],
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ],
+              "prepare": [
+                [
+                  "READ",
+                  {
+                    "path": "references/workflow.md"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "inventory-all-maintained-code-docs-specs-and-records-with-exact-coordinates-and-one-disposition-each"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "trace-one-executable-flow-per-code-backed-capability-candidate-and-record-documentary-basis-for-document-derived-candidates"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "reverse-derive-complete-layer-zero-applicable-design-capability-zones-glossary-and-all-required-owner-adjacent-knowledge-then-run-one-bounded-clean-context-semantic-refutation-before-report"
+                  }
+                ],
+                [
+                  "REPORT",
+                  {
+                    "template": "adoptionProposal"
+                  }
+                ],
+                "ASK"
+              ],
+              "refuse": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ]
+            }
+          },
+          "body": "stage: adoption",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
     "body": [
       {
-        "id": "why: purpose",
+        "id": "stage: adoption",
         "change": "modified",
-        "before": "sha256:29c89417a54e242e3453030c6d27af8118242a7e078f82dce80f27ce9e50e24b",
-        "after": "sha256:99b13c147898d1f26fefb48752aee3eb0b915743286c16d649409b31bceea1b2"
+        "before": "sha256:96355ff8402d92aef94d2ef54dd4672d3cdef91fba3e0ae1e2c794b0f953b6b9",
+        "after": "sha256:840c7f5f611b0895a515733db0b22f1a3a57426ec61df79adaf7ae2d21c74d56"
       }
     ],
     "references": [
       {
         "id": "references/workflow.md",
         "change": "modified",
-        "before": "sha256:17834f74380ce50fd934364925c85f01a339607b0289dddf1f2a92ff8b5b9027",
-        "after": "sha256:b0aed0cd92ce8433994566129f61ddd595664b8c151effa4d143d5b55727c7a8"
+        "before": "sha256:b0aed0cd92ce8433994566129f61ddd595664b8c151effa4d143d5b55727c7a8",
+        "after": "sha256:5e537362b3fe6861021646592e5bf30a101f15b7f0b103ddeb5268d32654c318"
       }
     ],
     "ownership": [],
     "artifacts": [],
     "roles": [],
-    "declarations": [],
+    "declarations": [
+      {
+        "id": "source_coverage",
+        "change": "modified",
+        "before": {
+          "value": "Every maintained source receives one explicit disposition: landed in a named Product, Architecture, Design, glossary, capability, or K owner; retained as a supporting source with exact coordinates; superseded or contradicted by named evidence; or excluded as non-domain with a reason. The approved coordinates, authority status, disposition, and landing owner persist in Architecture Existing records; no maintained source is silently dropped and no second ledger is created.",
+          "consumer": "template:adoptionProposal|template:architecture|stage:adoption"
+        },
+        "after": {
+          "value": "Every maintained source receives one explicit disposition: landed in a named Product, Architecture, Design, glossary, capability, or K owner; retained as a supporting source with exact coordinates; superseded or contradicted by named evidence; or excluded as non-domain with a reason. The approved coordinates, authority status, disposition, and landing owner persist in Architecture Existing records; no maintained source is silently dropped and no second ledger is created. Before binding, one separate clean-context semantic refutation leaves no unexplained contradicted or unsupported claim and no omitted current constraint that permits a concrete wrong action, erases a required decision or rejected direction, misstates ownership, or omits required verification means; an unavailable or unresolved refutation blocks binding.",
+          "consumer": "template:adoptionProposal|template:architecture|stage:adoption"
+        }
+      }
+    ],
     "deferred": []
   },
-  "change_id": "principles-entry-separation-0.23.1",
-  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
+  "change_id": "v0.23.4-adopt-semantic-repair",
+  "intent": "Restore bounded Arch evidence reads and require one bounded clean-context semantic refutation before Adopt binding.",
   "impact": {
+    "stages": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
     "body": {
       "total": 1,
       "added": 0,
@@ -52,6 +406,12 @@
       "modified": 1
     },
     "references": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "declarations": {
       "total": 1,
       "added": 0,
       "removed": 0,

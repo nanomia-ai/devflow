@@ -37,6 +37,8 @@ knowledge baselines are always on; there is no per-project switch.
 
 ## Document contract and zone boundary
 
+Within capability documents and K relations, an unqualified capability number means the disk `NN`. Product-local ids remain unchanged and may be cited only as `Product C<number> <name>`; they never substitute for disk `NN` navigation.
+
 Form governs content. Each file contains exactly one `## Verified state` H2 heading. The
 bytes before it are the **design zone**; the heading through end of file is the **verified
 zone**. When the fixed heading is absent or appears more than once, neither writer guesses
@@ -56,7 +58,7 @@ the boundary.
 | 9 | Lifecycle | verified | mermaid stateDiagram-v2, only when illegal transitions exist | soft | state sets with only legal transitions |
 | 10 | Current behavior | verified | table: action / precondition / what the user sees / entrypoint | soft | planned behavior and display-only wording changes |
 | 11 | Entrypoints | verified | table: exact path / role / entered from | soft | a whole “related” folder |
-| 12 | Consumed contracts | verified | table: exact path / other capability number / expectation | soft | anything this capability does not consume directly |
+| 12 | Consumed contracts | verified | table: exact path / other disk NN / expectation | soft | anything this capability does not consume directly |
 | 13 | Traps | verified | table: symptom / reproduction condition / cause / use instead | soft | universal development knowledge |
 | 14 | Verify | verified | commands and scenarios actually run at this closure, verbatim | soft | accumulated past passes |
 | 15 | Verification metadata | verified | the five `key: value` fields below, at end of file | 5 fields | every other field |
@@ -79,7 +81,7 @@ The deployed first 5 lines are exactly:
 ```text
 # <NN> <product.md capability name>
 Purpose: <why it exists and what it implements, one line>
-Boundary: owns <owned scope>; does not own <neighbor capability number and name, or none>
+Boundary: owns <owned scope>; does not own <neighbor disk NN and name, or none>
 Concepts: <JSON array of exact glossary terms | none>
 Trust: design reflects confirmed Layer 0; verified state reflects the last passing capability verification, or contains no evidence before one. Judge each zone by its metadata.
 ```

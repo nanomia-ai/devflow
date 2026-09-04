@@ -1542,7 +1542,7 @@ cost.
 
 ### DD-73 · Capability documents are arch's final output and must exist before the first tree opening, while decision and external-contract grounds are preserved at confirmation (v0.17.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.17.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.17.0 | State: active, partly corrected by DD-101 (v0.23.4)
 
 The diagnosis separates three intervals. Commits and resume preserve the boundary between one confirmed Layer 0 document and the next. During confirmation of one document there is no cheap intermediate landing because the contract forbids changing a core-document path before approval. The defect is the third interval: a run could end after arch.md and code-style.md landed while producing none of arch's final output, the capability documents. DD-43 requires domain boundaries and concepts before the first card, but arch had no context boundary before its biggest single output and split did not stop a zero-document tree opening.
 
@@ -1633,7 +1633,7 @@ produces a loss or double-plan that these rules do not classify.
 
 ### DD-76 · Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute (v0.18.1)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2), DD-92 (v0.20.0), DD-97 (v0.21.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2), DD-92 (v0.20.0), DD-97 (v0.21.0), DD-101 (v0.23.4)
 
 Observed problem: one capability's domain source in a real brownfield (jgnote property) ran
 to 3,699 lines — pressed as summary into a 185-line capability document, knowledge is lost;
@@ -1876,6 +1876,18 @@ the principles; the capability fixed header in baseline predicates; product, arc
 resume, split, and work pairs; project-state and focused invariant tests.
 Revisit when: a real-use exact-term lookup misses a relevant capability, over-tagging misleads
 entry, or the marker fails to guard glossary/header consistency across an interrupted writer.
+
+### DD-101 · Adopt binds only after bounded authority reads and one clean semantic refutation, while capability relations use disk numbers (v0.23.4)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.23.4 | State: active
+
+Observed problem: a real Adopt output mixed Product `C<number>` ids with disk `NN`, so all 14 Boundary lines violated the neighbor-number form; it invented signed sessions and a signing key against opaque-token, SHA256, and Postgres authority; and it omitted independent repository and CI verification means.
+
+Chosen boundary: Adopt reads only the verification-channel table, including Missing-channel, and the first proposal paragraph from `<skill-root>/../arch/references/workflow.md`. It records the current channel, exact repository commands or means, and missing action as evidence or unresolved follow-on without importing Arch verifier execution, stop, approval, commit, integration, or ADR-write behavior. One separate clean context refutes the complete draft once, Adopt revises once, and only returned coordinates are rechecked; unavailable or unresolved refutation is recorded through existing verification, questions, and contradictions and blocks binding.
+
+In capability documents and K relations, an unqualified capability number is disk `NN`. Product ids may be cited only as `Product C<number> <name>` and never substitute for disk navigation. Broader roles, state, schemas, validators, harnesses, domain rules, and exhaustive copying are rejected.
+
+Affected coordinates: Adopt adoption prepare, source coverage, body, and workflow; the Principles capability/K baseline; and DD-73/DD-76 status. Revisit when a false claim still binds after the clean refutation, an approved omission category permits a concrete wrong action, or number identity causes wrong-document navigation.
 
 ### Rejected under this subject
 

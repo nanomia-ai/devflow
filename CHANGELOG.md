@@ -15,6 +15,12 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.4 — 2026-09-04 — Bounded Adopt evidence repair
+
+Adopt now reads only Arch's verification-channel table and first proposal paragraph through the installed sibling edge, records the current channel and exact repository verification means, and performs one bounded separate clean-context semantic refutation before binding. Capability and K relations now reserve unqualified numbers for disk `NN`; Product ids remain explicit `Product C<number> <name>` citations and never substitute for disk navigation.
+
+The repair adds no role, state, schema, validator, harness, case-specific rule, or exhaustive-copy requirement. Skill Rails structurally rebuilt both affected packages. Its semantic-diff indexes `READ_FIRST` references only; the Principles baseline contract is outside that set, so `.generated.json` proves the changed bytes are packaged while that receipt does not represent the resource's semantic change.
+
 ## 0.23.3 — 2026-09-04 — Project membership from current evidence only
 
 The state tool's project-membership judgment no longer consults Git history. A checkout is
