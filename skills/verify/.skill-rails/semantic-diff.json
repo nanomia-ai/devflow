@@ -1,61 +1,28 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:e7cd6d8b51ef80ef4f2617b6dcbd22c0cd142c7e4a2ec8d78df2bda4141dc9e9",
-    "after": "sha256:bb70b7e209ab4807377268a787a4888ae8d2f26f9894a45b62f2d8bcf862eb57"
+    "before": "sha256:bb70b7e209ab4807377268a787a4888ae8d2f26f9894a45b62f2d8bcf862eb57",
+    "after": "sha256:3a37ba9007aae25b3f92504a85673b8508dc799792e95e7e47880351f39f7cdc"
   },
   "changed": true,
   "any_changed": true,
   "source_changes": {
     "behavior_source": true,
-    "observation_source": true,
+    "observation_source": false,
     "context": false
   },
   "artifact_receipts": [
     {
       "kind": "spec",
       "path": "spec.mjs",
-      "before_hash": "sha256:e7cd6d8b51ef80ef4f2617b6dcbd22c0cd142c7e4a2ec8d78df2bda4141dc9e9",
-      "after_hash": "sha256:bb70b7e209ab4807377268a787a4888ae8d2f26f9894a45b62f2d8bcf862eb57",
+      "before_hash": "sha256:bb70b7e209ab4807377268a787a4888ae8d2f26f9894a45b62f2d8bcf862eb57",
+      "after_hash": "sha256:3a37ba9007aae25b3f92504a85673b8508dc799792e95e7e47880351f39f7cdc",
       "source": "behavior_source"
-    },
-    {
-      "kind": "collector",
-      "path": "collectors/index.mjs",
-      "before_hash": "sha256:979c90cb1a4a6fe830fdafacce872c0fe659a26299629bfb3dfeebc577ae53a3",
-      "after_hash": "sha256:792b30e364d6e6ddf564c286c455ece76fb986165c950a1223e48fb285872b30",
-      "source": "observation_source"
     }
   ],
   "groups": {
-    "observations": [
-      {
-        "id": "projection.freshness",
-        "change": "removed",
-        "before": {
-          "collector": "verify/record.freshness",
-          "domain": [
-            "current",
-            "stale"
-          ]
-        }
-      }
-    ],
-    "guards": [
-      {
-        "id": "refuse-stale-result",
-        "change": "removed",
-        "before": {
-          "reads": [
-            "projection.freshness"
-          ],
-          "then": "ROUTE:verify",
-          "forbids": [],
-          "body": "guard: refuse-stale-result",
-          "unless": null
-        }
-      }
-    ],
+    "observations": [],
+    "guards": [],
     "stages": [],
     "tables": [],
     "formats": [],
@@ -66,38 +33,10 @@
     "ownership": [],
     "artifacts": [],
     "roles": [],
-    "declarations": [
-      {
-        "id": "freshness",
-        "change": "removed",
-        "before": {
-          "value": "stale-revisions-refuse-result-reuse",
-          "consumer": "refuse-stale-result"
-        }
-      }
-    ],
+    "declarations": [],
     "deferred": []
   },
-  "change_id": "verify-remove-stale-self-route",
-  "intent": "Let a fresh verifier replace stale evidence while current-record and execution gates continue to prevent stale closure.",
-  "impact": {
-    "observations": {
-      "total": 1,
-      "added": 0,
-      "removed": 1,
-      "modified": 0
-    },
-    "guards": {
-      "total": 1,
-      "added": 0,
-      "removed": 1,
-      "modified": 0
-    },
-    "declarations": {
-      "total": 1,
-      "added": 0,
-      "removed": 1,
-      "modified": 0
-    }
-  }
+  "change_id": "fix-verify-partial-write-boundary",
+  "intent": "Let only transitions with a finite recovery suffix bypass invalid verification-layer selection.",
+  "impact": {}
 }

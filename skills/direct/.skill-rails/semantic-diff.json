@@ -1,303 +1,29 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:b2068681a3052668c565391e343dec861707a4bd61bc5e49453be8f80c45f6a8",
+    "before": "sha256:3b7301b1c3946b94aa74e9d1908a574c6d32903d55aafc4175a5b801d45261ea",
     "after": "sha256:3b7301b1c3946b94aa74e9d1908a574c6d32903d55aafc4175a5b801d45261ea"
   },
-  "changed": true,
+  "changed": false,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": true,
-    "observation_source": false,
+    "behavior_source": false,
+    "observation_source": true,
     "context": false
   },
   "artifact_receipts": [
     {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:b2068681a3052668c565391e343dec861707a4bd61bc5e49453be8f80c45f6a8",
-      "after_hash": "sha256:3b7301b1c3946b94aa74e9d1908a574c6d32903d55aafc4175a5b801d45261ea",
-      "source": "behavior_source"
+      "kind": "collector",
+      "path": "collectors/index.mjs",
+      "before_hash": "sha256:55483db6d8c2002ba7bfd73065d921001d7e5cdc371ef325780ff1b2ad3ecbc9",
+      "after_hash": "sha256:3119aae802978890db0dc01b28b7ea4b2dd7219704863476331bbad898807a90",
+      "source": "observation_source"
     }
   ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [
-      {
-        "id": "propose",
-        "change": "modified",
-        "before": {
-          "reads": [
-            "planning.receipt"
-          ],
-          "needs": [
-            "proposal.decision"
-          ],
-          "table": "proposalSelector",
-          "branches": [
-            "repair-stale-approval",
-            "approve-failure-route",
-            "approve-plan",
-            "revise-plan",
-            "cancel-plan",
-            "ASK:proposal-decision"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "approve-failure-route": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "failureRoute",
-                    "contract": "external.principles Routing write order",
-                    "operations": "approved card bundle and final routing result",
-                    "state": "routing prepared",
-                    "target": "request.current.source"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "apply the prepared route remaining operations and final result exactly once"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "consumes": "settled-layer-opening-markers-and-failure-route",
-                    "scope": "current-origin-planning-pass"
-                  }
-                ],
-                [
-                  "REPORT",
-                  {
-                    "scope": "approved-work-handoff",
-                    "template": "proposal"
-                  }
-                ],
-                "WAIT"
-              ],
-              "approve-plan": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "approvalBundle",
-                    "target": "origin.drafts.cards",
-                    "value": "principles-fresh-approval"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "consumes": "settled-layer-opening-markers-and-request",
-                    "scope": "current-origin-planning-pass"
-                  }
-                ],
-                [
-                  "REPORT",
-                  {
-                    "scope": "approved-work-handoff",
-                    "template": "proposal"
-                  }
-                ],
-                "WAIT"
-              ],
-              "ASK:proposal-decision": [
-                [
-                  "REPORT",
-                  {
-                    "scope": "approval-request",
-                    "template": "proposal"
-                  }
-                ],
-                "ASK"
-              ],
-              "cancel-plan": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "cancelDraftCleanup",
-                    "target": "current-origin-drafts",
-                    "value": "remove"
-                  }
-                ],
-                [
-                  "WRITE",
-                  {
-                    "artifact": "cancelMarkerCleanup",
-                    "target": "current-origin-request-line-and-layer-opening-markers",
-                    "value": "remove"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "scope": "current-origin-cancellation"
-                  }
-                ],
-                "WAIT"
-              ],
-              "repair-stale-approval": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "approvalRepair",
-                    "target": "approval.issue.cards",
-                    "value": "pending"
-                  }
-                ],
-                "ASK"
-              ],
-              "revise-plan": [
-                "ASK"
-              ]
-            }
-          },
-          "body": "stage: propose",
-          "record": null,
-          "reentry": "rejudge"
-        },
-        "after": {
-          "reads": [
-            "planning.receipt"
-          ],
-          "needs": [
-            "proposal.decision"
-          ],
-          "table": "proposalSelector",
-          "branches": [
-            "repair-stale-approval",
-            "approve-failure-route",
-            "approve-plan",
-            "revise-plan",
-            "cancel-plan",
-            "ASK:proposal-decision"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "approve-failure-route": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "failureRoute",
-                    "contract": "external.principles Routing write order",
-                    "operations": "whole current-origin planning pass except the tracked Failure-history result",
-                    "state": "routing prepared",
-                    "target": "request.current.source"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "validate the prepared route and apply its remaining operations exactly once while leaving the prepared object intact"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "action": "replace the prepared object with its declared result and land the whole pass",
-                    "authority": "external.principles",
-                    "consumes": "settled-layer-opening-markers-and-failure-route",
-                    "scope": "current-origin-planning-pass",
-                    "transition": "prepared-route-completion"
-                  }
-                ],
-                [
-                  "REPORT",
-                  {
-                    "scope": "approved-work-handoff",
-                    "template": "proposal"
-                  }
-                ],
-                "WAIT"
-              ],
-              "approve-plan": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "approvalBundle",
-                    "target": "origin.drafts.cards",
-                    "value": "principles-fresh-approval"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "consumes": "settled-layer-opening-markers-and-request",
-                    "scope": "current-origin-planning-pass"
-                  }
-                ],
-                [
-                  "REPORT",
-                  {
-                    "scope": "approved-work-handoff",
-                    "template": "proposal"
-                  }
-                ],
-                "WAIT"
-              ],
-              "ASK:proposal-decision": [
-                [
-                  "REPORT",
-                  {
-                    "scope": "approval-request",
-                    "template": "proposal"
-                  }
-                ],
-                "ASK"
-              ],
-              "cancel-plan": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "cancelDraftCleanup",
-                    "target": "current-origin-drafts",
-                    "value": "remove"
-                  }
-                ],
-                [
-                  "WRITE",
-                  {
-                    "artifact": "cancelMarkerCleanup",
-                    "target": "current-origin-request-line-and-layer-opening-markers",
-                    "value": "remove"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "scope": "current-origin-cancellation"
-                  }
-                ],
-                "WAIT"
-              ],
-              "repair-stale-approval": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "approvalRepair",
-                    "target": "approval.issue.cards",
-                    "value": "pending"
-                  }
-                ],
-                "ASK"
-              ],
-              "revise-plan": [
-                "ASK"
-              ]
-            }
-          },
-          "body": "stage: propose",
-          "record": null,
-          "reentry": "rejudge"
-        }
-      }
-    ],
+    "stages": [],
     "tables": [],
     "formats": [],
     "templates": [],
@@ -310,14 +36,7 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "direct-align-prepared-route-boundary",
-  "intent": "Keep the existing prepared route recoverable until its one planning commit lands.",
-  "impact": {
-    "stages": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    }
-  }
+  "change_id": "fix-direct-failure-origin-identity",
+  "intent": "Preserve the exact Principles-owned failure route across Direct layer opening without a second local path grammar.",
+  "impact": {}
 }

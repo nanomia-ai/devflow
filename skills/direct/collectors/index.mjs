@@ -72,7 +72,7 @@ function failureRequest(state) {
   }
   if (!Array.isArray(entries) || !entries.some(entry => entry.kind === "layer-opening")) return NONE;
   const active = activeOrigin(state);
-  if (active === NONE || !/^verify:\.devflow\/tree\/[^#]+verify\.md#Failure history@[1-9]\d*$/.test(active.origin)) return NONE;
+  if (active === NONE || !entries.some(entry => entry.kind === "failure-routing" && `verify:${entry.path}#Failure history@${entry.sourceId}` === active.origin)) return NONE;
   return { source: active.origin, request: active.origin };
 }
 

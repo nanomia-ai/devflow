@@ -15,6 +15,15 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.4 — 2026-09-04 — failure-route identity and recovery boundary
+
+Direct now preserves a product-root Failure-history request after its layer-opening commit by
+matching the active origin to the canonical failure-routing entry, rather than re-parsing a
+narrower local path grammar. Verify now lets only recoverable transitions bypass an unavailable
+verification layer; a partial write stops closed instead of routing back into the same unchanged
+state. No state shape, capability contract, workflow stage, or role policy changed. Skill Rails
+rebuilt the Direct and Verify receipts, and both plugin manifests ship the result as 0.23.4.
+
 ## 0.23.3 — 2026-09-04 — Work–Verify loop continuity
 
 Work now persists every returned review verdict before yielding, and every completed task

@@ -58,7 +58,7 @@ export const ROLES = {
 };
 
 export const GUARDS = [
-  { id: "state-kernel-unavailable", reads: ["verification.layer", "projection.transition"], acceptsUnknown: [], when: s => s.verification.layer === "invalid" && s.projection.transition === "none", then: "BLOCK", body: "guard: state-kernel-unavailable" },
+  { id: "state-kernel-unavailable", reads: ["verification.layer", "projection.transition"], acceptsUnknown: [], when: s => s.verification.layer === "invalid" && (s.projection.transition === "none" || s.projection.transition === "partial-write"), then: "BLOCK", body: "guard: state-kernel-unavailable" },
   { id: "closed-history-refusal", reads: ["history.basis"], acceptsUnknown: ["history.basis"], when: s => s.history.basis === "broad" || s.history.basis === "ambiguous", then: "BLOCK", body: "guard: closed-history-refusal" },
   { id: "channel-unavailable", reads: ["projection.channel"], acceptsUnknown: [], when: s => s.projection.channel === "unavailable", then: "ROUTE:human", body: "guard: channel-unavailable" },
   { id: "residual-owner-marker", reads: ["landing.residual"], acceptsUnknown: [], when: s => s.landing.residual === "owner-marker", then: "ROUTE:arch", body: "guard: residual-owner-marker" }
