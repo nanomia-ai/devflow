@@ -24,8 +24,8 @@
       {
         "id": "stage: scope-entry",
         "change": "modified",
-        "before": "sha256:b4a9f020f39210c321b00acd00cdf85c5204ec0880192349e2edd7eee4bf6334",
-        "after": "sha256:bd4a24e35b64b72d252fa4edbd077b2eba25bdf65e4b8b15c36fcbd9a2935327"
+        "before": "sha256:bd4a24e35b64b72d252fa4edbd077b2eba25bdf65e4b8b15c36fcbd9a2935327",
+        "after": "sha256:29cdc7950d4e4ecc68e20ab7d863e88a4d9341257fe78026a8f30ea4083b5fa5"
       }
     ],
     "references": [],
@@ -35,8 +35,8 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "resume-unmanaged-report-current-evidence",
-  "intent": "Resume's unmanaged report states the current-evidence membership boundary (DD-100): no .devflow root in the working tree and no .devflow path in the current checkout's index. No other behavior changes.",
+  "change_id": "resume-unmanaged-report-users-only-membership",
+  "intent": "Resume's unmanaged report states DD-102's current project-membership boundary: no current product and no indexed .devflow path outside .devflow/users/**. No route, stage, guard, observation, or behavior shape changes.",
   "impact": {
     "body": {
       "total": 1,

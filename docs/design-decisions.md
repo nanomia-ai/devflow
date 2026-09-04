@@ -602,7 +602,7 @@ or a current reader and writer are reproduced observing different roots.
 
 ### DD-100 · Project membership is judged from current evidence only — with no current `.devflow` root or indexed path, a checkout is unmanaged regardless of any ref's history (v0.23.3)
 
-Subject: Identity, packaging, platforms | Introduced: v0.23.3 | State: active
+Subject: Identity, packaging, platforms | Introduced: v0.23.3 | State: active, partly corrected by DD-102 (v0.23.5)
 
 Observed problem: the state tool's membership predicate walked every ref of the shared object
 store with `git log --all -- .devflow`. A linked worktree whose own lineage never carried
@@ -648,6 +648,38 @@ report sentence; the scene wording of matrix §3.24. No new marker, state, zone,
 Revisit when a devflow artifact is actually overwritten in a checkout whose current root and
 index are both empty, when an unstaged working-tree deletion of `.devflow` reads unmanaged, or
 when a linked worktree's explicit Adopt is again pushed to Resume.
+
+### DD-102 · Current product or indexed non-user `.devflow` evidence establishes project membership; users-only room state does not (v0.23.5)
+
+Subject: Identity, packaging, platforms | Introduced: v0.23.5 | State: active
+
+Observed problem: JZ Note `121015b` had maintained code and documents plus only tracked
+`.devflow/users/jmp/{owner.md,digest.md,HANDOFF.md}`, yet v0.23.4 read `setup.no-product` and
+pushed explicit Adopt to Resume. DD-100's root test mistook room state for project membership.
+
+Desired behavior: project membership holds only when current `.devflow/project/product.md`
+exists or the current checkout index has at least one `.devflow` path outside
+`.devflow/users/**`. Users-only room state and untracked pre-product material are
+`setup.unmanaged`; indexed non-user remnants are `setup.no-product`. Observation failure
+conservatively means membership, and Git history and sibling refs are never consulted.
+
+Chosen boundary: `devflowMembershipEvidence` reads current product, then only indexed non-user
+`.devflow` paths. A failure in either observation is never declared unmanaged.
+
+Why the boundary is needed: a room owns user continuity, not Layer 0 binding. Product and indexed
+non-user paths are current binding or partial-management evidence; untracked pre-product material
+is input Adopt inventories and re-derives. This refutes DD-100's “overwritable root means
+membership” reason while preserving its current-evidence and no-history reasons.
+
+Rejected alternatives: excluding only users-only roots leaves other untracked material blocking
+product-last derivation; reading room contents or Git history restores the same wrong predicate.
+
+Affected coordinates: the membership predicate in `skills/principles/scripts/project-state.mjs`,
+T2 in `scripts/project-state.test.js`, Resume `scope-entry`, matrix §3.24, and DD-100's state. No
+new marker, state, zone, schema, guard, stage, effect, or mechanism.
+
+Revisit when product or an indexed non-user path reads unmanaged, users-only state reads
+`setup.no-product`, or Adopt overwrites rather than inventories and re-derives untracked material.
 
 ## Verification and roles
 

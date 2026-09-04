@@ -600,15 +600,17 @@ verify 접두가 아니라 arch로 돌아가는지, (d) 기존 방을 이름 대
 ### 3.24 H2×A3·A10·A17 — 명시 Adopt의 기존 프로젝트 역산 [14판 신규]
 
 ```
-유지 문서 또는 코드가 이미 크지만 현재 체크아웃의 작업 트리와 색인에 `.devflow` 흔적이 없는
-저장소에서 — 다른 ref의 이력은 무관하다 — 사용자가 devflow:adopt를 직접 지목한다.
+유지 문서 또는 코드가 이미 크지만 현재 `product.md`가 없고 색인에는 `.devflow/users/**`만
+있거나 `.devflow` 경로가 없는 저장소에서 — 다른 ref의 이력은 무관하다 — 사용자가
+devflow:adopt를 직접 지목한다.
 ```
 
 **정합(정적 계약)·실행 미검증** (2026-09-03 v0.21.0, DD-97). 상태 도구만
 `setup.unmanaged`를 증명하고, 명시 Adopt는 Principles나 Resume의 사전 분류 없이 그 상태를
 직접 소비한다. SessionStart는 `.devflow/project/product.md`가 없으면 침묵하므로 빈 `.devflow/`
-폴더만으로 Resume 안내가 살아나지 않는다. 정본 상태는 현재 `.devflow` 루트나 색인 경로가 있으면
-`setup.no-product`로 보호하고, 둘 다 없으면 다른 ref의 이력과 무관하게 무관리로 판정한다(DD-100).
+폴더만으로 Resume 안내가 살아나지 않는다. 정본 상태는 현재 product가 있거나 색인에
+`.devflow/users/**` 밖의 `.devflow` 경로가 있을 때만 소속으로 판정한다. users-only 방 상태와
+untracked pre-product 자료는 다른 ref의 이력과 무관하게 무관리다(DD-102).
 devflow 이전의 유지할 프로젝트 자료가 전혀 없을 때만 Product로 가며,
 문서나 코드의 존재 자체를 능력 증거 완료로 간주하지 않는다.
 Adopt는 모든 유지 구현·테스트·API·스키마·설정·문서·명세·운영 기록을 실제 좌표와 함께 조사하고,
@@ -625,8 +627,9 @@ Product, Architecture, 해당 시 Design, code style, glossary, 능력 설계 �
 Resume 선택은 0이다. `product.md` 쓰기 전 중단은 무관리 재도출이고, 그 쓰기와 첫 커밋 사이의
 dirty 경계는 사람이 정확한 승인 경계를 커밋하거나 폐기한다. 첫 커밋 뒤 두 번째 경계 쓰기 전은
 기존 Resume→Arch 기준선 누락 복구다. 관리 상태의 설계 마커와 기준선 갱신은 Adopt를 재개하지 않고
-Arch가 소유한다. 검증 시 확인할 것: (a) Codex와 Claude가 같은 직접 호출에서 첫 실행을 Adopt로
-고르는지, (b) 빈 `.devflow/`나 Product 질문 없이 실제 조사에 들어가는지, (c) 문서가 방대할 때
+Arch가 소유한다. 검증 시 확인할 것: (a) `.devflow` 흔적이 없을 때와 users-only 방만 추적할 때
+Codex와 Claude가 같은 직접 호출에서 첫 실행을 Adopt로 고르는지, (b) Product 질문 없이 실제
+조사에 들어가는지, (c) 문서가 방대할 때
 모든 유지 자료가 처분되고 glossary와 능력/K가 이후 차가운 유지보수 세션에 충분한지, (d) 관리
 상태 설계·기준선·지식 경로에 순환이 0인지와 Arch가 과거 `adopt`·현재 `arch` writer를 모두
 출처 그대로 처리하면서 미선택 마커를 보존하는지, (e) 후속 작업이 함께 요청되면 도입 커밋
@@ -807,3 +810,9 @@ Codex·Claude의 실제 선택은 사용자가 직접 확인하기 전까지 미
 A10의 뜻(devflow 없는 저장소에서 발화)과 Adopt·Resume·SessionStart의 진입 판정은 바뀌지 않았다.
 **새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.** 상태 도구 T2 시험은 통과했고, 설치 후 연결
 워크트리의 실제 Adopt 진입은 사용자가 직접 확인하기 전까지 미검증이다.
+
+0.23.5 부분 재판정(DD-102): §3.24의 현재 증거를 product 또는 색인의 비사용자 `.devflow`
+경로로 좁혔다. 추적된 users-only 방 상태와 untracked pre-product 자료는 무관리로 남아 명시 Adopt가
+직접 소비하고, 색인의 비사용자 journal·tree·project 잔재는 종전 `setup.no-product` 보호를 유지한다.
+A10·A3·A17의 뜻과 상태 zone·우선순위는 바뀌지 않는다. **새 H 행 0, 새 A 행 0, 새 교차 셀 0,
+새 공백 0.** 집중 T2와 읽기 전용 JZ Note 상태 실측 뒤 설치 후 Adopt 수용은 사용자가 확인한다.

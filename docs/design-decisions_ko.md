@@ -526,7 +526,7 @@ reader와 writer가 서로 다른 루트를 관측하는 장면이 재현될 때
 
 ### DD-100 · 프로젝트 소속은 현재 증거만으로 판정한다 — 현재 `.devflow` 루트나 색인 경로가 없으면 어느 ref의 이력과도 무관하게 무관리다 (v0.23.3)
 
-주제: 정체성 · 배포 · 플랫폼 | 도입: v0.23.3 | 상태: 유효
+주제: 정체성 · 배포 · 플랫폼 | 도입: v0.23.3 | 상태: 유효 · 일부 정정 → DD-102 (v0.23.5)
 
 관찰된 문제: 상태 도구의 소속 판정이 `git log --all -- .devflow`로 공유 객체 저장소의 모든 ref를
 걸었다. 그래서 자기 계보에 `.devflow`가 한 번도 없던 연결 워크트리(linked worktree)가 형제
@@ -566,6 +566,37 @@ T2 소속 시험; DD-95의 「전체 이력 증명」 절과 DD-97의 「추적�
 재검토: 현재 루트와 색인이 모두 없는 체크아웃에서 devflow 산출물이 실제로 덮어써지거나, 작업
 트리에서만 지운 `.devflow`가 무관리로 읽히거나, 연결 워크트리의 명시 Adopt가 다시 Resume로
 밀려나는 장면이 재현될 때.
+
+### DD-102 · 현재 product 또는 색인의 비사용자 `.devflow` 증거가 프로젝트 소속을 정하며 users-only 방 상태는 정하지 않는다 (v0.23.5)
+
+주제: 정체성 · 배포 · 플랫폼 | 도입: v0.23.5 | 상태: 유효
+
+관찰된 문제: JZ Note `121015b`는 유지 코드·문서와 추적된
+`.devflow/users/jmp/{owner.md,digest.md,HANDOFF.md}`만 가졌지만 v0.23.4가 `setup.no-product`로
+읽어 명시 Adopt를 Resume으로 밀었다. DD-100의 루트 검사가 방 상태를 프로젝트 소속으로 오인했다.
+
+원하는 동작: 프로젝트 소속은 현재 `.devflow/project/product.md`가 있거나 현재 체크아웃 색인에
+`.devflow/users/**` 밖의 `.devflow` 경로가 하나 이상 있을 때만 성립한다. users-only 방 상태와
+untracked pre-product 자료는 `setup.unmanaged`, 색인의 비사용자 잔재는 `setup.no-product`다.
+관측 실패는 보수적으로 소속으로 읽고 Git 이력과 형제 ref는 보지 않는다.
+
+선택한 경계: `devflowMembershipEvidence`는 현재 product 경로, 이어서 색인의 비사용자
+`.devflow` 경로만 읽는다. 어느 관측이든 실패하면 무관리로 단정하지 않는다.
+
+이 경계가 필요한 이유: 방은 사용자 연속성이지 Layer 0 구속이 아니다. product와 색인의
+비사용자 경로만 구속 또는 부분 관리의 현재 증거이고, untracked pre-product 자료는 Adopt가
+조사·재도출할 입력이다. 이는 DD-100의 「덮어쓸 루트면 소속」 이유를 반박하되 현재 증거와
+이력 배제 이유는 보존한다.
+
+기각한 대안: users-only만 루트 검사에서 빼면 다른 untracked 자료가 product-last 재도출을 막고,
+방 내용이나 Git 이력을 읽으면 같은 오술어와 호출 분기가 돌아온다.
+
+영향 좌표: `skills/principles/scripts/project-state.mjs` 소속 판정, `scripts/project-state.test.js`
+T2, Resume `scope-entry`, 매트릭스 §3.24, DD-100 상태. 새 marker·상태·zone·schema·guard·stage·
+effect·기제는 없다.
+
+재검토: product·색인의 비사용자 경로가 무관리로 읽히거나 users-only가 `setup.no-product`로
+읽히거나 Adopt가 untracked pre-product 자료를 조사·재도출하지 않고 덮어쓸 때.
 
 ## 검증과 역할
 

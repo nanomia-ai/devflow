@@ -15,6 +15,18 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.5 — 2026-09-04 — Users-only Adopt membership correction
+
+Project membership now requires a current `.devflow/project/product.md` or an indexed
+`.devflow` path outside `.devflow/users/**`. Tracked users-only room state and untracked
+pre-product material remain unmanaged for explicit Adopt, while indexed non-user remnants remain
+`setup.no-product`; failed observations stay conservative and Git history and sibling refs stay
+outside the predicate.
+
+The correction changes only the existing membership predicate, focused T2 evidence, Resume's
+unmanaged explanation, and release/provenance records. It adds no schema, zone, state, guard,
+stage, effect, or mechanism; DD-102 records why room continuity is not project binding.
+
 ## 0.23.4 — 2026-09-04 — Bounded Adopt evidence repair
 
 Adopt now reads only Arch's verification-channel table and first proposal paragraph through the installed sibling edge, records the current channel and exact repository verification means, and performs one bounded separate clean-context semantic refutation before binding. Capability and K relations now reserve unqualified numbers for disk `NN`; Product ids remain explicit `Product C<number> <name>` citations and never substitute for disk navigation.

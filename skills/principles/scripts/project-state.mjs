@@ -289,8 +289,8 @@ function currentPathEvidence(root, relative) {
   }
 }
 
-function indexedDevflowEvidence(root) {
-  const indexed = gitRun(root, ["ls-files", "-z", "--", ".devflow"], { allowFailure: true });
+function indexedNonUserDevflowEvidence(root) {
+  const indexed = gitRun(root, ["ls-files", "-z", "--", ".devflow", ":(exclude).devflow/users/**"], { allowFailure: true });
   if (indexed.status !== 0) return "unknown";
   try {
     return decodeUtf8(indexed.stdout, "indexed devflow paths").split("\0").some(Boolean) ? "present" : "absent";
@@ -299,15 +299,14 @@ function indexedDevflowEvidence(root) {
   }
 }
 
-// Membership is current evidence only: a `.devflow` root in the working tree or a `.devflow`
-// path in this checkout's index. Commit history on any ref is Git-owned recovery, never a
-// membership claim, so a sibling branch in a shared object store cannot make an unmanaged
-// checkout look managed, and a committed total deletion leaves nothing devflow could overwrite.
+// Membership is current project evidence only: a current product file or an indexed `.devflow`
+// path outside `.devflow/users/**`. Room state alone and untracked pre-product artifacts remain
+// unmanaged for Adopt's product-last derivation; history on any ref is Git-owned recovery.
 function devflowMembershipEvidence(root) {
-  const current = currentPathEvidence(root, ".devflow");
+  const current = currentPathEvidence(root, ".devflow/project/product.md");
   if (current !== "absent") return { current, indexed: "not-checked", unmanaged: false };
 
-  const indexed = indexedDevflowEvidence(root);
+  const indexed = indexedNonUserDevflowEvidence(root);
   return { current, indexed, unmanaged: indexed === "absent" };
 }
 

@@ -943,7 +943,7 @@ test("T2 priority structure has one canonical array position per zone", async ()
   assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 61);
 });
 
-test("T2 unmanaged activation needs an absent current .devflow root and index", async (t) => {
+test("T2 unmanaged activation needs no current product and no indexed non-user devflow path", async (t) => {
   const assertSetup = (root, kind) => {
     const result = run(root);
     ok(result);
@@ -959,10 +959,25 @@ test("T2 unmanaged activation needs an absent current .devflow root and index", 
     assertSetup(makePlainRepo(t, { unborn: true }), "unmanaged");
   });
 
-  await t.test("an untracked partial devflow path is protected as no-product", () => {
+  await t.test("an untracked non-product devflow path remains unmanaged", () => {
     const root = makePlainRepo(t);
-    write(root, ".devflow/partial.txt", "partial\n");
-    assertSetup(root, "no-product");
+    write(root, ".devflow/project/arch.md", "Brownfield: yes\n");
+    assertSetup(root, "unmanaged");
+  });
+
+  await t.test("a current untracked product file establishes membership", () => {
+    const root = makePlainRepo(t);
+    write(root, ".devflow/project/product.md", product());
+    assertSetup(root, "layer0-incomplete");
+  });
+
+  await t.test("tracked users-only room state remains unmanaged", () => {
+    const root = makePlainRepo(t);
+    write(root, ".devflow/users/jmp/owner.md", "id: jmp\ngit: Jmp, jmp@example.test\n");
+    write(root, ".devflow/users/jmp/digest.md", "none\n");
+    write(root, ".devflow/users/jmp/HANDOFF.md", "");
+    commit(root, "jmp room state");
+    assertSetup(root, "unmanaged");
   });
 
   await t.test("indexed devflow path remains no-product when absent from the worktree", () => {
