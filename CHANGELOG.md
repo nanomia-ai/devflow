@@ -15,6 +15,23 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.5 — 2026-09-04 — Skill Rails v0.3.0 cohort migration
+
+All nine P2 packages now seal Skill Rails validator 0.6.1 and runtime 0.3.3 from the
+v0.3.0 package. The generated adapters now direct trace state outside both the installed skill
+and the repository or directory tree containing the observed project. Validation also rejects
+missing or non-regular `READ_FIRST` targets and specification locators whose segment counts do
+not match their groups, while `spec:ROLES/<id>` now resolves normally. Maintenance receipts now
+hash all of `references/**` and `templates/**`, so resource-only changes are no longer missed.
+Version-5 runtime behavior and the existing kernel and specification versions remain unchanged.
+
+Devflow's repository-owned behavior tests, cohort and policy-pointer invariants, repeated-template
+grammar checks, and shared collector boundary remain in place; the migration does not move those
+unsupported cross-package guarantees into Skill Rails. The project-state suite also refreshes its
+stale Adopt glossary projection assertion from the removed `approval` stage to the current
+`adoption` stage and its complete WRITE-template order. Both plugin manifests ship the complete
+nine-package cohort as 0.23.5.
+
 ## 0.23.4 — 2026-09-04 — failure-route identity and recovery boundary
 
 Direct now preserves a product-root Failure-history request after its layer-opening commit by

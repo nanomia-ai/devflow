@@ -8,16 +8,6 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 
 ## Field observation items — watch during coming cycles, without adding rules
 
-- **Skill Rails trace placement can dirty the project it is observing** (recorded 2026-09-03
-  during the three-worktree Adopt diagnosis) — the shared P2 runtime rejects trace storage only
-  inside the installed skill package, while generated adapter guidance says merely “outside the
-  installed skill.” A literal consumer therefore chose project-local `.devflow-traces/adopt`,
-  leaving untracked state that a later Git snapshot can observe. The trace is appended after the
-  same run's end snapshot, so it does not explain that run's stale result; the exact stale writer
-  remains unproven. Do not add an Adopt-only path exception or description instruction. Repair the
-  invariant once in upstream Skill Rails so generated adapters and `assertExternalStateDir`
-  require runtime state outside both the installed package and the observed project, then rebuild
-  every affected P2 package. Reopen when Skill Rails itself is in scope.
 - **Compatible-feedback field residuals remain bounded observations** (recorded 2026-09-02
   by the DD-96 seal and integration-behind repairs) — first, the state tool currently derives
   a blocking reopen finding from Git history and cannot clear it after the journal is corrected.
@@ -299,6 +289,16 @@ comparative selection) as an option in Direct's execution proposal. Grounds for
 
 The items below were carried out and left the watch list. Re-proposals consult this lineage first.
 
+- ~~Skill Rails trace placement can dirty the project it is observing~~ — v0.23.5 rebuilt all
+  nine P2 packages with Skill Rails v0.3.0, whose generated adapter now says to place trace state
+  outside both the installed package and the repository or directory tree containing the observed
+  project. At the start of this migration this repository had no active project-local trace setting
+  or file, so there was nothing to move. The proposed second half—runtime rejection of project-local
+  placement—was not adopted because the upstream compatibility boundary
+  keeps existing version-5 caller placements valid. The observed risk was a literal consumer
+  following incomplete guidance; that guidance deficit is now repaired, so this observation is
+  closed. Runtime compatibility and a cold consumer's choice of an actual external location are not
+  claimed as passed behavior.
 - ~~In complex multi-domain brownfields, does "trace one representative flow" cut the
   capability list too coarsely?~~ — implemented in v0.9.21: enumerate candidates from
   external entry points, top-level modules, and existing documents, then trace one
