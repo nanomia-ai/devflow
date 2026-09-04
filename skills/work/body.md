@@ -162,7 +162,8 @@ small enough to overwrite safely.
 
 Judgment: Obtain `feedback.action` as exactly `none`, `compatible`, `staling`, or `design-note`; an absent or unknown value must be judged before any boundary effect. Close only when the structured finish-boundary passenger set is empty, the task commit is integrated, and no current marker sourced from this card remains. For compatible feedback with no lifecycle, transport the whole complete parser-proven set atomically through a journal-only boundary commit that cannot touch the card or change its exact H1, then route to Resume so each state-named Product, Design, or Arch semantic owner lands it before this boundary resumes; work never writes that owner document. Once a lifecycle exists, use that collected lifecycle as the sealed-set fact, add no marker, route every current residual owner, and close only after the complete set is consumed.
 If the exact-title commit is already present, current completion and review evidence may settle without another checkpoint. A later same-card owner, source revision, or coordinate paraphrase is an integrity failure rather than a new eligible entry. A done card plus a complete boundary is observed completion; no completion judgment substitutes for it.
-Why: one ordered boundary prevents an ownerless rename, feedback fragment, or handoff; the Git-derived first-set seal preserves complete atomic multi-owner production and exact replay while preventing duplicate owner work before Verify becomes the next consumer.
+
+Why: one ordered boundary prevents an ownerless rename, feedback fragment, or handoff; the Git-derived first-set seal preserves complete atomic multi-owner production and exact replay, while Resume chooses whether remaining work or verification is the next consumer.
 
 ## role: reviewer
 

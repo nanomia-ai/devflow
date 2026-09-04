@@ -211,7 +211,7 @@ test("all-consumed compatible reentry takes closure without a marker or exact-H1
   const effects = STAGES.find((stage) => stage.id === "boundary").branches[row.state];
   assert.equal(effects.some((effect) => effect?.[1]?.artifact === "compatibleFeedbackTransport"), false);
   assert.equal(effects.some((effect) => effect?.[1]?.subject === "exact card H1"), false);
-  assert.deepEqual(effects.map((effect) => Array.isArray(effect) ? effect[0] : effect), ["WRITE", "COMMIT", "ROUTE:verify"]);
+  assert.deepEqual(effects.map((effect) => Array.isArray(effect) ? effect[0] : effect), ["WRITE", "COMMIT", "ROUTE:resume"]);
 });
 
 test("compatible lifecycle collector isolates another card", async () => {

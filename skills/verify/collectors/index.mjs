@@ -116,12 +116,6 @@ async function recordCurrent(context) {
   return selected.record.current === true ? "current" : "stale";
 }
 
-async function recordFreshness(context) {
-  const selected = selectedRecord(await stateFor(context), context);
-  if (selected.state === "missing") return "current";
-  return selected.state === "selected" && selected.record.current === true ? "current" : "stale";
-}
-
 async function executionEvidence(context) {
   const selected = selectedRecord(await stateFor(context), context);
   if (selected.state !== "selected") return "missing";
@@ -140,7 +134,6 @@ export const collectors = Object.freeze({
   },
   "verify/principles.residual-landing": async (context) => residual(await stateFor(context)),
   "verify/principles.pending-event": async (context) => pendingEvent(await stateFor(context)),
-  "verify/record.freshness": recordFreshness,
   "verify/record.current": recordCurrent,
   "verify/record.execution-evidence": executionEvidence
 });

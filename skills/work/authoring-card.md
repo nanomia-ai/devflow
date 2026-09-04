@@ -23,9 +23,9 @@ owns current promoted knowledge for managed projects; the named semantic owner o
 
 Terminals: BLOCK on unavailable structured state, malformed evidence, missing bounded input,
 premature marker, broad history, lost passengers, or broken review lineage; ROUTE direct for
-card authority; ROUTE resume for canonical non-work and marker landing; ASK for the third
-objection disposition; WAIT on remote evidence, blockade, or mid-task handoff; ROUTE verify
-only from the boundary effect plan; DONE only after card.done + boundary.complete are
+card authority; ROUTE resume for canonical non-work, marker landing, and every completed
+task boundary so the state kernel can select remaining Work or Verify; ASK for the third
+objection disposition; WAIT on remote evidence, blockade, or mid-task handoff; DONE only after card.done + boundary.complete are
 observed and no current-source marker remains.
 
 Stages: claim/reentry; remote recovery; implement/signal; review reduction; research

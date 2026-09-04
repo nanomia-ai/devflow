@@ -1,48 +1,103 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:7da9d8f7b43e3a5685f51dd6fc15c9705c12668af4cc30b53de942d88e937350",
-    "after": "sha256:7da9d8f7b43e3a5685f51dd6fc15c9705c12668af4cc30b53de942d88e937350"
+    "before": "sha256:e7cd6d8b51ef80ef4f2617b6dcbd22c0cd142c7e4a2ec8d78df2bda4141dc9e9",
+    "after": "sha256:bb70b7e209ab4807377268a787a4888ae8d2f26f9894a45b62f2d8bcf862eb57"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
-    "observation_source": false,
-    "context": true
+    "behavior_source": true,
+    "observation_source": true,
+    "context": false
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:e7cd6d8b51ef80ef4f2617b6dcbd22c0cd142c7e4a2ec8d78df2bda4141dc9e9",
+      "after_hash": "sha256:bb70b7e209ab4807377268a787a4888ae8d2f26f9894a45b62f2d8bcf862eb57",
+      "source": "behavior_source"
+    },
+    {
+      "kind": "collector",
+      "path": "collectors/index.mjs",
+      "before_hash": "sha256:979c90cb1a4a6fe830fdafacce872c0fe659a26299629bfb3dfeebc577ae53a3",
+      "after_hash": "sha256:792b30e364d6e6ddf564c286c455ece76fb986165c950a1223e48fb285872b30",
+      "source": "observation_source"
+    }
+  ],
   "groups": {
-    "observations": [],
-    "guards": [],
+    "observations": [
+      {
+        "id": "projection.freshness",
+        "change": "removed",
+        "before": {
+          "collector": "verify/record.freshness",
+          "domain": [
+            "current",
+            "stale"
+          ]
+        }
+      }
+    ],
+    "guards": [
+      {
+        "id": "refuse-stale-result",
+        "change": "removed",
+        "before": {
+          "reads": [
+            "projection.freshness"
+          ],
+          "then": "ROUTE:verify",
+          "forbids": [],
+          "body": "guard: refuse-stale-result",
+          "unless": null
+        }
+      }
+    ],
     "stages": [],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [
-      {
-        "id": "why: purpose",
-        "change": "modified",
-        "before": "sha256:3f2ddf49e527bf0990e7ff6a9ecf1ad7acd2103d6dca47051e6b23cfe4c88758",
-        "after": "sha256:a733a45f16266c3814464ef4145c9ada391b16b8c5525d5554824c8fcac22874"
-      }
-    ],
+    "body": [],
     "references": [],
     "ownership": [],
     "artifacts": [],
     "roles": [],
-    "declarations": [],
+    "declarations": [
+      {
+        "id": "freshness",
+        "change": "removed",
+        "before": {
+          "value": "stale-revisions-refuse-result-reuse",
+          "consumer": "refuse-stale-result"
+        }
+      }
+    ],
     "deferred": []
   },
-  "change_id": "principles-entry-separation-0.23.1",
-  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
+  "change_id": "verify-remove-stale-self-route",
+  "intent": "Let a fresh verifier replace stale evidence while current-record and execution gates continue to prevent stale closure.",
   "impact": {
-    "body": {
+    "observations": {
       "total": 1,
       "added": 0,
-      "removed": 0,
-      "modified": 1
+      "removed": 1,
+      "modified": 0
+    },
+    "guards": {
+      "total": 1,
+      "added": 0,
+      "removed": 1,
+      "modified": 0
+    },
+    "declarations": {
+      "total": 1,
+      "added": 0,
+      "removed": 1,
+      "modified": 0
     }
   }
 }

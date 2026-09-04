@@ -268,6 +268,24 @@
     ]
   },
   {
+    "id": "failure-route-returns-to-direct",
+    "s": {
+      "state.canonicalNext": "transition.failure-routing",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:direct"
+      ]
+    },
+    "cover": []
+  },
+  {
     "id": "claim-and-layer-family-splits",
     "s": {
       "state.canonicalNext": "claim.needs-reapproval",

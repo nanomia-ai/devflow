@@ -1,8 +1,8 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:14cade6e574a9b5606e3306726ee63df795c048684b6fa87b2e625fa44772723",
-    "after": "sha256:14cade6e574a9b5606e3306726ee63df795c048684b6fa87b2e625fa44772723"
+    "before": "sha256:891bcde48bcd9ffdeb18432857e3fdf33e15f69b93d92255c69cbde914639641",
+    "after": "sha256:891bcde48bcd9ffdeb18432857e3fdf33e15f69b93d92255c69cbde914639641"
   },
   "changed": false,
   "any_changed": true,
@@ -20,25 +20,25 @@
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [
+    "body": [],
+    "references": [
       {
-        "id": "why: purpose",
+        "id": "references/purpose.md",
         "change": "modified",
-        "before": "sha256:4da48ca685ed7b173df664eaa57bc85f72f11c801c51f371796806834572a5ee",
-        "after": "sha256:64bf4488759204471c1b3f299fc8a8e27a1a848f1e51d4a36545e95187736bb6"
+        "before": "sha256:8ac1a673d310a029fe27b85c3e1c880a054addae90493a906458e93dc23424e9",
+        "after": "sha256:5fc8a2da0dc530cbb2befd7892882215aa2e9a091f5acb949a5117cafef2c39b"
       }
     ],
-    "references": [],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "principles-entry-separation-0.23.1",
-  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
+  "change_id": "work-align-purpose-route",
+  "intent": "Keep the always-read purpose aligned with Resume selecting the next route.",
   "impact": {
-    "body": {
+    "references": {
       "total": 1,
       "added": 0,
       "removed": 0,

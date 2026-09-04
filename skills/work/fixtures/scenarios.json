@@ -721,13 +721,13 @@
       "row": "repair",
       "status": "WAIT",
       "effects": [
-        "WRITE",
         "COMMIT",
         "WRITE",
         "RUN",
         "WRITE",
         "READ",
         "DISPATCH",
+        "WRITE",
         "WAIT"
       ]
     },
@@ -868,6 +868,7 @@
         "WRITE",
         "READ",
         "DISPATCH",
+        "WRITE",
         "WAIT"
       ]
     },
@@ -1405,7 +1406,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
-        "ROUTE:verify"
+        "ROUTE:resume"
       ]
     },
     "cover": [
@@ -1451,7 +1452,7 @@
         "WRITE",
         "WRITE",
         "COMMIT",
-        "ROUTE:verify"
+        "ROUTE:resume"
       ]
     },
     "cover": [
@@ -1756,7 +1757,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
-        "ROUTE:verify"
+        "ROUTE:resume"
       ]
     },
     "cover": []
@@ -1798,7 +1799,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
-        "ROUTE:verify"
+        "ROUTE:resume"
       ]
     },
     "cover": [
@@ -3214,7 +3215,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
-        "ROUTE:verify"
+        "ROUTE:resume"
       ]
     },
     "cover": [
@@ -3293,7 +3294,7 @@
         "WRITE",
         "WRITE",
         "COMMIT",
-        "ROUTE:verify"
+        "ROUTE:resume"
       ]
     },
     "cover": [

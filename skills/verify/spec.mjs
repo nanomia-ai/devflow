@@ -9,7 +9,6 @@ export const OBSERVATIONS = {
   "closure.target": { collector: "verify/principles.closure-target", domain: { folder: "path", number: "text" } },
   "projection.transition": { collector: "verify/principles.transition", domain: ["none", "prepared-route", "interrupted-result", "partial-write", "closing-suffix"] },
   "projection.channel": { collector: "verify/principles.channel", domain: ["available", "unavailable"] },
-  "projection.freshness": { collector: "verify/record.freshness", domain: ["current", "stale"] },
   "verifier.dispatch": { decided: true, domain: ["ready", "returned"] },
   "verifier.verdict": { decided: true, domain: ["pending", "pass", "fail", "unverified"] },
   "result.record": { collector: "verify/record.current", domain: ["missing", "current", "stale", "mismatched"] },
@@ -36,7 +35,7 @@ export const TEMPLATES = {
 };
 
 export const ORDERS = {
-  preExecution: ["canonical-project-state", "prepared-or-interrupted-recovery", "residual-owner-marker", "freshness", "clean-verifier-dispatch"],
+  preExecution: ["canonical-project-state", "prepared-or-interrupted-recovery", "residual-owner-marker", "clean-verifier-dispatch"],
   resultRouting: ["fail", "unverified", "pass-record", "capability-pass-gates", "capability-close", "product-stop", "audit", "retrospective"],
   effectOrder: ["observe", "recover", "dispatch", "record", "commit", "route", "reobserve"]
 };
@@ -59,9 +58,8 @@ export const ROLES = {
 };
 
 export const GUARDS = [
-  { id: "state-kernel-unavailable", reads: ["verification.layer"], acceptsUnknown: [], when: s => s.verification.layer === "invalid", then: "BLOCK", body: "guard: state-kernel-unavailable" },
+  { id: "state-kernel-unavailable", reads: ["verification.layer", "projection.transition"], acceptsUnknown: [], when: s => s.verification.layer === "invalid" && s.projection.transition === "none", then: "BLOCK", body: "guard: state-kernel-unavailable" },
   { id: "closed-history-refusal", reads: ["history.basis"], acceptsUnknown: ["history.basis"], when: s => s.history.basis === "broad" || s.history.basis === "ambiguous", then: "BLOCK", body: "guard: closed-history-refusal" },
-  { id: "refuse-stale-result", reads: ["projection.freshness"], acceptsUnknown: [], when: s => s.projection.freshness === "stale", then: "ROUTE:verify", body: "guard: refuse-stale-result" },
   { id: "channel-unavailable", reads: ["projection.channel"], acceptsUnknown: [], when: s => s.projection.channel === "unavailable", then: "ROUTE:human", body: "guard: channel-unavailable" },
   { id: "residual-owner-marker", reads: ["landing.residual"], acceptsUnknown: [], when: s => s.landing.residual === "owner-marker", then: "ROUTE:arch", body: "guard: residual-owner-marker" }
 ];
@@ -121,7 +119,7 @@ export const TABLES = {
     { state: "ready", reads: [], acceptsUnknown: [], when: s => true }
   ] },
   result: { rows: [
-    { state: "pass-record", reads: ["verifier.verdict", "result.record"], acceptsUnknown: [], when: s => s.verifier.verdict === "pass" && s.result.record === "missing" },
+    { state: "pass-record", reads: ["verifier.verdict", "result.record"], acceptsUnknown: [], when: s => s.verifier.verdict === "pass" && (s.result.record === "missing" || s.result.record === "stale") },
     { state: "fail", reads: ["verifier.verdict"], acceptsUnknown: [], when: s => s.verifier.verdict === "fail" },
     { state: "unverified", reads: ["verifier.verdict"], acceptsUnknown: [], when: s => s.verifier.verdict === "unverified" },
     { state: "await-execution-evidence", reads: ["verifier.verdict", "result.record", "record.execution"], acceptsUnknown: [], when: s => s.verifier.verdict === "pass" && (s.result.record !== "current" || s.record.execution !== "current") },
@@ -161,7 +159,6 @@ export const DECLARATIONS = {
   stateAuthority: { value: "project-state-and-verification-predicates", consumer: "all-stages" },
   executionEvidence: { value: "exact-revision-current-pass-record-with-nonempty-executed-is-the-strongest-existing-observable-not-external-execution-proof", consumer: "result-routing-and-closure" },
   recovery: { value: "prepared-and-interrupted-records-complete-a-finite-stored-suffix-or-fail-closed-before-resume", consumer: "recover" },
-  freshness: { value: "stale-revisions-refuse-result-reuse", consumer: "refuse-stale-result" },
   routing: { value: "fail-unverified-pass-use-canonical-repair-and-closure-boundaries", consumer: "result-routing" },
   residualLanding: { value: "owner-marker-refuses-closure-until-canonical-owner-consumes-it", consumer: "residual-owner-marker" },
   events: { value: "audit-and-retrospective-are-events-not-verdicts", consumer: "event-routing" }

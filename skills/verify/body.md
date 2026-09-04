@@ -52,15 +52,11 @@ A model verdict or a record's self-description cannot prove external execution. 
 
 ## guard: state-kernel-unavailable
 
-The schema-2 state kernel is the only source for route, zones, and facts. An unavailable kernel is an integrity stop, not permission to infer verification state from a rendered command or record.
+The schema-2 state kernel is the only source for route, zones, and facts. An unavailable kernel with no recoverable transition is an integrity stop, not permission to infer verification state from a rendered command or record. An existing canonical transition is recovered before fresh verification chooses a layer.
 
 ## guard: closed-history-refusal
 
 Closed history is opened only for an exact named card, a non-pass repair lineage, or the current K/Trap Source basis. A broad or ambiguous request reports its missing basis without reading history.
-
-## guard: refuse-stale-result
-
-A stale canonical revision projection refuses result reuse and returns to verification.
 
 ## guard: channel-unavailable
 
@@ -84,7 +80,7 @@ Why: A fresh verifier must execute the bounded scenario before a result can exis
 
 ## stage: result-routing
 
-Judgment: verifier.verdict is one of pending, pass, fail, unverified and the collector observes whether the exact record's execution evidence is current.
+Judgment: verifier.verdict is one of pending, pass, fail, unverified and the collector observes whether the exact record's execution evidence is current. A returned pass replaces a missing or stale record; a mismatched record remains closed for repair rather than being reused.
 
 Why: Every returned verdict, including pass, first lands a current record; raw execution scenes then determine repair routing or closure gates.
 

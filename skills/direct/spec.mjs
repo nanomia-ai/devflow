@@ -5,7 +5,7 @@ export const SPEC = { version: "5", id: "direct", profile: "single", imports: []
 export const OBSERVATIONS = {
   "project.product": { collector: "state.project.product", domain: ["present", "missing", "unknown"] },
   "request.current": { collector: "state.request.current", domain: { source: "text", request: "text" } },
-  "request.phase": { collector: "state.request.phase", domain: ["none", "uncommitted", "committed", "design-confirmed"] },
+  "request.phase": { collector: "state.request.phase", domain: ["none", "uncommitted", "committed", "design-confirmed", "failure-routed"] },
   "origin.active": { collector: "state.origin.active", domain: { origin: "text", scopes: "json", children: "json" } },
   "origin.drafts": { collector: "state.origin.drafts", domain: { origin: "text", scopes: "json", cards: "json" } },
   "origin.projectResearch": { collector: "state.origin.project-research", domain: { origin: "text", path: "path" } },
@@ -64,7 +64,8 @@ export const TABLES = {
   ] },
   proposalSelector: { exclusive: true, rows: [
     { state: "repair-stale-approval", reads: ["approval.issue"], acceptsUnknown: [], when: s => s.approval.issue !== "NONE" },
-    { state: "approve-plan", reads: ["origin.drafts", "approval.issue", "proposal.decision"], acceptsUnknown: ["proposal.decision"], when: s => s.origin.drafts !== "NONE" && s.approval.issue === "NONE" && s.proposal.decision === "approve" },
+    { state: "approve-failure-route", reads: ["origin.drafts", "approval.issue", "proposal.decision", "request.current", "request.phase"], acceptsUnknown: ["proposal.decision"], when: s => s.origin.drafts !== "NONE" && s.approval.issue === "NONE" && s.proposal.decision === "approve" && s.request.current !== "NONE" && s.request.phase === "failure-routed" },
+    { state: "approve-plan", reads: ["origin.drafts", "approval.issue", "proposal.decision", "request.phase"], acceptsUnknown: ["proposal.decision"], when: s => s.origin.drafts !== "NONE" && s.approval.issue === "NONE" && s.proposal.decision === "approve" && s.request.phase !== "failure-routed" },
     { state: "revise-plan", reads: ["proposal.decision"], acceptsUnknown: ["proposal.decision"], when: s => s.proposal.decision === "revise" },
     { state: "cancel-plan", reads: ["proposal.decision"], acceptsUnknown: ["proposal.decision"], when: s => s.proposal.decision === "cancel" },
     { state: "ASK:proposal-decision", reads: [], acceptsUnknown: [], when: () => true }
@@ -89,6 +90,7 @@ export const STAGES = [
   { id: "carry-approval", reads: ["planning.receipt", "approval.boundary", "origin.drafts", "request.classification"], acceptsUnknown: ["request.classification"], done: s => s.planning.receipt !== "NONE" || s.approval.boundary === "NONE" || s.origin.drafts === "NONE" || s.request.classification === "withdraw", effects: [["WRITE", { artifact: "approvalBundle", target: "origin.drafts.cards", source: "approval.boundary.values" }], ["COMMIT", { scope: "current-origin-planning-pass", consumes: "settled-layer-opening-markers" }], ["REPORT", { template: "proposal", scope: "approved-work-handoff" }], "WAIT"], reentry: "rejudge", body: "stage: carry-approval" },
   { id: "propose", reads: ["planning.receipt"], acceptsUnknown: [], done: s => s.planning.receipt !== "NONE", needs: ["proposal.decision"], table: "proposalSelector", reentry: "rejudge", branches: {
     "repair-stale-approval": [["WRITE", { artifact: "approvalRepair", target: "approval.issue.cards", value: "pending" }], "ASK"],
+    "approve-failure-route": [["WRITE", { artifact: "failureRoute", target: "request.current.source", state: "routing prepared", contract: "external.principles Routing write order", operations: "whole current-origin planning pass except the tracked Failure-history result" }], ["RUN", { action: "validate the prepared route and apply its remaining operations exactly once while leaving the prepared object intact" }], ["COMMIT", { authority: "external.principles", transition: "prepared-route-completion", scope: "current-origin-planning-pass", consumes: "settled-layer-opening-markers-and-failure-route", action: "replace the prepared object with its declared result and land the whole pass" }], ["REPORT", { template: "proposal", scope: "approved-work-handoff" }], "WAIT"],
     "approve-plan": [["WRITE", { artifact: "approvalBundle", target: "origin.drafts.cards", value: "principles-fresh-approval" }], ["COMMIT", { scope: "current-origin-planning-pass", consumes: "settled-layer-opening-markers-and-request" }], ["REPORT", { template: "proposal", scope: "approved-work-handoff" }], "WAIT"],
     "revise-plan": ["ASK"],
     "cancel-plan": [["WRITE", { artifact: "cancelDraftCleanup", target: "current-origin-drafts", value: "remove" }], ["WRITE", { artifact: "cancelMarkerCleanup", target: "current-origin-request-line-and-layer-opening-markers", value: "remove" }], ["COMMIT", { scope: "current-origin-cancellation" }], "WAIT"],
@@ -103,6 +105,7 @@ export const ARTIFACTS = {
   layerOpeningBundle: { path: ".devflow/journal.md", writer: "direct", readers: ["stage.materialize"] },
   cardBundle: { path: ".devflow/tree/<exact-active-scopes>/<one-or-more-sibling-card-addresses>.md", writer: "direct", readers: ["stage.materialize"] },
   approvalBundle: { path: ".devflow/tree/<current-origin-card-paths>.md", writer: "direct", readers: ["stage.carry-approval", "stage.propose"] },
+  failureRoute: { path: ".devflow/tree/**/verify.md#Failure history", writer: "direct", readers: ["stage.propose"] },
   approvalRepair: { path: ".devflow/tree/<approval-invalid-current-origin-card-paths>.md", writer: "direct", readers: ["stage.propose"] },
   cancelDraftCleanup: { path: ".devflow/tree/<current-origin-drafts>", writer: "direct", readers: ["stage.propose"] },
   cancelMarkerCleanup: { path: ".devflow/journal.md", writer: "direct", readers: ["stage.intake", "stage.propose"] }

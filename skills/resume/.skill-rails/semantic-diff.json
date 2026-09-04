@@ -2,16 +2,24 @@
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
     "before": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54",
-    "after": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54"
+    "after": "sha256:10442a1290349fb4eef2a40dc02ae41660cbfa95b05aba5c47f87d75411fe5b2"
   },
-  "changed": false,
-  "any_changed": false,
+  "changed": true,
+  "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
     "context": false
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54",
+      "after_hash": "sha256:10442a1290349fb4eef2a40dc02ae41660cbfa95b05aba5c47f87d75411fe5b2",
+      "source": "behavior_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
@@ -28,7 +36,7 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "resume-selector-purpose-compact",
-  "intent": "Keep the approved Resume selector semantics while removing words that do not change its selection or ownership boundary.",
+  "change_id": "route-failure-history-to-direct",
+  "intent": "Send a pending Failure-history planning source to Direct while keeping prepared-route recovery in Verify.",
   "impact": {}
 }

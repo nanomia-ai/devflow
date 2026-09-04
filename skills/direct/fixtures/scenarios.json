@@ -692,6 +692,60 @@
     ]
   },
   {
+    "id": "failure-route-prepares-before-the-planning-commit",
+    "s": {
+      "project.product": "present",
+      "request.current": {
+        "source": "verify:.devflow/tree/01-foundation/verify.md#Failure history@7",
+        "request": "verify:.devflow/tree/01-foundation/verify.md#Failure history@7"
+      },
+      "request.phase": "failure-routed",
+      "origin.active": {
+        "origin": "verify:.devflow/tree/01-foundation/verify.md#Failure history@7",
+        "scopes": [
+          ".devflow/tree/01-foundation"
+        ],
+        "children": [
+          "01.8"
+        ]
+      },
+      "origin.drafts": {
+        "origin": "verify:.devflow/tree/01-foundation/verify.md#Failure history@7",
+        "scopes": [
+          ".devflow/tree/01-foundation"
+        ],
+        "cards": [
+          ".devflow/tree/01-foundation/01.8-fix.md"
+        ]
+      },
+      "origin.projectResearch": "NONE",
+      "approval.boundary": "NONE",
+      "approval.issue": "NONE",
+      "planning.receipt": "NONE",
+      "projectResearch.approval": "none"
+    },
+    "judged": {
+      "request.classification": "tree-work",
+      "proposal.decision": "approve"
+    },
+    "expect": {
+      "stage": "propose",
+      "row": "approve-failure-route",
+      "status": "WAIT",
+      "effects": [
+        "WRITE",
+        "RUN",
+        "COMMIT",
+        "REPORT",
+        "WAIT"
+      ]
+    },
+    "cover": [
+      "row:proposalSelector/approve-failure-route",
+      "branch:proposalSelector/approve-failure-route"
+    ]
+  },
+  {
     "id": "proposal-revision-keeps-boundary-open",
     "s": {
       "project.product": "present",

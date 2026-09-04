@@ -61,7 +61,24 @@ function currentRequestLine(state) {
   return lines.sort((left, right) => left.line.slice(0, 20).localeCompare(right.line.slice(0, 20)) || left.index - right.index)[0].line;
 }
 
+function failureRequest(state) {
+  const entries = state.zones.transition?.entries;
+  if (state.route.id === "transition.failure-routing") {
+    if (!Array.isArray(entries)) throw new Error("project-state transition entries are unavailable");
+    const entry = entries.find(candidate => candidate.kind === "failure-routing");
+    if (!entry || typeof entry.path !== "string" || !entry.path.startsWith(".devflow/tree/") || !entry.path.endsWith("verify.md") || !Number.isInteger(entry.sourceId) || entry.sourceId <= 0) throw new Error("project-state failure route is malformed");
+    const source = `verify:${entry.path}#Failure history@${entry.sourceId}`;
+    return { source, request: source };
+  }
+  if (!Array.isArray(entries) || !entries.some(entry => entry.kind === "layer-opening")) return NONE;
+  const active = activeOrigin(state);
+  if (active === NONE || !/^verify:\.devflow\/tree\/[^#]+verify\.md#Failure history@[1-9]\d*$/.test(active.origin)) return NONE;
+  return { source: active.origin, request: active.origin };
+}
+
 function currentRequest(state) {
+  const failure = failureRequest(state);
+  if (failure !== NONE) return failure;
   const raw = currentRequestLine(state);
   if (raw === NONE) return NONE;
   const match = /request-json: (.+)$/.exec(raw);
@@ -155,6 +172,7 @@ function gitAncestry(state, ancestor, descendant) {
 }
 
 function requestPhase(state) {
+  if (failureRequest(state) !== NONE) return "failure-routed";
   const raw = currentRequestLine(state);
   if (raw === NONE) return "none";
   const introductions = git(state, ["log", "--reverse", "--format=%H", `-S${raw}`, "--", ".devflow/journal.md"]).split(/\r?\n/).filter(Boolean);

@@ -66,6 +66,45 @@ test("collector accepts the schema-2 core without a compatibility projection", a
   }
 });
 
+test("an active failure-route bundle keeps its durable Direct request", async () => {
+  const fixtureRoot = mkdtempSync(join(tmpdir(), "devflow-direct-failure-route-"));
+  try {
+    const skillRoot = join(fixtureRoot, "direct");
+    const projectRoot = join(fixtureRoot, "project");
+    const toolRoot = join(fixtureRoot, "principles", "scripts");
+    mkdirSync(skillRoot, { recursive: true });
+    mkdirSync(projectRoot, { recursive: true });
+    mkdirSync(toolRoot, { recursive: true });
+    writeFileSync(join(toolRoot, "project-state.mjs"), `export async function calculateState() {
+  return {
+    schema: "devflow/project-state/2",
+    route: { id: "transition.layer-opening", zone: "transition", kind: "layer-opening" },
+    zones: {
+      setup: { entries: [] },
+      transition: { entries: [
+        {
+          kind: "layer-opening",
+          timestamp: "2026-09-04T00:00:00Z",
+          sourceJson: "verify:.devflow/tree/01-foundation/verify.md#Failure history@7",
+          parent: ".devflow/tree/01-foundation",
+          children: "01"
+        },
+        { kind: "failure-routing", path: ".devflow/tree/01-foundation/verify.md", sourceId: 7 }
+      ] }
+    },
+    facts: { existingRequests: [] },
+    metadata: { head: "${"0".repeat(40)}" }
+  };
+}\n`);
+    const context = { skillRoot, projectRoot };
+    const source = "verify:.devflow/tree/01-foundation/verify.md#Failure history@7";
+    assert.deepEqual(await collectors["state.request.current"](context), { source, request: source });
+    assert.equal(await collectors["state.request.phase"](context), "failure-routed");
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
+});
+
 test("uncommitted canonical request record is the current request on rejudge", async () => {
   const fixture = await project();
   try {

@@ -15,6 +15,23 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.3 — 2026-09-04 — Work–Verify loop continuity
+
+Work now persists every returned review verdict before yielding, and every completed task
+boundary returns through Resume so its canonical selector can choose remaining sibling work,
+worktree work, or verification. This removes two reachable stalls without changing review
+policy, task decomposition, or the agent's implementation judgment.
+
+Verify failure routing now enters Direct with the exact durable Failure-history locator. Direct
+reuses its existing materialization and approval path, keeps the existing `routing prepared`
+object recoverable until the one planning commit lands, and then hands approved repair cards to
+Work. Verify now recovers that existing transition before choosing a fresh verification layer,
+while a missing state kernel still stops closed. Its duplicate stale-freshness self-route was
+removed: the existing record predicate now lets a fresh pass replace stale evidence, while current
+record and execution gates still prevent stale closure. No new workflow stage, state file, verifier
+method, event loop, or personalization framework was added. Skill Rails rebuilt the Direct, Work,
+Verify, and Resume projections and receipts; both plugin manifests ship the result as 0.23.3.
+
 ## 0.23.2 — 2026-09-03 — Resume purpose at the selector boundary
 
 Resume's selector now leads with its actual state-aware role: it re-enters an existing managed
