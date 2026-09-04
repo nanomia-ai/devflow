@@ -1,25 +1,17 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54",
-    "after": "sha256:10442a1290349fb4eef2a40dc02ae41660cbfa95b05aba5c47f87d75411fe5b2"
+    "before": "sha256:e4064392c2b1dbedb8992b380c05fcff38ef02cdf4e22879b9b8d97a1d16677e",
+    "after": "sha256:e4064392c2b1dbedb8992b380c05fcff38ef02cdf4e22879b9b8d97a1d16677e"
   },
-  "changed": true,
+  "changed": false,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": true,
+    "behavior_source": false,
     "observation_source": false,
-    "context": false
+    "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:b3e4cc289ab840f7f147ba00a978ff3c30f97e243f8e29523528941ddf6c1b54",
-      "after_hash": "sha256:10442a1290349fb4eef2a40dc02ae41660cbfa95b05aba5c47f87d75411fe5b2",
-      "source": "behavior_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
@@ -28,7 +20,14 @@
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [],
+    "body": [
+      {
+        "id": "stage: scope-entry",
+        "change": "modified",
+        "before": "sha256:da849f59c9b0582e17d77f5090ac4c434aab72229da89a5841736c249b33c70a",
+        "after": "sha256:f78f0e7312f55e7c8a3241f02fa597ded44b4517a3682574ad3fc54793f40851"
+      }
+    ],
     "references": [],
     "ownership": [],
     "artifacts": [],
@@ -36,7 +35,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "route-failure-history-to-direct",
-  "intent": "Send a pending Failure-history planning source to Direct while keeping prepared-route recovery in Verify.",
-  "impact": {}
+  "change_id": "resume-uncommitted-layer0-path-precision",
+  "intent": "Describe exactly the changed devflow status paths exposed by the canonical interrupted-boundary route.",
+  "impact": {
+    "body": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
 }

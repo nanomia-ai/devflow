@@ -1,25 +1,17 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:3b7301b1c3946b94aa74e9d1908a574c6d32903d55aafc4175a5b801d45261ea",
-    "after": "sha256:3b7301b1c3946b94aa74e9d1908a574c6d32903d55aafc4175a5b801d45261ea"
+    "before": "sha256:8b295f28157781f98e7e90399747cab17aafb983eb7d519928b58e140aaef5ee",
+    "after": "sha256:8b295f28157781f98e7e90399747cab17aafb983eb7d519928b58e140aaef5ee"
   },
   "changed": false,
   "any_changed": true,
   "source_changes": {
     "behavior_source": false,
-    "observation_source": true,
-    "context": false
+    "observation_source": false,
+    "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "collector",
-      "path": "collectors/index.mjs",
-      "before_hash": "sha256:55483db6d8c2002ba7bfd73065d921001d7e5cdc371ef325780ff1b2ad3ecbc9",
-      "after_hash": "sha256:3119aae802978890db0dc01b28b7ea4b2dd7219704863476331bbad898807a90",
-      "source": "observation_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
@@ -28,7 +20,14 @@
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [],
+    "body": [
+      {
+        "id": "guard: uncommitted-layer0",
+        "change": "modified",
+        "before": "sha256:373dbef056d7baa94ef0327a576b11bda5d45e40e61635e1350b4ed826255b7e",
+        "after": "sha256:7a3fce2feaf75efa50832f8c84bf016eeb1e70c2a4198b8b3e0b25a8e47e90f4"
+      }
+    ],
     "references": [],
     "ownership": [],
     "artifacts": [],
@@ -36,7 +35,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "fix-direct-failure-origin-identity",
-  "intent": "Preserve the exact Principles-owned failure route across Direct layer opening without a second local path grammar.",
-  "impact": {}
+  "change_id": "protect-direct-uncommitted-layer0",
+  "intent": "Return an interrupted first-Adopt Product boundary to Resume before Direct can write planning state.",
+  "impact": {
+    "body": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
 }

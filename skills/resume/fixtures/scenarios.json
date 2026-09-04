@@ -328,6 +328,24 @@
     ]
   },
   {
+    "id": "uncommitted-layer0-asks-without-routing-a-writer",
+    "s": {
+      "state.canonicalNext": "setup.layer0-uncommitted",
+      "state.compatibleWriter": "none"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "status": "ASK",
+      "effects": [
+        "ASK"
+      ]
+    },
+    "cover": []
+  },
+  {
     "id": "glossary-term-routes-arch",
     "s": {
       "state.canonicalNext": "marker.glossary-term",

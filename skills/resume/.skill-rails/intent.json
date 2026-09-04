@@ -9,7 +9,7 @@
   "irreversible_boundaries": [],
   "state_dependent_behaviors": [
     "Source contains candidate conditional, ordered, or evidence-bound behavior requiring review.",
-    "Canonical setup.unmanaged reports no current or historical devflow membership evidence and ends without ASK, route, or write; domain orientation remains first."
+    "Canonical setup.unmanaged reports no current .devflow root or current-index membership evidence and ends without ASK, route, or write; domain orientation remains first."
   ],
   "exact_formats": [],
   "external_dependencies": [],

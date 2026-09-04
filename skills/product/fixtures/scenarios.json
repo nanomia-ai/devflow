@@ -26,6 +26,30 @@
     ]
   },
   {
+    "id": "uncommitted-adopt-layer0-resume",
+    "s": {
+      "entry.state": "uncommitted-layer0",
+      "product.file": "current",
+      "glossary.state": "current",
+      "product.request": "none",
+      "research.origin": "",
+      "research.card.path": "",
+      "research.card.state": "none",
+      "compatible.owner": "none",
+      "compatible.landing": "none"
+    },
+    "decided": {},
+    "judged": {},
+    "expect": {
+      "stage": "orient",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:resume"
+      ]
+    },
+    "cover": []
+  },
+  {
     "id": "new-inline-ask",
     "s": {
       "entry.state": "new",

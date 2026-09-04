@@ -448,6 +448,14 @@ test("P2 stages enter one shared Principles policy index while companions and ro
   }
   assert.ok(Object.hasOwn(JSON.parse(read("skills/principles/.generated.json")).content, "references/policy-index.md"),
     "Principles generated package must carry the shared policy index");
+  const adoptBody = read("skills/adopt/body.md");
+  const archWorkflow = read("skills/arch/references/workflow.md");
+  assert.match(adoptBody, /<skill-root>\/\.\.\/arch\/references\/workflow\.md/,
+    "Adopt's first-read body must name its bounded Arch source");
+  assert.match(archWorkflow, /\| Surface \| Required channel \| Missing-channel action \|/,
+    "Adopt's selected verification-channel columns must remain addressable");
+  assert.match(archWorkflow, /^The proposal carries .*The ADR conditions are .*$/m,
+    "Adopt's selected proposal and ADR paragraph must remain addressable");
   for (const [packageName, roles] of [["principles", ["coordinator"]], ["work", ["reviewer"]], ["verify", ["verifier", "auditor", "retrospector"]]]) {
     const spec = read(`skills/${packageName}/spec.mjs`);
     for (const role of roles) assert.match(spec, new RegExp(`\\b${role}\\s*:`), `${packageName} does not declare ${role}`);

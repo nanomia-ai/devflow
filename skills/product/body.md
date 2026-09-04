@@ -34,9 +34,9 @@ Why: A superficial owner-file diff is still pending, and other owners' markers r
 
 ## stage: orient
 
-Judgment: An observed brownfield project without a product plan is a partial managed lifecycle state. Route to Resume, which owns canonical recovery; Product never jumps directly to Adopt.
+Judgment: An observed brownfield project without a product plan and an interrupted initial Adopt whose Layer 0 has no committed Product boundary are partial managed lifecycle states. Route either to Resume, which owns canonical recovery; Product never treats the current draft as committed truth or jumps directly to Adopt.
 
-Why: explicit unmanaged reconstruction remains Adopt's separate entry, while Resume owns incomplete managed state.
+Why: Explicit unmanaged reconstruction remains Adopt's separate entry, while Resume owns incomplete managed state and the owner-directed commit-or-discard boundary.
 
 ## stage: research
 

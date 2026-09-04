@@ -600,15 +600,17 @@ verify 접두가 아니라 arch로 돌아가는지, (d) 기존 방을 이름 대
 ### 3.24 H2×A3·A10·A17 — 명시 Adopt의 기존 프로젝트 역산 [14판 신규]
 
 ```
-유지 문서 또는 코드가 이미 크지만 devflow 현재·색인·역사 흔적은 없는 저장소에서
+유지 문서 또는 코드가 이미 크지만 현재 `.devflow` 루트와 현재 index 항목은 없는 저장소에서
 사용자가 devflow:adopt를 직접 지목한다.
 ```
 
 **정합(정적 계약)·실행 미검증** (2026-09-03 v0.21.0, DD-97). 상태 도구만
 `setup.unmanaged`를 증명하고, 명시 Adopt는 Principles나 Resume의 사전 분류 없이 그 상태를
 직접 소비한다. SessionStart는 `.devflow/project/product.md`가 없으면 침묵하므로 빈 `.devflow/`
-폴더만으로 Resume 안내가 살아나지 않는다. 정본 상태도 index·이력 증거가 없는 빈 폴더나 일부
-경로를 무관리로 유지한다. devflow 이전의 유지할 프로젝트 자료가 전혀 없을 때만 Product로 가며,
+폴더만으로 Resume 안내가 살아나지 않는다. 정본 상태는 현재 `.devflow` 루트가 있거나 현재 index에
+`.devflow` 항목이 있으면 부분 상태를 보호하고, 둘 다 없을 때만 무관리로 본다. 다른 ref의 이력과
+shallow 여부는 멤버십을 바꾸지 않으며 index 관찰 실패는 보수적으로 `no-product`에 남는다.
+devflow 이전의 유지할 프로젝트 자료가 전혀 없을 때만 Product로 가며,
 문서나 코드의 존재 자체를 능력 증거 완료로 간주하지 않는다.
 Adopt는 모든 유지 구현·테스트·API·스키마·설정·문서·명세·운영 기록을 실제 좌표와 함께 조사하고,
 각 자료에 이름 난 착지·보조 증거·대체/모순·이유 있는 비도메인 제외·드러난 미해결 중 하나를
@@ -618,11 +620,22 @@ Product, Architecture, 해당 시 Design, code style, glossary, 능력 설계 �
 깊은 영속 지식에 필요한 모든 소유자 인접 K를 한 제안으로 역산한다. K가 0개라면 모든 유지 도메인
 자료가 다른 정본 소유자에 완전히 착지했음을 보여야 한다. `Brownfield`는 도입 전 실행 구현의
 존재만 기록하므로 문서 전용 프로젝트는 `no`다. 사람이 답할 것은 증거로 닫히지 않는 결정과
-모순뿐이며, 구속 확인 전 쓰기 0, 거절·승인 전 중단 시 쓰기 0이다. 승인 하나 아래 Layer 0·후속
+모순뿐이다. 구속 질문 전에는 전체 초안·처분·load-bearing 좌표·공용 능력/캡슐 계약·Arch
+verification-channel 표의 Surface/Required channel 열과 첫 proposal·ADR 조건만 받은 clean context가
+한 번 의미를 반증한다. 실제 wrong
+action, 결정/기각 방향 소실, wrong owner, verification means 누락을 만드는 뒷받침된 모순·누락만
+막고, 수정은 한 번과 반환 좌표 재검사로 끝낸다. Missing-channel action 열·producer transcript·이전
+audit 결론·그 밖의 Arch 실행/검증-run/승인/쓰기/commit 지시는 입력하지 않는다. 반증 판단 상태 중
+clear만 구속 질문과 승인 쓰기에 도달하며 blocking이나 unavailable은 제안 앞에서 멈춘다. Product `C<n>`과
+disk `NN`은 명시적으로 다른 좌표다. 구속 확인 전 쓰기 0, 거절·승인 전 중단 시 쓰기 0이다. 승인 하나 아래 Layer 0·후속
 요청을 `product.md` 마지막의 `adopt — layer 0`으로 먼저 착지시키고, 그 커밋을 Design head로 쓴
 능력 문서와 검증한 K를 `adopt — capabilities`로 함께 착지시킨 뒤 자동 Product·Arch·Design·Direct·
-Resume 선택은 0이다. `product.md` 쓰기 전 중단은 무관리 재도출이고, 그 쓰기와 첫 커밋 사이의
-dirty 경계는 사람이 정확한 승인 경계를 커밋하거나 폐기한다. 첫 커밋 뒤 두 번째 경계 쓰기 전은
+Resume 선택은 0이다. 중단 시 현재 `.devflow` 루트와 index가 모두 없을 때만 무관리 재도출하고,
+현재 증거가 생긴 뒤에는 정본 상태가 복구를 소유한다. `product.md` 쓰기와 첫 커밋 사이에는
+`setup.layer0-uncommitted`가 marker보다 먼저 서고 Product와 Direct 직접 진입도 선택 route와 별개로
+동시에 관찰된 이 setup 사실을 소비해 Resume으로 돌아간다. Direct는 request·research·card 효과를
+내기 전에 돌아간다. Product가 없을 때 DD-92의 승인된 `00-project`
+연구는 기존 교차-zone 순서를 유지한다. 사람은 정확한 승인 경계를 커밋하거나 폐기한다. 첫 커밋 뒤 두 번째 경계 쓰기 전은
 기존 Resume→Arch 기준선 누락 복구다. 관리 상태의 설계 마커와 기준선 갱신은 Adopt를 재개하지 않고
 Arch가 소유한다. 검증 시 확인할 것: (a) Codex와 Claude가 같은 직접 호출에서 첫 실행을 Adopt로
 고르는지, (b) 빈 `.devflow/`나 Product 질문 없이 실제 조사에 들어가는지, (c) 문서가 방대할 때
@@ -632,7 +645,8 @@ Arch가 소유한다. 검증 시 확인할 것: (a) Codex와 Claude가 같은 �
 경계에서 전체 요청이 보존되는지, (f) 문서 내부 상태·코드/테스트/운영 증거·경로·Git 이력·수정
 시각을 함께 써서 구현/기획/리서치/대체 기록을 구분하되 이름이나 시각만으로 권위를 정하지 않고,
 증거로 닫히지 않는 현재 의도 충돌만 정확한 좌표와 질문으로 사람에게 보내는지, (g) 두 커밋 직후
-능력 문서의 Design head가 현재 값과 일치하는지.
+능력 문서의 Design head가 현재 값과 일치하는지, (h) 반증 입력·차단 기준·한 번 수정/좌표 재검사·
+Evidence verification 기록이 지켜지고 finding이 남으면 구속 질문이 나오지 않는지.
 사용자가 새 설치 뒤 테스트 브랜치에서 직접 확인하기로 했으므로 이 실제 행동은 **미검증**이다.
 
 ### 3.25 H51×A10 — 패키지 정보와 현재 프로젝트 작업의 진입 경계 [16판 신규]
@@ -817,3 +831,15 @@ Principles의 저장소 소유 상태 도구는 손상된 HEAD journal을 capabi
 기존의 구조화된 blocking 경로에 남는다. 따라서 §1·§2의 요청·진입 행과 기존 §3 교차 판정은
 그대로다. **새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.** 실제 모델 선택과 프로젝트 실행은
 이 저장소 검사 수리로 재검증했다고 세지 않는다.
+
+0.23.7 부분 재판정(DD-101·DD-102): 새 요청 형태나 진입 지점은 없다. §3.24의 멤버십 입력을
+현재 `.devflow` 루트와 현재 index로 좁혀 다른 ref·과거 이력·shallow 상태가 최초 Adopt를 막지
+않게 했고, index 관찰 실패의 보수 경계는 유지했다. 같은 셀의 구속 전 제안에 한 번의 유계한
+clean-context 의미 반증과 clear gate, Arch verification-channel의 선택된 두 표 열과 첫 문단,
+Product C와 disk NN의 구분을
+추가했다. 최초 커밋 전에는 `setup.layer0-uncommitted`가 lifecycle marker보다 먼저 서며 Product와
+Direct는 선택 route가 아니라 동시에 관찰된 그 정본 사실을 소비해 Resume으로 돌아간다. Direct의
+planning 효과는 그 뒤에만 열린다. Product 없는 승인된
+`00-project` 연구는 기존 DD-92 순서를 유지한다. Arch 실행/작성 계약과 다른 관리 경로는 바뀌지 않는다.
+**새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.** state fixture와 P2 생성/정적 대조 밖의 실제
+Adopt 모델 실행 및 §3.24 (a)~(h)는 재관측 전까지 미검증이다.

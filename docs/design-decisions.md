@@ -136,6 +136,65 @@ defect, a remaining hard check rejects a valid package, or upstream supplies a d
 semantic contract that replaces a heuristic. An observed failure path still comes first; changing
 a threshold alone never creates a hard gate.
 
+### DD-101 · Project membership reads only the current `.devflow` root and current index; Git history remains recovery evidence (v0.23.7)
+
+Subject: Identity, packaging, platforms | Introduced: v0.23.7 | State: active
+
+Observed problem: the state tool used `git log --all -- .devflow` as membership evidence. A
+checkout with no `.devflow` at all therefore became `setup.no-product` when a sibling worktree
+branch or remote-tracking ref had carried that path. Explicit Adopt was diverted to Resume's setup
+question. Shallow clones and broken unrelated refs took the same conservative route because of
+history observability rather than the current checkout.
+
+Desired behavior: the cheap evidence a person can see in this checkout agrees with membership. A
+current working-tree `.devflow` root or any `.devflow` path in the current index protects partial
+state. When both are absent, first-time Adopt opens regardless of other refs or prior commits.
+
+Chosen boundary: the canonical state tool first observes the current `.devflow` root, then, only
+when it is absent, the current index's `.devflow` entries. An empty, partial, or users-only root is
+current evidence. Only absence from both yields `setup.unmanaged`; a staged or committed total
+deletion is judged by that current state as well. A failed index command or undecodable output does
+not prove absence and remains `setup.no-product`. Git history and other refs are material a person
+may recover with Git, not current membership, so the state tool runs no global-history query for
+this decision. After membership, current Product absence emits `setup.no-product`, while DD-92's
+approved pre-Product `00-project` research retains its earlier position under the existing
+`zoneOrder` owner. When current Product exists but current HEAD has no committed Product boundary, the state tool emits
+the higher-priority `setup.layer0-uncommitted`: current journal bytes still receive integrity
+validation, but history-derived lifecycle and capability-baseline recovery wait for the first Adopt
+commit. An unreadable current-HEAD boundary is blocking integrity evidence rather than permission to
+skip that net. Product and Direct consume this canonical setup fact even when a higher git or
+integrity route coexists: Product returns to Resume instead of treating the draft as committed
+truth, and Direct returns before any request, research, or card effect.
+
+Why the boundary is needed: DD-95's asymmetric-error ground fits SessionStart's weak fixed-pointer
+eligibility check, but a false managed result from the action-owning state tool has no later
+authority to correct it. It demonstrably closed explicit Adopt. By contrast, Resume ends
+`setup.unmanaged` without writing, and explicit Adopt remains discoverable by the user's choice.
+Current root plus index protects uncommitted and staged partial state without letting a sibling ref
+take ownership of this checkout. The committed Product boundary gives every consumer the same point
+at which historical recovery becomes authoritative. Ordinary managed recovery without a current
+Product precedes a stale marker without taking DD-92's pre-Product research away. This corrects
+DD-97's history-recovery and untracked-partial-path clauses while preserving one state owner and
+direct named-stage entry.
+
+Rejected alternatives: removing only `--all` needs a new unborn-HEAD branch and still makes prior
+commits membership. Excluding only users paths from the index splits one current `.devflow`-root
+fact into role-specific exceptions and is unnecessary for this current-evidence purpose. Copying
+history or index observation into SessionStart recreates DD-95's rejected second predicate.
+
+Affected coordinates: `skills/principles/scripts/project-state.mjs`,
+`scripts/project-state.test.js`, `skills/principles/references/delivery/commit-and-verification.md`,
+`skills/principles/references/knowledge/writers-and-migration.md`, Product's canonical-state entry
+collector, Direct's canonical-state collector and early recovery guard, Product and Resume P2
+recovery rows, Adopt's interruption boundary, DD-95, DD-97, matrix
+§3.24, deploy manifests, CHANGELOG, and maintenance protocol §9. The existing zone array owns setup
+priority and `zoneOrder` owns DD-92's cross-zone research order; SessionStart, Arch's authoring
+contract, and the remaining skills' ordinary entry do not change.
+
+Revisit when a current `.devflow` root or index path is declared unmanaged, a checkout with neither
+is kept out of Adopt by another ref, an index-observation failure is mistaken for absence, or this
+current-evidence rule sends an existing managed Resume/Arch path back to Adopt.
+
 ### DD-18 · The Codex install leads with the native plugin channel (marketplace add + plugin add); generated slash prompts stay as the explicit channel; the hook stays separately registered in ~/.codex/hooks.json (v0.9.9)
 
 Subject: Identity, packaging, platforms | Introduced: v0.9.9 | State: active, partly corrected by DD-57 (v0.13.0)
@@ -561,7 +620,7 @@ Revisit when delayed guidance causes an action different from resume, a C1–C6 
 
 ### DD-95 · Globally installed devflow stays silent without current evidence; explicit intent and history-aware state preserve the adoption boundary (v0.20.0)
 
-Subject: Identity, packaging, platforms | Introduced: v0.20.0 | State: active, partly corrected by DD-97 (v0.21.0)
+Subject: Identity, packaging, platforms | Introduced: v0.20.0 | State: active, partly corrected by DD-97 (v0.21.0), DD-101 (v0.23.7)
 
 Observed problem: the globally installed plugin's SessionStart injected devflow guidance into
 every Git repository, and ordinary development language in the Arch, Design, Split, Work,
@@ -2012,7 +2071,7 @@ Nothing has been rejected under this subject yet.
 
 ### DD-97 · Explicit Adopt reconstructs an unmanaged brownfield once; managed technical refresh belongs to Arch (v0.21.0)
 
-Subject: Brownfield and entry | Introduced: v0.21.0 | State: active
+Subject: Brownfield and entry | Introduced: v0.21.0 | State: active, partly corrected by DD-101 (v0.23.7)
 
 Observed problem: three clean existing-code worktrees invoked Adopt explicitly, yet the installed
 entry text told Codex to enter Principles first and Adopt did not accept the state tool's
@@ -2125,6 +2184,66 @@ a maintained source disappears without an explicit disposition, a follow-on requ
 adoption boundary, a managed design/baseline/Arch-written knowledge route returns to Adopt, or the
 resulting glossary and capability/K surface is insufficient for a later cold maintenance session, or
 an adopted capability's stored Design head differs immediately after the two approved commits.
+
+### DD-102 · One bounded clean-context semantic refutation precedes Adopt's binding question (v0.23.7)
+
+Subject: Brownfield and entry | Introduced: v0.23.7 | State: active
+
+Observed problem: the Adopt proposal had an `Evidence verification` section immediately before
+binding confirmation, but current canon did not say what was checked, by whom, or what passed. The
+same producer could report that coordinates existed while a contradiction or omission across source
+dispositions, Layer 0, and capability/K links remained in the set being bound. Adopt also lacked the
+value space for the Architecture `verify_channel` it must write, while Product `C<n>` and disk
+capability `NN` were offset by one but both called a capability number. Failure evidence on a separate
+past lineage showed that these gaps could produce broken links and missing verification means; the
+orphan current verification section and the two ambiguous authority coordinates independently prove
+that the gap remains on current bytes.
+
+Desired behavior: before the owner binds the complete write set, a small context independent from
+production tries once to refute its meaning. It neither mechanizes every fact nor reviews prose taste;
+it blocks only load-bearing defects capable of producing a wrong next action.
+
+Chosen boundary: after preparing the complete draft, Adopt's semantic-refutation stage runs one
+bounded clean-context semantic refutation and records it under `Evidence verification` before showing the proposal and binding
+question. Its inputs are only the full draft; inventory and dispositions; load-bearing current and
+proposed source/code coordinates; the selected shared capability/capsule contract; and Arch's
+verification-channel table's Surface and Required channel columns plus first proposal paragraph and
+ADR conditions. It excludes the Missing-channel action column, producer transcript, earlier audit
+conclusions, and all other Arch execution, verification-run, approval, write, and commit instructions.
+
+A finding blocks only when a supported contradiction or omission would cause a wrong action, lose a
+required decision or rejected direction, assign the wrong owner, or omit verification means. The
+draft may be revised once; afterward only returned coordinates are rechecked and no new full pass is
+opened. An unresolved blocking finding or unavailable clean context prevents binding. Refutation state
+is a judged pending, clear, or blocked observation; blocked covers either a supported blocking finding
+or unavailable clean context. Only pending runs the refutation stage, only clear reaches the proposal
+and approved writes, and blocked stops before the proposal while the approval row also requires clear.
+The shared baseline contract fixes an unqualified capability number to disk `NN` and writes a Product-local id as
+`Product C<n> <name>`, keeping the two coordinate spaces distinct.
+
+Why the boundary is needed: one Adopt approval creates a broad knowledge surface later sessions treat
+as canon. Producer self-attestation cannot independently see its omissions, while a full audit or
+large validator would turn the stage into a product answer key and grow procedure. Bounded inputs, a
+narrow blocking threshold, and one revision cap fix both cost and convergence. Consuming only the two
+needed Arch table columns and first proposal paragraph does not move current technical-design ownership.
+
+Rejected alternatives: retaining only the `Evidence verification` heading invites producer
+self-attestation to masquerade as verification. Mechanizing every proposal fact in rules and fixtures,
+copying all Arch procedure into Adopt, or starting a new full pass per finding expands scope and read
+cost. No Product rule is added for refutation; Product's separate DD-101 bridge consumes only the
+concurrent canonical interrupted-boundary fact and does not duplicate this judgment.
+
+Affected coordinates: Adopt's refutation observation, stage, approval table, and declaration in `spec.mjs`, `body.md`,
+`references/workflow.md`, intent, obligation ledger, fixture, and generated receipts; Principles'
+capability baseline contract, `opening-and-freshness.md`, and `relations-and-lifecycle.md`;
+`scripts/repository-invariants.test.js`; DD-97; matrix §3.24; deploy manifests; CHANGELOG; and
+maintenance protocol §9. Arch runtime, Product's authoring decisions, and the original JZ Note sample
+remain unchanged by this decision.
+
+Revisit when the refuter lacks the full draft or load-bearing authority coordinates, earlier
+conclusions are injected as answers, findings broaden into prose review without an action failure, a
+full sweep repeats after the one revision, a proposal binds with a blocking finding, or Product C and
+disk NN confusion points at the wrong capability.
 
 ## Git mechanics and interruption recovery
 

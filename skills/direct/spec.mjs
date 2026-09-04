@@ -3,7 +3,7 @@ import { line } from "./scripts/skill-rails/dsl.mjs";
 export const SPEC = { version: "5", id: "direct", profile: "single", imports: [] };
 
 export const OBSERVATIONS = {
-  "project.product": { collector: "state.project.product", domain: ["present", "missing", "unknown"] },
+  "project.product": { collector: "state.project.product", domain: ["present", "missing", "uncommitted-layer0", "unknown"] },
   "request.current": { collector: "state.request.current", domain: { source: "text", request: "text" } },
   "request.phase": { collector: "state.request.phase", domain: ["none", "uncommitted", "committed", "design-confirmed", "failure-routed"] },
   "origin.active": { collector: "state.origin.active", domain: { origin: "text", scopes: "json", children: "json" } },
@@ -44,6 +44,7 @@ export const OWNERSHIP = {
 
 export const GUARDS = [
   { id: "canonical-state-required", reads: ["project.product"], acceptsUnknown: [], when: s => s.project.product === "unknown", then: "BLOCK", body: "guard: canonical-state-required" },
+  { id: "uncommitted-layer0", reads: ["project.product"], acceptsUnknown: [], when: s => s.project.product === "uncommitted-layer0", then: "ROUTE:resume", body: "guard: uncommitted-layer0" },
   { id: "approved-project-research", reads: ["origin.projectResearch", "projectResearch.approval"], acceptsUnknown: [], when: s => s.origin.projectResearch !== "NONE" && s.projectResearch.approval === "effective", then: "ROUTE:work", body: "guard: approved-project-research" }
 ];
 
@@ -115,7 +116,7 @@ export const ROLES = {};
 export const READ_FIRST = [{ body: "why: purpose", path: "references/purpose.md" }];
 export const DECLARATIONS = {
   profile: { value: "p2", consumer: "build:profile" },
-  canonicalStateBoundary: { value: "direct selects no filename; principles project-state supplies the exact current journal origin, active layer-opening scopes, approval freshness, and card origin siblings", consumer: "direct" },
+  canonicalStateBoundary: { value: "direct selects no filename; principles project-state supplies the committed Product boundary, exact current journal origin, active layer-opening scopes, approval freshness, and card origin siblings", consumer: "direct" },
   siblingUnitBoundary: { value: "one request may create several independently executable sibling cards; each unit is one card and may list several affected knowledge owners, but is never mirrored once per owner", consumer: "stage.materialize" },
   projectResearchBoundary: { value: "00-project is one many-branch research root; each numeric research card carries the exact Origin field, remains pending until the ordinary proposal boundary, and routes to work only after project-state reports effective approval", consumer: "guard.approved-project-research" },
   residualSeam: { value: "principles-owned layer-opening markers are the only direct-time remaining-scope representation; direct records affected owners but never creates knowledge-landing markers, which later confirmed work or research synthesis owns", consumer: "stage.carry-approval" },

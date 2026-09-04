@@ -102,23 +102,72 @@
     ]
   },
   {
+    "id": "refutation-blocked",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.unmanaged",
+      "state.material": "present"
+    },
+    "judged": {
+      "refutation.state": "blocked"
+    },
+    "decided": {},
+    "expect": {
+      "stage": "semantic-refutation",
+      "status": "BLOCK",
+      "effects": [
+        "BLOCK"
+      ]
+    },
+    "cover": [
+      "stage:semantic-refutation",
+      "branch:semantic-refutation/blocked"
+    ]
+  },
+  {
+    "id": "refutation-pending",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.unmanaged",
+      "state.material": "present"
+    },
+    "judged": {
+      "refutation.state": "pending"
+    },
+    "decided": {},
+    "expect": {
+      "stage": "semantic-refutation",
+      "status": "NEXT",
+      "effects": [
+        "READ",
+        "RUN",
+        "RUN",
+        "RUN",
+        "RUN",
+        "NEXT"
+      ]
+    },
+    "cover": [
+      "stage:semantic-refutation",
+      "branch:semantic-refutation/pending"
+    ]
+  },
+  {
     "id": "adoption-prepare",
     "s": {
       "state.kernel": "available",
       "state.route": "setup.unmanaged",
       "state.material": "present"
     },
-    "judged": {},
+    "judged": {
+      "refutation.state": "clear"
+    },
     "decided": {},
     "expect": {
       "stage": "adoption",
       "row": "prepare",
       "status": "ASK",
       "effects": [
-        "READ",
-        "RUN",
-        "RUN",
-        "RUN",
         "REPORT",
         "ASK"
       ]
@@ -136,7 +185,9 @@
       "state.route": "setup.unmanaged",
       "state.material": "present"
     },
-    "judged": {},
+    "judged": {
+      "refutation.state": "clear"
+    },
     "decided": {
       "approval.action": "refuse"
     },
@@ -161,7 +212,9 @@
       "state.route": "setup.unmanaged",
       "state.material": "present"
     },
-    "judged": {},
+    "judged": {
+      "refutation.state": "clear"
+    },
     "decided": {
       "approval.action": "approve"
     },

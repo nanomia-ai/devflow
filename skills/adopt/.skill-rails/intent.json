@@ -25,7 +25,7 @@
   ],
   "irreversible_boundaries": [
     "The owner's confirmation binds the complete proposed Layer 0, capability, and knowledge write set.",
-    "The approved projection lands through two ordered boundaries: product.md is the last write before the Layer 0 commit, then capability documents use that landed commit as Design head and their K nodes validate beside them; interruption before product remains unmanaged, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery."
+    "The approved projection lands through two ordered boundaries: product.md is the last write before the Layer 0 commit, then capability documents use that landed commit as Design head and their K nodes validate beside them; interruption remains unmanaged only while no current .devflow root or indexed path exists, current evidence returns recovery to canonical state, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery."
   ],
   "state_dependent_behaviors": [
     "Explicit Adopt consumes setup.unmanaged directly; it does not invoke Principles as a preflight and does not ask Resume to reinterpret that route.",
@@ -48,7 +48,7 @@
     "Every maintained source has an explicit named landing, evidence disposition, reasoned non-domain exclusion, or visible unresolved status.",
     "Every code-backed capability candidate has one representative executable flow with exact coordinates; every document-derived candidate without executable code cites its exact maintained documentary basis and marks the flow not applicable.",
     "Every proposal claim identifies executable or documentary evidence, contradiction, inference, and confidence.",
-    "The owner confirms the complete write set after irreducible questions are resolved.",
+    "The owner sees and confirms the complete write set only after irreducible questions are resolved and one bounded clean-context semantic refutation is judged clear and records no blocking contradiction or omission in Evidence verification.",
     "Complete Layer 0 is published in the first confirmed commit; all capability designs and their validated K nodes are published together in the second with Design head equal to the first commit.",
     "A final report names committed artifacts and preserves unknown or unverified items without claiming completion."
   ],

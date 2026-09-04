@@ -251,7 +251,11 @@ function planningReceipt(state) {
 }
 
 export const collectors = Object.freeze({
-  "state.project.product": async context => (await canonicalState(context)).zones.setup.entries.some(entry => entry.kind === "no-product") ? "missing" : "present",
+  "state.project.product": async context => {
+    const setup = (await canonicalState(context)).zones.setup.entries;
+    if (setup.some(entry => entry.kind === "layer0-uncommitted")) return "uncommitted-layer0";
+    return setup.some(entry => entry.kind === "no-product") ? "missing" : "present";
+  },
   "state.request.current": async context => currentRequest(await canonicalState(context)),
   "state.request.phase": async context => requestPhase(await canonicalState(context)),
   "state.origin.active": async context => activeOrigin(await canonicalState(context)),

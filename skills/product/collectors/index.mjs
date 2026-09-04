@@ -42,6 +42,14 @@ const canonicalState = async (ctx, root) => {
     return null;
   }
 };
+const productEntry = async (ctx, root) => {
+  const state = await canonicalState(ctx, root);
+  if (!state || typeof state !== "object") return "unknown";
+  if (state.zones?.setup?.entries?.some((entry) => entry.kind === "layer0-uncommitted")) return "uncommitted-layer0";
+  return !file(root, ".devflow/project/product.md") && file(root, ".devflow/project/arch.md")
+    ? "brownfield-no-product"
+    : file(root, ".devflow/project/product.md") ? "existing" : "new";
+};
 const projectResearch = async (ctx, root) => {
   try {
     const result = await canonicalState(ctx, root);
@@ -75,7 +83,7 @@ const compatible = async (ctx, root) => {
   return { owner, landing };
 };
 export const collectors = Object.freeze({
-  "state.product-entry": ctx => readState(ctx, root => (!file(root, ".devflow/project/product.md") && file(root, ".devflow/project/arch.md") ? "brownfield-no-product" : file(root, ".devflow/project/product.md") ? "existing" : "new")),
+  "state.product-entry": ctx => readState(ctx, root => productEntry(ctx, root)),
   "state.product-file": ctx => readState(ctx, productIsCurrent),
   "state.glossary": ctx => readState(ctx, root => file(root, ".devflow/project/glossary.md") ? "current" : "missing"),
   "state.product-request": ctx => readState(ctx, root => productRequest(ctx, root)),

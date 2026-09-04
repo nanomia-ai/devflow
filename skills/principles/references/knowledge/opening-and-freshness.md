@@ -92,7 +92,7 @@ A consumer makes only three comparisons.
    in sections 1–5 are fresh. When it differs or is empty, they are hypotheses.
 2. When the union is nonempty, the Scope head command output equals stored `Scope head`,
    the exact-path set in Consumed contracts equals `Consumed paths`, and every
-   other-capability number equals the provider currently mapped by arch.md's Code structure,
+   provider disk NN equals the provider currently mapped by arch.md's Code structure,
    the verified statements in sections 8–14 are fresh under this comparison. When the union
    is empty, the output differs or is empty, or either the path sets or provider mapping
    differ or are ambiguous, they are hypotheses.

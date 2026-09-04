@@ -34,6 +34,8 @@ knowledge baselines are always on; there is no per-project switch.
 - For initial creation, absent means no same-numbered baseline in HEAD. A file present in
   HEAD but absent from the working tree is recovery, not creation. Working-tree bytes with
   no HEAD counterpart have nothing to preserve, so the creation replaces them.
+- Inside capability documents and K relations, an unqualified capability number means the
+  disk NN. Cite a product-local identifier as `Product C<n> <name>`; it is not disk navigation.
 
 ## Document contract and zone boundary
 
@@ -56,7 +58,7 @@ the boundary.
 | 9 | Lifecycle | verified | mermaid stateDiagram-v2, only when illegal transitions exist | soft | state sets with only legal transitions |
 | 10 | Current behavior | verified | table: action / precondition / what the user sees / entrypoint | soft | planned behavior and display-only wording changes |
 | 11 | Entrypoints | verified | table: exact path / role / entered from | soft | a whole “related” folder |
-| 12 | Consumed contracts | verified | table: exact path / other capability number / expectation | soft | anything this capability does not consume directly |
+| 12 | Consumed contracts | verified | table: exact path / provider disk NN / expectation | soft | anything this capability does not consume directly |
 | 13 | Traps | verified | table: symptom / reproduction condition / cause / use instead | soft | universal development knowledge |
 | 14 | Verify | verified | commands and scenarios actually run at this closure, verbatim | soft | accumulated past passes |
 | 15 | Verification metadata | verified | the five `key: value` fields below, at end of file | 5 fields | every other field |
@@ -79,7 +81,7 @@ The deployed first 5 lines are exactly:
 ```text
 # <NN> <product.md capability name>
 Purpose: <why it exists and what it implements, one line>
-Boundary: owns <owned scope>; does not own <neighbor capability number and name, or none>
+Boundary: owns <owned scope>; does not own <neighbor disk NN and name, or none>
 Concepts: <JSON array of exact glossary terms | none>
 Trust: design reflects confirmed Layer 0; verified state reflects the last passing capability verification, or contains no evidence before one. Judge each zone by its metadata.
 ```

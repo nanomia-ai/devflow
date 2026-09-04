@@ -12,6 +12,8 @@ const { pathToFileURL } = require("node:url");
 const TOOL = path.resolve(__dirname, "../skills/principles/scripts/project-state.mjs");
 const ADOPT_SPEC = path.resolve(__dirname, "../skills/adopt/spec.mjs");
 const ARCH_SPEC = path.resolve(__dirname, "../skills/arch/spec.mjs");
+const DIRECT_SKILL_ROOT = path.resolve(__dirname, "../skills/direct");
+const DIRECT_COLLECTORS = path.resolve(DIRECT_SKILL_ROOT, "collectors/index.mjs");
 const PRODUCT_SPEC = path.resolve(__dirname, "../skills/product/spec.mjs");
 const PRODUCT_COLLECTORS = path.resolve(__dirname, "../skills/product/collectors/index.mjs");
 const ADOPT_PRODUCT_TEMPLATE = path.resolve(__dirname, "../skills/adopt/templates/product.md");
@@ -940,10 +942,23 @@ test("T2 priority structure has one canonical array position per zone", async ()
   const module = await registry();
   assert.deepEqual(module.ZONE_DEFINITIONS.map((item) => item.zone), ROUTE_ZONES);
   assert.equal(new Set(module.ZONE_DEFINITIONS.map((item) => item.zone)).size, 14);
-  assert.equal(module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => `${item.zone}.${kind.name}`)).length, 61);
+  const kinds = module.ZONE_DEFINITIONS.flatMap((item) => item.kinds.map((kind) => ({ zone: item.zone, ...kind })));
+  assert.equal(kinds.length, 62);
+  const boundaryRoute = "setup.layer0-uncommitted";
+  const earlier = new Set(["git.open-operation", "integrity.blocking", "setup.unmanaged", "setup.no-product", boundaryRoute]);
+  for (const treePresent of [true, false]) {
+    for (const kind of kinds.filter((item) => item.routing !== false && item[treePresent ? "present" : "absent"] !== null)) {
+      const candidate = `${kind.zone}.${kind.name}`;
+      if (earlier.has(candidate)) continue;
+      assert.equal(module.selectFirstRoute([candidate, boundaryRoute], treePresent), boundaryRoute,
+        `${boundaryRoute} must precede ${candidate} when tree=${treePresent ? "present" : "absent"}`);
+    }
+  }
+  assert.equal(module.selectFirstRoute([boundaryRoute, "git.open-operation"]), "git.open-operation");
+  assert.equal(module.selectFirstRoute([boundaryRoute, "integrity.blocking"]), "integrity.blocking");
 });
 
-test("T2 unmanaged activation needs absent current, index, and proven full history", async (t) => {
+test("T2 unmanaged activation needs an absent current .devflow root and index", async (t) => {
   const assertSetup = (root, kind) => {
     const result = run(root);
     ok(result);
@@ -951,18 +966,89 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
     assert.equal(nextOf(result.stdout), `setup.${kind}`, result.stdout);
   };
 
-  await t.test("full-history ordinary repository is unmanaged", () => {
+  await t.test("ordinary repository is unmanaged", () => {
     assertSetup(makePlainRepo(t), "unmanaged");
   });
 
-  await t.test("unborn full-history repository is unmanaged", () => {
+  await t.test("unborn repository is unmanaged", () => {
     assertSetup(makePlainRepo(t, { unborn: true }), "unmanaged");
   });
 
-  await t.test("an untracked partial devflow path remains unmanaged", () => {
+  await t.test("an untracked partial devflow path is protected as no-product", () => {
     const root = makePlainRepo(t);
     write(root, ".devflow/partial.txt", "partial\n");
-    assertSetup(root, "unmanaged");
+    assertSetup(root, "no-product");
+  });
+
+  await t.test("an interrupted first adoption remains owner-bound until its first commit", async () => {
+    const root = makePlainRepo(t, { unborn: true });
+    write(root, ".devflow/project/product.md", product());
+    let result = run(root);
+    ok(result);
+    assert.ok(hasKind(result.stdout, "setup", "layer0-incomplete"), result.stdout);
+    assert.ok(hasKind(result.stdout, "setup", "layer0-uncommitted"), result.stdout);
+    assert.equal(nextOf(result.stdout), "setup.layer0-uncommitted", result.stdout);
+    assert.equal(result.stdout.includes("integrity: kind=blocking"), false, result.stdout);
+    write(root, ".devflow/project/arch.md", arch());
+    write(root, ".devflow/project/code-style.md", "# Code Style\n\nNone.\n");
+    write(root, ".devflow/project/glossary.md", "# Glossary\n\nNone.\n");
+    write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z product re-run pending: statement-json: ${JSON.stringify("fixture")}`);
+    result = run(root);
+    ok(result);
+    assert.ok(hasKind(result.stdout, "marker", "product-rerun"), result.stdout);
+    assert.equal(nextOf(result.stdout), "setup.layer0-uncommitted", result.stdout);
+    const [{ collectors: productCollectors }, { collectors: directCollectors }] = await Promise.all([
+      import(pathToFileURL(PRODUCT_COLLECTORS).href),
+      import(pathToFileURL(DIRECT_COLLECTORS).href),
+    ]);
+    assert.equal(await productCollectors["state.product-entry"]({ projectRoot: root, projectStateTool: TOOL }), "uncommitted-layer0");
+    assert.equal(await directCollectors["state.project.product"]({ projectRoot: root, skillRoot: DIRECT_SKILL_ROOT }), "uncommitted-layer0");
+    write(root, ".git/MERGE_HEAD", `${"0".repeat(40)}\n`);
+    result = run(root);
+    ok(result);
+    assert.equal(nextOf(result.stdout), "git.open-operation", result.stdout);
+    assert.equal(await productCollectors["state.product-entry"]({ projectRoot: root, projectStateTool: TOOL }), "uncommitted-layer0");
+    assert.equal(await directCollectors["state.project.product"]({ projectRoot: root, skillRoot: DIRECT_SKILL_ROOT }), "uncommitted-layer0");
+    fs.rmSync(path.join(root, ".git", "MERGE_HEAD"));
+    write(root, ".devflow/journal.md", "");
+    commit(root, "adopt — layer 0");
+    result = run(root);
+    ok(result);
+    assert.equal(hasKind(result.stdout, "setup", "layer0-uncommitted"), false, result.stdout);
+    assert.equal(nextOf(result.stdout), "baseline.design-refresh", result.stdout);
+  });
+
+  await t.test("an unborn HEAD still validates current managed journal lifecycles", () => {
+    const root = makeRepo(t);
+    const source = researchSource(root).source;
+    git(root, "checkout", "-q", "--orphan", "recovery-without-head");
+    write(root, ".devflow/journal.md", `${knowledgeLanding(".devflow/project/capabilities/99-missing.md", "arch", source)}\n`);
+    const result = run(root);
+    ok(result);
+    assert.equal(nextOf(result.stdout), "integrity.blocking", result.stdout);
+    assert.ok(hasKind(result.stdout, "setup", "layer0-uncommitted"), result.stdout);
+    assertFragment(result.stdout, "integrity: kind=blocking", "reason=knowledge-owner-unresolved");
+  });
+
+  await t.test("a missing current product keeps the committed marker visible but owns the route", () => {
+    const root = makeRepo(t);
+    const head = git(root, "rev-parse", "HEAD");
+    write(root, ".devflow/journal.md", `2026-08-20T00:00:00Z capability closing: folder: .devflow/tree/02-capability; head: ${head}; product: ${head}; verification: ${head}; capability: ${head}\n`);
+    commit(root, "boundary — begin 02");
+    fs.rmSync(path.join(root, ".devflow", "project", "product.md"));
+    const result = run(root);
+    ok(result);
+    assert.ok(hasKind(result.stdout, "marker", "capability-closure"), result.stdout);
+    assert.equal(nextOf(result.stdout), "setup.no-product", result.stdout);
+  });
+
+  await t.test("an unreadable current HEAD boundary blocks managed recovery", () => {
+    const root = makeRepo(t);
+    write(root, ".git/refs/heads/main", `${"1".repeat(40)}\n`);
+    const result = run(root);
+    ok(result);
+    assert.equal(nextOf(result.stdout), "integrity.blocking", result.stdout);
+    assertFragment(result.stdout, "integrity: kind=blocking", "reason=committed-layer0-boundary-unreadable");
   });
 
   await t.test("indexed devflow path remains no-product when absent from the worktree", () => {
@@ -973,25 +1059,41 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
     assertSetup(root, "no-product");
   });
 
-  await t.test("deleted historical devflow path remains no-product", () => {
+  await t.test("staged total deletion of devflow is unmanaged without consulting HEAD", () => {
+    const root = makePlainRepo(t);
+    write(root, ".devflow/partial.txt", "partial\n");
+    commit(root, "jmp add devflow");
+    git(root, "rm", "-r", "-q", ".devflow");
+    assert.equal(gitTry(root, "cat-file", "-e", "HEAD:.devflow/partial.txt").status, 0);
+    assertSetup(root, "unmanaged");
+  });
+
+  await t.test("committed total deletion of devflow is unmanaged", () => {
     const root = makePlainRepo(t);
     write(root, ".devflow/partial.txt", "partial\n");
     commit(root, "jmp add devflow");
     fs.rmSync(path.join(root, ".devflow"), { recursive: true, force: true });
     commit(root, "jmp remove devflow");
-    assertSetup(root, "no-product");
+    assertSetup(root, "unmanaged");
   });
 
-  await t.test("empty shallow history is unknown and remains no-product", () => {
+  await t.test("shallow history does not decide membership", () => {
     const root = makePlainRepo(t);
     fs.writeFileSync(path.join(root, ".git", "shallow"), `${git(root, "rev-parse", "HEAD")}\n`, "utf8");
-    assertSetup(root, "no-product");
+    assertSetup(root, "unmanaged");
   });
 
-  await t.test("failed history inspection remains no-product", () => {
+  await t.test("a broken unrelated ref does not decide membership", () => {
     const root = makePlainRepo(t);
     write(root, ".git/refs/heads/broken", "not-an-object-id\n");
-    assert.notEqual(gitTry(root, "log", "-1", "--format=%H", "--all", "--", "devflow").status, 0);
+    assert.notEqual(gitTry(root, "log", "-1", "--format=%H", "--all", "--", ".devflow").status, 0);
+    assertSetup(root, "unmanaged");
+  });
+
+  await t.test("a failed index observation never becomes unmanaged", () => {
+    const root = makePlainRepo(t);
+    fs.writeFileSync(path.join(root, ".git", "index"), "not-an-index\n", "utf8");
+    assert.notEqual(gitTry(root, "ls-files", "-z", "--", ".devflow").status, 0);
     assertSetup(root, "no-product");
   });
 
@@ -1005,7 +1107,7 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
     assert.match(result.stdout, new RegExp(`root=${root.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
   });
 
-  await t.test("linked worktree sees devflow history on another current ref", () => {
+  await t.test("a linked worktree ignores devflow committed only on a sibling ref", () => {
     const root = makePlainRepo(t);
     const seed = git(root, "rev-parse", "HEAD");
     write(root, ".devflow/partial.txt", "partial\n");
@@ -1013,13 +1115,12 @@ test("T2 unmanaged activation needs absent current, index, and proven full histo
     const linked = `${root}-linked`;
     t.after(() => fs.rmSync(linked, { recursive: true, force: true }));
     git(root, "worktree", "add", "-q", "-b", "plain-linked", linked, seed);
-    assertSetup(linked, "no-product");
+    assertSetup(linked, "unmanaged");
   });
 
   const module = await registry();
   assert.equal(module.selectFirstRoute(["setup.unmanaged", "git.open-operation"], false), "git.open-operation");
   assert.equal(module.selectFirstRoute(["setup.unmanaged", "integrity.blocking"], false), "integrity.blocking");
-  assert.equal(module.selectFirstRoute(["setup.no-product", "setup.unmanaged"], false), "setup.unmanaged");
 });
 
 test("T2 priority selector uses the canonical array for every i less than j", async () => {
