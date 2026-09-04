@@ -2144,6 +2144,22 @@ test("R3 HEAD capability-closing markers survive an uncommitted deletion and dis
   assert.equal(closed.zones.marker.entries.some((entry) => entry.kind === "capability-closure"), false);
 });
 
+test("R3 an undecodable HEAD capability-closing marker blocks structurally instead of aborting", (t) => {
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  const checkpoint = git(root, "rev-parse", "HEAD");
+  const closing = `2026-08-20T00:00:00Z capability closing: folder: .devflow/tree/02-capability; head: ${checkpoint}; product: ${checkpoint}; verification: ${checkpoint}; capability: ${checkpoint}\n`;
+  fs.writeFileSync(path.join(root, ".devflow", "journal.md"), Buffer.concat([
+    Buffer.from(closing, "utf8"),
+    Buffer.from([0xff]),
+  ]));
+  commit(root, "jmp boundary — undecodable capability closing");
+  write(root, ".devflow/journal.md", "working journal changed\n");
+
+  const result = run(root); ok(result);
+  assertFragment(result.stdout, "integrity: kind=blocking", "reason=capability-closing-head-undecodable");
+  assert.equal(nextOf(result.stdout), "integrity.blocking", result.stdout);
+});
+
 test("R3 an unrelated source change alone does not invent an interrupted transition", (t) => {
   const root = makeRepo(t);
   write(root, "src/x.js", "export const x = 1;\n");
@@ -3774,8 +3790,8 @@ test("arch and adopt shipped capability templates round-trip through capabilityS
     },
     {
       id: "adopt",
-      trust: "traced brownfield code and existing records",
-      fields: { adrs: "None." },
+      trust: "confirmed Layer 0",
+      fields: { bindingAdrs: "None." },
     },
   ];
 
@@ -4470,12 +4486,14 @@ test("compatible feedback grammar preserves escaped coordinates, closed ownershi
   state = await module.calculateState({ root });
   assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-owner"));
 
-  const unknownWriter = makeRepo(t, { includeBrownfield: false });
-  const unknownSource = researchSource(unknownWriter);
-  write(unknownWriter, ".devflow/journal.md", `${compatibleFeedback(archOwner, unknownSource.source)}\n`);
-  commit(unknownWriter, "jmp boundary: compatible writer unknown");
-  state = await module.calculateState({ root: unknownWriter });
-  assert.ok(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-writer-unresolved"));
+  const missingBrownfield = makeRepo(t, { includeBrownfield: false });
+  const unknownSource = researchSource(missingBrownfield);
+  write(missingBrownfield, ".devflow/journal.md", `${compatibleFeedback(archOwner, unknownSource.source)}\n`);
+  commit(missingBrownfield, "jmp boundary: compatible owner with incomplete setup");
+  state = await module.calculateState({ root: missingBrownfield });
+  assert.equal(state.zones.marker.entries.find((entry) => entry.kind === "compatible-feedback")?.writer, "arch");
+  assert.ok(state.zones.setup.entries.some((entry) => entry.kind === "brownfield-field"));
+  assert.equal(state.zones.integrity.entries.some((entry) => entry.reason === "compatible-writer-unresolved"), false);
 });
 
 test("compatible feedback semantic replay rejects superficial diff and proves exact owner landing", async (t) => {
@@ -4680,11 +4698,14 @@ test("K exact knowledge landing marker preserves its declared writer, source, du
   assertFragment(accepted.stdout, "marker: kind=knowledge-landing", "owner=.devflow/project/arch.md");
   assertFragment(accepted.stdout, "marker: kind=knowledge-landing", `source=${source.source}`);
 
-  write(root, ".devflow/journal.md", `${knowledgeLanding(".devflow/project/arch.md", "adopt", source.source)}\n`);
-  const adoptWriter = run(root); ok(adoptWriter);
+  const adoptRoot = makeRepo(t, { brownfield: "no" });
+  const adoptSource = researchSource(adoptRoot);
+  write(adoptRoot, ".devflow/journal.md", `${knowledgeLanding(".devflow/project/arch.md", "adopt", adoptSource.source)}\n`);
+  commit(adoptRoot, "jmp boundary ??legacy adopt knowledge landing");
+  const adoptWriter = run(adoptRoot); ok(adoptWriter);
   assert.equal(nextOf(adoptWriter.stdout), "marker.knowledge-landing", adoptWriter.stdout);
   const module = await registry();
-  let structured = await module.calculateState({ root });
+  let structured = await module.calculateState({ root: adoptRoot });
   assert.equal(structured.zones.marker.entries.find((entry) => entry.kind === "knowledge-landing")?.writer, "adopt");
 
   write(root, ".devflow/journal.md", `${knowledgeLanding(".devflow/project/arch.md", "arch", `${source.card}@${"0".repeat(40)}`)}\n`);

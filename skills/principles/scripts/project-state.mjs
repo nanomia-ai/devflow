@@ -1004,6 +1004,7 @@ const KNOWLEDGE_SOURCE = new RegExp(`^(?<card>\\.devflow/tree/[^@\\r\\n]+\\.md)@
 const KNOWLEDGE_LANDING_BYTES = Buffer.from("knowledge landing pending:", "utf8");
 const COMPATIBLE_OWNER = /^(?:\.devflow\/project\/(?:product|glossary|design|arch)\.md|\.devflow\/project\/capabilities\/[0-9]+-[^/]+\.md)$/;
 const COMPATIBLE_FEEDBACK_BYTES = Buffer.from("compatible feedback pending:", "utf8");
+const CAPABILITY_CLOSING_BYTES = Buffer.from("capability closing:", "utf8");
 const COMPATIBLE_COORDINATE_KEYS = ["target", "background", "why", "conclusion", "implication"];
 
 function knowledgeLandingFields(line, start) {
@@ -2965,6 +2966,15 @@ function evaluateZones(snapshot) {
   const compatibleFeedback = snapshot.devflowMembership.unmanaged
     ? { accepted: [], issues: [], lifecycles: [] }
     : compatibleFeedbackState(snapshot);
+  const closingJournal = snapshot.devflowMembership.unmanaged
+    ? { state: "absent", text: "" }
+    : knowledgeJournalAt(snapshot.root, "HEAD", CAPABILITY_CLOSING_BYTES);
+  const closingIssues = ["failure", "undecodable"].includes(closingJournal.state) ? [{
+    item: "capability-closing",
+    blocking: true,
+    path: ".devflow/journal.md",
+    reason: "capability-closing-head-undecodable",
+  }] : [];
   const projectResearchIssues = snapshot.cards
     .filter((card) => card.path.startsWith(".devflow/tree/00-project/")
       && !new RegExp(`^# ${card.number.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} Research: \\S`).test(card.text ?? ""))
@@ -2980,7 +2990,8 @@ function evaluateZones(snapshot) {
     path: ".devflow/project/product.md",
     reason: "capability-rows-unparsed",
   }] : [];
-  const integrityItems = [...integrity(snapshot, verify), ...productCapabilityIssues, ...projectResearchIssues, ...landings.issues, ...compatibleFeedback.issues];
+  const integrityItems = [...integrity(snapshot, verify), ...productCapabilityIssues, ...projectResearchIssues,
+    ...landings.issues, ...compatibleFeedback.issues, ...closingIssues];
   const blocking = integrityItems.filter((item) => item.blocking);
   const nonblocking = integrityItems.filter((item) => !item.blocking);
   const shapeAnomalies = [
@@ -3084,7 +3095,7 @@ function evaluateZones(snapshot) {
   });
   for (const entry of glossary.routes) addEntry(zones, "marker", "glossary-term", entry);
   for (const { form, ...entry } of design.routes) addEntry(zones, "marker", form === "open-item" ? "design-open-item" : "design-note", entry);
-  const headJournal = parseJournal(gitFile(snapshot.root, "HEAD", ".devflow/journal.md"));
+  const headJournal = parseJournal(closingJournal.text);
   for (const line of headJournal.filter((item) => item.kind === "capability-closing")) {
     addEntry(zones, "marker", "capability-closure", { marker: line.raw, folder: line.folder, head: line.head });
   }

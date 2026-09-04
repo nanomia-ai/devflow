@@ -15,6 +15,28 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.6 — 2026-09-04 — Evidence-bounded repository audit
+
+Devflow's repository-owned Skill Rails semantic audit now fails only when current bytes establish
+a reproducible structural or execution-contract violation. Provenance fan-in, duplicate locators,
+broad migration projections, and name or wording heuristics remain visible review signals without
+dictating skill prose or failing the release. Exact unfinished migration placeholders remain hard
+failures. Target density now distinguishes unique atom-to-target edges from raw locator occurrences.
+
+The audit reads the observations actually exported by each `spec.mjs`, so valid JavaScript layout
+does not create a second accidental grammar. Its direct fixture suite covers the hard/advisory
+boundary, duplicate edges, unresolved provenance, multiline and commented observations, unfinished
+placeholders, stable finding counts, and missing package inputs. The root suite verifies all nine
+reports and prints every advisory.
+
+The completion gate also exposed one duplicate, unguarded decode of the committed journal in the
+Principles state tool. An undecodable `HEAD:.devflow/journal.md` now remains on the existing structured
+blocking routes instead of terminating the CLI while capability-closing markers are projected. Three
+stale or history-coupled test cases now follow the shipped capability template, DD-97 writer ownership,
+and isolated marker lifecycles. This repository-owned script is outside the Skill Rails package seal;
+the nine generated packages, runtime, validator, kernel, workflow stages, and user-facing instructions
+remain unchanged. Both plugin manifests ship these repository verification repairs as 0.23.6.
+
 ## 0.23.5 — 2026-09-04 — Skill Rails v0.3.0 cohort migration
 
 All nine P2 packages now seal Skill Rails validator 0.6.1 and runtime 0.3.3 from the

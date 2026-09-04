@@ -246,8 +246,8 @@ test("maintenance scripts and documents have repository-owned lifecycles", () =>
   for (const [script, consumers] of ROOT_SCRIPT_LIFECYCLES) {
     for (const consumer of consumers) assert.ok(read(consumer).includes(script), `${script} has no consumer in ${consumer}`);
     const directTest = script.replace(/\.m?js$/, ".test.js");
-    assert.ok(fs.existsSync(path.join(scriptsDir, directTest)) || script === "skill-rails-semantic-audit.mjs",
-      `${script} has neither a direct suite nor a declared standalone lifecycle`);
+    assert.ok(fs.existsSync(path.join(scriptsDir, directTest)),
+      `${script} has no direct suite`);
   }
 
   const design = read("docs/design.md");
@@ -319,7 +319,7 @@ test("the Codex installer retains one native channel and only cleans its generat
   assert.deepEqual([...GENERATED_NAMES].sort(), expected, "generated-prompt cleanup does not match the installed stages");
 });
 
-test("the root suite runs every tracked P2 package test and both semantic audits", () => {
+test("the root suite runs every tracked P2 package test and both semantic audits", (t) => {
   const listed = spawnSync("git", ["ls-files", "--", "skills/**/*.test.mjs"], { cwd: root, encoding: "utf8" });
   assert.equal(listed.status, 0, listed.stderr);
   const packageTests = listed.stdout.split(/\r?\n/).filter(Boolean);
@@ -328,6 +328,13 @@ test("the root suite runs every tracked P2 package test and both semantic audits
   assert.equal(tests.status, 0, tests.stderr || tests.stdout);
   const audit = spawnSync(process.execPath, ["scripts/skill-rails-semantic-audit.mjs"], { cwd: root, encoding: "utf8" });
   assert.equal(audit.status, 0, audit.stderr || audit.stdout);
+  const auditResult = JSON.parse(audit.stdout);
+  assert.equal(auditResult.schema, "devflow/skill-rails-semantic-audit/2");
+  assert.deepEqual(auditResult.reports.map(report => report.id).sort(), [...P2_PACKAGES].sort(),
+    "the semantic audit did not report every promoted P2 package");
+  for (const report of auditResult.reports.filter(row => row.advisories.length > 0)) {
+    t.diagnostic(`${report.id} semantic advisories: ${report.advisories.map(row => `${row.code}=${row.count}`).join(", ")}`);
+  }
   const principlesAudit = spawnSync(process.execPath, ["skills/principles/scripts/semantic-audit.mjs"], { cwd: root, encoding: "utf8" });
   assert.equal(principlesAudit.status, 0, principlesAudit.stderr || principlesAudit.stdout);
 });
