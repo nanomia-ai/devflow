@@ -7,16 +7,18 @@
   the same folder staged earlier never rides along.
 - **Layer 0 commit**: product, arch, and design land each core document in one
   commit immediately after the user confirms it — message `<skill> — <document filename>`
-  A document created alongside another (glossary.md with product.md) rides the same commit. A single-field
+  A document created alongside another (glossary.md with product.md; an owner document's K
+  nodes with that document) rides the same commit. A single-field
   completion of an existing document uses the same message form. This commit is a
   binding decision.
 - **Initial-adoption commits**: one confirmation binds the complete approved Product,
-  Architecture, applicable Design, code style, glossary, capability design zones, knowledge
-  capsules, and any exact follow-on marker. Adopt first writes Layer 0 and the optional marker,
-  writes `product.md` last, stages only those paths, and lands `adopt — layer 0`. It then
-  calculates the canonical Design head from that landed commit, writes capability documents
-  carrying that exact value, writes and validates their capsules beside them, stages only those
-  documents and capsules, and lands `adopt — capabilities`. Refusal or interruption before
+  Architecture, applicable Design, code style, glossary, capability design zones, K nodes,
+  and any exact follow-on marker. Adopt first writes the Layer 0 owner documents and optional
+  marker, writes `product.md` last among those documents, then writes and validates their K
+  nodes, stages only those paths, and lands `adopt — layer 0`. It then calculates the canonical
+  Design head from that landed commit, writes capability documents carrying that exact value,
+  writes and validates their K nodes beside them, stages only those documents and nodes, and
+  lands `adopt — capabilities`. Refusal or interruption before
   approval writes nothing. The checkout remains unmanaged only while no current `.devflow` root
   or indexed path exists. Once either exists, canonical state owns recovery; a missing
   `product.md` alone does not make the checkout unmanaged.

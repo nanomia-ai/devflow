@@ -2115,10 +2115,12 @@ style, glossary, capability design zones, and every owner-adjacent K node needed
   domain knowledge. Zero K nodes is valid only when all maintained domain sources demonstrably land
   in the always-read owners. One complete proposal precedes the owner's binding approval. Refusal or
   interruption before approval writes nothing. Under that one approval, Adopt preserves any follow-on
-  work in Principles' canonical maintenance-routing record, writes `product.md` last, and commits the
-  complete Layer 0 as `adopt — layer 0`. It then calculates the canonical Design head from that landed
-  commit, writes the capability documents carrying that exact value, writes and validates every K
-  capsule beside its owner, and commits both as `adopt — capabilities`, then ends without choosing
+  work in Principles' canonical maintenance-routing record, writes `product.md` last among the Layer 0
+  owner documents, writes and validates every Product-, Architecture-, or Design-owned K node beside
+  that owner document, and commits the complete Layer 0 boundary as `adopt — layer 0`. It then calculates
+  the canonical Design head from that landed commit, writes the capability documents carrying that exact
+  value, writes and validates every capability-owned K node beside its owner document, and commits that
+  complete boundary as `adopt — capabilities`, then ends without choosing
   Product, Arch, Design, Split, or Resume on the owner's behalf. Before `product.md` is written an
   interruption remains unmanaged. A post-product pre-commit interruption leaves an unverified dirty
   boundary for owner-directed exact commit or discard; no stage claims it. After the first commit and
@@ -2147,8 +2149,11 @@ two procedural owners and now has an observed route loop. The Brownfield field s
 pre-adoption origin and still prevents Resume from backfilling existing implementation into the
 work tree, as DD-26 requires.
 
-DD-76's same-commit owner rule remains intact: initial Adopt writes and validates K only beside its
-capability documents in `adopt — capabilities`, and every managed capsule refresh belongs to Arch.
+**v0.23.9 owner-boundary correction:** DD-92 made Product, Architecture, Design, and Capability the
+semantic owners of same-stem K trees. DD-76's same-commit owner rule therefore applies by owner class:
+initial Adopt lands Product-, Architecture-, and Design-owned K with Layer 0 in `adopt — layer 0`, and
+capability-owned K with the capability documents in `adopt — capabilities`. Every managed capsule
+refresh still belongs to Arch.
 
 Existing exact `writer=adopt` knowledge markers keep that value as bounded legacy provenance until
 consumed, because changing an already committed marker's declaration would break DD-92 provenance.

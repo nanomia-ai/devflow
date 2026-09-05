@@ -1835,10 +1835,11 @@ arch가 개발 기획과 Layer 0 전체 역산이라는 두 개념을 한 이름
 style, glossary, 능력 설계 구역과 깊은 영속 도메인 지식에 필요한 모든 소유자 인접 K를 역산한다.
 K가 0개인 것은 모든 유지 도메인 자료가 상시 읽는 소유자에 완전히 착지했음을 보일 때만 유효하다.
   완전한 제안 하나가 소유자의 구속 승인보다 먼저다. 거절이나 승인 전 중단은 쓰기 0이다. 그 승인
-  하나 아래 뒤따를 작업은 Principles의 정본 유지보수 라우팅 기록으로 보존하고 `product.md`를
-  마지막에 쓴 완전한 Layer 0을 `adopt — layer 0`으로 먼저 커밋한다. 그 착지 커밋에서 정본
-  Design head를 계산한 뒤 그 값을 담은 능력 문서와 각 소유자 옆에 쓰고 검증한 K를
-  `adopt — capabilities`로 함께 커밋하고 Product, Arch, Design, Split, Resume을 대신 선택하지 않고
+  하나 아래 뒤따를 작업은 Principles의 정본 유지보수 라우팅 기록으로 보존하고 `product.md`를 Layer 0
+  소유자 문서 중 마지막에 쓴다. Product·Architecture·Design 소유 K를 각 소유자 문서 옆에 쓰고
+  검증한 뒤 완전한 Layer 0 경계를 `adopt — layer 0`으로 먼저 커밋한다. 그 착지 커밋에서 정본
+  Design head를 계산한 뒤 그 값을 담은 능력 문서와 능력 소유 K를 각 소유자 문서 옆에 쓰고 검증해
+  완전한 경계를 `adopt — capabilities`로 커밋하고 Product, Arch, Design, Split, Resume을 대신 선택하지 않고
   끝낸다. `product.md` 쓰기 전 중단은 무관리 상태다. 그 쓰기와 첫 커밋 사이의 중단은 어느 단계도
   소유하지 않는 미검증 dirty 경계이므로 정확한 승인 경계의 커밋 또는 폐기를 사람이 정한다. 첫
   커밋 뒤 두 번째 경계 쓰기 전은 기존 관리 상태의 기준선 누락이므로 Resume이 Adopt 재개 없이
@@ -1862,8 +1863,11 @@ Layer 0이 생긴 뒤 현재 기술 설계의 소유자는 Arch 하나다. Resum
 산출물 하나에 절차 소유자 둘을 만들며 이제 실제 순환까지 관측됐다. 브라운필드 필드는 여전히
 도입 전 기원을 기록하고 DD-26대로 Resume의 기존 구현 소급 생성을 막는다.
 
-DD-76의 동일 커밋 소유자 규칙은 그대로다. 최초 Adopt는 `adopt — capabilities`에서 능력 문서 옆의
-K만 쓰고 검증하며, 관리 상태의 모든 캡슐 갱신은 Arch가 맡는다.
+**v0.23.9 소유자 경계 정정:** DD-92는 Product·Architecture·Design·Capability를 같은 stem K tree의
+의미 소유자로 정했다. 따라서 DD-76의 동일 커밋 소유자 규칙은 소유자 종류마다 적용된다. 최초
+Adopt는 Product·Architecture·Design 소유 K를 Layer 0과 함께 `adopt — layer 0`에 착지시키고,
+능력 소유 K는 능력 문서와 함께 `adopt — capabilities`에 착지시킨다. 관리 상태의 모든 캡슐 갱신은
+계속 Arch가 맡는다.
 
 이미 커밋된 정확한 `writer=adopt` 지식 마커는 소비될 때까지 그 값을 유계한 과거 출처로 보존한다.
 이미 선언된 값을 사후 변경하면 DD-92의 출처가 깨지기 때문이다. Resume은 이 출처를 절차 소유자로

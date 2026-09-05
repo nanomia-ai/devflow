@@ -15,6 +15,22 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.9 — 2026-09-05 — Knowledge follows its semantic owner
+
+Principles now gives every Product, Architecture, Design, and Capability document the same owner-shaped
+knowledge rule: concise always-needed knowledge stays in the owner document, reusable depth lives in its
+same-stem recursive K tree, and bounded discovery uses `project --under` while `--capability` remains a
+shorthand. Commit discipline applies the existing same-commit rule to that owner shape instead of
+describing every capsule through a capability path.
+
+Adopt now feeds the shared baseline and knowledge sections already opened during preparation into its
+existing clean-context semantic refutation, so a proposed filesystem shape that departs from the canon
+blocks before approval. After approval it writes and validates Product-, Architecture-, and Design-owned
+K with Layer 0, then capability-owned K with capability documents; no new stage, classifier, registry,
+validator, state predicate, or index was added. Principles and Adopt were rebuilt, the existing Adopt
+scenario projection follows the corrected effect order, and both plugin manifests ship the repair as
+0.23.9; installed-model real use, the full repository suite, and installation remain for final verification.
+
 ## 0.23.8 — 2026-09-05 — Cold-writer artifact grammar at its natural owners
 
 Verify's record template now gives a cold writer the one exact repeated-item shape that the

@@ -11,7 +11,7 @@
   conditions.
 - Capsule selection and indexing use machine queries that open no body — project each
   capsule's first two lines only. Do not create a hand-written index
-  section in the capability document — a summary living in two places drifts apart.
+  section in an owner document — a summary living in two places drifts apart.
 - The index emits each file's last-changed commit date as `changed` beside its first two lines.
   There is no separate command to run — the tool reads it from git into the projection, and the
   compact projection keeps it. The date is the second
@@ -32,14 +32,16 @@
   in one line that the tool cannot be called and open no capsule body. Sessions write capsule files themselves, and a capsule must
   pass `validate` before its commit. The tool is stateless and read-only; it owns its
   judgment internals and this document does not restate them.
-- **Call the index projection narrowed to one capability** — `project --capability <number>`
-  is the canonical call. An unfiltered `project` gathers every capability's first two lines at once
-  and overruns the index budget. The index carries a 24 KiB cap too, kept in two tiers: the
+- **Call the index projection narrowed to one owner document or K node** — `project --under
+  <owner-document-or-K-node-path>` is the canonical call and projects that path's direct
+  children; `project --capability <number>` is the shorthand for a capability owner. An
+  unfiltered `project` walks every owner's subtree at once and overruns the index budget. The
+  index carries a 24 KiB cap too, kept in two tiers: the
   full projection when it fits (`form=full`), and otherwise an automatic downgrade to a
   compact projection that drops what choosing never reads and keeps the path and the first
   line (`form=compact` — measured: one capability's 100 capsules fit compact in 21 KB
   and all 100 are emitted). When even compact overruns, it reports zero entries and the
-  filters to narrow by. When several capabilities must be seen, call once per capability and
+  filters to narrow by. When several owners must be seen, call once per owner and
   report the total to the person the same way the opening budget is reported.
 
 ## Metadata and freshness

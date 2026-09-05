@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:ff90813498f5e5d36ac419dc8b0d973b47f25b77281afcec0a2285af4a8db27f",
+  "intent_hash": "sha256:6c63ac8b583ec769b4e91623bfb3e49eb256603aa4120c2420ec211cecc56891",
   "profile": "p2",
   "atoms": [
     {
@@ -219,7 +219,7 @@
     {
       "id": "outputs-003",
       "source": "intent.outputs[2]",
-      "text": "Two ordered commits under the one approval: `adopt — layer 0` contains complete Layer 0 and any idempotent follow-on record with product.md written last; `adopt — capabilities` contains capability documents whose Design head is the first commit plus every required validated K node beside its owner.",
+      "text": "Two ordered commits under the one approval: `adopt — layer 0` contains complete Layer 0, any idempotent follow-on record, and validated K nodes beside Product, Architecture, and Design, with product.md written last among owner documents; `adopt — capabilities` contains capability documents whose Design head is the first commit plus their validated K nodes.",
       "candidate_class": "artifact",
       "consequence": "medium",
       "disposition": "projected",
@@ -250,7 +250,7 @@
     {
       "id": "irreversible-boundaries-002",
       "source": "intent.irreversible_boundaries[1]",
-      "text": "The approved projection lands through two ordered boundaries: product.md is the last write before the Layer 0 commit, then capability documents use that landed commit as Design head and their K nodes validate beside them; interruption remains unmanaged only while no current .devflow root or indexed path exists, current evidence returns recovery to canonical state, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery.",
+      "text": "The approved projection lands through two ordered boundaries: product.md is the last Layer 0 owner-document write, then those owners' K nodes validate before the Layer 0 commit; capability documents use that landed commit as Design head and their K nodes validate before the capability commit. Interruption remains unmanaged only while no current .devflow root or indexed path exists, current evidence returns recovery to canonical state, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery.",
       "candidate_class": "guard",
       "consequence": "high",
       "disposition": "projected",
@@ -395,7 +395,7 @@
     {
       "id": "external-dependencies-002",
       "source": "intent.external_dependencies[1]",
-      "text": "Git for exact source coordinates, history evidence, the first Layer 0 boundary, and the capability-and-knowledge boundary whose Design head names the first.",
+      "text": "Git for exact source coordinates, history evidence, the Layer 0 owner-and-K boundary, and the capability owner-and-K boundary whose Design head names the first.",
       "candidate_class": "collector",
       "consequence": "medium",
       "disposition": "projected",
@@ -507,7 +507,7 @@
     {
       "id": "completion-evidence-005",
       "source": "intent.completion_evidence[4]",
-      "text": "Complete Layer 0 is published in the first confirmed commit; all capability designs and their validated K nodes are published together in the second with Design head equal to the first commit.",
+      "text": "Complete Layer 0 and its validated Product, Architecture, and Design K nodes are published in the first confirmed commit; all capability designs and their validated K nodes are published together in the second with Design head equal to the first commit.",
       "candidate_class": "stage/done/evidence",
       "consequence": "high",
       "disposition": "projected",
@@ -629,7 +629,7 @@
     {
       "id": "judgment-points-004",
       "source": "intent.judgment_points[3]",
-      "text": "Decide which domain knowledge belongs in the always-read capability document and how many owner-adjacent K nodes deeper reusable evidence requires.",
+      "text": "Choose the nearest semantic owner document for each domain body, keep concise always-needed knowledge there, and decide how many owner-adjacent K nodes deeper reusable evidence requires.",
       "candidate_class": "judgment/body",
       "consequence": "low",
       "disposition": "projected",

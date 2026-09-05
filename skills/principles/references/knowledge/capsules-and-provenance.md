@@ -2,23 +2,23 @@
 
 ## Domain knowledge capsules
 
-The capability document is the map that is always read; a capsule is a jar holding one
-topic, opened only when needed. Measured basis: one real brownfield capability's domain
+The owner document is the map that is always read; a K node, called a capsule by the tool,
+is a jar holding one topic, opened only when needed. Measured basis: one real brownfield capability's domain
 source ran to 3,699 lines — pressed into a 185-line vessel as summary, what survives is
 confidence, not understanding.
 
-- The root path is `.devflow/project/capabilities/<number>-<name suffix>/K-<three digits, zero-padded>-<topic slug>.md`.
-  The folder name equals the same-numbered capability document's filename without `.md`. A
-  child capsule lives in its parent's same-stem folder. K numbers are immutable and unique
-  across the whole subtree under the capability's folder, not merely the immediate folder.
-  A capability without capsules is the default —
-  capsules exist only when knowledge overflows the capability document budget. On a
-  capability rename the capsule folder follows the new name in the same capability design
-  commit.
+- A K node lives under its owner document's same-stem folder:
+  `<owner path without .md>/K-<three digits, zero-padded>-<topic slug>.md`. Canonical owner
+  documents are `.devflow/project/product.md`, `arch.md`, `design.md`, and
+  `capabilities/<number>-<name>.md`; choose the nearest semantic owner. A child node lives in
+  its parent's same-stem folder. K numbers are immutable and unique across the owner's whole
+  subtree. An owner without K is the default — K exists only when knowledge overflows the
+  owner document's budget. On a capability rename, its folder follows the new name in the
+  same capability design commit.
 - The first two lines are prose and the third is blank. Line one is
   `# <what it is> · <when to open it>`, line two is
   `about: <the words a searcher would use that are not already in line one>`, and the body
-  starts on line four. The capability number and the topic are already in the path, so they
+  starts on line four. The owner identity and topic are already in the path, so they
   drop out of the first two lines. When the first two lines match this form, consumers open
   the body. When the shape differs, report the format anomaly in one line.
   The words in `about:` come first from that project's `glossary.md` — the words a project
@@ -54,14 +54,12 @@ confidence, not understanding.
 - The authoring cap is soft at 120 lines per capsule — exceeding it never blocks the write;
   the writer reports it, and a split that would tear meaning apart is not made — the capsule
   stays with its reason.
-- Capsules are owned by the same number's design-zone writer: Adopt only inside the initial
-  unmanaged projection, otherwise Arch. They always ride that writer's confirmation bundle
-  and the same commit as their capability document. Initial Adopt writes the owner documents,
-  then writes and validates their capsules, and lands both in `adopt — capabilities`.
-  Every managed Arch refresh likewise lands both in `arch — capabilities`.
-  Verify never writes capsules. The human deletion exception matches the capability
-  document's.
-- Capsules and the capability document are a derived account of the source documents, not
+- K nodes are written by the design-zone writer: Adopt only inside the initial unmanaged
+  projection, otherwise Arch. They ride the same confirmation bundle and commit as their
+  owner document: a Layer 0 owner's K in that owner's Layer 0 commit, and a capability's K
+  in `adopt — capabilities` or `arch — capabilities`. Verify never writes K. The human
+  deletion exception matches the owner document's.
+- K nodes and the owner document are a derived account of the source documents, not
   their owner. Skills never delete, move, or edit the source documents a capsule was
   processed from — disposition is always a person's act.
 
@@ -99,8 +97,8 @@ one closed head. There is no marking quota — a faithful capsule with zero mark
     with its own coordinate; interpretation candidates (such as "these may be different
     scenes") may be noted, but no resolution. Two distinct coordinates are required; missing
     either is a format anomaly. A dispute is itself an item for a person to decide; before
-    that decision no arm is cited as settled fact. C numbers are immutable and never reused
-    within a capability.
+  that decision no arm is cited as settled fact. C numbers are immutable and never reused
+  within one owner document's K subtree.
 - Source silence is written as a sentence, not a mark — "the source does not specify the
   mechanism" is a settled statement about the source. Marks carry only the three
   distinctions accurate prose cannot: a synthesized sentence looks identical to a quoted
@@ -114,7 +112,8 @@ one closed head. There is no marking quota — a faithful capsule with zero mark
 
 The contract for the form is not a checker but the two capsules below. The first uses all four
 words; the second uses two — what "write only the ones that apply" means is visible in the
-second. In both, most sentences are unmarked.
+second. In both, most sentences are unmarked. Both examples are capability-owned; a
+Product-owned node has the identical form at `.devflow/project/product/K-001-<topic>.md`.
 
 **One — `.devflow/project/capabilities/04-settlement/K-002-payout-hold.md`**
 

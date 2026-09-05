@@ -13,19 +13,18 @@
 - Arch first lands every user-confirmed managed Layer 0 document, then calculates Design
   head. It derives every changed design zone in memory and presents them as one batch;
   change no capability-document path before the user confirms that batch. After confirmation,
-  a commit containing capability documents only, `arch — capabilities`, is the last commit
-  of that run. Deleting the one routed line a
+  land the batch through [Capability-design commit](../delivery/commit-and-verification.md#commit-discipline),
+  including those capability documents and their K nodes; it is the last commit of that run.
+  Deleting the one routed line a
   design-only entry consumes — a `capability note` design line or a `design open item` line —
   is the single exception that rides that commit; no
-  other journal change does. When no bytes change, ask no
+  other journal change does. When no capability-document or K-node bytes change, ask no
   confirmation question and make no commit. It is a binding decision
   on the integration branch.
 - Adopt is the bounded initial-unmanaged exception. It derives the complete approved Layer 0,
-  capability design zones, and knowledge capsules in memory under one confirmation. It first
-  stages only Layer 0 and any follow-on record, writes `product.md` last, and commits
-  `adopt — layer 0`. It then calculates the canonical Design head from that commit, writes the
-  capability documents carrying that value, writes and validates their capsules beside those
-  owners, stages only those documents and capsules, and commits `adopt — capabilities`.
+  capability design zones, and every owner's K nodes in memory under one confirmation. It
+  lands them through [Initial-adoption commits](../delivery/commit-and-verification.md#commit-discipline);
+  each K node rides its owner document's commit.
   Architecture `Existing records` in the first commit preserves every source coordinate,
   authority, disposition, and landing owner needed to rederive that second boundary from source.
   There is no managed-state Adopt recovery path. A later explicit Adopt ignores partial bytes,
@@ -37,7 +36,8 @@
   baseline-missing state is recovered by Resume routing to Arch; it never reopens Adopt.
 - An uncommitted diff from a post-confirmation interrupted write is a capability-design
   commit prefix only when it touches current and final expected capability-document paths
-  alone (a rename may delete the old same-numbered path and add the final path). In a
+  and their same-stem K paths alone (a rename may delete the old same-numbered path and add
+  the final path). In a
   design-only entry, `.devflow/journal.md` is the one exception only when its working bytes
   equal HEAD with exactly one byte-identical occurrence of the routed design line removed.
   It preserves each number-matched existing file's HEAD verified zone, gives each new file the initial

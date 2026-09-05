@@ -21,11 +21,11 @@
   "outputs": [
     "A proposal that gives every maintained source one explicit disposition and includes capability candidates, one representative executable flow per code-backed candidate, exact documentary bases for document-derived candidates, reconciled claims, derived Layer 0, applicable Design, capability zones, the complete K-node landing plan, and any whole follow-on request that must survive the adoption boundary.",
     "After approval, canonical product.md, arch.md, applicable design.md, code-style.md, glossary.md, capability design documents, and every required owner-adjacent K node.",
-    "Two ordered commits under the one approval: `adopt — layer 0` contains complete Layer 0 and any idempotent follow-on record with product.md written last; `adopt — capabilities` contains capability documents whose Design head is the first commit plus every required validated K node beside its owner."
+    "Two ordered commits under the one approval: `adopt — layer 0` contains complete Layer 0, any idempotent follow-on record, and validated K nodes beside Product, Architecture, and Design, with product.md written last among owner documents; `adopt — capabilities` contains capability documents whose Design head is the first commit plus their validated K nodes."
   ],
   "irreversible_boundaries": [
     "The owner's confirmation binds the complete proposed Layer 0, capability, and knowledge write set.",
-    "The approved projection lands through two ordered boundaries: product.md is the last write before the Layer 0 commit, then capability documents use that landed commit as Design head and their K nodes validate beside them; interruption remains unmanaged only while no current .devflow root or indexed path exists, current evidence returns recovery to canonical state, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery."
+    "The approved projection lands through two ordered boundaries: product.md is the last Layer 0 owner-document write, then those owners' K nodes validate before the Layer 0 commit; capability documents use that landed commit as Design head and their K nodes validate before the capability commit. Interruption remains unmanaged only while no current .devflow root or indexed path exists, current evidence returns recovery to canonical state, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery."
   ],
   "state_dependent_behaviors": [
     "Explicit Adopt consumes setup.unmanaged directly; it does not invoke Principles as a preflight and does not ask Resume to reinterpret that route.",
@@ -40,7 +40,7 @@
   ],
   "external_dependencies": [
     "The read-only project-state snapshot for kernel validity, route, and the single non-devflow material observation.",
-    "Git for exact source coordinates, history evidence, the first Layer 0 boundary, and the capability-and-knowledge boundary whose Design head names the first.",
+    "Git for exact source coordinates, history evidence, the Layer 0 owner-and-K boundary, and the capability owner-and-K boundary whose Design head names the first.",
     "Product as the no-material destination and Resume as the owner of managed or active-operation states.",
     "Arch, Direct, Work, and Resume as readers of the canonical artifacts; none is automatically invoked on completion."
   ],
@@ -49,14 +49,14 @@
     "Every code-backed capability candidate has one representative executable flow with exact coordinates; every document-derived candidate without executable code cites its exact maintained documentary basis and marks the flow not applicable.",
     "Every proposal claim identifies executable or documentary evidence, contradiction, inference, and confidence.",
     "The owner sees and confirms the complete write set only after irreducible questions are resolved and one bounded clean-context semantic refutation is judged clear and records no blocking contradiction or omission in Evidence verification.",
-    "Complete Layer 0 is published in the first confirmed commit; all capability designs and their validated K nodes are published together in the second with Design head equal to the first commit.",
+    "Complete Layer 0 and its validated Product, Architecture, and Design K nodes are published in the first confirmed commit; all capability designs and their validated K nodes are published together in the second with Design head equal to the first commit.",
     "A final report names committed artifacts and preserves unknown or unverified items without claiming completion."
   ],
   "judgment_points": [
     "Classify sources as implemented/current material, binding plans, exploratory research, superseded records, or unresolved conflicts. Judge authority from document-internal status and actual code, test, and operational evidence; use path/name context, Git history when available, and last-modified time only as corroborating clues. Resolve evidence-supported discrepancies with exact provenance, and ask with conflicting coordinates plus the exact decision only when current product intent remains genuinely undecidable.",
     "Choose capability boundaries from entrypoints, top-level modules, service boundaries, and maintained domain documents; documentation may establish a candidate even when no executable code exists.",
     "Distinguish discoverable facts from irreducible owner decisions and contradictions.",
-    "Decide which domain knowledge belongs in the always-read capability document and how many owner-adjacent K nodes deeper reusable evidence requires.",
+    "Choose the nearest semantic owner document for each domain body, keep concise always-needed knowledge there, and decide how many owner-adjacent K nodes deeper reusable evidence requires.",
     "Preserve explicit uncertainty and confidence instead of inventing generic architecture or product decisions."
   ],
   "deterministic_helpers": [

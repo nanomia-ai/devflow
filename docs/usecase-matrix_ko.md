@@ -604,7 +604,7 @@ verify 접두가 아니라 arch로 돌아가는지, (d) 기존 방을 이름 대
 사용자가 devflow:adopt를 직접 지목한다.
 ```
 
-**정합(정적 계약)·실행 미검증** (2026-09-03 v0.21.0, DD-97). 상태 도구만
+**정합(정적 계약)·실행 미검증** (2026-09-05 v0.23.9, DD-97 소유자 경계 정정). 상태 도구만
 `setup.unmanaged`를 증명하고, 명시 Adopt는 Principles나 Resume의 사전 분류 없이 그 상태를
 직접 소비한다. SessionStart는 `.devflow/project/product.md`가 없으면 침묵하므로 빈 `.devflow/`
 폴더만으로 Resume 안내가 살아나지 않는다. 정본 상태는 현재 `.devflow` 루트가 있거나 현재 index에
@@ -618,18 +618,19 @@ Adopt는 모든 유지 구현·테스트·API·스키마·설정·문서·명세
 유지 도메인 문서에만 존재하는 후보는 그 출처를 드러내되 실행 증거를 지어내지 않는다. 그 증거로
 Product, Architecture, 해당 시 Design, code style, glossary, 능력 설계 구역과
 깊은 영속 지식에 필요한 모든 소유자 인접 K를 한 제안으로 역산한다. K가 0개라면 모든 유지 도메인
-자료가 다른 정본 소유자에 완전히 착지했음을 보여야 한다. `Brownfield`는 도입 전 실행 구현의
+자료가 다른 정본 소유자 문서에 완전히 착지했음을 보여야 한다. `Brownfield`는 도입 전 실행 구현의
 존재만 기록하므로 문서 전용 프로젝트는 `no`다. 사람이 답할 것은 증거로 닫히지 않는 결정과
-모순뿐이다. 구속 질문 전에는 전체 초안·처분·load-bearing 좌표·공용 능력/캡슐 계약·Arch
+모순뿐이다. 구속 질문 전에는 전체 초안·처분·load-bearing 좌표·Adopt 5단계가 연 동일 공통 기준선·지식 절·Arch
 verification-channel 표의 Surface/Required channel 열과 첫 proposal·ADR 조건만 받은 clean context가
 한 번 의미를 반증한다. 실제 wrong
-action, 결정/기각 방향 소실, wrong owner, verification means 누락을 만드는 뒷받침된 모순·누락만
+action, 결정/기각 방향 소실, wrong owner, verification means 누락, 연 절에서 벗어난 문서 구조를 만드는 뒷받침된 모순·누락만
 막고, 수정은 한 번과 반환 좌표 재검사로 끝낸다. Missing-channel action 열·producer transcript·이전
 audit 결론·그 밖의 Arch 실행/검증-run/승인/쓰기/commit 지시는 입력하지 않는다. 반증 판단 상태 중
 clear만 구속 질문과 승인 쓰기에 도달하며 blocking이나 unavailable은 제안 앞에서 멈춘다. Product `C<n>`과
-disk `NN`은 명시적으로 다른 좌표다. 구속 확인 전 쓰기 0, 거절·승인 전 중단 시 쓰기 0이다. 승인 하나 아래 Layer 0·후속
-요청을 `product.md` 마지막의 `adopt — layer 0`으로 먼저 착지시키고, 그 커밋을 Design head로 쓴
-능력 문서와 검증한 K를 `adopt — capabilities`로 함께 착지시킨 뒤 자동 Product·Arch·Design·Direct·
+disk `NN`은 명시적으로 다른 좌표다. 구속 확인 전 쓰기 0, 거절·승인 전 중단 시 쓰기 0이다. 승인 하나 아래 후속
+요청, Layer 0 소유자 문서(`product.md`가 문서 중 마지막), Product·Architecture·Design 소유 K를 쓰고 검증해
+`adopt — layer 0`으로 먼저 착지시킨다. 그 커밋을 Design head로 쓴 능력 문서와 능력 소유 K를 쓰고 검증해
+`adopt — capabilities`로 함께 착지시킨 뒤 자동 Product·Arch·Design·Direct·
 Resume 선택은 0이다. 중단 시 현재 `.devflow` 루트와 index가 모두 없을 때만 무관리 재도출하고,
 현재 증거가 생긴 뒤에는 정본 상태가 복구를 소유한다. `product.md` 쓰기와 첫 커밋 사이에는
 `setup.layer0-uncommitted`가 marker보다 먼저 서고 Product와 Direct 직접 진입도 선택 route와 별개로
@@ -639,13 +640,14 @@ Resume 선택은 0이다. 중단 시 현재 `.devflow` 루트와 index가 모두
 기존 Resume→Arch 기준선 누락 복구다. 관리 상태의 설계 마커와 기준선 갱신은 Adopt를 재개하지 않고
 Arch가 소유한다. 검증 시 확인할 것: (a) Codex와 Claude가 같은 직접 호출에서 첫 실행을 Adopt로
 고르는지, (b) 빈 `.devflow/`나 Product 질문 없이 실제 조사에 들어가는지, (c) 문서가 방대할 때
-모든 유지 자료가 처분되고 glossary와 능력/K가 이후 차가운 유지보수 세션에 충분한지, (d) 관리
+모든 유지 자료가 처분되고 Product·Architecture·Design·Capability 소유자 모양의 문서/K tree와
+`project --under` 색인이 이후 차가운 유지보수 세션에 충분한지, (d) 관리
 상태 설계·기준선·지식 경로에 순환이 0인지와 Arch가 과거 `adopt`·현재 `arch` writer를 모두
 출처 그대로 처리하면서 미선택 마커를 보존하는지, (e) 후속 작업이 함께 요청되면 도입 커밋
 경계에서 전체 요청이 보존되는지, (f) 문서 내부 상태·코드/테스트/운영 증거·경로·Git 이력·수정
 시각을 함께 써서 구현/기획/리서치/대체 기록을 구분하되 이름이나 시각만으로 권위를 정하지 않고,
-증거로 닫히지 않는 현재 의도 충돌만 정확한 좌표와 질문으로 사람에게 보내는지, (g) 두 커밋 직후
-능력 문서의 Design head가 현재 값과 일치하는지, (h) 반증 입력·차단 기준·한 번 수정/좌표 재검사·
+증거로 닫히지 않는 현재 의도 충돌만 정확한 좌표와 질문으로 사람에게 보내는지, (g) 두 커밋의 K가
+각 소유자 문서 경계와 함께 착지하고 능력 문서의 Design head가 현재 값과 일치하는지, (h) 반증 입력·차단 기준·한 번 수정/좌표 재검사·
 Evidence verification 기록이 지켜지고 finding이 남으면 구속 질문이 나오지 않는지.
 사용자가 새 설치 뒤 테스트 브랜치에서 직접 확인하기로 했으므로 이 실제 행동은 **미검증**이다.
 
