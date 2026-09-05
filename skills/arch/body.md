@@ -78,7 +78,7 @@ Why: A confirmed localized statement should refresh one design zone without reop
 
 ## stage: knowledge-landing
 
-Judgment: landing.mode is compact, recursive, partial-compact, partial-recursive, or multi-mixed. Choose compact when the conclusion stays understandable in its named owner; choose recursive only for depth or reuse, and select only owners that can be completed in this boundary.
+Judgment: landing.mode is compact, recursive, partial-compact, partial-recursive, or multi-mixed. Choose recursive or partial-recursive when the knowledge unit needs independent depth or reuse, or when an existing K already owns it. Choose compact or partial-compact only when the conclusion stays understandable in its named owner and no existing K owns that knowledge unit; use multi-mixed when selected owners require both, and select only owners that can be completed in this boundary.
 
 The stage is complete as soon as no valid knowledge marker remains. Treat `writer=adopt` as legacy provenance and `writer=arch` as current provenance; both land here, including mixed sets, and neither is routed back to Resume. Invalid or unsupported markers remain canonical integrity failures rather than a writer-based residual branch.
 

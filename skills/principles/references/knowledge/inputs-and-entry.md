@@ -8,10 +8,8 @@
   paragraphs or code contract bodies.
 - A capsule's input is the HEAD capsule for byte stability, the source documents the user
   named together with their revision, and current code at the points needing confirmation.
-  Never invent a capsule without a source — greenfield knowledge lives in the capability
-  document until it overflows that budget.
-- The foundation records only shared contracts and boundaries named by arch.md. Do not copy
-  coding style, verify-channel details, or universal rules.
+  Never invent a capsule without a source; decide whether sourced knowledge remains in the
+  owner document or K under the shared capsule contract.
 - Foundation has no capability-layer verification closure, so its initial verified scaffold
   remains unchanged. Invent no verification event for foundation. Shared code the foundation
   owns lies inside the capability code scope of every capability that uses it, so it is

@@ -15,6 +15,25 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.10 — 2026-09-06 — Cohesive knowledge lands at one exact current locus
+
+Principles now defines one K by the readers who need its content together and the reason it changes,
+so length, headings, and keyword similarity no longer masquerade as split boundaries. Concise direction
+still stays in the nearest Product, Architecture, Design, or Capability owner, while independently read
+and revised depth remains in that owner's same-stem recursive K tree.
+
+Adopt now carries each knowledge unit from source inventory to one exact owner-document or
+planned-K target, exposes that mapping and the Foundation content boundary to its existing clean-context
+refutation, and blocks omitted, scattered, or duplicated current landings. Arch uses the owner-bounded
+projection to find and refresh an existing K, takes a new number only for a new unit, and preserves
+still-valid source basis;
+no new stage, document layer, registry, state, marker, classifier, validator, or index was added. Arch's
+source fixture now matches its already-current 160-atom obligation ledger instead of the stale count 158.
+
+Principles, Adopt, and Arch were rebuilt and passed full structural lint and their 200-repeat deterministic
+evaluations; focused source fixtures and Adopt project simulations also pass. Fresh-model document quality,
+the full repository suite, Gate B, installation, and real-use regeneration remain for final verification.
+
 ## 0.23.9 — 2026-09-05 — Knowledge follows its semantic owner
 
 Principles now gives every Product, Architecture, Design, and Capability document the same owner-shaped

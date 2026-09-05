@@ -300,6 +300,7 @@ new concepts; add a row in the same change that coins a canonical term.
 | compatible feedback pending | compatible feedback pending | | semantic landing | semantic landing |
 | Product-local capability identifier | Product C<n> <name> | | provider capability number | provider disk NN |
 | bounded semantic challenge | semantic refutation | | committed Layer 0 anchor | committed Product boundary |
+| knowledge unit | knowledge unit | | | |
 
 A hypothesis is the trust state of a capability knowledge baseline, not the verification
 result `unverified`. The artifact's full name is `capability document` and its only short

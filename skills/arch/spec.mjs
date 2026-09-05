@@ -270,7 +270,7 @@ export const DECLARATIONS = {
   atomicLanding: { value: "Selected marker deletion, owner or K write, and the matching boundary commit form one effect plan; partial multi-owner landing preserves every unconsumed marker.", consumer: "stage:knowledge-landing" },
   legacySchemas: { value: "The exact Layer 0, capability-document design-zone, verification scaffold, provisional, ADR, and channel-evidence shapes are template-owned and are not reconstructed from the atom ledger.", consumer: "templates" },
   workflowOrder: { value: "Entry and prerequisites precede components, candidate-survival research, stack and derived decisions, code structure, verify channel, report, explicit approval, Layer 0 commit, capability design, and final routing.", consumer: "stages" },
-  migrationEvidence: { value: "Each of the 158 imported atoms resolves to a behavioral source locator and an executing fixture; legacy provenance files are never used as behavioral evidence.", consumer: "migration:obligation-ledger" }
+  migrationEvidence: { value: "Each of the 160 imported atoms resolves to a behavioral source locator and an executing fixture; legacy provenance files are never used as behavioral evidence.", consumer: "migration:obligation-ledger" }
 };
 
 export const DEFERRED = [];

@@ -2,19 +2,24 @@
 
 ## Domain knowledge capsules
 
-The owner document is the map that is always read; a K node, called a capsule by the tool,
-is a jar holding one topic, opened only when needed. Measured basis: one real brownfield capability's domain
-source ran to 3,699 lines — pressed into a 185-line vessel as summary, what survives is
-confidence, not understanding.
+The owner document is the map that is always read. A K node, called a capsule by the
+tool, keeps one knowledge unit that the map should not carry: current material its readers
+need together and would revise for the same reason. Split that knowledge unit only at an
+independent reading and change boundary; length, headings, and keyword similarity do not
+define the boundary. A knowledge unit keeps one current locus: when an existing K owns it,
+every refresh updates that K at its existing path instead of moving or duplicating it. Measured basis: one real brownfield capability's domain source ran to
+3,699 lines — pressed into a 185-line vessel as summary, what survives is confidence, not
+understanding.
 
 - A K node lives under its owner document's same-stem folder:
   `<owner path without .md>/K-<three digits, zero-padded>-<topic slug>.md`. Canonical owner
   documents are `.devflow/project/product.md`, `arch.md`, `design.md`, and
-  `capabilities/<number>-<name>.md`; choose the nearest semantic owner. A child node lives in
-  its parent's same-stem folder. K numbers are immutable and unique across the owner's whole
-  subtree. An owner without K is the default — K exists only when knowledge overflows the
-  owner document's budget. On a capability rename, its folder follows the new name in the
-  same capability design commit.
+  `capabilities/<number>-<name>.md`; choose the nearest semantic owner — the document whose
+  governing question the knowledge unit answers and whose readers need that answer. A child node lives
+  in its parent's same-stem folder. K numbers are immutable and unique across the owner's
+  whole subtree. An owner without K is the default; create K for a knowledge unit with its own reader
+  and change reason, or when that knowledge would overflow the always-read map. On a capability
+  rename, its folder follows the new name in the same capability design commit.
 - The first two lines are prose and the third is blank. Line one is
   `# <what it is> · <when to open it>`, line two is
   `about: <the words a searcher would use that are not already in line one>`, and the body
@@ -53,7 +58,9 @@ confidence, not understanding.
   Anything that does not reopen an exact place for a person is not a coordinate.
 - The authoring cap is soft at 120 lines per capsule — exceeding it never blocks the write;
   the writer reports it, and a split that would tear meaning apart is not made — the capsule
-  stays with its reason.
+  stays with its reason. For example, a maintained normative document with one reading and
+  change boundary remains one K past the cap; a subsection becomes a child only when it gains
+  its own boundary.
 - K nodes are written by the design-zone writer: Adopt only inside the initial unmanaged
   projection, otherwise Arch. They ride the same confirmation bundle and commit as their
   owner document: a Layer 0 owner's K in that owner's Layer 0 commit, and a capability's K

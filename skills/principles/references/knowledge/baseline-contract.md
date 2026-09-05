@@ -12,7 +12,9 @@ knowledge baselines are always on; there is no per-project switch.
 - There is one baseline per depth-1 tree unit. The foundation uses
   `.devflow/project/capabilities/01-foundation.md`; a capability uses
   `.devflow/project/capabilities/NN-<capability-name>.md`. Only `.md` files directly
-  below that folder are baselines; deeper paths are not.
+  below that folder are baselines; deeper paths are not. The foundation records only shared
+  contracts and boundaries named by arch.md; it does not copy coding style, verify-channel
+  details, or universal rules.
 - The foundation number is `01`. A capability uses the number on a same-numbered tree
   folder, waiting file, or existing baseline when one exists. Different numbers claimed by
   two or more of those paths are a format anomaly. When no disk path has a number yet,

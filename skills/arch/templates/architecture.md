@@ -20,6 +20,7 @@ Brownfield: {{brownfield}}
 
 ## Existing records
 
+<!-- one row per knowledge unit or supporting group: coordinates — authority — disposition — exact owner document/K path or disposition evidence/reason -->
 {{existingRecords}}
 
 ## Provisional

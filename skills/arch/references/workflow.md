@@ -4,7 +4,7 @@
 
 Take the canonical sibling state result as it stands. An absent product with no implementation routes to Product; existing implementation without a managed product definition routes to Resume for recovery, while direct Adopt remains the initial unmanaged reconstruction entry. Once the project is managed, design markers and baseline refresh routes remain in arch. Open Git operations and integrity failures stop before normal effects. Unrelated canonical routes return to resume.
 
-For initial or refresh planning, open the planning-evidence row selected through the shared policy index before deciding, then read product and glossary completely. Read existing architecture, code-style, journal, and direct legacy ADRs when present. For capability work, open the capability baseline or knowledge capsule row from that index before deciding. Omit its knowledge-overflow topic until an actual named source is processed or the design-zone budget is about to overflow; uncertainty opens the whole contract.
+For initial or refresh planning, open the planning-evidence row selected through the shared policy index before deciding, then read product and glossary completely. Read existing architecture, code-style, journal, and direct legacy ADRs when present. For capability work, open the capability baseline row before deciding. Before choosing a knowledge-landing mode, open the opening/selection row and use its owner-bounded projection to find any existing K. Open the knowledge capsule row when an actual named source is processed or the design-zone budget is about to overflow; uncertainty opens that row.
 
 ## Interview and research
 
@@ -44,7 +44,7 @@ Write integration as a bare branch name, never a description. With one worktree,
 
 When Layer 0 is confirmed, report the expected document count before generation. A context warning ends the run at that commit with no partial capability output and routes the next unclaimed session through resume.
 
-For a managed project, generate the foundation plus every non-retired product capability using the disk-first number and name rules. Rederive the entire expected design set from confirmed product, architecture, glossary, and only currently cited ADRs. Preserve an existing valid verified zone byte-for-byte; a new document receives the empty scaffold in the capability template. Process a named source into K only when the design budget requires it; K rides the same confirmed capability-design commit.
+For a managed project, generate the foundation plus every non-retired product capability using the disk-first number and name rules. Rederive the entire expected design set from confirmed product, architecture, glossary, and only currently cited ADRs. Preserve an existing valid verified zone byte-for-byte; a new document receives the empty scaffold in the capability template. Process a named source into K under the shared capsule contract; K rides the same confirmed capability-design commit.
 
 A design note or design open item updates only its named capability design zone and deletes the exact routed line in that same binding commit. The note's anchor is the supplied snapshot basis; an open item's confirmed statement is its basis and its card is only the confirmation location.
 

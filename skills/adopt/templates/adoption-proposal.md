@@ -1,6 +1,7 @@
 # Brownfield adoption proposal
 
-## Source inventory
+## Source-to-owner landing
+<!-- one row per knowledge unit or supporting group: coordinates — authority — disposition — exact owner document/planned K path or disposition evidence/reason -->
 {{sourceInventory}}
 
 ## Capability candidates

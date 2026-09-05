@@ -598,7 +598,7 @@ observed — what is restored then is not the table but **a callable path**.
 
 ### DD-92 · Principles entry is state-free, resume owns state, and knowledge/work trees and P2 packages keep separate boundaries (v0.20.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.20.0 | State: active, partly corrected by DD-93 (v0.20.0), DD-97 (v0.21.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.20.0 | State: active, partly corrected by DD-93 (v0.20.0), DD-97 (v0.21.0), DD-103 (v0.23.10)
 
 Observed problem: if the rulebook recomputes entry state or a hook injects it, it can disagree with resume; if one capability-number structure represents both knowledge and work, research and multi-owner knowledge can disappear. A manual index or central registry makes a second home for new facts, while missing package provenance makes it impossible to verify what a deploy artifact executes.
 
@@ -1703,7 +1703,7 @@ produces a loss or double-plan that these rules do not classify.
 
 ### DD-76 · Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute (v0.18.1)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2), DD-92 (v0.20.0), DD-97 (v0.21.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2), DD-92 (v0.20.0), DD-97 (v0.21.0), DD-103 (v0.23.10)
 
 Observed problem: one capability's domain source in a real brownfield (jgnote property) ran
 to 3,699 lines — pressed as summary into a 185-line capability document, knowledge is lost;
@@ -1947,6 +1947,57 @@ resume, split, and work pairs; project-state and focused invariant tests.
 Revisit when: a real-use exact-term lookup misses a relevant capability, over-tagging misleads
 entry, or the marker fails to guard glossary/header consistency across an interrupted writer.
 
+### DD-103 · A K boundary is one knowledge unit read together and revised for one reason; Adopt lands that knowledge unit at its exact canonical locus (v0.23.10)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.23.10 | State: active
+
+Observed problem: v0.23.9's first-project judgment, document-creation flow, and pre-approval
+clean-context refutation worked in real use, but the proposed tree and generated documents scattered
+verification and constraint knowledge that must be maintained together, diluting its central purpose.
+The current canon required source dispositions and a broad owner, yet also described K as one topic or
+owner-document overflow, leaving length, headings, or keyword similarity to be mistaken for a semantic
+boundary. Adopt had no exact landing path connecting each detailed knowledge unit in its inventory to
+the planned K list, and the Foundation content boundary was outside the refuter's read set. During
+managed refresh, an instruction to take the next K number even for an existing concept also conflicted
+with DD-77's replace-in-place rule.
+
+Chosen boundary: one K keeps one current knowledge unit whose readers need it together and would revise
+it for the same reason. A child is created only where both an independent reader and change boundary
+exist, never merely for length, headings, or keywords. Concise direction that is always needed stays in
+the nearest Product, Architecture, Design, or Capability owner document, selected by the governing
+question the knowledge unit answers and the readers who need that answer; depth with its own reading and change
+reason lives in that owner's same-stem recursive K. The 120-line value remains a soft reporting line,
+not grounds to tear a cohesive norm apart.
+
+Adopt inventories knowledge units and supporting evidence groups, attaching every unit to
+the exact current owner document or planned K path. One source may support several knowledge units, but one knowledge unit
+is neither scattered nor duplicated across current canonical targets. The proposal and clean-context
+refutation both read this unit-to-target mapping and the Foundation shared-contract-and-boundary scope,
+treating an omitted required landing or a scattered or duplicated current target as a blocking defect
+alongside wrong ownership. Arch uses the owner-bounded projection to find any existing K, replaces an
+existing unit at that path, takes the next unused number only for a new unit, and adds current evidence
+while preserving still-valid `Source basis`.
+Removing a basis requires a current replacement reason or reconfirmation against source. Approval,
+commit, and verification boundaries and v0.23.9's same-stem owner shape do not change.
+
+Rejected-lineage rebuttal: DD-76's capsules own current normative depth as well as evidence, so no
+intermediate document layer is needed. DR-14's central registration field, DR-17's free links, and
+DR-30's new working-note layer still create a second home or unbounded discovery; their rejection
+grounds stand. A claim graph, custody registry, fingerprint, or new classifier, validator, or index is
+rejected for the same reason. Updating an existing K in place strengthens rather than overturns
+DD-77's current-locus replacement rule.
+
+Affected coordinates: Principles K cohesion, ownership, and Foundation boundary; Adopt inventory,
+proposal, refutation inputs, and Architecture output; Arch knowledge landing and Architecture output;
+DD-76, DD-92, DD-97, and DD-102; matrix §3.18 and §3.24; P2 projections and release records. Product,
+Design, Direct, Work, Verify, and Resume stage roles, the state tool, and any new stage, marker, registry,
+validator, or index remain unchanged.
+
+Revisit when an artifact that passed unit-to-target mapping and refutation again scatters one current
+knowledge unit across owners, when an existing-K refresh creates a second path for the same unit, or
+when independently consumed and changed units remain coupled in one K and repeatedly cause needless
+opening or simultaneous revision.
+
 ### Rejected under this subject
 
 - **[DR-01 · v0.7.0]** **Mid-task handoff document** — hands over a half-truth.
@@ -2071,7 +2122,7 @@ Nothing has been rejected under this subject yet.
 
 ### DD-97 · Explicit Adopt reconstructs an unmanaged brownfield once; managed technical refresh belongs to Arch (v0.21.0)
 
-Subject: Brownfield and entry | Introduced: v0.21.0 | State: active, partly corrected by DD-101 (v0.23.7)
+Subject: Brownfield and entry | Introduced: v0.21.0 | State: active, partly corrected by DD-101 (v0.23.7), DD-103 (v0.23.10)
 
 Observed problem: three clean existing-code worktrees invoked Adopt explicitly, yet the installed
 entry text told Codex to enter Principles first and Adopt did not accept the state tool's
@@ -2192,7 +2243,7 @@ an adopted capability's stored Design head differs immediately after the two app
 
 ### DD-102 · One bounded clean-context semantic refutation precedes Adopt's binding question (v0.23.7)
 
-Subject: Brownfield and entry | Introduced: v0.23.7 | State: active
+Subject: Brownfield and entry | Introduced: v0.23.7 | State: active, partly corrected by DD-103 (v0.23.10)
 
 Observed problem: the Adopt proposal had an `Evidence verification` section immediately before
 binding confirmation, but current canon did not say what was checked, by whom, or what passed. The
