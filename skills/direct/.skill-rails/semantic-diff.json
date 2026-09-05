@@ -1,8 +1,8 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:3b7301b1c3946b94aa74e9d1908a574c6d32903d55aafc4175a5b801d45261ea",
-    "after": "sha256:3b7301b1c3946b94aa74e9d1908a574c6d32903d55aafc4175a5b801d45261ea"
+    "before": "sha256:8b295f28157781f98e7e90399747cab17aafb983eb7d519928b58e140aaef5ee",
+    "after": "sha256:8b295f28157781f98e7e90399747cab17aafb983eb7d519928b58e140aaef5ee"
   },
   "changed": false,
   "any_changed": true,

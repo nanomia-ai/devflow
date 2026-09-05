@@ -1,23 +1,23 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:110640e78afc565ecac04b300657dffb052119e3881cc900fa46638a64e789ee",
-    "after": "sha256:900c7f5e978e34be10c1cd18428e0b3b28b923818e99b264e09bca2a665a32f4"
+    "before": "sha256:bef54c53cbb1fd8cdef35b9df03e76243ce218501349d91b52378077cf33e443",
+    "after": "sha256:bef54c53cbb1fd8cdef35b9df03e76243ce218501349d91b52378077cf33e443"
   },
-  "changed": true,
+  "changed": false,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": true,
-    "observation_source": false,
-    "context": true
+    "behavior_source": false,
+    "observation_source": true,
+    "context": false
   },
   "artifact_receipts": [
     {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:110640e78afc565ecac04b300657dffb052119e3881cc900fa46638a64e789ee",
-      "after_hash": "sha256:900c7f5e978e34be10c1cd18428e0b3b28b923818e99b264e09bca2a665a32f4",
-      "source": "behavior_source"
+      "kind": "collector",
+      "path": "collectors/index.mjs",
+      "before_hash": "sha256:db6c20955743ce8adde01fac13c581c8adb8954bb9c2e974f2de3df411a28eba",
+      "after_hash": "sha256:d5a0be32dbec974fa0dd069011ff5bed6e9909442a1f553d20de4fa6cb072e30",
+      "source": "observation_source"
     }
   ],
   "groups": {
@@ -28,48 +28,15 @@
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [
-      {
-        "id": "why: purpose",
-        "change": "modified",
-        "before": "sha256:81a0fce2f76dbe99b937d734f86d2bbddef7cf0b3691d1abb5056c172155a846",
-        "after": "sha256:03aa023c6ff686ef991d427292cabf4ca7ef0d23597dca0ffcc4f2afe314c6e4"
-      }
-    ],
+    "body": [],
     "references": [],
     "ownership": [],
     "artifacts": [],
     "roles": [],
-    "declarations": [
-      {
-        "id": "coverage-invocation-identity",
-        "change": "modified",
-        "before": {
-          "value": "Product is invoked only by direct Product invocation or explicit new-project/product-planning intent; generic devflow naming stays with Principles. It identifies the service problem, capability composition, boundary, and product artifact.",
-          "consumer": "migration:source-coverage"
-        },
-        "after": {
-          "value": "Product is invoked only by direct Product invocation or explicit new-project/product-planning intent. It identifies the service problem, capability composition, boundary, and product artifact.",
-          "consumer": "migration:source-coverage"
-        }
-      }
-    ],
+    "declarations": [],
     "deferred": []
   },
-  "change_id": "principles-entry-separation-0.23.1",
-  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
-  "impact": {
-    "body": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
-    "declarations": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    }
-  }
+  "change_id": "adopt-mainline-recovery-concurrent-boundary",
+  "intent": "Read the canonical concurrent uncommitted Layer 0 fact even when a higher-priority route is selected.",
+  "impact": {}
 }

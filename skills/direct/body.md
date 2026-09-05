@@ -10,6 +10,10 @@ Read `<skill-root>/../principles/references/policy-index.md` as this stage's sha
 
 Any unavailable project-state, filesystem, containment, Git, origin, scope, or approval observation is unknown rather than absent. Stop before associating a request with a card or writing planning state.
 
+## guard: uncommitted-layer0
+
+When canonical project-state observes current Product bytes without a committed Product boundary, return to Resume before any Direct planning effect. The owner must commit the exact approved Adopt boundary or discard it; Direct cannot make the draft current by appending a request, reusing research approval, or writing cards.
+
 ## guard: approved-project-research
 
 Only route a `00-project` research card to work when principles project-state reports effective approval for that exact numeric research card and exact origin. A pending, invalid, unrelated, or merely discovered card stays inside direct's ordinary proposal boundary.
@@ -37,4 +41,3 @@ Why: One request has one approval boundary even when its parent scopes land in s
 Judgment: `proposal.decision` is exactly approve, revise, cancel, or ask. Report the complete execution proposal before asking for approval. Approval applies to the whole origin-bound sibling bundle; revision keeps the boundary open, cancellation removes only that origin's drafts, request line, and layer-opening markers, and an approval-invalid card is repaired from the exact project-state reason before asking again. A `failure-routed` request keeps its exact Failure-history source and selected repair plan as the single route result; do not create a second request or choose another route. Approval freshness remains owned by principles and is never reconstructed from a direct-local literal parser. After the planning commit, report the exact approved card set, order, and parallelism as the Work handoff, then wait so a solo caller can choose one exact card through Resume or Work and an external coordinator can assign all approved paths without competing with an automatic claim.
 
 Why: A durable planning decision requires the user's explicit choice, card writes, one planning commit, and a later collected receipt proving that commit consumed the settled origin; the visible post-commit handoff connects planning to execution without making Direct an agent supervisor.
-

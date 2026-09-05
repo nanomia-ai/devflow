@@ -23,10 +23,22 @@
     "body": [],
     "references": [
       {
-        "id": "references/policy-index.md",
+        "id": "references/knowledge/baseline-contract.md",
         "change": "modified",
-        "before": "sha256:e4d94da3d3a56bac90cd25ce34fe1e085cd7eafe8c6ad4ce17d7b14587063cab",
-        "after": "sha256:af4e92c27f48eaf473e89c1643006a52b7c02657485ce8cb4430346de31f0bd6"
+        "before": "sha256:1d1f58c0ca68758ebd735d26882872cdf4f29038314df4fb6a521aed0684bb5b",
+        "after": "sha256:378382d74de5eaecc231a037e2d3581eac4f4b3b2ec6f768e1f8cf2394f381ec"
+      },
+      {
+        "id": "references/knowledge/opening-and-freshness.md",
+        "change": "modified",
+        "before": "sha256:4ece12f2a733c222b051cef5c7f3fab558bef0b70e6eb829b3f3607c9c902986",
+        "after": "sha256:89a97cbe8d828d901f706e74bfa9f1e7dd292f94beb77c7d6b062e737b4bde5e"
+      },
+      {
+        "id": "references/knowledge/relations-and-lifecycle.md",
+        "change": "modified",
+        "before": "sha256:5e37e8a6125db73862e770ed8c834f7e438644bed2b0c3482a4c621b6e7c479f",
+        "after": "sha256:ac079c644144538852126ea72530151322102ee42c77a8bc94f04dad2b9f2374"
       }
     ],
     "ownership": [],
@@ -35,14 +47,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "principles-entry-separation-audit-followup-0.23.1",
-  "intent": "Align the shared-policy timing and always-applicable row with the actual stage and role entry contracts.",
+  "change_id": "adopt-mainline-recovery-disk-coordinate-follow-up",
+  "intent": "Use one provider disk NN term at every capability-consumption coordinate and rebuild the complete current contract.",
   "impact": {
     "references": {
-      "total": 1,
+      "total": 3,
       "added": 0,
       "removed": 0,
-      "modified": 1
+      "modified": 3
     }
   }
 }

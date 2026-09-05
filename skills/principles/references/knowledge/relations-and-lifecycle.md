@@ -7,7 +7,7 @@
   points to its exact path.
 - Consumed contracts has exactly one row per `Consumed paths` member in the same canonical
   path order and no other row. With no path, the section is `None.` and the array is `[]`.
-  The row's other-capability number is the provider number to which arch.md's Code structure
+  The row's provider disk NN is the provider number to which arch.md's Code structure
   maps that exact path.
 - A consumed-path member matches a provider Scope path only when their strings are equal, or
   when it is below a folder Scope path that arch.md maps exactly to the provider.

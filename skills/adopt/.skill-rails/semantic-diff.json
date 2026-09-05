@@ -1,8 +1,8 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:ec093501eff0ead89e4a02315d14cbb409c436c1e07a86fb524a923ed2be4722",
-    "after": "sha256:ec093501eff0ead89e4a02315d14cbb409c436c1e07a86fb524a923ed2be4722"
+    "before": "sha256:73bedfbe600c02b2e5ce205f83fee057193c48ce35ebb6a31418eb15c1cca975",
+    "after": "sha256:73bedfbe600c02b2e5ce205f83fee057193c48ce35ebb6a31418eb15c1cca975"
   },
   "changed": false,
   "any_changed": true,
@@ -24,34 +24,21 @@
       {
         "id": "why: purpose",
         "change": "modified",
-        "before": "sha256:29c89417a54e242e3453030c6d27af8118242a7e078f82dce80f27ce9e50e24b",
-        "after": "sha256:99b13c147898d1f26fefb48752aee3eb0b915743286c16d649409b31bceea1b2"
+        "before": "sha256:99b13c147898d1f26fefb48752aee3eb0b915743286c16d649409b31bceea1b2",
+        "after": "sha256:e0d6aac97b24ec721fc35fd749f4884c0be0df8d32709b1d410cf53c93e00f90"
       }
     ],
-    "references": [
-      {
-        "id": "references/workflow.md",
-        "change": "modified",
-        "before": "sha256:17834f74380ce50fd934364925c85f01a339607b0289dddf1f2a92ff8b5b9027",
-        "after": "sha256:b0aed0cd92ce8433994566129f61ddd595664b8c151effa4d143d5b55727c7a8"
-      }
-    ],
+    "references": [],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "principles-entry-separation-0.23.1",
-  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
+  "change_id": "adopt-mainline-recovery-refutation-gate-follow-up",
+  "intent": "Expose the exact bounded sibling Arch dependency on Adopt's first-read surface and rebuild the complete current contract.",
   "impact": {
     "body": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
-    "references": {
       "total": 1,
       "added": 0,
       "removed": 0,

@@ -1,6 +1,6 @@
 export const SPEC = { version: "5", id: "product", profile: "single", imports: [] };
 export const OBSERVATIONS = {
-  "entry.state": { collector: "state.product-entry", domain: ["new", "existing", "brownfield-no-product", "unknown"] },
+  "entry.state": { collector: "state.product-entry", domain: ["new", "existing", "brownfield-no-product", "uncommitted-layer0", "unknown"] },
   "product.file": { collector: "state.product-file", domain: ["absent", "current", "unknown"] },
   "glossary.state": { collector: "state.glossary", domain: ["missing", "current", "unknown"] },
   "product.request": { collector: "state.product-request", domain: ["none", "product-re-run", "unknown"] },
@@ -30,7 +30,7 @@ export const STAGES = [
     "write-glossary": [["WRITE", { artifact: "glossary", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], "WAIT"],
     land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: ["compatible.owner", ".devflow/journal.md"] }], "ROUTE:resume"]
   }, body: "stage: compatible-feedback" },
-  { id: "orient", reads: ["entry.state"], acceptsUnknown: [], done: s => s.entry.state !== "brownfield-no-product", effects: ["ROUTE:resume"], reentry: "rejudge", body: "stage: orient" },
+  { id: "orient", reads: ["entry.state"], acceptsUnknown: [], done: s => !["brownfield-no-product", "uncommitted-layer0"].includes(s.entry.state), effects: ["ROUTE:resume"], reentry: "rejudge", body: "stage: orient" },
   { id: "research", reads: ["research.need"], acceptsUnknown: [], done: s => s.research.need === "inline" || s.research.need === "settled", needs: ["research.need"], reentry: "rejudge", branches: { needed: [["RUN", { action: "record-durable-pre-product-research-origin" }], "ROUTE:direct"], blocked: ["WAIT"] }, body: "stage: research" },
   { id: "glossary", reads: ["product.file", "glossary.state", "product.request"], acceptsUnknown: [], done: s => s.product.file === "absent" || s.glossary.state === "current" || s.product.request === "product-re-run", needs: ["glossary.action"], reentry: "rejudge", branches: { ask: ["ASK"], write: [["WRITE", { artifact: "glossary", template: "glossary" }], ["COMMIT", { artifact: "glossary", boundary: "layer-0-completion" }], "ROUTE:resume"] }, body: "stage: glossary" },
   { id: "propose-and-confirm", reads: ["product.file", "glossary.state", "product.request"], acceptsUnknown: [], done: s => s.product.file === "current" && s.glossary.state === "current" && s.product.request === "none", needs: ["approval.action"], table: "confirmationRoute", reentry: "rejudge", branches: {

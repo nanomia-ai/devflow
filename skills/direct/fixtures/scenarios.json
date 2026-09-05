@@ -24,6 +24,30 @@
     ]
   },
   {
+    "id": "uncommitted-layer0-routes-resume-before-planning",
+    "s": {
+      "project.product": "uncommitted-layer0",
+      "request.current": "NONE",
+      "request.phase": "none",
+      "origin.active": "NONE",
+      "origin.drafts": "NONE",
+      "origin.projectResearch": "NONE",
+      "approval.boundary": "NONE",
+      "approval.issue": "NONE",
+      "planning.receipt": "NONE",
+      "projectResearch.approval": "none"
+    },
+    "expect": {
+      "stage": null,
+      "status": "ROUTE",
+      "guard": "uncommitted-layer0",
+      "effects": []
+    },
+    "cover": [
+      "guard:uncommitted-layer0"
+    ]
+  },
+  {
     "id": "no-product-tree-work-routes-product",
     "s": {
       "project.product": "missing",

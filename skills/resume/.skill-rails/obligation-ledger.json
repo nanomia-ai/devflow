@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:712903f83b76da5bc198d87aa0d4eee1d24baeaf1aa6897fa475e598ae341126",
+  "intent_hash": "sha256:e61a7cc3dc882388a4ed64a242d190f52e3068285e54cfea3659e376d682813d",
   "profile": "p2",
   "atoms": [
     {
@@ -50,7 +50,7 @@
     {
       "id": "state-dependent-behaviors-002",
       "source": "intent.state_dependent_behaviors[1]",
-      "text": "Canonical setup.unmanaged reports no current or historical devflow membership evidence and ends without ASK, route, or write; domain orientation remains first.",
+      "text": "Canonical setup.unmanaged reports no current .devflow root or current-index membership evidence and ends without ASK, route, or write; domain orientation remains first.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",

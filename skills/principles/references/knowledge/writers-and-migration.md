@@ -28,9 +28,10 @@
   owners, stages only those documents and capsules, and commits `adopt — capabilities`.
   Architecture `Existing records` in the first commit preserves every source coordinate,
   authority, disposition, and landing owner needed to rederive that second boundary from source.
-  There is no managed-state Adopt recovery path. Before `product.md` is written, a later explicit
-  Adopt ignores partial bytes as input, rederives from maintained pre-devflow sources, and seeks
-  approval again. An interruption after that write but before the first commit is an unverified
+  There is no managed-state Adopt recovery path. A later explicit Adopt ignores partial bytes,
+  rederives from maintained pre-devflow sources, and seeks approval again only while no current
+  `.devflow` root or indexed path exists. Once either exists, canonical state owns recovery.
+  An interruption after the `product.md` write but before the first commit is an unverified
   dirty boundary: report its exact paths and let the owner commit the exact approved boundary or
   discard it. After the first commit and before second-boundary writes, the now-managed
   baseline-missing state is recovered by Resume routing to Arch; it never reopens Adopt.

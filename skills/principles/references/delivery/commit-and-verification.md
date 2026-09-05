@@ -17,7 +17,9 @@
   calculates the canonical Design head from that landed commit, writes capability documents
   carrying that exact value, writes and validates their capsules beside them, stages only those
   documents and capsules, and lands `adopt — capabilities`. Refusal or interruption before
-  approval writes nothing. Before `product.md` is written the repository remains unmanaged.
+  approval writes nothing. The checkout remains unmanaged only while no current `.devflow` root
+  or indexed path exists. Once either exists, canonical state owns recovery; a missing
+  `product.md` alone does not make the checkout unmanaged.
   A post-product pre-commit interruption is an unverified dirty boundary reported for the owner
   to commit exactly or discard; no stage claims it. After the first commit and before
   second-boundary writes, the existing managed baseline-missing state routes through Resume to Arch.

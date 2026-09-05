@@ -1,7 +1,8 @@
 # v0.23.8 결과 보고 — 냉간 작성 산출물 문법의 자연 소유자 복원
 
 상태: 완료 — 이 보고서를 포함하는 0.23.8 릴리스 커밋으로 닫음
-기준 커밋: `9479feb7ad468c11c977a9220e1fb6eb45a1761f`
+원 구현·Gate B 기준 커밋: `9479feb7ad468c11c977a9220e1fb6eb45a1761f`
+통합 기준 커밋: `91d48e6a9fada4e591d6b9ba83751f9d066f6bee` (v0.23.7)
 
 ## 목적과 실제 실패
 
@@ -46,7 +47,7 @@ Verify build와 eval은 각각 L0–L18, fixture 28/28, deterministic 200회, mi
 positive source id 1로 읽혔고 migration이 아니었으며, 종전 malformed line은 계속 migration으로
 분류됐다.
 
-Direct build와 eval은 각각 L0–L18, fixture 27/27, deterministic 200회, mismatch 0으로
+Direct build와 eval은 각각 L0–L18, fixture 28/28, deterministic 200회, mismatch 0으로
 통과했다. build mutation은 20/20, format은 1/1이었다. semantic audit은 206 atoms에서 hard,
 advisory, duplicate 모두 0이었다. 독립 해시 재계산은 Direct 55/55, Verify 70/70이 일치했다.
 
@@ -83,8 +84,9 @@ exit 0이었고 final state는 `complete.adoption`이었다. Resume는 closure �
 
 ## 최종 전체 검증과 Gate A
 
-Gate B가 완전히 닫힌 뒤 완료 명령 `node --test "scripts/*.test.js"`를 정확히 한 번 실행했다.
-결과는 **509/509 통과, 실패·취소·skip 0, `duration_ms 1257968.2025`**였다. 같은 실행 안의
+최신 v0.23.7 main을 통합하고 Direct 생성 영수증을 결합 정본에서 다시 봉인한 뒤 완료 명령
+`node --test "scripts/*.test.js"`를 정확히 한 번 실행했다. 결과는 **515/515 통과,
+실패·취소·skip 0, `duration_ms 1298100.6631`**이었다. 같은 실행 안의
 Gate A는 18개 canonical reserved journal line을 모두 수용하고 대응하는 damaged line을 모두
 거부했다. semantic audit advisory는 기존과 같은 `adopt: provenance-fan-in=1`, `principles:
 duplicate-target-locators=28`이며 hard failure는 없었다.
@@ -109,7 +111,8 @@ collector의 base-identical stale assertion도 이번 변경이 만든 frontier 
 
 ## 배포·감사 경계
 
-두 manifest를 0.23.8로 맞추고 CHANGELOG 최신 항목과 이 수리 보고를 추가했다. 설치·merge·push는
+두 manifest를 0.23.8로 맞추고 CHANGELOG 최신 항목과 이 수리 보고를 추가했다. v0.23.7 main은
+이 릴리스 커밋에 통합했고 기존 Adopt 정본·결정·보고를 그대로 보존했다. 설치와 원격 push는
 실행하지 않았다. 로컬 Codex snapshot refresh, Claude/Codex 설치 상태, SessionStart hook 표시는
 따라서 미검증이다.
 

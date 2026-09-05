@@ -27,6 +27,35 @@ Verify were rebuilt. Their generated instructions and runtime behavior are other
 A disposable project passed the full failure-and-repair Gate B through Direct, Work, Resume, a
 distinct fresh Verify, and capability closure; both plugin manifests ship the repair as 0.23.8.
 
+## 0.23.7 — 2026-09-05 — Current-evidence Adopt recovery
+
+Project membership now uses only the current checkout's `.devflow` root and current index. It no
+longer consults all Git refs or prior history, so shallow history and a linked worktree's sibling ref
+cannot divert an explicit first Adopt to `setup.no-product`; a failed index observation remains the
+conservative boundary. The state regression, Resume wording, DD-101, and matrix cell 3.24 carry that
+single predicate consistently. Empty, partial, and users-only `.devflow` roots remain current
+evidence; the abandoned users-only exception was not transferred. Managed current journal bytes are
+always validated, while history-derived lifecycle recovery begins only after current HEAD contains
+the committed Product boundary. A current Product without that boundary routes as
+`setup.layer0-uncommitted`; a missing current Product routes as `setup.no-product` without displacing
+DD-92's approved pre-Product research. Product consumes the concurrently reported boundary fact,
+even when git or integrity owns the selected route, instead of treating an interrupted Adopt draft as current truth.
+Direct consumes the same fact before any request, research, or card effect and returns the owner to Resume.
+
+Adopt now performs one bounded clean-context semantic refutation of the complete draft before
+showing its binding proposal. The contract fixes the allowed inputs, excludes the producer transcript
+and Arch execution instructions, blocks only load-bearing contradictions or
+omissions, permits one revision plus returned-coordinate recheck, and records the result in the
+existing Evidence verification section. Adopt reads only Arch's Surface and Required channel columns
+and first proposal/ADR paragraph for this purpose. The shared capability baseline also distinguishes Product
+`C<n>` identifiers from disk `NN` navigation. DD-102 records the reason; the refutation change does
+not move Product or Arch authoring ownership.
+
+The authored Adopt, Direct, Principles, Product, and Resume P2 packages were maintained through bounded installed
+Skill Rails transactions and rebuilt into current generated receipts without hand-editing generated
+files. Both plugin manifests ship the state tool, tests, decisions, matrix,
+P2 contract changes, and the v0.23.7 round report as 0.23.7.
+
 ## 0.23.6 — 2026-09-04 — Evidence-bounded repository audit
 
 Devflow's repository-owned Skill Rails semantic audit now fails only when current bytes establish

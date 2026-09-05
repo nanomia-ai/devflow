@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:f4d3b9c84d1e8a81efe612208560a3d8601ba69ded5fd2205d85456e8b11a744",
+  "intent_hash": "sha256:ff90813498f5e5d36ac419dc8b0d973b47f25b77281afcec0a2285af4a8db27f",
   "profile": "p2",
   "atoms": [
     {
@@ -250,7 +250,7 @@
     {
       "id": "irreversible-boundaries-002",
       "source": "intent.irreversible_boundaries[1]",
-      "text": "The approved projection lands through two ordered boundaries: product.md is the last write before the Layer 0 commit, then capability documents use that landed commit as Design head and their K nodes validate beside them; interruption before product remains unmanaged, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery.",
+      "text": "The approved projection lands through two ordered boundaries: product.md is the last write before the Layer 0 commit, then capability documents use that landed commit as Design head and their K nodes validate beside them; interruption remains unmanaged only while no current .devflow root or indexed path exists, current evidence returns recovery to canonical state, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery.",
       "candidate_class": "guard",
       "consequence": "high",
       "disposition": "projected",
@@ -486,15 +486,21 @@
     {
       "id": "completion-evidence-004",
       "source": "intent.completion_evidence[3]",
-      "text": "The owner confirms the complete write set after irreducible questions are resolved.",
+      "text": "The owner sees and confirms the complete write set only after irreducible questions are resolved and one bounded clean-context semantic refutation is judged clear and records no blocking contradiction or omission in Evidence verification.",
       "candidate_class": "stage/done/evidence",
       "consequence": "high",
       "disposition": "projected",
       "targets": [
+        "spec:OBSERVATIONS/refutation.state",
+        "spec:STAGES/semantic-refutation",
         "spec:TABLES/approval/approve",
-        "body:stage: adoption"
+        "spec:DECLARATIONS/semantic_refutation",
+        "body:stage: semantic-refutation"
       ],
       "evidence": [
+        "fixture:refutation-blocked",
+        "fixture:refutation-pending",
+        "fixture:adoption-prepare",
         "fixture:approval-approve"
       ]
     },

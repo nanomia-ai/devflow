@@ -76,7 +76,11 @@ export const ZONE_DEFINITIONS = Object.freeze([
   ] },
   { zone: "setup", present: 5, absent: 5, kinds: [
     { name: "unmanaged", present: 5, absent: 1 },
-    { name: "no-product", present: 5.01, absent: 2 },
+    // Product absence keeps the existing setup policy, including DD-92's pre-Product research.
+    // The committed-boundary row is separate because an interrupted first Adopt already has
+    // current bytes but no commit from which another skill may safely recover them.
+    { name: "no-product", present: 2.5, absent: 0 },
+    { name: "layer0-uncommitted", present: 2.51, absent: 0.01 },
     { name: "layer0-incomplete", present: 5.02, absent: 3 },
     { name: "brownfield-field", present: 5.03, absent: 5 },
     { name: "integration-config", present: 5.04, absent: 5 },
@@ -299,38 +303,28 @@ function indexedDevflowEvidence(root) {
   }
 }
 
-function devflowHistoryEvidence(root) {
-  const history = gitRun(root, ["log", "-1", "--format=%H", "--all", "--", ".devflow"], { allowFailure: true });
-  if (history.status !== 0) return "unknown";
-  let commit;
-  try {
-    commit = decodeUtf8(history.stdout, "devflow history").trim();
-  } catch {
-    return "unknown";
-  }
-  if (commit !== "") return /^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit) ? "present" : "unknown";
-
-  const shallow = gitRun(root, ["rev-parse", "--is-shallow-repository"], { allowFailure: true });
-  if (shallow.status !== 0) return "unknown";
-  let value;
-  try {
-    value = decodeUtf8(shallow.stdout, "shallow repository state").trim();
-  } catch {
-    return "unknown";
-  }
-  if (value === "true") return "unknown";
-  return value === "false" ? "absent" : "unknown";
-}
-
+// Membership is current evidence only: a `.devflow` root in the working tree or a
+// `.devflow` path in this checkout's index. Other refs and prior commits are Git recovery
+// evidence, not a claim that the current checkout is managed.
 function devflowMembershipEvidence(root) {
-  const current = currentPathEvidence(root, ".devflow/project/product.md");
-  if (current !== "absent") return { current, indexed: "not-checked", history: "not-checked", unmanaged: false };
+  const current = currentPathEvidence(root, ".devflow");
+  if (current !== "absent") return { current, indexed: "not-checked", unmanaged: false };
 
   const indexed = indexedDevflowEvidence(root);
-  if (indexed !== "absent") return { current, indexed, history: "not-checked", unmanaged: false };
+  return { current, indexed, unmanaged: indexed === "absent" };
+}
 
-  const history = devflowHistoryEvidence(root);
-  return { current, indexed, history, unmanaged: history === "absent" };
+function committedLayer0BoundaryEvidence(root, head) {
+  if (head === "none") return "absent";
+  const listed = gitRun(root, ["ls-tree", "-z", "--name-only", head, "--", ".devflow/project/product.md"], { allowFailure: true });
+  if (listed.status !== 0) return "unreadable";
+  try {
+    const paths = decodeUtf8(listed.stdout, "committed Layer 0 boundary").split("\0").filter(Boolean);
+    if (paths.length === 0) return "absent";
+    return paths.length === 1 && paths[0] === ".devflow/project/product.md" ? "present" : "unreadable";
+  } catch {
+    return "unreadable";
+  }
 }
 
 function nonDevflowMaterialEvidence(root) {
@@ -833,14 +827,16 @@ async function baselineProjection(snapshot, capabilityFilter) {
   let legacyCount = 0;
   let designRefreshCount = 0;
   let boundaryState = "ok";
-  const currentDesignHead = await designHead(snapshot.root);
+  const currentDesignHead = snapshot.committedLayer0Boundary === "present" ? await designHead(snapshot.root) : "";
   for (const item of expected) {
     const sameNumber = snapshot.baselineFiles.filter((relative) => {
       const match = /^(\d+)-/.exec(path.posix.basename(relative));
       return match && Number(match[1]) === item.number;
     });
     const relative = sameNumber.length === 1 ? sameNumber[0] : item.path;
-    const headText = gitFile(snapshot.root, snapshot.integration.ref, relative);
+    const headText = snapshot.committedLayer0Boundary === "present"
+      ? gitFile(snapshot.root, snapshot.integration.ref, relative)
+      : null;
     const text = headText;
     const headExists = headText !== null;
     const shape = capabilityShape(text, relative, item.number, snapshot.glossary.definitions);
@@ -1195,6 +1191,12 @@ function knowledgeJournalAt(root, ref, markerBytes = KNOWLEDGE_LANDING_BYTES) {
   }
 }
 
+function committedJournalAt(snapshot, markerBytes = KNOWLEDGE_LANDING_BYTES) {
+  if (snapshot.committedLayer0Boundary === "absent") return { state: "absent", text: "" };
+  if (snapshot.committedLayer0Boundary === "unreadable") return { state: "failure", text: "" };
+  return knowledgeJournalAt(snapshot.root, snapshot.head, markerBytes);
+}
+
 function textLineCount(text) {
   if (text.length === 0) return 0;
   const normalized = normalizeFileText(text);
@@ -1261,7 +1263,7 @@ function knowledgeLandingState(snapshot) {
     }
   };
 
-  const headJournal = knowledgeJournalAt(snapshot.root, "HEAD");
+  const headJournal = committedJournalAt(snapshot);
   const workingChanged = new Set(snapshot.status.map((item) => item.path));
   const effectiveLifecycles = new Set(current.filter((line) => line.valid).map((line) => line.raw));
   if (["failure", "undecodable"].includes(headJournal.state)) {
@@ -1273,16 +1275,19 @@ function knowledgeLandingState(snapshot) {
     }
   }
 
-  const history = gitRun(snapshot.root,
-    ["log", "--text", "--no-textconv", "--format=%H", "-G", "knowledge landing pending:", "--", ".devflow/journal.md"],
-    { allowFailure: true });
-  let journalCommits = null;
-  if (history.status === 0) {
-    try {
-      journalCommits = normalizeFileText(decodeUtf8(history.stdout, "knowledge landing history")).split("\n").filter(Boolean);
-      if (journalCommits.some((commit) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit))) journalCommits = null;
-    } catch {
-      journalCommits = null;
+  let journalCommits = snapshot.committedLayer0Boundary === "unreadable" ? null : [];
+  if (snapshot.committedLayer0Boundary === "present") {
+    const history = gitRun(snapshot.root,
+      ["log", "--text", "--no-textconv", "--format=%H", "-G", "knowledge landing pending:", snapshot.head, "--", ".devflow/journal.md"],
+      { allowFailure: true });
+    journalCommits = null;
+    if (history.status === 0) {
+      try {
+        journalCommits = normalizeFileText(decodeUtf8(history.stdout, "knowledge landing history")).split("\n").filter(Boolean);
+        if (journalCommits.some((commit) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit))) journalCommits = null;
+      } catch {
+        journalCommits = null;
+      }
     }
   }
   if (journalCommits === null) {
@@ -1375,6 +1380,17 @@ function hasCompatibleFeedbackTransition(snapshot, base, ref) {
 }
 
 function compatibleFeedbackAuthority(snapshot) {
+  if (snapshot.committedLayer0Boundary !== "present") {
+    const unreadable = snapshot.committedLayer0Boundary === "unreadable";
+    return {
+      commit: unreadable ? "unreadable" : "none",
+      ref: "HEAD",
+      journal: committedJournalAt(snapshot, COMPATIBLE_FEEDBACK_BYTES),
+      overlayWorking: true,
+      localTransition: false,
+      workingText: snapshot.journalText ?? "",
+    };
+  }
   const integration = snapshot.integration.hash;
   let commit = snapshot.head;
   let ref = "HEAD";
@@ -1477,15 +1493,18 @@ function compatibleFeedbackState(snapshot) {
     issues.push({ item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", reason: "compatible-head-undecodable" });
   }
 
-  const history = gitRun(snapshot.root,
-    ["log", "--topo-order", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", authority.ref, "--", ".devflow/journal.md"],
-    { allowFailure: true });
-  let journalCommits = null;
-  if (history.status === 0) {
-    try {
-      journalCommits = normalizeFileText(decodeUtf8(history.stdout, "compatible feedback history")).split("\n").filter(Boolean);
-      if (journalCommits.some((commit) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit))) journalCommits = null;
-    } catch { journalCommits = null; }
+  let journalCommits = [];
+  if (authority.commit !== "none") {
+    const history = gitRun(snapshot.root,
+      ["log", "--topo-order", "--text", "--no-textconv", "--format=%H", "-G", "compatible feedback pending:", authority.ref, "--", ".devflow/journal.md"],
+      { allowFailure: true });
+    journalCommits = null;
+    if (history.status === 0) {
+      try {
+        journalCommits = normalizeFileText(decodeUtf8(history.stdout, "compatible feedback history")).split("\n").filter(Boolean);
+        if (journalCommits.some((commit) => !/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(commit))) journalCommits = null;
+      } catch { journalCommits = null; }
+    }
   }
   if (journalCommits === null) {
     issues.push({ item: "compatible-feedback", blocking: true, path: ".devflow/journal.md", reason: "compatible-history-undecodable" });
@@ -1752,6 +1771,7 @@ async function loadSnapshot(options) {
   const branch = gitLine(root, ["symbolic-ref", "--quiet", "--short", "HEAD"], { allowFailure: true }) || null;
   const productText = readFile(root, ".devflow/project/product.md");
   const devflowMembership = devflowMembershipEvidence(root);
+  const committedLayer0Boundary = committedLayer0BoundaryEvidence(root, head);
   const archText = readFile(root, ".devflow/project/arch.md");
   const tree = directTree(root);
   const closedDepth1 = tree.folders.filter((relative) => ["done", "stale"].includes(folderIdentity(relative)?.status));
@@ -1779,6 +1799,7 @@ async function loadSnapshot(options) {
     integration,
     productText,
     devflowMembership,
+    committedLayer0Boundary,
     nonDevflowMaterial: nonDevflowMaterialEvidence(root),
     product: parseProduct(productText),
     glossaryText,
@@ -2637,9 +2658,10 @@ function designNoteRoutes(snapshot) {
   const working = snapshot.journal.filter(routable);
   const changed = snapshot.status.map((entry) => entry.path);
   const journalChanged = changed.includes(".devflow/journal.md");
-  const shown = gitRun(snapshot.root, ["show", "HEAD:.devflow/journal.md"], { allowFailure: true });
+  if (snapshot.committedLayer0Boundary !== "present") return { routes: [], prefix: null };
+  const shown = gitRun(snapshot.root, ["show", `${snapshot.head}:.devflow/journal.md`], { allowFailure: true });
   if (shown.status !== 0) {
-    const listed = gitRun(snapshot.root, ["ls-tree", "--name-only", "HEAD", "--", ".devflow/journal.md"], { allowFailure: true });
+    const listed = gitRun(snapshot.root, ["ls-tree", "--name-only", snapshot.head, "--", ".devflow/journal.md"], { allowFailure: true });
     let headOwnsJournal = null;
     if (listed.status === 0) {
       try {
@@ -2960,6 +2982,8 @@ function pendingCompatible(compatibleFeedback, cardPath) {
 function evaluateZones(snapshot) {
   const zones = zoneBag();
   const verify = verifyProjection(snapshot);
+  // Membership is current root/index evidence. Managed current journal entries are always
+  // validated; committed lifecycle comparison begins only after Product has landed in current HEAD.
   const landings = snapshot.devflowMembership.unmanaged
     ? { accepted: [], issues: [] }
     : knowledgeLandingState(snapshot);
@@ -2968,7 +2992,7 @@ function evaluateZones(snapshot) {
     : compatibleFeedbackState(snapshot);
   const closingJournal = snapshot.devflowMembership.unmanaged
     ? { state: "absent", text: "" }
-    : knowledgeJournalAt(snapshot.root, "HEAD", CAPABILITY_CLOSING_BYTES);
+    : committedJournalAt(snapshot, CAPABILITY_CLOSING_BYTES);
   const closingIssues = ["failure", "undecodable"].includes(closingJournal.state) ? [{
     item: "capability-closing",
     blocking: true,
@@ -2990,7 +3014,13 @@ function evaluateZones(snapshot) {
     path: ".devflow/project/product.md",
     reason: "capability-rows-unparsed",
   }] : [];
-  const integrityItems = [...integrity(snapshot, verify), ...productCapabilityIssues, ...projectResearchIssues,
+  const boundaryIssues = !snapshot.devflowMembership.unmanaged && snapshot.committedLayer0Boundary === "unreadable" ? [{
+    item: "layer0-boundary",
+    blocking: true,
+    path: ".devflow/project/product.md",
+    reason: "committed-layer0-boundary-unreadable",
+  }] : [];
+  const integrityItems = [...integrity(snapshot, verify), ...boundaryIssues, ...productCapabilityIssues, ...projectResearchIssues,
     ...landings.issues, ...compatibleFeedback.issues, ...closingIssues];
   const blocking = integrityItems.filter((item) => item.blocking);
   const nonblocking = integrityItems.filter((item) => !item.blocking);
@@ -3114,6 +3144,12 @@ function evaluateZones(snapshot) {
     ...(invalidIntegration ? { reason: snapshot.integration.configuration } : {}),
     worktreeCount: snapshot.worktrees,
   });
+  if (!snapshot.devflowMembership.unmanaged && snapshot.productText !== null && snapshot.committedLayer0Boundary === "absent") {
+    addEntry(zones, "setup", "layer0-uncommitted", {
+      boundary: ".devflow/project/product.md",
+      paths: snapshot.status.map((entry) => entry.path).filter((relative) => relative.startsWith(".devflow/")),
+    });
+  }
   if (snapshot.cards.some((card) => card.bare) || readFile(snapshot.root, ".devflow/HANDOFF.md") !== null) addEntry(zones, "setup", "room-upgrade", {
     paths: [...snapshot.cards.filter((card) => card.bare).map((card) => card.path), ...(readFile(snapshot.root, ".devflow/HANDOFF.md") !== null ? [".devflow/HANDOFF.md"] : [])],
   });
@@ -3136,15 +3172,14 @@ function evaluateZones(snapshot) {
 
   zones.baseline.summary = snapshot.baseline.summary;
   for (const item of snapshot.baseline.expected) {
-    const matches = snapshot.baselineFiles.filter((relative) => Number(/^(\d+)-/.exec(path.posix.basename(relative))?.[1]) === item.number);
-    const relative = matches.length === 1 ? matches[0] : item.path;
-    const text = gitFile(snapshot.root, snapshot.integration.ref, relative);
-    const shape = capabilityShape(text, relative, item.number, snapshot.glossary.definitions);
-    if (legacyV010(text, item.number)) addEntry(zones, "baseline", "legacy-v010", { paths: [relative], stage: "arch" });
-    else if (text === null || (shape.boundaryCount === 1 && shape.anomalies.some((anomaly) => anomaly.zone === "design"))
-      || (shape.boundaryCount === 1 && !snapshot.baseline.records.find((record) => record.capability === item.number)?.designFresh)) {
-      addEntry(zones, "baseline", "design-refresh", { paths: [relative], stage: "arch", reasons: text === null ? ["missing"] : shape.anomalies.filter((anomaly) => anomaly.zone === "design").map((anomaly) => anomaly.detail) });
-    } else if (text !== null && shape.boundaryCount !== 1) addEntry(zones, "baseline", "boundary", { paths: [relative], boundaryCount: shape.boundaryCount });
+    const record = snapshot.baseline.records.find((candidate) => candidate.capability === item.number);
+    const relative = record?.relative ?? item.path;
+    const shape = record?.shape ?? capabilityShape(null, relative, item.number, snapshot.glossary.definitions);
+    if (record?.legacy) addEntry(zones, "baseline", "legacy-v010", { paths: [relative], stage: "arch" });
+    else if (!record?.headExists || (shape.boundaryCount === 1 && shape.anomalies.some((anomaly) => anomaly.zone === "design"))
+      || (shape.boundaryCount === 1 && !record.designFresh)) {
+      addEntry(zones, "baseline", "design-refresh", { paths: [relative], stage: "arch", reasons: !record?.headExists ? ["missing"] : shape.anomalies.filter((anomaly) => anomaly.zone === "design").map((anomaly) => anomaly.detail) });
+    } else if (shape.boundaryCount !== 1) addEntry(zones, "baseline", "boundary", { paths: [relative], boundaryCount: shape.boundaryCount });
   }
 
   const requests = snapshot.journal.filter((item) => item.kind === "maintenance-request" && item.valid);
@@ -3354,10 +3389,14 @@ function compactFieldString(values, omitted = new Set()) {
 }
 
 function zoneOrder(treePresent, zones) {
+  const noProductRank = zones.setup.entries.some((entry) => entry.kind === "no-product")
+    ? ROUTE_RANK.get("setup.no-product")?.[treePresent ? "present" : "absent"] : null;
   return [...ZONE_DEFINITIONS].sort((left, right) => {
     const rank = (definition) => {
       const actual = zones[definition.zone].entries.filter((entry) => entry.kind).map((entry) => {
-        if (["claim", "ready"].includes(definition.zone) && String(entry.path ?? entry.file ?? entry.card ?? "").startsWith(".devflow/tree/00-project/")) return 4.5;
+        if (["claim", "ready"].includes(definition.zone) && String(entry.path ?? entry.file ?? entry.card ?? "").startsWith(".devflow/tree/00-project/")) {
+          return noProductRank === null ? 4.5 : noProductRank - 0.01;
+        }
         return ROUTE_RANK.get(`${definition.zone}.${entry.kind}`)?.[treePresent ? "present" : "absent"];
       }).filter((value) => value !== null && value !== undefined);
       return actual.length > 0 ? Math.min(...actual) : treePresent ? definition.present : definition.absent;
