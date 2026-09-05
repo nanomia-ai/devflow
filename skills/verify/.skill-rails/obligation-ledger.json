@@ -1672,10 +1672,12 @@
       "consequence": "medium",
       "disposition": "projected",
       "targets": [
-        "file:references/record-grammar.md"
+        "file:references/record-grammar.md",
+        "file:templates/record.md"
       ],
       "evidence": [
-        "file:references/record-grammar.md"
+        "file:references/record-grammar.md",
+        "file:templates/record.md"
       ],
       "source_hash": "sha256:a2f954d13c472c111ef3d3fd03c895c17b3e28526867d3bedb9b0a8aa026b05e",
       "source_kind": "fenced-code",

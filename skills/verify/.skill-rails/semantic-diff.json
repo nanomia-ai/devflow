@@ -1,25 +1,17 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:bb70b7e209ab4807377268a787a4888ae8d2f26f9894a45b62f2d8bcf862eb57",
+    "before": "sha256:3a37ba9007aae25b3f92504a85673b8508dc799792e95e7e47880351f39f7cdc",
     "after": "sha256:3a37ba9007aae25b3f92504a85673b8508dc799792e95e7e47880351f39f7cdc"
   },
-  "changed": true,
+  "changed": false,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": true,
+    "behavior_source": false,
     "observation_source": false,
-    "context": false
+    "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:bb70b7e209ab4807377268a787a4888ae8d2f26f9894a45b62f2d8bcf862eb57",
-      "after_hash": "sha256:3a37ba9007aae25b3f92504a85673b8508dc799792e95e7e47880351f39f7cdc",
-      "source": "behavior_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
@@ -27,16 +19,43 @@
     "tables": [],
     "formats": [],
     "templates": [],
-    "template_content": [],
+    "template_content": [
+      {
+        "id": "record",
+        "change": "modified",
+        "before": "sha256:5e02e8a3715b15fd098f6936fc6ca715a251a4d4e9d37054a9a65ffc49826af1",
+        "after": "sha256:c42c72783d82a2a8584de0d92bc745cdeca69912f37c82ff6965b022037fcab4"
+      }
+    ],
     "body": [],
-    "references": [],
+    "references": [
+      {
+        "id": "templates/record.md",
+        "change": "modified",
+        "before": "sha256:5e02e8a3715b15fd098f6936fc6ca715a251a4d4e9d37054a9a65ffc49826af1",
+        "after": "sha256:c42c72783d82a2a8584de0d92bc745cdeca69912f37c82ff6965b022037fcab4"
+      }
+    ],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "fix-verify-partial-write-boundary",
-  "intent": "Let only transitions with a finite recovery suffix bypass invalid verification-layer selection.",
-  "impact": {}
+  "change_id": "verify-failure-history-item-grammar",
+  "intent": "Restore the exact repeated Failure-history item shape at the Verify record writer's canonical template so a cold writer produces parser-consumable repair routing.",
+  "impact": {
+    "template_content": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "references": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    }
+  }
 }

@@ -3,12 +3,12 @@
   "skill_id": "verify",
   "profile": "p2",
   "built_at": null,
-  "build_id": "sha256:5301a36651d862d798693e691ae2479005f5e40fabeb70934da54e9a412e83dd",
+  "build_id": "sha256:7c4fc4bf224753bc022868634fede724d2366326b2ad38567db3352aa571fc37",
   "spec_hash": "sha256:3a37ba9007aae25b3f92504a85673b8508dc799792e95e7e47880351f39f7cdc",
   "dsl_hash": "sha256:e8d77b180b886db5cf0474682c7ea2dfea19065561a015878c70efe1441694e6",
   "runtime_hash": "sha256:90a4c7b0db87b8da7849174fda4c9f80700907f5cfe481c3806a87e71b30146f",
   "validator_hash": "sha256:f4d2f24bdc94936180f8cafde1d84eb737173bdcc958b6f9166e2e8b35c1edb5",
-  "content_hash": "sha256:4d3a4a9fe6a185b037a1c65ba5f065db7c9b1552916ff004e950b406cfc11225",
+  "content_hash": "sha256:38206f462f52af65009b40b62baa144700827afb4339f96df9617edc7cc0f38f",
   "content": {
     "SKILL.md": "sha256:fda9de38c986e5a6628a8fffb7dba94d5ce9e3aed2eb9fdba0fc9b2ae83aca44",
     "body.md": "sha256:abde2446e154b7a3f2b5086ab9c18e7a7eafa0e95808081008acc4df173910a7",
@@ -35,14 +35,14 @@
     "references/retrospector-role.md": "sha256:6b64b3aabe5cbf8f08e358e995693fa544831cabc413a0d787e5576206d5724b",
     "references/verification-boundary.md": "sha256:837e8c8b2d67d97bc48117dbbf137bf8fb8f4072c27b4ea7958192e7efdbac2b",
     "references/verifier-role.md": "sha256:c646f49d9ecf4771c6228e99adc7b2563432740f30ba2f2a6a8a7be41ce7033f",
-    "templates/record.md": "sha256:5e02e8a3715b15fd098f6936fc6ca715a251a4d4e9d37054a9a65ffc49826af1",
+    "templates/record.md": "sha256:c42c72783d82a2a8584de0d92bc745cdeca69912f37c82ff6965b022037fcab4",
     "templates/result.md": "sha256:9962616d4ce6a7797a21217f5c4373279af04f27c79a312d5d252ecc1d247a32",
     "templates/route.md": "sha256:59ca80b0d14f40d32ee7c9d838e8204fc18cd439918253eb6a29d5bf6645230e",
     "templates/verifier-bundle.md": "sha256:a4fb1e49c290b66e954120dce6b3705bf9820c848d556c7e9a25b3c2d4f2786f",
     ".skill-rails/intent.json": "sha256:e8e6345224af77ec7f065f11769c80757fb6ea66d1f6f5c43c625a06175b532c",
     ".skill-rails/profile-decision.json": "sha256:7ffa007466bdcbe43bcafd7081b93705c47eea33b8d54d80499e1f327dc2790c",
     ".skill-rails/eval-cases.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    ".skill-rails/obligation-ledger.json": "sha256:ab9d46c0c7df023b61a5487274258d9ff3987c5f1810b9c2f148ca5b273d9d0d"
+    ".skill-rails/obligation-ledger.json": "sha256:d1df7c92954d16a0b11895b7b4dc9819d46eeebb0656fda83219a3ce5abf53d6"
   },
   "runtime_files": [
     "align.mjs",

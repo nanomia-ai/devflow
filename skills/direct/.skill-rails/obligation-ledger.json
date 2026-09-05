@@ -2549,10 +2549,14 @@
       "consequence": "high",
       "disposition": "projected",
       "targets": [
-        "spec:OBSERVATIONS/approval.issue"
+        "spec:OBSERVATIONS/approval.issue",
+        "file:templates/task-card.md",
+        "file:templates/research-card.md"
       ],
       "evidence": [
-        "fixture:several-independent-sibling-cards-remain-several"
+        "fixture:several-independent-sibling-cards-remain-several",
+        "file:templates/task-card.md",
+        "file:templates/research-card.md"
       ],
       "source_hash": "sha256:454391995b7d6513ebcb5e566104aa041e5074ed27c1eec9970e55374c428971",
       "source_kind": "fenced-code",

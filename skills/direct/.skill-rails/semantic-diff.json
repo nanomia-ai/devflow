@@ -8,18 +8,10 @@
   "any_changed": true,
   "source_changes": {
     "behavior_source": false,
-    "observation_source": true,
-    "context": false
+    "observation_source": false,
+    "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "collector",
-      "path": "collectors/index.mjs",
-      "before_hash": "sha256:55483db6d8c2002ba7bfd73065d921001d7e5cdc371ef325780ff1b2ad3ecbc9",
-      "after_hash": "sha256:3119aae802978890db0dc01b28b7ea4b2dd7219704863476331bbad898807a90",
-      "source": "observation_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
@@ -27,16 +19,55 @@
     "tables": [],
     "formats": [],
     "templates": [],
-    "template_content": [],
+    "template_content": [
+      {
+        "id": "researchCard",
+        "change": "modified",
+        "before": "sha256:1f1e52e374f037e1b55095e456ea525be90412b6b7494959effde77f52e67f6b",
+        "after": "sha256:82719108c1538f6ca95d687eb178a44a0a25e37b83943d4b958b0339fdc66202"
+      },
+      {
+        "id": "taskCard",
+        "change": "modified",
+        "before": "sha256:8316478e715c38c3120dce52894593ac66c7ef5aed53d066ff03e678d889b816",
+        "after": "sha256:d81bce1864853ddf780a2ff11e132fd04baef294e905dbd8ea6c782eff238015"
+      }
+    ],
     "body": [],
-    "references": [],
+    "references": [
+      {
+        "id": "templates/research-card.md",
+        "change": "modified",
+        "before": "sha256:1f1e52e374f037e1b55095e456ea525be90412b6b7494959effde77f52e67f6b",
+        "after": "sha256:82719108c1538f6ca95d687eb178a44a0a25e37b83943d4b958b0339fdc66202"
+      },
+      {
+        "id": "templates/task-card.md",
+        "change": "modified",
+        "before": "sha256:8316478e715c38c3120dce52894593ac66c7ef5aed53d066ff03e678d889b816",
+        "after": "sha256:d81bce1864853ddf780a2ff11e132fd04baef294e905dbd8ea6c782eff238015"
+      }
+    ],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "fix-direct-failure-origin-identity",
-  "intent": "Preserve the exact Principles-owned failure route across Direct layer opening without a second local path grammar.",
-  "impact": {}
+  "change_id": "direct-read-first-item-grammar",
+  "intent": "Restore the exact repeated Read first item shape at both Direct card-writer templates so cold cards remain consumable by Work without teaching the parser a tolerant alternate grammar.",
+  "impact": {
+    "template_content": {
+      "total": 2,
+      "added": 0,
+      "removed": 0,
+      "modified": 2
+    },
+    "references": {
+      "total": 2,
+      "added": 0,
+      "removed": 0,
+      "modified": 2
+    }
+  }
 }
