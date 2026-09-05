@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:550df3bd3c245f8d944e730ca49081559ed148f0b89c1521dea3e6a15914ac04",
+  "intent_hash": "sha256:f590a99ae94d7c3b3c751b3578f1be726f28d3ecbd8a6bbb1af3c79df98793da",
   "profile": "p2",
   "atoms": [
     {
@@ -36,7 +36,7 @@
     {
       "id": "state-dependent-behaviors-001",
       "source": "intent.state_dependent_behaviors[0]",
-      "text": "A maintenance direction records its origin through direct before ordinary design planning; durable research resumes through that same origin/card.",
+      "text": "A maintenance direction records its origin through direct before ordinary design planning; durable research resumes through that same origin/card, and an approved design batch preserves changed design/K at its existing locus without writing capability/K.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",

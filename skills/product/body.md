@@ -28,7 +28,7 @@ Block unless canonical state exposes an exact Product-owned marker for only the 
 
 ## stage: compatible-feedback
 
-Judgment: For a pending marker, edit only its exact owner and land its Background, Why/evidence, Conclusion, implication, and source provenance without rewriting unrelated current truth; then wait so canonical state can replay the exact owner content. On reentry, delete only the byte-identical marker when state reports `satisfied`, and commit the owner diff plus that journal deletion atomically before routing to Resume.
+Judgment: For a pending marker, project the Product owner's existing K headers, then edit only its exact owner and land its Background, Why/evidence, Conclusion, implication, and source provenance without rewriting unrelated current truth. When that unit already lives in product/K, update that exact locus and validate it before waiting for canonical replay. On reentry, delete only the byte-identical marker when state reports `satisfied`, and commit the owner/K diff plus that journal deletion atomically before routing to Resume.
 
 Why: A superficial owner-file diff is still pending, and other owners' markers remain untouched.
 
@@ -52,6 +52,6 @@ Why: Completing the language canon does not reopen a confirmed product judgment.
 
 ## stage: propose-and-confirm
 
-Judgment: approval.action is ask or commit; the initial or re-run boundary is selected only by the collected product file and re-run request state. Combine settled evidence and owner choices into a complete proposed six-judgment product and glossary delta, then report it and ask for explicit approval without writing a canonical product. After an explicit decided approval, write the legacy-compatible product schema with no Approval field and the glossary atomically, then commit: the initial run is the Layer 0 boundary, while a canonical product-re-run request uses the principles binding-decision boundary and its required update routing.
+Judgment: approval.action is ask or commit; the initial or re-run boundary is selected only by the collected product file and re-run request state. Combine settled evidence and owner choices into a complete proposed six-judgment product and glossary delta, project bounded product/K headers, and show any current-locus K delta before asking for explicit approval without writing canonical bytes. After approval, write the legacy-compatible product schema with no Approval field, the glossary, and only sourced product-owned K selected by the shared owner batch; validate changed K and commit the batch together. Product never writes capability/K or creates a K without an independent reader and change reason.
 
 Why: A card, source, or research answer is evidence, not a substitute for current truth. Approval and its commit make a durable planning boundary; they are not implied by a draft or by product.md existing.

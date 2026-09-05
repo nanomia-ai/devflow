@@ -3,15 +3,15 @@
   "skill_id": "work",
   "profile": "p2",
   "built_at": null,
-  "build_id": "sha256:8539d486acf436deb36cd12e6ab6fd0d94d3b556c2d53c9c0caff0f52054285d",
-  "spec_hash": "sha256:891bcde48bcd9ffdeb18432857e3fdf33e15f69b93d92255c69cbde914639641",
+  "build_id": "sha256:670ef6f9e8994761e5d054a60037deda6e917db90fccbcd7208d6ba3612cfbd4",
+  "spec_hash": "sha256:ed1405146d4c32190f514d8c1085212f352a1596faf7f53dcbd90b1594c9ae24",
   "dsl_hash": "sha256:e8d77b180b886db5cf0474682c7ea2dfea19065561a015878c70efe1441694e6",
   "runtime_hash": "sha256:90a4c7b0db87b8da7849174fda4c9f80700907f5cfe481c3806a87e71b30146f",
   "validator_hash": "sha256:f4d2f24bdc94936180f8cafde1d84eb737173bdcc958b6f9166e2e8b35c1edb5",
-  "content_hash": "sha256:ed73e77b95ce048c5b2fb3bdde59f50f4b55245b5a71aa513667bec321f61be9",
+  "content_hash": "sha256:123fbfc8f4da15846f093f995afbcaffc05057391e5a453759e43e0db5ece2a3",
   "content": {
     "SKILL.md": "sha256:aaf814481c8757f5dd6cb4ed73c55974c95e42c4a11fc02596a42c80c40625b9",
-    "body.md": "sha256:12b26217a74d377da3bad77f80051304a4efdd9f765b40aee154666ca60fedcc",
+    "body.md": "sha256:8cab13f59f7a8a41c1cc3b9df45b53cf22056d5ff50f6991fde62232c98506bb",
     "collectors/index.mjs": "sha256:ba6626578ee06c2d71de9d819038fa673dccf76ab0aaa81d87cacd461f53c7a2",
     "collectors/project-state-seam.test.mjs": "sha256:3d7a3e170695330f1936c306e4e449a08a9bf3335b30f882451f13bfb1b6128a",
     "collectors/remote-format.test.mjs": "sha256:aa8d69a9d4f597af5623543c66face20c9c9d54db7d5abd5d7f353c879a375a6",
@@ -20,7 +20,7 @@
     "fixtures/formats.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
     "fixtures/knowledge-marker-grammar.seam.test.mjs": "sha256:caf20eb3a2ed25c9eaf14c8bcc10c31559fdd407eb5e5d04b9f7805770fc06ce",
     "fixtures/lint/manifest.json": "sha256:7e63b4b60f9d85b72a2fb1e7040a3a28cffe59246ceedf69f0aee2290d826eed",
-    "fixtures/scenarios.json": "sha256:85c2c8adda441ca177765d5ad05e014d3e134be23426853c9246c4601a38aca5",
+    "fixtures/scenarios.json": "sha256:348e3441feaa69fded1f461a5fc5e4943e49720a41d3dfb69a820d9ffcd677b3",
     "references/purpose.md": "sha256:5fc8a2da0dc530cbb2befd7892882215aa2e9a091f5acb949a5117cafef2c39b",
     "references/reviewer-role.md": "sha256:34a346eeafad8894cf09c99b8fd54dcda1784ee573657138354a8b44eeb629da",
     "templates/carry.md": "sha256:ea247b38ecf1195ee1a0259f1b4f858db39f86d9c731c429d212b3b1872bfe98",
@@ -32,10 +32,10 @@
     "templates/result.md": "sha256:9962616d4ce6a7797a21217f5c4373279af04f27c79a312d5d252ecc1d247a32",
     "templates/review-result-line.md": "sha256:1cec8d21753b90ef42de50215eb8d0f7d34a5d38f3097d4a2ad950708bf88f35",
     "templates/reviewer-result.md": "sha256:ebed1254a90f619b8f6c0842a6f87f82bb9d134bd9d3e437c70859741c332096",
-    ".skill-rails/intent.json": "sha256:61a3f2dd94eb8efacf8a942cf417b6339db929b9c7bcf6053486ceb1a0fce602",
+    ".skill-rails/intent.json": "sha256:2cf15e2375656401e41f370ba29e56597078504ad11072d3ca13b4e5af79562b",
     ".skill-rails/profile-decision.json": "sha256:7ffa007466bdcbe43bcafd7081b93705c47eea33b8d54d80499e1f327dc2790c",
     ".skill-rails/eval-cases.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-    ".skill-rails/obligation-ledger.json": "sha256:cf0ca8504b93c7d93e0f3e00ca13662d02d5963b235f7b5ff1b306f2cf49789b"
+    ".skill-rails/obligation-ledger.json": "sha256:7bf6c887de38997360bbcc04cb93b7e2f856f4167fd0bb51322e383a725a919b"
   },
   "runtime_files": [
     "align.mjs",
@@ -325,11 +325,11 @@
       ]
     },
     "fixtures": {
-      "passed": 73,
-      "total": 73,
-      "deterministic_repeats": 200,
+      "passed": 75,
+      "total": 75,
+      "deterministic_repeats": 25,
       "mismatches": 0,
-      "predicate_evaluations": 400,
+      "predicate_evaluations": 50,
       "predicate_evaluation_limit_ms": 50,
       "predicate_performance": {
         "status": "pass",

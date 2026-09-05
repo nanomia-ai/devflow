@@ -3372,5 +3372,81 @@
     "cover": [
       "guard:compatible-feedback-set-required"
     ]
+  },
+  {
+    "id": "general-task-promotes-committed-current-knowledge-after-integration",
+    "s": {
+      "card.target": ".devflow/tree/02-auth/02.3-session.claim-jmp.md",
+      "state.kernel": "available",
+      "state.route": "transition.finish-boundary",
+      "card.phase": "claimed",
+      "card.contract": "valid",
+      "card.basis": "complete",
+      "completion.state": "pass",
+      "review.state": "pass",
+      "carry.state": "present",
+      "remote.state": "none",
+      "research.checkpoint": "not-applicable",
+      "knowledge.marker": "none",
+      "task.commit": "present",
+      "task.integration": "integrated",
+      "handoff.state": "current",
+      "boundary.state": "missing",
+      "feedback.marker": "none",
+      "feedback.lifecycles": []
+    },
+    "judged": {
+      "implementation.action": "continue",
+      "review.action": "dispatch",
+      "feedback.action": "none",
+      "history.basis": "none",
+      "knowledge.action": "emit-arch",
+      "feedback.lifecycleAction": "invalid"
+    },
+    "expect": {
+      "stage": "knowledge-marker",
+      "row": "emit-arch",
+      "status": "ROUTE",
+      "effects": ["WRITE", "COMMIT", "ROUTE:resume"]
+    },
+    "cover": ["stage:knowledge-marker", "branch:knowledge/emit-arch", "row:knowledge/emit-arch"]
+  },
+  {
+    "id": "general-task-post-title-source-gap-routes-direct-without-marker",
+    "s": {
+      "card.target": ".devflow/tree/02-auth/02.3-session.claim-jmp.md",
+      "state.kernel": "available",
+      "state.route": "transition.finish-boundary",
+      "card.phase": "claimed",
+      "card.contract": "valid",
+      "card.basis": "complete",
+      "completion.state": "pass",
+      "review.state": "pass",
+      "carry.state": "present",
+      "remote.state": "none",
+      "research.checkpoint": "not-applicable",
+      "knowledge.marker": "none",
+      "task.commit": "present",
+      "task.integration": "integrated",
+      "handoff.state": "current",
+      "boundary.state": "missing",
+      "feedback.marker": "none",
+      "feedback.lifecycles": []
+    },
+    "judged": {
+      "implementation.action": "continue",
+      "review.action": "dispatch",
+      "feedback.action": "none",
+      "history.basis": "none",
+      "knowledge.action": "route-direct",
+      "feedback.lifecycleAction": "invalid"
+    },
+    "expect": {
+      "stage": "knowledge-marker",
+      "row": "route-direct",
+      "status": "ROUTE",
+      "effects": ["REPORT", "ROUTE:direct"]
+    },
+    "cover": ["branch:knowledge/route-direct", "row:knowledge/route-direct"]
   }
 ]

@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:ba37075d17746f7033cc45c4bf19235421db5af93aeffc56d250bb9c51be5da4",
+  "intent_hash": "sha256:7074aae6550aa8c0f4d882189a71d4f8074a45bb8550b9f63f428d252f5d3234",
   "profile": "p2",
   "atoms": [
     {
@@ -69,7 +69,7 @@
     {
       "id": "use-cases-003",
       "source": "intent.use_cases[2]",
-      "text": "Promote one durable research synthesis to each named long-lived owner through an exact canonical knowledge marker.",
+      "text": "Promote one sourced current conclusion from a committed research checkpoint or integrated exact-title general task to each named long-lived owner through an exact canonical knowledge marker.",
       "candidate_class": "example",
       "consequence": "low",
       "disposition": "projected",
@@ -78,7 +78,8 @@
         "spec:STAGES/knowledge-marker"
       ],
       "evidence": [
-        "fixture:research-synthesis-marker-timing"
+        "fixture:research-synthesis-marker-timing",
+        "fixture:general-task-promotes-committed-current-knowledge-after-integration"
       ]
     },
     {
@@ -128,7 +129,7 @@
     {
       "id": "near-misses-003",
       "source": "intent.near_misses[2]",
-      "text": "Writing current promoted knowledge; Arch owns it for every managed project.",
+      "text": "Writing current promoted knowledge; Work only emits the journal transport and Arch consumes its exact delegated owner/K batch.",
       "candidate_class": "guard",
       "consequence": "medium",
       "disposition": "projected",
@@ -342,7 +343,7 @@
     {
       "id": "state-dependent-behaviors-003",
       "source": "intent.state_dependent_behaviors[2]",
-      "text": "Research promotion requires a committed synthesis checkpoint and emits one independent writer=arch owner marker at a time.",
+      "text": "Research promotion requires a committed synthesis checkpoint; general-task promotion waits for the integrated exact-title commit and current evidence, then emits one independent writer=arch owner marker at a time.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",
@@ -350,7 +351,8 @@
         "spec:STAGES/knowledge-marker"
       ],
       "evidence": [
-        "fixture:research-synthesis-marker-timing"
+        "fixture:research-synthesis-marker-timing",
+        "fixture:general-task-promotes-committed-current-knowledge-after-integration"
       ]
     },
     {
@@ -650,7 +652,7 @@
     {
       "id": "judgment-points-004",
       "source": "intent.judgment_points[3]",
-      "text": "Choose one exact permitted closed-history basis and one named long-lived research owner.",
+      "text": "Choose one exact permitted closed-history basis and one named long-lived owner for a reusable conclusion already present in its committed card source.",
       "candidate_class": "judgment/body",
       "consequence": "low",
       "disposition": "projected",

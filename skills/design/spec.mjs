@@ -20,12 +20,15 @@ export const OBSERVATIONS = {
 
 export const FORMATS = {};
 export const TEMPLATES = {
-  proposal: { file: "templates/proposal.md", fields: { approach: "line", designSource: "line", tokenStrategy: "line", componentStrategy: "line", decompositionAxis: "line", reviewSurface: "line", buildScope: "block" }, sections: [] },
-  result: { file: "templates/result.md", fields: { summary: "block" }, sections: [] }
+  proposal: { file: "templates/proposal.md", fields: { approach: "line", designSource: "line", tokenStrategy: "line", componentStrategy: "line", decompositionAxis: "line", reviewSurface: "line", buildScope: "block", knowledgeDelta: "block" }, sections: [] },
+  result: { file: "templates/result.md", fields: { summary: "block" }, sections: [] },
+  knowledgeNode: { file: "templates/knowledge-node.md", fields: { title: "line", openWhen: "line", about: "line", body: "block", sourceBasis: "generated" }, sections: [] }
 };
 export const ORDERS = { refinement: ["compatible-feedback", "input", "record-first", "research", "proposal", "confirmation"] };
 export const OWNERSHIP = {
   ".devflow/project/design.md": "design",
+  ".devflow/project/design": "design",
+  ".devflow/project/design/**": "design",
   ".devflow/journal.md#compatible-feedback-pending": "design-on-exact-owner-landing",
   ".devflow/project/capabilities/**": "external.arch-or-adopt"
 };
@@ -39,17 +42,17 @@ export const GUARDS = [
 ];
 export const STAGES = [
   { id: "compatible-feedback", reads: ["compatible.owner"], acceptsUnknown: [], done: s => s.compatible.owner === "none", table: "compatibleFeedback", reentry: "rejudge", branches: {
-    write: [["WRITE", { artifact: "design", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], "WAIT"],
-    land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: [".devflow/project/design.md", ".devflow/journal.md"] }], "ROUTE:resume"]
+    write: [["RUN", { action: "project existing design/K headers under the exact design owner" }], ["WRITE", { artifact: "design", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode", selection: "changed units already owned by existing design/K only", zeroAllowed: true }], ["RUN", { action: "validate exact changed design/K paths" }], "WAIT"],
+    land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: [".devflow/project/design.md", "exact changed design/K paths", ".devflow/journal.md"] }], "ROUTE:resume"]
   }, body: "stage: compatible-feedback" },
   { id: "input", reads: ["input.frontend"], acceptsUnknown: [], done: s => s.input.frontend === "needed", needs: ["entry.action"], reentry: "rejudge", branches: { skip: [["REPORT", { template: "result" }], "ROUTE:direct"] }, body: "stage: input" },
   { id: "record-first", reads: ["current.tree", "maintenance.state", "request.kind"], acceptsUnknown: ["request.kind"], done: s => s.current.tree === "absent" || s.maintenance.state === "current" || s.request.kind === "initial" || s.request.kind === "none" || s.request.kind === "tiny-no-delta", effects: ["ROUTE:direct"], reentry: "rejudge", body: "stage: record-first" },
   { id: "research", reads: ["research.state"], acceptsUnknown: [], done: s => s.research.state === "none" || s.research.state === "settled", needs: ["research.state"], reentry: "rejudge", branches: { needed: [["RUN", { action: "record-durable-design-research-origin" }], "ROUTE:direct"], blocked: ["WAIT"] }, body: "stage: research" },
-  { id: "proposal", reads: ["proposal.completeness"], acceptsUnknown: [], done: s => s.proposal.completeness === "ready", needs: ["proposal.completeness"], reentry: "rejudge", branches: { "needs-choice": [["REPORT", { template: "proposal" }], "ASK"] }, body: "stage: proposal" },
+  { id: "proposal", reads: ["proposal.completeness"], acceptsUnknown: [], done: s => s.proposal.completeness === "ready", needs: ["proposal.completeness"], reentry: "rejudge", branches: { "needs-choice": [["RUN", { action: "project existing design/K headers under the exact design owner" }], ["REPORT", { template: "proposal" }], "ASK"] }, body: "stage: proposal" },
   { id: "confirmation", reads: ["current.design", "request.kind"], acceptsUnknown: [], done: s => s.current.design === "present" && (s.request.kind === "none" || s.request.kind === "tiny-no-delta"), needs: ["approval.action"], reentry: "rejudge", branches: {
-    ask: [["REPORT", { template: "proposal" }], "ASK"],
+    ask: [["RUN", { action: "project existing design/K headers under the exact design owner" }], ["REPORT", { template: "proposal" }], "ASK"],
     reject: [["REPORT", { template: "result" }], "DONE"],
-    commit: [["WRITE", { artifact: "design", template: "proposal" }], ["COMMIT", { artifact: "design", boundary: "confirmed-design-current", subject: "<id> design — design.md", touches: [".devflow/project/design.md", ".devflow/journal.md"] }], "ROUTE:direct"]
+    commit: [["RUN", { action: "project existing design/K headers under the exact design owner" }], ["WRITE", { artifact: "design", template: "proposal" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode", selection: "approved sourced design-owned units; existing loci stay in place and new K requires the shared capsule boundary", zeroAllowed: true }], ["RUN", { action: "validate exact changed design/K paths" }], ["COMMIT", { artifact: "design", boundary: "confirmed-design-current", subject: "<id> design — design.md", touches: [".devflow/project/design.md", ".devflow/project/design/**", ".devflow/journal.md"] }], "ROUTE:direct"]
   }, body: "stage: confirmation" }
 ];
 export const TABLES = { compatibleFeedback: { exclusive: true, rows: [
@@ -65,7 +68,8 @@ export const ARTIFACTS = {
   compatibleFeedbackMarker: { path: ".devflow/journal.md#compatible-feedback-pending", writer: "design", readers: ["stage.compatible-feedback"] },
   journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.compatible-feedback", "stage.record-first", "stage.research", "stage.confirmation", "guard.existing-design-research"] },
   tree: { path: ".devflow/tree", writer: "external.direct", readers: ["stage.record-first", "stage.research", "guard.existing-design-research"] },
-  design: { path: ".devflow/project/design.md", writer: "design", readers: ["stage.compatible-feedback", "stage.confirmation", "external.arch", "external.direct", "external.resume"], template: "proposal" }
+  design: { path: ".devflow/project/design.md", writer: "design", readers: ["stage.compatible-feedback", "stage.confirmation", "external.arch", "external.direct", "external.resume"], template: "proposal" },
+  knowledgeNodes: { path: ".devflow/project/design", writer: "design", readers: ["stage.compatible-feedback", "stage.proposal", "stage.confirmation", "external.direct", "external.resume"], template: "knowledgeNode" }
 };
 export const ROLES = {};
 export const READ_FIRST = [
@@ -76,7 +80,7 @@ export const READ_FIRST = [
 export const DECLARATIONS = {
   currentDesign: { value: "design.md is current only after explicit approval and the matching atomic design commit; drafts are reports, not durable current state.", consumer: "stage:confirmation" },
   refinement: { value: "Initial, refresh, crosscut, and domain requests select the same state-driven design route; a tiny change with no design delta leaves the current owner untouched.", consumer: "stage:record-first" },
-  knowledgeLanding: { value: "Only later confirmed work or research synthesis may emit the canonical knowledge-landing marker; Arch is the sole managed recursive capability knowledge writer. Adopt remains only as initial artifact provenance from the unmanaged projection.", consumer: "external.arch-or-adopt" },
+  knowledgeLanding: { value: "Design writes only design/K selected by the shared owner batch and never writes recursive capability knowledge. Later confirmed Work may emit the canonical capability landing marker; Arch owns managed capability K and Adopt remains initial unmanaged provenance.", consumer: "stage.compatible-feedback|stage.confirmation|external.arch-or-adopt" },
   compactProject: { value: "No-UI projects skip design without a file, marker, or commit, and small projects may retain one compact current design document.", consumer: "stage:input" }
 };
 export const DEFERRED = [];

@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:f720e19cd6fea4b6f31140e3b1806cb639a179d127fa3de2940ff771f94def84",
+  "intent_hash": "sha256:459415eb5fba5f51ffef97650149e08fdec26dae43c2a1e89e482e16dfba823d",
   "profile": "p2",
   "atoms": [
     {
@@ -67,7 +67,7 @@
     {
       "id": "state-dependent-behaviors-003",
       "source": "intent.state_dependent_behaviors[2]",
-      "text": "Managed capability refresh and recursive K ownership belong to Arch; Adopt is only initial unmanaged reconstruction.",
+      "text": "Product preserves product-owned depth in product/K through its approval and commit; managed capability/K belongs to Arch, while Adopt is only initial unmanaged reconstruction.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",

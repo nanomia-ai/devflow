@@ -22,18 +22,18 @@ marker production, card status, and task boundary; reviewer owns clean judgment;
 owns current promoted knowledge for managed projects; the named semantic owner owns compatible feedback.
 
 Terminals: BLOCK on unavailable structured state, malformed evidence, missing bounded input,
-premature marker, broad history, lost passengers, or broken review lineage; ROUTE direct for
-card authority; ROUTE resume for canonical non-work, marker landing, and every completed
+premature or source-less marker, broad history, lost passengers, or broken review lineage; ROUTE direct for
+card authority or a post-title conclusion that lacks a committed source; ROUTE resume for canonical non-work, marker landing, and every completed
 task boundary so the state kernel can select remaining Work or Verify; ASK for the third
 objection disposition; WAIT on remote evidence, blockade, or mid-task handoff; DONE only after card.done + boundary.complete are
 observed and no current-source marker remains.
 
 Stages: claim/reentry; remote recovery; implement/signal; review reduction; research
-checkpoint; one-owner knowledge marker; feedback/carry/task finalization; integration;
+checkpoint; after a research checkpoint or integrated exact-title general task, one-owner knowledge marker; feedback/carry/task finalization; integration;
 handoff; boundary.
 
 Effects: exact bounded reads; destination and progress writes; completion/review execution;
-non-pass checkpoints; claim/task/integration/boundary commits; one canonical knowledge marker;
+non-pass checkpoints; claim/task/integration/boundary commits; one journal-only canonical knowledge marker from a committed card source;
 one atomically persisted canonical compatible-feedback marker set; byte-identical done rename; handoff refresh; route.
 
 Artifacts: project Product, Arch, code style, optional design and glossary, journal, active

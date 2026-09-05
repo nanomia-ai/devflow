@@ -61,8 +61,9 @@ understanding.
   stays with its reason. For example, a maintained normative document with one reading and
   change boundary remains one K past the cap; a subsection becomes a child only when it gains
   its own boundary.
-- K nodes are written by the design-zone writer: Adopt only inside the initial unmanaged
-  projection, otherwise Arch. They ride the same confirmation bundle and commit as their
+- K nodes are written by their semantic owner's physical writer: Adopt only inside the
+  initial unmanaged projection; Product for product/K, Design for design/K, and Arch for
+  arch/K and managed capability/K. They ride the same confirmation bundle and commit as their
   owner document: a Layer 0 owner's K in that owner's Layer 0 commit, and a capability's K
   in `adopt — capabilities` or `arch — capabilities`. Verify never writes K. The human
   deletion exception matches the owner document's.

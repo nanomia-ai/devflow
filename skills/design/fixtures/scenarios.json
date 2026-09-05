@@ -63,6 +63,7 @@
       "stage": "confirmation",
       "status": "ASK",
       "effects": [
+        "RUN",
         "REPORT",
         "ASK"
       ]
@@ -167,6 +168,7 @@
       "stage": "confirmation",
       "status": "ASK",
       "effects": [
+        "RUN",
         "REPORT",
         "ASK"
       ]
@@ -332,7 +334,10 @@
       "stage": "confirmation",
       "status": "ROUTE",
       "effects": [
+        "RUN",
         "WRITE",
+        "WRITE",
+        "RUN",
         "COMMIT",
         "ROUTE:direct"
       ]
@@ -465,6 +470,7 @@
       "stage": "proposal",
       "status": "ASK",
       "effects": [
+        "RUN",
         "REPORT",
         "ASK"
       ]
@@ -582,7 +588,10 @@
       "row": "write",
       "status": "WAIT",
       "effects": [
+        "RUN",
         "WRITE",
+        "WRITE",
+        "RUN",
         "WAIT"
       ]
     },

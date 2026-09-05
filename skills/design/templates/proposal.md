@@ -12,3 +12,7 @@ Review surface: {{reviewSurface}}
 | Item | Disposition | Source or planned Destination | How to check |
 | --- | --- | --- | --- |
 {{buildScope}}
+
+## Owner-adjacent knowledge changes
+
+{{knowledgeDelta}}

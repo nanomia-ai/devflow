@@ -616,6 +616,8 @@
       "status": "ROUTE",
       "effects": [
         "READ",
+        "RUN",
+        "WRITE",
         "WRITE",
         "RUN",
         "COMMIT",
@@ -1995,6 +1997,7 @@
       "stage": "approval",
       "status": "ASK",
       "effects": [
+        "RUN",
         "REPORT",
         "ASK"
       ]
@@ -2099,9 +2102,12 @@
       "stage": "approval",
       "status": "NEXT",
       "effects": [
+        "RUN",
         "WRITE",
         "WRITE",
         "WRITE",
+        "WRITE",
+        "RUN",
         "COMMIT",
         "NEXT"
       ]
@@ -2154,9 +2160,12 @@
       "stage": "approval",
       "status": "NEXT",
       "effects": [
+        "RUN",
         "WRITE",
         "WRITE",
         "WRITE",
+        "WRITE",
+        "RUN",
         "COMMIT",
         "NEXT"
       ]
@@ -2259,6 +2268,7 @@
       "stage": "capability-design",
       "status": "ASK",
       "effects": [
+        "RUN",
         "REPORT",
         "ASK"
       ]
@@ -2570,7 +2580,10 @@
       "row": "write-arch",
       "status": "WAIT",
       "effects": [
+        "RUN",
         "WRITE",
+        "WRITE",
+        "RUN",
         "WAIT"
       ]
     },
@@ -2622,7 +2635,10 @@
       "row": "write-capability",
       "status": "WAIT",
       "effects": [
+        "RUN",
         "WRITE",
+        "WRITE",
+        "RUN",
         "WAIT"
       ]
     },

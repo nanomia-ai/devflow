@@ -60,7 +60,7 @@ Return unrelated canonical routes to resume so arch never steals another stage's
 
 ## stage: compatible-feedback
 
-Judgment: For a pending marker, edit only its exact owner and preserve the source provenance plus Background, Why/evidence, Conclusion, and implication; then wait for canonical replay. Delete only the byte-identical marker after state proves those values are present in that owner, and commit the exact owner diff with the journal deletion atomically before routing to Resume.
+Judgment: For a pending marker, project existing K headers under its exact owner, edit only that owner, and preserve source provenance plus Background, Why/evidence, Conclusion, and implication. Update and validate only an existing K whose unit changes; keep the required payload in the owner document so canonical replay can prove landing. Delete only the byte-identical marker after replay, and commit the exact owner/K diff with the journal deletion atomically before routing to Resume.
 
 Why: A superficial owner-file diff is insufficient, and every other owner's marker remains pending.
 
@@ -72,7 +72,7 @@ Why: The definition must land while its marker remains before capability discove
 
 ## stage: design-marker
 
-Judgment: Use the exact structured note or open-item payload and its named capability; make no broader architecture inference.
+Judgment: Use the exact structured note or open-item payload and its named capability; project that capability's existing K headers and update only a current K locus whose unit changes. Validate the exact design-zone/K batch before deleting the routed line, and make no broader architecture inference.
 
 Why: A confirmed localized statement should refresh one design zone without reopening Layer 0.
 
@@ -140,7 +140,7 @@ Why: Interruption cannot promote a partial report into current architecture.
 
 ## stage: approval
 
-Judgment: approval.action is ask, approve, or refuse; request.kind is initial, refresh, capability-only, or none. Initial approval writes `Brownfield: no`; refresh binds the architecture template's Brownfield field to the canonical observed project origin and preserves it.
+Judgment: approval.action is ask, approve, or refuse; request.kind is initial, refresh, capability-only, or none. Project bounded arch/K headers and show any changed current locus with the proposal. Initial approval writes `Brownfield: no`; refresh preserves the canonical observed origin; either batch writes and validates only arch/K, never Product or Design K.
 
 Why: Reporting precedes explicit approval. Refusal writes nothing, while approval makes the complete Layer 0 pair current at the appropriate boundary.
 
@@ -152,7 +152,7 @@ Why: A context warning ends the run at the confirmed Layer 0 boundary so a fresh
 
 ## stage: capability-design
 
-Judgment: capability.action is ask or approve; route.after is design, direct, or resume. Confirm the full expected design batch, preserve existing verified zones, and choose the next stage from the confirmed frontend need and owner preference.
+Judgment: capability.action is ask or approve; route.after is design, direct, or resume. Project K headers only for expected changed capability owners, then show changed design zones and each changed K's current unit, exact current or new target, change reason, and adjacent owner-tree delta. Confirm the full expected design batch, preserve existing verified zones, and choose the next stage from the confirmed frontend need and owner preference; unchanged K trees never enter the report.
 
 Why: Capability documents are arch's final technical-planning output for a managed project and must exist before the first tree opening.
 

@@ -10,7 +10,7 @@ Read `<skill-root>/../principles/references/policy-index.md` as this stage's sha
 
 ## why: ownership
 
-The design writer owns one current design document. It never writes recursive capability knowledge; when an approved design exposes durable subtopic knowledge, the later capability writer receives one landing request and decides the appropriate design zone.
+The design writer owns one current design document and its design/K depth. It projects existing design/K headers before approval and updates a changed unit at its current locus in the same validated commit. It never writes recursive capability knowledge; a durable capability subtopic remains with the later capability writer.
 
 ## why: legacy
 
@@ -42,7 +42,7 @@ A design source is a scope-specific authority, not a repository-wide default. A 
 
 ## stage: compatible-feedback
 
-Judgment: For a pending marker, edit only the exact design owner and preserve the source provenance plus Background, Why/evidence, Conclusion, and implication; then wait for canonical replay. Delete only the byte-identical marker after state reports that all requested content is present, and commit the owner diff and journal deletion atomically before routing to Resume.
+Judgment: For a pending marker, project existing design/K headers, edit only the exact design owner, and preserve the source provenance plus Background, Why/evidence, Conclusion, and implication. If that unit already lives in design/K, update and validate that exact locus before waiting for canonical replay. Delete only the byte-identical marker after state reports that all requested content is present, and commit the owner/K diff and journal deletion atomically before routing to Resume.
 
 Why: A superficial diff is not semantic landing, and other owners' markers remain pending.
 
@@ -72,6 +72,6 @@ Why: The six decisions may stay compact for a small project, but every decision 
 
 ## stage: confirmation
 
-Judgment: approval.action is one of ask, commit, reject.
+Judgment: approval.action is one of ask, commit, reject. Project bounded design/K headers and show any changed current locus with the six UI decisions before approval; after approval write and validate only sourced design-owned K in the same design commit. New K still requires the shared independent-reader/change-reason boundary, and capability/K stays outside Design.
 
 Why: A report is provisional. Rejection preserves the current owner and leaves a recorded maintenance request resumable rather than silently cancelling it; explicit approval makes the new design current, carries the pending request line in the same canonical design commit, and routes the next build planning exactly once.

@@ -15,6 +15,29 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.11 — 2026-09-06 — Current owner knowledge survives planning and execution
+
+The shared owner contract now carries a changed unit's existing K locus through the same confirmation,
+write, validation, and commit boundary as its owner document. Product and Design update only their own
+Layer 0 K, while Arch retains architecture and managed capability K plus exact marker delegation; Adopt's
+all-owner authority remains limited to initial unmanaged reconstruction, and Direct, Work, and Verify never
+write K.
+
+Product, Design, and Arch expose bounded current-owner K deltas at their existing approval surfaces. Direct
+projects only the K headers needed by the current Layer 0 owner, target capability, and explicit crosscut
+owners into a card's exact reads. After a normal task's committed result is integrated and its existing
+completion boundary is settled, Work now uses the existing journal marker transport for a sourced reusable
+unit, creates nothing when no such unit changed, and returns a source-less late conclusion through Direct.
+No new state field, stage, registry, index, classifier, validator, marker family, scan, or cross-stage
+transaction was added.
+
+The six affected P2 packages were rebuilt and passed full structural lint, 25-repeat Skill Rails builds,
+and focused owner-projection and package-source fixtures. Final preflight exposed a v0.23.9 test-only
+drift: the project-state fixture now projects Adopt's separate Layer 0 and capability K writes at their
+existing commit boundaries, and its 385-test source suite passes. The full repository suite was not
+rerun after that repair; Gate B and entry-system before/after checks are not applicable, while
+fresh-model behavior, installation, and real-use execution remain unverified.
+
 ## 0.23.10 — 2026-09-06 — Cohesive knowledge lands at one exact current locus
 
 Principles now defines one K by the readers who need its content together and the reason it changes,

@@ -13,6 +13,6 @@ This index is the mandatory shared-policy entry. A named stage opens it from its
 | Status, claim, or tweak classification | [Status Notation](delivery/status-and-tweak.md#status-notation) and [The Tweak Lane](delivery/status-and-tweak.md#the-tweak-lane) |
 | Any Decision whose ordered effects contain `COMMIT` (a `COMMIT` effect is a Git commit under Commit Discipline), or any boundary, remote-evidence, or pass claim | [Commit Discipline](delivery/commit-and-verification.md#commit-discipline) and [The Verification Iron Rule](delivery/commit-and-verification.md#the-verification-iron-rule) |
 | Capability baseline or knowledge capsule | [Knowledge structure policy](knowledge-structure-policy.md#knowledge-structure-policy) and [Knowledge evidence policy](knowledge-evidence-policy.md#knowledge-evidence-policy) |
-| Planning evidence or binding-choice preparation | [Planning evidence discipline](planning/evidence-discipline.md#planning-evidence-discipline) |
+| Product, Arch, Adopt, or Direct planning evidence or binding-choice preparation | [Planning evidence discipline](planning/evidence-discipline.md#planning-evidence-discipline) |
 | Verification revision or event identity | [Verification revision predicates](verification/revision-predicates.md#verification-revision-predicates) and [Verification event predicates](verification/event-predicates.md#verification-event-predicates) |
 | Coordinating dispatched workers | [Coordinator contract](coordination/coordinator-contract.md#coordinator-contract) |

@@ -2,7 +2,7 @@
 
 ## Purpose and failure scene
 
-- Purpose: preserve the complete current technical-planning workflow for devflow-managed projects as a P2 state machine and make arch the design-zone and recursive K writer after initial unmanaged reconstruction.
+- Purpose: preserve the complete current technical-planning workflow for devflow-managed projects as a P2 state machine and make Arch the arch/K and managed capability design-zone/K writer after initial unmanaged reconstruction.
 - Failure scene: a cold consumer replaces prerequisite reads, approvals, actual writes, commits, verification evidence, or marker atomicity with one broad judgment.
 
 ## Observations and judgment inputs
@@ -14,9 +14,9 @@
 
 ## Owners and effects
 
-- Arch owns the architecture file, code-style file, architecture decision directory, capability design zones for managed projects including adopted brownfields, and recursive K writes authorized by valid knowledge markers; `writer=adopt` is legacy provenance and `writer=arch` is current provenance. Adopt owns only initial unmanaged reconstruction.
+- Arch owns the architecture file, code-style file, architecture decision directory, arch/K, and capability design zones/K for managed projects including adopted brownfields. A valid knowledge marker delegates only its exact semantic owner/K batch; `writer=adopt` is legacy provenance and `writer=arch` is current provenance. Adopt owns only initial unmanaged reconstruction.
 - Product and principles retain their canonical semantic ownership; arch's glossary and marker-consumption effects are only the explicitly routed transitions.
-- Report precedes approval. Approval effects write the complete artifacts and commit their boundary. Marker consumption writes the named owner or K target, deletes only selected markers, and commits all of it atomically.
+- Report precedes approval and includes the bounded current K delta. Approval effects write and validate the complete owner/K batch before committing its boundary. Marker consumption writes the named owner and changed existing K, deletes only selected markers, and commits all of it atomically.
 
 ## Static artifacts
 

@@ -58,7 +58,7 @@ export const TEMPLATES = {
   proposal: { file: "templates/proposal.md", fields: {
     components: "list", survivalEvidence: "list", stackChoices: "list", derivedChoices: "list",
     codeStructure: "block", data: "block", verificationChannel: "block", provisionalRows: "generated",
-    risks: "list", outOfScope: "list", adrReview: "list", openChoices: "list"
+    risks: "list", outOfScope: "list", adrReview: "list", openChoices: "list", knowledgeDelta: "block"
   }, sections: [] },
   architecture: { file: "templates/architecture.md", fields: {
     brownfield: "line", components: "list", stack: "list", codeStructure: "block", data: "block", existingRecords: "block",
@@ -78,6 +78,9 @@ export const TEMPLATES = {
   }, sections: [] },
   knowledgeNode: { file: "templates/knowledge-node.md", fields: {
     title: "line", openWhen: "line", about: "line", body: "block", sourceBasis: "generated"
+  }, sections: [] },
+  capabilityBatch: { file: "templates/capability-batch.md", fields: {
+    changedDesignZones: "list", knowledgeDelta: "block"
   }, sections: [] },
   channelEvidence: { file: "templates/channel-evidence.md", fields: {
     command: "line", exitCode: "line", readProbe: "block", interactionProbe: "block", cleanContext: "block", verdict: "line"
@@ -146,9 +149,9 @@ export const TABLES = {
 
 export const STAGES = [
   { id: "compatible-feedback", reads: ["compatible.owner"], acceptsUnknown: [], done: s => s.compatible.owner === "none", table: "compatibleFeedback", reentry: "rejudge", branches: {
-    "write-arch": [["WRITE", { artifact: "architecture", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], "WAIT"],
-    "write-capability": [["WRITE", { artifact: "capabilityDesignZones", target: "exact compatible-feedback owner", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], "WAIT"],
-    land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: ["compatible.owner", ".devflow/journal.md"] }], "ROUTE:resume"]
+    "write-arch": [["RUN", { action: "project existing arch/K headers under the exact arch owner" }], ["WRITE", { artifact: "architecture", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], ["WRITE", { artifact: "knowledgeNodes", selection: "changed units already owned by existing arch/K only", zeroAllowed: true }], ["RUN", { action: "validate exact changed arch/K paths" }], "WAIT"],
+    "write-capability": [["RUN", { action: "project existing K headers under the exact compatible-feedback capability owner" }], ["WRITE", { artifact: "capabilityDesignZones", target: "exact compatible-feedback owner", source: "compatible-feedback exact coordinates", preserves: ["source", "background", "why", "conclusion", "implication"] }], ["WRITE", { artifact: "knowledgeNodes", selection: "changed units already owned by that exact capability/K only", zeroAllowed: true }], ["RUN", { action: "validate exact changed capability/K paths" }], "WAIT"],
+    land: [["RUN", { action: "delete-byte-identical-compatible-feedback-marker" }], ["COMMIT", { scope: "compatible-feedback-owner-and-marker", touches: ["compatible.owner", "exact changed owner/K paths", ".devflow/journal.md"] }], "ROUTE:resume"]
   }, body: "stage: compatible-feedback" },
   { id: "glossary-term", reads: ["state.route"], acceptsUnknown: [], done: s => s.state.route !== "marker.glossary-term", needs: ["glossary.phase"], reentry: "rejudge", branches: {
     definition: [["READ", { path: "references/workflow.md" }], ["WRITE", { artifact: "glossary", template: "glossary" }], ["COMMIT", { boundary: "glossary-definition-marker-retained" }], "NEXT"],
@@ -156,7 +159,7 @@ export const STAGES = [
   }, body: "stage: glossary-term" },
 
   { id: "design-marker", reads: ["state.route"], acceptsUnknown: [], done: s => s.state.route !== "marker.design-note" && s.state.route !== "marker.design-open-item", effects: [
-    ["READ", { path: "references/workflow.md" }], ["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["RUN", { action: "delete-byte-identical-routed-design-line" }], ["COMMIT", { boundary: "binding-capability-design" }], "ROUTE:resume"
+    ["READ", { path: "references/workflow.md" }], ["RUN", { action: "project existing K headers under the marker's exact capability owner" }], ["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["WRITE", { artifact: "knowledgeNodes", selection: "changed units already owned by that exact capability/K only", zeroAllowed: true }], ["RUN", { action: "validate exact changed capability/K paths and delete the byte-identical routed design line" }], ["COMMIT", { boundary: "binding-capability-design", touches: ["exact marker-named capability design zone", "exact changed capability/K paths", ".devflow/journal.md"] }], "ROUTE:resume"
   ], reentry: "rejudge", body: "stage: design-marker" },
 
   { id: "knowledge-landing", reads: ["marker.knowledge", "marker.knowledgeCount"], acceptsUnknown: [], done: s => s.marker.knowledge === "none" && s.marker.knowledgeCount === 0, needs: ["landing.mode"], reentry: "rejudge", branches: {
@@ -216,10 +219,10 @@ export const STAGES = [
   }, body: "stage: proposal" },
 
   { id: "approval", reads: ["request.kind"], acceptsUnknown: [], done: s => s.request.kind === "capability-only" || s.request.kind === "none", needs: ["approval.action", "request.kind"], table: "approvalBoundary", reentry: "rejudge", branches: {
-    ask: [["REPORT", { template: "proposal" }], "ASK"],
+    ask: [["RUN", { action: "project existing arch/K headers under the exact arch owner" }], ["REPORT", { template: "proposal" }], "ASK"],
     refuse: [["REPORT", { template: "result" }], "DONE"],
-    "approve-initial": [["WRITE", { artifact: "architecture", template: "architecture", fields: { brownfield: "no" } }], ["WRITE", { artifact: "codeStyle", template: "codeStyle" }], ["WRITE", { artifact: "decisionRecords", template: "adr" }], ["COMMIT", { boundary: "confirmed-layer-0" }], "NEXT"],
-    "approve-refresh": [["WRITE", { artifact: "architecture", template: "architecture", fields: { brownfield: "state.brownfield" } }], ["WRITE", { artifact: "codeStyle", template: "codeStyle" }], ["WRITE", { artifact: "decisionRecords", template: "adr" }], ["COMMIT", { boundary: "binding-architecture-refresh" }], "NEXT"]
+    "approve-initial": [["RUN", { action: "project existing arch/K headers under the exact arch owner" }], ["WRITE", { artifact: "architecture", template: "architecture", fields: { brownfield: "no" } }], ["WRITE", { artifact: "codeStyle", template: "codeStyle" }], ["WRITE", { artifact: "decisionRecords", template: "adr" }], ["WRITE", { artifact: "knowledgeNodes", selection: "approved sourced arch-owned units; existing loci stay in place and new K requires the shared capsule boundary", zeroAllowed: true }], ["RUN", { action: "validate exact changed arch/K paths" }], ["COMMIT", { boundary: "confirmed-layer-0", touches: ["Layer 0 artifacts", "exact changed arch/K paths"] }], "NEXT"],
+    "approve-refresh": [["RUN", { action: "project existing arch/K headers under the exact arch owner" }], ["WRITE", { artifact: "architecture", template: "architecture", fields: { brownfield: "state.brownfield" } }], ["WRITE", { artifact: "codeStyle", template: "codeStyle" }], ["WRITE", { artifact: "decisionRecords", template: "adr" }], ["WRITE", { artifact: "knowledgeNodes", selection: "approved sourced arch-owned units; existing loci stay in place and new K requires the shared capsule boundary", zeroAllowed: true }], ["RUN", { action: "validate exact changed arch/K paths" }], ["COMMIT", { boundary: "binding-architecture-refresh", touches: ["Layer 0 artifacts", "exact changed arch/K paths"] }], "NEXT"]
   }, body: "stage: approval" },
 
   { id: "capability-capacity", reads: ["capacity.state"], acceptsUnknown: [], done: s => s.capacity.state === "enough", needs: ["capacity.state"], reentry: "rejudge", branches: {
@@ -227,7 +230,7 @@ export const STAGES = [
   }, body: "stage: capability-capacity" },
 
   { id: "capability-design", reads: ["state.capabilities", "state.expected"], acceptsUnknown: [], done: s => s.state.capabilities === "current" || s.state.expected === 0, needs: ["capability.action", "route.after"], table: "capabilityRoute", reentry: "rejudge", branches: {
-    ask: [["REPORT", { template: "capabilityDesign", countFrom: "state.expected" }], "ASK"],
+    ask: [["RUN", { action: "project existing K headers only for expected changed capability owners" }], ["REPORT", { template: "capabilityBatch", countFrom: "state.expected", surface: "changed design zones; changed K current unit, exact current/new target, change reason, adjacent owner tree delta" }], "ASK"],
     "approve-design": [["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode" }], ["COMMIT", { boundary: "capability-design" }], "ROUTE:design"],
     "approve-resume": [["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode" }], ["COMMIT", { boundary: "capability-design" }], "ROUTE:resume"],
     "approve-direct": [["WRITE", { artifact: "capabilityDesignZones", template: "capabilityDesign" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode" }], ["COMMIT", { boundary: "capability-design" }], "ROUTE:direct"]
@@ -244,7 +247,7 @@ export const ARTIFACTS = {
   decisionRecords: { path: ".devflow/project/decisions", writer: "arch", readers: ["stage.read-inputs", "stage.approval", "stage.capability-design", "external.work"], template: "adr" },
   capabilityDesignZones: { path: ".devflow/project/capabilities", writer: "arch", readers: ["stage.compatible-feedback", "stage.glossary-term", "stage.design-marker", "stage.capability-design", "external.direct", "external.work", "external.verify", "external.resume"], template: "capabilityDesign" },
   knowledgeOwnerScope: { path: ".devflow/project", writer: "arch", readers: ["stage.knowledge-landing", "external.resume"] },
-  knowledgeNodes: { path: ".devflow/project", writer: "arch", readers: ["stage.knowledge-landing", "stage.capability-design", "external.work", "external.resume"], template: "knowledgeNode" }
+  knowledgeNodes: { path: ".devflow/project", writer: "arch", readers: ["stage.compatible-feedback", "stage.design-marker", "stage.knowledge-landing", "stage.approval", "stage.capability-design", "external.work", "external.resume"], template: "knowledgeNode" }
 };
 
 export const ROLES = {
@@ -263,9 +266,9 @@ export const DECLARATIONS = {
   profile: { value: "p2", consumer: "build:profile" },
   stateApi: { value: "Every project-state observation comes from the context-bound sibling principles calculateState export. The collector never invokes its CLI, renders compatibility text, parses journal bytes, or uses process.cwd().", consumer: "collectors" },
   reportBeforeApproval: { value: "Canonical architecture and code-style writes occur only after the proposal report and explicit approval decision.", consumer: "stage:approval" },
-  managedProjectWriter: { value: "Arch is the current design-zone and recursive K writer for every devflow-managed project, including adopted brownfields; Adopt owns only initial unmanaged reconstruction.", consumer: "stage:design-marker|stage:capability-design" },
+  managedProjectWriter: { value: "Arch writes arch/K and managed capability/K, plus an exact semantic owner/K only while consuming an existing valid Arch/Adopt knowledge marker. Product and Design retain their own Layer 0 K; Adopt owns only initial unmanaged reconstruction.", consumer: "stage:compatible-feedback|stage:design-marker|stage:knowledge-landing|stage:approval|stage:capability-design" },
   brownfieldOrigin: { value: "Initial architecture approval writes Brownfield: no. Managed refresh binds the architecture template's Brownfield field to the canonical observed project origin and preserves it; Brownfield is not a routing predicate.", consumer: "template:architecture|stage:approval" },
-  knowledgeAuthority: { value: "Arch consumes every structured valid knowledge marker emitted by calculateState. writer=adopt is legacy provenance and writer=arch is current provenance; neither changes Arch's current managed-project stage ownership, and Arch never produces a marker or writes outside marker-named authorized owners.", consumer: "stage:knowledge-landing" },
+  knowledgeAuthority: { value: "Arch consumes every structured valid knowledge marker emitted by calculateState. writer=adopt is legacy provenance and writer=arch is current provenance; neither grants general ownership, and Arch never produces a marker or writes outside the exact marker-named owner/K batch.", consumer: "stage:knowledge-landing" },
   recursiveK: { value: "Recursive K is owner-adjacent through same-stem folders, uses numbers unique in the whole owner subtree, permits a leaf with zero children, cites exact card@fullhash line ranges, and has no Parent field, manual index, residual record, or batch record.", consumer: "templates:knowledgeNode" },
   atomicLanding: { value: "Selected marker deletion, owner or K write, and the matching boundary commit form one effect plan; partial multi-owner landing preserves every unconsumed marker.", consumer: "stage:knowledge-landing" },
   legacySchemas: { value: "The exact Layer 0, capability-document design-zone, verification scaffold, provisional, ADR, and channel-evidence shapes are template-owned and are not reconstructed from the atom ledger.", consumer: "templates" },

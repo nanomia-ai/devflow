@@ -49,3 +49,7 @@
 ## Choices requiring explicit approval
 
 {{openChoices}}
+
+## Owner-adjacent knowledge changes
+
+{{knowledgeDelta}}

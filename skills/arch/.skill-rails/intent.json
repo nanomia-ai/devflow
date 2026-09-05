@@ -10,7 +10,7 @@
   "state_dependent_behaviors": [
     "Initial architecture approval writes Brownfield: no, while managed refresh preserves the current observed Brownfield value.",
     "A partial setup.no-product state with implementation code or brownfield history routes to Resume; Arch never redirects managed recovery to Adopt.",
-    "Arch consumes both valid legacy writer=adopt and current writer=arch knowledge markers; writer is provenance, mixed sets stay in Arch until drained, and only invalid or unsupported markers fail integrity."
+    "Arch owns arch/K and managed capability/K, and consumes valid writer=adopt or writer=arch markers only as provenance-bound delegation to each exact owner/K batch; mixed sets stay in Arch until drained, while invalid markers fail integrity."
   ],
   "exact_formats": [],
   "external_dependencies": [],

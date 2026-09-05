@@ -598,7 +598,7 @@ observed — what is restored then is not the table but **a callable path**.
 
 ### DD-92 · Principles entry is state-free, resume owns state, and knowledge/work trees and P2 packages keep separate boundaries (v0.20.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.20.0 | State: active, partly corrected by DD-93 (v0.20.0), DD-97 (v0.21.0), DD-103 (v0.23.10)
+Subject: The knowledge layer and capability documents | Introduced: v0.20.0 | State: active, partly corrected by DD-93 (v0.20.0), DD-97 (v0.21.0), DD-103 (v0.23.10), DD-104 (v0.23.11)
 
 Observed problem: if the rulebook recomputes entry state or a hook injects it, it can disagree with resume; if one capability-number structure represents both knowledge and work, research and multi-owner knowledge can disappear. A manual index or central registry makes a second home for new facts, while missing package provenance makes it impossible to verify what a deploy artifact executes.
 
@@ -609,6 +609,51 @@ Refutation: DD-29's reason about a partial adapter dropping journal, freshness, 
 Affected coordinates: DD-03, DD-25, DD-28, DD-43, DD-44, DD-76, DD-29, DD-57, DD-54, DD-87; the principles/resume/hook/knowledge writers and package deploy artifacts; and the multi-owner, knowledge, and entry matrix cells. DD-05, DD-11, and DD-83 remain affirmed within their existing boundaries: one SessionStart hook, report-only correction, and one read-only state computation.
 
 Revisit when delayed guidance causes an action different from resume, a C1–C6 behavioral constraint fails, a recursive K opens without an exact consumer, or a P2 package loses its spec, provenance, or build evidence in real use.
+
+### DD-104 · Owner-specific writers preserve current K loci through approval, execution, and promotion (v0.23.11)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.23.11 | State: active
+
+Observed problem: DD-92 C4 and DD-97's managed-refresh language made Arch sound like the physical
+writer for every managed K even after v0.23.9 established Product, Architecture, Design, and
+Capability as distinct semantic owners. Product and Design could approve an owner-document change
+without seeing or updating an existing same-owner K; Direct projected only a target capability's
+headers; and Work considered promotion only for Research cards. The result could leave a stale K,
+omit a needed execution read, or silently lose a sourced current conclusion from an ordinary task.
+
+Chosen boundary: the shared core-document contract owns one confirmation batch. A writer projects
+bounded existing K headers for the confirmed owner, keeps an already-owned unit at its exact current
+locus, and carries every changed locus through approval, write, validation, and the same commit. New
+K still requires the existing independent-reader/change-reason or owner-map overflow boundary.
+Physical authority is narrow: Product writes product.md and product/K; Design writes design.md and
+design/K; Arch writes arch/K and managed capability design zones/K; Adopt writes every owner only in
+the initial unmanaged projection. Direct, Work, and Verify never write K, and an existing Arch/Adopt
+knowledge marker delegates only its exact semantic owner/K batch.
+
+Direct now selects exact card reads from bounded header projections for the needed current Layer 0
+owner, target capability, and explicit crosscut owners, using the header's use-when with the card
+Destination and target; affected owners are a narrowing hint, not the sole gate. Work retains the
+Research checkpoint and also judges an ordinary task only after its exact-title commit is integrated
+and completion, review, and handoff evidence are current. It emits only the existing journal marker
+from a conclusion already present in that committed card source; a source-less later conclusion is
+reported and returned through Direct, while a card with no reusable change creates no marker.
+
+Why this is a correction rather than a new model: semantic ownership, same-stem recursive K,
+source provenance, existing marker grammar, and atomic landing remain unchanged. No state field,
+predicate family, registry, index, classifier, validator, marker family, scan, or cross-stage
+transaction is added. Product, Architecture, Design, Direct, and Work keep their distinct purposes;
+the common rule applies only at the durable owner/K result boundary.
+
+Affected coordinates: Principles' owner, writer, routing, capsule, and policy-index references;
+Product, Design, Arch, Direct, and Work P2 sources, fixtures, ledgers, and generated receipts; matrix
+cells 3.17, 3.18, 3.20, and 3.21; plugin manifests; CHANGELOG; and the v0.23.11 implementation report.
+DD-92's C1–C3 and C5–C6 reasons and DD-97's unmanaged-Adopt/managed-Arch routing reason remain active;
+only their universal physical-K-writer wording is narrowed here. DD-103 remains a true record of its
+release-time correction and is not edited retroactively.
+
+Revisit when an owner change can commit while a changed existing K remains stale, Direct must scan
+unrelated owners to find a card dependency, a normal card loses a sourced reusable conclusion, or the
+physical-writer boundary prevents an exact marker-named semantic owner from landing atomically.
 
 ### Rejected under this subject
 
@@ -1949,7 +1994,7 @@ entry, or the marker fails to guard glossary/header consistency across an interr
 
 ### DD-103 · A K boundary is one knowledge unit read together and revised for one reason; Adopt lands that knowledge unit at its exact canonical locus (v0.23.10)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.23.10 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.23.10 | State: active, partly corrected by DD-104 (v0.23.11)
 
 Observed problem: v0.23.9's first-project judgment, document-creation flow, and pre-approval
 clean-context refutation worked in real use, but the proposed tree and generated documents scattered
@@ -2122,7 +2167,7 @@ Nothing has been rejected under this subject yet.
 
 ### DD-97 · Explicit Adopt reconstructs an unmanaged brownfield once; managed technical refresh belongs to Arch (v0.21.0)
 
-Subject: Brownfield and entry | Introduced: v0.21.0 | State: active, partly corrected by DD-101 (v0.23.7), DD-103 (v0.23.10)
+Subject: Brownfield and entry | Introduced: v0.21.0 | State: active, partly corrected by DD-101 (v0.23.7), DD-103 (v0.23.10), DD-104 (v0.23.11)
 
 Observed problem: three clean existing-code worktrees invoked Adopt explicitly, yet the installed
 entry text told Codex to enter Principles first and Adopt did not accept the state tool's

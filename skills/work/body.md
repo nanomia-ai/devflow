@@ -20,18 +20,6 @@ Stop when the sibling principles package does not return the structured
 `devflow/project-state/2` result. Compatibility rendering, a stale migration wrapper, or a
 locally reconstructed journal/card model is not shared state.
 
-## guard: premature-knowledge-marker
-
-A knowledge marker already sourced from this research card is invalid until the durable
-conclusion and evidence are present in the card at a committed checkpoint. Preserve the
-card and report the marker; do not legitimize it after the fact.
-
-## guard: knowledge-landing-before-closure
-
-Route the exact current-source marker to its named Arch writer. One consumed owner
-does not clear another owner’s marker, so a crosscut source remains open until no marker
-from that source remains.
-
 ## guard: compatible-feedback-set-required
 
 Compatible feedback has one card-boundary proposal set. Represent each judged set with canonical serialized JSON-array `bytes` plus mechanically collected `count`, `uniqueCount`, `sourceCount`, `sourceCard`, and `source`. With no lifecycle for this card, judge one complete deterministic nonempty `feedback.pendingSet`; its source card must equal this card's exact target, it must have one shared source and no duplicate payload, and `feedback.eligibleSet.bytes` plus its count and source identity must be byte-identical before `feedback.lifecycleAction=produce`. Partial, reordered, duplicate, mixed-source, foreign-card, empty, or collector-invalid input blocks. Once any lifecycle exists, treat the collected current and consumed entries as the sealed set, keep `feedback.eligibleSet.count` at zero, and use `settled`; do not rejudge or compare a pending set in that established arm.
@@ -41,6 +29,19 @@ The guard rejects partial, reordered, duplicate, mixed-source, foreign-source, e
 
 Route only a current marker sourced from the current card to Resume. Its exact named semantic owner remains visible until landing consumes it; residual current owners continue to block even when sibling entries are already consumed.
 A current or consumed lifecycle from another card does not hijack this card. A consumed sealed member stays retired, every residual current sealed member remains routable, and a nonmember is an integrity failure rather than an eligible proposal.
+
+## guard: premature-knowledge-marker
+
+A knowledge marker is valid only from a committed source: a research card's durable synthesis
+checkpoint, or a general card after its exact-title commit is integrated and its completion,
+review, and handoff evidence are current. Preserve the card and report an earlier marker; do
+not legitimize it after the fact.
+
+## guard: knowledge-landing-before-closure
+
+Route the exact current-source marker to its named Arch writer. One consumed owner
+does not clear another owner’s marker, so a crosscut source remains open until no marker
+from that source remains.
 
 ## guard: invalid-card
 
@@ -128,10 +129,17 @@ knowledge.
 
 ## stage: knowledge-marker
 
-Judgment: `knowledge.action` is exactly `none` or `emit-arch`. Promote only a
-reusable current conclusion with one named long-lived owner. Arch is the current technical
-owner for every managed project, including brownfield projects. Emit one owner marker now;
-if the same source has another owner, re-evaluate after the first marker is consumed.
+Judgment: `knowledge.action` is exactly `none`, `emit-arch`, or `route-direct`. Research keeps
+its checkpoint path. For a general card, judge only after the exact-title task commit is
+integrated and completion, required review, and handoff are current. Promote only a reusable
+current conclusion that is already present with its evidence in that committed card and has
+one named long-lived owner. `Affected knowledge owners` narrows known candidates but neither
+an empty value nor a legacy missing field exempts an actual reusable unit. If no unit changed,
+choose `none` without a K projection, question, or marker. If the conclusion arose after the
+task commit and lacks a committed source, refuse emission, report that missing source, and
+return it through the existing request/Direct handoff. Emit only the journal marker now;
+do not touch the task card, code, or compatible-feedback payload. Re-evaluate another owner
+only after the first marker is consumed.
 
 Why: independent markers preserve partial multi-owner landing without a batch or shared set,
 or semantic-owner inference.

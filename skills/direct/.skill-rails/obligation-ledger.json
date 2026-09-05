@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:aeaff68e04e5dc20a2c9b2a22fb83b250513c59843bb0b2dd7efeb2ac001adda",
+  "intent_hash": "sha256:8b80cf51abd0cf8ce3897ce06be5dbebc4fd610edbdb6e1e8c43c39db07e9e56",
   "profile": "p2",
   "atoms": [
     {
@@ -36,7 +36,7 @@
     {
       "id": "state-dependent-behaviors-001",
       "source": "intent.state_dependent_behaviors[0]",
-      "text": "00-project materializes only canonical Research cards; all other scopes materialize task cards with one identity and progress-log contract.",
+      "text": "00-project materializes only canonical Research cards; all other scopes materialize task cards after bounded current-owner K headers contribute only exact destination-matched Read first paths.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",
@@ -2703,10 +2703,10 @@
       "consequence": "high",
       "disposition": "projected",
       "targets": [
-        "spec:OBSERVATIONS/approval.issue"
+        "spec:STAGES/materialize"
       ],
       "evidence": [
-        "fixture:several-independent-sibling-cards-remain-several"
+        "fixture:one-crosscut-unit-is-one-card-with-three-owners"
       ],
       "source_hash": "sha256:108f07c7bfb496e4bc34ba96df9ec2123b4f67474376a264947e70863a969c1f",
       "source_kind": "paragraph",
@@ -5776,10 +5776,11 @@
       "consequence": "high",
       "disposition": "projected",
       "targets": [
-        "spec:ARTIFACTS/approvalBundle"
+        "body:stage: materialize",
+        "spec:STAGES/materialize"
       ],
       "evidence": [
-        "fixture:one-crosscut-unit-is-one-card-with-three-owners"
+        "fixture:active-resplit-origin-reuses-exact-scopes"
       ],
       "source_hash": "sha256:d47204f515cb78b10860522efececf901d10f12f49fd2b06bd5f1f080149afa3",
       "source_kind": "paragraph",

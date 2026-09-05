@@ -149,6 +149,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
+        "RUN",
         "WRITE",
         "NEXT"
       ]
@@ -235,6 +236,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
+        "RUN",
         "WRITE",
         "NEXT"
       ]
@@ -344,6 +346,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
+        "RUN",
         "WRITE",
         "NEXT"
       ]
@@ -405,6 +408,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
+        "RUN",
         "WRITE",
         "NEXT"
       ]
@@ -449,6 +453,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
+        "RUN",
         "WRITE",
         "NEXT"
       ]
@@ -504,6 +509,7 @@
       "row": "continue-active-bundle",
       "status": "NEXT",
       "effects": [
+        "RUN",
         "WRITE",
         "NEXT"
       ]
@@ -1144,6 +1150,7 @@
       "effects": [
         "WRITE",
         "COMMIT",
+        "RUN",
         "WRITE",
         "NEXT"
       ]

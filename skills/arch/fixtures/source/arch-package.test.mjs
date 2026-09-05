@@ -223,9 +223,22 @@ test("workflow has concrete writes and atomic landing boundaries", async () => {
     assert.ok(verbs.indexOf("WRITE") < verbs.indexOf("RUN") && verbs.indexOf("RUN") < verbs.indexOf("COMMIT"), name);
   }
   const approval = spec.STAGES.find((stage) => stage.id === "approval");
-  assert.deepEqual(approval.branches["approve-initial"].map((effect) => Array.isArray(effect) ? effect[0] : effect), ["WRITE", "WRITE", "WRITE", "COMMIT", "NEXT"]);
-  assert.equal(approval.branches["approve-initial"][0][1].fields.brownfield, "no");
-  assert.equal(approval.branches["approve-refresh"][0][1].fields.brownfield, "state.brownfield");
+  assert.deepEqual(approval.branches["approve-initial"].map((effect) => Array.isArray(effect) ? effect[0] : effect), ["RUN", "WRITE", "WRITE", "WRITE", "WRITE", "RUN", "COMMIT", "NEXT"]);
+  assert.equal(approval.branches["approve-initial"][1][1].fields.brownfield, "no");
+  assert.equal(approval.branches["approve-refresh"][1][1].fields.brownfield, "state.brownfield");
+  for (const branch of ["approve-initial", "approve-refresh"]) {
+    const effects = approval.branches[branch];
+    assert.match(JSON.stringify(effects), /existing arch\/K headers/);
+    assert.match(JSON.stringify(effects), /validate exact changed arch\/K paths/);
+  }
+
+  const designMarker = spec.STAGES.find((stage) => stage.id === "design-marker");
+  assert.match(JSON.stringify(designMarker.effects), /marker's exact capability owner/);
+  assert.match(JSON.stringify(designMarker.effects), /changed units already owned by that exact capability\/K only/);
+
+  const capabilityDesign = spec.STAGES.find((stage) => stage.id === "capability-design");
+  assert.equal(capabilityDesign.branches.ask[1][1].template, "capabilityBatch");
+  assert.match(JSON.stringify(capabilityDesign.branches.ask), /expected changed capability owners/);
 });
 
 test("templates retain exact Layer 0 and capability design-zone contracts", () => {

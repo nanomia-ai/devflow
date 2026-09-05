@@ -30,3 +30,7 @@
 ## Proposed glossary delta
 
 {{glossaryDelta}}
+
+## Owner-adjacent knowledge changes
+
+{{knowledgeDelta}}

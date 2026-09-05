@@ -60,8 +60,9 @@ For a product re-run, use the canonical `product re-run pending` line above. Ser
 the whole disproved statement as one JSON string so newlines and quotes remain recoverable.
 
 An update per this table (replacing a provisional value, fixing a signal text, etc.) is
-itself a sanctioned modification path. Steps 1–4 run only when a lower layer must
-**violate** an upper one.
+itself a sanctioned modification path, not general K-write authority. Its owning rerun uses
+the core-document confirmation batch, including any existing K locus changed by that update.
+Steps 1–4 run only when a lower layer must **violate** an upper one.
 
 Discoveries do not come only from card work — a decision confirmed in conversation also
 lands through this table, immediately. The confirmed product.md's identity paragraph,

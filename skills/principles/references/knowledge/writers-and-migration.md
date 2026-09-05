@@ -2,7 +2,7 @@
 
 ## Writers and replacement boundaries
 
-- The design-zone writer is Adopt only during its initial unmanaged projection;
+- The capability design-zone writer is Adopt only during its initial unmanaged projection;
   otherwise it is Arch. That writer replaces from file start up to but excluding
   `## Verified state`. Verify replaces from `## Verified state` through end of file. Their
   byte ranges do not overlap. The initialization exception lets the design-zone writer create the
@@ -10,8 +10,11 @@
   reset a zero- or multiple-boundary file. After creation or reset, verify is the sole writer
   that replaces the verified zone. The exact v0.10 migration below is a separate
   content-blind initialization exception.
-- Arch first lands every user-confirmed managed Layer 0 document, then calculates Design
-  head. It derives every changed design zone in memory and presents them as one batch;
+- Each managed Layer 0 writer projects its owner's existing K headers and carries every
+  changed existing locus in the same approval, validation, and commit as that owner document:
+  Product for product/K, Design for design/K, and Arch for arch/K. Arch first lands its
+  user-confirmed Layer 0 documents, then calculates Design head. It derives every changed
+  capability design zone and its changed capability/K loci in memory and presents them as one batch;
   change no capability-document path before the user confirms that batch. After confirmation,
   land the batch through [Capability-design commit](../delivery/commit-and-verification.md#commit-discipline),
   including those capability documents and their K nodes; it is the last commit of that run.

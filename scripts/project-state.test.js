@@ -1288,7 +1288,7 @@ test("T4 glossary projections match Product and a rendered glossary is canon", a
   const approve = adopt.STAGES.find((stage) => stage.id === "adoption").branches.approve;
   assert.deepEqual(approve.filter((effect) => Array.isArray(effect) && effect[0] === "WRITE")
     .map((effect) => effect[1].template), [
-      "architecture", "design", "codeStyle", "glossary", "product", "capabilityDesign", "knowledgeNode",
+      "architecture", "design", "codeStyle", "glossary", "product", "knowledgeNode", "capabilityDesign", "knowledgeNode",
     ]);
   for (const branch of Object.values(arch.STAGES.find((stage) => stage.id === "glossary-term").branches)) {
     for (const effect of branch) {

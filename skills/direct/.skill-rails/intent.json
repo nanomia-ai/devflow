@@ -8,7 +8,7 @@
   "outputs": [],
   "irreversible_boundaries": [],
   "state_dependent_behaviors": [
-    "00-project materializes only canonical Research cards; all other scopes materialize task cards with one identity and progress-log contract."
+    "00-project materializes only canonical Research cards; all other scopes materialize task cards after bounded current-owner K headers contribute only exact destination-matched Read first paths."
   ],
   "exact_formats": [],
   "external_dependencies": [],

@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:d405529e65e7fa88a4cc3f9d411ebcea9fef2f8046a40ec3d57506d02bd4f147",
+  "intent_hash": "sha256:0e1a372b2f6047157140c2741dcdc43368bc558f130e4e5b866e0fca13a7e6bb",
   "profile": "p2",
   "atoms": [
     {
@@ -352,7 +352,7 @@
     {
       "id": "state-dependent-behaviors-005",
       "source": "intent.state_dependent_behaviors[4]",
-      "text": "Current knowledge uses only the canonical capability-capsule artifacts projected by project-knowledge; the package introduces no second node schema.",
+      "text": "Current knowledge uses only the canonical semantic-owner K artifacts projected by project-knowledge; the package introduces no second node schema.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",
@@ -367,7 +367,7 @@
     {
       "id": "state-dependent-behaviors-006",
       "source": "intent.state_dependent_behaviors[5]",
-      "text": "Knowledge landing uses the externally state-owned knowledgeLandingPending family; Arch is the canonical managed writer, while Adopt appears only in the initial unmanaged projection and retained legacy provenance.",
+      "text": "A confirmed owner batch preserves an existing K locus through approval, write, validation, and commit; Product writes product/K, Design writes design/K, Arch writes arch/K and managed capability/K, and Adopt writes all owners only in initial unmanaged projection.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",

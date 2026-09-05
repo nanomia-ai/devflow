@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:8275a9167d15c1225819b2a00fd5912e96ff2cf1590a3046f2266243b1fc754a",
+  "intent_hash": "sha256:665cef03067b5354093763c71c15f1000f033bc246c075f38c52c0366a84dcb9",
   "profile": "p2",
   "atoms": [
     {
@@ -62,7 +62,7 @@
     {
       "id": "state-dependent-behaviors-003",
       "source": "intent.state_dependent_behaviors[2]",
-      "text": "Arch consumes both valid legacy writer=adopt and current writer=arch knowledge markers; writer is provenance, mixed sets stay in Arch until drained, and only invalid or unsupported markers fail integrity.",
+      "text": "Arch owns arch/K and managed capability/K, and consumes valid writer=adopt or writer=arch markers only as provenance-bound delegation to each exact owner/K batch; mixed sets stay in Arch until drained, while invalid markers fail integrity.",
       "candidate_class": "stage",
       "consequence": "high",
       "disposition": "projected",

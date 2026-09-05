@@ -4,14 +4,13 @@
 
 Core documents (`.devflow/project/*`) are modified **only through this procedure or by
 re-running the owning skill** — never edited in passing during a task.
-Target ownership is fixed: product owns product.md and glossary.md; arch owns arch.md,
-code-style.md, and the legacy ADRs; design owns design.md; Adopt initially projects the whole
-confirmed unmanaged knowledge surface, including arch.md `Existing records`; after that boundary,
-direct owns the tree and task cards and verify owns verify.md. Adopt owns the capability design
-zone only inside that atomic initial projection; Arch owns every managed refresh under
-`.devflow/project/capabilities/`, and verify owns the verified zone
-after creation. The same-numbered knowledge capsule folder belongs to the design-zone
-writer, and the canonical baseline predicates govern its path, header, provenance marks,
+Target ownership is fixed: Product owns product.md, glossary.md, and product/K; Arch owns
+arch.md, code-style.md, the legacy ADRs, arch/K, and managed capability design zones and
+capability/K; Design owns design.md and design/K. Adopt alone initially projects the whole
+confirmed unmanaged knowledge surface, including every owner's K and arch.md `Existing
+records`; after that boundary, direct owns the tree and task cards and verify owns verify.md.
+Verify owns a capability's verified zone after creation. The canonical baseline predicates
+govern capability paths and zones; the capsule contract governs K paths, headers, provenance,
 and opening budget. Skills never delete, move, or edit the source documents a capsule was
 processed from — disposition belongs to a person alone. The canonical baseline predicates
 govern the initial empty verified
@@ -27,7 +26,11 @@ A document still being produced by a running product, arch, design, or adopt ses
 a draft until the user confirms it — reconcile a draft's contradictions by editing the
 draft on the spot, not through the procedures above, and when an already-inherited upper
 document must change, put that edit into the same confirmation batch. Derive and present
-the whole confirmation batch in memory; before confirmation, change no core-document path.
+the whole confirmation batch in memory. Project the confirmed owner's existing K headers
+through the bounded opening rule: if a changed knowledge unit already has a K locus, include
+that exact current path in approval, write, validation, and the same commit; create a K only
+at the independent-reader/change-reason boundary defined by the capsule contract. Before
+confirmation, change no core-document or K path.
 When an interruption leaves an uncommitted diff on a core-document path, do not use partial
 bytes as input or guess whether confirmation occurred: resume does not route to the next
 stage, and the owning skill either rederives the whole batch from HEAD and current inputs,
