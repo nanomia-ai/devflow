@@ -1,6 +1,6 @@
-# v0.23.7 결과 보고 — 냉간 작성 산출물 문법의 자연 소유자 복원
+# v0.23.8 결과 보고 — 냉간 작성 산출물 문법의 자연 소유자 복원
 
-상태: 완료 — 이 보고서를 포함하는 0.23.7 릴리스 커밋으로 닫음
+상태: 완료 — 이 보고서를 포함하는 0.23.8 릴리스 커밋으로 닫음
 기준 커밋: `9479feb7ad468c11c977a9220e1fb6eb45a1761f`
 
 ## 목적과 실제 실패
@@ -109,7 +109,7 @@ collector의 base-identical stale assertion도 이번 변경이 만든 frontier 
 
 ## 배포·감사 경계
 
-두 manifest를 0.23.7로 맞추고 CHANGELOG 최신 항목과 이 수리 보고를 추가했다. 설치·merge·push는
+두 manifest를 0.23.8로 맞추고 CHANGELOG 최신 항목과 이 수리 보고를 추가했다. 설치·merge·push는
 실행하지 않았다. 로컬 Codex snapshot refresh, Claude/Codex 설치 상태, SessionStart hook 표시는
 따라서 미검증이다.
 

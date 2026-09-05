@@ -15,7 +15,7 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
-## 0.23.7 — 2026-09-05 — Cold-writer artifact grammar at its natural owners
+## 0.23.8 — 2026-09-05 — Cold-writer artifact grammar at its natural owners
 
 Verify's record template now gives a cold writer the one exact repeated-item shape that the
 existing failure-routing parser consumes. Direct's task and research card templates likewise state
@@ -25,7 +25,7 @@ artifact-writing gap without adding a parser, workflow stage, or generic formatt
 The existing migration obligations now project to those three templates, and only Direct and
 Verify were rebuilt. Their generated instructions and runtime behavior are otherwise unchanged.
 A disposable project passed the full failure-and-repair Gate B through Direct, Work, Resume, a
-distinct fresh Verify, and capability closure; both plugin manifests ship the repair as 0.23.7.
+distinct fresh Verify, and capability closure; both plugin manifests ship the repair as 0.23.8.
 
 ## 0.23.6 — 2026-09-04 — Evidence-bounded repository audit
 
