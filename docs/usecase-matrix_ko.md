@@ -635,7 +635,7 @@ v0.23.11 재판정(DD-104): 이 설계 마커가 바꾸는 단위를 기존 capa
 사용자가 devflow:adopt를 직접 지목한다.
 ```
 
-**정합(정적 계약)·실행 미검증** (2026-09-06 v0.23.10, DD-103 지식 단위 착지 정정). 상태 도구만
+**정합(정적 계약)·실행 미검증** (2026-09-06 v0.23.13, DD-103 지식 착지·DD-106 반증 수렴 정정). 상태 도구만
 `setup.unmanaged`를 증명하고, 명시 Adopt는 Principles나 Resume의 사전 분류 없이 그 상태를
 직접 소비한다. SessionStart는 `.devflow/project/product.md`가 없으면 침묵하므로 빈 `.devflow/`
 폴더만으로 Resume 안내가 살아나지 않는다. 정본 상태는 현재 `.devflow` 루트가 있거나 현재 index에
@@ -657,9 +657,12 @@ Product, Architecture, 해당 시 Design, code style, glossary, 능력 설계 �
 verification-channel 표의 Surface/Required channel 열과 첫 proposal·ADR 조건만 받은 clean context가
 한 번 의미를 반증한다. 실제 wrong
 action, 결정/기각 방향 소실, wrong owner, 필수 단위 미착지·현재 target 분산/복제, verification means 누락, 연 절에서 벗어난 문서 구조를 만드는 뒷받침된 모순·누락만
-막고, 수정은 한 번과 반환 좌표 재검사로 끝낸다. Missing-channel action 열·producer transcript·이전
-audit 결론·그 밖의 Arch 실행/검증-run/승인/쓰기/commit 지시는 입력하지 않는다. 반증 판단 상태 중
-clear만 구속 질문과 승인 쓰기에 도달하며 blocking이나 unavailable은 제안 앞에서 멈춘다. Product `C<n>`과
+막는다. 최초 전수 반증은 한 번이고, 현재 권위로 모든 차단 원인을 고칠 수 있을 때 `revise`가 초안을
+고친 뒤 반환 좌표·변경 target·직접 영향만 독립 재검사한다. 같은 원인의 제거 또는 엄격한 축소가
+증명되는 동안만 계속하며 진전 없음·퇴행·닫힌 실패 재발, 사람 결정·권위 모순, 필수 초안·출처·직전
+증거·clean context 부재는 막는다. Missing-channel action 열·producer transcript·이전 audit 결론·그 밖의
+Arch 실행/검증-run/승인/쓰기/commit 지시는 입력하지 않는다. 반증 판단 상태 중 clear만 구속 질문과
+승인 쓰기에 도달하며 revise는 같은 판단으로 돌아오고 blocked는 제안 앞에서 멈춘다. Product `C<n>`과
 disk `NN`은 명시적으로 다른 좌표다. 구속 확인 전 쓰기 0, 거절·승인 전 중단 시 쓰기 0이다. 승인 하나 아래 후속
 요청, Layer 0 소유자 문서(`product.md`가 문서 중 마지막), Product·Architecture·Design 소유 K를 쓰고 검증해
 `adopt — layer 0`으로 먼저 착지시킨다. 그 커밋을 Design head로 쓴 능력 문서와 능력 소유 K를 쓰고 검증해
@@ -681,8 +684,8 @@ Arch가 소유한다. 검증 시 확인할 것: (a) Codex와 Claude가 같은 �
 시각을 함께 써서 구현/기획/리서치/대체 기록을 구분하되 이름이나 시각만으로 권위를 정하지 않고,
 증거로 닫히지 않는 현재 의도 충돌만 정확한 좌표와 질문으로 사람에게 보내는지, (g) 두 커밋의 K가
 각 소유자 문서 경계와 함께 착지하고 능력 문서의 Design head가 현재 값과 일치하는지, (h) 단위별
-정확한 target과 Foundation 범위를 포함한 반증 입력·차단 기준·한 번 수정/좌표 재검사·Evidence
-verification 기록이 지켜지고 미착지·분산·복제 finding이 남으면 구속 질문이 나오지 않는지.
+정확한 target과 Foundation 범위를 포함한 반증 입력·차단 기준·진전 기반 revise/유계 인과 재검사·
+Evidence verification 기록이 지켜지고 미착지·분산·복제 finding이 남으면 구속 질문이 나오지 않는지.
 사용자가 새 설치 뒤 테스트 브랜치에서 직접 확인하기로 했으므로 이 실제 행동은 **미검증**이다.
 
 ### 3.25 H51×A10 — 패키지 정보와 현재 프로젝트 작업의 진입 경계 [16판 신규]

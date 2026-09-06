@@ -77,6 +77,22 @@
     ]
   },
   {
+    "id": "refutation-progress-convergence",
+    "task": "During explicit devflow Adopt, the initial independent refutation returns two supported blockers and current authority supplies a concrete correction for each. The first bounded recheck proves one root removed and the other strictly narrowed without a new blocker; a later correction leaves that attempted root unchanged. State what happens at each boundary and whether binding may proceed.",
+    "should_trigger": true,
+    "expected_obligations": [
+      "Revise the current draft, then independently recheck returned coordinates, changed targets, and their direct consequences while recording current Evidence verification.",
+      "Continue only while every attempted root is removed or strictly narrowed without a new or reopened blocker, then block on the unchanged attempted root and explain the exact input needed."
+    ],
+    "forbidden_actions": [
+      "Treat renamed findings, moved coordinates, or a lower total finding count as causal progress.",
+      "Expose binding approval while a supported blocker or unanswered binding dependency remains."
+    ],
+    "acceptance": [
+      "The sequence distinguishes first revise eligibility, evidenced progress, and the no-progress stop without a retry count or another full pass."
+    ]
+  },
+  {
     "id": "generic-code-documentation-near-miss",
     "task": "Document an existing codebase without naming devflow or asking to adopt it into devflow.",
     "should_trigger": false,

@@ -48,14 +48,14 @@
     "Every maintained source has an explicit named landing, evidence disposition, reasoned non-domain exclusion, or visible unresolved status.",
     "Every code-backed capability candidate has one representative executable flow with exact coordinates; every document-derived candidate without executable code cites its exact maintained documentary basis and marks the flow not applicable.",
     "Every proposal claim identifies executable or documentary evidence, contradiction, inference, and confidence.",
-    "The owner sees and confirms the complete write set only after irreducible questions are resolved and one bounded clean-context semantic refutation is judged clear and records no blocking contradiction or omission in Evidence verification.",
+    "The owner sees and confirms the complete write set only after irreducible questions are resolved, the initial bounded clean-context semantic refutation and every correction's bounded independent recheck preserve full initial coverage, and current Evidence verification records no supported blocker or unanswered binding dependency.",
     "Complete Layer 0 and its validated Product, Architecture, and Design K nodes are published in the first confirmed commit; all capability designs and their validated K nodes are published together in the second with Design head equal to the first commit.",
     "A final report names committed artifacts and preserves unknown or unverified items without claiming completion."
   ],
   "judgment_points": [
     "Classify sources as implemented/current material, binding plans, exploratory research, superseded records, or unresolved conflicts. Judge authority from document-internal status and actual code, test, and operational evidence; use path/name context, Git history when available, and last-modified time only as corroborating clues. Resolve evidence-supported discrepancies with exact provenance, and ask with conflicting coordinates plus the exact decision only when current product intent remains genuinely undecidable.",
     "Choose capability boundaries from entrypoints, top-level modules, service boundaries, and maintained domain documents; documentation may establish a candidate even when no executable code exists.",
-    "Distinguish discoverable facts from irreducible owner decisions and contradictions.",
+    "Distinguish discoverable facts and evidence-supported corrections from irreducible owner decisions, authority contradictions, and missing evidence; after a correction, continue only when independent recheck proves every attempted failure was removed or strictly narrowed without introducing or reopening a blocker.",
     "Choose the nearest semantic owner document for each domain body, keep concise always-needed knowledge there, and decide how many owner-adjacent K nodes deeper reusable evidence requires.",
     "Preserve explicit uncertainty and confidence instead of inventing generic architecture or product decisions."
   ],

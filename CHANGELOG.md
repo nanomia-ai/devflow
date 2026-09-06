@@ -15,6 +15,22 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.13 — 2026-09-06 — Adopt refutation converges on evidenced progress
+
+Adopt keeps its one complete bounded clean-context refutation, but a correctable current draft no
+longer stops merely because it has used one revision. The existing semantic-refutation stage now
+corrects every current blocker from returned evidence and current authority, independently rechecks
+only returned coordinates, changed targets, and direct consequences, and re-enters judgment while
+that causal scope is demonstrably removed or strictly narrowed.
+
+No progress, regression, a reopened failure, an owner-owned decision or authority contradiction, and
+missing required draft, source, prior evidence, or clean context remain on the existing blocking exit.
+Only current independent verification with preserved initial coverage and no binding dependency can
+reach the unchanged proposal and approval boundary. No retry counter, taxonomy, stage, collector,
+artifact, template field, Principles rule, or full-pass repetition was added; targeted Skill Rails
+verification is recorded in the round report, while independent audit, the canonical full suite,
+installation, and fresh-project real use remain for the release gate.
+
 ## 0.23.12 — 2026-09-06 — Proposal inputs discover their current K depth
 
 The shared capsule contract now tells a proposal reader to project another input owner's bounded

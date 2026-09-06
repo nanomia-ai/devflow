@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:6c63ac8b583ec769b4e91623bfb3e49eb256603aa4120c2420ec211cecc56891",
+  "intent_hash": "sha256:fcc1910586e4cfc3f92fef2ba19c38aeaffc38d6742375f41fd19fb3864d974e",
   "profile": "p2",
   "atoms": [
     {
@@ -486,7 +486,7 @@
     {
       "id": "completion-evidence-004",
       "source": "intent.completion_evidence[3]",
-      "text": "The owner sees and confirms the complete write set only after irreducible questions are resolved and one bounded clean-context semantic refutation is judged clear and records no blocking contradiction or omission in Evidence verification.",
+      "text": "The owner sees and confirms the complete write set only after irreducible questions are resolved, the initial bounded clean-context semantic refutation and every correction's bounded independent recheck preserve full initial coverage, and current Evidence verification records no supported blocker or unanswered binding dependency.",
       "candidate_class": "stage/done/evidence",
       "consequence": "high",
       "disposition": "projected",
@@ -495,13 +495,16 @@
         "spec:STAGES/semantic-refutation",
         "spec:TABLES/approval/approve",
         "spec:DECLARATIONS/semantic_refutation",
-        "body:stage: semantic-refutation"
+        "body:stage: semantic-refutation",
+        "file:references/workflow.md"
       ],
       "evidence": [
         "fixture:refutation-blocked",
         "fixture:refutation-pending",
+        "fixture:refutation-revise",
         "fixture:adoption-prepare",
-        "fixture:approval-approve"
+        "fixture:approval-approve",
+        "eval:refutation-progress-convergence"
       ]
     },
     {
@@ -613,17 +616,18 @@
     {
       "id": "judgment-points-003",
       "source": "intent.judgment_points[2]",
-      "text": "Distinguish discoverable facts from irreducible owner decisions and contradictions.",
+      "text": "Distinguish discoverable facts and evidence-supported corrections from irreducible owner decisions, authority contradictions, and missing evidence; after a correction, continue only when independent recheck proves every attempted failure was removed or strictly narrowed without introducing or reopening a blocker.",
       "candidate_class": "judgment/body",
       "consequence": "low",
       "disposition": "projected",
       "targets": [
-        "body:stage: adoption",
+        "body:stage: semantic-refutation",
         "file:references/workflow.md"
       ],
       "evidence": [
-        "fixture:adoption-prepare",
-        "file:templates/adoption-proposal.md"
+        "fixture:refutation-blocked",
+        "fixture:refutation-revise",
+        "eval:refutation-progress-convergence"
       ]
     },
     {

@@ -2321,7 +2321,7 @@ an adopted capability's stored Design head differs immediately after the two app
 
 ### DD-102 · One bounded clean-context semantic refutation precedes Adopt's binding question (v0.23.7)
 
-Subject: Brownfield and entry | Introduced: v0.23.7 | State: active, partly corrected by DD-103 (v0.23.10)
+Subject: Brownfield and entry | Introduced: v0.23.7 | State: active, partly corrected by DD-103 (v0.23.10), DD-106 (v0.23.13)
 
 Observed problem: the Adopt proposal had an `Evidence verification` section immediately before
 binding confirmation, but current canon did not say what was checked, by whom, or what passed. The
@@ -2378,6 +2378,60 @@ Revisit when the refuter lacks the full draft or load-bearing authority coordina
 conclusions are injected as answers, findings broaden into prose review without an action failure, a
 full sweep repeats after the one revision, a proposal binds with a blocking finding, or Product C and
 disk NN confusion points at the wrong capability.
+
+### DD-106 · Adopt semantic refutation converges by independently evidenced causal progress, not a revision count (v0.23.13)
+
+Subject: Brownfield and entry | Introduced: v0.23.13 | State: active
+
+Observed problem: a real Adopt run completed the one permitted correction after its initial semantic
+refutation, then stopped with `blocked` and `reinvoke: null` while the executing agent judged that
+correctable findings remained. The retained raw evidence cannot establish that all three findings were
+actually correctable, but the canonical transition closed the next action by count without observing
+whether the correction had removed or narrowed a failure.
+
+Desired behavior: keep one complete initial refutation, while a draft correctable from current authority
+and returned evidence continues converging as an independent recheck proves real removal or narrowing
+of the same cause. Stop when that cause is unchanged, recurs, or creates a new blocker, and also before
+binding on an owner decision, authority contradiction, or missing required input.
+
+Chosen boundary: add `revise` to the existing `semantic-refutation` judged state. A first revise is
+eligible only with the current draft, returned evidence, and one concrete current-authority correction
+for every current blocking finding. The branch corrects that draft, independently rechecks only returned
+coordinates, changed targets, and direct consequences, records the current result in existing `Evidence
+verification`, and returns to the same stage judgment. A later revise requires independent evidence that
+every attempted root was removed or strictly narrowed in its causal scope without introducing a blocker
+or reopening a closed failure. Finding names, coordinates, and total count are not progress evidence.
+
+`clear` requires preserved initial coverage, current independent verification, and no supported blocker
+or unanswered binding dependency. An unchanged or regressed attempted root, a needed owner answer or
+authority contradiction, or unavailable current draft, source, prior evidence, or clean context explains
+the current failure and required input and remains on existing `blocked`/`BLOCK`. A future choice falsely
+written as confirmed may be accurately retracted when current binding does not depend on resolving it;
+moving an unresolved binding fact to Questions does not make the draft clear. An owner answer that
+changes load-bearing draft content receives the bounded independent recheck before the current write set
+can be confirmed.
+
+Why the boundary is needed: DD-102's bounded inputs, clean independence, load-bearing threshold, and
+single initial full refutation still cap cost. But “one revision” stopped a draft that was still being
+corrected without observing convergence, so field execution partly refuted the recorded reason that the
+count fixed both cost and convergence. A causal recheck of the returned scope plus a hard wall at a
+no-progress root fixes both cost and termination without an arbitrary constant.
+
+Rejected alternatives: raising the retry constant to two or three only postpones the same arbitrary
+stop, while expanding a finding taxonomy substitutes terminology for canonical judgment. A prose-only
+reinvoke has no execution branch, and treating owner decisions or authority contradictions as `clear`
+reverses DD-102's binding protection. Opening a new full pass per finding also breaks the bounded cost
+and is not adopted.
+
+Affected coordinates: Adopt `refutation.state`, `semantic-refutation` branch, declaration, body and
+workflow, current intent and obligation ledger, eval and scenario fixtures, generated receipt, DD-102
+state, matrix §3.24, both plugin manifests, CHANGELOG, and the v0.23.13 implementation report. Product,
+Arch, Design, and Principles runtime, the proposal template, collector, two confirmed commit boundaries,
+and the user's raw evidence remain unchanged.
+
+Revisit when the bounded causal recheck permits the same no-progress root again, opens a new full pass
+per correction, clears after disguising a required owner decision as unresolved future work, or Evidence
+verification cannot recover initial coverage and current progress.
 
 ## Git mechanics and interruption recovery
 
