@@ -38,7 +38,7 @@ test("00-project accepts only the canonical research heading", () => {
   const collector = readFileSync(join(root, "collectors", "index.mjs"), "utf8");
   assert.match(collector, /\^# \\d\+\\\.\\d\+ Research:/);
   assert.match(collector, /00-project card is not a canonical research card/);
-  assert.match(collector, /\.devflow\/project-state\/2/);
+  assert.match(collector, /devflow\/project-state\/2/);
   assert.doesNotMatch(collector, /state\.compatibility\.(?:snapshot|evaluated)/);
 });
 

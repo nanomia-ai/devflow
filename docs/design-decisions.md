@@ -655,6 +655,39 @@ Revisit when an owner change can commit while a changed existing K remains stale
 unrelated owners to find a card dependency, a normal card loses a sourced reusable conclusion, or the
 physical-writer boundary prevents an exact marker-named semantic owner from landing atomically.
 
+### DD-105 · Proposal readers discover bounded input-owner K depth before confirmation (v0.23.12)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.23.12 | State: active
+
+Observed problem: an owner document is the always-read map, so current reusable detail may correctly
+live only in its same-stem K tree. Arch read Product as a planning input but projected only arch/K at
+its own approval boundary; Design likewise read Product and Architecture but projected only design/K.
+A cold reader could therefore obey every declared input effect and still propose a choice that
+contradicted applicable current input-owner depth.
+
+Chosen boundary: when a stage uses another owner's map as input to a proposal it will ask the user to
+confirm, it first projects that input owner's K headers through the existing owner-bounded opening
+contract and opens only depth whose first-line use-when fits the pending judgment. Arch applies this
+to Product in read-inputs. Design applies it to Product and Architecture before both proposal and
+confirmation. Reading an input K does not confer write authority or change the stage's specialized
+decision surface.
+
+Why this is an extension rather than a new index model: DD-92's owner maps, same-stem K, zero-child
+validity, dynamic projection, and state-free hook remain intact, as do DD-104's physical writers and
+confirmation batches. The missing edge was reader-side timing, and the existing `project --under`
+projection plus policy-index routing already provide its bounded mechanism. No persistent index,
+global scan, state predicate, classifier, registry, stage, or new owner is introduced.
+
+Affected coordinates: the shared capsule contract; Arch's read-inputs spec, judgment body,
+artifact declaration, intent, ledger, and fixture; Design's proposal/confirmation spec, judgment body,
+artifact declarations, intent, ledger, and fixtures; matrix section 3.18; plugin manifests; CHANGELOG;
+and the v0.23.12 implementation report. Adopt and Product creation, capability design, Direct, Work,
+Verify, Resume, hooks, project-state, project-knowledge, and writer approval behavior remain unchanged.
+
+Revisit when a proposal still misses applicable current depth under an input owner, bounded header
+projection forces unrelated owner trees or body preload, a zero-K owner blocks normal planning, or an
+input read is mistaken for authority to write that owner's K.
+
 ### Rejected under this subject
 
 - **[DR-03 · v0.7.0]** **Journal injection by the hook** — duplicates what resume reads.

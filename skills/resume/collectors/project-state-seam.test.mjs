@@ -75,7 +75,8 @@ test("knowledge recovery routes every validated marker to Arch", async () => {
     skillRoot,
     fixture: {
       id: "knowledge-landing",
-      s: { "state.canonicalNext": "marker.knowledge-landing" },
+      s: { "state.canonicalNext": "marker.knowledge-landing",
+           "state.compatibleWriter": "none" },
       judged: { "intent.scope": "ordinary" }
     }
   })).decision;

@@ -319,13 +319,11 @@ test("the Codex installer retains one native channel and only cleans its generat
   assert.deepEqual([...GENERATED_NAMES].sort(), expected, "generated-prompt cleanup does not match the installed stages");
 });
 
-test("the root suite runs every tracked P2 package test and both semantic audits", (t) => {
-  const listed = spawnSync("git", ["ls-files", "--", "skills/**/*.test.mjs"], { cwd: root, encoding: "utf8" });
+test("the root suite inventories every current non-ignored P2 package test and runs both semantic audits", (t) => {
+  const listed = spawnSync("git", ["ls-files", "--cached", "--others", "--exclude-standard", "--", "skills/**/*.test.mjs"], { cwd: root, encoding: "utf8" });
   assert.equal(listed.status, 0, listed.stderr);
-  const packageTests = listed.stdout.split(/\r?\n/).filter(Boolean);
-  assert.equal(packageTests.length, 13, "the promoted package-test inventory changed without root-gate review");
-  const tests = spawnSync(process.execPath, ["--test", ...packageTests], { cwd: root, encoding: "utf8" });
-  assert.equal(tests.status, 0, tests.stderr || tests.stdout);
+  const packageTests = listed.stdout.split(/\r?\n/).filter(Boolean).sort();
+  assert.equal(packageTests.length, 15, "the current package-test inventory changed without root-gate review");
   const audit = spawnSync(process.execPath, ["scripts/skill-rails-semantic-audit.mjs"], { cwd: root, encoding: "utf8" });
   assert.equal(audit.status, 0, audit.stderr || audit.stdout);
   const auditResult = JSON.parse(audit.stdout);

@@ -72,6 +72,6 @@ Why: The six decisions may stay compact for a small project, but every decision 
 
 ## stage: confirmation
 
-Judgment: approval.action is one of ask, commit, reject. Project bounded design/K headers and show any changed current locus with the six UI decisions before approval; after approval write and validate only sourced design-owned K in the same design commit. New K still requires the shared independent-reader/change-reason boundary, and capability/K stays outside Design.
+Judgment: approval.action is one of ask, commit, reject. Before asking the user to confirm a proposal, Design projects the Product and Architecture owners' K headers and opens only input depth whose first-line use-when fits the pending Design judgment. Project bounded design/K headers and show any changed current locus with the six UI decisions before approval; after approval write and validate only sourced design-owned K in the same design commit. New K still requires the shared independent-reader/change-reason boundary, and capability/K stays outside Design.
 
 Why: A report is provisional. Rejection preserves the current owner and leaves a recorded maintenance request resumable rather than silently cancelling it; explicit approval makes the new design current, carries the pending request line in the same canonical design commit, and routes the next build planning exactly once.

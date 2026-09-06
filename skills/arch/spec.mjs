@@ -176,7 +176,7 @@ export const STAGES = [
   }, body: "stage: repair-layer0-fields" },
 
   { id: "read-inputs", reads: ["inputs.status"], acceptsUnknown: [], done: s => s.inputs.status === "read", needs: ["inputs.status"], reentry: "rejudge", branches: {
-    needed: [["READ", { artifact: "product" }], ["READ", { artifact: "glossary" }], ["READ", { artifact: "architecture" }], ["READ", { artifact: "codeStyle" }], ["READ", { artifact: "journal" }], ["READ", { artifact: "decisionRecords" }], ["READ", { path: "references/workflow.md" }], "NEXT"]
+    needed: [["READ", { artifact: "product" }], ["RUN", { action: "project existing product/K headers under the exact Product owner; open only K whose first-line use-when matches a pending architecture judgment" }], ["READ", { artifact: "glossary" }], ["READ", { artifact: "architecture" }], ["READ", { artifact: "codeStyle" }], ["READ", { artifact: "journal" }], ["READ", { artifact: "decisionRecords" }], ["READ", { path: "references/workflow.md" }], "NEXT"]
   }, body: "stage: read-inputs" },
 
   { id: "refresh-check", reads: ["refresh.result"], acceptsUnknown: [], done: s => s.refresh.result === "compatible", needs: ["refresh.result"], reentry: "rejudge", branches: {
@@ -239,6 +239,7 @@ export const STAGES = [
 
 export const ARTIFACTS = {
   product: { path: ".devflow/project/product.md", writer: "external.product", readers: ["stage.read-inputs", "stage.capability-design", "external.direct"] },
+  productKnowledge: { path: ".devflow/project/product", writer: "external.product", readers: ["stage.read-inputs"] },
   glossary: { path: ".devflow/project/glossary.md", writer: "arch", readers: ["stage.glossary-term", "stage.read-inputs", "stage.capability-design", "external.direct"], template: "glossary" },
   architecture: { path: ".devflow/project/arch.md", writer: "arch", readers: ["stage.compatible-feedback", "stage.repair-layer0-fields", "stage.read-inputs", "stage.approval", "stage.capability-design", "external.design", "external.direct", "external.resume"], template: "architecture" },
   codeStyle: { path: ".devflow/project/code-style.md", writer: "arch", readers: ["stage.read-inputs", "stage.approval", "external.direct", "external.work"], template: "codeStyle" },

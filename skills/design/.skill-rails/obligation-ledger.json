@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:f590a99ae94d7c3b3c751b3578f1be726f28d3ecbd8a6bbb1af3c79df98793da",
+  "intent_hash": "sha256:d18dd5a6a878e71b13e9ec20a489a9757c3c53d2656dea8519b03aba09abe1da",
   "profile": "p2",
   "atoms": [
     {
@@ -49,6 +49,23 @@
       "evidence": [
         "fixture:recorded-maintenance-resumes-through-direct",
         "fixture:interrupted-design-research"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-002",
+      "source": "intent.state_dependent_behaviors[1]",
+      "text": "Before asking the user to confirm a Design proposal, Design projects the Product and Architecture input owners' K headers and opens only depth whose use-when fits the pending Design judgment.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/proposal",
+        "spec:STAGES/confirmation",
+        "body:stage: confirmation"
+      ],
+      "evidence": [
+        "fixture:proposal-needs-choice",
+        "fixture:initial-design"
       ]
     },
     {

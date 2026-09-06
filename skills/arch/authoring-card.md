@@ -3,7 +3,7 @@
 ## Purpose and failure scene
 
 - Purpose: preserve the complete current technical-planning workflow for devflow-managed projects as a P2 state machine and make Arch the arch/K and managed capability design-zone/K writer after initial unmanaged reconstruction.
-- Failure scene: a cold consumer replaces prerequisite reads, approvals, actual writes, commits, verification evidence, or marker atomicity with one broad judgment.
+- Failure scene: a cold consumer drops applicable Product/K depth or replaces prerequisite reads, approvals, actual writes, commits, verification evidence, or marker atomicity with one broad judgment.
 
 ## Observations and judgment inputs
 
@@ -21,6 +21,7 @@
 ## Static artifacts
 
 - `.devflow/project/product.md`: read by input and capability-design stages.
+- `.devflow/project/product`: bounded Product/K headers read by the input stage before architecture judgment.
 - `.devflow/project/glossary.md`: read by input/capability stages; written only on the glossary marker route.
 - `.devflow/project/arch.md`: read or written by repair, input, approval, and capability stages.
 - `.devflow/project/code-style.md`: read or written by input and approval stages.
@@ -40,7 +41,7 @@
 
 ## Named consumer consumption sets
 
-- Initial arch consumer: task + `SKILL.md` + current Decision + `references/workflow.md` + `references/schemas.md` + declared Layer 0 artifacts.
+- Initial arch consumer: task + `SKILL.md` + current Decision + `references/workflow.md` + `references/schemas.md` + declared Layer 0 artifacts + Product/K headers matching the pending architecture judgment.
 - Knowledge-landing consumer: task + `SKILL.md` + current Decision (including exact marker JSON) + `references/knowledge-landing.md` + the marker's exact committed card coordinate and named owner.
 - Capability-design consumer: task + `SKILL.md` + current Decision + `references/schemas.md` + product, glossary, architecture, cited decision records, and existing capability documents.
 - Channel verifier: its role section + proposed exact command + smallest representative target; it does not receive the authoring card.

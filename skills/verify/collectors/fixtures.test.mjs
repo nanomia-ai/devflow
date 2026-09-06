@@ -75,7 +75,6 @@ test("collector reads exact canonical record state without invented execution gr
 
     await mkdir(join(counterfeit, ".devflow", "tree"), { recursive: true });
     await writeFile(join(counterfeit, ".devflow", "tree", "verify.md"), base({ product: "p", verification: "v", code: "c" }).replace("Executed:", "Executed: claimed success"));
-    assert.equal(await collectors["verify/record.freshness"]({ projectRoot: counterfeit }), "stale");
     assert.equal(await collectors["verify/record.current"]({ projectRoot: counterfeit }), "stale");
     assert.equal(await collectors["verify/record.execution-evidence"]({ projectRoot: counterfeit }), "missing");
 

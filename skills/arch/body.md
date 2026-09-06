@@ -94,7 +94,7 @@ Why: A missing brownfield field or missing or malformed integration field is a b
 
 Judgment: inputs.status is needed or read.
 
-Why: Current product language, prior technical choices, attributed decisions, and existing outputs are the minimum basis for a coherent proposal.
+Why: Current product language and matching Product/K depth, prior technical choices, attributed decisions, and existing outputs are the minimum basis for a coherent proposal.
 
 ## stage: refresh-check
 

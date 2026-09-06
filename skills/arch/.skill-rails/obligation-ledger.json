@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:665cef03067b5354093763c71c15f1000f033bc246c075f38c52c0366a84dcb9",
+  "intent_hash": "sha256:19c7c5faf4f04affb4204422cbe96eb590bcd981e2236037b22047a09371ca44",
   "profile": "p2",
   "atoms": [
     {
@@ -71,6 +71,21 @@
       ],
       "evidence": [
         "fixture:legacy-adopt-writer-landing"
+      ]
+    },
+    {
+      "id": "state-dependent-behaviors-004",
+      "source": "intent.state_dependent_behaviors[3]",
+      "text": "Before proposing architecture from Product, Arch projects that input owner's K headers and opens only depth whose use-when fits the pending architecture judgment.",
+      "candidate_class": "stage",
+      "consequence": "high",
+      "disposition": "projected",
+      "targets": [
+        "spec:STAGES/read-inputs",
+        "body:stage: read-inputs"
+      ],
+      "evidence": [
+        "fixture:read-product-glossary-inputs"
       ]
     },
     {

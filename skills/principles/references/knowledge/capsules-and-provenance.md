@@ -11,6 +11,10 @@ every refresh updates that K at its existing path instead of moving or duplicati
 3,699 lines — pressed into a 185-line vessel as summary, what survives is confidence, not
 understanding.
 
+When a stage uses another owner's map as input to a proposal it will ask the user to confirm,
+first project that input owner's same-stem K headers, then open only depth whose first-line
+use-when fits the pending judgment; follow the opening and freshness contract for bounded selection.
+
 - A K node lives under its owner document's same-stem folder:
   `<owner path without .md>/K-<three digits, zero-padded>-<topic slug>.md`. Canonical owner
   documents are `.devflow/project/product.md`, `arch.md`, `design.md`, and

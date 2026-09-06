@@ -64,6 +64,7 @@
       "status": "ASK",
       "effects": [
         "RUN",
+        "RUN",
         "REPORT",
         "ASK"
       ]
@@ -168,6 +169,7 @@
       "stage": "confirmation",
       "status": "ASK",
       "effects": [
+        "RUN",
         "RUN",
         "REPORT",
         "ASK"
@@ -470,6 +472,7 @@
       "stage": "proposal",
       "status": "ASK",
       "effects": [
+        "RUN",
         "RUN",
         "REPORT",
         "ASK"

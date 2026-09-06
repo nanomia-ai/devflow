@@ -1036,6 +1036,7 @@
       "status": "NEXT",
       "effects": [
         "READ",
+        "RUN",
         "READ",
         "READ",
         "READ",

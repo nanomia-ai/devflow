@@ -209,6 +209,12 @@ test("workflow has concrete writes and atomic landing boundaries", async () => {
   assert.match(body, /compact or partial-compact only when[^;]+no existing K owns that knowledge unit/);
   assert.match(workflow, /Before choosing a knowledge-landing mode, open the opening\/selection row and use its owner-bounded projection/);
   assert.match(landingContract, /2\. Decide from the conclusion, not the source length\.\r?\n3\. Preserve one current locus\./);
+  const readInputs = spec.STAGES.find((stage) => stage.id === "read-inputs").branches.needed;
+  assert.deepEqual(readInputs.slice(0, 2).map((effect) => effect[0]), ["READ", "RUN"]);
+  assert.equal(readInputs[0][1].artifact, "product");
+  assert.match(readInputs[1][1].action, /product\/K headers under the exact Product owner/);
+  assert.equal(readInputs.some((effect) => Array.isArray(effect) && effect[0] === "WRITE"), false);
+  assert.deepEqual(spec.ARTIFACTS.productKnowledge, { path: ".devflow/project/product", writer: "external.product", readers: ["stage.read-inputs"] });
   const landing = spec.STAGES.find((stage) => stage.id === "knowledge-landing");
   assert.ok(landing);
   for (const name of ["recursive", "partial-recursive", "multi-mixed"]) assert.match(JSON.stringify(landing.branches[name]), /knowledgeNodes/, name);
@@ -260,11 +266,11 @@ test("templates retain exact Layer 0 and capability design-zone contracts", () =
   assert.equal(capabilityText.includes("Design written at:"), false);
 });
 
-test("ledger resolves all 160 atoms to portable behavioral evidence", () => {
+test("ledger resolves all 161 atoms to portable behavioral evidence", () => {
   const ledger = JSON.parse(readFileSync(join(skillRoot, ".skill-rails", "obligation-ledger.json"), "utf8"));
   const scenarios = new Set(JSON.parse(readFileSync(join(skillRoot, "fixtures", "scenarios.json"), "utf8")).map(({ id }) => id));
-  assert.equal(ledger.atoms.length, 160);
-  assert.equal(ledger.atoms.filter(({ disposition }) => disposition === "projected").length, 160);
+  assert.equal(ledger.atoms.length, 161);
+  assert.equal(ledger.atoms.filter(({ disposition }) => disposition === "projected").length, 161);
   assert.equal(ledger.atoms.some(({ targets, evidence }) => [...targets, ...evidence].some((value) => /legacy-atoms|legacy-source|^[A-Za-z]:\\|review-required|DEFERRED/i.test(value))), false);
   for (const atom of ledger.atoms) {
     assert.ok(atom.targets.length > 0, atom.id);

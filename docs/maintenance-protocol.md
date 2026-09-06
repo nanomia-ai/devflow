@@ -56,7 +56,7 @@ back-syncs the Korean original before the next release. Active Korean authoring 
 `_ko.md`, the two Korean-only standing instruments, unpaired round records, and the terminology
 table in the Korean original of this document. P2 migration provenance may preserve source Korean
 under `references/legacy-atoms/`, but it is not runtime guidance. English deploy guidance contains
-no Korean. `node --test "scripts/*.test.js"` owns structural and machine-figure parity for the
+no Korean. `node --test "scripts/*.test.js" "skills/**/*.test.mjs"` owns structural and machine-figure parity for the
 declared pairs above and the zero-Korean check for English deploy guidance; it explicitly exempts
 legacy atoms only as migration provenance.
 
@@ -209,7 +209,7 @@ before 0.10.0 is in `docs/changelog-archive.md`.
 
 ## 8. Pre-flight checklist
 
-- [ ] `node --test "scripts/*.test.js"` passes
+- [ ] `node --test "scripts/*.test.js" "skills/**/*.test.mjs"` passes
 - [ ] inside that run, gate A — every canonical reserved journal line fed to the deployed
       parser — is green. It is not a separate command
 - [ ] when the release changes the verification contract, gate B has been passed once: one

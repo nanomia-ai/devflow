@@ -15,6 +15,24 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.12 — 2026-09-06 — Proposal inputs discover their current K depth
+
+The shared capsule contract now tells a proposal reader to project another input owner's bounded
+same-stem K headers before confirmation and to open only depth whose first-line use-when fits the
+pending judgment. Arch connects that rule to its Product input, while Design reconnects both Product
+and Architecture inputs before proposal and confirmation; their specialized judgments and all writer
+boundaries remain unchanged.
+
+The change reuses the existing owner-bounded `project --under` projection and policy-index route. It
+adds no hook injection, central index, global scan, state predicate, classifier, registry, stage, or
+write authority, and does not change initial Adopt/Product, Direct, Work, Verify, or Resume behavior.
+Principles, Arch, and Design were rebuilt for the 0.23.12 manifests. The completion gate now passes root
+and P2 package tests to one runner as first-class inputs, while its cached and non-ignored untracked
+inventory keeps the reviewed 15-file set independent of staging. Three stale test expectations exposed by
+real execution were aligned with current runtime and their Direct, Resume, and Verify receipts were rebuilt
+without changing runtime projection. Focused verification is recorded in the round report; the full suite,
+installation, and fresh-project real use remain for the release gate.
+
 ## 0.23.11 — 2026-09-06 — Current owner knowledge survives planning and execution
 
 The shared owner contract now carries a changed unit's existing K locus through the same confirmation,
