@@ -499,6 +499,15 @@ Product·Architecture 입력에 적용하며, 입력 읽기는 해당 K의 작�
 확인할 것: K가 0이면 그대로 진행하고, K가 있으면 REPORT 전에 정확한 입력 소유자 경계에서 발견하며,
 무관한 owner tree·본문 선개봉·placeholder가 생기지 않는지.
 
+**정합 유지 — Arch의 K 쓰기는 commit 전에 유계 검증을 통과한다** (2026-09-07 v0.23.14).
+Principles가 이미 고정한 “capsule은 commit 전에 `validate`를 통과한다”는 계약을 Arch의 누락된 여섯
+K-writing branch에도 연결했다. 세 knowledge landing은 K 쓰기 → exact selected knowledge/K 검증 →
+해당 marker 삭제 → commit 순서이고, 세 capability-design 승인은 capability zone과 K 쓰기 → exact
+changed capability/K 검증 → commit → 기존 route 순서다. compact·partial-compact와 ask에는 K 쓰기가
+없으므로 검증을 분사하지 않는다. 새 H·A 행은 없다. 검증 시 확인할 것: 여섯 branch가 이 순서를
+유지하고, 실제 검증 실패에서는 marker가 남으며 commit과 route가 실행되지 않는지. 마지막 실제
+실패 장면은 이번 자동 검증에서 실행하지 않았으므로 `unverified`다.
+
 ### 3.19 A21 — 상태 도구를 부를 수 없는 진입 [11판 신규]
 
 ```

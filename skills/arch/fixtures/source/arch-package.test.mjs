@@ -217,16 +217,21 @@ test("workflow has concrete writes and atomic landing boundaries", async () => {
   assert.deepEqual(spec.ARTIFACTS.productKnowledge, { path: ".devflow/project/product", writer: "external.product", readers: ["stage.read-inputs"] });
   const landing = spec.STAGES.find((stage) => stage.id === "knowledge-landing");
   assert.ok(landing);
-  for (const name of ["recursive", "partial-recursive", "multi-mixed"]) assert.match(JSON.stringify(landing.branches[name]), /knowledgeNodes/, name);
-  for (const name of ["compact", "partial-compact"]) assert.doesNotMatch(JSON.stringify(landing.branches[name]), /knowledgeNodes/, name);
-  for (const name of ["compact", "recursive", "partial-compact", "partial-recursive", "multi-mixed"]) {
+  const runActionIndex = (effects, expected) => effects.findIndex((effect) => Array.isArray(effect) && effect[0] === "RUN" && effect[1]?.action === expected);
+  const verbIndex = (effects, expected) => effects.findIndex((effect) => (Array.isArray(effect) ? effect[0] : effect) === expected);
+  for (const name of ["recursive", "partial-recursive", "multi-mixed"]) {
     const effects = landing.branches[name];
-    const verbs = effects.map((effect) => Array.isArray(effect) ? effect[0] : effect);
-    assert.ok(verbs.includes("WRITE"), name);
-    assert.ok(verbs.includes("RUN"), name);
-    assert.ok(verbs.includes("COMMIT"), name);
-    assert.equal(verbs.some((verb) => String(verb).includes("marker pending")), false);
-    assert.ok(verbs.indexOf("WRITE") < verbs.indexOf("RUN") && verbs.indexOf("RUN") < verbs.indexOf("COMMIT"), name);
+    const knowledgeWrite = effects.findIndex((effect) => Array.isArray(effect) && effect[0] === "WRITE" && effect[1]?.artifact === "knowledgeNodes");
+    const validation = runActionIndex(effects, "validate exact selected knowledge/K paths");
+    const markerDeletion = effects.findIndex((effect) => Array.isArray(effect) && effect[0] === "RUN" && /^delete-/.test(effect[1]?.action ?? ""));
+    const commit = verbIndex(effects, "COMMIT");
+    assert.ok(knowledgeWrite >= 0 && knowledgeWrite < validation && validation < markerDeletion && markerDeletion < commit, `${name}: K validation must precede marker deletion and commit`);
+  }
+  for (const name of ["compact", "partial-compact"]) {
+    const effects = landing.branches[name];
+    assert.doesNotMatch(JSON.stringify(effects), /knowledgeNodes/, name);
+    assert.equal(runActionIndex(effects, "validate exact selected knowledge/K paths"), -1, `${name}: no K write means no K validation`);
+    assert.ok(verbIndex(effects, "WRITE") < verbIndex(effects, "RUN") && verbIndex(effects, "RUN") < verbIndex(effects, "COMMIT"), name);
   }
   const approval = spec.STAGES.find((stage) => stage.id === "approval");
   assert.deepEqual(approval.branches["approve-initial"].map((effect) => Array.isArray(effect) ? effect[0] : effect), ["RUN", "WRITE", "WRITE", "WRITE", "WRITE", "RUN", "COMMIT", "NEXT"]);
@@ -245,6 +250,16 @@ test("workflow has concrete writes and atomic landing boundaries", async () => {
   const capabilityDesign = spec.STAGES.find((stage) => stage.id === "capability-design");
   assert.equal(capabilityDesign.branches.ask[1][1].template, "capabilityBatch");
   assert.match(JSON.stringify(capabilityDesign.branches.ask), /expected changed capability owners/);
+  assert.equal(runActionIndex(capabilityDesign.branches.ask, "validate exact changed capability/K paths"), -1, "ask is a non-writing control");
+  assert.equal(verbIndex(capabilityDesign.branches.ask, "COMMIT"), -1, "ask must not commit");
+  for (const name of ["approve-design", "approve-resume", "approve-direct"]) {
+    const effects = capabilityDesign.branches[name];
+    const knowledgeWrite = effects.findIndex((effect) => Array.isArray(effect) && effect[0] === "WRITE" && effect[1]?.artifact === "knowledgeNodes");
+    const validation = runActionIndex(effects, "validate exact changed capability/K paths");
+    const commit = verbIndex(effects, "COMMIT");
+    const route = effects.findIndex((effect) => typeof effect === "string" && effect.startsWith("ROUTE:"));
+    assert.ok(knowledgeWrite >= 0 && knowledgeWrite < validation && validation < commit && commit < route, `${name}: K validation must precede commit and route`);
+  }
 });
 
 test("templates retain exact Layer 0 and capability design-zone contracts", () => {

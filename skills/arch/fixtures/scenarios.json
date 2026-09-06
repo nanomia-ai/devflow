@@ -725,6 +725,7 @@
         "READ",
         "WRITE",
         "RUN",
+        "RUN",
         "COMMIT",
         "NEXT"
       ]
@@ -831,6 +832,7 @@
         "READ",
         "WRITE",
         "RUN",
+        "RUN",
         "COMMIT",
         "NEXT"
       ]
@@ -884,6 +886,7 @@
         "READ",
         "WRITE",
         "WRITE",
+        "RUN",
         "RUN",
         "COMMIT",
         "NEXT"
@@ -2324,6 +2327,7 @@
       "effects": [
         "WRITE",
         "WRITE",
+        "RUN",
         "COMMIT",
         "ROUTE:design"
       ]
@@ -2378,6 +2382,7 @@
       "effects": [
         "WRITE",
         "WRITE",
+        "RUN",
         "COMMIT",
         "ROUTE:resume"
       ]
@@ -2432,6 +2437,7 @@
       "effects": [
         "WRITE",
         "WRITE",
+        "RUN",
         "COMMIT",
         "ROUTE:resume"
       ]
@@ -2484,6 +2490,7 @@
       "effects": [
         "WRITE",
         "WRITE",
+        "RUN",
         "COMMIT",
         "ROUTE:direct"
       ]

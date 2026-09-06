@@ -15,6 +15,21 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.14 — 2026-09-07 — Arch validates K before landing commits
+
+Arch now executes the existing Principles capsule-validation contract in the six K-writing
+branches that omitted it. Recursive knowledge landings write K, validate the exact selected
+knowledge paths, and only then delete their marker and commit; capability-design approvals write
+their capability zones and K, validate the exact changed capability paths, and only then commit
+and route. Marker deletion and commit now remain downstream of validation instead of consuming
+the routing signal first.
+
+The change stays inside Arch's existing effect plans and uses existing validator actions: no
+shared semantic gate, retry rule, taxonomy, registry, crawler, central index, or other runtime
+owner changed. The shipped paths are the Arch spec, its seven scenario expectations, its focused
+effect-order test, the generated receipt, and both plugin manifests; the round report and matrix
+record the audit, verification, boundaries, and remaining unverified real-use behavior.
+
 ## 0.23.13 — 2026-09-06 — Adopt refutation converges on evidenced progress
 
 Adopt keeps its one complete bounded clean-context refutation, but a correctable current draft no
