@@ -1,6 +1,6 @@
 # authoring card — adopt
 
-Purpose: On explicit Adopt invocation for `setup.unmanaged`, directly reverse-derive a brownfield repository's canonical devflow planning surface from maintained pre-devflow documentation, code, or both.
+Purpose: On explicit Adopt invocation for `setup.unmanaged`, directly reverse-derive a brownfield repository's canonical devflow planning surface and proposed Working language from maintained pre-devflow documentation, code, or both.
 
 Failure scene: Adopt receives `setup.unmanaged`, mistakes material presence for completed evidence work, sends a documentation-only existing project to Product, asks for discoverable facts, or loops through Resume/Product instead of producing a proposal.
 
@@ -8,9 +8,9 @@ Observations: state kernel, route, current tracked-plus-untracked non-devflow ma
 
 Terminals: invalid state blocks; no maintained non-devflow project material routes to Product; managed state routes to Resume; an open Git operation asks the owner; refutation revises only while independent evidence shows causal progress and blocks otherwise; refusal and interruption before approval write nothing; approved adoption reports and stops.
 
-Evidence path: inventory every maintained source by knowledge unit or supporting group, map each knowledge unit to one exact owner-document or planned K target, reconcile claims, trace one evidence-grounded executable flow per code-backed capability candidate, cite the exact documentary basis for document-only candidates, and derive Layer 0, capability zones, and whole owner-adjacent knowledge units in K. Before binding, an initial bounded clean-context semantic refutation and each correction's bounded independent causal recheck record current scope, progress or remaining failure, and result in the proposal's Evidence verification section.
+Evidence path: inventory every maintained source by knowledge unit or supporting group, infer the proposed Working language from its meaningful human prose without counting machine tokens, map each knowledge unit to one exact owner-document or planned K target, reconcile claims, trace one evidence-grounded executable flow per code-backed capability candidate, cite the exact documentary basis for document-only candidates, and derive Layer 0, capability zones, and whole owner-adjacent knowledge units in K. Before binding, an initial bounded clean-context semantic refutation and each correction's bounded independent causal recheck record current scope, progress or remaining failure, and result in the proposal's Evidence verification section.
 
-Human boundary: ask only irreducible decisions and authority contradictions, recheck any load-bearing answer, then obtain one confirmation binding the complete proposed write set only after refutation is currently clear.
+Human boundary: expose the inferred Working language and its uncertainty; a correction supplies no approval value and receives a fresh independent semantic refutation before the write-free proposal fallback is shown again. Ask only irreducible decisions and authority contradictions, recheck any load-bearing answer, then obtain one confirmation binding the complete proposed write set only after refutation is currently clear.
 
 Commit boundary: under the one approval, write product.md last among the Layer 0 owner documents, validate their K nodes, and commit them with any idempotent follow-on record as `adopt — layer 0`; then use that landed commit as Design head, write the capability documents and their K nodes, validate the nodes, and commit both as `adopt — capabilities`. Interruption remains unmanaged only while no current `.devflow` root or indexed path exists; current evidence returns recovery to canonical state. A post-product pre-commit diff is owner-directed Git recovery; after the first commit and before second-boundary writes Resume routes the managed missing baseline to Arch.
 

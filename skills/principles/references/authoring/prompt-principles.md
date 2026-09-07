@@ -2,8 +2,7 @@
 
 ## The 7 Prompt Principles
 
-1. **One concept, one word.** No synonyms. Register project-specific terms in
-   `.devflow/project/glossary.md` and use the same word everywhere, to the end.
+1. **One working language; one word per concept.** The exact `Working language: <owner-confirmed description>` line in `.devflow/project/product.md` is the sole durable language choice. Semantic prose that devflow authors or revises follows it. If that line is absent from a legacy managed project, preserve each target artifact's already coherent prose language until Product reconfirms it; do not rewrite merely to add the line. Preserve fixed schema headings and keys, paths and slugs, commands, API and code identifiers, provenance literals, exact canonical terms, and quoted source text as their contracts require. Register project-specific terms in `.devflow/project/glossary.md` and use the same word everywhere, to the end.
 2. **Destination over instruction.** Write "what must become true," not "what to do."
 3. **Rich direction, short prohibitions.** Give context, intent, and the "why" generously.
    Keep the harness (prohibitions) to 3 lines or fewer.

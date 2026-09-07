@@ -1,8 +1,8 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:5ea385b525f2225c0348b59c36cfa380104c755c0d3fdd59b956c4d0ca75d94f",
-    "after": "sha256:5ea385b525f2225c0348b59c36cfa380104c755c0d3fdd59b956c4d0ca75d94f"
+    "before": "sha256:c6400bc7056a79c3e244e7d446bbd0ab411920bc61b0544a0a604102c0c8d1d0",
+    "after": "sha256:c6400bc7056a79c3e244e7d446bbd0ab411920bc61b0544a0a604102c0c8d1d0"
   },
   "changed": false,
   "any_changed": true,
@@ -23,22 +23,10 @@
     "body": [],
     "references": [
       {
-        "id": "references/knowledge/baseline-contract.md",
+        "id": "references/authoring/prompt-principles.md",
         "change": "modified",
-        "before": "sha256:1d1f58c0ca68758ebd735d26882872cdf4f29038314df4fb6a521aed0684bb5b",
-        "after": "sha256:378382d74de5eaecc231a037e2d3581eac4f4b3b2ec6f768e1f8cf2394f381ec"
-      },
-      {
-        "id": "references/knowledge/opening-and-freshness.md",
-        "change": "modified",
-        "before": "sha256:4ece12f2a733c222b051cef5c7f3fab558bef0b70e6eb829b3f3607c9c902986",
-        "after": "sha256:89a97cbe8d828d901f706e74bfa9f1e7dd292f94beb77c7d6b062e737b4bde5e"
-      },
-      {
-        "id": "references/knowledge/relations-and-lifecycle.md",
-        "change": "modified",
-        "before": "sha256:5e37e8a6125db73862e770ed8c834f7e438644bed2b0c3482a4c621b6e7c479f",
-        "after": "sha256:ac079c644144538852126ea72530151322102ee42c77a8bc94f04dad2b9f2374"
+        "before": "sha256:1bdbc91868d3bf7b59892286595327117d9d6162156c36915a4542328cfcf572",
+        "after": "sha256:c19fa34f7c25a596d115c1bf043dc9400b403368c549ed2b07ffb4ed21d10d84"
       }
     ],
     "ownership": [],
@@ -47,14 +35,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "adopt-mainline-recovery-disk-coordinate-follow-up",
-  "intent": "Use one provider disk NN term at every capability-consumption coordinate and rebuild the complete current contract.",
+  "change_id": "v0.23.15-opus-convergence",
+  "intent": "Make the already-decided legacy fallback reachable from the one always-read Working language policy.",
   "impact": {
     "references": {
-      "total": 3,
+      "total": 1,
       "added": 0,
       "removed": 0,
-      "modified": 3
+      "modified": 1
     }
   }
 }

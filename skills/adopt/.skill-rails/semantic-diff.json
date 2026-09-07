@@ -1,17 +1,25 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:73bedfbe600c02b2e5ce205f83fee057193c48ce35ebb6a31418eb15c1cca975",
-    "after": "sha256:73bedfbe600c02b2e5ce205f83fee057193c48ce35ebb6a31418eb15c1cca975"
+    "before": "sha256:756107200da7bffe5312f6b23140505426c77bf76f272c79ce0f0c58427c1367",
+    "after": "sha256:dfe5c73c96962cec12cd1105496718f777dc0a0021301e898fb59d57e511ce50"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
     "context": true
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:756107200da7bffe5312f6b23140505426c77bf76f272c79ce0f0c58427c1367",
+      "after_hash": "sha256:dfe5c73c96962cec12cd1105496718f777dc0a0021301e898fb59d57e511ce50",
+      "source": "behavior_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
@@ -22,23 +30,55 @@
     "template_content": [],
     "body": [
       {
-        "id": "why: purpose",
+        "id": "stage: adoption",
         "change": "modified",
-        "before": "sha256:99b13c147898d1f26fefb48752aee3eb0b915743286c16d649409b31bceea1b2",
-        "after": "sha256:e0d6aac97b24ec721fc35fd749f4884c0be0df8d32709b1d410cf53c93e00f90"
+        "before": "sha256:326963dcf3e355916179f455bbf3858397ac236df331343d30f5c7f02352069c",
+        "after": "sha256:88a5fedbde69ef56850378245c77aec4ebeedcb1134bf9af55e49a60d2e59ada"
       }
     ],
-    "references": [],
+    "references": [
+      {
+        "id": "references/workflow.md",
+        "change": "modified",
+        "before": "sha256:9fea3325a006642f4b8b68712278165e8480d1320b42120ace429f63b24aa7b7",
+        "after": "sha256:16aa67d06ee34cce7f968e389d3dc24da70319ede22011f7853b334dd60b7ac4"
+      }
+    ],
     "ownership": [],
     "artifacts": [],
     "roles": [],
-    "declarations": [],
+    "declarations": [
+      {
+        "id": "working_language",
+        "change": "modified",
+        "before": {
+          "value": "Infer a proposed Working language from maintained meaningful human prose, never from code identifiers or other machine tokens; expose uncertainty, explicit owner preference, and the proposal before canonical writes. The owner may correct it without writing, and approved product.md becomes the single durable value owner while shared Principles policy governs every writer.",
+          "consumer": "template:adoptionProposal|template:product|stage:adoption"
+        },
+        "after": {
+          "value": "Infer a proposed Working language from maintained meaningful human prose, never from code identifiers or other machine tokens; expose uncertainty, explicit owner preference, and the proposal before canonical writes. The owner may correct it without writing; every correction receives fresh independent semantic refutation before proposal reentry. Approved product.md becomes the single durable value owner while shared Principles policy governs every writer.",
+          "consumer": "template:adoptionProposal|template:product|stage:adoption"
+        }
+      }
+    ],
     "deferred": []
   },
-  "change_id": "adopt-mainline-recovery-refutation-gate-follow-up",
-  "intent": "Expose the exact bounded sibling Arch dependency on Adopt's first-read surface and rebuild the complete current contract.",
+  "change_id": "v0.23.15-opus-convergence",
+  "intent": "Restore independent refutation after every Adopt Working language correction without adding a new action or branch.",
   "impact": {
     "body": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "references": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "declarations": {
       "total": 1,
       "added": 0,
       "removed": 0,

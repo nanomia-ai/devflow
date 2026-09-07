@@ -460,6 +460,55 @@ test("P2 stages enter one shared Principles policy index while companions and ro
   }
 });
 
+test("Working language has one Product value owner and preserves fixed schema through both proposal paths", () => {
+  const policy = read("skills/principles/references/authoring/prompt-principles.md");
+  assert.match(policy, /The exact `Working language: <owner-confirmed description>` line in `\.devflow\/project\/product\.md` is the sole durable language choice/);
+  assert.match(read("skills/product/body.md"), /A current legacy product without the Working language line remains valid/);
+  assert.doesNotMatch(read("skills/principles/scripts/project-state.mjs"), /Working language:/,
+    "Working language must not become a project-state parser or global state field");
+
+  const templateHeadings = new Map([
+    ["skills/product/templates/product-proposal.md", ["## Problem", "## Approach", "## Capabilities", "## Boundary", "## Success criteria", "## Screens & access points", "## Proposed glossary delta", "## Owner-adjacent knowledge changes"]],
+    ["skills/product/templates/product-confirmed.md", ["## Problem", "## Approach", "## Capabilities", "## Boundary", "## Success criteria", "## Screens & access points", "## Open questions"]],
+    ["skills/adopt/templates/product.md", ["## Problem", "## Approach", "## Capabilities", "## Boundary", "## Success criteria", "## Screens & access points", "## Open questions"]],
+  ]);
+  for (const [relative, expectedHeadings] of templateHeadings) {
+    const text = read(relative);
+    assert.equal((text.match(/^Working language: \{\{workingLanguage\}\}$/gm) ?? []).length, 1,
+      `${relative} must carry the one exact Product-owned Working language line`);
+    assert.deepEqual(text.match(/^## .+$/gm), expectedHeadings,
+      `${relative} must preserve its fixed schema headings`);
+  }
+  assert.match(read("skills/adopt/templates/adoption-proposal.md"), /^Working language: \{\{workingLanguage\}\}$/m,
+    "Adopt must expose its inferred proposal before any canonical write");
+
+  const productAsk = JSON.parse(read("skills/product/fixtures/scenarios.json"))
+    .find((scenario) => scenario.id === "new-inline-ask");
+  assert.deepEqual(productAsk.expect.effects, ["RUN", "REPORT", "ASK"]);
+  assert.equal(productAsk.expect.effects.some((effect) => effect === "WRITE" || effect === "COMMIT"), false,
+    "Product language correction must reuse the write-free ask/rejudge path");
+  assert.match(read("skills/product/body.md"), /use the existing ask path to re-report the whole proposal without writing/);
+  const productApprove = JSON.parse(read("skills/product/fixtures/scenarios.json"))
+    .find((scenario) => scenario.id === "new-inline-approved-commit");
+  assert.equal(productApprove.expect.effects.includes("WRITE"), true);
+  assert.equal(productApprove.expect.effects.includes("COMMIT"), true,
+    "Product must write the confirmed language only behind its existing approval boundary");
+  assert.match(policy, /If that line is absent from a legacy managed project, preserve each target artifact's already coherent prose language until Product reconfirms it; do not rewrite merely to add the line/,
+    "The always-read policy must define safe behavior without claiming a state-observed legacy branch");
+
+  const adoptPrepare = JSON.parse(read("skills/adopt/fixtures/scenarios.json"))
+    .find((scenario) => scenario.id === "adoption-prepare");
+  assert.deepEqual(adoptPrepare.expect.effects, ["REPORT", "ASK"]);
+  assert.equal(adoptPrepare.expect.effects.some((effect) => effect === "WRITE" || effect === "COMMIT"), false,
+    "Adopt language correction must reuse the write-free proposal fallback until approval");
+  assert.match(read("skills/adopt/body.md"), /A Working language correction is not approval/);
+  const adoptApprove = JSON.parse(read("skills/adopt/fixtures/scenarios.json"))
+    .find((scenario) => scenario.id === "approval-approve");
+  assert.equal(adoptApprove.expect.effects.includes("WRITE"), true);
+  assert.equal(adoptApprove.expect.effects.includes("COMMIT"), true,
+    "Adopt must write the confirmed language only behind its existing binding approval");
+});
+
 test("the deployed semantic audit remains present beside the promoted packages", () => {
   assert.ok(fs.existsSync(path.join(root, "scripts", "skill-rails-semantic-audit.mjs")),
     "missing deployed Skill Rails semantic audit");

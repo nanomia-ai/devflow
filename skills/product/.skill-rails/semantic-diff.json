@@ -1,23 +1,23 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:bef54c53cbb1fd8cdef35b9df03e76243ce218501349d91b52378077cf33e443",
-    "after": "sha256:bef54c53cbb1fd8cdef35b9df03e76243ce218501349d91b52378077cf33e443"
+    "before": "sha256:a3da7861768c39be9060b9fc20ac0ba4e55e131b8158857310a498baccc21682",
+    "after": "sha256:7a5fc90530e163bc0bda317688574d84f7715a1802b102c20375b3b91d2e0376"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
-    "observation_source": true,
+    "behavior_source": true,
+    "observation_source": false,
     "context": false
   },
   "artifact_receipts": [
     {
-      "kind": "collector",
-      "path": "collectors/index.mjs",
-      "before_hash": "sha256:db6c20955743ce8adde01fac13c581c8adb8954bb9c2e974f2de3df411a28eba",
-      "after_hash": "sha256:d5a0be32dbec974fa0dd069011ff5bed6e9909442a1f553d20de4fa6cb072e30",
-      "source": "observation_source"
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:a3da7861768c39be9060b9fc20ac0ba4e55e131b8158857310a498baccc21682",
+      "after_hash": "sha256:7a5fc90530e163bc0bda317688574d84f7715a1802b102c20375b3b91d2e0376",
+      "source": "behavior_source"
     }
   ],
   "groups": {
@@ -33,10 +33,42 @@
     "ownership": [],
     "artifacts": [],
     "roles": [],
-    "declarations": [],
+    "declarations": [
+      {
+        "id": "coverage-product-schema",
+        "change": "modified",
+        "before": {
+          "value": "The confirmed product schema has a service name, fixed-form identity paragraph, the six judgment headings, Open questions, and one allowed interface value. It has no Approval field.",
+          "consumer": "migration:source-coverage"
+        },
+        "after": {
+          "value": "The confirmed product schema has a service name, fixed-form identity paragraph, the exact Working language line, the six judgment headings, Open questions, and one allowed interface value. It has no Approval field.",
+          "consumer": "migration:source-coverage"
+        }
+      },
+      {
+        "id": "productSchema",
+        "change": "modified",
+        "before": {
+          "value": "product.md uses the legacy six-judgment schema and contains no Approval field.",
+          "consumer": "stage:propose-and-confirm"
+        },
+        "after": {
+          "value": "product.md uses the six-judgment schema, adds the exact Working language line when Product next confirms it, and contains no Approval field.",
+          "consumer": "stage:propose-and-confirm"
+        }
+      }
+    ],
     "deferred": []
   },
-  "change_id": "adopt-mainline-recovery-concurrent-boundary",
-  "intent": "Read the canonical concurrent uncommitted Layer 0 fact even when a higher-priority route is selected.",
-  "impact": {}
+  "change_id": "v0.23.15-opus-convergence",
+  "intent": "Make the canonical Product schema declarations include the exact Working language line without changing the existing approval path.",
+  "impact": {
+    "declarations": {
+      "total": 2,
+      "added": 0,
+      "removed": 0,
+      "modified": 2
+    }
+  }
 }

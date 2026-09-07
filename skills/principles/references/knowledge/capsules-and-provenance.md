@@ -92,7 +92,8 @@ one closed head. There is no marking quota — a faithful capsule with zero mark
   coordinate.
 - The head literals are exactly four, ASCII everywhere in ko and en — a token a machine reads
   does not follow a human language. These four are themselves the canon of that discipline.
-  Prose stays in its own language; only the head is ASCII.
+  Semantic prose follows the confirmed Working language policy, while exact quoted source text
+  keeps its source language; only the head is ASCII.
   **This section is the canonical home of this vocabulary, and a head that is not listed here
   is rejected whether or not it carries a coordinate** — `conjecture` in particular is the
   only head with no coordinate, so a misspelling of it passing as unmarked would promote a

@@ -3879,6 +3879,26 @@ test("G routing baseline accepts glossary-defined concepts and rejects undefined
   assert.ok(refresh.reasons.includes("concepts-not-in-glossary:missing concept"), JSON.stringify(refresh));
 });
 
+test("G exact non-ASCII glossary terms remain canonical capability-routing keys", async (t) => {
+  const term = "\uACB0\uC81C";
+  const relative = ".devflow/project/capabilities/02-records.md";
+  const root = makeRepo(t, {
+    capabilities: ["records"],
+    glossaryText: `# Glossary\n\n${term}: completes a transfer\n`,
+  });
+  setCapabilityConcepts(root, relative, [term]);
+  commit(root, "jmp arch — non-ascii exact concept");
+
+  const module = await registry();
+  const state = await module.calculateState({ root });
+  assert.equal(state.zones.baseline.entries.some((entry) => entry.kind === "design-refresh" && entry.paths?.includes(relative)), false);
+
+  const lookup = run(root, "--term", term); ok(lookup);
+  assertFragment(lookup.stdout, "term:", "canonical=1");
+  assertFragment(lookup.stdout, "term:", 'capabilities=["02"]');
+  assertFragment(lookup.stdout, "term:", `term=${term}`);
+});
+
 test("arch and adopt shipped capability templates round-trip through capabilityShape", async (t) => {
   const rendererPath = path.resolve(__dirname, "../skills/arch/scripts/skill-rails/templates.mjs");
   const { renderTemplate } = await import(pathToFileURL(rendererPath).href);

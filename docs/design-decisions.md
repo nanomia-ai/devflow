@@ -1986,7 +1986,7 @@ this condition. Or when measurement finds a second range that cuts the same way.
 
 ### DD-91 · glossary is the project-language canon, capability-header concepts are definition-free many-to-many discovery consumers, and confirmed terms promote through the existing journal to the design writer (v0.19.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active
+Subject: The knowledge layer and capability documents | Introduced: v0.19.0 | State: active, partly corrected by DD-107 (v0.23.15)
 
 Observed problem: real-use projects had glossary definitions but no header index from those
 terms to capability documents. A new session had to open every body to locate an ordinary
@@ -2075,6 +2075,58 @@ Revisit when an artifact that passed unit-to-target mapping and refutation again
 knowledge unit across owners, when an existing-K refresh creates a second path for the same unit, or
 when independently consumed and changed units remain coupled in one K and repeatedly cause needless
 opening or simultaneous revision.
+
+### DD-107 · product.md owns the confirmed Working language as one fact and Principles keeps every writer's prose coherent (v0.23.15)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.23.15 | State: active
+
+Observed problem: a real Adopt output mixed Korean and English prose, but exposed no proposal or
+confirmation surface for the language that later people and AIs should use for maintenance. Current
+English runtime guidance and examples can create pressure to treat English as the content language,
+while DD-91's “project-language canon” means the glossary's exact terms and does not own a prose-language
+choice. If every stage infers again from documents or the glossary, it loses the confirmed answer in
+multilingual, tied, or sparse material, projects with canonical foreign-language terms, and projects
+whose owner chooses a language different from the corpus.
+
+Chosen boundary: the exact `Working language: <owner-confirmed description>` line immediately after
+identity in `.devflow/project/product.md` is the sole durable value owner for the project's Working
+language. The value is not a closed language enum; it may describe one language or an owner-selected
+multilingual convention. Adopt inspects meaningful maintained human prose in documentation, code
+comments, specifications, and operational records and proposes its dominant language. An explicit owner
+preference wins; code/API identifiers, paths, generated material, and vendor text are machine tokens, not
+votes, while tied, materially multilingual, sparse, or absent evidence remains visible uncertainty rather
+than a false majority. Product naturally proposes the same value from the owner conversation for a new
+project with no corpus to adopt. Both stages show the proposal before canonical writes, and a correction
+is not approval. Product's existing write-free ask reentry shows its revised proposal again; Adopt first
+runs a fresh independent semantic refutation of the complete revision, then returns to its existing
+write-free prepare reentry.
+
+Principles' prompt policy, already read by every stage, makes later authored and revised semantic prose
+follow the confirmed value. Fixed schema headings and keys, paths and slugs, commands, API and code
+identifiers, provenance literals, and exact source or canonical domain terms remain as their contracts
+require, and quoted source text keeps its source language. Glossary keys and `Concepts:` therefore keep
+exact terms while definitions and synthesized prose follow the Working language. An existing managed
+project without the line remains valid and is not rewritten merely to add it; each target artifact's
+already coherent prose language is preserved until Product next reconfirms the choice.
+
+Why and rejected alternatives: Product already owns project identity and current planning read by every
+later stage, while Principles already owns the one common policy read by every P2 entry. One value and one
+behavior therefore each have one home. This differs from DR-14's unconsumed observation-cache field: the
+new line has named consumers and neither the state tool nor routing parses it. Glossary metadata, per-stage
+reinference, per-document language fields, scanners, registries, crawlers, a closed language list,
+identifier translation, and a global semantic validator would add duplicate ownership, heuristic errors,
+or unbounded cost and are rejected.
+
+Affected coordinates: Principles prompt policy and capsule-provenance sentence; Product and Adopt spec,
+body, proposal and product templates, and focused contract tests; every P2 package's existing shared-policy/product read
+edge; DD-91 and DD-97; matrix §3.18 and §3.24; paired design, fixed terminology, plugin manifests,
+CHANGELOG, and the v0.23.15 report. The state tool, new markers, a language scanner, and other stages'
+sources do not change.
+
+Revisit when a downstream writer that read the confirmed line again mixes prose languages or translates
+fixed tokens, when a valid legacy project is blocked only because the line is absent, or when Adopt's
+proposal repeatedly chooses the wrong dominant language after meaningful-prose evidence and owner
+correction.
 
 ### Rejected under this subject
 

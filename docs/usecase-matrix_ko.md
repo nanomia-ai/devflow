@@ -508,6 +508,15 @@ changed capability/K 검증 → commit → 기존 route 순서다. compact·part
 유지하고, 실제 검증 실패에서는 marker가 남으며 commit과 route가 실행되지 않는지. 마지막 실제
 실패 장면은 이번 자동 검증에서 실행하지 않았으므로 `unverified`다.
 
+**정합 유지 — K의 의미 산문은 확인된 작업 언어를 따르고 기계 토큰은 보존한다**
+(2026-09-07 v0.23.15 DD-107). `product.md`의 `Working language:` 한 줄이 작업 언어 값을 한 곳에서
+소유하고, 모든 K 작성자가 이미 읽는 Principles 공통 정책이 본문·머리의 의미 산문에 적용된다.
+`about:`·`Source basis:`·네 provenance head, path·slug·command·code identifier, glossary의 정확 용어와
+`Concepts:` 값은 기존 계약대로 보존되며 인용 원문은 번역하지 않는다. 새 scanner·validator·index는
+없다. 검증 시 확인할 것: 비ASCII 정확 glossary 용어가 능력 routing key로 그대로 작동하고, 다른
+작업 언어로 K를 쓸 때도 고정 header/provenance token이 바뀌지 않는지. 실제 fresh-model K 작성은
+이번 표적 정적·도구 시험 밖이므로 `unverified`다.
+
 ### 3.19 A21 — 상태 도구를 부를 수 없는 진입 [11판 신규]
 
 ```
@@ -696,6 +705,19 @@ Arch가 소유한다. 검증 시 확인할 것: (a) Codex와 Claude가 같은 �
 정확한 target과 Foundation 범위를 포함한 반증 입력·차단 기준·진전 기반 revise/유계 인과 재검사·
 Evidence verification 기록이 지켜지고 미착지·분산·복제 finding이 남으면 구속 질문이 나오지 않는지.
 사용자가 새 설치 뒤 테스트 브랜치에서 직접 확인하기로 했으므로 이 실제 행동은 **미검증**이다.
+
+**정합 유지 — Adopt가 작업 언어를 쓰기 전에 제안하고 소유자 교정을 재제안한다**
+(2026-09-07 v0.23.15 DD-107). Adopt는 전 자료 처분과 같은 유계 inventory에서 유지 문서·코드 주석·
+명세·운영 기록의 의미 있는 사람 산문을 보고 우세 작업 언어를 제안한다. 명시 소유자 언어가 우선하고
+식별자·경로·생성물·vendor text는 표에서 빠지며, 동률·실질적 다국어·희박·부재 근거는 불확실성으로
+드러낸다. 제안서와 파생 Product 모두 같은 `Working language:` 값을 쓰기 전에 보여 준다. 교정은
+승인이 아니며 Adopt는 수정한 전체 제안에 새 독립 의미 반증을 거친 뒤 기존 `prepare`의 REPORT→ASK
+재진입으로 돌아간다. approve 전 WRITE·COMMIT은 0이다. Product의 새 프로젝트는 기존 ask 재진입으로
+같은 확인을 한다. 기존 관리
+프로젝트는 이 줄 부재만으로 차단하거나 이관 쓰기를 하지 않는다. 검증 시 확인할 것: 언어 제안·교정·
+재제안 뒤에만 승인 쓰기가 열리고, 다국어·동률·희박·명시 선호 fixture에서 거짓 다수와 식별자 투표가
+없는지. 실제 브라운필드 fresh-model 추론과 줄 부재 legacy artifact의 언어 보존은 이번 표적 검증
+밖이므로 `unverified`다.
 
 ### 3.25 H51×A10 — 패키지 정보와 현재 프로젝트 작업의 진입 경계 [16판 신규]
 
@@ -906,3 +928,11 @@ registry·validator·index는 0이고 v0.23.9의 최초 진입·승인·커밋 �
 새 state/predicate/classifier/registry/stage/write 권한은 0이다. 초기 Adopt/Product와 Direct·Work·
 Verify·Resume, DD-104의 작성자 묶음은 그대로다. 표적 구조·행동 검증 밖의 fresh-model 선택과 실제
 프로젝트 제안 품질은 재관측 전까지 **미검증**이다. **새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.**
+
+0.23.15 부분 재판정(DD-107): 새 요청·진입 형태나 교차 셀은 없다. §3.24의 기존 Adopt inventory와
+쓰기 전 proposal/approval 경계에 사람 산문 기반 작업 언어 제안·교정 재제안을 연결했고, §3.18의
+기존 K 자유 산문과 고정 provenance 경계에 확인된 언어 상속을 연결했다. Product가 값 한 줄,
+Principles가 공통 행동 하나를 소유하며 state tool·scanner·registry·crawler·전역 semantic gate·다른
+단계 source는 바뀌지 않는다. 기존 project는 줄 부재만으로 차단하거나 이관하지 않는다. 표적 정적
+구조·P2 fixture·비ASCII glossary routing 밖의 실제 다국어 Adopt와 후속 fresh-model 작성은
+재관측 전까지 **미검증**이다. **새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.**

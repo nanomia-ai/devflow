@@ -15,6 +15,23 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.15 — 2026-09-07 — Project prose keeps one confirmed working language
+
+Product now owns one explicit `Working language` value and confirms it through its existing
+write-free question before either Product document is written. Adopt proposes that value from
+maintained human prose rather than identifier counts, exposes uncertain, tied, multilingual, or
+sparse evidence before canonical writes, and after an owner correction runs fresh independent
+refutation before reusing its existing prepare fallback. Principles makes the confirmed value apply
+to later semantic prose while
+fixed schemas, paths, commands, identifiers, provenance literals, quoted sources, and exact
+canonical terms remain stable; older managed projects without the field remain valid.
+
+The shipped paths are the canonical Principles, Product, and Adopt sources and their generated
+receipts, focused repository/state tests, and both plugin manifests. The decision record, design
+map, paired maintenance terminology, Korean use-case matrix, and round report record ownership,
+scope boundaries, verification, and the remaining unverified live multilingual behavior; no
+scanner, registry, state predicate, global gate, or per-document language metadata was added.
+
 ## 0.23.14 — 2026-09-07 — Arch validates K before landing commits
 
 Arch now executes the existing Principles capsule-validation contract in the six K-writing
