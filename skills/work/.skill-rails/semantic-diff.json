@@ -1,48 +1,228 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:891bcde48bcd9ffdeb18432857e3fdf33e15f69b93d92255c69cbde914639641",
-    "after": "sha256:891bcde48bcd9ffdeb18432857e3fdf33e15f69b93d92255c69cbde914639641"
+    "before": "sha256:ed1405146d4c32190f514d8c1085212f352a1596faf7f53dcbd90b1594c9ae24",
+    "after": "sha256:b4bbf0d019baa9416fc1edc596477b8ffa058a4499468a8c885ced9497488cc8"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
-    "context": true
+    "context": false
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:ed1405146d4c32190f514d8c1085212f352a1596faf7f53dcbd90b1594c9ae24",
+      "after_hash": "sha256:b4bbf0d019baa9416fc1edc596477b8ffa058a4499468a8c885ced9497488cc8",
+      "source": "behavior_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
-    "tables": [],
+    "stages": [
+      {
+        "id": "knowledge-marker",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "research.checkpoint",
+            "knowledge.marker",
+            "boundary.state",
+            "task.commit",
+            "task.integration",
+            "handoff.state",
+            "completion.state",
+            "review.state",
+            "knowledge.action"
+          ],
+          "needs": [
+            "knowledge.action"
+          ],
+          "table": "knowledge",
+          "branches": [
+            "emit-arch",
+            "route-direct",
+            "none"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "emit-arch": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeMarkerTransport",
+                    "source": "exact-card-path@fullhash",
+                    "template": "knowledgeLandingPending",
+                    "touches": [
+                      ".devflow/journal.md"
+                    ],
+                    "writer": "arch"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "knowledge-marker",
+                    "subject": "<id> boundary: knowledge landing",
+                    "touches": [
+                      ".devflow/journal.md"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "none": [
+                [
+                  "REPORT",
+                  {
+                    "scope": "no-reusable-knowledge-promotion"
+                  }
+                ],
+                "NEXT"
+              ],
+              "route-direct": [
+                [
+                  "REPORT",
+                  {
+                    "scope": "post-title-knowledge-source-missing"
+                  }
+                ],
+                "ROUTE:direct"
+              ]
+            }
+          },
+          "body": "stage: knowledge-marker",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "research.checkpoint",
+            "knowledge.marker",
+            "boundary.state",
+            "task.commit",
+            "task.integration",
+            "handoff.state",
+            "completion.state",
+            "review.state",
+            "knowledge.action"
+          ],
+          "needs": [
+            "knowledge.action"
+          ],
+          "table": null,
+          "branches": [
+            "emit-arch",
+            "route-direct",
+            "none"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "emit-arch": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeMarkerTransport",
+                    "source": "exact-card-path@fullhash",
+                    "template": "knowledgeLandingPending",
+                    "touches": [
+                      ".devflow/journal.md"
+                    ],
+                    "writer": "arch"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "scope": "knowledge-marker",
+                    "subject": "<id> boundary: knowledge landing",
+                    "touches": [
+                      ".devflow/journal.md"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ],
+              "none": [
+                "NEXT"
+              ],
+              "route-direct": [
+                [
+                  "REPORT",
+                  {
+                    "scope": "post-title-knowledge-source-missing"
+                  }
+                ],
+                "ROUTE:direct"
+              ]
+            }
+          },
+          "body": "stage: knowledge-marker",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "id": "knowledge",
+        "change": "removed",
+        "before": {
+          "exclusive": true,
+          "rows": [
+            {
+              "state": "emit-arch",
+              "reads": [
+                "knowledge.action"
+              ]
+            },
+            {
+              "state": "route-direct",
+              "reads": [
+                "knowledge.action"
+              ]
+            },
+            {
+              "state": "none",
+              "reads": []
+            }
+          ]
+        }
+      }
+    ],
     "formats": [],
     "templates": [],
     "template_content": [],
     "body": [],
-    "references": [
-      {
-        "id": "references/purpose.md",
-        "change": "modified",
-        "before": "sha256:8ac1a673d310a029fe27b85c3e1c880a054addae90493a906458e93dc23424e9",
-        "after": "sha256:5fc8a2da0dc530cbb2befd7892882215aa2e9a091f5acb949a5117cafef2c39b"
-      }
-    ],
+    "references": [],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "work-align-purpose-route",
-  "intent": "Keep the always-read purpose aligned with Resume selecting the next route.",
+  "change_id": "work-effect-free-knowledge-none",
+  "intent": "Pass the no-reusable-knowledge branch inside the current evaluation so Work reaches task finalization without emitting a duplicate same-run Decision; direct-dispatch the one judged action instead of retaining a table whose no-effect state is intentionally passed over.",
   "impact": {
-    "references": {
+    "stages": {
       "total": 1,
       "added": 0,
       "removed": 0,
       "modified": 1
+    },
+    "tables": {
+      "total": 1,
+      "added": 0,
+      "removed": 1,
+      "modified": 0
     }
   }
 }

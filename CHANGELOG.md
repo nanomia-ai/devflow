@@ -15,6 +15,32 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.18 — 2026-09-08 — Keep no-effect continuations trace-safe
+
+Adopt now ends an evidence-supported proposal correction and its independent bounded recheck with
+`ROUTE:adopt`. The same actor immediately continues at a fresh Adopt entry, so a legitimate later
+`revise` can repeat the same pure Decision without colliding with the trace guard inside one run or
+requiring another user prompt.
+
+Work's no-reusable-knowledge branch is now the exact effect-free `NEXT` plan. The evaluator passes that
+branch over inside the current evaluation and proceeds directly to task finalization, instead of emitting
+a report-only Decision whose required same-run reinvocation has no observation change and is rejected as
+a duplicate.
+
+The common evaluator and duplicate-emission guard remain unchanged and still fail closed when the same
+Decision is emitted twice in one run. The Adopt loop was latent from 0.23.13 and the Work branch from the
+0.20.0 Skill Rails migration; the observed Sol failure also included a separate caller error that reused
+an ASK run even though its Decision had no reinvocation. The common CLI `resume` terminal-run concern is
+recorded separately for its external Skill Rails runtime owner and is not changed here.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `skills/adopt/spec.mjs`;
+`skills/adopt/fixtures/make-scenarios.mjs`; `skills/adopt/fixtures/scenarios.json`;
+`skills/adopt/.skill-rails/semantic-diff.json`; `skills/adopt/.generated.json`;
+`skills/work/spec.mjs`; `skills/work/fixtures/scenarios.json`;
+`skills/work/.skill-rails/semantic-diff.json`; `skills/work/.generated.json`;
+`docs/design-backlog_ko.md`; `docs/design-backlog.md`;
+`docs/rounds/v0.23.0/report-0.23.18_ko.md`; `CHANGELOG.md`.
+
 ## 0.23.17 — 2026-09-08 — Repair the Adopt package seal
 
 Adopt's authored behavior is unchanged. The 0.23.16 package shipped `body.md` after a final whitespace

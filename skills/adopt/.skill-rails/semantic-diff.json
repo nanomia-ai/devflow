@@ -1,84 +1,198 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:dc88add216d84d236c4b21180739be25445235680a7050757bc5a7e350f49276",
-    "after": "sha256:01a898c580bb28e51b26879abc6e68d5f73b733a148f41eda3df17748b455f85"
+    "before": "sha256:01a898c580bb28e51b26879abc6e68d5f73b733a148f41eda3df17748b455f85",
+    "after": "sha256:731eda6c60dd93a32d3723c85d0914afe633d5be1e8919d9599351caaa13ed97"
   },
   "changed": true,
   "any_changed": true,
   "source_changes": {
     "behavior_source": true,
     "observation_source": false,
-    "context": true
+    "context": false
   },
   "artifact_receipts": [
     {
       "kind": "spec",
       "path": "spec.mjs",
-      "before_hash": "sha256:dc88add216d84d236c4b21180739be25445235680a7050757bc5a7e350f49276",
-      "after_hash": "sha256:01a898c580bb28e51b26879abc6e68d5f73b733a148f41eda3df17748b455f85",
+      "before_hash": "sha256:01a898c580bb28e51b26879abc6e68d5f73b733a148f41eda3df17748b455f85",
+      "after_hash": "sha256:731eda6c60dd93a32d3723c85d0914afe633d5be1e8919d9599351caaa13ed97",
       "source": "behavior_source"
     }
   ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "semantic-refutation",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "refutation.state"
+          ],
+          "needs": [
+            "refutation.state"
+          ],
+          "table": null,
+          "branches": [
+            "pending",
+            "revise",
+            "blocked"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "blocked": [
+                "BLOCK"
+              ],
+              "pending": [
+                [
+                  "READ",
+                  {
+                    "path": "references/workflow.md"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "inventory-all-maintained-sources-by-knowledge-unit-with-exact-coordinates-disposition-and-landing-target"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "trace-one-executable-flow-per-code-backed-capability-candidate-and-record-documentary-basis-for-document-derived-candidates"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "reverse-derive-complete-layer-zero-applicable-design-capability-zones-glossary-and-whole-owner-adjacent-knowledge-units"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "perform-one-bounded-clean-context-semantic-refutation-of-the-complete-draft-before-binding"
+                  }
+                ],
+                "NEXT"
+              ],
+              "revise": [
+                [
+                  "RUN",
+                  {
+                    "action": "apply-evidence-supported-current-authority-correction-to-every-current-blocker-in-the-current-draft"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "independently-recheck-returned-coordinates-changed-targets-and-direct-consequences-and-record-current-evidence-verification"
+                  }
+                ],
+                "NEXT"
+              ]
+            }
+          },
+          "body": "stage: semantic-refutation",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "refutation.state"
+          ],
+          "needs": [
+            "refutation.state"
+          ],
+          "table": null,
+          "branches": [
+            "pending",
+            "revise",
+            "blocked"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "blocked": [
+                "BLOCK"
+              ],
+              "pending": [
+                [
+                  "READ",
+                  {
+                    "path": "references/workflow.md"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "inventory-all-maintained-sources-by-knowledge-unit-with-exact-coordinates-disposition-and-landing-target"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "trace-one-executable-flow-per-code-backed-capability-candidate-and-record-documentary-basis-for-document-derived-candidates"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "reverse-derive-complete-layer-zero-applicable-design-capability-zones-glossary-and-whole-owner-adjacent-knowledge-units"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "perform-one-bounded-clean-context-semantic-refutation-of-the-complete-draft-before-binding"
+                  }
+                ],
+                "NEXT"
+              ],
+              "revise": [
+                [
+                  "RUN",
+                  {
+                    "action": "apply-evidence-supported-current-authority-correction-to-every-current-blocker-in-the-current-draft"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "independently-recheck-returned-coordinates-changed-targets-and-direct-consequences-and-record-current-evidence-verification"
+                  }
+                ],
+                "ROUTE:adopt"
+              ]
+            }
+          },
+          "body": "stage: semantic-refutation",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [
-      {
-        "id": "stage: adoption",
-        "change": "modified",
-        "before": "sha256:183c511e3370aa25ce3c851e8660c8dda73ed82b0442439f37e0622a296bec31",
-        "after": "sha256:3b391f0aef8146081c2e6eae253162566093b08db8c0e6467794afad4f2b6420"
-      }
-    ],
-    "references": [
-      {
-        "id": "references/workflow.md",
-        "change": "modified",
-        "before": "sha256:505bb02bf12c9b79ec854ff9e81c3f620db44b184d80216f1d692f4aa0f1108a",
-        "after": "sha256:a15a8391ebf27c9c55393b1d966bbcaf7872379883a0b7fc6279072d7090f89a"
-      }
-    ],
+    "body": [],
+    "references": [],
     "ownership": [],
     "artifacts": [],
     "roles": [],
-    "declarations": [
-      {
-        "id": "brownfield_effects",
-        "change": "modified",
-        "before": {
-          "value": "Evidence and the complete proposal precede owner questions and one binding approval; refusal writes nothing. Approval writes and validates the complete Layer 0, capability, and K set before the first commit, with capability Design head none, then commits every approved owner document, same-owner K, and optional follow-on as adopt — layer 0. Because the Design-head command reads only product.md, arch.md, and glossary.md, Adopt can replace only the capability Design head lines with that first commit and land those line changes as adopt — capabilities. Before the first commit the owner commits the exact approved dirty boundary or discards it; after it, all approved meaning is canonical and none makes the baseline stale for Resume-to-Arch recovery. Uncommitted bytes are never recovery input and Adopt adds no state or recovery protocol.",
-          "consumer": "stage:adoption"
-        },
-        "after": {
-          "value": "Evidence and the complete proposal precede owner questions and one binding approval; refusal writes nothing. Approval writes and validates the complete Layer 0, capability, and K set before the first commit, with capability Design head none, then commits every approved owner document, same-owner K, and optional follow-on as adopt — layer 0. Because the Design-head command reads only product.md, arch.md, and glossary.md, Adopt can replace only the capability Design head lines with that first commit and land those line changes as adopt — capabilities. Once the first commit lands, all approved meaning is canonical and none makes the baseline stale for Resume-to-Arch recovery. Uncommitted bytes are never recovery input and Adopt adds no state or recovery protocol.",
-          "consumer": "stage:adoption"
-        }
-      }
-    ],
+    "declarations": [],
     "deferred": []
   },
-  "change_id": "adopt-remove-rejected-dirty-recovery",
-  "intent": "Remove the rejected owner-directed dirty-boundary theory while preserving canonical recovery after the first commit.",
+  "change_id": "adopt-revise-fresh-self-route",
+  "intent": "Continue evidence-supported Adopt correction in the same actor while opening each subsequent judgment as a fresh trace run.",
   "impact": {
-    "body": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
-    "references": {
-      "total": 1,
-      "added": 0,
-      "removed": 0,
-      "modified": 1
-    },
-    "declarations": {
+    "stages": {
       "total": 1,
       "added": 0,
       "removed": 0,

@@ -8,6 +8,18 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 
 ## Field observation items — watch during coming cycles, without adding rules
 
+- **Skill Rails `resume` can reuse a terminal trace run** (recorded 2026-09-08 by the
+  v0.23.18 whole-diff audit; deployed coordinates
+  `skills/*/scripts/skill-rails/cli.mjs:85-95`, canonical owner external Skill Rails runtime)
+  — generated adapter step 6 calls stage with the same run id only when the Decision has
+  `reinvoke`, but CLI `resume` always puts the last event's run id in `next_command` without
+  inspecting the last terminal or `reinvoke`. If that recovery command is used after a
+  `reinvoke: null` terminal while observation and judgment material remain unchanged, it can
+  emit the same Decision in the same run and the trace store rejects it as
+  `duplicate-decision-emission`. This path did not cause the observed Sol failure, and
+  v0.23.18 does not change the common runtime. Reopen it as a separate Skill Rails/runtime
+  repair with terminal-sensitive command generation and cross-P2 regression coverage; do not
+  relax the trace guard or treat a terminal run as an after-effects reinvocation.
 - **Compatible-feedback field residuals remain bounded observations** (recorded 2026-09-02
   by the DD-96 seal and integration-behind repairs) — first, the state tool currently derives
   a blocking reopen finding from Git history and cannot clear it after the journal is corrected.

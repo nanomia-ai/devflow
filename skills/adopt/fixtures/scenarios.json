@@ -167,11 +167,11 @@
     "decided": {},
     "expect": {
       "stage": "semantic-refutation",
-      "status": "NEXT",
+      "status": "ROUTE",
       "effects": [
         "RUN",
         "RUN",
-        "NEXT"
+        "ROUTE:adopt"
       ]
     },
     "cover": [

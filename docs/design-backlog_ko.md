@@ -8,6 +8,16 @@
 
 ## 실전 관찰 항목 — 규칙 추가 없이 다음 사이클에서 지켜볼 것
 
+- **Skill Rails `resume`은 종결 terminal의 trace run을 다시 쓸 수 있다** (v0.23.18 whole-diff
+  감사가 2026-09-08 기록; 배포 좌표 `skills/*/scripts/skill-rails/cli.mjs:85-95`, 정본
+  소유자는 외부 Skill Rails runtime) — 생성 adapter의 6단계는 Decision에 `reinvoke`가 있을
+  때만 같은 run id로 stage를 다시 부르지만, CLI `resume`은 마지막 terminal과 `reinvoke`를
+  보지 않고 언제나 `next_command`에 마지막 event의 run id를 넣는다. `reinvoke: null`인
+  terminal 뒤에 이 복구 명령을 쓰고 관찰·판단 material이 그대로이면 같은 Decision을 같은
+  run에 다시 발행해 trace store가 `duplicate-decision-emission`으로 거부할 수 있다. 이 경로는
+  관찰된 Sol 실패를 일으키지 않았고 v0.23.18은 공통 runtime을 바꾸지 않는다. terminal을
+  구분하는 command 생성과 P2 전체 회귀를 별도 Skill Rails/runtime 수리로 열 때 다시 본다.
+  trace guard를 완화하거나 terminal run을 after-effects 재호출로 취급하지 않는다.
 - **호환 환류 실전 잔여는 유계 관찰로 남는다** (DD-96 seal과 integration-behind 수리가
   2026-09-02 기록) — 첫째, 상태 도구는 현재 Git 이력에서 차단형 reopen finding을 도출하며
   journal을 고친 뒤에도 그것을 지울 수 없다. 이것은 기록일 뿐이고 런타임 동작 변경 권한이

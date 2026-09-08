@@ -240,8 +240,7 @@
     },
     "cover": [
       "stage:knowledge-marker",
-      "branch:knowledge/emit-arch",
-      "row:knowledge/emit-arch"
+      "branch:knowledge-marker/emit-arch"
     ]
   },
   {
@@ -2172,17 +2171,22 @@
       "feedback.lifecycleAction": "invalid"
     },
     "expect": {
-      "stage": "knowledge-marker",
-      "row": "none",
+      "stage": "task-finalization",
+      "row": "carry",
       "status": "NEXT",
       "effects": [
-        "REPORT",
+        "WRITE",
+        "COMMIT",
         "NEXT"
       ]
     },
     "cover": [
-      "row:knowledge/none",
-      "branch:knowledge/none"
+      "stage:knowledge-marker",
+      "branch:knowledge-marker/none",
+      "stage:task-finalization",
+      "branch:task-finalization/none",
+      "branch:finalize/carry",
+      "row:finalize/carry"
     ]
   },
   {
@@ -3409,7 +3413,7 @@
       "status": "ROUTE",
       "effects": ["WRITE", "COMMIT", "ROUTE:resume"]
     },
-    "cover": ["stage:knowledge-marker", "branch:knowledge/emit-arch", "row:knowledge/emit-arch"]
+    "cover": ["stage:knowledge-marker", "branch:knowledge-marker/emit-arch"]
   },
   {
     "id": "general-task-post-title-source-gap-routes-direct-without-marker",
@@ -3447,6 +3451,6 @@
       "status": "ROUTE",
       "effects": ["REPORT", "ROUTE:direct"]
     },
-    "cover": ["branch:knowledge/route-direct", "row:knowledge/route-direct"]
+    "cover": ["branch:knowledge-marker/route-direct"]
   }
 ]

@@ -57,7 +57,7 @@ export const TABLES = {
 export const STAGES = [
   { id: "semantic-refutation", reads: ["refutation.state"], acceptsUnknown: [], done: s => s.refutation.state === "clear", needs: ["refutation.state"], reentry: "rejudge", branches: {
     pending: [["READ", { path: "references/workflow.md" }], ["RUN", { action: "inventory-all-maintained-sources-by-knowledge-unit-with-exact-coordinates-disposition-and-landing-target" }], ["RUN", { action: "trace-one-executable-flow-per-code-backed-capability-candidate-and-record-documentary-basis-for-document-derived-candidates" }], ["RUN", { action: "reverse-derive-complete-layer-zero-applicable-design-capability-zones-glossary-and-whole-owner-adjacent-knowledge-units" }], ["RUN", { action: "perform-one-bounded-clean-context-semantic-refutation-of-the-complete-draft-before-binding" }], "NEXT"],
-    revise: [["RUN", { action: "apply-evidence-supported-current-authority-correction-to-every-current-blocker-in-the-current-draft" }], ["RUN", { action: "independently-recheck-returned-coordinates-changed-targets-and-direct-consequences-and-record-current-evidence-verification" }], "NEXT"],
+    revise: [["RUN", { action: "apply-evidence-supported-current-authority-correction-to-every-current-blocker-in-the-current-draft" }], ["RUN", { action: "independently-recheck-returned-coordinates-changed-targets-and-direct-consequences-and-record-current-evidence-verification" }], "ROUTE:adopt"],
     blocked: ["BLOCK"]
   }, body: "stage: semantic-refutation" },
   { id: "adoption", reads: ["state.route"], acceptsUnknown: [], done: s => s.state.route !== "setup.unmanaged", table: "approval", reentry: "rejudge", branches: {

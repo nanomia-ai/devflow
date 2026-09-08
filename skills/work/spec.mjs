@@ -139,11 +139,6 @@ export const TABLES = {
     { state: "repair", reads: ["review.action"], acceptsUnknown: [], when: s => s.review.action === "repair" },
     { state: "dispatch", reads: [], acceptsUnknown: [], when: () => true }
   ] },
-  knowledge: { exclusive: true, rows: [
-    { state: "emit-arch", reads: ["knowledge.action"], acceptsUnknown: [], when: s => s.knowledge.action === "emit-arch" },
-    { state: "route-direct", reads: ["knowledge.action"], acceptsUnknown: [], when: s => s.knowledge.action === "route-direct" },
-    { state: "none", reads: [], acceptsUnknown: [], when: () => true }
-  ] },
   finalize: { exclusive: true, rows: [
     { state: "staling", reads: ["feedback.action"], acceptsUnknown: [], when: s => s.feedback.action === "staling" },
     { state: "design-note", reads: ["feedback.action"], acceptsUnknown: [], when: s => s.feedback.action === "design-note" },
@@ -196,10 +191,10 @@ export const STAGES = [
     dispatch: [["READ", { artifact: "reviewerContract" }], ["READ", { artifact: "activeCard" }], ["DISPATCH", { role: "reviewer" }], ["WRITE", { artifact: "activeCard", template: "reviewResult" }], "WAIT"]
   }, body: "stage: review-reduction" },
   { id: "research-checkpoint", reads: ["research.checkpoint"], acceptsUnknown: [], done: s => s.research.checkpoint === "not-applicable" || s.research.checkpoint === "committed", effects: [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: research synthesis" }], "NEXT"], reentry: "rejudge", body: "stage: research-checkpoint" },
-  { id: "knowledge-marker", reads: ["research.checkpoint", "knowledge.marker", "boundary.state", "task.commit", "task.integration", "handoff.state", "completion.state", "review.state", "knowledge.action"], needs: ["knowledge.action"], acceptsUnknown: ["knowledge.action"], done: s => s.knowledge.marker === "current-source" || (s.research.checkpoint === "not-applicable" && (s.knowledge.action === "none" || !lateBoundarySettled(s))), table: "knowledge", reentry: "rejudge", branches: {
+  { id: "knowledge-marker", reads: ["research.checkpoint", "knowledge.marker", "boundary.state", "task.commit", "task.integration", "handoff.state", "completion.state", "review.state", "knowledge.action"], needs: ["knowledge.action"], acceptsUnknown: ["knowledge.action"], done: s => s.knowledge.marker === "current-source" || (s.research.checkpoint === "not-applicable" && (s.knowledge.action === "none" || !lateBoundarySettled(s))), reentry: "rejudge", branches: {
     "emit-arch": [["WRITE", { artifact: "knowledgeMarkerTransport", template: "knowledgeLandingPending", writer: "arch", source: "exact-card-path@fullhash", touches: [".devflow/journal.md"] }], ["COMMIT", { scope: "knowledge-marker", subject: "<id> boundary: knowledge landing", touches: [".devflow/journal.md"] }], "ROUTE:resume"],
     "route-direct": [["REPORT", { scope: "post-title-knowledge-source-missing" }], "ROUTE:direct"],
-    none: [["REPORT", { scope: "no-reusable-knowledge-promotion" }], "NEXT"]
+    none: ["NEXT"]
   }, body: "stage: knowledge-marker" },
   { id: "task-finalization", reads: ["remote.state", "task.commit"], needs: ["feedback.action"], acceptsUnknown: [], done: s => s.task.commit === "present" || s.remote.state === "finalizing", table: "finalize", reentry: "rejudge", branches: {
     staling: [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: upper-document change" }], "ROUTE:resume"],
