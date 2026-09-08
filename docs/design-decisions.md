@@ -1781,7 +1781,7 @@ produces a loss or double-plan that these rules do not classify.
 
 ### DD-76 · Domain knowledge capsules — knowledge overflowing a capability document lives in on-demand capsules under the same number, and provenance marks separate source, synthesis, conjecture, and dispute (v0.18.1)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2), DD-92 (v0.20.0), DD-97 (v0.21.0), DD-103 (v0.23.10)
+Subject: The knowledge layer and capability documents | Introduced: v0.18.1 | State: active, partly corrected by DD-77 (v0.18.2), DD-92 (v0.20.0), DD-97 (v0.21.0), DD-103 (v0.23.10), DD-108 (v0.23.16)
 
 Observed problem: one capability's domain source in a real brownfield (jgnote property) ran
 to 3,699 lines — pressed as summary into a 185-line capability document, knowledge is lost;
@@ -2128,6 +2128,54 @@ fixed tokens, when a valid legacy project is blocked only because the line is ab
 proposal repeatedly chooses the wrong dominant language after meaningful-prose evidence and owner
 correction.
 
+### DD-108 · Adopt transfers knowledge ownership; absorbed inputs are not permanent project dependencies (v0.23.16)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.23.16 | State: active
+
+Observed problem: Adopt accounted for every maintained source correctly during reconstruction, but then
+persisted that migration inventory in Architecture `Existing records`, K footers, and in-body provenance
+marks. Deleting or substantially changing an input document after a successful
+adoption therefore made current project knowledge fail validation or sent later readers back to the old
+material. The document path became a second owner instead of the temporary evidence from which durable
+purpose, domain meaning, decisions, constraints, terminology, modality, and uncertainty were transferred.
+
+Chosen boundary: source coordinates, authority, disposition, and landing targets are complete but transient
+proposal and refutation evidence. The approved final owner/K surface is self-contained current knowledge,
+and Architecture `Existing records` contains only external inputs the owner explicitly elects to keep live.
+A K normally has no `Source basis` after absorbed migration input. When a user-designated live input or an
+existing managed card supplies the footer, the array remains nonempty and every coordinate must pass the
+same path, revision, and range checks as before; absent and strongly valid are the only two forms. In-body
+coordinates likewise name only current code, owner-kept live input, or managed-card evidence. Absorbed
+meaning, modality, rejected directions, and uncertainty live in self-contained owner prose; unresolved
+contradictions keep both positions and grounds without a machine coordinate mark.
+
+DD-97's two commits remain but their staging partition follows the self-reference boundary. Adopt writes
+and validates the complete approved Layer 0, capability, and K set, with capability `Design head: none`,
+then lands every owner, same-owner K, and exact follow-on in the first commit. The Design-head command's
+pathspec names only product, architecture, and glossary, so the capability-only second commit does not
+advance the first commit selected by that command. The second commit changes only capability Design head
+lines to that first commit ID. After commit one all approved meaning is
+canonical and the committed `none` heads are a stale baseline for Resume-to-Arch recovery; uncommitted
+bytes are never recovery input. No state, marker, predicate, ledger, or commit-body mapping is added.
+
+Why and rejected alternatives: keeping historical coordinates, even with a compatibility label, preserves
+the dangling dependency. Weakening coordinate validation lets a live input or managed card lie. Banning all
+coordinates breaks exact managed-card evidence. A single commit would remove the real Layer 0 hash that
+Design head needs. A durable migration ledger or new recovery state duplicates ownership and repeats the
+discarded broad redesign. The correction is therefore one causal boundary: transient accounting becomes
+self-contained knowledge, with optional evidence strong whenever it exists.
+
+Affected coordinates: Adopt behavior, authoring card, proposal and output templates; the shared capsule,
+freshness, writer, commit, and input policies; the common Product/Design/Arch K template; both Architecture
+templates and Arch's schema sentence; the one adoption sentence in document-change routing; the root and
+deployed knowledge validator pair and focused tests; DD-76 and DD-97; matrix §3.18 and §3.24; design map,
+generated receipts, plugin manifests, CHANGELOG, and the v0.23.16 report. Direct, Work, Verify, Resume,
+project-state, managed-card landing, journal grammar, and commit messages do not change.
+
+Revisit when a completed adoption still requires an absorbed input to answer or maintain a current domain
+question, when absent evidence weakens a live/card coordinate check, or when the committed `none` boundary
+does not route as a stale baseline without changing the state model.
+
 ### Rejected under this subject
 
 - **[DR-01 · v0.7.0]** **Mid-task handoff document** — hands over a half-truth.
@@ -2252,7 +2300,7 @@ Nothing has been rejected under this subject yet.
 
 ### DD-97 · Explicit Adopt reconstructs an unmanaged brownfield once; managed technical refresh belongs to Arch (v0.21.0)
 
-Subject: Brownfield and entry | Introduced: v0.21.0 | State: active, partly corrected by DD-101 (v0.23.7), DD-103 (v0.23.10), DD-104 (v0.23.11)
+Subject: Brownfield and entry | Introduced: v0.21.0 | State: active, partly corrected by DD-101 (v0.23.7), DD-103 (v0.23.10), DD-104 (v0.23.11), DD-108 (v0.23.16)
 
 Observed problem: three clean existing-code worktrees invoked Adopt explicitly, yet the installed
 entry text told Codex to enter Principles first and Adopt did not accept the state tool's
@@ -2335,6 +2383,12 @@ semantic owners of same-stem K trees. DD-76's same-commit owner rule therefore a
 initial Adopt lands Product-, Architecture-, and Design-owned K with Layer 0 in `adopt — layer 0`, and
 capability-owned K with the capability documents in `adopt — capabilities`. Every managed capsule
 refresh still belongs to Arch.
+
+**v0.23.16 staging correction:** initial Adopt completes and validates every owner and same-owner K before
+the first commit, then lands all of them in `adopt — layer 0` with capability `Design head: none`. Because
+the Design-head command excludes capability paths, `adopt — capabilities` changes only those head lines to
+the first commit hash. If interrupted after the first commit, the committed semantic set remains complete
+and the stale `none` heads route through Resume to Arch; no uncommitted capability or K bytes are inputs.
 
 Existing exact `writer=adopt` knowledge markers keep that value as bounded legacy provenance until
 consumed, because changing an already committed marker's declaration would break DD-92 provenance.

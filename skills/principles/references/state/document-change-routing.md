@@ -22,7 +22,7 @@ differs: open it when you are about to reverse that conclusion.
 
 At brownfield adoption, reconstruct from maintained documentation and/or code. Resolve only
 what the combined evidence supports, ask a person about irreducible current-intent conflicts,
-and keep the approved source dispositions and exact coordinates in arch.md `Existing records`.
+and keep only owner-designated ongoing external inputs in arch.md `Existing records`; absorbed migration coordinates end with the approved proposal.
 
 Past versions are git's to carry. Name the overwritten concept in the subject of the commit
 that overwrote it — that is git's index, and it is what lets ordinary reading end at the

@@ -50,7 +50,7 @@ Design metadata is the end of the design zone, before `## Verified state`.
 
 ```text
 Capability number: 02
-Design head: <output of the Design head command>
+Design head: <output of the Design head command | none>
 ```
 
 Verification metadata is the end of the file.
@@ -66,6 +66,9 @@ Scope head: <output of the Scope head command | none>
 - `Capability number` equals the filename number. Adopt owns `Design head` only in its initial
   unmanaged projection; Arch owns it after the project becomes managed. Verify owns
   the other five fields.
+- `Design head: none` is valid only in Adopt's first committed boundary. It makes the design
+  zone stale until an uninterrupted Adopt replaces only that line with the first commit's
+  canonical output; after an interruption the existing stale-baseline route belongs to Arch.
 - `Covered cards` holds every non-`.stale.` `.done.` task-card number below the capability
   folder, without duplicates and in canonical card-number order. It is empty for the
   foundation and at initial creation.

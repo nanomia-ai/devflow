@@ -218,6 +218,7 @@ function parseInsertions(text, root, relative) {
 }
 
 function parseSourceBasis(line, root, relative) {
+  if (!line.startsWith("Source basis")) return [];
   const prefix = "Source basis: ";
   if (!line.startsWith(prefix)) fail(`${relative}: Source basis must be a JSON string array`);
   let value;
@@ -235,6 +236,8 @@ function parseSourceBasis(line, root, relative) {
 
 function validateCurrentBody(lines, root, relative) {
   if (!/^# (?!#)/.test(lines[0] ?? "")) fail(`${relative}: capsule requires one H1 on line one`);
+  const misplaced = lines.slice(0, -1).findIndex((line) => line.startsWith("Source basis"));
+  if (misplaced !== -1) fail(`${relative}:${misplaced + 1}: Source basis must be the final line`);
   parseSourceBasis(lines.at(-1) ?? "", root, relative);
 }
 

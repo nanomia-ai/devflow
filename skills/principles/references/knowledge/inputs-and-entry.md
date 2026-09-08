@@ -6,10 +6,11 @@
   glossary.md, and only ADR paths actually cited by current design statements. Compress
   purpose, boundary, concepts, invariants, and non-goals per capability; do not copy Layer 0
   paragraphs or code contract bodies.
-- A capsule's input is the HEAD capsule for byte stability, the source documents the user
-  named together with their revision, and current code at the points needing confirmation.
-  Never invent a capsule without a source; decide whether sourced knowledge remains in the
-  owner document or K under the shared capsule contract.
+- A capsule's refresh input is its HEAD body for byte stability, current canonical owner/K
+  knowledge, current code at points needing confirmation, and only user-designated live inputs
+  or managed cards that the current change names. During Adopt, maintained pre-devflow material
+  is transient reconstruction evidence: land its durable meaning in the nearest owner or K, then
+  maintain that canonical knowledge without reopening absorbed inputs.
 - Foundation has no capability-layer verification closure, so its initial verified scaffold
   remains unchanged. Invent no verification event for foundation. Shared code the foundation
   owns lies inside the capability code scope of every capability that uses it, so it is

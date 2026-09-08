@@ -25,18 +25,19 @@
   confirmation question and make no commit. It is a binding decision
   on the integration branch.
 - Adopt is the bounded initial-unmanaged exception. It derives the complete approved Layer 0,
-  capability design zones, and every owner's K nodes in memory under one confirmation. It
-  lands them through [Initial-adoption commits](../delivery/commit-and-verification.md#commit-discipline);
-  each K node rides its owner document's commit.
-  Architecture `Existing records` in the first commit preserves every source coordinate,
-  authority, disposition, and landing owner needed to rederive that second boundary from source.
-  There is no managed-state Adopt recovery path. A later explicit Adopt ignores partial bytes,
-  rederives from maintained pre-devflow sources, and seeks approval again only while no current
-  `.devflow` root or indexed path exists. Once either exists, canonical state owns recovery.
-  An interruption after the `product.md` write but before the first commit is an unverified
-  dirty boundary: report its exact paths and let the owner commit the exact approved boundary or
-  discard it. After the first commit and before second-boundary writes, the now-managed
-  baseline-missing state is recovered by Resume routing to Arch; it never reopens Adopt.
+  capability design zones, and every owner's self-contained K nodes under one confirmation,
+  then writes that complete draft set before the first commit. Capability drafts use
+  `Design head: none` until the first boundary lands. It commits every approved owner document,
+  same-owner K, and optional follow-on together as `adopt — layer 0`; then it replaces only the
+  capability Design head lines with that landed commit and lands `adopt — capabilities`.
+  Each K therefore rides its owner document's commit. The proposal inventory remains transient.
+  Architecture `Existing records` contains only external inputs the owner explicitly chooses to
+  maintain. There is no managed-state Adopt recovery path. While no current `.devflow` root or
+  indexed path exists, a later explicit Adopt rederives from maintained pre-devflow sources and
+  seeks approval again; once either exists, canonical state owns recovery. After the first commit there are no unpublished semantic drafts to
+  recover: committed `Design head: none` is a stale baseline that Resume routes to Arch. Uncommitted
+  bytes remain non-authoritative and no state, marker, predicate, ledger, or commit-body recovery
+  contract is added.
 - An uncommitted diff from a post-confirmation interrupted write is a capability-design
   commit prefix only when it touches current and final expected capability-document paths
   and their same-stem K paths alone (a rename may delete the old same-numbered path and add

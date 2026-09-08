@@ -936,3 +936,17 @@ Principles가 공통 행동 하나를 소유하며 state tool·scanner·registry
 단계 source는 바뀌지 않는다. 기존 project는 줄 부재만으로 차단하거나 이관하지 않는다. 표적 정적
 구조·P2 fixture·비ASCII glossary routing 밖의 실제 다국어 Adopt와 후속 fresh-model 작성은
 재관측 전까지 **미검증**이다. **새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.**
+
+0.23.16 부분 재판정(DD-108): 새 요청·진입 형태나 교차 셀은 없다. §3.24의 전수 inventory 좌표는
+제안·반증·구속 확인까지만 존재하고, 승인된 의미는 원문을 다시 열지 않아도 목적·결정 이유·제약·
+용어·modality·불확실성을 보존하는 Product·Architecture·Design·Capability 소유자와 K로 옮겨진다.
+흡수 입력은 최종 `Existing records`, K `Source basis`, 본문 mark에 남지 않으며, 사람이 계속 유지한다고
+고른 live input·기존 managed card와 현재 code 좌표만 강하게 유효하다. 흡수 모순은 두 입장·근거·
+미결 상태를 self-contained 산문으로 남긴다. §3.18의 개봉·예산·표기 어휘·다툼 의미는 유지되고
+validator는 실제 `Source basis` footer가 있을 때 기존 강도로 경로·revision·범위를 검사하며 head 없는
+자유 본문을 provenance로 추론하지 않는다. DD-97의 두 커밋은 그대로지만 첫 커밋이 `Design head: none`인 전체 owner/K 의미를 착지하고
+둘째 커밋은 capability head 줄만 바꾼다. 중단은 committed stale baseline으로 회복한다. state·marker·
+predicate·ledger·commit-body 복구, Direct·Work·
+Verify·Resume 변경은 0이다. 정적 validator·Adopt fixture·P2 생성 검증 밖의 실제 대형 Adopt와 입력
+삭제 전후 cold-model 유지보수는 재관측 전까지 **미검증**이다. **새 H 행 0, 새 A 행 0, 새 교차 셀 0,
+새 공백 0.**

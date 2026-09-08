@@ -15,6 +15,23 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.16 — 2026-09-08 — Adopt transfers knowledge instead of retaining migration inputs
+
+Adopt now keeps its complete source-coordinate inventory on the proposal and refutation surface, then
+writes self-contained durable meaning to the canonical Product, Architecture, applicable Design,
+glossary, capability, and K owners. Absorbed migration inputs no longer survive as `Existing records` or
+mandatory K `Source basis` dependencies; that footer is absent by default and remains nonempty and fully
+validated when an owner keeps a live input or an existing managed card supplies evidence.
+
+The existing two-commit self-reference boundary remains without relying on dirty drafts. Commit one lands
+the complete approved semantic set with provisional capability `Design head: none`; because the head
+command reads only product, architecture, and glossary, commit two changes only those capability head
+lines. Absorbed coordinates also leave provenance marks and the worked form now shows both the absorbed
+default and explicit live evidence. The release updates the causal Adopt and Principles owners, common K
+templates, both Architecture templates, focused validators/tests, generated receipts, decision/design/
+matrix records, this changelog, the round report, and both plugin manifests; project-state and downstream
+stages remain unchanged.
+
 ## 0.23.15 — 2026-09-07 — Project prose keeps one confirmed working language
 
 Product now owns one explicit `Working language` value and confirms it through its existing

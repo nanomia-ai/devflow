@@ -21,11 +21,11 @@
   "outputs": [
     "A proposal that gives every maintained source one explicit disposition and includes capability candidates, one representative executable flow per code-backed candidate, exact documentary bases for document-derived candidates, reconciled claims, derived Layer 0, applicable Design, capability zones, the complete K-node landing plan, and any whole follow-on request that must survive the adoption boundary.",
     "After approval, canonical product.md, arch.md, applicable design.md, code-style.md, glossary.md, capability design documents, and every required owner-adjacent K node.",
-    "Two ordered commits under the one approval: `adopt — layer 0` contains complete Layer 0, any idempotent follow-on record, and validated K nodes beside Product, Architecture, and Design, with product.md written last among owner documents; `adopt — capabilities` contains capability documents whose Design head is the first commit plus their validated K nodes."
+    "Two ordered commits under one approval: the first publishes the complete approved owner-and-K knowledge set with provisional capability Design heads, and the second changes only those Design heads to identify the first boundary."
   ],
   "irreversible_boundaries": [
     "The owner's confirmation binds the complete proposed Layer 0, capability, and knowledge write set.",
-    "The approved projection lands through two ordered boundaries: product.md is the last Layer 0 owner-document write, then those owners' K nodes validate before the Layer 0 commit; capability documents use that landed commit as Design head and their K nodes validate before the capability commit. Interruption remains unmanaged only while no current .devflow root or indexed path exists, current evidence returns recovery to canonical state, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery."
+    "Adopted meaning becomes deletion-independent only at a boundary containing every approved owner and K body. Uncommitted bytes never become recovery input; after that boundary, canonical state owns interruption recovery and the second boundary only finalizes capability Design heads against the first."
   ],
   "state_dependent_behaviors": [
     "Explicit Adopt consumes setup.unmanaged directly; it does not invoke Principles as a preflight and does not ask Resume to reinterpret that route.",
@@ -36,11 +36,11 @@
   ],
   "exact_formats": [
     "Canonical product, architecture, applicable design, code-style, glossary, capability-design, knowledge-node, result, and adoption-proposal templates.",
-    "Owner-adjacent K nodes retain same-stem identity and exact provenance with no central index."
+    "Owner-adjacent K nodes retain same-stem identity and self-contained current meaning with no central index; exact coordinates remain only for evidence intentionally kept live after adoption."
   ],
   "external_dependencies": [
     "The read-only project-state snapshot for kernel validity, route, and the single non-devflow material observation.",
-    "Git for exact source coordinates, history evidence, the Layer 0 owner-and-K boundary, and the capability owner-and-K boundary whose Design head names the first.",
+    "Git supplies current evidence and history coordinates plus the ordered publication boundaries whose second identifies the first.",
     "Product as the no-material destination and Resume as the owner of managed or active-operation states.",
     "Arch, Direct, Work, and Resume as readers of the canonical artifacts; none is automatically invoked on completion."
   ],
@@ -49,7 +49,7 @@
     "Every code-backed capability candidate has one representative executable flow with exact coordinates; every document-derived candidate without executable code cites its exact maintained documentary basis and marks the flow not applicable.",
     "Every proposal claim identifies executable or documentary evidence, contradiction, inference, and confidence.",
     "The owner sees and confirms the complete write set only after irreducible questions are resolved, the initial bounded clean-context semantic refutation and every correction's bounded independent recheck preserve full initial coverage, and current Evidence verification records no supported blocker or unanswered binding dependency.",
-    "Complete Layer 0 and its validated Product, Architecture, and Design K nodes are published in the first confirmed commit; all capability designs and their validated K nodes are published together in the second with Design head equal to the first commit.",
+    "The first confirmed boundary contains the complete approved owner-and-K meaning with provisional capability Design heads; the second changes only those heads to identify the first boundary.",
     "A final report names committed artifacts and preserves unknown or unverified items without claiming completion."
   ],
   "judgment_points": [

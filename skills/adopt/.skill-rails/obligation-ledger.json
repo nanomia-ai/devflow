@@ -1,6 +1,6 @@
 {
   "schema": "skill-rails/obligation-ledger/2",
-  "intent_hash": "sha256:fcc1910586e4cfc3f92fef2ba19c38aeaffc38d6742375f41fd19fb3864d974e",
+  "intent_hash": "sha256:1d7ab38fbf84f41d8969f70c34861bcc159353e2ed9d30c360a98d3c316afd49",
   "profile": "p2",
   "atoms": [
     {
@@ -219,7 +219,7 @@
     {
       "id": "outputs-003",
       "source": "intent.outputs[2]",
-      "text": "Two ordered commits under the one approval: `adopt — layer 0` contains complete Layer 0, any idempotent follow-on record, and validated K nodes beside Product, Architecture, and Design, with product.md written last among owner documents; `adopt — capabilities` contains capability documents whose Design head is the first commit plus their validated K nodes.",
+      "text": "Two ordered commits under one approval: the first publishes the complete approved owner-and-K knowledge set with provisional capability Design heads, and the second changes only those Design heads to identify the first boundary.",
       "candidate_class": "artifact",
       "consequence": "medium",
       "disposition": "projected",
@@ -250,7 +250,7 @@
     {
       "id": "irreversible-boundaries-002",
       "source": "intent.irreversible_boundaries[1]",
-      "text": "The approved projection lands through two ordered boundaries: product.md is the last Layer 0 owner-document write, then those owners' K nodes validate before the Layer 0 commit; capability documents use that landed commit as Design head and their K nodes validate before the capability commit. Interruption remains unmanaged only while no current .devflow root or indexed path exists, current evidence returns recovery to canonical state, a post-product pre-commit diff is owner-directed Git recovery, and the clean interval between commits is canonical baseline-missing recovery.",
+      "text": "Adopted meaning becomes deletion-independent only at a boundary containing every approved owner and K body. Uncommitted bytes never become recovery input; after that boundary, canonical state owns interruption recovery and the second boundary only finalizes capability Design heads against the first.",
       "candidate_class": "guard",
       "consequence": "high",
       "disposition": "projected",
@@ -365,7 +365,7 @@
     {
       "id": "exact-formats-002",
       "source": "intent.exact_formats[1]",
-      "text": "Owner-adjacent K nodes retain same-stem identity and exact provenance with no central index.",
+      "text": "Owner-adjacent K nodes retain same-stem identity and self-contained current meaning with no central index; exact coordinates remain only for evidence intentionally kept live after adoption.",
       "candidate_class": "format",
       "consequence": "medium",
       "disposition": "projected",
@@ -395,7 +395,7 @@
     {
       "id": "external-dependencies-002",
       "source": "intent.external_dependencies[1]",
-      "text": "Git for exact source coordinates, history evidence, the Layer 0 owner-and-K boundary, and the capability owner-and-K boundary whose Design head names the first.",
+      "text": "Git supplies current evidence and history coordinates plus the ordered publication boundaries whose second identifies the first.",
       "candidate_class": "collector",
       "consequence": "medium",
       "disposition": "projected",
@@ -510,7 +510,7 @@
     {
       "id": "completion-evidence-005",
       "source": "intent.completion_evidence[4]",
-      "text": "Complete Layer 0 and its validated Product, Architecture, and Design K nodes are published in the first confirmed commit; all capability designs and their validated K nodes are published together in the second with Design head equal to the first commit.",
+      "text": "The first confirmed boundary contains the complete approved owner-and-K meaning with provisional capability Design heads; the second changes only those heads to identify the first boundary.",
       "candidate_class": "stage/done/evidence",
       "consequence": "high",
       "disposition": "projected",

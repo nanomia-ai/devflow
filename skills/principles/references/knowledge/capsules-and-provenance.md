@@ -49,15 +49,13 @@ use-when fits the pending judgment; follow the opening and freshness contract fo
   measured, the fixed-slot form had 5 of 12 capsules pass with a slot filled by "could not
   fill this", and 0 defects were detected. There is no evidence four raises comprehension:
   four forms of the same material all scored 9/13 on the same 13 questions.
-- The last line of the file is `Source basis: [...]`. It grounds the unmarked sentences at file
-  level, and every element must be a
-  string satisfying the coordinate grammar below — it is not a place for free description or
-  a bare document name. **It cannot be empty**: a capsule is born only from processing a
-  source (see "Creation and refresh inputs" below), so having no coordinate to cite means
-  that capsule should not exist.
-  **`validate` checks each element's path existence and line range with the same strength as
-  an insertion coordinate** — unmarked is the default, so most of a capsule leans on this
-  one line.
+- `Source basis` is optional. Its absence means the K body is self-contained current knowledge
+  owned by its semantic owner; it does not make absorbed migration material a required read edge.
+  When present, it is the final line `Source basis: [...]` and names only an external input the
+  owner explicitly keeps live or existing managed-card evidence. Every element must be a string
+  satisfying the coordinate grammar below, the array cannot be empty, and `validate` checks every
+  path and line range with the same strength as an insertion coordinate. Free descriptions, bare
+  document names, malformed arrays, and dangling coordinates remain invalid.
 - The coordinate grammar is `<repository-relative path>[@<revision>]:<start line>[-<end line>]`.
   Anything that does not reopen an exact place for a person is not a coordinate.
 - The authoring cap is soft at 120 lines per capsule — exceeding it never blocks the write;
@@ -68,12 +66,14 @@ use-when fits the pending judgment; follow the opening and freshness contract fo
 - K nodes are written by their semantic owner's physical writer: Adopt only inside the
   initial unmanaged projection; Product for product/K, Design for design/K, and Arch for
   arch/K and managed capability/K. They ride the same confirmation bundle and commit as their
-  owner document: a Layer 0 owner's K in that owner's Layer 0 commit, and a capability's K
-  in `adopt — capabilities` or `arch — capabilities`. Verify never writes K. The human
-  deletion exception matches the owner document's.
-- K nodes and the owner document are a derived account of the source documents, not
-  their owner. Skills never delete, move, or edit the source documents a capsule was
-  processed from — disposition is always a person's act.
+  owner document. Initial Adopt lands every owner and same-owner K in `adopt — layer 0` with
+  provisional capability Design heads, then `adopt — capabilities` changes only those head
+  lines; later owner writes retain their ordinary Product, Design, or Arch commit. Verify never
+  writes K. The human deletion exception matches the owner document's.
+- K nodes and owner documents are the semantic owner's current knowledge. Evidence used to
+  create or refresh them does not become a durable owner, mandatory read edge, or maintenance
+  target unless the person explicitly keeps it as a live input. Skills never delete, move, or
+  edit source material during adoption — disposition is always a person's act.
 
 ### Provenance marks — unmarked is the default
 
@@ -83,13 +83,15 @@ text answered a source contradiction as settled fact, while the control group th
 the source was more accurate in its honest not-knowing. So sentences are written unmarked
 by default, and only a sentence departing from the default carries an opening bracket and
 one closed head. There is no marking quota — a faithful capsule with zero marks is normal.
+A coordinate mark cites only current code, an owner-kept live input, or managed-card evidence;
+absorbed migration coordinates never survive in a mark any more than they do in a footer.
 
-- Defaults: an unmarked sentence in a capsule body is source content within the
-  `Source basis` coordinates, held with no more confidence than the source states. An
-  unmarked sentence in the capability document's `Intent` section is the processor's
-  synthesis — an overview is synthesis by nature, and marking every sentence there is
-  noise. Sentences carried verbatim from the source are the ones marked, with quotes and a
-  coordinate.
+- Defaults: an unmarked sentence in a capsule body is current owner-held knowledge. Its prose
+  preserves the source's modality, confidence, uncertainty, decision grounds, and discarded
+  directions so a reader does not need an absorbed input to reconstruct meaning. An unmarked
+  sentence in a capability document's `Intent` section is likewise the processor's synthesis —
+  an overview is synthesis by nature, and marking every sentence there is noise. Sentences
+  carried verbatim from a live source are the ones marked, with quotes and a coordinate.
 - The head literals are exactly four, ASCII everywhere in ko and en — a token a machine reads
   does not follow a human language. These four are themselves the canon of that discipline.
   Semantic prose follows the confirmed Working language policy, while exact quoted source text
@@ -99,19 +101,27 @@ one closed head. There is no marking quota — a faithful capsule with zero mark
   only head with no coordinate, so a misspelling of it passing as unmarked would promote a
   guess into source-and-confident. Machines read only the head after the opening delimiter.
   - `(synthesis@<coordinate>[,<coordinate>]: free prose)` — this sentence is not in the
-    source. The processor distilled it from those coordinates and the distillation basis
+    live source. The processor distilled it from those coordinates and the distillation basis
     follows as prose. One or two coordinates.
   - `(code@<coordinate>[,<coordinate>]: free prose)` — confirmed in code, not documents. It
     proves current behavior, never intent or a desired future.
   - `(conjecture: free prose)` — a judgment with no coordinate to pin it to. It carries no
     coordinate, and a later session must not cite it as fact.
   - `[dispute C-<three digits>@<coordinate>,<coordinate>: free prose]` — the source contains
-    differing statements. Do not pick one side and smooth it over — keep both contents, each
+    differing live statements. Do not pick one side and smooth it over — keep both contents, each
     with its own coordinate; interpretation candidates (such as "these may be different
     scenes") may be noted, but no resolution. Two distinct coordinates are required; missing
     either is a format anomaly. A dispute is itself an item for a person to decide; before
   that decision no arm is cited as settled fact. C numbers are immutable and never reused
   within one owner document's K subtree.
+- A contradiction learned only from absorbed inputs stays with its whole knowledge unit at
+  the nearest semantic owner. When that unit needs depth beyond the always-read owner document,
+  place it in owner-adjacent K under the existing capsule boundary; do not invent an owner-specific
+  section or create K outside that boundary. Preserve both positions, their grounds, and unresolved
+  status as self-contained running prose, without coordinates or machine-mark delimiters. When an
+  existing marked dispute is converted because its inputs were absorbed, its old `C-NNN` may
+  survive only in running prose such as “the earlier C-003 contradiction,” never inside parentheses,
+  brackets, or another marker-like form. Never mint a C number for a never-marked absorbed contradiction.
 - Source silence is written as a sentence, not a mark — "the source does not specify the
   mechanism" is a settled statement about the source. Marks carry only the three
   distinctions accurate prose cannot: a synthesized sentence looks identical to a quoted
@@ -123,9 +133,10 @@ one closed head. There is no marking quota — a faithful capsule with zero mark
 
 ### Two worked capsules
 
-The contract for the form is not a checker but the two capsules below. The first uses all four
-words; the second uses two — what "write only the ones that apply" means is visible in the
-second. In both, most sentences are unmarked. Both examples are capability-owned; a
+The contract for the form is not a checker but the two capsules below. In the first, the owner
+explicitly keeps the cited operational documents live, so all four marks and a strong footer
+apply. The second shows the absorbed default: self-contained prose, one current-code mark, and
+no footer. In both, most sentences are unmarked. Both examples are capability-owned; a
 Product-owned node has the identical form at `.devflow/project/product/K-001-<topic>.md`.
 
 **One — `.devflow/project/capabilities/04-settlement/K-002-payout-hold.md`**
@@ -182,7 +193,7 @@ Whether a failed payout becomes a hold or enters a separate retry queue is not y
 (conjecture: failure codes do not use the same enum as `HeldReason`, which suggests a separate
 path.)
 
-Source basis: ["docs/ops/settlement-runbook.md@a41c9f2:80-170", "docs/ops/risk-review.md@a41c9f2:1-58", "docs/finance/close-policy.md@a41c9f2:40-96", "src/settlement/payout_state.py:1-120"]
+Source basis: ["docs/ops/settlement-runbook.md@a41c9f2:80-170", "docs/ops/risk-review.md@a41c9f2:1-58", "docs/finance/close-policy.md@a41c9f2:40-96"]
 ```
 
 **Two — `.devflow/project/capabilities/06-notification/K-001-delivery-retry.md`**
@@ -212,5 +223,4 @@ is investigated at whatever created the chains, not in the retry settings.
 The four intervals are constants in code. (code@src/notify/retry.ts:18-26: `BACKOFF_MS` is
 `[0, 30_000, 300_000, 1_800_000]` and its length is the maximum attempt count.)
 
-Source basis: ["docs/ops/notification-runbook.md@a41c9f2:31-92", "src/notify/retry.ts:1-64"]
 ```

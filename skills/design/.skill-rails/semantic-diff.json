@@ -1,8 +1,8 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:ea90ba14b02ba98f1d2418c1e04f2459613258742eef05dc26be2aa7aa2cf76c",
-    "after": "sha256:ea90ba14b02ba98f1d2418c1e04f2459613258742eef05dc26be2aa7aa2cf76c"
+    "before": "sha256:8b5b1d23828867c93fd98a1ab99e2b3aeb52eff2925abf25331af80d9749ca73",
+    "after": "sha256:8b5b1d23828867c93fd98a1ab99e2b3aeb52eff2925abf25331af80d9749ca73"
   },
   "changed": false,
   "any_changed": true,
@@ -19,26 +19,39 @@
     "tables": [],
     "formats": [],
     "templates": [],
-    "template_content": [],
-    "body": [
+    "template_content": [
       {
-        "id": "why: purpose",
+        "id": "knowledgeNode",
         "change": "modified",
-        "before": "sha256:31cec2456994e51a87841b5e84c6020c23c700ae150c33c7f8609dfe874726a6",
-        "after": "sha256:71a22bac384c70df47492594ba4aa6408133b09ebef732e3a920cb7c601b1524"
+        "before": "sha256:c5d18fae74d59b63746b3ec383ba3a842d2d2cbe379583b3145d7b02cebb39a7",
+        "after": "sha256:6af0f7b786f38ad2983bd489db822b8c7974d86fe9e4083d03dddd859aac1c03"
       }
     ],
-    "references": [],
+    "body": [],
+    "references": [
+      {
+        "id": "templates/knowledge-node.md",
+        "change": "modified",
+        "before": "sha256:c5d18fae74d59b63746b3ec383ba3a842d2d2cbe379583b3145d7b02cebb39a7",
+        "after": "sha256:6af0f7b786f38ad2983bd489db822b8c7974d86fe9e4083d03dddd859aac1c03"
+      }
+    ],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "principles-entry-separation-0.23.1",
-  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
+  "change_id": "adopt-knowledge-ownership-forward",
+  "intent": "Transfer adopted knowledge into self-contained owners, preserve only live evidence, and publish the complete semantic set before Design-head finalization.",
   "impact": {
-    "body": {
+    "template_content": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "references": {
       "total": 1,
       "added": 0,
       "removed": 0,

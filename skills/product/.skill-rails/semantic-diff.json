@@ -1,25 +1,17 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:a3da7861768c39be9060b9fc20ac0ba4e55e131b8158857310a498baccc21682",
+    "before": "sha256:7a5fc90530e163bc0bda317688574d84f7715a1802b102c20375b3b91d2e0376",
     "after": "sha256:7a5fc90530e163bc0bda317688574d84f7715a1802b102c20375b3b91d2e0376"
   },
-  "changed": true,
+  "changed": false,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": true,
+    "behavior_source": false,
     "observation_source": false,
-    "context": false
+    "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:a3da7861768c39be9060b9fc20ac0ba4e55e131b8158857310a498baccc21682",
-      "after_hash": "sha256:7a5fc90530e163bc0bda317688574d84f7715a1802b102c20375b3b91d2e0376",
-      "source": "behavior_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
@@ -27,48 +19,43 @@
     "tables": [],
     "formats": [],
     "templates": [],
-    "template_content": [],
+    "template_content": [
+      {
+        "id": "knowledgeNode",
+        "change": "modified",
+        "before": "sha256:c5d18fae74d59b63746b3ec383ba3a842d2d2cbe379583b3145d7b02cebb39a7",
+        "after": "sha256:6af0f7b786f38ad2983bd489db822b8c7974d86fe9e4083d03dddd859aac1c03"
+      }
+    ],
     "body": [],
-    "references": [],
+    "references": [
+      {
+        "id": "templates/knowledge-node.md",
+        "change": "modified",
+        "before": "sha256:c5d18fae74d59b63746b3ec383ba3a842d2d2cbe379583b3145d7b02cebb39a7",
+        "after": "sha256:6af0f7b786f38ad2983bd489db822b8c7974d86fe9e4083d03dddd859aac1c03"
+      }
+    ],
     "ownership": [],
     "artifacts": [],
     "roles": [],
-    "declarations": [
-      {
-        "id": "coverage-product-schema",
-        "change": "modified",
-        "before": {
-          "value": "The confirmed product schema has a service name, fixed-form identity paragraph, the six judgment headings, Open questions, and one allowed interface value. It has no Approval field.",
-          "consumer": "migration:source-coverage"
-        },
-        "after": {
-          "value": "The confirmed product schema has a service name, fixed-form identity paragraph, the exact Working language line, the six judgment headings, Open questions, and one allowed interface value. It has no Approval field.",
-          "consumer": "migration:source-coverage"
-        }
-      },
-      {
-        "id": "productSchema",
-        "change": "modified",
-        "before": {
-          "value": "product.md uses the legacy six-judgment schema and contains no Approval field.",
-          "consumer": "stage:propose-and-confirm"
-        },
-        "after": {
-          "value": "product.md uses the six-judgment schema, adds the exact Working language line when Product next confirms it, and contains no Approval field.",
-          "consumer": "stage:propose-and-confirm"
-        }
-      }
-    ],
+    "declarations": [],
     "deferred": []
   },
-  "change_id": "v0.23.15-opus-convergence",
-  "intent": "Make the canonical Product schema declarations include the exact Working language line without changing the existing approval path.",
+  "change_id": "adopt-knowledge-ownership-forward",
+  "intent": "Transfer adopted knowledge into self-contained owners, preserve only live evidence, and publish the complete semantic set before Design-head finalization.",
   "impact": {
-    "declarations": {
-      "total": 2,
+    "template_content": {
+      "total": 1,
       "added": 0,
       "removed": 0,
-      "modified": 2
+      "modified": 1
+    },
+    "references": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
     }
   }
 }

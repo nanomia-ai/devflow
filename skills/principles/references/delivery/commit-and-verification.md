@@ -13,18 +13,20 @@
   binding decision.
 - **Initial-adoption commits**: one confirmation binds the complete approved Product,
   Architecture, applicable Design, code style, glossary, capability design zones, K nodes,
-  and any exact follow-on marker. Adopt first writes the Layer 0 owner documents and optional
-  marker, writes `product.md` last among those documents, then writes and validates their K
-  nodes, stages only those paths, and lands `adopt — layer 0`. It then calculates the canonical
-  Design head from that landed commit, writes capability documents carrying that exact value,
-  writes and validates their K nodes beside them, stages only those documents and nodes, and
-  lands `adopt — capabilities`. Refusal or interruption before
+  and any exact follow-on marker. Adopt writes and validates that complete semantic set before
+  the first commit, writes `product.md` last among the Layer 0 owners, and gives every capability
+  `Design head: none`. It stages all approved owner documents, same-owner K nodes, and the optional
+  marker, then lands `adopt — layer 0`. The Design head command's pathspec names only
+  `product.md`, `arch.md`, and `glossary.md`, so the capability-only follow-up commit does not
+  advance the landed commit selected by that command. Adopt replaces only each capability's Design
+  head line with that landed commit ID, stages only those changed
+  capability documents, and lands `adopt — capabilities`. Refusal or interruption before
   approval writes nothing. The checkout remains unmanaged only while no current `.devflow` root
   or indexed path exists. Once either exists, canonical state owns recovery; a missing
   `product.md` alone does not make the checkout unmanaged.
-  A post-product pre-commit interruption is an unverified dirty boundary reported for the owner
-  to commit exactly or discard; no stage claims it. After the first commit and before
-  second-boundary writes, the existing managed baseline-missing state routes through Resume to Arch.
+  After the first commit, all approved meaning is
+  canonical and `Design head: none` makes the baseline stale, so interruption routes through Resume
+  to Arch without treating uncommitted bytes as recovery input.
 - **Capability-design commit**: after every confirmed managed Layer 0 commit has landed,
   Arch writes the design zones for the expected capability documents as its final output.
   Land only those capability documents and their knowledge capsules as

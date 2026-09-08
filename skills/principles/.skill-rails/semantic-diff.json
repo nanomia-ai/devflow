@@ -23,10 +23,16 @@
     "body": [],
     "references": [
       {
-        "id": "references/authoring/prompt-principles.md",
+        "id": "references/delivery/commit-and-verification.md",
         "change": "modified",
-        "before": "sha256:1bdbc91868d3bf7b59892286595327117d9d6162156c36915a4542328cfcf572",
-        "after": "sha256:c19fa34f7c25a596d115c1bf043dc9400b403368c549ed2b07ffb4ed21d10d84"
+        "before": "sha256:14d5830e3f043e7b5e777a8c218a7e8d2b8a71a97c6069d6ee346bf6b0fff8a0",
+        "after": "sha256:859d9bbace0147a2d9cecf331c44c0af3dced0baa52325db3f0c4bba22e269f5"
+      },
+      {
+        "id": "references/knowledge/capsules-and-provenance.md",
+        "change": "modified",
+        "before": "sha256:e41a3e8764c5cdefd9bb1fb8fee59a52c46d8210883a137e783898cffa63e66a",
+        "after": "sha256:5589abdcd514619f1e5228e24acca720e6b1b2d15b72b94954529ac933d5e9bc"
       }
     ],
     "ownership": [],
@@ -35,14 +41,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "v0.23.15-opus-convergence",
-  "intent": "Make the already-decided legacy fallback reachable from the one always-read Working language policy.",
+  "change_id": "principles-final-adopt-ownership-repair",
+  "intent": "Keep absorbed contradictions with their semantic owner and explain the path-filtered Design-head commit boundary precisely.",
   "impact": {
     "references": {
-      "total": 1,
+      "total": 2,
       "added": 0,
       "removed": 0,
-      "modified": 1
+      "modified": 2
     }
   }
 }

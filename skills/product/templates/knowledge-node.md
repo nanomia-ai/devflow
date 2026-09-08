@@ -3,4 +3,4 @@ about: {{about}}
 
 {{body}}
 
-Source basis: {{sourceBasis}}
+{{sourceBasis}}

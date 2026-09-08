@@ -22,7 +22,7 @@ const data = [
   fixture("refutation-revise", { judged: { "refutation.state": "revise" } }, { stage: "semantic-refutation", status: "NEXT", effects: ["RUN", "RUN", "NEXT"] }, ["stage:semantic-refutation", "branch:semantic-refutation/revise"]),
   fixture("adoption-prepare", { judged: { "refutation.state": "clear" } }, { stage: "adoption", row: "prepare", status: "ASK", effects: ["REPORT", "ASK"] }, ["stage:adoption", "row:approval/prepare", "branch:approval/prepare"]),
   fixture("approval-refuse", { judged: { "refutation.state": "clear" }, decided: { "approval.action": "refuse" } }, { stage: "adoption", row: "refuse", status: "DONE", effects: ["REPORT", "DONE"] }, ["row:approval/refuse", "branch:approval/refuse"]),
-  fixture("approval-approve", { judged: { "refutation.state": "clear" }, decided: { "approval.action": "approve" } }, { stage: "adoption", row: "approve", status: "DONE", effects: ["WRITE", "WRITE", "WRITE", "WRITE", "RUN", "WRITE", "WRITE", "RUN", "COMMIT", "RUN", "WRITE", "WRITE", "RUN", "COMMIT", "REPORT", "DONE"] }, ["row:approval/approve", "branch:approval/approve"])
+  fixture("approval-approve", { judged: { "refutation.state": "clear" }, decided: { "approval.action": "approve" } }, { stage: "adoption", row: "approve", status: "DONE", effects: ["WRITE", "WRITE", "WRITE", "WRITE", "RUN", "WRITE", "WRITE", "RUN", "WRITE", "WRITE", "RUN", "COMMIT", "RUN", "WRITE", "COMMIT", "REPORT", "DONE"] }, ["row:approval/approve", "branch:approval/approve"])
 ];
 
 await writeFile(new URL("scenarios.json", root), `${JSON.stringify(data, null, 2)}\n`);

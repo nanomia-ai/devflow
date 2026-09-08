@@ -1564,7 +1564,7 @@ DD-62를 일부 정정한다: 그 "push가 필요한 증거 기록"은 journal�
 
 ### DD-76 · 도메인 지식 캡슐 — 능력 문서를 넘치는 지식은 같은 번호 아래 필요 개봉 캡슐로 살고, 출처 표기가 원문·종합·추정·다툼을 가른다 (v0.18.1)
 
-주제: 지식층과 능력 문서 | 도입: v0.18.1 | 상태: 유효 · 일부 정정 → DD-77 (v0.18.2), DD-92 (v0.20.0), DD-97 (v0.21.0), DD-103 (v0.23.10)
+주제: 지식층과 능력 문서 | 도입: v0.18.1 | 상태: 유효 · 일부 정정 → DD-77 (v0.18.2), DD-92 (v0.20.0), DD-97 (v0.21.0), DD-103 (v0.23.10), DD-108 (v0.23.16)
 
 관찰된 문제: 실전 브라운필드(jgnote property)의 한 능력 도메인 원문이 3,699줄이었다 — 185줄
 능력 문서에 요약으로 눌러 담으면 지식이 소실되고, 안 담으면 다음 세션에 존재하지 않는다.
@@ -1848,6 +1848,49 @@ product template·표적 계약 test, 모든 P2의 기존 shared-policy/product 
 유효한 기존 프로젝트가 줄 부재만으로 차단되는 장면, 또는 의미 있는 산문 근거와 소유자 교정을 거친
 Adopt 제안이 반복적으로 잘못된 우세 언어를 고르는 장면이 관측될 때.
 
+### DD-108 · Adopt는 지식 소유권을 이전하며 흡수 입력은 영구 프로젝트 의존성이 아니다 (v0.23.16)
+
+주제: 지식층과 능력 문서 | 도입: v0.23.16 | 상태: 유효
+
+관측된 문제: Adopt는 역산 중 모든 유지 자료를 올바르게 회계했지만, 그 이관 inventory를
+Architecture `Existing records`와 K footer·본문 provenance mark에 영속시켰다.
+성공한 도입 뒤 입력 문서를 삭제하거나 크게 고치면 현재 지식이 검증에 실패하거나 후속 독자가
+옛 자료를 다시 열어야 했다. 목적·도메인 의미·결정 이유·제약·용어·modality·불확실성을 옮기는
+일시 증거였던 문서 경로가 두 번째 소유자가 된 것이다.
+
+선택한 경계: 원문 좌표·권위·처분·착지 target은 완전하지만 일시적인 제안·반증 증거다. 승인된
+최종 owner/K는 자기완결 현재 지식이고, Architecture `Existing records`에는 소유자가 계속
+유지하겠다고 명시한 외부 입력만 남는다. 흡수 이관 입력 뒤의 K에는 보통 `Source basis`가 없다.
+사용자가 유지한 live input 또는 기존 managed card가 footer를 공급할 때는 배열이 비어 있지 않고
+모든 좌표가 이전과 같은 경로·revision·줄 범위 검사를 통과해야 한다. 부재와 강하게 유효함만 있다.
+본문 좌표도 현재 code·소유자 유지 live input·managed-card evidence만 가리킨다. 흡수 입력의 의미·
+modality·기각 방향·불확실성은 자기완결 owner 산문에 살고, 미해결 모순은 두 입장과 근거를 machine
+coordinate mark 없이 보존한다.
+
+DD-97의 두 커밋은 유지하되 staging partition은 self-reference 경계를 따른다. Adopt는 capability
+`Design head: none`으로 승인된 Layer 0·capability·K 전체를 쓰고 검증한 뒤 모든 owner·same-owner K·
+정확한 follow-on을 첫 커밋에 착지시킨다. Design-head command의 pathspec은 product·architecture·
+glossary만 이름 대므로 capability-only 둘째 커밋은 그 명령이 선택한 첫 커밋을 전진시키지 않는다.
+둘째 커밋은 capability Design head 줄만 그 첫 커밋 ID로 바꾼다. 첫 커밋 뒤 승인된 의미는 모두 정본이고 committed `none`은 Resume→Arch가 회복하는
+stale baseline이며, uncommitted bytes는 복구 입력이 아니다. 새 state·marker·predicate·ledger·
+commit-body mapping은 없다.
+
+이유와 기각안: 역사 좌표를 호환 표지와 함께 남겨도 dangling 의존성은 남는다. 좌표 검증을
+약화하면 live input과 managed card가 거짓말할 수 있고, 모든 좌표를 금지하면 기존 card 근거가
+깨진다. 단일 커밋은 Design head가 요구하는 실제 Layer 0 hash를 없앤다. 영속 이관 ledger나 새
+복구 상태는 소유권을 중복시키고 폐기한 광역 재설계를 되풀이한다. 따라서 transient 회계가
+self-contained 지식이 되고, 근거가 있을 때만 optional footer가 강하게 유효한 하나의 인과로 고친다.
+
+영향 좌표: Adopt 행동·authoring card·제안·출력 template, 공통 capsule·freshness·writer·commit·input
+정책, Product·Design·Arch 공통 K template, 두 Architecture template와 Arch schema 한 문장, 문서
+변경 routing의 Adopt 한 문장, root·deployed knowledge validator pair와 표적 시험, DD-76·DD-97,
+matrix §3.18·§3.24, 설계 지도, 생성 영수증, plugin manifest, CHANGELOG, v0.23.16 보고. Direct·Work·
+Verify·Resume·project-state·managed-card landing·journal 문법·commit message는 바뀌지 않는다.
+
+재검토 조건: 완료된 Adopt 뒤에도 현재 도메인 질문을 이해하거나 유지하려 흡수 입력이 필요하거나,
+근거 부재가 live/card 좌표 검사를 약화하거나, committed `none` 경계가 state model 변경 없이 stale
+baseline으로 route되지 않는 장면이 관측될 때.
+
 ### 이 주제에서 기각된 안
 
 - **[DR-01 · v0.7.0]** **중간 인계 문서** — 반쪽 진실을 넘긴다.
@@ -1951,7 +1994,7 @@ arch가 개발 기획과 Layer 0 전체 역산이라는 두 개념을 한 이름
 
 ### DD-97 · 명시 Adopt는 무관리 브라운필드를 한 번 역산하고, 관리 상태의 기술 갱신은 Arch가 맡는다 (v0.21.0)
 
-주제: 브라운필드와 진입 | 도입: v0.21.0 | 상태: 유효 · 일부 정정 → DD-101 (v0.23.7), DD-103 (v0.23.10), DD-104 (v0.23.11)
+주제: 브라운필드와 진입 | 도입: v0.21.0 | 상태: 유효 · 일부 정정 → DD-101 (v0.23.7), DD-103 (v0.23.10), DD-104 (v0.23.11), DD-108 (v0.23.16)
 
 관측된 문제: 코드가 있는 깨끗한 세 작업 트리에서 사용자가 Adopt를 명시했지만 설치된 진입
 문구는 Codex에 Principles부터 실행하라고 했고, Adopt는 상태 도구의 `setup.unmanaged`를
@@ -2021,6 +2064,12 @@ Layer 0이 생긴 뒤 현재 기술 설계의 소유자는 Arch 하나다. Resum
 Adopt는 Product·Architecture·Design 소유 K를 Layer 0과 함께 `adopt — layer 0`에 착지시키고,
 능력 소유 K는 능력 문서와 함께 `adopt — capabilities`에 착지시킨다. 관리 상태의 모든 캡슐 갱신은
 계속 Arch가 맡는다.
+
+**v0.23.16 staging 정정:** 최초 Adopt는 모든 owner와 same-owner K를 첫 커밋 전에 완성·검증한 뒤
+capability `Design head: none`과 함께 전부 `adopt — layer 0`에 착지시킨다. Design-head command가
+capability path를 제외하므로 `adopt — capabilities`는 그 head 줄만 첫 커밋 hash로 바꾼다. 첫 커밋
+뒤 중단되면 committed semantic set은 완전하고 stale `none` head는 Resume→Arch로 route되며,
+uncommitted capability 또는 K bytes는 입력이 아니다.
 
 이미 커밋된 정확한 `writer=adopt` 지식 마커는 소비될 때까지 그 값을 유계한 과거 출처로 보존한다.
 이미 선언된 값을 사후 변경하면 DD-92의 출처가 깨지기 때문이다. Resume은 이 출처를 절차 소유자로

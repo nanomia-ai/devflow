@@ -1,8 +1,8 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:367fe3b66746a3aabfbc430153262587e5092b7f15a07dd5dd051b5c19022e1e",
-    "after": "sha256:367fe3b66746a3aabfbc430153262587e5092b7f15a07dd5dd051b5c19022e1e"
+    "before": "sha256:00a7c9ae792f3903be9e9b45fa3906f104f3b8c4aa5fde6c51e867607678405a",
+    "after": "sha256:00a7c9ae792f3903be9e9b45fa3906f104f3b8c4aa5fde6c51e867607678405a"
   },
   "changed": false,
   "any_changed": true,
@@ -19,21 +19,39 @@
     "tables": [],
     "formats": [],
     "templates": [],
-    "template_content": [],
-    "body": [
+    "template_content": [
       {
-        "id": "why: purpose",
+        "id": "architecture",
         "change": "modified",
-        "before": "sha256:5e7cd754486b412847c086d411c56ab2c9313808a557dc75112da018b7798e28",
-        "after": "sha256:4ccfa82c1ba6cbb97eded4dd436f496b05259f12ae95d9edc391934d5f0bc02a"
+        "before": "sha256:7bbb08b42fbd3694c90c952c048ee8cf245e1f6d94139fe42c6817cb4a3cf1e6",
+        "after": "sha256:608ae262ebdbdd8912840998698f099c983e96a4da2a2dbc819711ce30d38a2e"
+      },
+      {
+        "id": "knowledgeNode",
+        "change": "modified",
+        "before": "sha256:c5d18fae74d59b63746b3ec383ba3a842d2d2cbe379583b3145d7b02cebb39a7",
+        "after": "sha256:6af0f7b786f38ad2983bd489db822b8c7974d86fe9e4083d03dddd859aac1c03"
       }
     ],
+    "body": [],
     "references": [
       {
-        "id": "references/workflow.md",
+        "id": "references/schemas.md",
         "change": "modified",
-        "before": "sha256:a437a4554d30eae1f64c45316e037b1b88b09adb3280b6d4d14a1f9955c55aee",
-        "after": "sha256:79798f68c14b4201cdcec27a0a0f6a12da2335649b2fdfd45a37e6744f70d415"
+        "before": "sha256:24234a74c9a050ba84c644245b3690ea0d502be2d61ae9448558a9b0ea9307ab",
+        "after": "sha256:931fb65013804ed20a605199714053f19a7841ab27586ab1b0d6d44e577d395b"
+      },
+      {
+        "id": "templates/architecture.md",
+        "change": "modified",
+        "before": "sha256:7bbb08b42fbd3694c90c952c048ee8cf245e1f6d94139fe42c6817cb4a3cf1e6",
+        "after": "sha256:608ae262ebdbdd8912840998698f099c983e96a4da2a2dbc819711ce30d38a2e"
+      },
+      {
+        "id": "templates/knowledge-node.md",
+        "change": "modified",
+        "before": "sha256:c5d18fae74d59b63746b3ec383ba3a842d2d2cbe379583b3145d7b02cebb39a7",
+        "after": "sha256:6af0f7b786f38ad2983bd489db822b8c7974d86fe9e4083d03dddd859aac1c03"
       }
     ],
     "ownership": [],
@@ -42,20 +60,20 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "principles-entry-separation-0.23.1",
-  "intent": "Separate Principles request selection from bounded consumption of its single shared-policy canon.",
+  "change_id": "adopt-knowledge-ownership-forward",
+  "intent": "Transfer adopted knowledge into self-contained owners, preserve only live evidence, and publish the complete semantic set before Design-head finalization.",
   "impact": {
-    "body": {
-      "total": 1,
+    "template_content": {
+      "total": 2,
       "added": 0,
       "removed": 0,
-      "modified": 1
+      "modified": 2
     },
     "references": {
-      "total": 1,
+      "total": 3,
       "added": 0,
       "removed": 0,
-      "modified": 1
+      "modified": 3
     }
   }
 }

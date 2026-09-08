@@ -2,8 +2,8 @@
 
 Working language: {{workingLanguage}}
 
-## Source-to-owner landing
-<!-- one row per knowledge unit or supporting group: coordinates — authority — disposition — exact owner document/planned K path or disposition evidence/reason -->
+## Source-to-owner landing (transient adoption inventory)
+<!-- one row per knowledge unit or supporting group: coordinates — authority — disposition — exact owner document/planned K path or disposition evidence/reason; owner-kept live input lands in Existing records and only supporting K footers; this table is not written into final project knowledge -->
 {{sourceInventory}}
 
 ## Capability candidates

@@ -20,7 +20,7 @@ Brownfield: {{brownfield}}
 
 ## Existing records
 
-<!-- one row per knowledge unit or supporting group: coordinates — authority — disposition — exact owner document/K path or disposition evidence/reason -->
+<!-- only external inputs the owner explicitly chose to keep live: capability name|shared: exact path; omit when none -->
 {{existingRecords}}
 
 ## Provisional

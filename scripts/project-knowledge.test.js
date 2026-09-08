@@ -242,16 +242,21 @@ test("dispute insertions may span lines without compressing both arms", (t) => {
   assert.match(result.stdout, /markers=1 disputes=1/);
 });
 
-test("Source basis requires at least one real coordinate", (t) => {
+test("Source basis is optional and remains strong when present", (t) => {
   const cases = [
+    [null, null],
     ["Source basis: [\"docs/source.md:1-2\"]", null],
     ["Source basis: []", /non-empty JSON coordinate array/],
+    ["Source basis:[]", /JSON string array/],
     ["Source basis: [\"docs/source.md\"]", /coordinate must be path:line-range/],
     ["Source basis: [\"missing/source.md:1\"]", /coordinate path does not exist/],
   ];
   for (const [basis, expected] of cases) {
     const root = fixture(t);
-    writeCapsule(root, header(), body().replace('Source basis: ["docs/source.md:1-2"]', basis));
+    const content = basis === null
+      ? body().replace('\nSource basis: ["docs/source.md:1-2"]', "")
+      : body().replace('Source basis: ["docs/source.md:1-2"]', basis);
+    writeCapsule(root, header(), content);
     const result = run(root, "validate");
     if (expected === null) assertOk(result);
     else {
@@ -259,6 +264,14 @@ test("Source basis requires at least one real coordinate", (t) => {
       assert.match(result.stderr, expected);
     }
   }
+});
+
+test("Source basis cannot be followed by body prose", (t) => {
+  const root = fixture(t);
+  writeCapsule(root, header(), `${body()}\ntrailing prose`);
+  const result = run(root, "validate");
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /Source basis must be the final line/);
 });
 
 test("coordinates must resolve to current or historical source lines", (t) => {
