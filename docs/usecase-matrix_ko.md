@@ -681,9 +681,15 @@ action, 결정/기각 방향 소실, wrong owner, 필수 단위 미착지·현�
 증거·clean context 부재는 막는다. Missing-channel action 열·producer transcript·이전 audit 결론·그 밖의
 Arch 실행/검증-run/승인/쓰기/commit 지시는 입력하지 않는다. 반증 판단 상태 중 clear만 구속 질문과
 승인 쓰기에 도달하며 revise는 같은 판단으로 돌아오고 blocked는 제안 앞에서 멈춘다. Product `C<n>`과
-disk `NN`은 명시적으로 다른 좌표다. 구속 확인 전 쓰기 0, 거절·승인 전 중단 시 쓰기 0이다. 승인 하나 아래 후속
-요청, Layer 0 소유자 문서(`product.md`가 문서 중 마지막), Product·Architecture·Design 소유 K를 쓰고 검증해
-`adopt — layer 0`으로 먼저 착지시킨다. 그 커밋을 Design head로 쓴 능력 문서와 능력 소유 K를 쓰고 검증해
+disk `NN`은 명시적으로 다른 좌표다. ADR 조건에 해당하거나 근거가 빠진 결정은 현재 방향·근거·버린
+대안·정확한 owner landing을 제안에 드러내고 Architecture 또는 capability Intent에 self-contained로
+착지한다. on-demand K는 추가 깊이만 맡고, `Binding ADRs`는 기존 exact path만 받으며 formal ADR
+작성자는 Arch다. 구속 확인 전 쓰기 0, 거절·승인 전 중단 시 쓰기 0이다. 열린 Git operation gate 뒤
+actor와 Git identity는 읽기 전용으로 먼저 해소한다. 승인 하나 아래 Adopt P2 effect는 방이 없을 때
+pre-boundary HEAD 또는 unborn의 `none`을 digest로 한 room triple을 만들고, 후속 요청, Layer 0 소유자
+문서(`product.md`가 문서 중 마지막), Product·Architecture·Design 소유 K와 함께 `adopt — layer 0`
+첫 구속 커밋에 착지시킨다. 기존 research room은 보존하고 다시 stage하지 않는다. 그 커밋을 Design
+head로 쓴 능력 문서와 능력 소유 K를 쓰고 검증해
 `adopt — capabilities`로 함께 착지시킨 뒤 자동 Product·Arch·Design·Direct·
 Resume 선택은 0이다. 중단 시 현재 `.devflow` 루트와 index가 모두 없을 때만 무관리 재도출하고,
 현재 증거가 생긴 뒤에는 정본 상태가 복구를 소유한다. `product.md` 쓰기와 첫 커밋 사이에는
@@ -950,3 +956,12 @@ predicate·ledger·commit-body 복구, Direct·Work·
 Verify·Resume 변경은 0이다. 정적 validator·Adopt fixture·P2 생성 검증 밖의 실제 대형 Adopt와 입력
 삭제 전후 cold-model 유지보수는 재관측 전까지 **미검증**이다. **새 H 행 0, 새 A 행 0, 새 교차 셀 0,
 새 공백 0.**
+
+0.23.19 부분 재판정(DD-109): 새 요청·진입 형태나 교차 셀은 없다. §3.24에서 최초 Product/Adopt
+구속 전 identity는 읽기 전용이고, roomless 승인만 기존 첫 binding commit에 정본 room triple을
+원자적으로 싣는다. 독립 join commit·fresh re-entry·room-only 상태 예외는 없고 project-state와 Resume,
+다른 writer stage는 그대로다. 같은 셀의 ADR/missing-ground 심사는 current direction·ground·dropped
+alternatives·exact owner landing을 제안과 Architecture/capability Intent에 자기완결로 남기며 새 ADR
+artifact는 만들지 않는다. 정적 P2 fixture·Skill Rails build 밖의 cold Product/Adopt 실제 commit
+adherence와 legacy 삭제 뒤 downstream 이해는 재관측 전까지 **미검증**이다. **새 H 행 0, 새 A 행 0,
+새 교차 셀 0, 새 공백 0.**

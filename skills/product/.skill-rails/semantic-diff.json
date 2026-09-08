@@ -2,60 +2,396 @@
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
     "before": "sha256:7a5fc90530e163bc0bda317688574d84f7715a1802b102c20375b3b91d2e0376",
-    "after": "sha256:7a5fc90530e163bc0bda317688574d84f7715a1802b102c20375b3b91d2e0376"
+    "after": "sha256:264b655886dc45ab798d833700b5eeec66fdf6c3d57f51e5910416b007fa556b"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
     "context": true
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:7a5fc90530e163bc0bda317688574d84f7715a1802b102c20375b3b91d2e0376",
+      "after_hash": "sha256:264b655886dc45ab798d833700b5eeec66fdf6c3d57f51e5910416b007fa556b",
+      "source": "behavior_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "propose-and-confirm",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "product.file",
+            "glossary.state",
+            "product.request"
+          ],
+          "needs": [
+            "approval.action"
+          ],
+          "table": "confirmationRoute",
+          "branches": [
+            "ask",
+            "commit-initial",
+            "commit-rerun",
+            "BLOCK:confirmation-state"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ask": [
+                [
+                  "RUN",
+                  {
+                    "action": "project existing product/K headers under the exact product owner"
+                  }
+                ],
+                [
+                  "REPORT",
+                  {
+                    "template": "productProposal"
+                  }
+                ],
+                "ASK"
+              ],
+              "BLOCK:confirmation-state": [
+                "BLOCK"
+              ],
+              "commit-initial": [
+                [
+                  "RUN",
+                  {
+                    "action": "project existing product/K headers under the exact product owner"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "template": "productConfirmed"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeNodes",
+                    "selection": "approved sourced product-owned units; existing loci stay in place and new K requires the shared capsule boundary",
+                    "template": "knowledgeNode",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "validate exact changed product/K paths"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "artifact": "product",
+                    "boundary": "confirmed-layer-0",
+                    "touches": [
+                      ".devflow/project/product.md",
+                      ".devflow/project/glossary.md",
+                      "exact changed product/K paths"
+                    ]
+                  }
+                ],
+                "ROUTE:arch"
+              ],
+              "commit-rerun": [
+                [
+                  "RUN",
+                  {
+                    "action": "project existing product/K headers under the exact product owner"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "template": "productConfirmed"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeNodes",
+                    "selection": "approved sourced product-owned units; existing loci stay in place and new K requires the shared capsule boundary",
+                    "template": "knowledgeNode",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "validate exact changed product/K paths and apply every matching canonical discovery-update action and delete only the addressed product re-run pending lines; preserve unaddressed lines"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "authority": "external.principles",
+                    "boundary": "product-rerun-binding",
+                    "touches": [
+                      ".devflow/project/product.md",
+                      ".devflow/project/glossary.md",
+                      ".devflow/journal.md",
+                      "exact changed product/K paths",
+                      "matching canonical discovery-update targets"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ]
+            }
+          },
+          "body": "stage: propose-and-confirm",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "product.file",
+            "glossary.state",
+            "product.request"
+          ],
+          "needs": [
+            "approval.action"
+          ],
+          "table": "confirmationRoute",
+          "branches": [
+            "ask",
+            "commit-initial",
+            "commit-rerun",
+            "BLOCK:confirmation-state"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ask": [
+                [
+                  "RUN",
+                  {
+                    "action": "project existing product/K headers under the exact product owner"
+                  }
+                ],
+                [
+                  "REPORT",
+                  {
+                    "template": "productProposal"
+                  }
+                ],
+                "ASK"
+              ],
+              "BLOCK:confirmation-state": [
+                "BLOCK"
+              ],
+              "commit-initial": [
+                [
+                  "RUN",
+                  {
+                    "action": "project existing product/K headers under the exact product owner"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "template": "productConfirmed"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeNodes",
+                    "selection": "approved sourced product-owned units; existing loci stay in place and new K requires the shared capsule boundary",
+                    "template": "knowledgeNode",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "validate exact changed product/K paths"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "materialize the resolved actor room under the Principles Identity and Rooms contract only when absent, with digest equal to the pre-boundary HEAD or none for unborn history; preserve an existing room",
+                    "artifact": "room"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "artifact": "product",
+                    "boundary": "confirmed-layer-0",
+                    "staging": "approved product owner set plus the newly materialized resolved-actor room triple when absent",
+                    "touches": [
+                      ".devflow/project/product.md",
+                      ".devflow/project/glossary.md",
+                      "exact changed product/K paths"
+                    ]
+                  }
+                ],
+                "ROUTE:arch"
+              ],
+              "commit-rerun": [
+                [
+                  "RUN",
+                  {
+                    "action": "project existing product/K headers under the exact product owner"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "template": "productConfirmed"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeNodes",
+                    "selection": "approved sourced product-owned units; existing loci stay in place and new K requires the shared capsule boundary",
+                    "template": "knowledgeNode",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "validate exact changed product/K paths and apply every matching canonical discovery-update action and delete only the addressed product re-run pending lines; preserve unaddressed lines"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "authority": "external.principles",
+                    "boundary": "product-rerun-binding",
+                    "touches": [
+                      ".devflow/project/product.md",
+                      ".devflow/project/glossary.md",
+                      ".devflow/journal.md",
+                      "exact changed product/K paths",
+                      "matching canonical discovery-update targets"
+                    ]
+                  }
+                ],
+                "ROUTE:resume"
+              ]
+            }
+          },
+          "body": "stage: propose-and-confirm",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
-    "template_content": [
+    "template_content": [],
+    "body": [
       {
-        "id": "knowledgeNode",
+        "id": "stage: propose-and-confirm",
         "change": "modified",
-        "before": "sha256:c5d18fae74d59b63746b3ec383ba3a842d2d2cbe379583b3145d7b02cebb39a7",
-        "after": "sha256:6af0f7b786f38ad2983bd489db822b8c7974d86fe9e4083d03dddd859aac1c03"
+        "before": "sha256:c983d7a775f9b2ad8e963c78bbbcbb4677378daca4c71ec0481d2c777c4cfaf7",
+        "after": "sha256:66f901bd7479ab321a33a114e3b5cf8e9bc705a410ef80dfaaf654f18a47fdcc"
       }
     ],
-    "body": [],
-    "references": [
+    "references": [],
+    "ownership": [
       {
-        "id": "templates/knowledge-node.md",
-        "change": "modified",
-        "before": "sha256:c5d18fae74d59b63746b3ec383ba3a842d2d2cbe379583b3145d7b02cebb39a7",
-        "after": "sha256:6af0f7b786f38ad2983bd489db822b8c7974d86fe9e4083d03dddd859aac1c03"
+        "id": ".devflow/users/<id>/**",
+        "change": "added",
+        "after": "external.principles"
       }
     ],
-    "ownership": [],
-    "artifacts": [],
+    "artifacts": [
+      {
+        "id": "room",
+        "change": "added",
+        "after": {
+          "path": ".devflow/users",
+          "writer": "external.principles",
+          "readers": [
+            "stage.propose-and-confirm"
+          ]
+        }
+      }
+    ],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "adopt-knowledge-ownership-forward",
-  "intent": "Transfer adopted knowledge into self-contained owners, preserve only live evidence, and publish the complete semantic set before Design-head finalization.",
+  "change_id": "v0.23.19-product-initial-room-atomic-publication",
+  "intent": "Product initial confirmation owns exact ordered room materialization immediately before its existing first binding commit.",
   "impact": {
-    "template_content": {
+    "stages": {
       "total": 1,
       "added": 0,
       "removed": 0,
       "modified": 1
     },
-    "references": {
+    "body": {
       "total": 1,
       "added": 0,
       "removed": 0,
       "modified": 1
+    },
+    "ownership": {
+      "total": 1,
+      "added": 1,
+      "removed": 0,
+      "modified": 0
+    },
+    "artifacts": {
+      "total": 1,
+      "added": 1,
+      "removed": 0,
+      "modified": 0
     }
   }
 }

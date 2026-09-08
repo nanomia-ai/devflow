@@ -1259,6 +1259,50 @@ v0.14.0 감사가 Git fixture로 재현한 셋의 수리다: 이름 없는 HEAD�
 
 DD-53은 한 작업 폴더의 여러 세션을 안전하게 만들었지만, 바깥에서 세션을 배정하는 행위자가 사람 관문을 대신 답하거나 파일 전체 재작성을 시키거나 지식을 디스크 밖 전달에만 두는 일은 신뢰 경계 밖이라 기존 상태 기계가 감지하지 못한다. 등록 스킬이나 새 상태를 만들면 devflow의 동작이 배정 방식에 따라 갈리고, 그 장치도 경계 밖 행동을 강제하지 못한다. 따라서 DD-19의 원문 브리핑 역할 계약 형식을 상속해 의무를 `skills/principles/coordinator.md` 한 곳에 둔다. 문서 지도와 이 결정은 계약의 존재·역할을 기록하고, 훅·README는 계약을 발견시키는 포인터만 가진다. 카드 번호 발급은 구속 결정이므로 병렬 구현 워커를 배정하기 전에 한 split 워커가 `split — begin <부모>`와 이어지는 계획 커밋을 통합 브랜치에 착지시킨다. 점유는 미리 대신 만들지 않으며, `coordinator`는 통합 브랜치를 체크아웃한 채로 두지 않는다. 카드를 맡은 워커가 work의 최초 점유 커밋으로 만들며, `coordinator`가 같은 소유자 id로 선점하면 점유가 여럿 생겨 무지목 resume이 카드를 묻는 모호성이 늘어난다. 기존 스킬·상태·커밋 종류·id·방은 바꾸지 않는다.
 
+### DD-109 · 최초 Product/Adopt는 방을 별도 커밋하지 않고 첫 구속 경계에 원자적으로 싣는다 (v0.23.19)
+
+주제: 동시성 · 점유 · 통합 | 도입: v0.23.19 | 상태: 유효
+
+관측된 문제: 동일한 cold Adopt 입력에서 한 실행은 제안 승인 뒤 별도 방 join 커밋을 먼저 만들어
+승인 snapshot을 낡게 했고, 다른 실행은 첫 core write 전에 방을 전혀 만들지 않았다. 별도 join 뒤
+중단하면 Product도 승인된 Adopt 의미도 없는 room-only 관리 상태만 남아 Resume가 같은 요청을
+자연스럽게 이어갈 근거가 없다. clean room-only를 무관리로 다시 분류하는 보상은 새 join과 과거
+관리 tree를 지우고 방만 남긴 저장소를 구분할 수 없어 DD-101의 부분 상태 보호를 뒤집는다.
+
+원하는 동작: 최초 Product 또는 Adopt가 구속 확인을 준비할 때 actor와 Git identity를 읽기 전용으로
+확정한다. 거절이나 승인 전 중단은 계속 쓰기 0이다. 승인 뒤 방이 없다면 정본 room triple을 기존
+첫 구속 커밋에 함께 싣고, pre-Product research가 이미 만든 방은 덮어쓰거나 다시 stage하지 않는다.
+
+선택한 경계: 공통 policy index가 최초 Product/Adopt 구속 준비에 Identity and Rooms를 열고,
+열린 Git operation gate 뒤 identity를 읽기 전용으로 해소한다. 정확한 순서는 Product의
+`commit-initial`과 Adopt의 `approve` P2 effect plan이 각각 소유한다. 두 branch는 기존 첫 커밋 직전에
+방이 없을 때만 owner.md·빈 HANDOFF.md·digest.md를 만들고, digest에는 그 경계 전 HEAD 또는 unborn
+history의 `none`을 기록하며, 그 세 경로를 승인된 owner set과 같은 커밋에 stage한다. 이 좁은 최초
+publication은 공통 독립 joining transition을 확장하며, DD-46의 단일 모드와 카드별 점유 선택은
+그대로다. 기존 방, 이후 신규 구성원 join, newcomer·
+research·upgrade·claim 경로와 상태 판정은 그대로다.
+
+이 경계가 필요한 이유: Skill Rails에서 effect 순서는 각 P2 spec만 소유하므로 공통 산문만으로는
+모델별 누락을 막지 못한다. 별도 room 커밋은 approval snapshot과 중단 경계를 둘로 가르지만,
+기존 첫 binding commit에 합치면 identity와 승인된 현재 의미가 함께 durable해져 ownerless fragment가
+없다. boundary commit과 journal 결합 선례는 한 transition의 조각을 함께 싣는 이유를 뒷받침하지만,
+이 최초 room publication을 이미 허가한 것은 아니므로 이 결정은 그 확장만 좁게 승인한다.
+
+기각한 대안: 승인 전 join은 거절·중단 쓰기 0과 approval freshness를 깨뜨린다. join 뒤 fresh
+re-entry와 room-only 무관리 판정은 사용자 진입을 늘리고 과거 managed deletion을 새 Adopt로 오인한다.
+승인 뒤 독립 join prefix는 그 직후 중단 창을 남긴다. 모든 writer stage나 공통 runtime에 같은
+장치를 넣는 안은 실제 roomless 최초 writer 둘보다 넓고 behavior owner를 복제한다.
+
+영향 좌표: `skills/principles/references/{policy-index.md,state/identity-and-rooms.md,delivery/commit-and-verification.md}`;
+Product `spec.mjs`·`body.md`·승인 fixture; Adopt `spec.mjs`·`body.md`·workflow·제안 template·승인 fixture;
+`docs/design{_ko}.md` component intent 계보; matrix §3.24; 세 package 생성 영수증; plugin manifest; CHANGELOG;
+v0.23.19 보고. project-state,
+Resume, 다른 stage spec, runtime·trace·evaluator, 기존 방과 research/upgrade/claim 효과는 바뀌지 않는다.
+
+재검토 조건: roomless 최초 binding writer가 둘 밖에서 실제로 나타나거나, 기존 방이 다시 stage되거나,
+첫 커밋 뒤 actor room이나 승인 의미 중 하나가 빠지거나, pre-boundary digest가 containing commit을
+가리키거나, 원자 publication이 기존 integration/room 소비자를 깨뜨리는 장면이 관측될 때.
+
 ### 이 주제에서 기각된 안
 
 - **[DR-06 · v0.8.0]** **A안(공유 문서 + ID 표기)·C안(사용자별 폴더 분리)** — 채택안 D("진실의 범위")에 흡수됨.

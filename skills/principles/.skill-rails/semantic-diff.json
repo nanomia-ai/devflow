@@ -25,14 +25,20 @@
       {
         "id": "references/delivery/commit-and-verification.md",
         "change": "modified",
-        "before": "sha256:14d5830e3f043e7b5e777a8c218a7e8d2b8a71a97c6069d6ee346bf6b0fff8a0",
-        "after": "sha256:859d9bbace0147a2d9cecf331c44c0af3dced0baa52325db3f0c4bba22e269f5"
+        "before": "sha256:859d9bbace0147a2d9cecf331c44c0af3dced0baa52325db3f0c4bba22e269f5",
+        "after": "sha256:256944fc92d5d6121505ba70186d7969f251d79ab6e93c3664d73dee241ce1c9"
       },
       {
-        "id": "references/knowledge/capsules-and-provenance.md",
+        "id": "references/policy-index.md",
         "change": "modified",
-        "before": "sha256:e41a3e8764c5cdefd9bb1fb8fee59a52c46d8210883a137e783898cffa63e66a",
-        "after": "sha256:5589abdcd514619f1e5228e24acca720e6b1b2d15b72b94954529ac933d5e9bc"
+        "before": "sha256:451a8fa92d0c0663fb30194d6346fdf64fcb0ae602fe61d8878e75be3e9abc1e",
+        "after": "sha256:d09b90ed49e670921a03b1731bac0ad69dad21e3c4ed9ecd0fb2e0e073a10001"
+      },
+      {
+        "id": "references/state/identity-and-rooms.md",
+        "change": "modified",
+        "before": "sha256:3944a993d57791d6cad0645103cff0c103f45c66dfc0a815f5558c86ae3adf6e",
+        "after": "sha256:483cc0f72006898a63959f9c858bc70de272cdccbbd8b5bbe767b46e0c357005"
       }
     ],
     "ownership": [],
@@ -41,14 +47,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "principles-final-adopt-ownership-repair",
-  "intent": "Keep absorbed contradictions with their semantic owner and explain the path-filtered Design-head commit boundary precisely.",
+  "change_id": "v0.23.19-initial-room-atomic-publication",
+  "intent": "Resolve initial identity read-only and atomically publish an absent room in Product or Adopt first binding commit.",
   "impact": {
     "references": {
-      "total": 2,
+      "total": 3,
       "added": 0,
       "removed": 0,
-      "modified": 2
+      "modified": 3
     }
   }
 }

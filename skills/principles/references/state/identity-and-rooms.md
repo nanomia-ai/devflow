@@ -5,18 +5,24 @@
 devflow has one mode. Whether one person or several share the repository, every session
 works out of its own room.
 
-Resolve your id before writing to the tree, journal, or a core document
-(`.devflow/project/*`), and before landing a tweak commit — read `git config user.name` and `git config user.email` and match
+After the open-Git-operation gate clears, resolve your id before writing to the tree,
+journal, or a core document (`.devflow/project/*`), before landing a tweak commit, and
+read-only before Product's initial confirmation or Adopt's binding confirmation. Read
+`git config user.name` and `git config user.email` and match
 each non-empty value against the `git:` line of each `.devflow/users/*/owner.md`. An empty
 value matches nothing, and a value that matches a room's `git:` line while the other
 value conflicts with that same line is not a match. Exactly one match is your room. With no room on
-disk, propose an id derived from that identity, or ask for one when both values are empty,
-and create the room through the joining transition below. With rooms on disk and no match,
+disk, propose an id derived from that identity, or ask for one when both values are empty.
+Product's initial confirmation and Adopt's binding confirmation keep that resolution
+read-only until their P2 effect plan creates the absent room with the approved owner set and
+includes it in the existing first binding commit; an existing room, including one from
+pre-Product research, is preserved and not staged again. Every other new person creates the
+room through the joining transition below. With rooms on disk and no match,
 show every existing id and ask whether this is a new person or a changed identity: a new
-person joins through that same transition, while a changed identity replaces the `git:`
+person joins through that transition, while a changed identity replaces the `git:`
 line of the room the user names and creates no room. Whichever skill first writes to the
-tree, journal, or a core document does this. A session that cannot resolve an identity, or
-cannot put the question to a user (CI, bots), only reads.
+tree, journal, or a core document consumes this resolved room. Only ambiguous identity asks
+the user; a session that cannot put that question to a user (CI, bots) only reads.
 ids are lowercase `[a-z0-9]{2,8}`. Names devflow uses (project, tree, users, decisions)
 are forbidden; ids are never reused.
 
@@ -132,11 +138,14 @@ a semantic choice. Allow only those confirmed conflict-resolution paths and comm
 makes while continuing the existing operation; write no separate devflow state. After the
 open operation disappears, read `git status` again and restart the integrity check at item 1.
 
-Room transitions — joining and departure are each one commit; the upgrade splits three ways:
+Room transitions — joining and departure are each one commit, except for the initial
+Product or Adopt publication above; the upgrade splits three ways:
 
 - Joining: create the room — owner.md, an empty HANDOFF.md, and digest.md holding the marker
-  = current HEAD — and land only those three paths as `<id> room — join`. It is a binding
-  decision. In a repository with no commit yet, the marker is `none` and the first digest
+  = the pre-boundary current HEAD — and land only those three paths as `<id> room — join`.
+  It is a binding decision. The initial Product or Adopt publication instead stages that
+  same absent triple with its existing first binding commit. In a repository with no commit
+  yet, the marker is `none` and the first digest
   starts at the repository's first commit. Past understanding comes
   from the shared documents, not from commit archaeology.
 - Upgrading from a version without rooms: arch adds `integration` and `merge` to arch.md, the identity resolution above creates

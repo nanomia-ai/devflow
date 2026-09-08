@@ -261,6 +261,7 @@
         "WRITE",
         "WRITE",
         "RUN",
+        "RUN",
         "COMMIT",
         "RUN",
         "WRITE",

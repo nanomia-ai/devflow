@@ -15,6 +15,31 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.19 — 2026-09-08 — Publish initial identity with the binding boundary
+
+Initial Product and Adopt now resolve actor and Git identity read-only before binding approval. When the
+resolved actor has no room, only Product `commit-initial` and Adopt `approve` materialize the canonical
+room triple immediately before their existing first binding commit and stage it with the approved owner
+set. Existing pre-Product research rooms are preserved, and no standalone room commit, fresh re-entry,
+room-only state exception, project-state change, or Resume change is introduced.
+
+Adopt's proposal now screens every ADR-qualified decision and every decision missing ground. Current
+direction, ground, dropped alternatives, and exact owner landing remain self-contained in Architecture or
+capability Intent, with on-demand K only for additional depth; `Binding ADRs` accepts only existing exact
+paths and Arch remains the sole formal ADR writer.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `skills/principles/references/policy-index.md`;
+`skills/principles/references/state/identity-and-rooms.md`;
+`skills/principles/references/delivery/commit-and-verification.md`;
+`skills/principles/.skill-rails/semantic-diff.json`; `skills/principles/.generated.json`;
+`skills/product/spec.mjs`; `skills/product/body.md`; `skills/product/fixtures/scenarios.json`;
+`skills/product/.skill-rails/semantic-diff.json`; `skills/product/.generated.json`;
+`skills/adopt/spec.mjs`; `skills/adopt/body.md`; `skills/adopt/references/workflow.md`;
+`skills/adopt/templates/adoption-proposal.md`; `skills/adopt/fixtures/make-scenarios.mjs`;
+`skills/adopt/fixtures/scenarios.json`; `skills/adopt/.skill-rails/semantic-diff.json`;
+`skills/adopt/.generated.json`; `docs/design-decisions_ko.md`; `docs/design-decisions.md`;
+`docs/usecase-matrix_ko.md`; `docs/rounds/v0.23.0/report-0.23.19_ko.md`; `CHANGELOG.md`.
+
 ## 0.23.18 — 2026-09-08 — Keep no-effect continuations trace-safe
 
 Adopt now ends an evidence-supported proposal correction and its independent bounded recheck with

@@ -43,11 +43,11 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증
 
 | 구성요소 | 존재 이유와 소유 범위 | 입력 → 다음 소비자 | 설계 계보 |
 |---|---|---|---|
-| `principles` | 공통 정책 색인·커밋 규율과 확인된 프로젝트 작업 언어를 따르는 산문 작성 정책을 소유하며 Principles로 들어온 현재 프로젝트 devflow 요청만 상태 없이 분류. 이름을 명시한 단계는 자체 진입에서 그 색인을 읽되 Principles 사전 분류는 하지 않음 | 단계 이름 없는 현재 프로젝트 devflow 의도 → resume, 명시 단계 → 공통 정책 색인 뒤 이름 난 소유자, 역할 계약 → 계약 직접 진입 | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 · DD-107 |
-| `product` | 문제·정체성·능력·경계·성공 판정과 프로젝트 작업 언어를 소유자와 확정하고 `product.md`에 한 사실로 소유 | 명시한 새 프로젝트·제품 기획 요청 → arch·design. 기존 프로젝트의 최초 역산은 Product를 거치지 않고 Adopt가 소유 | 기원 · DD-33 · DD-67 · DD-97 · DD-107 |
+| `principles` | 공통 정책 색인·커밋 규율과 확인된 프로젝트 작업 언어를 따르는 산문 작성 정책을 소유하며 Principles로 들어온 현재 프로젝트 devflow 요청만 상태 없이 분류. 이름을 명시한 단계는 자체 진입에서 그 색인을 읽되 Principles 사전 분류는 하지 않음 | 단계 이름 없는 현재 프로젝트 devflow 의도 → resume, 명시 단계 → 공통 정책 색인 뒤 이름 난 소유자, 역할 계약 → 계약 직접 진입 | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 · DD-107 · DD-109 |
+| `product` | 문제·정체성·능력·경계·성공 판정과 프로젝트 작업 언어를 소유자와 확정하고 `product.md`에 한 사실로 소유 | 명시한 새 프로젝트·제품 기획 요청 → arch·design. 기존 프로젝트의 최초 역산은 Product를 거치지 않고 Adopt가 소유 | 기원 · DD-33 · DD-67 · DD-97 · DD-107 · DD-109 |
 | `arch` | 관리 프로젝트의 현재 기술 Layer 0·stack·코드 구조·data·verify channel·glossary·능력 설계 구역을 확정하고 갱신 | product 또는 관리 상태 glossary·design·baseline 경로 → direct·work·verify | DD-42 · DD-43 · DD-69 · DD-97 · DD-99 |
 | `design` | 선택적 UI 접근 방식·원천·token/component 전략·분해 축·검토 표면을 확정 | product·arch → arch 능력 설계와 direct | DD-69 · DD-99 |
-| `adopt` | 무관리 브라운필드의 모든 유지 자료를 일시적으로 회계하고, 의미 있는 사람 산문에서 작업 언어를 제안하며, 흡수 입력을 현재 의존성으로 남기지 않고 그 영속 의미를 자기완결 Product·Architecture·해당 시 Design·code style·glossary·능력 설계 구역·소유자 인접 K로 이전 | 무관리 문서 및/또는 코드 → 독립적으로 유지 가능한 관리 기획·지식 표면과 `product.md`의 작업 언어, 그 뒤 정지 | DD-10 · DD-20 · DD-26 · DD-97 · DD-107 · DD-108 |
+| `adopt` | 무관리 브라운필드의 모든 유지 자료를 일시적으로 회계하고, 의미 있는 사람 산문에서 작업 언어를 제안하며, 흡수 입력을 현재 의존성으로 남기지 않고 그 영속 의미를 자기완결 Product·Architecture·해당 시 Design·code style·glossary·능력 설계 구역·소유자 인접 K로 이전 | 무관리 문서 및/또는 코드 → 독립적으로 유지 가능한 관리 기획·지식 표면과 `product.md`의 작업 언어, 그 뒤 정지 | DD-10 · DD-20 · DD-26 · DD-97 · DD-107 · DD-108 · DD-109 |
 | `direct` | 기획 깊이와 실행 단위 크기를 판단하고 연구·작업 카드를 구체화해 실행 제안과 Work 인계를 승인받는 작업 방향을 소유하되 실제 에이전트 배치·감독은 하지 않음 | Layer 0·기록·현재 코드 → work | DD-25 · DD-50 · DD-67 · DD-99 |
 | `work` | 카드 하나의 코드·진행 로그·완료 신호·상위 문서 환류를 끝까지 운반 | 승인 카드·정본·baseline → verify 또는 다음 카드 | DD-09 · DD-48 · DD-56 |
 | `verify` | 실제 실행으로 능력·제품 verdict를 내리고 실패·감리·회고의 생존 경로를 소유 | 닫힌 코드·신호·baseline → direct 수리 또는 폐쇄 | DD-21–DD-24 · DD-30 · DD-36 · DD-68 · DD-99 |

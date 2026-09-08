@@ -1409,6 +1409,56 @@ Subject: Concurrency, claims, integration | Introduced: v0.16.0 | State: active
 
 DD-53 made several sessions in one working folder safe, but an outside actor assigning sessions can answer human gates on their behalf, direct whole-file rewrites, or leave knowledge only in an off-disk channel; those actions lie outside the trust boundary, so the existing state machine cannot detect them. A registered skill or new state would make devflow behavior branch on the assignment method, and that mechanism still could not enforce conduct outside the trust boundary. Therefore this decision inherits DD-19's verbatim-briefed role-contract form and puts the duties in one place, `skills/principles/coordinator.md`. The document map and this decision record the contract's existence and role; the hook and README only point to it. Because minting task-card numbers is a binding decision, one split worker lands `split — begin <parent>` and the following planning commit on the integration branch before parallel implementation workers are assigned. Claims are not made in advance on someone else's behalf, and the `coordinator` does not leave the integration branch checked out. The worker carrying the card creates the claim in work's initial claim commit; if the `coordinator` preclaims under the same owner id, several claims accumulate and an unaddressed resume asks which card, adding ambiguity. No existing skill, state, commit kind, id, or room changes.
 
+### DD-109 · Initial Product/Adopt publishes the room atomically in its first binding boundary, not as a standalone commit (v0.23.19)
+
+Subject: Concurrency, claims, integration | Introduced: v0.23.19 | State: active
+
+Observed problem: for the same cold Adopt input, one run created a standalone room-join commit after
+proposal approval and made the approved snapshot stale, while another run omitted the room before its
+first core write. Interruption after a standalone join leaves a managed room-only checkout with neither
+Product nor approved Adopt meaning, so Resume has no durable basis for continuing the same request.
+Reclassifying a clean room-only checkout as unmanaged cannot distinguish a fresh join from a formerly
+managed tree deleted down to its rooms and would reverse DD-101's partial-state protection.
+
+Desired behavior: initial Product or Adopt resolves the actor and Git identity read-only while preparing
+binding confirmation. Refusal or interruption before approval remains write-free. After approval, an
+absent canonical room rides the existing first binding commit, while a room already created by
+pre-Product research is neither overwritten nor staged again.
+
+Chosen boundary: the shared policy index opens Identity and Rooms for initial Product/Adopt binding
+preparation and resolves identity read-only after the open-Git-operation gate. Product `commit-initial`
+and Adopt `approve` each own the exact order in their P2 effect plan. Immediately before the existing
+first commit, only an absent room materializes as owner.md, empty HANDOFF.md, and digest.md; digest holds
+the pre-boundary HEAD or `none` for unborn history, and those three paths are staged with the approved
+owner set. This narrow initial publication extends the shared standalone joining transition; DD-46's
+one-mode and claim-per-card choice remains unchanged. Existing
+rooms, later-member joining, newcomer, research, upgrade, claim, and state-classification paths remain
+unchanged.
+
+Why the boundary is needed: each P2 spec is the sole owner of ordered effects, so shared prose cannot
+prevent model-dependent omission. A standalone room commit splits approval freshness and interruption
+recovery across two boundaries; combining it with the existing first binding commit makes identity and
+approved current meaning durable together without an ownerless fragment. The combined boundary-commit
+and journal precedents support co-landing the parts of one transition, but did not already authorize this
+initial room publication, so this decision grants only that narrow extension.
+
+Rejected alternatives: joining before approval violates write-free refusal/interruption and approval
+freshness. Fresh re-entry after join plus a room-only unmanaged classification adds user-visible entry
+and misclassifies a deleted managed tree as new Adopt. A standalone post-approval join prefix retains its
+immediate interruption gap. Adding the mechanism to every writer stage or a common runtime is wider than
+the two reachable roomless initial writers and duplicates the behavior owner.
+
+Affected coordinates: `skills/principles/references/{policy-index.md,state/identity-and-rooms.md,delivery/commit-and-verification.md}`;
+Product `spec.mjs`, `body.md`, and approval fixture; Adopt `spec.mjs`, `body.md`, workflow, proposal
+template, and approval fixture; `docs/design{_ko}.md` component intent lineages; matrix §3.24; generated receipts for the three packages; plugin
+manifests; CHANGELOG; and the v0.23.19 report. project-state, Resume, other stage specs, runtime, trace,
+evaluator, existing-room, research, upgrade, and claim effects do not change.
+
+Revisit when a roomless initial binding writer is observed outside these two branches, an existing room
+is staged again, either the actor room or approved meaning is absent after the first commit, the digest
+points at the containing commit instead of the pre-boundary tip, or atomic publication breaks an existing
+integration or room consumer.
+
 ### Rejected under this subject
 
 - **[DR-06 · v0.8.0]** **Candidate A (shared documents + ID tags) · Candidate C (per-user folders)** — absorbed

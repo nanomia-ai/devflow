@@ -1,22 +1,22 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:01a898c580bb28e51b26879abc6e68d5f73b733a148f41eda3df17748b455f85",
-    "after": "sha256:731eda6c60dd93a32d3723c85d0914afe633d5be1e8919d9599351caaa13ed97"
+    "before": "sha256:731eda6c60dd93a32d3723c85d0914afe633d5be1e8919d9599351caaa13ed97",
+    "after": "sha256:6cd2c4cb8dabce010f0d3ff19d9be1bd38b9acf2907d63b55536001d026120bc"
   },
   "changed": true,
   "any_changed": true,
   "source_changes": {
     "behavior_source": true,
     "observation_source": false,
-    "context": false
+    "context": true
   },
   "artifact_receipts": [
     {
       "kind": "spec",
       "path": "spec.mjs",
-      "before_hash": "sha256:01a898c580bb28e51b26879abc6e68d5f73b733a148f41eda3df17748b455f85",
-      "after_hash": "sha256:731eda6c60dd93a32d3723c85d0914afe633d5be1e8919d9599351caaa13ed97",
+      "before_hash": "sha256:731eda6c60dd93a32d3723c85d0914afe633d5be1e8919d9599351caaa13ed97",
+      "after_hash": "sha256:6cd2c4cb8dabce010f0d3ff19d9be1bd38b9acf2907d63b55536001d026120bc",
       "source": "behavior_source"
     }
   ],
@@ -25,83 +25,346 @@
     "guards": [],
     "stages": [
       {
-        "id": "semantic-refutation",
+        "id": "adoption",
         "change": "modified",
         "before": {
           "reads": [
-            "refutation.state"
+            "state.route"
           ],
-          "needs": [
-            "refutation.state"
-          ],
-          "table": null,
+          "needs": [],
+          "table": "approval",
           "branches": [
-            "pending",
-            "revise",
-            "blocked"
+            "prepare",
+            "refuse",
+            "approve"
           ],
           "effects": [],
           "effect_plans": {
             "default": null,
             "branches": {
-              "blocked": [
-                "BLOCK"
+              "approve": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "architecture",
+                    "template": "architecture"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "design",
+                    "selection": "when-existing-product-evidence-has-a-design-surface",
+                    "template": "design",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "codeStyle",
+                    "template": "codeStyle"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "append-principles-maintenance-routing-pending-idempotently-with-the-whole-follow-on-request-when-adoption-includes-follow-on-work"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "ordering": "last-layer-zero-owner-write-before-first-commit",
+                    "template": "product"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeNodes",
+                    "selection": "every-approved-layer-zero-owner-body-needing-depth-beyond-its-owner-document",
+                    "template": "knowledgeNode",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "validate-every-written-layer-zero-knowledge-node-with-project-knowledge"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "capabilityDesigns",
+                    "fields": {
+                      "designHead": "none"
+                    },
+                    "ordering": "complete-approved-semantic-set-before-first-commit",
+                    "template": "capabilityDesign"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeNodes",
+                    "selection": "every-approved-capability-body-needing-depth-beyond-its-capability-document",
+                    "template": "knowledgeNode",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "validate-every-written-capability-knowledge-node-with-project-knowledge"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "boundary": "confirmed-brownfield-semantic-set",
+                    "staging": "all-approved-owner-documents-same-owner-knowledge-and-follow-on-paths"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "calculate-canonical-design-head-from-the-landed-first-commit"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "capabilityDesigns",
+                    "fields": {
+                      "designHead": "canonical-design-head-output"
+                    },
+                    "mutation": "replace-only-design-head-lines-equal-to-none"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "boundary": "finalized-brownfield-design-heads",
+                    "staging": "only-capability-documents-whose-design-head-line-changed"
+                  }
+                ],
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
               ],
-              "pending": [
+              "prepare": [
                 [
-                  "READ",
+                  "REPORT",
                   {
-                    "path": "references/workflow.md"
+                    "template": "adoptionProposal"
                   }
                 ],
-                [
-                  "RUN",
-                  {
-                    "action": "inventory-all-maintained-sources-by-knowledge-unit-with-exact-coordinates-disposition-and-landing-target"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "trace-one-executable-flow-per-code-backed-capability-candidate-and-record-documentary-basis-for-document-derived-candidates"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "reverse-derive-complete-layer-zero-applicable-design-capability-zones-glossary-and-whole-owner-adjacent-knowledge-units"
-                  }
-                ],
-                [
-                  "RUN",
-                  {
-                    "action": "perform-one-bounded-clean-context-semantic-refutation-of-the-complete-draft-before-binding"
-                  }
-                ],
-                "NEXT"
+                "ASK"
               ],
-              "revise": [
+              "refuse": [
                 [
-                  "RUN",
+                  "REPORT",
                   {
-                    "action": "apply-evidence-supported-current-authority-correction-to-every-current-blocker-in-the-current-draft"
+                    "template": "result"
                   }
                 ],
-                [
-                  "RUN",
-                  {
-                    "action": "independently-recheck-returned-coordinates-changed-targets-and-direct-consequences-and-record-current-evidence-verification"
-                  }
-                ],
-                "NEXT"
+                "DONE"
               ]
             }
           },
-          "body": "stage: semantic-refutation",
+          "body": "stage: adoption",
           "record": null,
           "reentry": "rejudge"
         },
         "after": {
+          "reads": [
+            "state.route"
+          ],
+          "needs": [],
+          "table": "approval",
+          "branches": [
+            "prepare",
+            "refuse",
+            "approve"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "approve": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "architecture",
+                    "template": "architecture"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "design",
+                    "selection": "when-existing-product-evidence-has-a-design-surface",
+                    "template": "design",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "codeStyle",
+                    "template": "codeStyle"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "glossary",
+                    "template": "glossary"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "append-principles-maintenance-routing-pending-idempotently-with-the-whole-follow-on-request-when-adoption-includes-follow-on-work"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "product",
+                    "ordering": "last-layer-zero-owner-write-before-first-commit",
+                    "template": "product"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeNodes",
+                    "selection": "every-approved-layer-zero-owner-body-needing-depth-beyond-its-owner-document",
+                    "template": "knowledgeNode",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "validate-every-written-layer-zero-knowledge-node-with-project-knowledge"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "capabilityDesigns",
+                    "fields": {
+                      "designHead": "none"
+                    },
+                    "ordering": "complete-approved-semantic-set-before-first-commit",
+                    "template": "capabilityDesign"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "knowledgeNodes",
+                    "selection": "every-approved-capability-body-needing-depth-beyond-its-capability-document",
+                    "template": "knowledgeNode",
+                    "zeroAllowed": true
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "validate-every-written-capability-knowledge-node-with-project-knowledge"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "materialize the resolved actor room under the Principles Identity and Rooms contract only when absent, with digest equal to the pre-boundary HEAD or none for unborn history; preserve an existing room",
+                    "artifact": "room"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "boundary": "confirmed-brownfield-semantic-set",
+                    "staging": "all-approved-owner-documents-same-owner-knowledge-and-follow-on-paths plus the newly materialized resolved-actor room triple when absent"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "calculate-canonical-design-head-from-the-landed-first-commit"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "capabilityDesigns",
+                    "fields": {
+                      "designHead": "canonical-design-head-output"
+                    },
+                    "mutation": "replace-only-design-head-lines-equal-to-none"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "boundary": "finalized-brownfield-design-heads",
+                    "staging": "only-capability-documents-whose-design-head-line-changed"
+                  }
+                ],
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ],
+              "prepare": [
+                [
+                  "REPORT",
+                  {
+                    "template": "adoptionProposal"
+                  }
+                ],
+                "ASK"
+              ],
+              "refuse": [
+                [
+                  "REPORT",
+                  {
+                    "template": "result"
+                  }
+                ],
+                "DONE"
+              ]
+            }
+          },
+          "body": "stage: adoption",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      },
+      {
+        "id": "semantic-refutation",
+        "change": "modified",
+        "before": {
           "reads": [
             "refutation.state"
           ],
@@ -174,29 +437,257 @@
           "body": "stage: semantic-refutation",
           "record": null,
           "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "refutation.state"
+          ],
+          "needs": [
+            "refutation.state"
+          ],
+          "table": null,
+          "branches": [
+            "pending",
+            "revise",
+            "blocked"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "blocked": [
+                "BLOCK"
+              ],
+              "pending": [
+                [
+                  "READ",
+                  {
+                    "path": "references/workflow.md"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "inventory-all-maintained-sources-by-knowledge-unit-with-exact-coordinates-disposition-and-landing-target"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "trace-one-executable-flow-per-code-backed-capability-candidate-and-record-documentary-basis-for-document-derived-candidates"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "reverse-derive-complete-layer-zero-applicable-design-capability-zones-glossary-whole-owner-adjacent-knowledge-and-adr-or-missing-ground-owner-landings"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "perform-one-bounded-clean-context-semantic-refutation-of-the-complete-draft-before-binding"
+                  }
+                ],
+                "NEXT"
+              ],
+              "revise": [
+                [
+                  "RUN",
+                  {
+                    "action": "apply-evidence-supported-current-authority-correction-to-every-current-blocker-in-the-current-draft"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "independently-recheck-returned-coordinates-changed-targets-and-direct-consequences-and-record-current-evidence-verification"
+                  }
+                ],
+                "ROUTE:adopt"
+              ]
+            }
+          },
+          "body": "stage: semantic-refutation",
+          "record": null,
+          "reentry": "rejudge"
         }
       }
     ],
     "tables": [],
     "formats": [],
-    "templates": [],
-    "template_content": [],
-    "body": [],
-    "references": [],
-    "ownership": [],
-    "artifacts": [],
+    "templates": [
+      {
+        "id": "adoptionProposal",
+        "change": "modified",
+        "before": {
+          "file": "templates/adoption-proposal.md",
+          "fields": {
+            "workingLanguage": "line",
+            "sourceInventory": "list",
+            "candidates": "list",
+            "flows": "list",
+            "documentClaims": "list",
+            "product": "block",
+            "architecture": "block",
+            "design": "block",
+            "codeStyle": "block",
+            "glossary": "list",
+            "capabilityDesigns": "list",
+            "knowledgeNodes": "list",
+            "followOn": "block",
+            "questions": "list",
+            "contradictions": "list",
+            "verification": "block",
+            "binding": "block"
+          },
+          "sections": []
+        },
+        "after": {
+          "file": "templates/adoption-proposal.md",
+          "fields": {
+            "workingLanguage": "line",
+            "sourceInventory": "list",
+            "candidates": "list",
+            "flows": "list",
+            "documentClaims": "list",
+            "adrReview": "list",
+            "product": "block",
+            "architecture": "block",
+            "design": "block",
+            "codeStyle": "block",
+            "glossary": "list",
+            "capabilityDesigns": "list",
+            "knowledgeNodes": "list",
+            "followOn": "block",
+            "questions": "list",
+            "contradictions": "list",
+            "verification": "block",
+            "binding": "block"
+          },
+          "sections": []
+        }
+      }
+    ],
+    "template_content": [
+      {
+        "id": "adoptionProposal",
+        "change": "modified",
+        "before": "sha256:15a9b417a921e06cd9dd0d67b513d2b649f0a1084378b95d6a5d033723642834",
+        "after": "sha256:9dd026e99da07a9db79023cca3d0e803790248bb72040cb0f90f7ab060d7adf4"
+      }
+    ],
+    "body": [
+      {
+        "id": "stage: adoption",
+        "change": "modified",
+        "before": "sha256:3b391f0aef8146081c2e6eae253162566093b08db8c0e6467794afad4f2b6420",
+        "after": "sha256:94ae716c7e7a3b7b22ee1fce8972c646204b0ef9b521140c69c210242232fa79"
+      },
+      {
+        "id": "why: workflow",
+        "change": "modified",
+        "before": "sha256:6b3935cb117acb7601f18fdb97a5aa3b7a38143182027d2814350d0572bc9f53",
+        "after": "sha256:187981fc24206b78996229abea1fcf991d69babe5d6b6e8d77f9a32a177c2237"
+      }
+    ],
+    "references": [
+      {
+        "id": "references/workflow.md",
+        "change": "modified",
+        "before": "sha256:a15a8391ebf27c9c55393b1d966bbcaf7872379883a0b7fc6279072d7090f89a",
+        "after": "sha256:0ac6dc7536b583ef9a3625e174ef2ab4d7f07546c83a252edf55577492d76d8b"
+      },
+      {
+        "id": "templates/adoption-proposal.md",
+        "change": "modified",
+        "before": "sha256:15a9b417a921e06cd9dd0d67b513d2b649f0a1084378b95d6a5d033723642834",
+        "after": "sha256:9dd026e99da07a9db79023cca3d0e803790248bb72040cb0f90f7ab060d7adf4"
+      }
+    ],
+    "ownership": [
+      {
+        "id": ".devflow/users/<id>/**",
+        "change": "added",
+        "after": "external.principles"
+      }
+    ],
+    "artifacts": [
+      {
+        "id": "room",
+        "change": "added",
+        "after": {
+          "path": ".devflow/users",
+          "writer": "external.principles",
+          "readers": [
+            "stage.adoption"
+          ]
+        }
+      }
+    ],
     "roles": [],
-    "declarations": [],
+    "declarations": [
+      {
+        "id": "adr_landing",
+        "change": "added",
+        "after": {
+          "value": "The proposal screens every ADR-qualified decision and every decision with missing ground and states its current direction, ground, dropped alternatives, and exact owner landing. Adopt creates no ADR artifact: current direction, ground, and dropped alternatives land self-contained in Architecture or capability Intent, with on-demand K only for additional depth; Binding ADRs names only exact existing decision paths, and Arch remains the formal ADR writer.",
+          "consumer": "template:adoptionProposal|template:architecture|template:capabilityDesign|stage:adoption"
+        }
+      }
+    ],
     "deferred": []
   },
-  "change_id": "adopt-revise-fresh-self-route",
-  "intent": "Continue evidence-supported Adopt correction in the same actor while opening each subsequent judgment as a fresh trace run.",
+  "change_id": "v0.23.19-adopt-room-and-decision-landing",
+  "intent": "Adopt resolves identity before approval, publishes an absent room atomically with Layer 0, and lands ADR-grade meaning without minting ADR artifacts.",
   "impact": {
     "stages": {
+      "total": 2,
+      "added": 0,
+      "removed": 0,
+      "modified": 2
+    },
+    "templates": {
       "total": 1,
       "added": 0,
       "removed": 0,
       "modified": 1
+    },
+    "template_content": {
+      "total": 1,
+      "added": 0,
+      "removed": 0,
+      "modified": 1
+    },
+    "body": {
+      "total": 2,
+      "added": 0,
+      "removed": 0,
+      "modified": 2
+    },
+    "references": {
+      "total": 2,
+      "added": 0,
+      "removed": 0,
+      "modified": 2
+    },
+    "ownership": {
+      "total": 1,
+      "added": 1,
+      "removed": 0,
+      "modified": 0
+    },
+    "artifacts": {
+      "total": 1,
+      "added": 1,
+      "removed": 0,
+      "modified": 0
+    },
+    "declarations": {
+      "total": 1,
+      "added": 1,
+      "removed": 0,
+      "modified": 0
     }
   }
 }

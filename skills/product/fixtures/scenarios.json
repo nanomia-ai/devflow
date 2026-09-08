@@ -111,6 +111,7 @@
         "WRITE",
         "WRITE",
         "RUN",
+        "RUN",
         "COMMIT",
         "ROUTE:arch"
       ]

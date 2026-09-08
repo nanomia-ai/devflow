@@ -20,7 +20,10 @@
   `product.md`, `arch.md`, and `glossary.md`, so the capability-only follow-up commit does not
   advance the landed commit selected by that command. Adopt replaces only each capability's Design
   head line with that landed commit ID, stages only those changed
-  capability documents, and lands `adopt — capabilities`. Refusal or interruption before
+  capability documents, and lands `adopt — capabilities`. Before the first Product or Adopt
+  binding commit, its P2 effect plan materializes an absent resolved-actor room under the
+  shared Identity and Rooms contract and stages that exact triple with the approved owner
+  set; an existing room is preserved and omitted from staging. Refusal or interruption before
   approval writes nothing. The checkout remains unmanaged only while no current `.devflow` root
   or indexed path exists. Once either exists, canonical state owns recovery; a missing
   `product.md` alone does not make the checkout unmanaged.

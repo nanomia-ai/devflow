@@ -15,6 +15,10 @@ Working language: {{workingLanguage}}
 ## Document claims
 {{documentClaims}}
 
+## ADR and missing-ground review
+<!-- one item per ADR-qualified decision and every decision with missing ground: current direction — ground — dropped alternatives — exact owner landing -->
+{{adrReview}}
+
 ## Derived product
 {{product}}
 
