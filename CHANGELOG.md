@@ -15,6 +15,17 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.17 — 2026-09-08 — Repair the Adopt package seal
+
+Adopt's authored behavior is unchanged. The 0.23.16 package shipped `body.md` after a final whitespace
+cleanup while `.generated.json` still sealed the prior bytes, so the Skill Rails runtime correctly
+stopped source and installed entry with `SR_MANIFEST_MISMATCH`.
+
+This hotfix rebuilds `skills/adopt/.generated.json` from the canonical P2 sources with the standard Skill
+Rails build, restoring the exact content hash and full 200-repeat evidence. Both plugin manifests move to
+0.23.17 so the repaired snapshot can be installed independently on Claude and Codex; no skill prose,
+predicate, fixture, runtime loader, state tool, or downstream stage changes.
+
 ## 0.23.16 — 2026-09-08 — Adopt transfers knowledge instead of retaining migration inputs
 
 Adopt now keeps its complete source-coordinate inventory on the proposal and refutation surface, then
