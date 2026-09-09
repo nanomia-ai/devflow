@@ -973,3 +973,11 @@ Layer 0·현재 능력·Binding ADR 입력은 카드 밖의 기존 Work 읽기 �
 점유 전·재개 fail-closed 경계는 바꾸지 않고 tracked-card 자동 수리도 추가하지 않았다. 표적 정적·
 collector 검증 밖의 cold rerun과 전체 suite는 재관측 전까지 **미검증**이다. **새 H 행 0, 새 A 행 0,
 새 교차 셀 0, 새 공백 0.**
+
+0.23.21 재판정 결과(Skill Rails v0.4.1 생성 projection): §1·§2 전 행과 §3 전 칸을 현재
+텍스트에 다시 대조했다. 이 릴리스는 동일 package·canonical project·target·stable snapshot의 바로
+앞 `after-input` Decision이 봉인한 caller 입력을 외부 runtime이 이어받게 할 뿐, Devflow의 요청·진입
+형태, 단계 목적, owner/read/write 경계, Decision의 stage·row·effects·needs를 바꾸지 않는다. 새 외부
+trace에서 A 다음 B만 공급해도 A와 B가 함께 유지되어 terminal route와 Resume까지 이어졌고,
+무입력 반복은 기존 duplicate-Decision guard에서 fail-closed였다. 다른 실사용 경로는 이 증거로
+통과 처리하지 않는다. **기존 판정 유지, 새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.**

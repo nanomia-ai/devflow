@@ -15,6 +15,26 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.21 — 2026-09-09 — Carry forward sealed after-input values
+
+All nine promoted P2 packages now project the official Skill Rails v0.4.1 runtime 0.3.5,
+validator 0.6.2, and kernel 6. When consecutive effect-free `after-input` Decisions keep the
+same package, canonical project, target, stable snapshot, and run, the runtime carries forward
+caller-supplied judged and decided values sealed by the immediately preceding Decision; a newly
+supplied value replaces the retained value for its field. Changed or unsealed context does not
+inherit those values, and the duplicate-Decision emission guard remains fail-closed.
+
+This is an external runtime projection correction, not a Devflow semantic change. Every authored
+`spec.mjs`, `body.md`, collector, fixture, intent, and obligation ledger remains byte-identical;
+the official installed builder repaired only its generated ownership envelope. A fresh Principles
+trace proved A→B cumulative input retention through a terminal route, preserved the duplicate
+guard, and resumed from the terminal Decision without a next command.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `CHANGELOG.md`;
+`docs/usecase-matrix_ko.md`; `docs/rounds/v0.23.0/report-0.23.21_ko.md`; each of
+`skills/{adopt,arch,design,direct,principles,product,resume,verify,work}` at `.generated.json`,
+`SKILL.md`, and `scripts/skill-rails/{api,constants,evaluator}.mjs`.
+
 ## 0.23.20 — 2026-09-09 — Give T-low cards their concrete execution basis
 
 Direct now puts only destination-matched exact K paths in every task or research card's `Read
