@@ -8,6 +8,12 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 
 ## Field observation items — watch during coming cycles, without adding rules
 
+- **A millisecond-prefixed reserved journal line bypasses integrity item 12** (observed
+  2026-09-10 in the clean Claude Adopt → Direct real-use pass) — Claude wrote the advertised
+  `2026-09-03T00:00:00.000Z maintenance routing pending:` example; project-state then reported
+  `request.current=NONE` with no item-12 finding, and Direct reissued the same write effect.
+  The fixture repair removes that bad instruction. Widen the parser's malformed-prefix
+  diagnostic only in a separate round that tests the full attributed-line boundary.
 - **Compatible-feedback field residuals remain bounded observations** (recorded 2026-09-02
   by the DD-96 seal and integration-behind repairs) — first, the state tool currently derives
   a blocking reopen finding from Git history and cannot clear it after the journal is corrected.

@@ -8,6 +8,12 @@
 
 ## 실전 관찰 항목 — 규칙 추가 없이 다음 사이클에서 지켜볼 것
 
+- **millisecond prefix를 붙인 예약 journal 행은 integrity item 12를 우회한다** (2026-09-10
+  clean Claude Adopt → Direct 실사용에서 관찰) — Claude가 안내된
+  `2026-09-03T00:00:00.000Z maintenance routing pending:` 예제를 썼지만 project-state는
+  item-12 소견 없이 `request.current=NONE`을 보고했고 Direct는 같은 write effect를 다시 냈다.
+  fixture 수리는 잘못된 안내를 없앤다. malformed-prefix 진단 확장은 attributed-line 경계를
+  전부 검증하는 별도 라운드에서만 다룬다.
 - **호환 환류 실전 잔여는 유계 관찰로 남는다** (DD-96 seal과 integration-behind 수리가
   2026-09-02 기록) — 첫째, 상태 도구는 현재 Git 이력에서 차단형 reopen finding을 도출하며
   journal을 고친 뒤에도 그것을 지울 수 없다. 이것은 기록일 뿐이고 런타임 동작 변경 권한이

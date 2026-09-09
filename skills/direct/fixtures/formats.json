@@ -6,8 +6,8 @@
       "request-json": "fix rounding in the 02 report"
     },
     "context": {
-      "timestamp": "2026-09-03T00:00:00.000Z"
+      "timestamp": "2026-09-03T00:00:00Z"
     },
-    "expect": "2026-09-03T00:00:00.000Z maintenance routing pending: request-json: \"fix rounding in the 02 report\""
+    "expect": "2026-09-03T00:00:00Z maintenance routing pending: request-json: \"fix rounding in the 02 report\""
   }
 ]

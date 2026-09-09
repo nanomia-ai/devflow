@@ -6,9 +6,9 @@
       "request-json": "fix rounding in the 02 report"
     },
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z maintenance routing pending: request-json: \"fix rounding in the 02 report\""
+    "expect": "2026-08-30T00:00:00Z maintenance routing pending: request-json: \"fix rounding in the 02 report\""
   },
   {
     "id": "golden-productReRunPending",
@@ -17,18 +17,18 @@
       "statement-json": "the service boundary changed"
     },
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z product re-run pending: statement-json: \"the service boundary changed\""
+    "expect": "2026-08-30T00:00:00Z product re-run pending: statement-json: \"the service boundary changed\""
   },
   {
     "id": "golden-productVerificationRequested",
     "format": "productVerificationRequested",
     "values": {},
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z product verification requested"
+    "expect": "2026-08-30T00:00:00Z product verification requested"
   },
   {
     "id": "golden-productVerificationRunning",
@@ -40,9 +40,9 @@
       "code": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     },
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z product verification running: trigger: requested; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; code: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    "expect": "2026-08-30T00:00:00Z product verification running: trigger: requested; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; code: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   },
   {
     "id": "golden-productVerificationResult",
@@ -55,9 +55,9 @@
       "verdict": "pass"
     },
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z product verification result: trigger: requested; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; code: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass"
+    "expect": "2026-08-30T00:00:00Z product verification result: trigger: requested; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; code: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass"
   },
   {
     "id": "golden-capabilityClosing",
@@ -70,9 +70,9 @@
       "capability": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     },
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z capability closing: folder: .devflow/tree/01; head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; capability: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    "expect": "2026-08-30T00:00:00Z capability closing: folder: .devflow/tree/01; head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; product: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verification: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; capability: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   },
   {
     "id": "golden-capabilityNote",
@@ -82,9 +82,9 @@
       "note-json": "sample"
     },
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z capability note: capability: 1; note-json: \"sample\""
+    "expect": "2026-08-30T00:00:00Z capability note: capability: 1; note-json: \"sample\""
   },
   {
     "id": "golden-knowledgeLandingPending",
@@ -95,9 +95,9 @@
       "source-json": ".devflow/tree/00-project/00.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     },
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z knowledge landing pending: owner: .devflow/project/arch.md; writer: arch; source-json: \".devflow/tree/00-project/00.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\""
+    "expect": "2026-08-30T00:00:00Z knowledge landing pending: owner: .devflow/project/arch.md; writer: arch; source-json: \".devflow/tree/00-project/00.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\""
   },
   {
     "id": "golden-completionSignalResult",
@@ -108,9 +108,9 @@
       "detail-json": "command; \"test\""
     },
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z completion signal result: head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass; detail-json: \"command; \\\"test\\\"\""
+    "expect": "2026-08-30T00:00:00Z completion signal result: head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass; detail-json: \"command; \\\"test\\\"\""
   },
   {
     "id": "golden-reviewResult",
@@ -121,9 +121,9 @@
       "detail-json": "review; clean"
     },
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z review result: head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass; detail-json: \"review; clean\""
+    "expect": "2026-08-30T00:00:00Z review result: head: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa; verdict: pass; detail-json: \"review; clean\""
   },
   {
     "id": "golden-compatibleFeedbackPending",
@@ -142,8 +142,8 @@
       }
     },
     "context": {
-      "timestamp": "2026-08-30T00:00:00.000Z"
+      "timestamp": "2026-08-30T00:00:00Z"
     },
-    "expect": "2026-08-30T00:00:00.000Z compatible feedback pending: payload-json: {\"owner\":\".devflow/project/arch.md\",\"source\":\".devflow/tree/01-foundation/01.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"coordinates\":{\"target\":\".devflow/project/arch.md#Boundary\",\"background\":\"review observed\",\"why\":\"evidence explains choice\",\"conclusion\":\"retain behavior\",\"implication\":\"future work reuses it\"}}"
+    "expect": "2026-08-30T00:00:00Z compatible feedback pending: payload-json: {\"owner\":\".devflow/project/arch.md\",\"source\":\".devflow/tree/01-foundation/01.1-source.done.md@aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"coordinates\":{\"target\":\".devflow/project/arch.md#Boundary\",\"background\":\"review observed\",\"why\":\"evidence explains choice\",\"conclusion\":\"retain behavior\",\"implication\":\"future work reuses it\"}}"
   }
 ]

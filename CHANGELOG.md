@@ -15,6 +15,19 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.23 — 2026-09-10 — Keep reserved-journal examples parseable
+
+Direct, Verify, and the Principles-owned journal/progress format fixtures now use the
+canonical seconds-only UTC timestamp that `project-state.mjs` consumes. This removes an
+authored millisecond example which a clean Claude Adopt → Direct run copied literally and
+which the state projection then discarded without surfacing the request.
+
+Gate A now discovers the affected packages' actual reserved-head fixtures and traces the
+live Direct and Verify journal writers into their projected state. The broader case where a
+malformed timestamp prefix bypasses integrity item 12 is recorded for a separate parser-boundary
+round; this release does not widen the timestamp contract or change any stage, collector, or
+role behavior.
+
 ## 0.23.22 — 2026-09-10 — Make runtime evidence input shell-neutral
 
 All nine promoted P2 packages now project the official Skill Rails v0.4.3 runtime 0.3.6,

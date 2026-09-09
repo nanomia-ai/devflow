@@ -991,3 +991,11 @@ data file이 READ effect의 index와 verb에 결합됐고 alignment·resume·aft
 이어졌지만, agent claim은 관측 증거로 승격하지 않아 alignment는 `unproven`으로 남겼다. 설치본만
 사용하는 실제 Codex·Claude 소비 경로는 별도 재관측 전까지 **미검증**이다. **기존 판정 유지,
 새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.**
+
+0.23.23 재판정 결과(예약 저널 형식 예제): §1·§2 전 행과 §3 전 칸을 현재 텍스트에
+다시 대조했다. Direct의 실제 저널 WRITE와 Verify의 capability-closing WRITE, 그리고
+Principles가 소유하는 journal·progress 예제의 timestamp를 canonical 초 단위 UTC 형식에 맞췄다.
+단계 목적, owner/read/write 경계, Decision의 stage·row·effects·needs, parser 계약은 바뀌지
+않는다. 실제 fixture 행을 읽는 Gate A에서 live writer 둘은 각각 request와 closing marker로
+투영됐고, 나머지 예약 head는 투영되거나 item 12 진단으로 드러났다. **기존 판정 유지,
+새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.**

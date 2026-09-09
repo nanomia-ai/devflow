@@ -816,6 +816,20 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
     }));
   assert.deepEqual(canonHeads, tableHeads);
 
+  const fixtureRoots = [path.resolve(__dirname, "../skills/principles"), DIRECT_SKILL_ROOT, path.resolve(__dirname, "../skills/verify")];
+  const fixtureRows = fixtureRoots.flatMap((skillRoot) => JSON.parse(fs.readFileSync(path.join(skillRoot, "fixtures/formats.json"), "utf8"))
+    .map((fixture) => ({ ...fixture, skill: path.basename(skillRoot), head: parserHeads.find((head) => fixture.expect.slice(fixture.expect.indexOf(" ") + 1).startsWith(head)) }))
+    .filter((fixture) => fixture.head)
+    .map((fixture, lineIndex) => ({ ...fixture, lineNumber: lineIndex + 1 })));
+  const journalWriters = new Set();
+  for (const skillRoot of fixtureRoots.filter((skillRoot) => path.basename(skillRoot) !== "principles")) {
+    const spec = await import(pathToFileURL(path.join(skillRoot, "spec.mjs")).href);
+    for (const stage of spec.STAGES) for (const effect of Object.values(stage.branches ?? {}).flat()) {
+      if (Array.isArray(effect) && effect[0] === "WRITE" && effect[1]?.format && /^\.devflow\/journal\.md(?:#|$)/.test(spec.ARTIFACTS[effect[1].artifact]?.path ?? "")) journalWriters.add(`${spec.SPEC.id}:${effect[1].format}`);
+    }
+  }
+  assert.deepEqual([...journalWriters].sort(), ["direct:maintenanceRoutingPending", "verify:capabilityClosing"]);
+
   const execute = async (lines, subject) => {
     const batchRoot = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "devflow-gate-a-")));
     t.after(() => fs.rmSync(batchRoot, { recursive: true, force: true }));
@@ -869,6 +883,17 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
       assert.ok(item12.some((line) => line.includes(`reason=${JSON.stringify(reason)}`) || line.includes(`reason=${reason}`)),
         `missing ${reason}\n${invalidOutput}`);
     });
+  }
+  const fixtureOutputs = new Map(await Promise.all(fixtureRoots.map(async (skillRoot) => [path.basename(skillRoot), await execute(fixtureRows.filter((item) => item.skill === path.basename(skillRoot)).map((item) => item.expect), `jmp gate A — ${path.basename(skillRoot)} fixtures`)])));
+  for (const item of fixtureRows) {
+    assert.match(item.expect, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z /);
+    const output = fixtureOutputs.get(item.skill);
+    const expected = valid.find((candidate) => candidate.head === item.head && candidate.zone);
+    const diagnosed = output.split(/\r?\n/).some((line) => line.startsWith("integrity: kind=blocking") && (line.includes(`path=.devflow/journal.md line=${item.lineNumber} `) || (line.includes("item=12 ") && line.includes(`reserved-format:${item.head}`))));
+    const projected = expected && hasKind(output, expected.zone, expected.kind);
+    if (journalWriters.has(`${item.skill}:${item.format}`)) assert.ok(projected, `${item.skill}/${item.id} writer did not reach ${expected?.zone}.${expected?.kind}\n${output}`);
+    if (expected) assert.ok(projected || diagnosed, `${item.skill}/${item.id} vanished\n${output}`);
+    else assert.equal(diagnosed, false, `${item.skill}/${item.id} is not parser-valid\n${output}`);
   }
 });
 
