@@ -369,9 +369,9 @@ export function revisionFromGit(run, emptyValue) {
 }
 
 function parseArguments(argv) {
-  if (argv.length === 0) fail("missing subcommand (state)");
-  if (argv[0] !== "state") fail(`unknown subcommand ${argv[0]}`);
-  const options = { root: process.cwd() };
+  if (argv.length === 0) fail("missing subcommand (state or check-staged)");
+  if (!["state", "check-staged"].includes(argv[0])) fail(`unknown subcommand ${argv[0]}`);
+  const options = { root: process.cwd(), command: argv[0] };
   for (let index = 1; index < argv.length; index += 1) {
     const flag = argv[index];
     const value = argv[index + 1];
@@ -387,6 +387,7 @@ function parseArguments(argv) {
   }
   if (options.term !== undefined && options.term.trim() === "") fail("--term must be nonempty");
   if (options.term !== undefined && options.capability !== undefined) fail("--term and --capability are mutually exclusive");
+  if (options.command === "check-staged" && (options.capability !== undefined || options.term !== undefined)) fail("check-staged accepts only --root");
   const requested = path.resolve(options.root);
   if (!fs.existsSync(requested) || !fs.statSync(requested).isDirectory()) fail(`root is not a directory: ${requested}`);
   const resolved = gitRun(requested, ["rev-parse", "--show-toplevel"], { allowFailure: true });
@@ -593,14 +594,15 @@ function parseProduct(text) {
     : [];
   const body = start < 0 ? [] : lines.slice(start + 1, lines.findIndex((line, index) => index > start && /^##\s+/.test(line)) < 0
     ? lines.length : lines.findIndex((line, index) => index > start && /^##\s+/.test(line)));
-  const substantiveCapabilityContent = body.join("\n").replace(/<!--[\s\S]*?-->/g, "").split("\n").some((line) => {
+  const semanticBody = body.join("\n").replace(/<!--[\s\S]*?-->/g, (comment) => comment.replace(/[^\n]/g, "")).split("\n");
+  const substantiveCapabilityContent = semanticBody.some((line) => {
     const trimmed = line.trim();
     return trimmed !== "" && trimmed !== "None." && !/^[-:| ]+$/.test(trimmed);
   });
   const circled = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳";
   const capabilities = [];
-  for (const line of body) {
-    const trimmed = line.replace(/^[-*|\s]+/, "").trim();
+  for (const [offset, line] of body.entries()) {
+    const trimmed = semanticBody[offset].replace(/^[-*|\s]+/, "").trim();
     if (!trimmed || /^[-:| ]+$/.test(trimmed)) continue;
     let position = circled.indexOf(trimmed[0]);
     if (position >= 0 && circled.includes(trimmed[1])) continue;
@@ -613,7 +615,16 @@ function parseProduct(text) {
         name = numbered[3].split("|")[0].trim();
       }
     }
-    if (position < 0 || !name) continue;
+    if (position < 0 || !name) {
+      if (trimmed !== "None.") anomalies.push({
+        path: ".devflow/project/product.md",
+        zone: "product",
+        detail: "capability-row-unparsed",
+        line: start + offset + 2,
+        raw: line,
+      });
+      continue;
+    }
     name = name.replace(/\s+[—-].*$/, "").replace(/\*\*/g, "").replace(/~~/g, "").trim();
     capabilities.push({ number: position + 2, name, retired: /retired|~~/.test(line) });
   }
@@ -1106,6 +1117,11 @@ function parseJournalLine(line, lineNumber) {
     const reserved = RESERVED_JOURNAL_HEADS.find((head) => timestamped.groups.body.startsWith(head));
     if (reserved) return { ...out, kind: "invalid", valid: false, ...timestamped.groups, reason: `reserved-format:${reserved}` };
     return { ...out, kind: "attributed", ...timestamped.groups, ...designOpenItemFields(line), ...glossaryTermFields(line) };
+  }
+  const nearTimestamped = /^(?<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z) (?<body>.+)$/.exec(line);
+  if (nearTimestamped) {
+    const reserved = RESERVED_JOURNAL_HEADS.find((head) => nearTimestamped.groups.body.startsWith(head));
+    if (reserved) return { ...out, kind: "invalid", valid: false, ...nearTimestamped.groups, reason: `reserved-format:${reserved}` };
   }
   const body = line.replace(/^\s*(?:[-*+]\s+)?/, "");
   const reserved = RESERVED_JOURNAL_HEADS.find((head) => body.startsWith(head));
@@ -2319,7 +2335,7 @@ function integrity(snapshot, verify) {
     }
   }
   for (const line of snapshot.journal.filter((item) => !item.valid)) {
-    report(12, true, { path: ".devflow/journal.md", line: line.raw, expected: "canonical reserved journal format", reason: reasonForJournal(line) });
+    report(12, true, { path: ".devflow/journal.md", line: line.raw, lineNumber: line.line, expected: "canonical reserved journal format", reason: reasonForJournal(line) });
   }
   for (const line of snapshot.journal.filter((item) => item.kind === "layer-opening" && item.valid)) {
     const count = locatorResolutionCount(snapshot, verify, line.source);
@@ -3057,7 +3073,7 @@ function evaluateZones(snapshot) {
   for (const anomaly of blocking) addEntry(zones, "integrity", "blocking", anomaly);
   for (const anomaly of nonblocking) addEntry(zones, "integrity", "advisory", anomaly);
   for (const anomaly of shapeAnomalies) {
-    addEntry(zones, "integrity", "shape", { path: anomaly.path, zone: anomaly.zone, detail: anomaly.detail });
+    addEntry(zones, "integrity", "shape", anomaly);
   }
 
   for (const item of verify.prepared) addEntry(zones, "transition", "prepared-route", {
@@ -3642,9 +3658,48 @@ function renderCompatibility(state) {
   return { output, bytes: Buffer.byteLength(output), status: 3, form: "refused" };
 }
 
+function checkStagedContracts(root) {
+  const targets = [".devflow/journal.md", ".devflow/project/product.md"];
+  const staged = new Set(gitNulList(root, ["diff", "--cached", "--name-only", "--diff-filter=ACMRT", "-z", "--", ...targets]));
+  const diagnostics = [];
+  for (const relative of targets.filter((target) => staged.has(target))) {
+    const text = gitFile(root, "", relative);
+    if (text === null) continue;
+    if (relative === ".devflow/journal.md") {
+      for (const line of parseJournal(text).filter((item) => !item.valid)) diagnostics.push({
+        path: relative,
+        line: line.line,
+        reason: reasonForJournal(line),
+        raw: line.raw,
+      });
+      continue;
+    }
+    const product = parseProduct(text);
+    for (const anomaly of product.anomalies) diagnostics.push({
+      path: relative,
+      line: anomaly.line ?? null,
+      reason: anomaly.detail,
+      raw: anomaly.raw ?? null,
+    });
+    if (product.capabilityRowsUnparsed) diagnostics.push({
+      path: relative,
+      line: null,
+      reason: "capability-rows-unparsed",
+      raw: null,
+    });
+  }
+  if (diagnostics.length === 0) {
+    return { output: `staged-contract: pass checked=${targets.filter((target) => staged.has(target)).length}\n`, status: 0 };
+  }
+  const output = diagnostics.map((item) => `staged-contract: fail path=${item.path} line=${item.line ?? "none"} reason=${item.reason} raw=${JSON.stringify(item.raw)}`).join("\n");
+  return { output: `${output}\n`, status: 2 };
+}
+
 async function main() {
   const options = parseArguments(process.argv.slice(2));
-  const result = renderCompatibility(await calculateState(options));
+  const result = options.command === "check-staged"
+    ? checkStagedContracts(options.root)
+    : renderCompatibility(await calculateState(options));
   process.stdout.write(result.output);
   process.exitCode = result.status;
 }

@@ -2,6 +2,12 @@
 
 ## Commit Discipline
 
+- **Consume staged contract checks at the commit boundary.** After staging exactly the
+  paths named by the current commit rule, run `node "<skill-root>/../principles/scripts/project-state.mjs"
+  check-staged --root "<project-root>"`. Commit only on exit 0 and without changing the index.
+  On failure, repair the reported staged bytes and rerun. The check reads only staged journal
+  and Product index bytes and does not intercept other Git clients.
+
 - **Every devflow commit carries only its own paths.** Whatever else this working tree has
   staged, a commit contains exactly the paths its own rule names — a file another flow in
   the same folder staged earlier never rides along.

@@ -1,3 +1,5 @@
+import { line } from "./scripts/skill-rails/dsl.mjs";
+
 export const SPEC = { version: "5", id: "adopt", profile: "single", imports: [] };
 
 export const OBSERVATIONS = {
@@ -8,7 +10,9 @@ export const OBSERVATIONS = {
   "refutation.state": { judged: true, domain: ["pending", "revise", "clear", "blocked"] }
 };
 
-export const FORMATS = {};
+export const FORMATS = {
+  maintenanceRoutingPending: line("maintenance routing pending", { "request-json": "json" })
+};
 
 export const TEMPLATES = {
   adoptionProposal: { file: "templates/adoption-proposal.md", fields: { workingLanguage: "line", sourceInventory: "list", candidates: "list", flows: "list", documentClaims: "list", adrReview: "list", product: "block", architecture: "block", design: "block", codeStyle: "block", glossary: "list", capabilityDesigns: "list", knowledgeNodes: "list", followOn: "block", questions: "list", contradictions: "list", verification: "block", binding: "block" }, sections: [] },
@@ -26,6 +30,7 @@ export const ORDERS = {};
 
 export const OWNERSHIP = {
   ".devflow/project": "adopt",
+  ".devflow/journal.md#maintenance-routing-pending": "adopt",
   ".devflow/users/<id>/**": "external.principles",
   ".devflow/project/product.md": "adopt",
   ".devflow/project/arch.md": "adopt",
@@ -64,12 +69,13 @@ export const STAGES = [
   { id: "adoption", reads: ["state.route"], acceptsUnknown: [], done: s => s.state.route !== "setup.unmanaged", table: "approval", reentry: "rejudge", branches: {
     prepare: [["REPORT", { template: "adoptionProposal" }], "ASK"],
     refuse: [["REPORT", { template: "result" }], "DONE"],
-    approve: [["WRITE", { artifact: "architecture", template: "architecture" }], ["WRITE", { artifact: "design", template: "design", selection: "when-existing-product-evidence-has-a-design-surface", zeroAllowed: true }], ["WRITE", { artifact: "codeStyle", template: "codeStyle" }], ["WRITE", { artifact: "glossary", template: "glossary" }], ["RUN", { action: "append-principles-maintenance-routing-pending-idempotently-with-the-whole-follow-on-request-when-adoption-includes-follow-on-work" }], ["WRITE", { artifact: "product", template: "product", ordering: "last-layer-zero-owner-write-before-first-commit" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode", selection: "every-approved-layer-zero-owner-body-needing-depth-beyond-its-owner-document", zeroAllowed: true }], ["RUN", { action: "validate-every-written-layer-zero-knowledge-node-with-project-knowledge" }], ["WRITE", { artifact: "capabilityDesigns", template: "capabilityDesign", fields: { designHead: "none" }, ordering: "complete-approved-semantic-set-before-first-commit" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode", selection: "every-approved-capability-body-needing-depth-beyond-its-capability-document", zeroAllowed: true }], ["RUN", { action: "validate-every-written-capability-knowledge-node-with-project-knowledge" }], ["RUN", { action: "materialize the resolved actor room under the Principles Identity and Rooms contract only when absent, with digest equal to the pre-boundary HEAD or none for unborn history; preserve an existing room", artifact: "room" }], ["COMMIT", { boundary: "confirmed-brownfield-semantic-set", staging: "all-approved-owner-documents-same-owner-knowledge-and-follow-on-paths plus the newly materialized resolved-actor room triple when absent" }], ["RUN", { action: "calculate-canonical-design-head-from-the-landed-first-commit" }], ["WRITE", { artifact: "capabilityDesigns", fields: { designHead: "canonical-design-head-output" }, mutation: "replace-only-design-head-lines-equal-to-none" }], ["COMMIT", { boundary: "finalized-brownfield-design-heads", staging: "only-capability-documents-whose-design-head-line-changed" }], ["REPORT", { template: "result" }], "DONE"]
+    approve: [["WRITE", { artifact: "architecture", template: "architecture" }], ["WRITE", { artifact: "design", template: "design", selection: "when-existing-product-evidence-has-a-design-surface", zeroAllowed: true }], ["WRITE", { artifact: "codeStyle", template: "codeStyle" }], ["WRITE", { artifact: "glossary", template: "glossary" }], ["WRITE", { artifact: "maintenanceRoutingTransport", format: "maintenanceRoutingPending", selection: "when-adoption-includes-follow-on-work", idempotent: true, "request-json": "<the whole follow-on user request as one JSON string>" }], ["WRITE", { artifact: "product", template: "product", ordering: "last-layer-zero-owner-write-before-first-commit" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode", selection: "every-approved-layer-zero-owner-body-needing-depth-beyond-its-owner-document", zeroAllowed: true }], ["RUN", { action: "validate-every-written-layer-zero-knowledge-node-with-project-knowledge" }], ["WRITE", { artifact: "capabilityDesigns", template: "capabilityDesign", fields: { designHead: "none" }, ordering: "complete-approved-semantic-set-before-first-commit" }], ["WRITE", { artifact: "knowledgeNodes", template: "knowledgeNode", selection: "every-approved-capability-body-needing-depth-beyond-its-capability-document", zeroAllowed: true }], ["RUN", { action: "validate-every-written-capability-knowledge-node-with-project-knowledge" }], ["RUN", { action: "materialize the resolved actor room under the Principles Identity and Rooms contract only when absent, with digest equal to the pre-boundary HEAD or none for unborn history; preserve an existing room", artifact: "room" }], ["COMMIT", { boundary: "confirmed-brownfield-semantic-set", staging: "all-approved-owner-documents-same-owner-knowledge-and-follow-on-paths plus the newly materialized resolved-actor room triple when absent" }], ["RUN", { action: "calculate-canonical-design-head-from-the-landed-first-commit" }], ["WRITE", { artifact: "capabilityDesigns", fields: { designHead: "canonical-design-head-output" }, mutation: "replace-only-design-head-lines-equal-to-none" }], ["COMMIT", { boundary: "finalized-brownfield-design-heads", staging: "only-capability-documents-whose-design-head-line-changed" }], ["REPORT", { template: "result" }], "DONE"]
   }, body: "stage: adoption" }
 ];
 
 export const ARTIFACTS = {
   room: { path: ".devflow/users", writer: "external.principles", readers: ["stage.adoption"] },
+  maintenanceRoutingTransport: { path: ".devflow/journal.md#maintenance-routing-pending", writer: "adopt", readers: ["stage.adoption"] },
   product: { path: ".devflow/project/product.md", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.direct"], template: "product" },
   architecture: { path: ".devflow/project/arch.md", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.direct", "external.resume"], template: "architecture" },
   codeStyle: { path: ".devflow/project/code-style.md", writer: "adopt", readers: ["stage.adoption", "external.work"], template: "codeStyle" },

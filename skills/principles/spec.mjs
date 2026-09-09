@@ -128,7 +128,7 @@ export const DECLARATIONS = {
   research_entry: { value: "Ordinary 00-project cards are research-only when their canonical heading is '# NN.N Research: ...'; active or pending research outranks setup.no-product.", consumer: "project-state|resume|direct|work" },
   closed_history: { value: "Legacy closed-history descent remains exact and no automatic migration is added.", consumer: "work|verify|resume" },
   package_portability: { value: "Every runtime and policy reference resolves inside the copied package.", consumer: "build|runtime" }
-  ,canonical_format_ownership: { value: "Every immutable journal/progress form has exactly one owner: a native FORMAT when its parser can preserve the canonical byte order, otherwise the mandatory canonicalJournalProgressGrammar template plus project-state parser.", consumer: "principles|project-state|stages" }
+  ,canonical_format_ownership: { value: "Journal grammar owns the grammar of reserved journal records. Their native FORMATs, canonicalJournalProgressGrammar rows, and package fixtures are exact projections; project-state is their deterministic consumer.", consumer: "principles|project-state|stages" }
   ,compatible_feedback_set: { value: "The first atomic compatible-feedback introduction for one source card seals its complete exact-payload set in Git history. Later same-card introductions cannot enlarge or reopen it, while current and consumed members remain the exact replay lifecycle until every semantic owner lands once and Verify becomes the next consumer.", consumer: "project-state|work|resume|verify" }
 };
 

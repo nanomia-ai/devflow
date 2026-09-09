@@ -8,7 +8,9 @@ Whenever a canonical procedure says to write or append a journal line, create
 ### Exact journal formats
 
 The formats below are the sole canon for reserved journal records. Other skills fill in
-their values; they do not redefine the formats. A line that starts with the canonical
+their values; they do not redefine the formats. Principles `FORMATS`, the canonical-journal
+template, and package fixtures are executable or imitation projections of this contract.
+A line that starts with the canonical
 timestamp or is led by a reserved headword below is the machine's — with a reserved
 headword it stands in that format exactly, and with any other headword after the timestamp
 it is a cross-task decision or an open item a person

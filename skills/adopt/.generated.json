@@ -3,25 +3,25 @@
   "skill_id": "adopt",
   "profile": "p2",
   "built_at": null,
-  "build_id": "sha256:2ff5c5f73bae8c31000e0fe45a8596b0860fbeef68d2d0131d61216e95ee2ea7",
-  "spec_hash": "sha256:6cd2c4cb8dabce010f0d3ff19d9be1bd38b9acf2907d63b55536001d026120bc",
+  "build_id": "sha256:52e0266b38a1f953da9fcdd618221627e8b50f5335a33f5e1998e72f98526172",
+  "spec_hash": "sha256:3b8a572199a066da8828469aa94cc1386d34a1021f12895508cead7036afb3da",
   "dsl_hash": "sha256:e8d77b180b886db5cf0474682c7ea2dfea19065561a015878c70efe1441694e6",
   "runtime_hash": "sha256:c871a427645d6f734e97c777f694c94678dafd36dabf777608a543cc2648df3b",
   "validator_hash": "sha256:07ae1f97a8abd6e427cb9fab74997deabe4c813982027a982c3b9265cecc696c",
-  "content_hash": "sha256:6669fb3c225c8fb252e5e4b235bb7d13eeea5b77981bf505af29326345f0f7bb",
+  "content_hash": "sha256:a3cc8f248dde2c736359841bf55d46d0157ccdf900a9117d62adadc013fac030",
   "content": {
     "SKILL.md": "sha256:de8a36268d54840e94e684c7740f5a01bd13befe07eb48f40cf96bf68eb84e33",
     "body.md": "sha256:635591fdc99876436fa441ff133ed9a3f4379b48034e3711bba7b76f6fd7af6d",
     "collectors/index.mjs": "sha256:a4e5079c90b0baf51e0bf21371b61420addc1f9d5af03a7811fa3ed3517ba01c",
     "collectors/source-atoms.json": "sha256:bc25061f9d38ddd6a3c4593dfe4535bdfc4720fe39888214502f1fa35582b845",
-    "fixtures/formats.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "fixtures/formats.json": "sha256:1f454435a84eca9aa42bf10b9bd8feebace316d94fd1d331f88bdc1ecc8bdacc",
     "fixtures/lint/manifest.json": "sha256:7e63b4b60f9d85b72a2fb1e7040a3a28cffe59246ceedf69f0aee2290d826eed",
-    "fixtures/make-scenarios.mjs": "sha256:d896d0b30b354ad80a59408f73b93566e64ab377ca009371fdbca08bebb91312",
+    "fixtures/make-scenarios.mjs": "sha256:a268378bb31c4322a27590e2282ea5f10e0a355e580f40ca487206a5ab5d3b73",
     "fixtures/project-simulations.mjs": "sha256:776690f349de700be7ce025212bc286837b6553e31745b39d18d6fababce500c",
     "fixtures/projects/initial-brownfield/docs/orders.md": "sha256:ba4c07b3bb184243930b0ba1ad19349ca11297200a47e7ace93633136ad1867e",
     "fixtures/projects/initial-brownfield/src/server.js": "sha256:cb0a33fd7adeecca93bbbea7227373c9e1bb59c52261935896a0b83aa67666b2",
     "fixtures/projects/missing-code/README.md": "sha256:6e9b616098091e5e723f7052e1628f20ef1fded9e1f578c7c4c1eab4743dceb3",
-    "fixtures/scenarios.json": "sha256:a8a9d699720715a9bb0ca857ea672cb0296b3ffbf7494aea2565eeb2861c30e7",
+    "fixtures/scenarios.json": "sha256:823a8c5021040baab809af5cb1383ee19120545564ac2c2efb8a3524631dfccb",
     "references/legacy-atoms/intent-01.md": "sha256:480fd2564a60e2dd1b5c8ca2b78598a1e31c0027398a41f63655772079b3a1b7",
     "references/legacy-atoms/skill-01.md": "sha256:5c09a742dc4128dd7ef2643187fac685851a0cd7b904e6ba36587ad313c56c94",
     "references/legacy-atoms/skill-02.md": "sha256:aad8982d6efc1772aa61bcde151d9fc848f4db8d417e72059e549f9e1703149c",
@@ -36,7 +36,7 @@
     "references/legacy-atoms/skill_ko-05.md": "sha256:5ec9c573cbad00d155dd3ed68bcff94ac77b5eabdf5b2f7cea6b1fba162aac30",
     "references/legacy-source.md": "sha256:c665b101438b1e5c06cda1ee29fdfe7e340e2daf57a584f77741731951953a00",
     "references/purpose.md": "sha256:5b88a90d990d6b2dcf3488569e06809a9cd34625eb5e8418eba2754f302674cf",
-    "references/workflow.md": "sha256:0ac6dc7536b583ef9a3625e174ef2ab4d7f07546c83a252edf55577492d76d8b",
+    "references/workflow.md": "sha256:cf13a4c5e97205562667da8421c123f14f945fa9d18653675782b56bcc7b0819",
     "templates/adoption-proposal.md": "sha256:9dd026e99da07a9db79023cca3d0e803790248bb72040cb0f90f7ab060d7adf4",
     "templates/architecture.md": "sha256:608ae262ebdbdd8912840998698f099c983e96a4da2a2dbc819711ce30d38a2e",
     "templates/capability-design.md": "sha256:544cff65870359da6fc5aee28af2b84cbc7cc9c28d52c4ba05855e4b728c9996",
@@ -337,9 +337,15 @@
       }
     },
     "formats": {
-      "passed": 0,
-      "total": 0,
-      "results": []
+      "passed": 1,
+      "total": 1,
+      "results": [
+        {
+          "id": "maintenanceRoutingPending",
+          "round_trips": 256,
+          "crlf_rejected": false
+        }
+      ]
     },
     "isolated_import": true,
     "build_timestamp": null

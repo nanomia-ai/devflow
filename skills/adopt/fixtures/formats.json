@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "golden-maintenanceRoutingPending",
+    "format": "maintenanceRoutingPending",
+    "values": {
+      "request-json": "adopt the service, then rename the third column"
+    },
+    "context": {
+      "timestamp": "2026-09-10T00:00:00Z"
+    },
+    "expect": "2026-09-10T00:00:00Z maintenance routing pending: request-json: \"adopt the service, then rename the third column\""
+  }
+]

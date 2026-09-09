@@ -10,6 +10,8 @@ const { test } = require("node:test");
 const { pathToFileURL } = require("node:url");
 
 const TOOL = path.resolve(__dirname, "../skills/principles/scripts/project-state.mjs");
+const ADOPT_SKILL_ROOT = path.resolve(__dirname, "../skills/adopt");
+const ADOPT_RUN = path.resolve(ADOPT_SKILL_ROOT, "scripts/skill-rails/run.mjs");
 const ADOPT_SPEC = path.resolve(__dirname, "../skills/adopt/spec.mjs");
 const ARCH_SPEC = path.resolve(__dirname, "../skills/arch/spec.mjs");
 const DIRECT_SKILL_ROOT = path.resolve(__dirname, "../skills/direct");
@@ -282,6 +284,10 @@ function makePlainRepo(t, { unborn = false } = {}) {
 
 function run(root, ...args) {
   return spawnSync(process.execPath, [TOOL, "state", "--root", root, ...args], { cwd: root, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 });
+}
+
+function checkStaged(root) {
+  return spawnSync(process.execPath, [TOOL, "check-staged", "--root", root], { cwd: root, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 });
 }
 
 function ok(result) {
@@ -704,6 +710,64 @@ test("E channel-unavailable results wait for an explicit verification request", 
   assert.equal(nextOf(requested.stdout), "event.product-requested", requested.stdout);
 });
 
+test("staged contract check reads index bytes and excludes unstaged bytes", (t) => {
+  const root = makeRepo(t);
+  const canonical = `2026-09-10T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact follow-on")}`;
+  write(root, ".devflow/journal.md", `${canonical}\n`);
+  git(root, "add", ".devflow/journal.md");
+  write(root, ".devflow/journal.md", '2026-09-10T00:00:00.123Z maintenance routing pending: request-json: {"task":"wrong"}\n');
+  const result = checkStaged(root);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.match(result.stdout, /^staged-contract: pass checked=1$/m);
+});
+
+test("staged contract check rejects journal millisecond and object near-misses with a clean working copy", (t) => {
+  const root = makeRepo(t);
+  const millisecond = `2026-09-10T00:00:00.123Z maintenance routing pending: request-json: ${JSON.stringify("wrong precision")}`;
+  const objectValue = '2026-09-10T00:00:00Z maintenance routing pending: request-json: {"task":"wrong type"}';
+  write(root, ".devflow/journal.md", `${millisecond}\n${objectValue}\n`);
+  git(root, "add", ".devflow/journal.md");
+  write(root, ".devflow/journal.md", `2026-09-10T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("exact follow-on")}\n`);
+  const result = checkStaged(root);
+  assert.equal(result.status, 2, result.stdout + result.stderr);
+  assert.match(result.stdout, /line=1 reason=reserved-format:maintenance routing pending:/);
+  assert.match(result.stdout, /line=2 /);
+  assert.ok(result.stdout.includes(JSON.stringify(millisecond)), result.stdout);
+  assert.ok(result.stdout.includes(JSON.stringify(objectValue)), result.stdout);
+});
+
+test("Product mixed rows remain visible and fail only when staged", (t) => {
+  const root = makeRepo(t, { capabilities: ["capability"] });
+  const relative = ".devflow/project/product.md";
+  const mixed = read(root, relative).replace("## Boundary", "unparseable capability promise\n## Boundary");
+  write(root, relative, mixed);
+  const current = run(root);
+  ok(current);
+  assertFragment(current.stdout, "integrity:", "blocking=0");
+  assertFragment(current.stdout, "integrity: kind=shape", "detail=capability-row-unparsed");
+  assert.ok(current.stdout.includes('raw="unparseable capability promise"'), current.stdout);
+  assert.equal(checkStaged(root).status, 0, "unstaged Product bytes must be ignored");
+  git(root, "add", relative);
+  const staged = checkStaged(root);
+  assert.equal(staged.status, 2, staged.stdout + staged.stderr);
+  assert.match(staged.stdout, /reason=capability-row-unparsed raw="unparseable capability promise"/);
+});
+
+test("staged contract check handles add, delete, and an unstaged untracked target without disk fallback", (t) => {
+  const untracked = makePlainRepo(t);
+  write(untracked, ".devflow/journal.md", "2026-09-10T00:00:00.123Z maintenance routing pending: request-json: {}\n");
+  assert.match(checkStaged(untracked).stdout, /^staged-contract: pass checked=0$/m);
+  write(untracked, ".devflow/journal.md", `2026-09-10T00:00:00Z maintenance routing pending: request-json: ${JSON.stringify("new request")}\n`);
+  git(untracked, "add", ".devflow/journal.md");
+  assert.match(checkStaged(untracked).stdout, /^staged-contract: pass checked=1$/m);
+
+  const deleted = makeRepo(t);
+  git(deleted, "rm", ".devflow/project/product.md");
+  const result = checkStaged(deleted);
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.match(result.stdout, /^staged-contract: pass checked=0$/m);
+});
+
 test("gate A feeds every canon-reserved journal line to the deployed parser", { timeout: 60_000 }, async (t) => {
   const timestamp = "2026-08-21T00:00:00Z";
   const root = makeRepo(t, { capabilities: ["capability"] });
@@ -815,8 +879,13 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
       return colon === -1 ? body : body.slice(0, colon + 1);
     }));
   assert.deepEqual(canonHeads, tableHeads);
+  const imitation = fs.readFileSync(path.resolve(__dirname, "../skills/principles/templates/canonical-journal-progress-grammar.md"), "utf8");
+  const maintenanceProjection = canon.slice(canonStart, canonEnd).split(/\r?\n/)
+    .find((line) => line.startsWith(`${canonPrefix}maintenance routing pending:`));
+  assert.ok(maintenanceProjection && imitation.split(/\r?\n/).includes(maintenanceProjection),
+    "the imitation template must project the journal owner's maintenance form byte-for-byte");
 
-  const fixtureRoots = [path.resolve(__dirname, "../skills/principles"), DIRECT_SKILL_ROOT, path.resolve(__dirname, "../skills/verify")];
+  const fixtureRoots = [path.resolve(__dirname, "../skills/principles"), ADOPT_SKILL_ROOT, DIRECT_SKILL_ROOT, path.resolve(__dirname, "../skills/verify")];
   const fixtureRows = fixtureRoots.flatMap((skillRoot) => JSON.parse(fs.readFileSync(path.join(skillRoot, "fixtures/formats.json"), "utf8"))
     .map((fixture) => ({ ...fixture, skill: path.basename(skillRoot), head: parserHeads.find((head) => fixture.expect.slice(fixture.expect.indexOf(" ") + 1).startsWith(head)) }))
     .filter((fixture) => fixture.head)
@@ -828,7 +897,7 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
       if (Array.isArray(effect) && effect[0] === "WRITE" && effect[1]?.format && /^\.devflow\/journal\.md(?:#|$)/.test(spec.ARTIFACTS[effect[1].artifact]?.path ?? "")) journalWriters.add(`${spec.SPEC.id}:${effect[1].format}`);
     }
   }
-  assert.deepEqual([...journalWriters].sort(), ["direct:maintenanceRoutingPending", "verify:capabilityClosing"]);
+  assert.deepEqual([...journalWriters].sort(), ["adopt:maintenanceRoutingPending", "direct:maintenanceRoutingPending", "verify:capabilityClosing"]);
 
   const execute = async (lines, subject) => {
     const batchRoot = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "devflow-gate-a-")));
@@ -852,6 +921,22 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
     assertReadOnly(batchRoot, before);
     return result.stdout;
   };
+  const adoptProject = makePlainRepo(t);
+  const emitted = spawnSync(process.execPath, [ADOPT_RUN, "stage", "--skill", ADOPT_SKILL_ROOT, "--project", adoptProject,
+    "--judged", "refutation.state=clear", "--decided", "approval.action=approve", "--json"],
+  { cwd: adoptProject, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 });
+  assert.equal(emitted.status, 0, emitted.stdout + emitted.stderr);
+  const decision = JSON.parse(emitted.stdout).decision;
+  assert.equal(decision.stage, "adoption");
+  const followOnWrite = decision.effects.find((effect) => Array.isArray(effect) && effect[0] === "WRITE" && effect[1]?.format === "maintenanceRoutingPending");
+  assert.ok(followOnWrite, JSON.stringify(decision.effects));
+  const adoptProjectionBytes = followOnWrite[1].format_example;
+  assert.match(adoptProjectionBytes, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z maintenance routing pending: request-json: /);
+  assert.equal(typeof JSON.parse(adoptProjectionBytes.slice(adoptProjectionBytes.indexOf("request-json: ") + "request-json: ".length)), "string");
+  const projectionOutput = await execute([adoptProjectionBytes], "jmp gate A — live Adopt Decision projection bytes to parser");
+  assertFragment(projectionOutput, "integrity:", "blocking=0");
+  assert.ok(hasKind(projectionOutput, "request", "existing"), projectionOutput);
+
   const pendingOutputs = new Map();
   for (const batch of uniqueSorted(valid.map((item) => item.batch))) {
     pendingOutputs.set(batch, execute(valid.filter((item) => item.batch === batch).map((item) => item.line), `jmp gate A — ${batch}`));
@@ -889,7 +974,10 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
     assert.match(item.expect, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z /);
     const output = fixtureOutputs.get(item.skill);
     const expected = valid.find((candidate) => candidate.head === item.head && candidate.zone);
-    const diagnosed = output.split(/\r?\n/).some((line) => line.startsWith("integrity: kind=blocking") && (line.includes(`path=.devflow/journal.md line=${item.lineNumber} `) || (line.includes("item=12 ") && line.includes(`reserved-format:${item.head}`))));
+    const diagnosed = output.split(/\r?\n/).some((line) => line.startsWith("integrity: kind=blocking") && (
+      (!line.includes("item=12 ") && line.includes(`path=.devflow/journal.md line=${item.lineNumber} `))
+      || (line.includes("item=12 ") && line.includes("path=.devflow/journal.md ") && line.includes(`lineNumber=${item.lineNumber} `) && line.includes(`reserved-format:${item.head}`))
+    ));
     const projected = expected && hasKind(output, expected.zone, expected.kind);
     if (journalWriters.has(`${item.skill}:${item.format}`)) assert.ok(projected, `${item.skill}/${item.id} writer did not reach ${expected?.zone}.${expected?.kind}\n${output}`);
     if (expected) assert.ok(projected || diagnosed, `${item.skill}/${item.id} vanished\n${output}`);
