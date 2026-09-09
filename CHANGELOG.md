@@ -15,6 +15,27 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.22 — 2026-09-10 — Make runtime evidence input shell-neutral
+
+All nine promoted P2 packages now project the official Skill Rails v0.4.3 runtime 0.3.6,
+validator 0.6.2, and kernel 6. Generated Decisions expose structured `record inputs`; the CLI
+binds an `effect_claimed` record to its planned Decision effect by index and accepts bounded
+UTF-8 JSON through `--data-file`, so generated guidance no longer depends on preserving JSON
+bytes through shell quoting. Argument, input, and resume failures also use structured diagnostics
+before evidence can reach the trace.
+
+This is an external runtime projection update, not a Devflow semantic change. Every authored
+`spec.mjs`, `body.md`, collector, fixture, template, reference, intent, evaluation case, and
+obligation ledger remains byte-identical; the official installed builder repaired only its
+generated ownership envelope. A fresh Work trace exercised effect-index binding, a Korean UTF-8
+data file, alignment, resume, and after-effects re-entry without using an earlier run or repository
+project state.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `CHANGELOG.md`;
+`docs/usecase-matrix_ko.md`; `docs/rounds/v0.23.0/report-0.23.22_ko.md`; each of
+`skills/{adopt,arch,design,direct,principles,product,resume,verify,work}` at `.generated.json`,
+`SKILL.md`, and `scripts/skill-rails/{cli,constants,guide}.mjs`.
+
 ## 0.23.21 — 2026-09-09 — Carry forward sealed after-input values
 
 All nine promoted P2 packages now project the official Skill Rails v0.4.1 runtime 0.3.5,

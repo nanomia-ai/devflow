@@ -981,3 +981,13 @@ collector 검증 밖의 cold rerun과 전체 suite는 재관측 전까지 **미�
 trace에서 A 다음 B만 공급해도 A와 B가 함께 유지되어 terminal route와 Resume까지 이어졌고,
 무입력 반복은 기존 duplicate-Decision guard에서 fail-closed였다. 다른 실사용 경로는 이 증거로
 통과 처리하지 않는다. **기존 판정 유지, 새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.**
+
+0.23.22 재판정 결과(Skill Rails v0.4.3 생성 projection): §1·§2 전 행과 §3 전 칸을 현재
+텍스트에 다시 대조했다. 이 릴리스는 외부 runtime이 현재 Decision의 계획된 effect index로
+`effect_claimed`를 결합하고, shell quoting에 기대지 않는 유계 UTF-8 `--data-file` 입력과 구조화된
+실패 진단을 생성 안내와 CLI에 투영한다. Devflow의 요청·진입 형태, 단계 목적, owner/read/write
+경계, Decision의 stage·row·effects·needs는 바뀌지 않는다. 새 외부 Work trace에서 한글을 포함한
+data file이 READ effect의 index와 verb에 결합됐고 alignment·resume·after-effects 재진입까지
+이어졌지만, agent claim은 관측 증거로 승격하지 않아 alignment는 `unproven`으로 남겼다. 설치본만
+사용하는 실제 Codex·Claude 소비 경로는 별도 재관측 전까지 **미검증**이다. **기존 판정 유지,
+새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.**
