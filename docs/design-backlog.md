@@ -8,18 +8,6 @@ The same holds for on-hold candidates. One that is taken up keeps its entry with
 
 ## Field observation items — watch during coming cycles, without adding rules
 
-- **Skill Rails `resume` can reuse a terminal trace run** (recorded 2026-09-08 by the
-  v0.23.18 whole-diff audit; deployed coordinates
-  `skills/*/scripts/skill-rails/cli.mjs:85-95`, canonical owner external Skill Rails runtime)
-  — generated adapter step 6 calls stage with the same run id only when the Decision has
-  `reinvoke`, but CLI `resume` always puts the last event's run id in `next_command` without
-  inspecting the last terminal or `reinvoke`. If that recovery command is used after a
-  `reinvoke: null` terminal while observation and judgment material remain unchanged, it can
-  emit the same Decision in the same run and the trace store rejects it as
-  `duplicate-decision-emission`. This path did not cause the observed Sol failure, and
-  v0.23.18 does not change the common runtime. Reopen it as a separate Skill Rails/runtime
-  repair with terminal-sensitive command generation and cross-P2 regression coverage; do not
-  relax the trace guard or treat a terminal run as an after-effects reinvocation.
 - **Compatible-feedback field residuals remain bounded observations** (recorded 2026-09-02
   by the DD-96 seal and integration-behind repairs) — first, the state tool currently derives
   a blocking reopen finding from Git history and cannot clear it after the journal is corrected.
@@ -301,6 +289,13 @@ comparative selection) as an option in Direct's execution proposal. Grounds for
 
 The items below were carried out and left the watch list. Re-proposals consult this lineage first.
 
+- ~~Skill Rails `resume` can reuse a terminal trace run~~ — v0.23.20 projected the external
+  owner's Skill Rails 0.3.4 common runtime across all nine P2 packages. `resume/2` now creates
+  `next_command` only when the last Decision's `reinvoke` is `after-effects` or `recompute`, and
+  creates none for `after-input`, terminal Decisions, or non-continuable BLOCKs. A targeted trace
+  run observed null after `after-input`, a command after `after-effects`, and the unchanged
+  `duplicate-decision-emission` refusal for a bare repeat. This closes the original observation
+  at its external owner without relaxing the trace guard or treating terminal runs as effects.
 - ~~Skill Rails trace placement can dirty the project it is observing~~ — v0.23.5 rebuilt all
   nine P2 packages with Skill Rails v0.3.0, whose generated adapter now says to place trace state
   outside both the installed package and the repository or directory tree containing the observed

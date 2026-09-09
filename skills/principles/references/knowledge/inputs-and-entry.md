@@ -35,10 +35,9 @@
   number, read it independently
   of `Read first`. When zero or more than one match, report one line and do not guess. This
   includes foundation and research cards.
-- A baseline path directly under `.devflow/project/capabilities/` that remains in a card's
-  `Read first` is legacy wiring. Do not open it or report its absence through that field;
-  select and shape-gate only through the number rule above. direct puts no such path on a new
-  card.
+- A baseline path directly under `.devflow/project/capabilities/` in `Read first` duplicates
+  a path work already reads through the number rule. Direct puts no such path on a new card;
+  work treats it as invalid card basis instead of opening it from that field.
 - When the selected file has zero or multiple fixed boundaries, guess no zone and read no
   body. Report the bounded shape facts in one line and continue active work with reviewer's
   `design: baseline missing — judge from the card and supplied shared documents` projection.

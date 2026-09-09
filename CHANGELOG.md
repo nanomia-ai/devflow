@@ -15,6 +15,38 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.23.20 — 2026-09-09 — Give T-low cards their concrete execution basis
+
+Direct now puts only destination-matched exact K paths in every task or research card's `Read
+first`; T-low implementation cards additionally carry the minimal concrete provider or consumer
+code/test paths, essential ordering or dataflow constraints, and any task-owned named fixture.
+Layer 0, the number-owned current capability, and Binding ADR inputs remain Work's independent
+automatic inputs instead of being copied into `Read first`; truly greenfield or independent cards use the one explicit N/A form.
+
+Work keeps its existing fail-closed basis boundary for absent, escaping, or duplicated capability
+paths. DD-44 now records DD-90's narrow correction of the old legacy-defer sentence without
+changing the depth-1 number rule, and the Direct authoring card carries the current writer effect.
+
+Separately, all nine promoted P2 packages now project the common Skill Rails runtime 0.3.4 and
+validator 0.6.2. An effect-free BLOCK whose needs are all caller-supplied judged or decided values
+now carries `reinvoke: after-input`; traced stage writes and returns its UTF-8 stage-result path;
+`resume/2` emits a next command only for `after-effects` or `recompute`; generated adapters treat
+a stale Decision as effect-free and continue only through `reinvoke: recompute`. The
+duplicate-Decision trace guard remains fail-closed, and no Devflow spec, body, fixture, or test was
+added for this common-runtime correction.
+
+Files: `.claude-plugin/plugin.json`; `.codex-plugin/plugin.json`; `skills/direct/spec.mjs`;
+`skills/direct/body.md`; `skills/direct/authoring-card.md`;
+`skills/direct/fixtures/source/direct-package.test.mjs`; `skills/direct/.skill-rails/semantic-diff.json`;
+`skills/principles/references/knowledge/inputs-and-entry.md`;
+`skills/principles/.skill-rails/semantic-diff.json`; `skills/work/body.md`;
+`skills/work/collectors/project-state-seam.test.mjs`; `skills/work/.skill-rails/semantic-diff.json`;
+each of `skills/{adopt,arch,design,direct,principles,product,resume,verify,work}` at `SKILL.md`,
+`.generated.json`, and `scripts/skill-rails/{authoring-ledger,cli,constants,evaluator}.mjs`;
+`docs/design-decisions_ko.md`; `docs/design-decisions.md`; `docs/usecase-matrix_ko.md`;
+`docs/design-backlog_ko.md`; `docs/design-backlog.md`;
+`docs/rounds/v0.23.0/report-0.23.20_ko.md`; `CHANGELOG.md`.
+
 ## 0.23.19 — 2026-09-08 — Publish initial identity with the binding boundary
 
 Initial Product and Adopt now resolve actor and Git identity read-only before binding approval. When the

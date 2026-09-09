@@ -1,207 +1,33 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:ed1405146d4c32190f514d8c1085212f352a1596faf7f53dcbd90b1594c9ae24",
+    "before": "sha256:b4bbf0d019baa9416fc1edc596477b8ffa058a4499468a8c885ced9497488cc8",
     "after": "sha256:b4bbf0d019baa9416fc1edc596477b8ffa058a4499468a8c885ced9497488cc8"
   },
-  "changed": true,
+  "changed": false,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": true,
+    "behavior_source": false,
     "observation_source": false,
-    "context": false
+    "context": true
   },
-  "artifact_receipts": [
-    {
-      "kind": "spec",
-      "path": "spec.mjs",
-      "before_hash": "sha256:ed1405146d4c32190f514d8c1085212f352a1596faf7f53dcbd90b1594c9ae24",
-      "after_hash": "sha256:b4bbf0d019baa9416fc1edc596477b8ffa058a4499468a8c885ced9497488cc8",
-      "source": "behavior_source"
-    }
-  ],
+  "artifact_receipts": [],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [
-      {
-        "id": "knowledge-marker",
-        "change": "modified",
-        "before": {
-          "reads": [
-            "research.checkpoint",
-            "knowledge.marker",
-            "boundary.state",
-            "task.commit",
-            "task.integration",
-            "handoff.state",
-            "completion.state",
-            "review.state",
-            "knowledge.action"
-          ],
-          "needs": [
-            "knowledge.action"
-          ],
-          "table": "knowledge",
-          "branches": [
-            "emit-arch",
-            "route-direct",
-            "none"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "emit-arch": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "knowledgeMarkerTransport",
-                    "source": "exact-card-path@fullhash",
-                    "template": "knowledgeLandingPending",
-                    "touches": [
-                      ".devflow/journal.md"
-                    ],
-                    "writer": "arch"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "scope": "knowledge-marker",
-                    "subject": "<id> boundary: knowledge landing",
-                    "touches": [
-                      ".devflow/journal.md"
-                    ]
-                  }
-                ],
-                "ROUTE:resume"
-              ],
-              "none": [
-                [
-                  "REPORT",
-                  {
-                    "scope": "no-reusable-knowledge-promotion"
-                  }
-                ],
-                "NEXT"
-              ],
-              "route-direct": [
-                [
-                  "REPORT",
-                  {
-                    "scope": "post-title-knowledge-source-missing"
-                  }
-                ],
-                "ROUTE:direct"
-              ]
-            }
-          },
-          "body": "stage: knowledge-marker",
-          "record": null,
-          "reentry": "rejudge"
-        },
-        "after": {
-          "reads": [
-            "research.checkpoint",
-            "knowledge.marker",
-            "boundary.state",
-            "task.commit",
-            "task.integration",
-            "handoff.state",
-            "completion.state",
-            "review.state",
-            "knowledge.action"
-          ],
-          "needs": [
-            "knowledge.action"
-          ],
-          "table": null,
-          "branches": [
-            "emit-arch",
-            "route-direct",
-            "none"
-          ],
-          "effects": [],
-          "effect_plans": {
-            "default": null,
-            "branches": {
-              "emit-arch": [
-                [
-                  "WRITE",
-                  {
-                    "artifact": "knowledgeMarkerTransport",
-                    "source": "exact-card-path@fullhash",
-                    "template": "knowledgeLandingPending",
-                    "touches": [
-                      ".devflow/journal.md"
-                    ],
-                    "writer": "arch"
-                  }
-                ],
-                [
-                  "COMMIT",
-                  {
-                    "scope": "knowledge-marker",
-                    "subject": "<id> boundary: knowledge landing",
-                    "touches": [
-                      ".devflow/journal.md"
-                    ]
-                  }
-                ],
-                "ROUTE:resume"
-              ],
-              "none": [
-                "NEXT"
-              ],
-              "route-direct": [
-                [
-                  "REPORT",
-                  {
-                    "scope": "post-title-knowledge-source-missing"
-                  }
-                ],
-                "ROUTE:direct"
-              ]
-            }
-          },
-          "body": "stage: knowledge-marker",
-          "record": null,
-          "reentry": "rejudge"
-        }
-      }
-    ],
-    "tables": [
-      {
-        "id": "knowledge",
-        "change": "removed",
-        "before": {
-          "exclusive": true,
-          "rows": [
-            {
-              "state": "emit-arch",
-              "reads": [
-                "knowledge.action"
-              ]
-            },
-            {
-              "state": "route-direct",
-              "reads": [
-                "knowledge.action"
-              ]
-            },
-            {
-              "state": "none",
-              "reads": []
-            }
-          ]
-        }
-      }
-    ],
+    "stages": [],
+    "tables": [],
     "formats": [],
     "templates": [],
     "template_content": [],
-    "body": [],
+    "body": [
+      {
+        "id": "guard: missing-bounded-basis",
+        "change": "modified",
+        "before": "sha256:8c1515743ca3d83d354dcddb78be619788daa76d32c418df3eb8a7bd79f42259",
+        "after": "sha256:6f1a6eacec24c44da82e526fbd12f0ea98ca857edd031aa2dd04190302ff0668"
+      }
+    ],
     "references": [],
     "ownership": [],
     "artifacts": [],
@@ -209,20 +35,14 @@
     "declarations": [],
     "deferred": []
   },
-  "change_id": "work-effect-free-knowledge-none",
-  "intent": "Pass the no-reusable-knowledge branch inside the current evaluation so Work reaches task finalization without emitting a duplicate same-run Decision; direct-dispatch the one judged action instead of retaining a table whose no-effect state is intentionally passed over.",
+  "change_id": "v0.23.20-work-basis-wording",
+  "intent": "Align Work judgment with its existing fail-closed capability-baseline basis collector without adding recovery behavior.",
   "impact": {
-    "stages": {
+    "body": {
       "total": 1,
       "added": 0,
       "removed": 0,
       "modified": 1
-    },
-    "tables": {
-      "total": 1,
-      "added": 0,
-      "removed": 1,
-      "modified": 0
     }
   }
 }

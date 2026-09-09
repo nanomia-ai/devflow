@@ -1112,6 +1112,16 @@ the observed missing consumer edge; declaring every test in a broad suite — no
 additional responsibility; and prescribing the implementation method — conflicts with the
 card harness boundary.
 
+DD-44 correction evidence (missing record restored in v0.23.20): a cold Direct run copied
+automatic Layer 0 and current capability paths into `Read first` while omitting concrete
+provider/consumer code/test paths, so Work stopped at `missing-bounded-basis` before
+implementation. This is the exact “accepting automatic reads as the T-low basis” alternative
+DD-90 already rejects. DD-44's number-rule ownership remains; only its sentence that quietly
+defers a duplicated v0.10 baseline path is corrected. Current coordinates are Direct
+`spec.mjs`, `body.md`, and `authoring-card.md`; Principles
+`references/knowledge/inputs-and-entry.md`; Work `body.md` and the existing basis collector;
+matrix §3.23; and the two targeted tests.
+
 Impact coordinates: task-card construction and repair in `skills/split/SKILL{,_ko}.md`, claim,
 resume, and delegation preflight in `skills/work/SKILL{,_ko}.md`, the A17 matrix cells, and the
 repository invariant fixture. DD-24, DD-25, DD-50, DD-55, and DD-69 remain in force.
@@ -1539,7 +1549,7 @@ The owner's operating intent is that a new MVP, a brownfield, and a mid-project 
 
 ### DD-44 · Domain reachability is owned by the depth-1 number rule and resume's domain-entry branch, not by card fields (v0.11.0)
 
-Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1), DD-91 (v0.19.0), DD-92 (v0.20.0)
+Subject: The knowledge layer and capability documents | Introduced: v0.11.0 | State: active, partly corrected by DD-76 (v0.18.1), DD-90 (v0.19.0), DD-91 (v0.19.0), DD-92 (v0.20.0)
 
 If split copies a baseline and ADRs into every card, the path lives in two places and requires a research-card exception. work uses the claimed card's depth-1 number to read one document and only the exact ADRs named by that document. A baseline path left in a v0.10 card's `Read first` is treated only as legacy wiring and deferred to that number rule. resume normally reads only file names and a shape projection, but when the user asks to explain a capability it opens one document by number or name and answers with both freshness states. It opens the entire expected set only when the user explicitly requests that full set. Foundation is reached by the same `01` number rule. Relationships live on the consuming side as exact paths in `Consumed paths`; provider closure, retirement, and split project only bounded metadata plus the Consumed-contract path/number columns and report consumers with their actual current freshness. That column projection detects an unchanged path reassigned to another capability without opening other prose. With no observed failure, this does not automatically expand into execution, card creation, or cross-capability regression
 

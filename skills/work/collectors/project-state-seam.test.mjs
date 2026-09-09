@@ -390,25 +390,28 @@ test("ready file-shape entries resolve through the supplied target", async (t) =
   }
 });
 
-test("work consumes the ordered multiline readFirst projection", async () => {
-  const fixture = await project("");
-  try {
-    await mkdir(join(fixture.root, "docs"), { recursive: true });
-    await writeFile(join(fixture.root, "docs", "first.md"), "first\n", "utf8");
-    const card = await readFile(join(fixture.root, ...fixture.cardPath.split("/")), "utf8");
-    await writeFile(join(fixture.root, ...fixture.cardPath.split("/")), card.replace(
-      "Read first: none",
-      "Read first: docs/first.md\n  docs/second.md"
-    ), "utf8");
-    git(fixture.root, "add", ".");
-    git(fixture.root, "commit", "-m", "multiline read first");
-
-    const state = await calculateState({ root: fixture.root });
-    const entry = state.zones.claim.entries.find(({ path }) => path === fixture.cardPath);
-    assert.deepEqual(entry.readFirst, ["docs/first.md", "docs/second.md"]);
-    assert.equal(await collectors["work/card.basis"]({ projectRoot: fixture.root, targetPath: fixture.cardPath }), "missing");
-  } finally {
-    await rm(fixture.root, { recursive: true, force: true });
+test("work accepts concrete Read first paths and rejects missing or automatic inputs", async () => {
+  for (const [readFirst, files, expected] of [
+    [["docs/first.md", "docs/second.md"], ["docs/first.md"], "missing"],
+    [["docs/first.md", "docs/second.md"], ["docs/first.md", "docs/second.md"], "complete"],
+    [[".devflow/project/capabilities/01-foundation.md"], [], "invalid"],
+  ]) {
+    const fixture = await project("");
+    try {
+      for (const relative of files) {
+        await mkdir(join(fixture.root, ...relative.split("/").slice(0, -1)), { recursive: true });
+        await writeFile(join(fixture.root, ...relative.split("/")), `${relative}\n`, "utf8");
+      }
+      const target = join(fixture.root, ...fixture.cardPath.split("/"));
+      await writeFile(target, (await readFile(target, "utf8")).replace("Read first: none", `Read first: ${readFirst.join("\n  ")}`), "utf8");
+      git(fixture.root, "add", ".");
+      git(fixture.root, "commit", "-m", "bounded read first");
+      const state = await calculateState({ root: fixture.root });
+      assert.deepEqual(state.zones.claim.entries.find(({ path }) => path === fixture.cardPath).readFirst, readFirst);
+      assert.equal(await collectors["work/card.basis"]({ projectRoot: fixture.root, targetPath: fixture.cardPath }), expected);
+    } finally {
+      await rm(fixture.root, { recursive: true, force: true });
+    }
   }
 });
 

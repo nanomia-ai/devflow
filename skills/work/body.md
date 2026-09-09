@@ -50,8 +50,8 @@ progress in the card before release; work does not repair planning authority by 
 
 ## guard: missing-bounded-basis
 
-An exact `Read first` path that is absent, escapes the repository, or names legacy baseline
-wiring has no substitute. Stop with that path instead of searching for a plausible basis.
+An exact `Read first` path that is absent, escapes the repository, or directly names a
+`.devflow/project/capabilities/...` document already owned by Work's depth-1 number rule has no substitute. Stop with that path instead of searching for one.
 
 ## guard: closed-history-refusal
 

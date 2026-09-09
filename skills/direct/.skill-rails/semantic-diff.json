@@ -1,73 +1,231 @@
 {
   "schema": "skill-rails/semantic-diff/1",
   "spec_hash": {
-    "before": "sha256:8b295f28157781f98e7e90399747cab17aafb983eb7d519928b58e140aaef5ee",
-    "after": "sha256:8b295f28157781f98e7e90399747cab17aafb983eb7d519928b58e140aaef5ee"
+    "before": "sha256:fd2cafe6069b7eb94185f05e447db34a573fe526a7a6340d0bace95e6a42118a",
+    "after": "sha256:0931375e276f3664ccd1072d9161d933c6a600a086267c0e6d87c67fd0efc1fd"
   },
-  "changed": false,
+  "changed": true,
   "any_changed": true,
   "source_changes": {
-    "behavior_source": false,
+    "behavior_source": true,
     "observation_source": false,
     "context": true
   },
-  "artifact_receipts": [],
+  "artifact_receipts": [
+    {
+      "kind": "spec",
+      "path": "spec.mjs",
+      "before_hash": "sha256:fd2cafe6069b7eb94185f05e447db34a573fe526a7a6340d0bace95e6a42118a",
+      "after_hash": "sha256:0931375e276f3664ccd1072d9161d933c6a600a086267c0e6d87c67fd0efc1fd",
+      "source": "behavior_source"
+    }
+  ],
   "groups": {
     "observations": [],
     "guards": [],
-    "stages": [],
+    "stages": [
+      {
+        "id": "materialize",
+        "change": "modified",
+        "before": {
+          "reads": [
+            "planning.receipt",
+            "origin.drafts"
+          ],
+          "needs": [
+            "bundle.contract",
+            "bundle.units"
+          ],
+          "table": "materializeSelector",
+          "branches": [
+            "continue-active-bundle",
+            "begin-request-bundle",
+            "ASK:bundle-uncertain"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ASK:bundle-uncertain": [
+                "ASK"
+              ],
+              "begin-request-bundle": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "layerOpeningBundle",
+                    "scopes": "bundle.units",
+                    "source": "request.current.source",
+                    "target": ".devflow/journal.md"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "message": "direct — begin <parent>",
+                    "scope": "layer-opening-bundle"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "project existing K headers for bounded current Layer 0, target capability, and explicit crosscut owners; add only destination-matched exact K paths to each card Read first"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "cardBundle",
+                    "forbiddenTemplates": "taskCard@00-project",
+                    "target": "<exact-active-scopes>/<one-or-more-sibling-card-addresses>",
+                    "templates": "00-project=researchCard; all-other-scopes=taskCard",
+                    "units": "bundle.units"
+                  }
+                ],
+                "NEXT"
+              ],
+              "continue-active-bundle": [
+                [
+                  "RUN",
+                  {
+                    "action": "project existing K headers for bounded current Layer 0, target capability, and explicit crosscut owners; add only destination-matched exact K paths to each card Read first"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "cardBundle",
+                    "forbiddenTemplates": "taskCard@00-project",
+                    "target": "<exact-active-scopes>/<one-or-more-sibling-card-addresses>",
+                    "templates": "00-project=researchCard; all-other-scopes=taskCard",
+                    "units": "bundle.units"
+                  }
+                ],
+                "NEXT"
+              ]
+            }
+          },
+          "body": "stage: materialize",
+          "record": null,
+          "reentry": "rejudge"
+        },
+        "after": {
+          "reads": [
+            "planning.receipt",
+            "origin.drafts"
+          ],
+          "needs": [
+            "bundle.contract",
+            "bundle.units"
+          ],
+          "table": "materializeSelector",
+          "branches": [
+            "continue-active-bundle",
+            "begin-request-bundle",
+            "ASK:bundle-uncertain"
+          ],
+          "effects": [],
+          "effect_plans": {
+            "default": null,
+            "branches": {
+              "ASK:bundle-uncertain": [
+                "ASK"
+              ],
+              "begin-request-bundle": [
+                [
+                  "WRITE",
+                  {
+                    "artifact": "layerOpeningBundle",
+                    "scopes": "bundle.units",
+                    "source": "request.current.source",
+                    "target": ".devflow/journal.md"
+                  }
+                ],
+                [
+                  "COMMIT",
+                  {
+                    "message": "direct — begin <parent>",
+                    "scope": "layer-opening-bundle"
+                  }
+                ],
+                [
+                  "RUN",
+                  {
+                    "action": "for each T-low implementation card, put only minimal bounded concrete provider or consumer code/test paths and destination-matched K in Read first. Never copy automatic Layer 0, number-owned current capability, or Binding ADR inputs into a card; put any essential ordering or dataflow constraint in Destination or Forbidden and any task-specific fixture in both Destination and Completion signal; for greenfield or independent work use exactly Read first: none and Forbidden: T-low basis: N/A — greenfield|independent"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "cardBundle",
+                    "forbiddenTemplates": "taskCard@00-project",
+                    "target": "<exact-active-scopes>/<one-or-more-sibling-card-addresses>",
+                    "templates": "00-project=researchCard; all-other-scopes=taskCard",
+                    "units": "bundle.units"
+                  }
+                ],
+                "NEXT"
+              ],
+              "continue-active-bundle": [
+                [
+                  "RUN",
+                  {
+                    "action": "for each T-low implementation card, put only minimal bounded concrete provider or consumer code/test paths and destination-matched K in Read first. Never copy automatic Layer 0, number-owned current capability, or Binding ADR inputs into a card; put any essential ordering or dataflow constraint in Destination or Forbidden and any task-specific fixture in both Destination and Completion signal; for greenfield or independent work use exactly Read first: none and Forbidden: T-low basis: N/A — greenfield|independent"
+                  }
+                ],
+                [
+                  "WRITE",
+                  {
+                    "artifact": "cardBundle",
+                    "forbiddenTemplates": "taskCard@00-project",
+                    "target": "<exact-active-scopes>/<one-or-more-sibling-card-addresses>",
+                    "templates": "00-project=researchCard; all-other-scopes=taskCard",
+                    "units": "bundle.units"
+                  }
+                ],
+                "NEXT"
+              ]
+            }
+          },
+          "body": "stage: materialize",
+          "record": null,
+          "reentry": "rejudge"
+        }
+      }
+    ],
     "tables": [],
     "formats": [],
     "templates": [],
-    "template_content": [
+    "template_content": [],
+    "body": [
       {
-        "id": "researchCard",
+        "id": "stage: materialize",
         "change": "modified",
-        "before": "sha256:1f1e52e374f037e1b55095e456ea525be90412b6b7494959effde77f52e67f6b",
-        "after": "sha256:82719108c1538f6ca95d687eb178a44a0a25e37b83943d4b958b0339fdc66202"
-      },
-      {
-        "id": "taskCard",
-        "change": "modified",
-        "before": "sha256:8316478e715c38c3120dce52894593ac66c7ef5aed53d066ff03e678d889b816",
-        "after": "sha256:d81bce1864853ddf780a2ff11e132fd04baef294e905dbd8ea6c782eff238015"
+        "before": "sha256:edc4e9da9db31e49a66f17b63da379d17283b968da2354784db3b170b82d25e6",
+        "after": "sha256:1110552bcf188c35cbec697e1ab177a6229d0e31ebb8b239880fee908ef9f5b9"
       }
     ],
-    "body": [],
-    "references": [
-      {
-        "id": "templates/research-card.md",
-        "change": "modified",
-        "before": "sha256:1f1e52e374f037e1b55095e456ea525be90412b6b7494959effde77f52e67f6b",
-        "after": "sha256:82719108c1538f6ca95d687eb178a44a0a25e37b83943d4b958b0339fdc66202"
-      },
-      {
-        "id": "templates/task-card.md",
-        "change": "modified",
-        "before": "sha256:8316478e715c38c3120dce52894593ac66c7ef5aed53d066ff03e678d889b816",
-        "after": "sha256:d81bce1864853ddf780a2ff11e132fd04baef294e905dbd8ea6c782eff238015"
-      }
-    ],
+    "references": [],
     "ownership": [],
     "artifacts": [],
     "roles": [],
     "declarations": [],
     "deferred": []
   },
-  "change_id": "direct-read-first-item-grammar",
-  "intent": "Restore the exact repeated Read first item shape at both Direct card-writer templates so cold cards remain consumable by Work without teaching the parser a tolerant alternate grammar.",
+  "change_id": "v0.23.20-direct-card-basis",
+  "intent": "Restore DD-90 card construction so T-low work carries bounded concrete code basis without duplicating Work automatic inputs.",
   "impact": {
-    "template_content": {
-      "total": 2,
+    "stages": {
+      "total": 1,
       "added": 0,
       "removed": 0,
-      "modified": 2
+      "modified": 1
     },
-    "references": {
-      "total": 2,
+    "body": {
+      "total": 1,
       "added": 0,
       "removed": 0,
-      "modified": 2
+      "modified": 1
     }
   }
 }

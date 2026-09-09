@@ -636,8 +636,9 @@ v0.23.11 재판정(DD-104): 이 설계 마커가 바꾸는 단위를 기존 capa
 
 **정합(문서 계약 + 저장소 gate)** (2026-08-23 v0.19.0). direct는 확정된 제공자·현재 소비자를
 쓰는 T-하 카드에 최소한의 유계한 구체 코드 경로와 필수 순서·데이터 흐름 제약을 요구하고,
-실제 그린필드·독립 작업만 명시적 해당 없음 형식을 쓴다. work는 대기 카드 점유와 점유 카드
-재개 전에 이를 검사해 부실한 카드를 기존 direct 수리 경로로 돌려보낸다. 완료 신호는 기대 관측과
+실제 그린필드·독립 작업만 명시적 해당 없음 형식을 쓴다. work는 점유 전·재개 전에 이를 검사하고
+부실한 카드는 구현하지 않은 채 정확한 경로를 보고하고 멈춘다. 이번 수리는 새 카드 작성 경계에서
+재발을 막고 기존 카드를 자동 수리하는 전이는 추가하지 않는다. 완료 신호는 기대 관측과
 그 관측이 무엇을 증명하는지 말하고, 이름 댄 작업 전용 테스트·fixture 경로는 목적지의 정확한
 산출물이어야 한다. 작업 전용 경로가 없는 넓은 suite 명령은 경로 선언에서만 면제되며 suite
 전체 열거를 요구하지 않는다. 복합 카드는 여러 능력에 영향을 줄 수 있고, 경로 전수·능력별 카드
@@ -964,4 +965,11 @@ Verify·Resume 변경은 0이다. 정적 validator·Adopt fixture·P2 생성 검
 alternatives·exact owner landing을 제안과 Architecture/capability Intent에 자기완결로 남기며 새 ADR
 artifact는 만들지 않는다. 정적 P2 fixture·Skill Rails build 밖의 cold Product/Adopt 실제 commit
 adherence와 legacy 삭제 뒤 downstream 이해는 재관측 전까지 **미검증**이다. **새 H 행 0, 새 A 행 0,
+새 교차 셀 0, 새 공백 0.**
+
+0.23.20 부분 재판정(DD-44·DD-90 누락 계보 복구): 새 요청·진입 형태나 교차 셀은 없다. §3.23의
+Direct 작성자는 T-하 카드에 유계한 concrete code/test 근거와 destination-matched K만 싣고 자동
+Layer 0·현재 능력·Binding ADR 입력은 카드 밖의 기존 Work 읽기 규칙에 남긴다. Work의 기존
+점유 전·재개 fail-closed 경계는 바꾸지 않고 tracked-card 자동 수리도 추가하지 않았다. 표적 정적·
+collector 검증 밖의 cold rerun과 전체 suite는 재관측 전까지 **미검증**이다. **새 H 행 0, 새 A 행 0,
 새 교차 셀 0, 새 공백 0.**
