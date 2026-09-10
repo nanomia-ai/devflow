@@ -604,7 +604,7 @@ Observed problem: if the rulebook recomputes entry state or a hook injects it, i
 
 Chosen boundary: principles entry is state-free and offers one route to resume. SessionStart provides delayed principles guidance only; it neither judges state or next stage nor injects file bodies. Knowledge and work are orthogonal trees: research-only cards live only under `00`, and knowledge expands only through owner-adjacent recursive `K` directories under the same stem; no central/manual index exists and zero `K` children is valid. Six behavioral constraints preserve this boundary: C1 pre-product research survives durably under `00-project`; C2 card/source evidence remains named source evidence; C3 conclusions land at the nearest semantic owner or the exact crosscut owners; C4 only arch or adopt writes `K`; C5 closed history opens only through exact named provenance; and C6 multi-owner conclusions preserve every owner and land atomically. One principles FORMAT owns the exact JSON marker shape; the work template and project-state parser are executable projections bound by a seam test, and this decision does not duplicate the fields. A P2 Skill Rails package keeps English-authored `spec.mjs` and `body.md` as its executable authored canon, generates `SKILL.md` from them, and retains portable provenance plus generation, build, and evaluation evidence inside the package.
 
-Refutation: DD-29's reason about a partial adapter dropping journal, freshness, and integrity does not apply because delayed guidance copies no procedure and only points to resume. DD-44's number-reach/card-field-duplication reason does not apply because knowledge and work are separate trees and `00`/`K` are path ownership, not card fields. DD-76 and DR-17/DR-25's bounded same-number/no-unbounded-link reasons remain satisfied by same-stem adjacency, exact consumers, bounded opening at each recursion, and valid zero children. DD-78 and DR-03's hook-judgment/journal-injection reasons remain because the hook neither judges nor injects; DD-57's plugin-cache-companion reason is strengthened because portable P2 provenance makes that carriage inspectable.
+Refutation: DD-29's reason about a partial adapter dropping journal, freshness, and integrity does not apply because delayed guidance copies no procedure and only points to resume. DD-44's number-reach/card-field-duplication reason does not apply because knowledge and work are separate trees and `00`/`K` are path ownership, not card fields. DD-76 and DR-17/DR-25's bounded same-number/no-unbounded-link reasons remain satisfied by same-stem adjacency, exact consumers, bounded opening at each recursion, and valid zero children. DD-78 and DR-03's hook-judgment/journal-injection reasons remain because the hook neither judges nor injects; DD-57's plugin-cache-companion reason is strengthened because portable P2 provenance makes that carriage inspectable. Folding every research question, decision path, and intermediate result into one card or progress log would mix current conclusions with transient progress in a mega-log whose readers cannot tell what remains current. A separate cycle, evidence lifecycle, or typed graph would instead create a second authority, lifetime, and maintenance duty beside the existing card, owner/K, Git, and verification boundaries.
 
 Affected coordinates: DD-03, DD-25, DD-28, DD-43, DD-44, DD-76, DD-29, DD-57, DD-54, DD-87; the principles/resume/hook/knowledge writers and package deploy artifacts; and the multi-owner, knowledge, and entry matrix cells. DD-05, DD-11, and DD-83 remain affirmed within their existing boundaries: one SessionStart hook, report-only correction, and one read-only state computation.
 
@@ -654,6 +654,47 @@ release-time correction and is not edited retroactively.
 Revisit when an owner change can commit while a changed existing K remains stale, Direct must scan
 unrelated owners to find a card dependency, a normal card loses a sourced reusable conclusion, or the
 physical-writer boundary prevents an exact marker-named semantic owner from landing atomically.
+
+### DD-110 · AI execution context points purpose, request, and approval to canonical owners before judgment and preserves durable re-entry (v0.24.0)
+
+Subject: The knowledge layer and capability documents | Introduced: v0.24.0 | State: active
+
+Observed problem: repeated stage purposes, common Why prose, and unconditional reads gave detailed
+material equal weight before judgment. In long runs, cold Codex and Claude lost the current request,
+approved scope, or exact owner. Normal boundaries such as Product completion and an Adopt follow-on
+also cannot rely on conversation memory or on ROUTE executing itself; a fresh session must recover
+the next owner from canonical disk state.
+
+Desired behavior: before its first judgment, a cold stage keeps purpose, the current request, the
+latest explicit approval or approved proposal/card, and the canonical owner/read path salient without
+copying their current values. Shared judgment inputs arrive before Decision, branch-only detail beside
+its first effect, and a fresh session recovers the next owner from canonical disk state.
+
+Chosen boundary: the nine intent descriptions and stage identities remain. The Principles policy
+index owns the sentence that points those inputs to the current owner/read path, and the eight bodies
+project it. The state tool projects existing entry data `stage:arch` only when committed Product inputs
+equal current bytes and the exact missing set is the two Arch-owned files; Resume consumes that
+transient observation. Direct selects Design only when the current request or approved scope has an
+actual unresolved Design decision, leaving work under the current or default style on the Work path.
+The staged knowledge contract preserves an Adopt whole follow-on, while no-follow-on completion
+remains DONE. ROUTE is not an execution command. No new state, approval, route kind, registry, helper,
+or model/OS branch is introduced.
+
+Why the boundary is needed: flat repeated delivery obscured purpose and approval, while conversation
+continuity and ROUTE execution were not durable facts. Existing owners and artifacts can restore both
+salience and normal-boundary re-entry without creating another source of truth.
+
+Rejected alternatives: byte reduction alone does not restore salience; making every reference
+READ_FIRST keeps importance flat; blanket edits to nine specs duplicate common ownership; turning
+conversation continuity into a recovery contract adds a second state model.
+
+Affected coordinates: `skills/principles/references/policy-index.md` and the eight body projections;
+`skills/principles/scripts/project-state.mjs`; Resume's collector and spec; Direct's spec and body;
+Adopt's body; Verify's spec; their fixtures, generated receipts, and repository tests.
+
+Revisit when a cold lane loses owner, approval, or a required read; a fresh Resume
+cannot safely find the next owner after a normal stage boundary; or branch detail again arrives
+with flat pre-judgment priority.
 
 ### DD-105 · Proposal readers discover bounded input-owner K depth before confirmation (v0.23.12)
 

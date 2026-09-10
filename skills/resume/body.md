@@ -1,12 +1,8 @@
 # Resume
 
-## why: purpose
-
-Interpret canonical project state at entry without duplicating its predicates, filename grammar, or status grammar.
-
-Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
-
 ## why: entry-orientation
+
+Before this stage's first judgment, anchor the active skill's objective to the current request and latest explicit approval or approved proposal/card, then use `<skill-root>/../principles/references/policy-index.md` and the selected Decision to open the canonical owner/read path; this does not invoke Principles classification.
 
 Entry starts from the explicit-root schema-2 state and the shared glossary. It reports room, integrity, claim, HANDOFF, digest, integration, and blocking facts supplied by that state before selecting a single owner route.
 
@@ -41,10 +37,6 @@ Resume selects the owning stage or stopping terminal; downstream skills own thei
 ## why: planning-boundaries
 
 Planning repairs and tree openings retain their existing direct owner, request scope, and recorded boundary rather than widening resume into planning.
-
-## why: recovery-policy
-
-Use the recovery policy only for design-note, design-open-item, baseline-boundary, folder-boundary, and digest recovery. Preserve their recorded facts, inspect the named policy before choosing `recovery.action`, and do not re-enter until the planned commit changes state.
 
 ## guard: unrecognized-state
 

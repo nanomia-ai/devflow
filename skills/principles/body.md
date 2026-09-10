@@ -20,7 +20,7 @@ An exact local topic owner preserves canonical meaning without making every Deci
 
 ## why: exact-journal-progress-grammar
 
-Read [canonical journal and progress grammar](templates/canonical-journal-progress-grammar.md). The selected grammar owns only forms the line DSL cannot represent byte-exactly; project-state remains their deterministic parser.
+Read [canonical journal and progress grammar](templates/canonical-journal-progress-grammar.md). The selected grammar owns only forms the line DSL cannot represent byte-exactly; project-state remains their deterministic consumer.
 
 ## guard: authoring-not-ready
 

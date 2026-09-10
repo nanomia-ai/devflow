@@ -529,7 +529,7 @@ metadata가 바로 준다.
 
 선택 경계: `principles` 진입은 상태가 없고 오직 resume으로 가는 한 경로만 제공한다. SessionStart는 지연된 원칙 안내만 하며 상태·다음 단계·파일 본문을 판정하거나 주입하지 않는다. 지식 트리와 작업 트리는 직교하고, 프로젝트 연구 전용 카드는 `00` 아래에만 살며, 지식은 소유자 옆의 같은 stem 아래 재귀 `K`로만 확장한다; 중앙/수동 색인은 없고 `K`의 자식 수 0도 유효하다. 여섯 행동 제약은 이 경계를 지킨다: C1 product 전 research는 `00-project` 아래에서 지속적으로 남고, C2 card/source evidence는 이름 붙은 source evidence로 남으며, C3 conclusion은 가장 가까운 semantic owner 또는 정확한 crosscut owner에 착지하고, C4 `K`는 arch 또는 adopt만 쓰며, C5 closed history는 정확히 이름 붙은 provenance로만 열고, C6 multi-owner conclusion은 모든 owner를 보존해 원자적으로 착지한다. 정확한 JSON marker shape의 소유자는 principles FORMAT 하나이고, work template과 project-state parser는 seam test로 묶인 실행 투영이다; 이 결정에는 field를 중복하지 않는다. P2 Skill Rails 패키지는 영문으로 작성한 `spec.mjs`와 `body.md`를 실행 작성 정본으로 두고, 그 둘에서 `SKILL.md`를 생성하며 portable provenance와 생성·빌드·평가 증거를 패키지 안에 보존한다.
 
-반박: DD-29의 부분 어댑터가 journal·신선도·정합성을 빠뜨렸다는 이유는 지연 안내가 절차를 복제하지 않고 resume만 가리키므로 적용되지 않는다. DD-44의 번호 도달성과 카드 필드 중복 이유는 지식/작업이 별 트리이고 `00`·`K`가 카드 필드가 아닌 경로 소유권이므로 적용되지 않는다. DD-76 및 DR-17·DR-25의 같은 번호·유계 개봉 이유는 같은 stem 인접성, 정확 소비자, 재귀마다의 유계 개봉 및 자식 0 유효성이 보존하므로 적용되지 않는다. DD-78 및 DR-03의 훅 판정·journal 주입 중복 이유는 훅이 판정·주입을 하지 않으므로 유지된다. DD-57의 플러그인 캐시 동반 문서 이유는 P2의 portable provenance가 패키지 내부에서 그 동행을 검증 가능한 사실로 만들므로 보강된다.
+반박: DD-29의 부분 어댑터가 journal·신선도·정합성을 빠뜨렸다는 이유는 지연 안내가 절차를 복제하지 않고 resume만 가리키므로 적용되지 않는다. DD-44의 번호 도달성과 카드 필드 중복 이유는 지식/작업이 별 트리이고 `00`·`K`가 카드 필드가 아닌 경로 소유권이므로 적용되지 않는다. DD-76 및 DR-17·DR-25의 같은 번호·유계 개봉 이유는 같은 stem 인접성, 정확 소비자, 재귀마다의 유계 개봉 및 자식 0 유효성이 보존하므로 적용되지 않는다. DD-78 및 DR-03의 훅 판정·journal 주입 중복 이유는 훅이 판정·주입을 하지 않으므로 유지된다. DD-57의 플러그인 캐시 동반 문서 이유는 P2의 portable provenance가 패키지 내부에서 그 동행을 검증 가능한 사실로 만들므로 보강된다. 모든 research 질문·결정 경과·중간 결과를 카드나 progress log 하나에 합치면 current conclusion과 일시 진행이 mega-log에 다시 섞여 독자가 무엇이 여전히 현재인지 알 수 없다. 별도 cycle·evidence lifecycle·typed graph는 기존 card·owner/K·Git·verification 경계 옆에 두 번째 정본·생애·유지 의무를 만든다.
 
 영향 좌표: DD-03·DD-25·DD-28·DD-43·DD-44·DD-76·DD-29·DD-57·DD-54·DD-87, 원칙/재개/훅/지식 작성자와 패키지 배포물, 그리고 다중 소유·지식·진입 매트릭스 셀. DD-05·DD-11·DD-83은 각각 SessionStart 하나, 보고만 하는 계산, 한 읽기 전용 상태 계산이라는 범위에서 그대로 유효하다.
 
@@ -573,6 +573,42 @@ CHANGELOG, v0.23.11 구현 보고. DD-92 C1–C3·C5–C6의 이유와 DD-97의 
 재검토: 소유자 변경이 커밋되는데 바뀐 기존 K가 stale로 남거나, Direct가 카드 의존성을 찾으려고
 무관한 소유자를 scan해야 하거나, 일반 카드의 출처 있는 재사용 결론이 사라지거나, 물리 작성자 경계가
 정확한 마커 지정 의미 소유자의 원자적 착지를 막는 실제 장면이 관측될 때.
+
+### DD-110 · AI 실행 문맥은 판단 전에 목적·요청·승인을 정본 owner로 가리키고 durable 재진입을 보존한다 (v0.24.0)
+
+주제: 지식층과 능력 문서 | 도입: v0.24.0 | 상태: 유효
+
+관찰된 문제: 단계 목적·공통 Why·상시 READ의 반복은 상세 자료를 판단 전에 같은 무게로 보였다.
+긴 실행의 cold Codex와 Claude는 현재 요청·승인 범위·정확한 owner를 놓쳤다. Product 완료와
+Adopt follow-on 같은 정상 경계도 대화 기억이나 ROUTE의 자동 실행을 기대할 수 없으며, 새 세션은
+canonical disk state에서 다음 owner를 복원해야 한다.
+
+바라는 동작: 단계의 첫 판단 전에 cold AI가 목적·현재 요청·최근 명시 승인 또는 승인된 제안/카드와
+정본 owner/read path를 현재 값의 복사 없이 먼저 붙잡는다. 공통 판단 입력은 Decision 전에, branch
+전용 상세는 첫 effect 직전에 도달하고, 새 세션은 canonical disk state에서 다음 owner를 복원한다.
+
+선택 경계: 아홉 intent description과 단계 정체성은 유지한다. Principles policy-index가 이 입력을
+현재 owner/read path로 가리키는 문장을 소유하고 여덟 body는 이를 투영한다. 상태 도구는 committed
+Product 입력과 현재 byte가 같고 빠진 것이 정확히 Arch 소유 두 파일일 때만 기존 entry data로
+`stage:arch`를 보이며 Resume은 그 transient observation을 소비한다. Direct는 현재 요청·승인 범위에
+실제 미해결 Design 판단이 있을 때만 Design을 선택하고 current/default style 작업은 Work 방향으로
+유지한다. staged knowledge contract는 Adopt whole follow-on을 보존하고 no-follow-on 완료는 DONE이다.
+ROUTE는 실행 명령이 아니다. 새 상태·승인·route kind·registry·helper·model/OS 분기는 만들지 않는다.
+
+이 경계가 필요한 이유: 평평하게 반복된 전달은 목적과 승인의 중요도를 가렸고, 대화 연속성과 ROUTE
+실행은 durable 사실이 아니었다. 기존 owner와 artifact만으로 salience와 정상 경계 재진입을 함께
+복원해야 별도 정본이 생기지 않는다.
+
+기각 대안: byte 수만 줄이면 salience가 복원되지 않고, 모든 reference를 READ_FIRST로 두면 중요도가
+계속 평평하다. 아홉 spec 일괄 수정은 공통 owner를 복제하며, 대화 연속성을 복구 계약으로 만들면 두
+번째 상태 모델이 생긴다.
+
+영향 좌표: `skills/principles/references/policy-index.md`와 여덟 body projection,
+`skills/principles/scripts/project-state.mjs`, Resume collector·spec, Direct spec·body, Adopt body,
+Verify spec, 그 fixture·생성 receipt·저장소 검사.
+
+재검토: cold lane에서 owner·승인·필수 read가 빠지거나, 정상 단계 완료 뒤 fresh Resume이 안전한
+다음 owner를 못 찾거나, branch 상세가 판단 전에 다시 평평해질 때.
 
 ### DD-105 · 제안 독자는 확인을 묻기 전에 입력 소유자의 K 깊이를 유계 발견한다 (v0.23.12)
 

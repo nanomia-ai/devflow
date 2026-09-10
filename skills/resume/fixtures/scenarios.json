@@ -346,6 +346,52 @@
     "cover": []
   },
   {
+    "id": "completed-product-boundary-routes-arch",
+    "s": {
+      "state.canonicalNext": "setup.layer0-incomplete",
+      "state.compatibleWriter": "none",
+      "state.routeStage": "arch"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "row": "ROUTE:arch",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:arch"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ROUTE:arch",
+      "branch:canonicalNext/ROUTE:arch"
+    ]
+  },
+  {
+    "id": "unproven-incomplete-layer0-asks",
+    "s": {
+      "state.canonicalNext": "setup.layer0-incomplete",
+      "state.compatibleWriter": "none",
+      "state.routeStage": "none"
+    },
+    "judged": {
+      "intent.scope": "ordinary"
+    },
+    "expect": {
+      "stage": "scope-entry",
+      "row": "ASK:setup",
+      "status": "ASK",
+      "effects": [
+        "ASK"
+      ]
+    },
+    "cover": [
+      "row:canonicalNext/ASK:setup",
+      "branch:canonicalNext/ASK:setup"
+    ]
+  },
+  {
     "id": "glossary-term-routes-arch",
     "s": {
       "state.canonicalNext": "marker.glossary-term",

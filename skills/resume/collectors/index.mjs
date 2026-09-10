@@ -37,10 +37,18 @@ function compatibleWriter(state) {
   const marker = entries.find((entry) => entry?.kind === "compatible-feedback");
   return ["product", "design", "arch"].includes(marker?.writer) ? marker.writer : "invalid";
 }
-
 export const collectors = Object.freeze({
   "state.canonical-next": async (context) => route(await stateFor(context)),
   "state.compatible-writer": async (context) => compatibleWriter(await stateFor(context)),
+  "state.route-stage": async (context) => {
+    const state = await stateFor(context);
+    if (route(state) !== "setup.layer0-incomplete") return "none";
+    const entries = state?.zones?.setup?.entries;
+    if (!Array.isArray(entries)) return "invalid";
+    const entry = entries.find((candidate) => candidate?.kind === "layer0-incomplete");
+    if (!entry || entry.stage === undefined) return "none";
+    return entry.stage === "arch" ? "arch" : "invalid";
+  },
   "state.schema": async (context) => (await stateFor(context)) ? "schema-2" : "unavailable",
   "state.route": async (context) => route(await stateFor(context)),
   "state.zones": async (context) => (await stateFor(context)) ? "available" : "unavailable",

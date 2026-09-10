@@ -3148,12 +3148,43 @@ function evaluateZones(snapshot) {
   for (const line of snapshot.journal.filter((item) => item.kind === "re-split")) addEntry(zones, "marker", "re-split", { marker: line.raw, folder: line.folder, stale: line.stale });
 
   const missing = [];
-  if (snapshot.productText !== null && readFile(snapshot.root, ".devflow/project/glossary.md") === null) missing.push(".devflow/project/glossary.md");
+  const currentGlossary = readFile(snapshot.root, ".devflow/project/glossary.md");
+  if (snapshot.productText !== null && currentGlossary === null) missing.push(".devflow/project/glossary.md");
   if (snapshot.productText !== null && snapshot.archText === null) missing.push(".devflow/project/arch.md");
   if (snapshot.productText !== null && readFile(snapshot.root, ".devflow/project/code-style.md") === null) missing.push(".devflow/project/code-style.md");
+  let completedProductRoutesArch = false;
+  if (snapshot.committedLayer0Boundary === "present" && snapshot.head !== "none") {
+    const boundaryPaths = [
+      ".devflow/project/product.md", ".devflow/project/glossary.md",
+      ".devflow/project/arch.md", ".devflow/project/code-style.md",
+    ];
+    const listed = gitRun(snapshot.root, ["ls-tree", "-z", "--name-only", snapshot.head, "--", ...boundaryPaths], { allowFailure: true });
+    if (listed.status === 0) {
+      try {
+        const headPaths = decodeUtf8(listed.stdout, "committed Product boundary paths").split("\0").filter(Boolean);
+        const headProduct = gitFile(snapshot.root, snapshot.head, boundaryPaths[0]);
+        const headGlossary = gitFile(snapshot.root, snapshot.head, boundaryPaths[1]);
+        completedProductRoutesArch = headPaths.length === 2
+          && headPaths.includes(boundaryPaths[0]) && headPaths.includes(boundaryPaths[1])
+          && currentPathEvidence(snapshot.root, boundaryPaths[0]) === "present"
+          && currentPathEvidence(snapshot.root, boundaryPaths[1]) === "present"
+          && currentPathEvidence(snapshot.root, boundaryPaths[2]) === "absent"
+          && currentPathEvidence(snapshot.root, boundaryPaths[3]) === "absent"
+          && headProduct !== null && headGlossary !== null
+          && snapshot.productText === headProduct && currentGlossary === headGlossary
+          && (() => {
+            const productKnowledgeStatus = gitRun(snapshot.root, ["--no-optional-locks", "status", "--porcelain=v1", "-z", "--untracked-files=all", "--", ".devflow/project/product/"], { allowFailure: true });
+            return productKnowledgeStatus.status === 0 && Buffer.isBuffer(productKnowledgeStatus.stdout)
+              && productKnowledgeStatus.stdout.length === 0;
+          })();
+      } catch {
+        completedProductRoutesArch = false;
+      }
+    }
+  }
   if (snapshot.productText === null && snapshot.devflowMembership.unmanaged) addEntry(zones, "setup", "unmanaged");
   else if (snapshot.productText === null) addEntry(zones, "setup", "no-product", { missing: [".devflow/project/product.md"] });
-  else if (missing.length > 0) addEntry(zones, "setup", "layer0-incomplete", { missing });
+  else if (missing.length > 0) addEntry(zones, "setup", "layer0-incomplete", { missing, ...(completedProductRoutesArch ? { stage: "arch" } : {}) });
   else if (!snapshot.archFields.has("Brownfield")) addEntry(zones, "setup", "brownfield-field", { missing: ["Brownfield"] });
   else if (!snapshot.archFields.has("integration") || !snapshot.archFields.has("merge") || invalidIntegration) addEntry(zones, "setup", "integration-config", {
     missing: [!snapshot.archFields.has("integration") ? "integration" : null, !snapshot.archFields.has("merge") ? "merge" : null].filter(Boolean),

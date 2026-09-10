@@ -4,7 +4,7 @@
 
 Arch turns an approved product definition into current technical Layer 0 and capability design zones for a devflow-managed project, including an adopted brownfield. Adopt owns only the initial reconstruction of an unmanaged codebase. Arch preserves the canonical Brownfield origin rather than using it to redirect managed refresh, preserves reasons and rejected alternatives, keeps uncertain optimization values visibly provisional, and leaves implementation method to later work.
 
-Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+Before this stage's first judgment, anchor the active skill's objective to the current request and latest explicit approval or approved proposal/card, then use `<skill-root>/../principles/references/policy-index.md` and the selected Decision to open the canonical owner/read path; this does not invoke Principles classification.
 
 ## why: workflow
 

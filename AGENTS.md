@@ -10,11 +10,11 @@ read edges, and unbounded rules become defects in every project using devflow.
    projects every decision from `docs/design-decisions.md`. State which rows move, open those
    subjects, and refute a recorded reason before overturning a decision or re-proposing a
    rejection.
-2. Establish bounded current state: read both manifest versions, `git status --short`, and
-   the latest five commit subjects with changed paths. Read only the newest CHANGELOG entry.
-   From the greatest numeric-version round below the current version, read the shipped/result
-   and limitations/carry-forward sections; if that report has no such sections, read it in
-   full. Do not use the whole CHANGELOG, all rounds, or all blueprints as onboarding.
+2. Read both manifests, `git status --short`, five latest commits with
+   changed paths, and only the newest CHANGELOG entry. In `docs/rounds/`, manifest `X.Y.Z`
+   selects folder `vX.Y.0` and `report_ko.md` if `Z=0`, else `report-X.Y.Z_ko.md`. Read its
+   shipped/result and limitations/carry-forward sections, or the full report if absent. Do not
+   onboard from the whole CHANGELOG, all rounds, or all blueprints.
 3. Fix the requested write scope as exact paths. Open only the sections that the wiring
    table below triggers. When uncertain whether a condition applies, expand the read set;
    never silently shrink it.

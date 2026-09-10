@@ -4,7 +4,7 @@
 
 Verification records executed evidence at a capability or product boundary. Canonical principles projections own state, revisions, events, and completion facts; this package orders their use without replacing their grammar.
 
-Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+Before this stage's first judgment, anchor the active skill's objective to the current request and latest explicit approval or approved proposal/card, then use `<skill-root>/../principles/references/policy-index.md` and the selected Decision to open the canonical owner/read path; this does not invoke Principles classification.
 
 ## why: verification-boundary
 
@@ -30,21 +30,9 @@ Route Audit and Retrospective as canonical events after a verdict; neither role 
 
 Resolve canonical result, event, request, and repair priorities before selecting new work.
 
-## why: audit-guidance
-
-Use the bounded Audit event lifecycle and its clean execution boundary before dispatch.
-
-## why: retrospective-guidance
-
-Use the bounded Retrospective lifecycle and artifact-only judgment after verification.
-
 ## why: record-grammar
 
 Use only current-format records, revision predicates, and journal signatures when deriving state.
-
-## why: recovery-completion
-
-A prepared route or interrupted result is a durable disk object, not a cue to replay verification. Its declared remaining suffix must finish once and leave the transition cleared; an object that cannot be validated or completed stops closed.
 
 ## why: execution-evidence
 

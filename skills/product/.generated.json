@@ -3,15 +3,15 @@
   "skill_id": "product",
   "profile": "p2",
   "built_at": null,
-  "build_id": "sha256:4a357279398bc754ea3e0123c320d66efbbae7b3250b79aabc03d1e35f81e3f0",
-  "spec_hash": "sha256:264b655886dc45ab798d833700b5eeec66fdf6c3d57f51e5910416b007fa556b",
+  "build_id": "sha256:081844540e2560acc864835b047b757b18f4349acef39f13f76ad3bde63c9027",
+  "spec_hash": "sha256:7248dc27489297db5c2aa32e99f12472af0aa15a859d40fefa1d8d63de8063ad",
   "dsl_hash": "sha256:e8d77b180b886db5cf0474682c7ea2dfea19065561a015878c70efe1441694e6",
   "runtime_hash": "sha256:c871a427645d6f734e97c777f694c94678dafd36dabf777608a543cc2648df3b",
   "validator_hash": "sha256:07ae1f97a8abd6e427cb9fab74997deabe4c813982027a982c3b9265cecc696c",
-  "content_hash": "sha256:41c81060287bd5fb7e600922e0b3190cf7331eb780cc998fd766c36695c0640b",
+  "content_hash": "sha256:f8827c3df93b9289c0c38d06b0448c601a75a926b8b69312390068419684d980",
   "content": {
     "SKILL.md": "sha256:2d2087be1aabaf884dc5555d687de53d930c55ee52cab80d28c00b34775b32a5",
-    "body.md": "sha256:562da007dc725a36dcc6498dab7e2f84eee6b6273cd2b74ca9773eff90c7b1a2",
+    "body.md": "sha256:c0a11002a54a05a5dc2fc758b7f9e5ccb859eabcd00ac1f752d35080ec15ed8c",
     "collectors/index.mjs": "sha256:d5a0be32dbec974fa0dd069011ff5bed6e9909442a1f553d20de4fa6cb072e30",
     "collectors/source-atoms.json": "sha256:7a82cc27a68bf5e9a7568b3bbcfccde680bdc48603bfea31a92ea55c7e0b5eb9",
     "fixtures/formats.json": "sha256:37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
@@ -31,7 +31,7 @@
     ".skill-rails/intent.json": "sha256:c46300c384da7724baa1c434e223b9948ce9581d5204ffc4201e5d2313d274dc",
     ".skill-rails/profile-decision.json": "sha256:1c27d1059f3f56d761b02dcfc1c21c0e40b925275573e62c64a20c6d97a989c0",
     ".skill-rails/eval-cases.json": "sha256:b84ad6576bb6d9a705cf83e215d0d863c040ba8a8baeea60474853eed1773367",
-    ".skill-rails/obligation-ledger.json": "sha256:c5555336055fd44e5b88445f02d9663ebbecced7bb1a34052072ad86b26868f7"
+    ".skill-rails/obligation-ledger.json": "sha256:ca7bdddf0cf5d269166a3c580f99d46ff5cd7f6fb52a847e8564fc1997f36285"
   },
   "runtime_files": [
     "align.mjs",

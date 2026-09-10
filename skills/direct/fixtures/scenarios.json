@@ -1114,6 +1114,39 @@
     ]
   },
   {
+    "id": "unresolved-ui-design-routes-owner-before-cards",
+    "s": {
+      "project.product": "present",
+      "request.current": {
+        "source": "user",
+        "request": "add the first implementation-facing UI"
+      },
+      "request.phase": "uncommitted",
+      "origin.active": "NONE",
+      "origin.drafts": "NONE",
+      "origin.projectResearch": "NONE",
+      "approval.boundary": "NONE",
+      "approval.issue": "NONE",
+      "planning.receipt": "NONE",
+      "projectResearch.approval": "none"
+    },
+    "judged": {
+      "request.classification": "design-change"
+    },
+    "expect": {
+      "stage": "intake",
+      "row": "route-design",
+      "status": "ROUTE",
+      "effects": [
+        "ROUTE:design"
+      ]
+    },
+    "cover": [
+      "row:intakeSelector/route-design",
+      "branch:intakeSelector/route-design"
+    ]
+  },
+  {
     "id": "design-confirmed-request-proceeds-to-materialize",
     "s": {
       "project.product": "present",

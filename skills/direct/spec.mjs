@@ -101,6 +101,8 @@ export const STAGES = [
 
 export const ARTIFACTS = {
   product: { path: ".devflow/project/product.md", writer: "external.product", readers: ["stage.intake"] },
+  arch: { path: ".devflow/project/arch.md", writer: "external.arch", readers: ["stage.intake"] },
+  design: { path: ".devflow/project/design.md", writer: "external.design", readers: ["stage.intake"] },
   journal: { path: ".devflow/journal.md", writer: "external.principles", readers: ["stage.intake", "stage.materialize", "stage.carry-approval", "stage.propose"] },
   requestRecord: { path: ".devflow/journal.md", writer: "direct", readers: ["stage.intake", "stage.materialize"] },
   layerOpeningBundle: { path: ".devflow/journal.md", writer: "direct", readers: ["stage.materialize"] },

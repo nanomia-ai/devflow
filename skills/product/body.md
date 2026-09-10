@@ -1,16 +1,10 @@
 # Product
 
-## why: purpose
+## why: evidence-boundary
 
-Product planning is a revisable service-level synthesis, not a one-shot interview. Keep the six judgments — Problem, Approach, Capability composition, Boundary, Success criteria, and Screens & access points — together as present truth in product.md.
-
-Its migration provenance is the immutable repository sources `skills/product/SKILL.md` and `skills/product/SKILL_ko.md`, identified by their recorded source hashes.
+Before this stage's first judgment, anchor the active skill's objective to the current request and latest explicit approval or approved proposal/card, then use `<skill-root>/../principles/references/policy-index.md` and the selected Decision to open the canonical owner/read path; this does not invoke Principles classification.
 
 Each capability row identifies a stable number and name, the user outcome it enables, and why that outcome is needed for success. Responsibility and a success signal belong to different concerns and must not replace those fields.
-
-Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
-
-## why: evidence-boundary
 
 Raw repository, contract, and research facts inform a judgment but do not become product truth by themselves. Direct owns materializing and approving durable `00-project` research cards; Work executes approved research, and Product synthesizes settled evidence into product judgment. Only an explicitly approved product write at its canonical binding boundary can replace the current plan.
 

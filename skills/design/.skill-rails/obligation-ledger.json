@@ -26,11 +26,10 @@
       "consequence": "low",
       "disposition": "projected",
       "targets": [
-        "body:why: purpose",
         "file:references/purpose.md"
       ],
       "evidence": [
-        "body:why: purpose"
+        "file:references/purpose.md"
       ]
     },
     {

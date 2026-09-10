@@ -6,7 +6,7 @@ Carry one approved card through implementation, current execution evidence, clea
 integration, durable feedback, and its observed boundary without replacing principles,
 direct, verify, or a semantic owner.
 
-Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
+Before this stage's first judgment, anchor the active skill's objective to the current request and latest explicit approval or approved proposal/card, then use `<skill-root>/../principles/references/policy-index.md` and the selected Decision to open the canonical owner/read path; this does not invoke Principles classification.
 
 ## guard: card-target-required
 

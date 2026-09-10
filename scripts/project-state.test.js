@@ -16,6 +16,8 @@ const ADOPT_SPEC = path.resolve(__dirname, "../skills/adopt/spec.mjs");
 const ARCH_SPEC = path.resolve(__dirname, "../skills/arch/spec.mjs");
 const DIRECT_SKILL_ROOT = path.resolve(__dirname, "../skills/direct");
 const DIRECT_COLLECTORS = path.resolve(DIRECT_SKILL_ROOT, "collectors/index.mjs");
+const RESUME_SKILL_ROOT = path.resolve(__dirname, "../skills/resume");
+const RESUME_RUN = path.resolve(RESUME_SKILL_ROOT, "scripts/skill-rails/run.mjs");
 const PRODUCT_SPEC = path.resolve(__dirname, "../skills/product/spec.mjs");
 const PRODUCT_COLLECTORS = path.resolve(__dirname, "../skills/product/collectors/index.mjs");
 const ADOPT_PRODUCT_TEMPLATE = path.resolve(__dirname, "../skills/adopt/templates/product.md");
@@ -431,6 +433,61 @@ ${retrospective}
 async function registry() {
   return import(pathToFileURL(TOOL).href);
 }
+
+test("completed Product re-enters Arch only from exact unchanged four-path evidence", async (t) => {
+  const { calculateState } = await registry();
+  const resume = (root) => {
+    const result = spawnSync(process.execPath, [RESUME_RUN, "stage", "--skill", RESUME_SKILL_ROOT, "--project", root,
+      "--judged", "intent.scope=ordinary", "--json"],
+    { cwd: root, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 });
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+    return JSON.parse(result.stdout).decision;
+  };
+  const setupEntry = async (root) => (await calculateState({ root })).zones.setup.entries
+    .find((entry) => entry.kind === "layer0-incomplete");
+
+  await t.test("unchanged committed Product and glossary with absent Arch outputs route Arch", async (t) => {
+    const root = makeRepo(t, { arch: false, codeStyle: false, baseline: false, tree: false });
+    const entry = await setupEntry(root);
+    assert.deepEqual(entry.missing, [".devflow/project/arch.md", ".devflow/project/code-style.md"]);
+    assert.equal(entry.stage, "arch");
+    const decision = resume(root);
+    assert.equal(decision.stage, "scope-entry");
+    assert.deepEqual(decision.effects, ["ROUTE:arch"]);
+  });
+
+  for (const [name, arrange] of [
+    ["dirty glossary", (t) => {
+      const root = makeRepo(t, { arch: false, codeStyle: false, baseline: false, tree: false });
+      write(root, ".devflow/project/glossary.md", "# Glossary\n\nChanged.\n");
+      return root;
+    }],
+    ["untracked glossary", (t) => {
+      const root = makeRepo(t, { glossary: false, arch: false, codeStyle: false, baseline: false, tree: false });
+      write(root, ".devflow/project/glossary.md", "# Glossary\n\nUntracked.\n");
+      return root;
+    }],
+    ["untracked Product knowledge", (t) => {
+      const root = makeRepo(t, { arch: false, codeStyle: false, baseline: false, tree: false });
+      write(root, ".devflow/project/product/K-001-uncommitted.md", "# Uncommitted Product knowledge\n");
+      return root;
+    }],
+    ["deleted Arch outputs", (t) => {
+      const root = makeRepo(t, { baseline: false, tree: false });
+      fs.rmSync(path.join(root, ".devflow/project/arch.md"));
+      fs.rmSync(path.join(root, ".devflow/project/code-style.md"));
+      return root;
+    }],
+  ]) {
+    await t.test(`${name} stays an unproven setup ASK`, async (t) => {
+      const root = arrange(t);
+      assert.equal((await setupEntry(root)).stage, undefined);
+      const decision = resume(root);
+      assert.equal(decision.row, "ASK:setup");
+      assert.deepEqual(decision.effects, ["ASK"]);
+    });
+  }
+});
 
 function completedRepo(t, verdict = null) {
   const root = makeRepo(t, { brownfield: "no" });
@@ -1100,6 +1157,8 @@ test("T2 unmanaged activation needs an absent current .devflow root and index", 
     ok(result);
     assert.ok(hasKind(result.stdout, "setup", "layer0-incomplete"), result.stdout);
     assert.ok(hasKind(result.stdout, "setup", "layer0-uncommitted"), result.stdout);
+    const incomplete = result.stdout.split(/\r?\n/).find((line) => line.startsWith("setup: kind=layer0-incomplete"));
+    assert.equal(incomplete.includes("stage=arch"), false, result.stdout);
     assert.equal(nextOf(result.stdout), "setup.layer0-uncommitted", result.stdout);
     assert.equal(result.stdout.includes("integrity: kind=blocking"), false, result.stdout);
     write(root, ".devflow/project/arch.md", arch());
@@ -2955,7 +3014,7 @@ test("R7 the canon's progress heads and the tool's recognizer are one table", as
   const canonHeads = [...new Set([...nativeHeads, ...selectedHeads])].sort();
   assert.deepEqual(parserHeads, ["carry:", "completion signal result:", "remote evidence check:", "review result:"]);
   assert.deepEqual(canonHeads, parserHeads, "the canon's four progress formats and the recognizer's heads are the same set");
-  assert.ok(grammar.includes("`project-state.mjs` is the deterministic parser and rejects malformed, reordered, duplicate, missing, bare, and CRLF forms"));
+  assert.ok(grammar.includes("`project-state.mjs` is the deterministic consumer and rejects malformed, reordered, duplicate, missing, bare, and CRLF forms"));
 });
 
 test("R7 an in-progress card before its review is not blocked by the missing evidence", (t) => {

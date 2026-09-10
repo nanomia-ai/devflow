@@ -8,12 +8,6 @@
 
 ## 실전 관찰 항목 — 규칙 추가 없이 다음 사이클에서 지켜볼 것
 
-- **millisecond prefix를 붙인 예약 journal 행은 integrity item 12를 우회한다** (2026-09-10
-  clean Claude Adopt → Direct 실사용에서 관찰) — Claude가 안내된
-  `2026-09-03T00:00:00.000Z maintenance routing pending:` 예제를 썼지만 project-state는
-  item-12 소견 없이 `request.current=NONE`을 보고했고 Direct는 같은 write effect를 다시 냈다.
-  fixture 수리는 잘못된 안내를 없앤다. malformed-prefix 진단 확장은 attributed-line 경계를
-  전부 검증하는 별도 라운드에서만 다룬다.
 - **호환 환류 실전 잔여는 유계 관찰로 남는다** (DD-96 seal과 integration-behind 수리가
   2026-09-02 기록) — 첫째, 상태 도구는 현재 Git 이력에서 차단형 reopen finding을 도출하며
   journal을 고친 뒤에도 그것을 지울 수 없다. 이것은 기록일 뿐이고 런타임 동작 변경 권한이
@@ -235,6 +229,15 @@
 
 아래는 이미 이행되어 관찰 목록에서 내려온 항목이다. 재제안 때 이 계보를 먼저 본다.
 
+- ~~**millisecond prefix를 붙인 예약 journal 행은 integrity item 12를 우회한다**~~ (2026-09-10
+  clean Claude Adopt → Direct 실사용에서 관찰) — Claude가 안내된
+  `2026-09-03T00:00:00.000Z maintenance routing pending:` 예제를 썼지만 project-state는
+  item-12 소견 없이 `request.current=NONE`을 보고했고 Direct는 같은 write effect를 다시 냈다.
+  fixture 수리는 잘못된 안내를 없앤다. malformed-prefix 진단 확장은 attributed-line 경계를
+  전부 검증하는 별도 라운드에서만 다룬다. **종결:** `b178898`의 staged knowledge-contract repair가
+  `skills/principles/references/state/journal-grammar.md`를 의미 owner로 유지하면서 near-miss의
+  원문·locator 진단, exact Adopt projection, staged candidate guard를 같은 경계에서 닫았고 0.24.0이
+  이를 출시한다. 범용 Skill Rails timestamp/JSON domain은 바꾸지 않았다.
 - ~~Skill Rails `resume`은 종결 terminal의 trace run을 다시 쓸 수 있다~~ — v0.23.20이 외부
   소유자 Skill Rails 0.3.4의 공통 runtime을 아홉 P2 패키지에 함께 투영했다. `resume/2`는 마지막
   Decision의 `reinvoke`가 `after-effects` 또는 `recompute`일 때만 `next_command`를 만들며,

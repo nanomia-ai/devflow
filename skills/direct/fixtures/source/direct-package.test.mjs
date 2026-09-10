@@ -34,3 +34,20 @@ test("materialization gives T-low cards concrete basis without copying automatic
   assert.match(body, /Reproject only a needed nested branch/);
   assert.match(body, /never open bodies or enumerate other capabilities/);
 });
+
+test("intake reads canonical design inputs before classifying unresolved UI work", async () => {
+  const spec = await import(pathToFileURL(join(skillRoot, "spec.mjs")).href);
+  const body = readFileSync(join(skillRoot, "body.md"), "utf8");
+
+  assert.deepEqual(spec.ARTIFACTS.arch, {
+    path: ".devflow/project/arch.md",
+    writer: "external.arch",
+    readers: ["stage.intake"]
+  });
+  assert.deepEqual(spec.ARTIFACTS.design, {
+    path: ".devflow/project/design.md",
+    writer: "external.design",
+    readers: ["stage.intake"]
+  });
+  assert.match(body, /Only a current request or approved scope that requires an unresolved Design decision not supplied by confirmed `design\.md` is `design-change`; work under the current or default style remains `tree-work`/);
+});

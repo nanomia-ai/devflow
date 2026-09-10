@@ -1,14 +1,8 @@
 # Design
 
-## why: purpose
-
-Design optionally settles the current UI direction without turning a stage into a once-only phase. It keeps the six planning decisions coherent: approach, canonical source, token strategy, component strategy, decomposition axis, and review surface.
-
-Its migration provenance is the immutable repository sources `skills/design/SKILL.md` and `skills/design/SKILL_ko.md`, identified by their recorded source hashes.
-
-Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.
-
 ## why: ownership
+
+Before this stage's first judgment, anchor the active skill's objective to the current request and latest explicit approval or approved proposal/card, then use `<skill-root>/../principles/references/policy-index.md` and the selected Decision to open the canonical owner/read path; this does not invoke Principles classification.
 
 The design writer owns one current design document and its design/K depth. It projects existing design/K headers before approval and updates a changed unit at its current locus in the same validated commit. It never writes recursive capability knowledge; a durable capability subtopic remains with the later capability writer.
 

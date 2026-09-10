@@ -12,8 +12,10 @@ test("prepared and interrupted recovery perform a finite suffix and resume", () 
   for (const branchName of ["prepared-route", "interrupted-result"]) {
     const branch = recover.branches[branchName];
     assert.equal(branch.at(-1), "ROUTE:resume");
-    assert.deepEqual(branch.map((step) => Array.isArray(step) ? step[0] : step), ["READ", "RUN", "COMMIT", "ROUTE:resume"]);
-    assert.match(branch[1][1].action, /validate.*(suffix|result).*once/i);
+    const verbs = branch.map((step) => Array.isArray(step) ? step[0] : step);
+    assert.deepEqual(verbs.filter((verb) => verb !== "READ"), ["RUN", "COMMIT", "ROUTE:resume"]);
+    const validateStep = branch.find((step) => Array.isArray(step) && step[0] === "RUN");
+    assert.match(validateStep[1].action, /validate.*(suffix|result).*once/i);
   }
 });
 

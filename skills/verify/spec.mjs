@@ -66,10 +66,10 @@ export const GUARDS = [
 
 export const STAGES = [
   { id: "recover", reads: ["projection.transition"], acceptsUnknown: [], done: s => s.projection.transition === "none", table: "recovery", reentry: "rejudge", branches: {
-    "prepared-route": [["READ", { artifact: "record" }], ["RUN", { action: "validate the prepared disk object and apply its remaining declared suffix exactly once" }], ["COMMIT", { authority: "external.principles", transition: "prepared-route-completion" }], "ROUTE:resume"],
-    "interrupted-result": [["READ", { artifact: "record" }], ["RUN", { action: "validate the stored result and finish its exact durable record transition once" }], ["COMMIT", { authority: "external.principles", transition: "product-verification-result-completion" }], "ROUTE:resume"],
-    "closing-suffix": [["READ", { artifact: "closingMarker", ref: "HEAD" }], ["RUN", { action: "finish the canonical verify.md and journal sweep for closure.target, delete that exact capability-closing line, and rename that folder to .done; write no record, baseline, or new closing line" }], ["COMMIT", { authority: "external.principles", boundary: "capability-closure" }], "ROUTE:resume"],
-    "partial-write": [["READ", { artifact: "record" }], ["REPORT", { template: "route" }], "ROUTE:verify"]
+    "prepared-route": [["READ", { path: "references/recovery-completion.md" }], ["READ", { artifact: "record" }], ["RUN", { action: "validate the prepared disk object and apply its remaining declared suffix exactly once" }], ["COMMIT", { authority: "external.principles", transition: "prepared-route-completion" }], "ROUTE:resume"],
+    "interrupted-result": [["READ", { path: "references/recovery-completion.md" }], ["READ", { artifact: "record" }], ["RUN", { action: "validate the stored result and finish its exact durable record transition once" }], ["COMMIT", { authority: "external.principles", transition: "product-verification-result-completion" }], "ROUTE:resume"],
+    "closing-suffix": [["READ", { path: "references/recovery-completion.md" }], ["READ", { artifact: "closingMarker", ref: "HEAD" }], ["RUN", { action: "finish the canonical verify.md and journal sweep for closure.target, delete that exact capability-closing line, and rename that folder to .done; write no record, baseline, or new closing line" }], ["COMMIT", { authority: "external.principles", boundary: "capability-closure" }], "ROUTE:resume"],
+    "partial-write": [["READ", { path: "references/recovery-completion.md" }], ["READ", { artifact: "record" }], ["REPORT", { template: "route" }], "ROUTE:verify"]
   }, body: "stage: recover" },
   { id: "dispatch-verifier", reads: ["verification.layer", "closure.target", "verifier.dispatch"], acceptsUnknown: [], done: s => s.verifier.dispatch === "returned" && (s.verification.layer === "product" || s.closure.target !== "NONE"), table: "dispatch", reentry: "rejudge", branches: {
     ready: [["READ", { artifact: "product" }], ["READ", { artifact: "arch" }], ["READ", { artifact: "codeStyle" }], ["READ", { artifact: "glossary" }], ["DISPATCH", { role: "verifier", template: "verifierBundle", target: "closure.target.folder when capability; product otherwise" }], "WAIT"]
@@ -91,8 +91,8 @@ export const STAGES = [
     continue: [["WRITE", { artifact: "record", template: "record", target: "closure.target.folder/verify.md when capability; .devflow/tree/verify.md when product" }], ["COMMIT", { authority: "external.principles", transition: "product-verification-result" }], "ROUTE:product"]
   }, body: "stage: product-stop" },
   { id: "event-routing", reads: ["event.pending"], acceptsUnknown: [], done: s => s.event.pending === "none", table: "event", reentry: "rejudge", branches: {
-    audit: [["DISPATCH", { role: "auditor", template: "route" }], "WAIT"],
-    retrospective: [["DISPATCH", { role: "retrospector", template: "route" }], "WAIT"]
+    audit: [["READ", { path: "references/audit-events.md" }], ["DISPATCH", { role: "auditor", template: "route" }], "WAIT"],
+    retrospective: [["READ", { path: "references/retrospective-events.md" }], ["DISPATCH", { role: "retrospector", template: "route" }], "WAIT"]
   }, body: "stage: event-routing" }
 ];
 
@@ -148,10 +148,7 @@ export const READ_FIRST = [
   { body: "why: product-stop-guidance", path: "references/product-stop.md" },
   { body: "why: event-guidance", path: "references/event-guidance.md" },
   { body: "why: event-priority", path: "references/event-priority.md" },
-  { body: "why: audit-guidance", path: "references/audit-events.md" },
-  { body: "why: retrospective-guidance", path: "references/retrospective-events.md" },
   { body: "why: record-grammar", path: "references/record-grammar.md" },
-  { body: "why: recovery-completion", path: "references/recovery-completion.md" },
   { body: "why: execution-evidence", path: "references/execution-evidence.md" }
 ];
 

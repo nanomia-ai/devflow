@@ -43,17 +43,17 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증
 
 | 구성요소 | 존재 이유와 소유 범위 | 입력 → 다음 소비자 | 설계 계보 |
 |---|---|---|---|
-| `principles` | 공통 정책 색인·커밋 규율과 확인된 프로젝트 작업 언어를 따르는 산문 작성 정책을 소유하며 Principles로 들어온 현재 프로젝트 devflow 요청만 상태 없이 분류. 이름을 명시한 단계는 자체 진입에서 그 색인을 읽되 Principles 사전 분류는 하지 않음 | 단계 이름 없는 현재 프로젝트 devflow 의도 → resume, 명시 단계 → 공통 정책 색인 뒤 이름 난 소유자, 역할 계약 → 계약 직접 진입 | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 · DD-107 · DD-109 |
-| `product` | 문제·정체성·능력·경계·성공 판정과 프로젝트 작업 언어를 소유자와 확정하고 `product.md`에 한 사실로 소유 | 명시한 새 프로젝트·제품 기획 요청 → arch·design. 기존 프로젝트의 최초 역산은 Product를 거치지 않고 Adopt가 소유 | 기원 · DD-33 · DD-67 · DD-97 · DD-107 · DD-109 |
+| `principles` | 공통 정책 색인·커밋 규율과 확인된 프로젝트 작업 언어를 따르는 산문 작성 정책을 소유하며 Principles로 들어온 현재 프로젝트 devflow 요청만 상태 없이 분류. 이름을 명시한 단계는 자체 진입에서 그 색인의 투영을 읽되 Principles 사전 분류는 하지 않음 | 단계 이름 없는 현재 프로젝트 devflow 의도 → resume, 명시 단계 → 공통 정책 색인 뒤 이름 난 소유자, 역할 계약 → 계약 직접 진입 | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 · DD-107 · DD-109 · DD-110 |
+| `product` | 문제·정체성·능력·경계·성공 판정과 프로젝트 작업 언어를 소유자와 확정하고 `product.md`에 한 사실로 소유 | 명시한 새 프로젝트·제품 기획 요청 → arch·design. 완료 뒤 fresh entry는 보존된 Product 경계에서 arch를 재발견하고, 기존 프로젝트의 최초 역산은 Adopt가 소유 | 기원 · DD-33 · DD-67 · DD-97 · DD-107 · DD-109 · DD-110 |
 | `arch` | 관리 프로젝트의 현재 기술 Layer 0·stack·코드 구조·data·verify channel·glossary·능력 설계 구역을 확정하고 갱신 | product 또는 관리 상태 glossary·design·baseline 경로 → direct·work·verify | DD-42 · DD-43 · DD-69 · DD-97 · DD-99 |
 | `design` | 선택적 UI 접근 방식·원천·token/component 전략·분해 축·검토 표면을 확정 | product·arch → arch 능력 설계와 direct | DD-69 · DD-99 |
-| `adopt` | 무관리 브라운필드의 모든 유지 자료를 일시적으로 회계하고, 의미 있는 사람 산문에서 작업 언어를 제안하며, 흡수 입력을 현재 의존성으로 남기지 않고 그 영속 의미를 자기완결 Product·Architecture·해당 시 Design·code style·glossary·능력 설계 구역·소유자 인접 K로 이전 | 무관리 문서 및/또는 코드 → 독립적으로 유지 가능한 관리 기획·지식 표면과 `product.md`의 작업 언어, 그 뒤 정지 | DD-10 · DD-20 · DD-26 · DD-97 · DD-107 · DD-108 · DD-109 |
-| `direct` | 기획 깊이와 실행 단위 크기를 판단하고 연구·작업 카드를 구체화해 실행 제안과 Work 인계를 승인받는 작업 방향을 소유하되 실제 에이전트 배치·감독은 하지 않음 | Layer 0·기록·현재 코드 → work | DD-25 · DD-50 · DD-67 · DD-99 |
+| `adopt` | 무관리 브라운필드의 모든 유지 자료를 일시적으로 회계하고, 의미 있는 사람 산문에서 작업 언어를 제안하며, 흡수 입력을 현재 의존성으로 남기지 않고 그 영속 의미를 자기완결 Product·Architecture·해당 시 Design·code style·glossary·능력 설계 구역·소유자 인접 K로 이전 | 무관리 문서 및/또는 코드 → 독립적으로 유지 가능한 관리 기획·지식 표면과 `product.md`의 작업 언어, whole follow-on이 있으면 journal을 거쳐 direct, 없으면 정지 | DD-10 · DD-20 · DD-26 · DD-97 · DD-107 · DD-108 · DD-109 · DD-110 |
+| `direct` | 기획 깊이와 실행 단위 크기를 판단하고 연구·작업 카드를 구체화해 실행 제안과 Work 인계를 승인받는 작업 방향을 소유하되 실제 에이전트 배치·감독은 하지 않음 | 현재 요청·승인 범위와 Layer 0·기록·현재 코드 → 필요한 미해결 Design 판단 또는 work | DD-25 · DD-50 · DD-67 · DD-99 · DD-110 |
 | `work` | 카드 하나의 코드·진행 로그·완료 신호·상위 문서 환류를 끝까지 운반 | 승인 카드·정본·baseline → verify 또는 다음 카드 | DD-09 · DD-48 · DD-56 |
 | `verify` | 실제 실행으로 능력·제품 verdict를 내리고 실패·감리·회고의 생존 경로를 소유 | 닫힌 코드·신호·baseline → direct 수리 또는 폐쇄 | DD-21–DD-24 · DD-30 · DD-36 · DD-68 · DD-99 |
-| `resume` | 구조화된 디스크 상태를 단독으로 읽고 중단된 전이를 복구해 다음 단계로 라우팅 | Git·작업·지식 tree·journal·verify 투영 → 해당 entry skill | DD-11 · DD-25 · DD-26 · DD-44 · DD-92 |
+| `resume` | 구조화된 디스크 상태와 transient entry observation을 단독으로 읽고 중단된 전이를 복구해 다음 단계로 라우팅 | Git·작업·지식 tree·journal·verify 투영 → 해당 entry skill | DD-11 · DD-25 · DD-26 · DD-44 · DD-92 · DD-110 |
 | predicate 동반 정본 | 여러 단계가 공유하는 baseline 판정을 한 곳에서 고정. 상태·검증 판정은 상태 도구로 옮겼다 | 명시된 소비자만 읽고 절차는 각 단계가 소유 | DD-28 · DD-42 · DD-56 · DD-80 · DD-92 |
-| 상태 도구 | 진입·술어·무결성 계산의 소유자, 읽기 전용이고 아무것도 고치지 않는다 | 디스크와 Git → 구역 열넷과 파생 한 줄 `next:`. 부름 하나, 소비자 여섯 | DD-11 · DD-25 · DD-39 · DD-80 |
+| 상태 도구 | 진입·술어·무결성 계산의 소유자, 읽기 전용이고 아무것도 고치지 않는다 | 디스크와 Git → 구역 열넷, 유계 entry observation, 파생 한 줄 `next:`. 부름 하나, 소비자 여섯 | DD-11 · DD-25 · DD-39 · DD-80 · DD-110 |
 | 역할 계약 | reviewer·verifier·auditor·retrospector를 깨끗한 컨텍스트에 원문 브리핑 | entry skill의 사건 → 편향을 제한한 독립 판단 | DD-19 · DD-21–DD-23 |
 | `coordinator` 역할 계약 | devflow 위에서 worker를 배치·감독하되 새 단계나 상태를 만들지 않음 | orchestrator → 기존 entry skill | DD-70 |
 
@@ -83,6 +83,7 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증
 | `skills/<name>/spec.mjs` · `body.md` | P2 실행 작성 정본 — 영문 구조화 동작과 산문 본문 | P2 스킬 작성·생성·평가 시 |
 | `skills/<name>/SKILL.md` · `.generated.json` | 생성 배포물과 영수증 — 작성 정본에서 빌드된 런타임 진입점과 생성 정체성 | devflow 런타임과 빌드·릴리스 검증 시 |
 | `skills/<name>/references/**` | 정확 소비자 동반 자료와 이관 출처 — 런타임 참조는 이름 난 경로로 열고 `legacy-atoms/`는 작성 정본이 아닌 이관 계보로만 보존 | `spec.mjs`·`body.md`가 정확 소비자를 지목할 때. legacy atom은 이관 출처를 대조할 때 |
+| `skills/principles/references/policy-index.md` | 런타임 정본 — 단계 첫 판단 전에 목적·현재 요청·최근 명시 승인 또는 승인된 제안/카드에서 Decision이 선택한 현재 owner와 필요한 read path를 가리키며 그 값을 복사해 소유하지 않는다 | 각 이름 난 단계의 진입에서 body의 동일 projection을 거쳐, Decision이 선택한 원문을 열 때 |
 | `skills/principles/references/planning/evidence-discipline.md` | 런타임 동반 자료 — 기획 증거 규율 | product·arch·adopt는 진입 시, direct는 유지보수 기획 깊이 등급 판정 시 유계하게 |
 | `skills/principles/references/coordination/coordinator-contract.md` | 역할 계약 — devflow 위에서 다른 실행자를 디스패치하는 `coordinator`의 의무 | 첫 디스패치 전에 |
 

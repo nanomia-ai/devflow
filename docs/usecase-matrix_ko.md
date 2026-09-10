@@ -999,3 +999,13 @@ Principles가 소유하는 journal·progress 예제의 timestamp를 canonical �
 않는다. 실제 fixture 행을 읽는 Gate A에서 live writer 둘은 각각 request와 closing marker로
 투영됐고, 나머지 예약 head는 투영되거나 item 12 진단으로 드러났다. **기존 판정 유지,
 새 H 행 0, 새 A 행 0, 새 교차 셀 0, 새 공백 0.**
+
+0.24.0 재판정 결과(staged knowledge contract · DD-110 AI 실행 문맥): §1·§2 전 행과
+§3.16·§3.18·§3.24의 현재 source를 대조했다. staged candidate 검사는 기존 journal/Product 의미를
+보존하며 새 요청·진입 형태를 만들지 않는다. DD-110은 아홉 단계 정체성과 승인·검증·복구 경계를
+유지한 채 판단 전 목적·현재 요청·승인 범위를 정본 owner/read path로 잇고 branch 상세를 첫 소비자
+가까이에 둔다. Product 완료 뒤 fresh 재진입은 기존 Product→Architecture 경로의 내부 생애 경계이므로
+§1·§2의 새 요청 형태도 새 진입 지점도 아니다. Adopt no-follow-on DONE과 ROUTE 비자동 실행은
+그대로다. **새 H 행 0, 새 A 행 0, 새 교차 셀 0**이며, 어느 칸의 기존 판정도 움직이지 않으므로 공백
+수는 새로 산정하지 않는다. 그 경계의 현재 증거와 한계는 0.24.0 라운드 보고가 소유한다. 동일 clean
+Codex/Claude cold 비교, 전체 suite, 공식 설치, macOS/Linux 동작은 완료 전까지 **미검증**이다.

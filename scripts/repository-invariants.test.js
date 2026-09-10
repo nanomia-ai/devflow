@@ -427,16 +427,19 @@ test("P2 stages enter one shared Principles policy index while companions and ro
     }
   }
   const sharedPolicyPointer = "../principles/references/policy-index.md";
-  const sharedPolicySentence = "Read `<skill-root>/../principles/references/policy-index.md` as this stage's shared-policy entry; this consumes common policy without invoking Principles request classification.";
+  const sharedPolicySentence = "Before this stage's first judgment, anchor the active skill's objective to the current request and latest explicit approval or approved proposal/card, then use `<skill-root>/../principles/references/policy-index.md` and the selected Decision to open the canonical owner/read path; this does not invoke Principles classification.";
   for (const packageName of P2_PACKAGES.filter((name) => name !== "principles")) {
     const body = read(`skills/${packageName}/body.md`);
     const pointers = body.match(/\.\.\/principles\/references\/policy-index\.md/g) ?? [];
     assert.equal(pointers.length, 1, `${packageName} must enter the single shared Principles policy index exactly once`);
-    const purpose = body.match(/## why: purpose\r?\n\r?\n([\s\S]*?)(?:\r?\n## |\s*$)/)?.[1] ?? "";
-    assert.ok(purpose.includes(sharedPolicySentence),
-      `${packageName} must carry the byte-identical shared policy pointer in why: purpose`);
-    assert.match(read(`skills/${packageName}/spec.mjs`), /body:\s*"why: purpose"/,
-      `${packageName} must deliver the shared policy pointer through its always-read purpose`);
+    assert.ok(body.includes(sharedPolicySentence),
+      `${packageName} body must repeat the sentence skills/principles/references/policy-index.md owns, byte-for-byte`);
+    const entered = spawnSync(process.execPath, [path.join(root, "skills", packageName, "scripts", "skill-rails", "run.mjs"),
+      "enter", "--skill", path.join(root, "skills", packageName), "--json"],
+    { cwd: root, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 });
+    assert.equal(entered.status, 0, entered.stdout + entered.stderr);
+    assert.ok(JSON.parse(entered.stdout).sections.some(({ markdown }) => markdown.includes(sharedPolicySentence)),
+      `${packageName} actual enter must project that same sentence`);
     const directPolicyFiles = walk(path.join(root, "skills", packageName), (name) => name.endsWith(".md") || name.endsWith(".mjs"))
       .filter((file) => !file.includes(`${path.sep}legacy-atoms${path.sep}`))
       .flatMap((file) => [...fs.readFileSync(file, "utf8").matchAll(/\.\.\/principles\/references\/([a-zA-Z0-9._/-]+)/g)]

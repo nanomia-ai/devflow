@@ -75,7 +75,6 @@ export const ARTIFACTS = {
 };
 export const ROLES = {};
 export const READ_FIRST = [
-  { body: "why: purpose", path: "references/purpose.md" },
   { body: "why: ownership", path: "references/ownership.md" },
   { body: "why: legacy", path: "references/legacy-source.md" }
 ];

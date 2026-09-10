@@ -15,6 +15,26 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.24.0 — 2026-09-10 — Re-anchor cold execution in canonical owners
+
+The staged knowledge-contract repair preserves journal and Product meaning before commit because
+actual Adopt projection had copied a wider timestamp/JSON form that the project-state parser silently
+lost. It keeps the journal grammar as meaning owner, round-trips the live projection, reports reserved
+near-misses with their bytes and locator, and rejects malformed staged Product knowledge instead of
+discarding it. Files: `skills/principles/references/state/journal-grammar.md`,
+`skills/principles/scripts/project-state.mjs`, Adopt's spec/body/format fixture, the shared commit
+discipline, their generated receipts, and targeted tests.
+
+The AI context-delivery redesign keeps all nine stage identities while replacing repeated, flat
+delivery with a pre-judgment pointer from current purpose, request, and approval to canonical owners,
+stage-owned judgment inputs, and detail beside its first consumer. This lets fresh Resume rediscover
+Arch after a complete Product boundary without assuming ROUTE execution, while Direct preserves
+optional Design and Verify/Resume defer branch-only reads. Files: the authored policy/body/spec and
+collector changes under Principles, Product, Adopt, Direct, Verify, and Resume; all nine generated
+package receipts; `skills/principles/body.md`; `scripts/project-state.test.js`;
+`skills/verify/fixtures/post-repair.test.mjs`; and `scripts/repository-invariants.test.js`. No new state,
+route kind, registry, helper, or automatic ROUTE execution was introduced.
+
 ## 0.23.23 — 2026-09-10 — Keep reserved-journal examples parseable
 
 Direct, Verify, and the Principles-owned journal/progress format fixtures now use the
