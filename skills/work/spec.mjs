@@ -185,10 +185,10 @@ export const STAGES = [
   { id: "review-reduction", reads: ["remote.state", "review.state"], needs: ["review.action"], acceptsUnknown: [], done: s => s.review.state === "pass" || s.review.state === "waived" || s.review.state === "not-applicable" || s.remote.state === "finalizing", table: "review", reentry: "rejudge", branches: {
     "contract-route": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: card contract" }], ["WRITE", { artifact: "activeCard", scope: "release-claim" }], ["COMMIT", { authority: "external.principles", scope: "binding-release", branch: "integration", files: "release rename only", subject: "<id> <NN.N> release" }], "ROUTE:direct"],
     "ask-disposition": ["ASK"],
-    "apply-disposition": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: review disposition" }], ["WRITE", { artifact: "activeCard", scope: "person-directed repair" }], ["RUN", { scope: "completion-signal" }], ["WRITE", { artifact: "activeCard", template: "completionSignalResult" }], ["READ", { artifact: "reviewerContract" }], ["DISPATCH", { role: "reviewer" }], ["WRITE", { artifact: "activeCard", template: "reviewResult" }], "WAIT"],
+    "apply-disposition": [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: review disposition" }], ["WRITE", { artifact: "activeCard", scope: "person-directed repair" }], ["RUN", { scope: "completion-signal" }], ["WRITE", { artifact: "activeCard", template: "completionSignalResult" }], ["READ", { path: "references/reviewer-role.md" }], ["DISPATCH", { role: "reviewer" }], ["WRITE", { artifact: "activeCard", template: "reviewResult" }], "WAIT"],
     "block-nonpass": [["REPORT", { scope: "spent-disposition-nonpass" }], "BLOCK"],
-    repair: [["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: review objections" }], ["WRITE", { artifact: "activeCard", scope: "review repair" }], ["RUN", { scope: "completion-signal" }], ["WRITE", { artifact: "activeCard", template: "completionSignalResult" }], ["READ", { artifact: "reviewerContract" }], ["DISPATCH", { role: "reviewer" }], ["WRITE", { artifact: "activeCard", template: "reviewResult" }], "WAIT"],
-    dispatch: [["READ", { artifact: "reviewerContract" }], ["READ", { artifact: "activeCard" }], ["DISPATCH", { role: "reviewer" }], ["WRITE", { artifact: "activeCard", template: "reviewResult" }], "WAIT"]
+    repair: [["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: review objections" }], ["WRITE", { artifact: "activeCard", scope: "review repair" }], ["RUN", { scope: "completion-signal" }], ["WRITE", { artifact: "activeCard", template: "completionSignalResult" }], ["READ", { path: "references/reviewer-role.md" }], ["DISPATCH", { role: "reviewer" }], ["WRITE", { artifact: "activeCard", template: "reviewResult" }], "WAIT"],
+    dispatch: [["READ", { path: "references/reviewer-role.md" }], ["READ", { artifact: "activeCard" }], ["DISPATCH", { role: "reviewer" }], ["WRITE", { artifact: "activeCard", template: "reviewResult" }], "WAIT"]
   }, body: "stage: review-reduction" },
   { id: "research-checkpoint", reads: ["research.checkpoint"], acceptsUnknown: [], done: s => s.research.checkpoint === "not-applicable" || s.research.checkpoint === "committed", effects: [["WRITE", { artifact: "activeCard", template: "progressSnippet" }], ["COMMIT", { scope: "checkpoint", subject: "<id> <NN.N> wip: research synthesis" }], "NEXT"], reentry: "rejudge", body: "stage: research-checkpoint" },
   { id: "knowledge-marker", reads: ["research.checkpoint", "knowledge.marker", "boundary.state", "task.commit", "task.integration", "handoff.state", "completion.state", "review.state", "knowledge.action"], needs: ["knowledge.action"], acceptsUnknown: ["knowledge.action"], done: s => s.knowledge.marker === "current-source" || (s.research.checkpoint === "not-applicable" && (s.knowledge.action === "none" || !lateBoundarySettled(s))), reentry: "rejudge", branches: {
@@ -225,6 +225,7 @@ export const STAGES = [
 ];
 
 export const ARTIFACTS = {
+  reviewerContract: { path: "references/reviewer-role.md", writer: "work", readers: ["role.reviewer"] },
   activeCard: { path: ".devflow/tree/**.md", writer: "work", readers: ["stage.claim-or-reenter", "stage.implement-and-signal", "stage.review-reduction", "stage.research-checkpoint", "stage.task-finalization", "stage.boundary"] },
   product: { path: ".devflow/project/product.md", writer: "project.product", readers: ["stage.implement-and-signal", "role.reviewer"] },
   arch: { path: ".devflow/project/arch.md", writer: "project.arch", readers: ["stage.implement-and-signal", "role.reviewer"] },
@@ -236,7 +237,6 @@ export const ARTIFACTS = {
   compatibleFeedbackTransport: { path: ".devflow/journal.md#compatible-feedback-pending", writer: "work", readers: ["stage.task-finalization", "stage.boundary", "guard.compatible-feedback-before-closure"] },
   remoteFinalizingTransport: { path: ".devflow/journal.md#remote-evidence-finalizing", writer: "work", readers: ["stage.task-finalization"] },
   roomHandoff: { path: ".devflow/users/<id>/HANDOFF.md", writer: "work", readers: ["stage.handoff"] },
-  reviewerContract: { path: "references/reviewer-role.md", writer: "work", readers: ["stage.review-reduction", "role.reviewer"] },
 };
 
 export const ROLES = {

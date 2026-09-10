@@ -1801,6 +1801,7 @@
       "stage": "verify-channel",
       "status": "WAIT",
       "effects": [
+        "READ",
         "DISPATCH",
         "WAIT"
       ]

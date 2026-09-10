@@ -7,7 +7,7 @@ export const OBSERVATIONS = {
   "state.route": { collector: "state.route", domain: ["none", "git.open-operation", "integrity.blocking", "setup.unmanaged", "owned-elsewhere"] },
   "state.material": { collector: "state.material", domain: ["present", "none", "unknown"] },
   "approval.action": { decided: true, domain: ["approve", "refuse"] },
-  "refutation.state": { judged: true, domain: ["pending", "revise", "clear", "blocked"] }
+  "refutation.state": { decided: true, domain: ["pending", "revise", "clear", "blocked"] }
 };
 
 export const FORMATS = {
@@ -23,6 +23,7 @@ export const TEMPLATES = {
   capabilityDesign: { file: "templates/capability-design.md", fields: { number: "line", name: "line", purpose: "line", boundary: "line", concepts: "line", intent: "block", conceptRows: "generated", invariants: "list", nonGoals: "list", bindingAdrs: "list", designHead: "line" }, sections: [] },
   knowledgeNode: { file: "templates/knowledge-node.md", fields: { title: "line", openWhen: "line", about: "line", body: "block", sourceBasis: "generated" }, sections: [] },
   glossary: { file: "templates/glossary.md", fields: { terms: "generated" }, sections: [] },
+  refutationResult: { file: "templates/refutation-result.md", fields: { coverage: "list", findings: "list", verdict: "line", uncertainty: "block" }, sections: [] },
   result: { file: "templates/result.md", fields: { summary: "block", next: "line" }, sections: [] }
 };
 
@@ -49,7 +50,8 @@ export const GUARDS = [
   { id: "open-git-operation", reads: ["state.route"], acceptsUnknown: [], when: s => s.state.route === "git.open-operation", then: "ASK", body: "guard: open-git-operation" },
   { id: "no-project-material-routes-product", reads: ["state.route", "state.material"], acceptsUnknown: [], when: s => s.state.route === "setup.unmanaged" && s.state.material === "none", then: "ROUTE:product", body: "guard: no-project-material-routes-product" },
   { id: "unknown-project-material", reads: ["state.route", "state.material"], acceptsUnknown: [], when: s => s.state.route === "setup.unmanaged" && s.state.material === "unknown", then: "BLOCK", body: "guard: unknown-project-material" },
-  { id: "state-owned-elsewhere", reads: ["state.route"], acceptsUnknown: [], when: s => s.state.route !== "setup.unmanaged", then: "ROUTE:resume", body: "guard: state-owned-elsewhere" }
+  { id: "state-owned-elsewhere", reads: ["state.route"], acceptsUnknown: [], when: s => s.state.route !== "setup.unmanaged", then: "ROUTE:resume", body: "guard: state-owned-elsewhere" },
+  { id: "approval-precedes-refutation", reads: ["state.route", "refutation.state", "approval.action"], acceptsUnknown: ["refutation.state", "approval.action"], when: s => s.state.route === "setup.unmanaged" && s.approval.action === "approve" && s.refutation.state !== "clear", then: "BLOCK", body: "guard: approval-precedes-refutation" }
 ];
 
 export const TABLES = {
@@ -62,8 +64,8 @@ export const TABLES = {
 
 export const STAGES = [
   { id: "semantic-refutation", reads: ["refutation.state"], acceptsUnknown: [], done: s => s.refutation.state === "clear", needs: ["refutation.state"], reentry: "rejudge", branches: {
-    pending: [["READ", { path: "references/workflow.md" }], ["RUN", { action: "inventory-all-maintained-sources-by-knowledge-unit-with-exact-coordinates-disposition-and-landing-target" }], ["RUN", { action: "trace-one-executable-flow-per-code-backed-capability-candidate-and-record-documentary-basis-for-document-derived-candidates" }], ["RUN", { action: "reverse-derive-complete-layer-zero-applicable-design-capability-zones-glossary-whole-owner-adjacent-knowledge-and-adr-or-missing-ground-owner-landings" }], ["RUN", { action: "perform-one-bounded-clean-context-semantic-refutation-of-the-complete-draft-before-binding" }], "NEXT"],
-    revise: [["RUN", { action: "apply-evidence-supported-current-authority-correction-to-every-current-blocker-in-the-current-draft" }], ["RUN", { action: "independently-recheck-returned-coordinates-changed-targets-and-direct-consequences-and-record-current-evidence-verification" }], "ROUTE:adopt"],
+    pending: [["READ", { path: "references/workflow.md" }], ["RUN", { action: "inventory-all-maintained-sources-by-knowledge-unit-with-exact-coordinates-disposition-and-landing-target" }], ["RUN", { action: "trace-one-executable-flow-per-code-backed-capability-candidate-and-record-documentary-basis-for-document-derived-candidates" }], ["RUN", { action: "reverse-derive-complete-layer-zero-applicable-design-capability-zones-glossary-whole-owner-adjacent-knowledge-and-adr-or-missing-ground-owner-landings" }], ["READ", { path: "references/refuter-role.md" }], ["DISPATCH", { role: "refuter", template: "refutationResult" }], "WAIT"],
+    revise: [["RUN", { action: "apply-evidence-supported-current-authority-correction-to-every-current-blocker-in-the-current-draft" }], ["READ", { path: "references/refuter-role.md" }], ["DISPATCH", { role: "refuter", template: "refutationResult" }], "WAIT"],
     blocked: ["BLOCK"]
   }, body: "stage: semantic-refutation" },
   { id: "adoption", reads: ["state.route"], acceptsUnknown: [], done: s => s.state.route !== "setup.unmanaged", table: "approval", reentry: "rejudge", branches: {
@@ -86,7 +88,16 @@ export const ARTIFACTS = {
   knowledgeNodes: { path: ".devflow/project", writer: "adopt", readers: ["stage.adoption", "external.arch", "external.resume", "external.work"], template: "knowledgeNode" }
 };
 
-export const ROLES = {};
+export const ROLES = {
+  refuter: {
+    body: "role: refuter",
+    inputs: ["complete-draft", "knowledge-unit-inventory-dispositions-and-exact-landing-targets", "load-bearing-current-and-proposed-source-and-code-coordinates", "maintained-source-path-list", "shared-baseline-and-knowledge-sections-opened-by-workflow-step-5", "arch-verification-channel-surface-and-required-channel-columns", "arch-first-proposal-paragraph-with-adr-conditions"],
+    reads: ["provided-inputs-only", "maintained-source-paths-recomputed-in-clean-context"],
+    effects: [],
+    judgments: ["clear", "revise", "blocked"],
+    returns: "refutationResult"
+  }
+};
 export const READ_FIRST = [{ body: "why: purpose", path: "references/purpose.md" }, { body: "why: workflow", path: "references/workflow.md" }];
 export const DECLARATIONS = {
   state_api: { value: "Call sibling principles calculateState({ root: explicitRealpath }) and accept only devflow/project-state/2, including its single nonDevflowMaterial observation; never parse its CLI, raw journal, render output, or process.cwd().", consumer: "collector" },
@@ -95,7 +106,7 @@ export const DECLARATIONS = {
   source_coverage: { value: "Every maintained source is covered during investigation by knowledge unit or supporting group rows with exact coordinates, authority, disposition, and a destination. Current meaning lands in an exact owner document or planned K path; an owner-kept live input also lands in Architecture Existing records and only the K footers it supports; every other nonlanding has exact disposition evidence or reason. A mixed source has one row per knowledge unit. This inventory is transient adoption evidence: absorbed-input coordinates do not persist in owner documents, K nodes, or Architecture Existing records. No maintained source is silently dropped during refutation and no second ledger is created.", consumer: "template:adoptionProposal|template:architecture|stage:adoption" },
   adr_landing: { value: "The proposal screens every ADR-qualified decision and every decision with missing ground and states its current direction, ground, dropped alternatives, and exact owner landing. Adopt creates no ADR artifact: current direction, ground, and dropped alternatives land self-contained in Architecture or capability Intent, with on-demand K only for additional depth; Binding ADRs names only exact existing decision paths, and Arch remains the formal ADR writer.", consumer: "template:adoptionProposal|template:architecture|template:capabilityDesign|stage:adoption" },
   working_language: { value: "Infer a proposed Working language from maintained meaningful human prose, never from code identifiers or other machine tokens; expose uncertainty, explicit owner preference, and the proposal before canonical writes. The owner may correct it without writing; every correction receives fresh independent semantic refutation before proposal reentry. Approved product.md becomes the single durable value owner while shared Principles policy governs every writer.", consumer: "template:adoptionProposal|template:product|stage:adoption" },
-  semantic_refutation: { value: "Before binding, run one bounded clean-context semantic refutation over the complete draft, selected authority coordinates, and the same shared baseline and knowledge sections opened by workflow step 5. A departure from those sections, or a supported contradiction or omission that would cause a wrong action, lose a required decision or rejected direction, assign the wrong owner document, omit a knowledge unit's landing, scatter or duplicate that knowledge unit across current targets, or omit the means of verification, blocks. A first revise requires the current draft, returned evidence, and a concrete current-authority correction for every current blocker; each correction is followed by an independent recheck of returned coordinates, changed targets, and direct consequences. A later revise requires evidence that every attempted failure was removed or strictly narrowed in its causal scope without introducing or reopening a blocker. Clear requires preserved initial coverage, current independent verification, and no supported blocker or unanswered binding dependency. Block on no progress or regression, a required owner answer or authority contradiction, or missing required draft, source, prior evidence, or clean context; record current scope, findings, progress, and result in Evidence verification.", consumer: "template:adoptionProposal|stage:adoption" },
+  semantic_refutation: { value: "Before binding, the declared refuter role returns one bounded clean-context semantic refutation of the complete draft; that role contract owns its inputs, exclusions, blocking threshold, and bounded recheck. A first revise requires the current draft, returned evidence, and a concrete current-authority correction for every current blocker; a later revise requires evidence that every attempted failure was removed or strictly narrowed in its causal scope without introducing or reopening a blocker. Clear requires preserved initial coverage, current independent verification, and no supported blocker or unanswered binding dependency. Block on no progress or regression, a required owner answer or authority contradiction, or missing required draft, source, prior evidence, or clean context; the returned result records current scope, findings, progress, and outcome under Evidence verification.", consumer: "template:adoptionProposal|template:refutationResult|role:refuter|stage:adoption" },
   brownfield_effects: { value: "Evidence and the complete proposal precede owner questions and one binding approval; refusal writes nothing. Approval writes and validates the complete Layer 0, capability, and K set before the first commit, with capability Design head none, then commits every approved owner document, same-owner K, and optional follow-on as adopt — layer 0. Because the Design-head command reads only product.md, arch.md, and glossary.md, Adopt can replace only the capability Design head lines with that first commit and land those line changes as adopt — capabilities. Once the first commit lands, all approved meaning is canonical and none makes the baseline stale for Resume-to-Arch recovery. Uncommitted bytes are never recovery input and Adopt adds no state or recovery protocol.", consumer: "stage:adoption" },
   follow_on_request: { value: "When the adoption request also contains follow-on work, append the whole request idempotently once through Principles maintenanceRoutingPending in the first adoption commit; adoption-only requests create no marker.", consumer: "stage:adoption" },
   knowledge_shape: { value: "K holds one whole, self-contained current knowledge unit that the always-read owner document should not carry; the shared capsule contract fixes its cohesion and split. It has a subtree-unique immutable number, zero children allowed, and no Parent, index, residual, or batch metadata. Its sourceBasis template field is empty for absorbed migration inputs; only an owner-designated live input or managed card evidence supplies the complete final Source basis line, which remains strongly validated.", consumer: "template:knowledgeNode|stage:adoption" }

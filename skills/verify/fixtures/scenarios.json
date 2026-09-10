@@ -302,6 +302,7 @@
       "status": "WAIT",
       "effects": [
         "READ",
+        "READ",
         "DISPATCH",
         "WAIT"
       ]
@@ -393,6 +394,7 @@
         "READ",
         "READ",
         "READ",
+        "READ",
         "DISPATCH",
         "WAIT"
       ]
@@ -460,6 +462,7 @@
       "stage": "dispatch-verifier",
       "status": "WAIT",
       "effects": [
+        "READ",
         "READ",
         "READ",
         "READ",
@@ -705,6 +708,7 @@
       "status": "WAIT",
       "effects": [
         "READ",
+        "READ",
         "DISPATCH",
         "WAIT"
       ]
@@ -948,6 +952,7 @@
       "stage": "dispatch-verifier",
       "status": "WAIT",
       "effects": [
+        "READ",
         "READ",
         "READ",
         "READ",

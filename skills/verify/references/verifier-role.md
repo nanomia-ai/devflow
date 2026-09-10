@@ -1,3 +1,8 @@
-# Migration locator
+# Verifier role
 
-The canonical verifier contract is `body.md` under `role: verifier`; this legacy locator remains only for the immutable obligation ledger.
+Brief a clean context with the verbatim output of
+`node <skill-root>/scripts/skill-rails/run.mjs role --skill <skill-root> --role verifier`.
+
+That output is the whole contract — inputs, reads, effects, judgments, and the return
+template. Attach only the inputs it lists. Pass no producer transcript, earlier conclusion,
+or instruction outside it, and accept only the declared return.

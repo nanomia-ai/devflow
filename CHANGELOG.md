@@ -15,6 +15,33 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.25.0 - 2026-09-10 - Adopt's refutation becomes a declared role, and a premature approval stops at a guard
+
+Two real 0.24.0 Adopt runs reached the irreversible first canonical write set on producer-supplied
+values alone. One narrowed the refuter's brief until the blocking check for verification means fell
+outside it. The other resumed after an interruption and headed straight for the write plan, because a
+stage BLOCK that asks for one caller value seals every value supplied with it and inherits it into the
+next call - so an `approve` typed while refutation was still unknown rode a refutation question into
+the approve row, skipping the write-free proposal and its question.
+
+Adopt now declares `ROLES.refuter` with its inputs, reads, judgments, and a `refutationResult` return
+template. Both refutation branches open the refuter contract and `DISPATCH` that role before `WAIT`,
+so the brief is the runtime's own `role` render rather than prose the producer assembles, and the
+returned `coverage` field carries initial coverage across a correction. `refutation.state` moves to the
+`decided` lane it shares with Verify's returned verdicts, leaving Adopt with no producer self-judgment.
+A new guard, `approval-precedes-refutation`, blocks an `approve` that arrives while refutation is not
+`clear`; a guard stop carries no needs, so it emits no continuation seal and the next call falls to the
+write-free proposal. Verify's three dispatches and Arch's channel-verifier dispatch gained the same
+role-contract `READ`, and the three Verify stubs plus two new files now say how to hand a contract to a
+clean context. Adopt still writes nothing before approval, and no state, marker, or collector was added.
+
+Files: `skills/adopt/{spec.mjs,body.md,references/workflow.md,references/refuter-role.md,templates/refutation-result.md,fixtures/*}`,
+`skills/verify/{spec.mjs,references/{verifier,auditor,retrospector}-role.md,fixtures/scenarios.json}`,
+`skills/arch/{spec.mjs,references/channel-verifier-role.md,fixtures/scenarios.json}`,
+nine regenerated P2 receipts, `scripts/project-state.test.js`, `docs/design.md`,
+`docs/design-decisions.md` (DD-111; DD-102 and DD-106 partly corrected), `docs/usecase-matrix_ko.md`,
+`docs/rounds/v0.25.0/report_ko.md`, both plugin manifests.
+
 ## 0.24.0 — 2026-09-10 — Re-anchor cold execution in canonical owners
 
 The staged knowledge-contract repair preserves journal and Product meaning before commit because

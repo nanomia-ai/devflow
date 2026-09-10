@@ -726,6 +726,22 @@ Evidence verification 기록이 지켜지고 미착지·분산·복제 finding�
 없는지. 실제 브라운필드 fresh-model 추론과 줄 부재 legacy artifact의 언어 보존은 이번 표적 검증
 밖이므로 `unverified`다.
 
+**정합 유지 · 판정 교체 — 반증은 선언된 역할이 반환하고 이른 승인은 guard에서 멈춘다**
+(2026-09-10 v0.25.0 DD-111). 0.24.0 실사용 두 번이 생산자 공급값만으로 최초 정본 쓰기에 도달했다.
+브리프는 이제 `ROLES.refuter` 선언에서 런타임이 렌더하므로 생산자가 좁힐 수 없고, 반환은
+`refutationResult` 템플릿(coverage·findings·verdict·uncertainty)이며 두 반증 분기는 계약을 `READ`한 뒤
+`DISPATCH`하고 `WAIT`한다. `refutation.state`는 `decided` lane으로 옮겨 Adopt에 생산자 자기판정이 0이다.
+guard `approval-precedes-refutation`은 route가 `setup.unmanaged`이고 승인이 `approve`인데 반증이 `clear`가
+아닐 때 막으며, guard 정지는 needs를 싣지 않아 continuation seal을 만들지 않으므로 이른 승인이 다음
+호출로 상속되지 않고 쓰기 없는 `prepare` 제안으로 떨어진다. 승인 전 쓰기 0, 새 상태·마커·collector 0은
+그대로다. 같은 역할 계약 `READ`가 Verify 셋과 Arch 하나의 기존 `DISPATCH` 앞에도 섰다.
+검증 시 확인할 것: (i) 반증 분기 두 곳이 계약 `READ` 뒤에 `DISPATCH`·`WAIT`으로 끝나 seal이 생기지
+않는지, (j) 승인만 먼저 공급한 호출이 guard BLOCK으로 서고 그 다음 호출이 `prepare` REPORT→ASK로
+가는지, (k) 반증자가 유지 소스 경로 목록을 스스로 재계산해 inventory와 대조하는지.
+같은 호출에 승인과 `clear`를 함께 타이핑하는 잔여 경로는 승인 전 디스크 차이가 존재하지 않으므로
+기계로 막히지 않는다 — 사람 게이트의 몫이고 이 라운드는 그것을 약속하지 않는다.
+정적 계약은 fixture와 저장소 검사로 확인했고 실사용 실행은 여전히 **미검증**이다.
+
 ### 3.25 H51×A10 — 패키지 정보와 현재 프로젝트 작업의 진입 경계 [16판 신규]
 
 ```

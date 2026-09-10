@@ -2528,7 +2528,7 @@ an adopted capability's stored Design head differs immediately after the two app
 
 ### DD-102 · One bounded clean-context semantic refutation precedes Adopt's binding question (v0.23.7)
 
-Subject: Brownfield and entry | Introduced: v0.23.7 | State: active, partly corrected by DD-103 (v0.23.10), DD-106 (v0.23.13)
+Subject: Brownfield and entry | Introduced: v0.23.7 | State: active, partly corrected by DD-103 (v0.23.10), DD-106 (v0.23.13), DD-111 (v0.25.0)
 
 Observed problem: the Adopt proposal had an `Evidence verification` section immediately before
 binding confirmation, but current canon did not say what was checked, by whom, or what passed. The
@@ -2588,7 +2588,7 @@ disk NN confusion points at the wrong capability.
 
 ### DD-106 · Adopt semantic refutation converges by independently evidenced causal progress, not a revision count (v0.23.13)
 
-Subject: Brownfield and entry | Introduced: v0.23.13 | State: active
+Subject: Brownfield and entry | Introduced: v0.23.13 | State: active, partly corrected by DD-111 (v0.25.0)
 
 Observed problem: a real Adopt run completed the one permitted correction after its initial semantic
 refutation, then stopped with `blocked` and `reinvoke: null` while the executing agent judged that
@@ -2639,6 +2639,62 @@ and the user's raw evidence remain unchanged.
 Revisit when the bounded causal recheck permits the same no-progress root again, opens a new full pass
 per correction, clears after disguising a required owner decision as unresolved future work, or Evidence
 verification cannot recover initial coverage and current progress.
+
+### DD-111 · A declared role returns Adopt's semantic refutation, and an approval that arrives before it is current never reaches a write (v0.25.0)
+
+Subject: Brownfield and entry | Introduced: v0.25.0 | State: active
+
+Observed problem: two real 0.24.0 Adopt runs reached the irreversible first canonical write set on
+producer-supplied values alone. One narrowed the refuter's brief until the blocking check for
+verification means fell outside it; the other resumed after an interruption and went straight toward
+the write plan. The machine cause is one absence and one leak. Absence: the refuter was the only
+independent judge in devflow that was not a declared role - `ROLES` was empty and the refutation was
+an opaque `RUN` action, so its inputs, exclusions, and return lived only in prose the producer itself
+assembled. Leak: a stage BLOCK that asks for one caller value seals every value supplied with it and
+inherits it into the next call, so `approval.action=approve` typed while refutation was still unknown
+rode a refutation question into the approve row and skipped the write-free proposal and its question.
+
+Desired behavior: the clean context receives a contract the producer does not author, returns a
+declared shape, and an approval taken against a proposal this run never presented cannot reach a
+write. Adopt still writes nothing before approval and adds no state, marker, or recovery protocol.
+
+Chosen boundary: Adopt declares `ROLES.refuter` with its inputs, reads, judgments, and a
+`refutationResult` return template, and both refutation branches open that contract by package path and
+`DISPATCH` the role before `WAIT`. The brief is the runtime's own `role` render, so narrowing it is no longer a
+producer choice; the returned `coverage` field carries the preserved initial coverage that prose alone
+could not hand across a correction. `refutation.state` moves to the `decided` lane it shares with
+Verify's returned verdicts, leaving Adopt with no producer self-judgment. Guard
+`approval-precedes-refutation` blocks while the route is `setup.unmanaged`, the approval is `approve`,
+and refutation is not `clear`; because a guard stop carries no needs, it emits no continuation seal, so
+the premature approval is not inherited and the next call falls to the write-free `prepare` proposal.
+The same role-contract `READ` lands ahead of the four existing `DISPATCH` effects in Verify and Arch,
+whose contracts were reachable only if the producer already knew the `role` command existed.
+
+Why the boundary is needed: every other independent judgment in devflow is a declared role whose
+verdict lands where a collector can read it, and every other approval boundary has a disk observation.
+Adopt has neither and cannot have the second: write-free-before-approval is the recorded conclusion of
+DD-102, DD-108, and DD-109, so no disk fact distinguishes a resumed session from a fresh one. What is
+available is removing the producer's authorship of the brief and removing the seal window that carried
+an approval past its question. Both use constructs the repository already runs.
+
+Rejected alternatives: writing refutation or approval evidence into the project before approval
+reverses DD-109's recorded reason. A coverage collector needs the proposal on disk and turns the stage
+into the product answer key DD-102 rejected. Adding a shared-layer maintained-source projection was
+withdrawn once the runtime snapshot basis was found to already bind HEAD, full working-tree status,
+and the worktree list. Narrowing the caller-input seal to the fields a Decision needs is the right
+repair but belongs to Skill Rails, not here.
+
+Affected coordinates: `skills/adopt/spec.mjs` observations, guards, roles, templates, stage
+branches, and declaration; `skills/adopt/body.md`; `skills/adopt/references/workflow.md`;
+`skills/adopt/references/refuter-role.md`; `skills/adopt/templates/refutation-result.md`;
+`skills/verify/spec.mjs` and its three role contracts; `skills/arch/spec.mjs`, its channel-verifier
+role fields, and `skills/arch/references/channel-verifier-role.md`; `skills/work/spec.mjs`, whose
+reviewer contract carried the same project-resolved read; their fixtures and generated receipts;
+`scripts/project-state.test.js`; DD-102 and DD-106 state; matrix 3.24.
+
+Revisit when a producer still assembles a role brief by hand, a premature approval reaches a write
+row again, the returned coverage cannot be compared across a correction, or the residual same-call
+approval becomes reachable without a person in the loop.
 
 ## Git mechanics and interruption recovery
 

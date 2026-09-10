@@ -209,7 +209,7 @@ export const STAGES = [
 
   { id: "verify-channel", reads: ["verification.state"], acceptsUnknown: [], done: s => s.verification.state === "confirmed", needs: ["verification.state"], reentry: "rejudge", branches: {
     select: [["REPORT", { template: "proposal" }], "ASK"],
-    probe: [["DISPATCH", { role: "channel-verifier" }], "WAIT"],
+    probe: [["READ", { path: "references/channel-verifier-role.md" }], ["DISPATCH", { role: "channel-verifier" }], "WAIT"],
     unavailable: [["REPORT", { template: "channelEvidence" }], "ASK"]
   }, body: "stage: verify-channel" },
 
@@ -252,7 +252,7 @@ export const ARTIFACTS = {
 };
 
 export const ROLES = {
-  "channel-verifier": { body: "role: channel-verifier", effects: [], returns: "channelEvidence" }
+  "channel-verifier": { body: "role: channel-verifier", inputs: ["proposed-channel", "exact-command", "smallest-representative-target"], reads: ["provided-inputs-only"], effects: [], judgments: ["confirmed", "unavailable"], returns: "channelEvidence" }
 };
 
 export const READ_FIRST = [

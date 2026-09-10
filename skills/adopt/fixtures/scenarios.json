@@ -102,17 +102,34 @@
     ]
   },
   {
+    "id": "approval-before-refutation",
+    "s": {
+      "state.kernel": "available",
+      "state.route": "setup.unmanaged",
+      "state.material": "present"
+    },
+    "judged": {},
+    "decided": {
+      "approval.action": "approve"
+    },
+    "expect": {
+      "guard": "approval-precedes-refutation",
+      "status": "BLOCK"
+    },
+    "cover": [
+      "guard:approval-precedes-refutation"
+    ]
+  },
+  {
     "id": "refutation-blocked",
     "s": {
       "state.kernel": "available",
       "state.route": "setup.unmanaged",
       "state.material": "present"
     },
-    "judged": {
-      "refutation.state": "blocked"
-    },
+    "judged": {},
     "decided": {
-      "approval.action": "approve"
+      "refutation.state": "blocked"
     },
     "expect": {
       "stage": "semantic-refutation",
@@ -133,20 +150,21 @@
       "state.route": "setup.unmanaged",
       "state.material": "present"
     },
-    "judged": {
+    "judged": {},
+    "decided": {
       "refutation.state": "pending"
     },
-    "decided": {},
     "expect": {
       "stage": "semantic-refutation",
-      "status": "NEXT",
+      "status": "WAIT",
       "effects": [
         "READ",
         "RUN",
         "RUN",
         "RUN",
-        "RUN",
-        "NEXT"
+        "READ",
+        "DISPATCH",
+        "WAIT"
       ]
     },
     "cover": [
@@ -161,17 +179,18 @@
       "state.route": "setup.unmanaged",
       "state.material": "present"
     },
-    "judged": {
+    "judged": {},
+    "decided": {
       "refutation.state": "revise"
     },
-    "decided": {},
     "expect": {
       "stage": "semantic-refutation",
-      "status": "ROUTE",
+      "status": "WAIT",
       "effects": [
         "RUN",
-        "RUN",
-        "ROUTE:adopt"
+        "READ",
+        "DISPATCH",
+        "WAIT"
       ]
     },
     "cover": [
@@ -186,10 +205,10 @@
       "state.route": "setup.unmanaged",
       "state.material": "present"
     },
-    "judged": {
+    "judged": {},
+    "decided": {
       "refutation.state": "clear"
     },
-    "decided": {},
     "expect": {
       "stage": "adoption",
       "row": "prepare",
@@ -212,10 +231,9 @@
       "state.route": "setup.unmanaged",
       "state.material": "present"
     },
-    "judged": {
-      "refutation.state": "clear"
-    },
+    "judged": {},
     "decided": {
+      "refutation.state": "clear",
       "approval.action": "refuse"
     },
     "expect": {
@@ -239,10 +257,9 @@
       "state.route": "setup.unmanaged",
       "state.material": "present"
     },
-    "judged": {
-      "refutation.state": "clear"
-    },
+    "judged": {},
     "decided": {
+      "refutation.state": "clear",
       "approval.action": "approve"
     },
     "expect": {

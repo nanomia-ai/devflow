@@ -980,7 +980,7 @@ test("gate A feeds every canon-reserved journal line to the deployed parser", { 
   };
   const adoptProject = makePlainRepo(t);
   const emitted = spawnSync(process.execPath, [ADOPT_RUN, "stage", "--skill", ADOPT_SKILL_ROOT, "--project", adoptProject,
-    "--judged", "refutation.state=clear", "--decided", "approval.action=approve", "--json"],
+    "--decided", "refutation.state=clear", "--decided", "approval.action=approve", "--json"],
   { cwd: adoptProject, encoding: "utf8", maxBuffer: 16 * 1024 * 1024 });
   assert.equal(emitted.status, 0, emitted.stdout + emitted.stderr);
   const decision = JSON.parse(emitted.stdout).decision;

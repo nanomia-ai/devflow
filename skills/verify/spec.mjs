@@ -72,7 +72,7 @@ export const STAGES = [
     "partial-write": [["READ", { path: "references/recovery-completion.md" }], ["READ", { artifact: "record" }], ["REPORT", { template: "route" }], "ROUTE:verify"]
   }, body: "stage: recover" },
   { id: "dispatch-verifier", reads: ["verification.layer", "closure.target", "verifier.dispatch"], acceptsUnknown: [], done: s => s.verifier.dispatch === "returned" && (s.verification.layer === "product" || s.closure.target !== "NONE"), table: "dispatch", reentry: "rejudge", branches: {
-    ready: [["READ", { artifact: "product" }], ["READ", { artifact: "arch" }], ["READ", { artifact: "codeStyle" }], ["READ", { artifact: "glossary" }], ["DISPATCH", { role: "verifier", template: "verifierBundle", target: "closure.target.folder when capability; product otherwise" }], "WAIT"]
+    ready: [["READ", { artifact: "product" }], ["READ", { artifact: "arch" }], ["READ", { artifact: "codeStyle" }], ["READ", { artifact: "glossary" }], ["READ", { path: "references/verifier-role.md" }], ["DISPATCH", { role: "verifier", template: "verifierBundle", target: "closure.target.folder when capability; product otherwise" }], "WAIT"]
   }, body: "stage: dispatch-verifier" },
   { id: "result-routing", reads: ["verification.layer", "closure.target", "verifier.verdict", "result.record", "record.execution"], acceptsUnknown: [], done: s => (s.verification.layer === "product" || s.closure.target !== "NONE") && s.verifier.verdict === "pass" && s.result.record === "current" && s.record.execution === "current", table: "result", reentry: "rejudge", branches: {
     pending: [["REPORT", { template: "route" }], "WAIT"],
@@ -91,8 +91,8 @@ export const STAGES = [
     continue: [["WRITE", { artifact: "record", template: "record", target: "closure.target.folder/verify.md when capability; .devflow/tree/verify.md when product" }], ["COMMIT", { authority: "external.principles", transition: "product-verification-result" }], "ROUTE:product"]
   }, body: "stage: product-stop" },
   { id: "event-routing", reads: ["event.pending"], acceptsUnknown: [], done: s => s.event.pending === "none", table: "event", reentry: "rejudge", branches: {
-    audit: [["READ", { path: "references/audit-events.md" }], ["DISPATCH", { role: "auditor", template: "route" }], "WAIT"],
-    retrospective: [["READ", { path: "references/retrospective-events.md" }], ["DISPATCH", { role: "retrospector", template: "route" }], "WAIT"]
+    audit: [["READ", { path: "references/audit-events.md" }], ["READ", { path: "references/auditor-role.md" }], ["DISPATCH", { role: "auditor", template: "route" }], "WAIT"],
+    retrospective: [["READ", { path: "references/retrospective-events.md" }], ["READ", { path: "references/retrospector-role.md" }], ["DISPATCH", { role: "retrospector", template: "route" }], "WAIT"]
   }, body: "stage: event-routing" }
 ];
 
