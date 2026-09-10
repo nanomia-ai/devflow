@@ -15,6 +15,29 @@ the round it belongs to. Entries written before that rule existed were removed o
 Entries for 0.10.0 and later are here; older ones are in
 [docs/changelog-archive.md](docs/changelog-archive.md).
 
+## 0.25.1 - 2026-09-11 - The role briefing rides its own DISPATCH instead of five copied files
+
+0.25.0 closed the role-briefing gap by adding one contract file per dispatching role. Measured after
+the fact, those five files were 93.7-97.8% identical: 72% of each was byte-for-byte the same in all
+five, and the only per-file difference was the H1 title and one role id. That is the shape this
+repository exists to prevent - one instruction changed in five places, drifting apart between edits.
+
+The six contract `READ` effects are gone and no replacement sentence takes their place. An inlined `brief` argument and a shared policy-index row were each built and measured first; both were removed, because either one is a copy or a pointer to a sentence devflow does not own. devflow carries no delivery instruction for this. Verify and Work already declare roles and briefed them correctly without one in 0.23.3 and 0.23.8; the one observed failure was Adopt, which declared no role at all, and declaring it closes that. No evidence shows the sentence is needed.
+`adopt/references/refuter-role.md` and `arch/references/channel-verifier-role.md` are deleted.
+Verify's three and Work's one return to their locator form, because obligation-ledger atoms and the
+repository companion-home invariant hold those exact paths while their content was a second copy of
+the `role:` sections in their own `body.md`. Principles' four orphan role sections - reviewer,
+verifier, auditor, retrospector, none of them anchored by any ledger atom - are deleted with their
+declarations; `coordinator` stays, anchored by 44.
+
+Net -3,692 B of authored bytes, two files fewer, six effects fewer, four role declarations fewer,
+and no change to any judgment, state, guard, or commit boundary.
+
+Files: `skills/principles/{spec.mjs,body.md}`, `skills/{adopt,arch,verify}/spec.mjs` and their fixtures, `skills/{verify,work}/references/*-role.md`,
+deleted `skills/adopt/references/refuter-role.md` and `skills/arch/references/channel-verifier-role.md`,
+three regenerated P2 receipts, `docs/design.md` pair, `docs/design-decisions.md` pair (DD-111 coordinates),
+`docs/rounds/v0.25.0/report-0.25.1_ko.md`, both plugin manifests.
+
 ## 0.25.0 - 2026-09-10 - Adopt's refutation becomes a declared role, and a premature approval stops at a guard
 
 Two real 0.24.0 Adopt runs reached the irreversible first canonical write set on producer-supplied

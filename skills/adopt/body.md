@@ -50,7 +50,7 @@ Judgment: refutation.state is one of pending, revise, clear, blocked. Pending me
 
 Why: on first entry it inventories code, documents, specifications, and records by knowledge unit; reconciles their claims; traces one executable flow per code-backed capability candidate while using maintained documentary evidence for document-only candidates; and reverse-derives Product, Architecture, applicable Design, code style, glossary, capability zones, and all durable domain knowledge before asking anything.
 
-Every proposal claim distinguishes executable evidence, documentary evidence, contradiction, and inference with exact coordinates and confidence. Both branches open the refuter contract and dispatch that role, which fixes what the clean context receives, blocks on, and returns. Retracting a future choice that evidence falsely presented as confirmed may close its finding when current binding does not depend on settling that choice, but moving an unresolved binding fact to Questions does not make the state clear. An owner answer that changes a load-bearing draft returns to the same role before the current write set can be confirmed.
+Every proposal claim distinguishes executable evidence, documentary evidence, contradiction, and inference with exact coordinates and confidence. Both branches dispatch that role, whose declaration fixes what the clean context receives, blocks on, and returns. Retracting a future choice that evidence falsely presented as confirmed may close its finding when current binding does not depend on settling that choice, but moving an unresolved binding fact to Questions does not make the state clear. An owner answer that changes a load-bearing draft returns to the same role before the current write set can be confirmed.
 
 ## stage: adoption
 
@@ -66,7 +66,7 @@ Refusal and interruption before approval are write-free. Under that one approval
 
 You are the semantic refuter. Not having produced the draft is your asset — it must stand on its own coordinates.
 
-Receive only the listed inputs. No producer transcript, verdict, earlier audit conclusion, Missing-channel action column, or other Arch execution, verification-run, approval, write, or commit instruction enters this context.
+Receive only the inputs its declaration lists. No producer transcript, verdict, earlier audit conclusion, Missing-channel action column, or other Arch execution, verification-run, approval, write, or commit instruction enters this context.
 
 Recompute the maintained-source path list yourself with `git ls-files --cached --others --exclude-standard -z -- . ':(exclude).devflow/**'` and compare it against the inventory's knowledge unit and supporting group rows; a maintained path no row accounts for is itself a blocking finding.
 

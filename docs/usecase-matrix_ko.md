@@ -729,13 +729,14 @@ Evidence verification 기록이 지켜지고 미착지·분산·복제 finding�
 **정합 유지 · 판정 교체 — 반증은 선언된 역할이 반환하고 이른 승인은 guard에서 멈춘다**
 (2026-09-10 v0.25.0 DD-111). 0.24.0 실사용 두 번이 생산자 공급값만으로 최초 정본 쓰기에 도달했다.
 브리프는 이제 `ROLES.refuter` 선언에서 런타임이 렌더하므로 생산자가 좁힐 수 없고, 반환은
-`refutationResult` 템플릿(coverage·findings·verdict·uncertainty)이며 두 반증 분기는 계약을 `READ`한 뒤
+`refutationResult` 템플릿(coverage·findings·verdict·uncertainty)이며 두 반증 분기는 그 역할을
 `DISPATCH`하고 `WAIT`한다. `refutation.state`는 `decided` lane으로 옮겨 Adopt에 생산자 자기판정이 0이다.
 guard `approval-precedes-refutation`은 route가 `setup.unmanaged`이고 승인이 `approve`인데 반증이 `clear`가
 아닐 때 막으며, guard 정지는 needs를 싣지 않아 continuation seal을 만들지 않으므로 이른 승인이 다음
 호출로 상속되지 않고 쓰기 없는 `prepare` 제안으로 떨어진다. 승인 전 쓰기 0, 새 상태·마커·collector 0은
-그대로다. 같은 역할 계약 `READ`가 Verify 셋과 Arch 하나의 기존 `DISPATCH` 앞에도 섰다.
-검증 시 확인할 것: (i) 반증 분기 두 곳이 계약 `READ` 뒤에 `DISPATCH`·`WAIT`으로 끝나 seal이 생기지
+그대로다. 브리핑 지시를 나르는 devflow 문장은 두지 않는다 — 역할이 선언돼 있고 계약은 그 선언을
+런타임이 렌더한 것이다. Verify 셋과 Arch 하나의 기존 `DISPATCH` 도 같다.
+검증 시 확인할 것: (i) 반증 분기 두 곳이 `DISPATCH`·`WAIT`으로 끝나 seal이 생기지
 않는지, (j) 승인만 먼저 공급한 호출이 guard BLOCK으로 서고 그 다음 호출이 `prepare` REPORT→ASK로
 가는지, (k) 반증자가 유지 소스 경로 목록을 스스로 재계산해 inventory와 대조하는지.
 같은 호출에 승인과 `clear`를 함께 타이핑하는 잔여 경로는 승인 전 디스크 차이가 존재하지 않으므로

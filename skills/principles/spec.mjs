@@ -102,10 +102,6 @@ export const STAGES = [{
 export const ARTIFACTS = {};
 
 export const ROLES = {
-  reviewer: { body: "role: reviewer", effects: [["REPORT", { template: "roleResult" }], "DONE"], returns: "roleResult" },
-  verifier: { body: "role: verifier", effects: [["REPORT", { template: "roleResult" }], "DONE"], returns: "roleResult" },
-  auditor: { body: "role: auditor", effects: [["REPORT", { template: "roleResult" }], "DONE"], returns: "roleResult" },
-  retrospector: { body: "role: retrospector", effects: [["REPORT", { template: "roleResult" }], "DONE"], returns: "roleResult" },
   coordinator: { body: "role: coordinator", effects: [], returns: null }
 };
 

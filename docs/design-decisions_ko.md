@@ -2307,15 +2307,17 @@ coverage와 현재 진전을 복원하지 못할 때.
 마커와 복구 규약을 만들지 않는다.
 
 선택 경계: Adopt는 입력과 reads와 judgments와 `refutationResult` 반환 템플릿을 가진 `ROLES.refuter`를
-선언하고, 두 반증 분기가 그 계약을 패키지 경로로 열고 그 역할을 `DISPATCH`한 뒤 `WAIT`한다. 브리프는
+선언하고, 두 반증 분기가 그 역할을 `DISPATCH`한 뒤 `WAIT`하며 브리핑 지시를 나르는 devflow 문장은
+없다(v0.25.1. 0.25.0은 역할마다 계약 파일 하나를 썼는데 다섯이 93.7~97.8% 동일했다).
+전달 지시는 devflow 에 두지 않는다. ROLE 이 선언된 verify·work 는 그 지시 없이 0.23.3·0.23.8 실전에서 제대로 브리핑했고, 관측된 실패는 ROLE 이 없던 adopt 하나뿐이며 그것은 ROLE 선언으로 닫혔다. 그 문장이 필요하다는 증거가 없다. 브리프는
 런타임 자신의 `role` 렌더이므로 좁히는 것이 더는 생산자의 선택이 아니며, 반환의 `coverage` 필드가
 산문만으로는 교정 너머로 넘기지 못하던 초기 커버리지를 나른다. `refutation.state`는 Verify의 반환된
 판정과 같은 `decided` lane으로 옮겨 Adopt에 생산자 자기판정이 남지 않는다. guard
 `approval-precedes-refutation`은 route가 `setup.unmanaged`이고 승인이 `approve`이며 반증이 `clear`가
 아닐 때 막는다. guard 정지는 needs를 싣지 않으므로 continuation seal을 만들지 않고, 따라서 이른 승인이
-상속되지 않으며 다음 호출은 쓰기 없는 `prepare` 제안으로 떨어진다. 같은 역할 계약 `READ`가 Verify와
-Arch의 기존 `DISPATCH` 넷 앞에도 서는데, 그 계약들은 생산자가 `role` 명령의 존재를 이미 알아야만
-닿을 수 있었다.
+상속되지 않으며 다음 호출은 쓰기 없는 `prepare` 제안으로 떨어진다. Verify와 Arch의 기존 `DISPATCH` 넷에도
+브리핑 문장은 없다. 역할이 선언돼 있고, 각 깨끗한 문맥에 필요한 계약은 그 선언을 런타임이 렌더한
+것이기 때문이다.
 
 이 경계가 필요한 이유: devflow의 다른 모든 독립 판단은 collector가 읽을 수 있는 자리에 판정을 착지시키는
 선언된 역할이고, 다른 모든 승인 경계에는 디스크 관측이 있다. Adopt에는 둘 다 없고 두 번째는 가질 수
@@ -2331,9 +2333,9 @@ collector는 제안서가 디스크에 있어야 하고 DD-102가 기각한 답�
 
 영향 좌표: `skills/adopt/spec.mjs`의 관측치와 guard와 role과 template과 stage 분기와 선언,
 `skills/adopt/body.md`, `skills/adopt/references/workflow.md`,
-`skills/adopt/references/refuter-role.md`, `skills/adopt/templates/refutation-result.md`,
-`skills/verify/spec.mjs`와 그 역할 계약 셋, `skills/arch/spec.mjs`와 그 channel-verifier 역할 필드와
-`skills/arch/references/channel-verifier-role.md`, 같은 project 해석 read를 갖고 있던 `skills/work/spec.mjs`,
+`skills/adopt/templates/refutation-result.md`,
+`skills/verify/spec.mjs`와 그 역할 locator 셋, `skills/arch/spec.mjs`와 그 channel-verifier 역할 필드,
+같은 project 해석 read를 갖고 있던 `skills/work/spec.mjs`,
 그 fixture와 생성 receipt,
 `scripts/project-state.test.js`, DD-102와 DD-106 상태, matrix 3.24.
 

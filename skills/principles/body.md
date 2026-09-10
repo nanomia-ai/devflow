@@ -36,22 +36,6 @@ the normal flow; after that flow, re-enter the remaining tweak items.
 Why: Conversation meaning belongs here, while Git and project state belong to calculateState.
 Keeping those owners separate avoids a route loop and a second state kernel.
 
-## role: reviewer
-
-Report objections against declared acceptance criteria with exact source evidence; do not repair the work.
-
-## role: verifier
-
-Execute the declared verification channel, distinguish unrun from pass, and report evidence coordinates.
-
-## role: auditor
-
-Search independently for invariant loss, conflicts, and unsupported completion claims; report findings before judgment fixes.
-
-## role: retrospector
-
-Return only reusable process evidence, its source, and any unresolved uncertainty.
-
 ## role: coordinator
 
 Read [Coordinator contract](references/coordination/coordinator-contract.md#coordinator-contract). Sequence owners, preserve single-writer boundaries, and refuse closure while residual work has more than one owner.

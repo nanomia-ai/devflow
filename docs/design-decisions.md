@@ -2659,16 +2659,18 @@ declared shape, and an approval taken against a proposal this run never presente
 write. Adopt still writes nothing before approval and adds no state, marker, or recovery protocol.
 
 Chosen boundary: Adopt declares `ROLES.refuter` with its inputs, reads, judgments, and a
-`refutationResult` return template, and both refutation branches open that contract by package path and
-`DISPATCH` the role before `WAIT`. The brief is the runtime's own `role` render, so narrowing it is no longer a
+`refutationResult` return template, and both refutation branches `DISPATCH` the role before `WAIT`,
+and no devflow sentence carries the briefing (v0.25.1; 0.25.0 used one contract file per role,
+which measured 93.7~97.8% identical across five). devflow carries no delivery instruction for this. Verify and Work already declare roles and briefed them correctly without one in 0.23.3 and 0.23.8; the one observed failure was Adopt, which declared no role at all, and declaring it closes that. No evidence shows the sentence is needed. The brief is the runtime's own `role` render, so narrowing it is no longer a
 producer choice; the returned `coverage` field carries the preserved initial coverage that prose alone
 could not hand across a correction. `refutation.state` moves to the `decided` lane it shares with
 Verify's returned verdicts, leaving Adopt with no producer self-judgment. Guard
 `approval-precedes-refutation` blocks while the route is `setup.unmanaged`, the approval is `approve`,
 and refutation is not `clear`; because a guard stop carries no needs, it emits no continuation seal, so
 the premature approval is not inherited and the next call falls to the write-free `prepare` proposal.
-The same role-contract `READ` lands ahead of the four existing `DISPATCH` effects in Verify and Arch,
-whose contracts were reachable only if the producer already knew the `role` command existed.
+Verify's and Arch's four existing `DISPATCH` effects carry no briefing sentence either: their roles
+are declared, and the contract each clean context needs is the runtime's own render of that
+declaration.
 
 Why the boundary is needed: every other independent judgment in devflow is a declared role whose
 verdict lands where a collector can read it, and every other approval boundary has a disk observation.
@@ -2686,10 +2688,9 @@ repair but belongs to Skill Rails, not here.
 
 Affected coordinates: `skills/adopt/spec.mjs` observations, guards, roles, templates, stage
 branches, and declaration; `skills/adopt/body.md`; `skills/adopt/references/workflow.md`;
-`skills/adopt/references/refuter-role.md`; `skills/adopt/templates/refutation-result.md`;
-`skills/verify/spec.mjs` and its three role contracts; `skills/arch/spec.mjs`, its channel-verifier
-role fields, and `skills/arch/references/channel-verifier-role.md`; `skills/work/spec.mjs`, whose
-reviewer contract carried the same project-resolved read; their fixtures and generated receipts;
+`skills/adopt/templates/refutation-result.md`;
+`skills/verify/spec.mjs` and its three role locators; `skills/arch/spec.mjs` and its channel-verifier
+role fields; `skills/work/spec.mjs`, whose reviewer contract carried the same project-resolved read; their fixtures and generated receipts;
 `scripts/project-state.test.js`; DD-102 and DD-106 state; matrix 3.24.
 
 Revisit when a producer still assembles a role brief by hand, a premature approval reaches a write

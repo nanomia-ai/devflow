@@ -18,7 +18,9 @@
 핵심 철학 — 모든 수정은 이 기조를 지켜야 한다:
 
 1. **풍부한 방향성 + 최소 하네스.** 최신 상위 모델은 방법을 안다. 목적지와 금지만 명확히
-   주고 방법은 지시하지 않는다. 하네스는 모델 등급에 반비례해서만 강화한다.
+   주고 방법은 지시하지 않는다. 하네스는 모델 등급에 반비례해서만 강화한다. 산문은 목적·의도·
+   방향을 나르고, 반드시 성립해야 하는 것은 어길 자리를 없애는 기계 검사가 된다. 규칙 목록이
+   길수록 더 지켜지는 것이 아니라 덜 지켜진다.
 2. **지식은 적지 않는다, 취향은 적는다.** 모델이 이미 아는 보편 원칙(인젝션 방어법 등)을
    적는 것은 세금이다. 이 프로젝트가 무엇을 우선하는지(선언)만 적는다.
 3. **진행 상태는 문서가 아니라 파일 트리다.** 파일명 접미사(.wip./.done./.stale.)와
@@ -54,7 +56,7 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증
 | `resume` | 구조화된 디스크 상태와 transient entry observation을 단독으로 읽고 중단된 전이를 복구해 다음 단계로 라우팅 | Git·작업·지식 tree·journal·verify 투영 → 해당 entry skill | DD-11 · DD-25 · DD-26 · DD-44 · DD-92 · DD-110 |
 | predicate 동반 정본 | 여러 단계가 공유하는 baseline 판정을 한 곳에서 고정. 상태·검증 판정은 상태 도구로 옮겼다 | 명시된 소비자만 읽고 절차는 각 단계가 소유 | DD-28 · DD-42 · DD-56 · DD-80 · DD-92 |
 | 상태 도구 | 진입·술어·무결성 계산의 소유자, 읽기 전용이고 아무것도 고치지 않는다 | 디스크와 Git → 구역 열넷, 유계 entry observation, 파생 한 줄 `next:`. 부름 하나, 소비자 여섯 | DD-11 · DD-25 · DD-39 · DD-80 · DD-110 |
-| 역할 계약 | reviewer·verifier·auditor·retrospector·channel-verifier·refuter를 깨끗한 컨텍스트에 원문 브리핑. 발동하는 단계가 그 계약을 먼저 연다 | entry skill의 사건 → 편향을 제한한 독립 판단 | DD-19 · DD-21–DD-23 · DD-111 |
+| 역할 계약 | reviewer·verifier·auditor·retrospector·channel-verifier·refuter를 깨끗한 컨텍스트에 원문 브리핑. 런타임이 선언에서 각 계약을 렌더하며 devflow 산문이 그것을 되풀이하지 않는다 | entry skill의 사건 → 편향을 제한한 독립 판단 | DD-19 · DD-21–DD-23 · DD-111 |
 | `coordinator` 역할 계약 | devflow 위에서 worker를 배치·감독하되 새 단계나 상태를 만들지 않음 | orchestrator → 기존 entry skill | DD-70 |
 
 묶음 행이 가리키는 파일은 `references/state/task-card-predicates.md`,
@@ -62,8 +64,7 @@ Layer 0 (1회·상속): product → arch → [design] · 기존 프로젝트 증
 `references/verification/event-predicates.md`, `references/knowledge/baseline-contract.md`,
 `references/planning/evidence-discipline.md`, `work/references/reviewer-role.md`,
 `verify/references/verifier-role.md`, `verify/references/auditor-role.md`,
-`verify/references/retrospector-role.md`, `arch/references/channel-verifier-role.md`,
-`adopt/references/refuter-role.md`, `references/coordination/coordinator-contract.md`다. 각 파일의 실제 소비자와 역할 경계는 원문과 저장소 검사가
+`verify/references/retrospector-role.md`, `references/coordination/coordinator-contract.md`다. 각 파일의 실제 소비자와 역할 경계는 원문과 저장소 검사가
 판정한다.
 
 ## 문서 지도 — 무엇이 어디에 살고 언제 읽히나

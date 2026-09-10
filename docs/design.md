@@ -21,7 +21,9 @@ Core philosophy — every modification must keep to it:
 
 1. **Rich direction + minimal harness.** Top-tier recent models know the how. State the
    destination and the forbidden clearly; do not dictate methods. Strengthen the harness
-   only in inverse proportion to model tier.
+   only in inverse proportion to model tier. Prose carries goal, intent, and direction;
+   whatever must hold becomes a machine check that removes the place to break it. A longer
+   list of rules is obeyed less, not more.
 2. **Write taste, not knowledge.** Writing universal principles the model already knows
    (e.g. injection defenses) is a tax. Write only what this project prioritizes (declarations).
 3. **Progress state lives in the file tree, not in documents.** Filename suffixes
@@ -59,7 +61,7 @@ points to from their actual sources.
 | `resume` | solely reads structured disk state and transient entry observations, recovers interrupted transitions, and routes the next stage | Git, work and knowledge trees, journal, and verify projection → the applicable entry skill | DD-11 · DD-25 · DD-26 · DD-44 · DD-92 · DD-110 |
 | predicate companions | fix the shared baseline judgment in one place; state and verification judgments moved to the state tool | only named consumers read them; each stage owns its procedure | DD-28 · DD-42 · DD-56 · DD-80 · DD-92 |
 | state tool | owns the entry, predicate, and integrity computation, read-only and repairing nothing | disk and Git → fourteen zones, a bounded entry observation, and a derived `next:` line; one call, six consumers | DD-11 · DD-25 · DD-39 · DD-80 · DD-110 |
-| role contracts | brief reviewer, verifier, auditor, retrospector, channel-verifier, and refuter verbatim into clean contexts; each dispatching stage opens its contract first | an entry-skill event → an independently constrained judgment | DD-19 · DD-21–DD-23 · DD-111 |
+| role contracts | brief reviewer, verifier, auditor, retrospector, channel-verifier, and refuter verbatim into clean contexts; the runtime renders each contract from its declaration and no devflow prose restates it | an entry-skill event → an independently constrained judgment | DD-19 · DD-21–DD-23 · DD-111 |
 | `coordinator` role contract | dispatches and supervises workers above devflow without creating a stage or state | orchestrator → existing entry skills | DD-70 |
 
 The grouped rows name `references/state/task-card-predicates.md`,
@@ -67,7 +69,6 @@ The grouped rows name `references/state/task-card-predicates.md`,
 `references/knowledge/baseline-contract.md`, `references/planning/evidence-discipline.md`,
 `work/references/reviewer-role.md`, `verify/references/verifier-role.md`,
 `verify/references/auditor-role.md`, `verify/references/retrospector-role.md`,
-`arch/references/channel-verifier-role.md`, `adopt/references/refuter-role.md`, and
 `references/coordination/coordinator-contract.md`. Their actual consumers and role boundaries are
 judged from source and repository checks.
 

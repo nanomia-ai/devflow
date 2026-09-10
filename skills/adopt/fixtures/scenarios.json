@@ -162,7 +162,6 @@
         "RUN",
         "RUN",
         "RUN",
-        "READ",
         "DISPATCH",
         "WAIT"
       ]
@@ -188,7 +187,6 @@
       "status": "WAIT",
       "effects": [
         "RUN",
-        "READ",
         "DISPATCH",
         "WAIT"
       ]

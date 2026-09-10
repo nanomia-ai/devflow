@@ -209,7 +209,7 @@ export const STAGES = [
 
   { id: "verify-channel", reads: ["verification.state"], acceptsUnknown: [], done: s => s.verification.state === "confirmed", needs: ["verification.state"], reentry: "rejudge", branches: {
     select: [["REPORT", { template: "proposal" }], "ASK"],
-    probe: [["READ", { path: "references/channel-verifier-role.md" }], ["DISPATCH", { role: "channel-verifier" }], "WAIT"],
+    probe: [["DISPATCH", { role: "channel-verifier" }], "WAIT"],
     unavailable: [["REPORT", { template: "channelEvidence" }], "ASK"]
   }, body: "stage: verify-channel" },
 

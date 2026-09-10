@@ -117,9 +117,26 @@ comparative selection) as an option in Direct's execution proposal. Grounds for
   first-match rule, the active-claim row precedes the capability-document row. Code correctness
   remains intact; reopen after one owner entering the domain or one new joiner is actually
   misled by stale capability-document content.
+- **A `DISPATCH` Decision does not carry its own role render** (v0.25.1) — `ROLES` declares each
+  role's inputs, reads, judgments, and return template and `renderRole` (`api.mjs:167-183`) renders
+  them exactly, but no Decision carries that output: `renderGuide` ships the selected stage/guard
+  body and the template, never the role section, and the generated `SKILL.md` names only `enter`
+  and `stage`. So the briefing is assembled by the producer, which is how a 0.24.0 Adopt run
+  narrowed it until a blocking check fell outside. devflow moved that sentence three times - one
+  contract file per role, an inlined `DISPATCH` argument, a shared policy-index row - and removed
+  all three, because every form is a copy or a pointer to a sentence devflow does not own.
+  **Adopt when Skill Rails inlines the `renderRole` output into a `DISPATCH` Decision**
+  (`evaluator.mjs:250-258`, `guide.mjs:20`, the shape `template_text` and `format.example`
+  already use); devflow then closes this with zero prose. The companion request is the
+  `after-input` seal covering fields the Decision never asked for (`api.mjs:256`), which one
+  local guard now absorbs. Role-brief arrival is unmeasured; the first observation is the next
+  cold dispatching run.
 - **Death midway through adopt loses the whole representative-flow trace** (v0.17.0) — adopt
   forbids persisting the evidence table and has no progress marker. Re-measure intermediate
   landing cost after an actual brownfield adoption has to rerun adopt.
+  2026-09-10: that resume condition fired - a Codex Adopt lane was interrupted and resumed, and the
+  lost trace is what let a producer-supplied `clear` stand in for the refutation. Re-measurement
+  is still pending.
 - **An upper-document change and design-zone re-derivation are not one transition** (v0.17.0) —
   the discovery→update table directly wires re-derivation only for capability rename and split;
   common stack, boundary, and data changes rely on the semantic-review rule. Reopen transition
