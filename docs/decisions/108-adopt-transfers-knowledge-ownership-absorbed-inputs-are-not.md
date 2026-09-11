@@ -3,7 +3,6 @@
 - 상태: 유효
 - 주제: 지식층과 능력 문서
 - 도입: v0.23.16
-- 최종 검토: 2026-09-11
 
 관측된 문제: Adopt는 역산 중 모든 유지 자료를 올바르게 회계했지만, 그 이관 inventory를
 Architecture `Existing records`와 K footer·본문 provenance mark에 영속시켰다.

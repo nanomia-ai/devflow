@@ -3,7 +3,6 @@
 - 상태: 유효 · 일부 정정 → DD-97 (v0.21.0), DD-101 (v0.23.7)
 - 주제: 정체성 · 배포 · 플랫폼
 - 도입: v0.20.0
-- 최종 검토: 2026-09-11
 
 관찰된 문제: 전역 설치된 플러그인의 SessionStart가 모든 Git 저장소에 devflow 안내를 넣고,
 arch·design·split·work·verify·resume의 일반 개발 어휘와 product·adopt의 넓은 설명이 이를

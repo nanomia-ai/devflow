@@ -123,9 +123,9 @@ function render(decisions, order) {
   const lines = ["# 결정 색인", "",
     "한 결정은 `docs/decisions/` 아래 한 파일이다. 하나만 열려면 `--id DD-nn`.", ""];
   for (const subject of subjects) {
-    lines.push(`## ${subject}`, "", "| ID | 결정 | 상태 |", "|---|---|---|");
+    lines.push(`## ${subject}`, "", "| ID | 결정 | 도입 | 상태 |", "|---|---|---|---|");
     for (const decision of groups.get(subject).sort((a, b) => Number(a.id.slice(3)) - Number(b.id.slice(3)))) {
-      lines.push(`| ${decision.id} | ${cell(decision.title)} | ${cell(decision.state)} |`);
+      lines.push(`| ${decision.id} | ${cell(decision.title)} | ${cell(decision.introduced)} | ${cell(decision.state)} |`);
     }
     const rejection = rejections.get(subject);
     if (rejection) {

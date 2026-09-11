@@ -3,7 +3,6 @@
 - 상태: 유효
 - 주제: Git 기계와 중단 복구
 - 도입: v0.19.0
-- 최종 검토: 2026-09-11
 
 DD-39는 기존 `cmd` binary pipe가 raw-byte hash와 같고 PowerShell 객체 파이프라인만
 달랐음을 이미 측정했다. v0.19.0 S3 fixture는 이제 이관된 실행자를 직접 봉합한다.

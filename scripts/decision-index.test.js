@@ -38,8 +38,10 @@ function fixture(t, files) {
 
 function rows(output) {
   return output.split(/\r?\n/).flatMap((line) => {
-    const match = /^\|\s*(DD-\d+)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|$/.exec(line);
-    return match && match[1] !== "ID" ? [{ id: match[1], title: match[2], state: match[3] }] : [];
+    const match = /^\|\s*(DD-\d+)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|$/.exec(line);
+    return match && match[1] !== "ID"
+      ? [{ id: match[1], title: match[2], introduced: match[3], state: match[4] }]
+      : [];
   });
 }
 
