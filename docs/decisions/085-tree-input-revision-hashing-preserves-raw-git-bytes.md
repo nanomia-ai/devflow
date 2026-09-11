@@ -4,6 +4,7 @@
 - 주제: Git 기계와 중단 복구
 - 도입: v0.19.0
 - 날짜: 2026-08-23
+- 날짜 근거: git 추정 (CHANGELOG에 해당 버전 없음)
 
 DD-39는 기존 `cmd` binary pipe가 raw-byte hash와 같고 PowerShell 객체 파이프라인만
 달랐음을 이미 측정했다. v0.19.0 S3 fixture는 이제 이관된 실행자를 직접 봉합한다.
