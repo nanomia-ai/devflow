@@ -3,6 +3,7 @@
 - 상태: 유효
 - 주제: Git 기계와 중단 복구
 - 도입: v0.19.0
+- 결정일: 2026-08-23
 - 최종 수정: 2026-08-23
 
 DD-39는 기존 `cmd` binary pipe가 raw-byte hash와 같고 PowerShell 객체 파이프라인만

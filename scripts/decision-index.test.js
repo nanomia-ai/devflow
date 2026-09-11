@@ -14,7 +14,7 @@ const OUTPUT_ADVISORY = 24 * 1024;
 const DECISIONS = path.join(ROOT, "docs", "decisions");
 
 // docs/ is Korean, so decision header fields are Korean and there is no language option.
-const F = { state: "상태", subject: "주제", introduced: "도입", modified: "최종 수정" };
+const F = { state: "상태", subject: "주제", decided: "결정일", modified: "최종 수정" };
 const ACTIVE = "유효";
 const KOREAN = /[가-힣]/;
 
@@ -22,9 +22,9 @@ function run(cwd, ...args) {
   return spawnSync(process.execPath, [TOOL, ...args], { cwd, encoding: "utf8", maxBuffer: 4 * 1024 * 1024 });
 }
 
-function decisionFile(id, title, { subject = "Fixture subject", state = ACTIVE, introduced = "fixture", modified = "2026-09-11" } = {}) {
+function decisionFile(id, title, { subject = "Fixture subject", state = ACTIVE, decided = "2026-09-11", modified = "2026-09-11" } = {}) {
   return `# ${id} · ${title}\n\n- ${F.state}: ${state}\n- ${F.subject}: ${subject}\n`
-    + `- ${F.introduced}: ${introduced}\n- ${F.modified}: ${modified}\n\nFixture reason.\n`;
+    + `- ${F.decided}: ${decided}\n- ${F.modified}: ${modified}\n\nFixture reason.\n`;
 }
 
 function fixture(t, files) {
@@ -40,7 +40,7 @@ function rows(output) {
   return output.split(/\r?\n/).flatMap((line) => {
     const match = /^\|\s*(DD-\d+)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|$/.exec(line);
     return match && match[1] !== "ID"
-      ? [{ id: match[1], title: match[2], introduced: match[3], modified: match[4], state: match[5] }]
+      ? [{ id: match[1], title: match[2], decided: match[3], modified: match[4], state: match[5] }]
       : [];
   });
 }
@@ -96,14 +96,14 @@ test("unknown options and identifiers fail loudly", () => {
 });
 
 test("a missing title is refused instead of invented", (t) => {
-  const body = `# DD-01 ·\n\n- ${F.state}: ${ACTIVE}\n- ${F.subject}: S\n- ${F.introduced}: v0.1.0\n\nBody.\n`;
+  const body = `# DD-01 ·\n\n- ${F.state}: ${ACTIVE}\n- ${F.subject}: S\n- ${F.decided}: 2026-09-11\n\nBody.\n`;
   const result = run(fixture(t, [["001-a.md", body]]));
   assert.equal(result.status, 1);
   assert.match(result.stderr, /first line must be/);
 });
 
 test("a missing header field is refused instead of invented", (t) => {
-  const body = `# DD-01 · Title\n\n- ${F.state}: ${ACTIVE}\n- ${F.introduced}: v0.1.0\n\nBody.\n`;
+  const body = `# DD-01 · Title\n\n- ${F.state}: ${ACTIVE}\n- ${F.decided}: 2026-09-11\n\nBody.\n`;
   const result = run(fixture(t, [["001-a.md", body]]));
   assert.equal(result.status, 1);
   assert.match(result.stderr, /header needs nonempty/);
