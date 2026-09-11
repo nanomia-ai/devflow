@@ -11,148 +11,152 @@ const { test } = require("node:test");
 const ROOT = path.resolve(__dirname, "..");
 const TOOL = path.join(__dirname, "decision-index.mjs");
 const OUTPUT_ADVISORY = 24 * 1024;
+const DECISIONS = path.join(ROOT, "docs", "decisions");
+
+// docs/ is Korean, so decision header fields are Korean and there is no language option.
+const F = { state: "상태", subject: "주제", introduced: "도입", reviewed: "최종 검토" };
+const ACTIVE = "유효";
+const KOREAN = /[가-힣]/;
 
 function run(cwd, ...args) {
-  return spawnSync(process.execPath, [TOOL, ...args], {
-    cwd,
-    encoding: "utf8",
-    maxBuffer: 4 * 1024 * 1024,
-  });
+  return spawnSync(process.execPath, [TOOL, ...args], { cwd, encoding: "utf8", maxBuffer: 4 * 1024 * 1024 });
 }
 
-function write(root, relative, content) {
-  const target = path.join(root, ...relative.split("/"));
-  fs.mkdirSync(path.dirname(target), { recursive: true });
-  fs.writeFileSync(target, content, "utf8");
+function decisionFile(id, title, { subject = "Fixture subject", state = ACTIVE, introduced = "fixture" } = {}) {
+  return `# ${id} · ${title}\n\n- ${F.state}: ${state}\n- ${F.subject}: ${subject}\n`
+    + `- ${F.introduced}: ${introduced}\n- ${F.reviewed}: 2026-09-11\n\nFixture reason.\n`;
 }
 
-function decision(id, title, subject = "Fixture subject", state = "active", introduced = "fixture") {
-  return `### ${id} · ${title}\n\nSubject: ${subject} | Introduced: ${introduced} | State: ${state}\n\nFixture reason.\n`;
-}
-
-function fixture(t, english, korean = english) {
+function fixture(t, files) {
   const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "devflow-decision-index-")));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
-  write(root, "docs/design-decisions.md", `# Decisions\n\n${english}`);
-  write(root, "docs/design-decisions_ko.md", `# \uACB0\uC815\n\n${korean}`);
+  const dir = path.join(root, "docs", "decisions");
+  fs.mkdirSync(dir, { recursive: true });
+  for (const [name, body] of files) fs.writeFileSync(path.join(dir, name), body, "utf8");
   return root;
 }
 
 function rows(output) {
   return output.split(/\r?\n/).flatMap((line) => {
     const match = /^\|\s*(DD-\d+)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|$/.exec(line);
-    if (!match || match[1] === "ID") return [];
-    return [{ id: match[1], title: match[2], state: match[3] }];
+    return match && match[1] !== "ID" ? [{ id: match[1], title: match[2], state: match[3] }] : [];
   });
 }
 
-function sourceDecisions(relative) {
-  const text = fs.readFileSync(path.join(ROOT, relative), "utf8");
-  return [...text.matchAll(/^###\s+(DD-\d+)\s+·\s+(.+)$/gm)]
-    .map((match) => ({ id: match[1], title: match[2].trim()
-      .replace(/ \(v\d+\.\d+\.\d+(?:, [^()]+ v\d+\.\d+\.\d+)?\)$/, "") }));
+function repositoryDecisions() {
+  return fs.readdirSync(DECISIONS).filter((name) => name.endsWith(".md"))
+    .map((name) => /^# (DD-\d+) · (.+)$/m.exec(fs.readFileSync(path.join(DECISIONS, name), "utf8")))
+    .map((match) => ({ id: match[1], title: match[2].trim() }));
 }
 
-test("decision index projects every English decision once in source order", () => {
+test("the index projects every decision file exactly once", () => {
   const result = run(ROOT);
   assert.equal(result.status, 0, result.stderr);
-  assert.doesNotMatch(result.stderr, /^error:/m);
-  const expected = sourceDecisions("docs/design-decisions.md");
-  const actual = rows(result.stdout);
-  assert.ok(expected.length >= 80, "the canonical source unexpectedly lost legacy decisions");
-  assert.deepEqual(actual.map((item) => item.id), expected.map((item) => item.id));
-  assert.deepEqual(actual.map((item) => item.title), expected.map((item) => item.title));
-  assert.equal(new Set(actual.map((item) => item.id)).size, actual.length);
-  assert.doesNotMatch(result.stdout, /truncat|\.\.\./i);
+  const projected = rows(result.stdout);
+  const expected = repositoryDecisions();
+  assert.equal(projected.length, expected.length, "row count does not match the file count");
+  assert.deepEqual(projected.map((r) => r.id).sort(), expected.map((d) => d.id).sort());
+  const titles = new Map(expected.map((d) => [d.id, d.title]));
+  for (const row of projected) assert.equal(row.title, titles.get(row.id), `${row.id}: title drift`);
 });
 
-test("decision index projects Korean with the same identifier set and row count", () => {
-  const english = run(ROOT);
-  const korean = run(ROOT, "--lang", "ko");
-  assert.equal(english.status, 0, english.stderr);
-  assert.equal(korean.status, 0, korean.stderr);
-  const enRows = rows(english.stdout);
-  const koRows = rows(korean.stdout);
-  assert.deepEqual(koRows.map((item) => item.id), sourceDecisions("docs/design-decisions_ko.md").map((item) => item.id));
-  assert.deepEqual(new Set(koRows.map((item) => item.id)), new Set(enRows.map((item) => item.id)));
-  assert.equal(koRows.length, enRows.length);
-  assert.doesNotMatch(korean.stdout, /truncat|\.\.\./i);
+test("the projection is Korean and carries no second language directory", () => {
+  assert.match(run(ROOT).stdout, KOREAN, "the index should be Korean");
+  assert.ok(!fs.existsSync(path.join(DECISIONS, "ko")), "docs/decisions/ko/ came back");
 });
 
-test("decision index preserves the four legacy index meanings that used to exist only in design.md", () => {
-  const result = run(ROOT);
+test("--id prints one decision in full and nothing else", () => {
+  const result = run(ROOT, "--id", "DD-84");
   assert.equal(result.status, 0, result.stderr);
-  const byId = new Map(rows(result.stdout).map((item) => [item.id, item.title]));
-  const legacyMeaning = new Map([
-    ["DD-65", "A mixed request records only its gate-failing items — a passing item enters no journal line"],
-    ["DD-78", "One canon range goes unread only when a tool proves that range has no subject — the machine cuts, it reads HEAD and the working tree both, and every other answer collapses to the full read"],
-    ["DD-79", "README is a person's document and lives outside the AI's read set — not read, not updated, not used as grounds for a judgment, and the line holds after README returns"],
-  ]);
-  for (const [id, title] of legacyMeaning) assert.equal(byId.get(id), title, `${id} lost legacy index meaning`);
-  const entry = byId.get("DD-71") ?? "";
-  assert.match(entry, /design in full.*decision index generated from the source/i);
-  assert.match(entry, /AGENTS routes detailed procedure conditionally/i);
-  assert.match(entry, /history is not onboarding/i);
+  assert.match(result.stdout, /^# DD-84 · /);
+  assert.match(result.stdout, new RegExp(`^- ${F.state}: `, "m"));
+  assert.doesNotMatch(result.stdout, /^# DD-(?!84)\d+ · /m, "--id leaked another decision");
+  assert.ok(Buffer.byteLength(result.stdout) < 16 * 1024, "one decision should open on its own");
+  assert.equal(run(ROOT, "--id", "84").stdout, result.stdout, "a bare number should resolve the same");
 });
 
-test("decision index groups rows by Subject without changing source order", (t) => {
-  const body = [
-    decision("DD-01", "First", "Alpha"),
-    decision("DD-02", "Second", "Alpha"),
-    decision("DD-03", "Third", "Beta", "active, partly corrected by DD-02 (v1.2.3)"),
-  ].join("\n");
-  const root = fixture(t, body);
+test("rows stay grouped under their subject heading", () => {
+  const subjects = [...run(ROOT).stdout.matchAll(/^## (.+)$/gm)].map((m) => m[1]);
+  assert.ok(subjects.length >= 2, "the index lost its subject grouping");
+  assert.equal(new Set(subjects).size, subjects.length, "a subject heading repeats");
+});
+
+test("unknown options and identifiers fail loudly", () => {
+  const lang = run(ROOT, "--lang", "ko");
+  assert.equal(lang.status, 1, "the language option is gone with the pairs");
+  assert.match(lang.stderr, /unknown option/);
+  const missing = run(ROOT, "--id", "DD-99999");
+  assert.equal(missing.status, 1);
+  assert.match(missing.stderr, /is not a decision/);
+  const shape = run(ROOT, "--id", "nonsense");
+  assert.equal(shape.status, 1);
+  assert.match(shape.stderr, /must look like DD-84/);
+});
+
+test("a missing title is refused instead of invented", (t) => {
+  const body = `# DD-01 ·\n\n- ${F.state}: ${ACTIVE}\n- ${F.subject}: S\n- ${F.introduced}: v0.1.0\n\nBody.\n`;
+  const result = run(fixture(t, [["001-a.md", body]]));
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /first line must be/);
+});
+
+test("a missing header field is refused instead of invented", (t) => {
+  const body = `# DD-01 · Title\n\n- ${F.state}: ${ACTIVE}\n- ${F.introduced}: v0.1.0\n\nBody.\n`;
+  const result = run(fixture(t, [["001-a.md", body]]));
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /header needs nonempty/);
+});
+
+test("each subject's rejections are reachable from the index, and a stray rejection is refused", (t) => {
+  const entry = "- **[DR-01 · v0.1.0]** **x** — y.\n";
+  const homed = decisionFile("DD-01", "A", { subject: "S" }) + `\n## 기각된 안 — S\n\n${entry}`;
+  const ok = run(fixture(t, [["001-a.md", homed]]));
+  assert.equal(ok.status, 0, ok.stderr);
+  assert.match(ok.stdout, /^기각된 안: DR-01 — `--id DD-01`$/m, "the subject does not point at its rejections");
+  const stray = run(fixture(t, [["001-a.md", decisionFile("DD-01", "A", { subject: "S" }) + `\n${entry}`]]));
+  assert.equal(stray.status, 1, "a rejection with no subject section was projected");
+  assert.match(stray.stderr, /rejection section/);
+});
+
+test("an unknown state is refused instead of projected", (t) => {
+  const result = run(fixture(t, [["001-a.md", decisionFile("DD-01", "Title", { state: "maybe" })]]));
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /invalid state/);
+});
+
+test("a duplicate identifier across two files is refused", (t) => {
+  const result = run(fixture(t, [
+    ["001-a.md", decisionFile("DD-01", "First")],
+    ["002-b.md", decisionFile("DD-01", "Second")],
+  ]));
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /duplicate decision identifier/);
+});
+
+test("a missing decision directory is refused", (t) => {
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "devflow-decision-index-")));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const result = run(root);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /decision directory is missing/);
+});
+
+test("an oversized projection stays complete and only warns", (t) => {
+  const files = [];
+  for (let index = 1; index <= 400; index += 1) {
+    files.push([`${String(index).padStart(3, "0")}-x.md`,
+      decisionFile(`DD-${index}`, `Padded title ${"y".repeat(120)} ${index}`)]);
+  }
+  const result = run(fixture(t, files));
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /^## Alpha$/m);
-  assert.match(result.stdout, /^## Beta$/m);
-  assert.deepEqual(rows(result.stdout).map((item) => item.id), ["DD-01", "DD-02", "DD-03"]);
-  assert.doesNotMatch(result.stdout, /Introduced/);
+  assert.ok(Buffer.byteLength(result.stdout) > OUTPUT_ADVISORY, "fixture did not exceed the advisory size");
+  assert.match(result.stderr, /warning: decision index is \d+ bytes/);
+  assert.equal(rows(result.stdout).length, 400, "the projection was truncated");
 });
 
-test("decision index rejects an unsupported language and arbitrary path surface", () => {
-  const language = run(ROOT, "--lang", "fr");
-  assert.notEqual(language.status, 0);
-  assert.match(language.stderr, /--lang.*(?:en|ko)/i);
-  const pathOption = run(ROOT, "--path", "elsewhere.md");
-  assert.notEqual(pathOption.status, 0);
-  assert.match(pathOption.stderr, /unknown option/i);
-});
-
-for (const [name, english, expected] of [
-  ["missing title", "### DD-01 · \n\nSubject: Alpha | Introduced: fixture | State: active\n", /title/i],
-  ["missing Subject", "### DD-01 · First\n\nIntroduced: fixture | State: active\n", /metadata|Subject/i],
-  ["missing State", "### DD-01 · First\n\nSubject: Alpha | Introduced: fixture\n", /metadata|State/i],
-  ["invalid State", decision("DD-01", "First", "Alpha", "deprecated"), /State/i],
-  ["duplicate identifier", decision("DD-01", "First") + decision("DD-01", "Again"), /duplicate/i],
-]) {
-  test(`decision index rejects ${name} instead of inventing a value`, (t) => {
-    const root = fixture(t, english);
-    const result = run(root);
-    assert.notEqual(result.status, 0);
-    assert.match(result.stderr, expected);
-    assert.equal(result.stdout, "");
-  });
-}
-
-test("decision index rejects an English/Korean identifier-set mismatch", (t) => {
-  const root = fixture(t, decision("DD-01", "First"), decision("DD-02", "\uCCAB\uC9F8"));
-  const result = run(root);
-  assert.notEqual(result.status, 0);
-  assert.match(result.stderr, /identifier set|ID set/i);
-  assert.equal(result.stdout, "");
-});
-
-test("decision index keeps an oversized projection complete and warns instead of blocking entry", (t) => {
-  const body = Array.from({ length: 180 }, (_, index) => decision(
-    `DD-${1000 + index}`,
-    `Complete decision ${index} ${"x".repeat(180)}`,
-  )).join("\n");
-  const root = fixture(t, body);
-  const result = run(root);
-  assert.equal(result.status, 0, result.stderr);
-  assert.ok(Buffer.byteLength(result.stdout) > OUTPUT_ADVISORY);
-  assert.equal(rows(result.stdout).length, 180);
-  assert.match(result.stderr, /^warning: decision index is \d+ bytes; advisory threshold is \d+\n$/);
-  assert.doesNotMatch(result.stdout, /truncat|\.\.\./i);
+test("the tool writes nothing", () => {
+  const before = fs.readdirSync(DECISIONS).sort();
+  run(ROOT);
+  run(ROOT, "--id", "DD-84");
+  assert.deepEqual(fs.readdirSync(DECISIONS).sort(), before);
 });

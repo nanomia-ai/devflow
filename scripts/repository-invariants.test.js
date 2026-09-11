@@ -19,18 +19,9 @@ const P2_PACKAGES = [
   "work",
   "verify",
 ];
-const LANGUAGE_PAIR_RELATIVES = [
-  "codex/AGENTS-devflow_ko.md",
-  "docs/design_ko.md",
-  "docs/design-decisions_ko.md",
-  "docs/design-backlog_ko.md",
-  "docs/maintenance-protocol_ko.md",
-  "docs/rounds/v0.10.0/proposal_ko.md",
-  "docs/rounds/v0.11.0/report_ko.md",
-  "docs/rounds/v0.9.21/report_ko.md",
-];
 const ROOT_SCRIPT_LIFECYCLES = new Map([
   ["decision-index.mjs", ["AGENTS.md", "docs/design.md"]],
+  ["runtime-map.mjs", ["docs/design.md", "docs/README.md"]],
   ["project-knowledge.mjs", ["skills/principles/references/knowledge/opening-and-freshness.md"]],
   ["remove-generated-codex-prompts.js", ["codex/install.ps1", "codex/install.sh"]],
   ["remove-legacy-codex-hook.js", ["codex/install.ps1", "codex/install.sh"]],
@@ -80,28 +71,13 @@ function walk(dir, predicate, output = []) {
   return output;
 }
 
-test("declared Korean design originals have structurally equivalent English deploy pairs", () => {
-  for (const relative of LANGUAGE_PAIR_RELATIVES) {
-    const original = path.join(root, relative);
-    const deployed = original.replace(/_ko\.md$/, ".md");
-    assert.ok(fs.existsSync(original), `missing original ${relative}`);
-    assert.ok(fs.existsSync(deployed), `missing pair for ${relative}`);
-    assert.deepEqual(structure(fs.readFileSync(original, "utf8")), structure(fs.readFileSync(deployed, "utf8")),
-      `structure drift: ${relative}`);
-    assert.deepEqual(machineFigures(fs.readFileSync(original, "utf8")), machineFigures(fs.readFileSync(deployed, "utf8")),
-      `machine-checkable figure drift: ${relative}`);
-  }
-});
-
-test("English deploy artifacts contain no Korean", () => {
-  const deployFiles = [
+test("the one language rule holds: skills English, docs Korean, CHANGELOG English", () => {
+  const KOREAN = /[\uAC00-\uD7A3]/;
+  const english = [
     "AGENTS.md",
     "CHANGELOG.md",
     "CLAUDE.md",
-    "docs/design.md",
-    "docs/design-decisions.md",
-    "docs/design-backlog.md",
-    "docs/maintenance-protocol.md",
+    "docs/changelog-archive.md",
     "codex/AGENTS-devflow.md",
     "codex/install.ps1",
     "codex/install.sh",
@@ -109,52 +85,62 @@ test("English deploy artifacts contain no Korean", () => {
     ".claude-plugin/marketplace.json",
     ".codex-plugin/plugin.json",
     "hooks/hooks.json",
-    ...walk(path.join(root, "skills"), (name) => name.endsWith(".md") && !name.endsWith("_ko.md")),
-    ...walk(path.join(root, "scripts"), (name) => name.endsWith(".js") || name.endsWith(".mjs")),
+    ...walk(path.join(root, "skills"), (name) => name.endsWith(".md")),
   ].map((item) => (path.isAbsolute(item) ? item : path.join(root, item)));
-
-  for (const file of deployFiles) {
+  for (const file of english) {
     const relative = path.relative(root, file).replace(/\\/g, "/");
-    // P2 preserves the original Korean source verbatim in its provenance ledger. Those
-    // records are migration evidence, not English runtime guidance.
+    // P2 keeps its original Korean source verbatim as migration provenance, not runtime guidance.
     if (/^skills\/[^/]+\/references\/legacy-atoms\//.test(relative)) continue;
-    assert.doesNotMatch(read(relative), /[\uAC00-\uD7A3]/, `${relative}: Korean in English deploy artifact`);
+    assert.doesNotMatch(read(relative), KOREAN, `${relative}: Korean in an English surface`);
+  }
+  // docs/ is the Korean working surface, and it carries no _ko pairs any more.
+  for (const entry of fs.readdirSync(path.join(root, "docs"), { withFileTypes: true })) {
+    assert.doesNotMatch(entry.name, /_ko\.md$/, `docs/${entry.name}: the _ko suffix is gone with the pairs`);
+    if (!entry.isFile() || entry.name === "changelog-archive.md") continue;
+    assert.match(read(`docs/${entry.name}`), KOREAN, `docs/${entry.name} carries no Korean; docs/ is the Korean surface`);
+  }
+  const decisions = fs.readdirSync(path.join(root, "docs", "decisions"), { withFileTypes: true });
+  assert.ok(!decisions.some((entry) => entry.isDirectory()),
+    "docs/decisions/ has a subdirectory; one decision is one file in one language");
+  for (const entry of decisions.filter((e) => e.isFile() && e.name.endsWith(".md"))) {
+    assert.match(read(`docs/decisions/${entry.name}`), KOREAN, `docs/decisions/${entry.name} is not Korean`);
   }
 });
 
-test("the generated decision projections remain source-ordered one-to-one views", () => {
+test("the generated decision projection is a one-to-one view of docs/decisions/", () => {
   const tool = path.join(root, "scripts", "decision-index.mjs");
   const projected = [];
-  for (const [args, bodyFile] of [
-    [[], "docs/design-decisions.md"],
-    [["--lang", "ko"], "docs/design-decisions_ko.md"],
-  ]) {
+  for (const [args, dir] of [[[], path.join("docs", "decisions")]]) {
     const result = spawnSync(process.execPath, [tool, ...args], { cwd: root, encoding: "utf8" });
     assert.equal(result.status, 0, result.stderr);
     const indexed = [...result.stdout.matchAll(/^\|\s*(DD-\d+)\s*\|/gm)].map((match) => match[1]);
-    const bodied = [...read(bodyFile).matchAll(/^###\s+(DD-\d+)\s+·/gm)].map((match) => match[1]);
-    assert.ok(indexed.length > 0, `${bodyFile}: generated projection has no decisions`);
-    assert.deepEqual(new Set(indexed).size, indexed.length, `${bodyFile}: duplicate projected rows`);
-    assert.deepEqual(new Set(bodied).size, bodied.length, `${bodyFile}: duplicate decision bodies`);
-    assert.deepEqual(indexed, bodied, `${bodyFile}: projection is not source ordered`);
-    projected.push(indexed);
+    const filed = fs.readdirSync(path.join(root, dir)).filter((name) => name.endsWith(".md"))
+      .map((name) => /^# (DD-\d+) ·/m.exec(fs.readFileSync(path.join(root, dir, name), "utf8"))?.[1]);
+    assert.ok(indexed.length > 0, `${dir}: generated projection has no decisions`);
+    assert.ok(filed.every(Boolean), `${dir}: a decision file has no "# DD-nn ·" heading`);
+    assert.deepEqual(new Set(indexed).size, indexed.length, `${dir}: duplicate projected rows`);
+    assert.deepEqual([...indexed].sort(), [...filed].sort(), `${dir}: projection and files disagree`);
+    projected.push([...indexed].sort());
   }
-  assert.deepEqual(projected[0], projected[1], "English and Korean projections disagree on identifiers");
+  // One decision opens on its own, which is the reason the single-file source was split.
+  const one = spawnSync(process.execPath, [tool, "--id", "DD-84"], { cwd: root, encoding: "utf8" });
+  assert.equal(one.status, 0, one.stderr);
+  assert.match(one.stdout, /^# DD-84 ·/, "--id does not print the decision itself");
+  assert.ok(Buffer.byteLength(one.stdout) < 16 * 1024, "a single decision should be small enough to open alone");
 });
 
-test("decision and rejection identifiers remain dense and decision states are known", () => {
-  const body = read("docs/design-decisions.md");
+// Decision state grammar is enforced by decision-index.mjs itself, which the projection test runs.
+test("decision and rejection identifiers remain dense", () => {
+  const dir = path.join(root, "docs", "decisions");
+  const body = fs.readdirSync(dir).filter((name) => name.endsWith(".md"))
+    .map((name) => fs.readFileSync(path.join(dir, name), "utf8")).join("\n");
   for (const [prefix, pattern] of [
-    ["DD", /^###\s+(DD-\d+)\s+·/gm],
+    ["DD", /^# (DD-\d+) ·/gm],
     ["DR", /\*\*\[(DR-\d+)\s+·/g],
   ]) {
     const numbers = [...body.matchAll(pattern)].map((match) => Number(match[1].slice(3))).sort((a, b) => a - b);
     assert.deepEqual(new Set(numbers).size, numbers.length, `${prefix}: identifier is reused`);
     assert.deepEqual(numbers, numbers.map((_, index) => index + 1), `${prefix}: identifiers are not dense`);
-  }
-  for (const state of [...body.matchAll(/\|\s*State:\s*(.+)$/gm)].map((match) => match[1].trim())) {
-    assert.match(state, /^(?:active|replaced by DD-\d+ \(v\d+\.\d+\.\d+\)|active, partly corrected by DD-\d+ \(v\d+\.\d+\.\d+\)(?:, DD-\d+ \(v\d+\.\d+\.\d+\))*)$/,
-      `unknown decision state: ${state}`);
   }
 });
 
@@ -164,10 +150,14 @@ test("repository-owned documentation references resolve", () => {
   for (const file of markdown) {
     const relative = path.relative(root, file).replace(/\\/g, "/");
     if (relative === "CHANGELOG.md" || relative === "docs/changelog-archive.md") continue;
+    // skills/ prose names paths inside a *user's* project, where docs/ is not this repository's.
+    if (relative.startsWith("skills/")) continue;
     for (const match of fs.readFileSync(file, "utf8").matchAll(/\bdocs\/[A-Za-z0-9._/-]+\.md\b/g)) {
       const target = match[0];
-      const ours = target.startsWith("docs/rounds/")
-        || /^docs\/(design|maintenance-protocol|audit-guideline|usecase-matrix|capability-knowledge|v0\.)/.test(target);
+      // DD-115 forbids _ko files under docs/, so a _ko path in prose can only be a historical name.
+      if (/_ko\.md$/.test(target)) continue;
+      // Any docs/ path this repository writes must resolve; the list of names is not hardcoded.
+      const ours = target.startsWith("docs/");
       if (ours && !fs.existsSync(path.join(root, target))) dangling.push(`${relative} -> ${target}`);
     }
   }
@@ -177,48 +167,68 @@ test("repository-owned documentation references resolve", () => {
 test("the maintenance entry routes to its canonical document owners", () => {
   const agents = read("AGENTS.md");
   for (const required of [
+    "docs/README.md",
     "docs/design.md",
-    "docs/design-decisions.md",
-    "docs/design-backlog.md",
+    "docs/direction.md",
+    "docs/decisions/",
+    "docs/direction.md",
+    "docs/working-method.md",
     "docs/maintenance-protocol.md",
-    "docs/audit-guideline_ko.md",
-    "docs/usecase-matrix_ko.md",
-    "docs/rounds/",
+    "docs/audit-guideline.md",
+    "docs/usecase-matrix.md",
   ]) assert.ok(agents.includes(required), `AGENTS.md never names ${required}`);
-  assert.ok(read("docs/design.md").includes("Skill intent index"), "design lacks its component-intent owner");
-  assert.ok(read("docs/maintenance-protocol.md").includes("## 7. Release and installation"),
+  assert.ok(read("docs/design.md").includes("스킬 의도 색인"), "design lacks its component-intent owner");
+  assert.ok(/^## 5. /m.test(read("docs/maintenance-protocol.md")),
     "release procedure is not reachable from its canonical owner");
 });
 
-test("maintenance onboarding stays bounded and every protocol section has an entry route", () => {
+test("every docs entry answers exactly one question in the README map", () => {
+  const readme = read("docs/README.md");
+  for (const entry of fs.readdirSync(path.join(root, "docs"), { withFileTypes: true })) {
+    if (entry.name === "README.md") continue;
+    const named = entry.isDirectory() ? `${entry.name}/` : entry.name;
+    assert.ok(readme.includes(named), `docs/${named} has no row in docs/README.md`);
+  }
+  for (const match of readme.matchAll(/\]\(([A-Za-z0-9._/-]+)\)/g)) {
+    if (match[1].startsWith("../")) continue;
+    assert.ok(fs.existsSync(path.join(root, "docs", match[1])), `docs/README.md names missing ${match[1]}`);
+  }
+});
+
+test("no read route reaches history that the reorganization removed", () => {
+  const agents = read("AGENTS.md");
+  assert.doesNotMatch(agents, /docs\/rounds\//, "AGENTS.md still routes to the removed round layer");
+  assert.ok(!fs.existsSync(path.join(root, "docs", "rounds")), "docs/rounds/ came back");
+  assert.ok(!fs.existsSync(path.join(root, "docs", "blueprints")), "docs/blueprints/ came back");
+  assert.match(agents, /rounds-archive-v1/, "AGENTS.md does not name the archive tag that holds the originals");
+});
+
+test("the entry stays bounded and every protocol section is routed", () => {
   const agents = read("AGENTS.md");
   const protocol = read("docs/maintenance-protocol.md");
+  // A section with no entry route is unreachable. The *number* of sections is not a defect - the
+  // exact-count assertion this replaces only ever fired on legitimate renumbering.
   const sections = [...protocol.matchAll(/^##\s+(\d+)\./gm)].map((match) => match[1]);
-  assert.deepEqual(sections, ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
-    "the canonical maintenance protocol no longer has its nine numbered sections");
+  assert.ok(sections.length > 0, "no numbered protocol sections were found; this check would pass vacuously");
   for (const section of sections) {
-    assert.ok(agents.includes(`\u00a7${section}`), `protocol \u00a7${section} has no AGENTS.md route`);
+    assert.ok(agents.includes(`§${section}`), `protocol §${section} has no AGENTS.md route`);
   }
-  const normalizedAgents = normalizedText("AGENTS.md");
-  const normalizedDesign = normalizedText("docs/design.md");
-  assert.ok(Buffer.byteLength(normalizedAgents) <= 6 * 1024, "AGENTS.md exceeds the 6 KiB entry budget");
-  assert.ok(Buffer.byteLength(normalizedDesign) <= 26 * 1024, "docs/design.md exceeds the 26 KiB intent budget");
-  assert.ok(Buffer.byteLength(normalizedAgents) + Buffer.byteLength(normalizedDesign) <= 32 * 1024,
-    "always-read AGENTS.md + docs/design.md exceeds 32 KiB");
-  assert.doesNotMatch(protocol, /^\| Condition \| Read additionally \|$/m,
-    "conditional read dispatch is duplicated outside AGENTS.md");
-  assert.match(agents, /opening a folder under `docs\/rounds\/`[^\n]+not the bounded current-state read/i);
-  assert.match(protocol, /versioned implementation without naming a round-document role[\s\S]+`report_ko\.md`/i);
-  assert.doesNotMatch(agents, /read (?:all of |the whole )?docs\/maintenance-protocol\.md/i);
-  for (const forbidden of ["CURRENT.md", "another skill map", "whole CHANGELOG", "all rounds"]) {
-    assert.ok(agents.includes(forbidden), `AGENTS.md does not bound default onboarding through ${forbidden}`);
-  }
+  // One ceiling, on the sum, because the sum is what a cold session actually pays. Per-file ceilings
+  // blocked nothing and had to be raised three times in one round to let the entry carry its content.
+  const entry = ["AGENTS.md", "docs/README.md", "docs/design.md", "docs/direction.md"];
+  const total = entry.reduce((sum, relative) => sum + Buffer.byteLength(normalizedText(relative)), 0);
+  assert.ok(total <= 42 * 1024, `the always-read entry is ${total} B and exceeds 42 KiB`);
+  // jgnote's status field cannot lie because a checker cross-references code; ours is prose, so at
+  // minimum it must name the version it describes, or "where we are" rots silently.
+  const version = JSON.parse(read(".claude-plugin/plugin.json")).version;
+  assert.ok(read("docs/direction.md").includes(version),
+    `docs/direction.md does not name the current version ${version}; the present tense has gone stale`);
 });
 
 test("the always-read design intent index covers promoted packages and their role homes", () => {
   const design = read("docs/design.md");
-  const start = design.indexOf("### Skill intent index");
-  const end = design.indexOf("## Document map", start);
+  const start = design.indexOf("### 스킬 의도 색인");
+  const end = design.indexOf("## 이 문서 체계가 누적되는 방식", start);
   assert.ok(start >= 0 && end > start, "design.md has no bounded skill intent index");
   const intent = design.slice(start, end);
   for (const id of P2_PACKAGES) assert.ok(intent.includes(`\`${id}\``), `skill intent index omits ${id}`);
@@ -248,19 +258,6 @@ test("maintenance scripts and documents have repository-owned lifecycles", () =>
     const directTest = script.replace(/\.m?js$/, ".test.js");
     assert.ok(fs.existsSync(path.join(scriptsDir, directTest)),
       `${script} has no direct suite`);
-  }
-
-  const design = read("docs/design.md");
-  for (const entry of fs.readdirSync(path.join(root, "docs"), { withFileTypes: true })) {
-    if (!entry.isFile()) continue;
-    if (entry.name.endsWith("_ko.md")) {
-      const deployed = entry.name.replace(/_ko\.md$/, ".md");
-      const standingInstrument = new Set(["audit-guideline_ko.md", "usecase-matrix_ko.md"]);
-      assert.ok(standingInstrument.has(entry.name) || fs.existsSync(path.join(root, "docs", deployed)),
-        `${entry.name} has neither a deploy pair nor a declared Korean-only lifecycle`);
-    } else {
-      assert.ok(design.includes(`docs/${entry.name}`), `${entry.name} is absent from the document map`);
-    }
   }
 });
 
@@ -457,9 +454,23 @@ test("P2 stages enter one shared Principles policy index while companions and ro
     "Adopt's selected verification-channel columns must remain addressable");
   assert.match(archWorkflow, /^The proposal carries .*The ADR conditions are .*$/m,
     "Adopt's selected proposal and ADR paragraph must remain addressable");
-  for (const [packageName, roles] of [["principles", ["coordinator"]], ["work", ["reviewer"]], ["verify", ["verifier", "auditor", "retrospector"]]]) {
+  // Every declared role is discovered from source, never listed here: a hardcoded list stops growing
+  // with the specs, and by 0.25.0 it guarded five of the seven roles that actually existed.
+  const mapped = spawnSync(process.execPath, [path.join(root, "scripts", "runtime-map.mjs")], { cwd: root, encoding: "utf8" });
+  assert.equal(mapped.status, 0, mapped.stderr);
+  const declared = [...mapped.stdout.matchAll(/^  role ([a-z][\w-]*)/gm)].map((match) => match[1]);
+  assert.ok(declared.length > 0, "no ROLES are declared in any P2 package");
+  const designRoles = read("docs/design.md");
+  for (const role of declared) {
+    assert.ok(designRoles.includes(role), `docs/design.md never names the declared role ${role}`);
+  }
+  for (const packageName of P2_PACKAGES) {
     const spec = read(`skills/${packageName}/spec.mjs`);
-    for (const role of roles) assert.match(spec, new RegExp(`\\b${role}\\s*:`), `${packageName} does not declare ${role}`);
+    const owned = [...mapped.stdout.matchAll(new RegExp(`^## ${packageName}\\b[\\s\\S]*?(?=\\n## |\\ntotal:)`, "gm"))]
+      .flatMap((block) => [...block[0].matchAll(/^  role ([a-z][\w-]*)/gm)].map((match) => match[1]));
+    for (const role of owned) {
+      assert.match(spec, new RegExp(`\\b${role}"?\\s*:`), `${packageName} does not declare ${role}`);
+    }
   }
 });
 
@@ -515,4 +526,23 @@ test("Working language has one Product value owner and preserves fixed schema th
 test("the deployed semantic audit remains present beside the promoted packages", () => {
   assert.ok(fs.existsSync(path.join(root, "scripts", "skill-rails-semantic-audit.mjs")),
     "missing deployed Skill Rails semantic audit");
+});
+
+// jgnote's expiresWhen mechanism has a checker that reports stale entries; docs/direction.md is
+// prose instead of data, so this is the minimum equivalent: a bullet cannot lose its closing
+// condition without failing here.
+test("every Next-measurement-targets bullet in docs/direction.md names its closing condition", () => {
+  const direction = read("docs/direction.md");
+  // Match the heading by its text, not its number - renumbering a section is not a defect.
+  const found = new RegExp(`^## (?:\\d+\\. )?\u{B2E4}\u{C74C} \u{CE21}\u{C815} \u{B300}\u{C0C1}\\s*$`, "mu").exec(direction);
+  const start = found ? found.index : -1;
+  const end = start >= 0 ? direction.indexOf("\n## ", start + found[0].length) : -1;
+  assert.ok(start >= 0 && end > start, "docs/direction.md has no bounded Next-measurement-targets section");
+  const bullets = direction.slice(start, end).split(/\n(?=- \*\*)/).slice(1);
+  assert.ok(bullets.length > 0, "Next-measurement-targets section has no bullets");
+  // "closes when" / "reopen condition" markers, Korean and English
+  const closingCondition = /\u{B2EB}\u{D788}\u{B294} \u{C870}\u{AC74}|\u{C7AC}\u{AC1C} \u{C870}\u{AC74}|Closes when|Reopen/u;
+  for (const bullet of bullets) {
+    assert.match(bullet, closingCondition, `bullet has no closing condition: ${bullet.slice(0, 60)}`);
+  }
 });

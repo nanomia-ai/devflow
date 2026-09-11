@@ -1,100 +1,157 @@
 #!/usr/bin/env node
 
+// Read-only projection of docs/decisions/. One decision is one file; this prints the index the
+// entry gate reads, or one decision in full with --id. It writes nothing.
+// docs/ is Korean, so decision headers are Korean and there is no language option.
+
 import fs from "node:fs";
 import path from "node:path";
 
 const OUTPUT_ADVISORY = 24 * 1024;
-const KO_ACTIVE = "\uC720\uD6A8";
-const KO_REPLACED = "\uB300\uCCB4\uB428";
-const KO_PARTLY_CORRECTED = "\uC77C\uBD80 \uC815\uC815";
-const STATE_RE = new RegExp(`^(?:active|replaced by DD-\\d+ \\(v\\d+\\.\\d+\\.\\d+\\)|active, partly corrected by DD-\\d+ \\(v\\d+\\.\\d+\\.\\d+\\)(?:, DD-\\d+ \\(v\\d+\\.\\d+\\.\\d+\\))*|${KO_ACTIVE}|${KO_REPLACED} → DD-\\d+ \\(v\\d+\\.\\d+\\.\\d+\\)|${KO_ACTIVE} · ${KO_PARTLY_CORRECTED} → DD-\\d+ \\(v\\d+\\.\\d+\\.\\d+\\)(?:, DD-\\d+ \\(v\\d+\\.\\d+\\.\\d+\\))*)$`);
-const METADATA_RE = new RegExp(`^(?:Subject|\\uC8FC\\uC81C): (.+) \\| (?:Introduced|\\uB3C4\\uC785): (.+) \\| (?:State|\\uC0C1\\uD0DC): (.+)$`);
+const ACTIVE = "유효";
+const REPLACED = "대체됨";
+const PARTLY = "일부 정정";
+const VERSION = "\\(v\\d+\\.\\d+\\.\\d+\\)";
+const STATE_RE = new RegExp(
+  `^(?:${ACTIVE}|${REPLACED} → DD-\\d+ ${VERSION}`
+  + `|${ACTIVE} · ${PARTLY} → DD-\\d+ ${VERSION}(?:, DD-\\d+ ${VERSION})*)$`,
+);
+const FIELD = { state: "상태", subject: "주제", introduced: "도입" };
+// One section per subject holds that subject's rejections (DR-nn). The index names where it lives, so a
+// re-proposal reaches the recorded rejection from the always-read projection.
+const REJECTED = "기각된 안";
 
 function fail(message) {
   throw new Error(message);
 }
 
 function parseArguments(argv) {
-  let lang = "en";
+  let id = null;
   for (let index = 0; index < argv.length; index += 1) {
     const flag = argv[index];
-    if (flag !== "--lang") fail(`unknown option ${flag}`);
     const value = argv[index + 1];
-    if (value === undefined || value.startsWith("--")) fail("--lang requires en or ko");
-    if (!['en', 'ko'].includes(value)) fail("--lang must be en or ko");
-    lang = value;
+    if (flag !== "--id") fail(`unknown option ${flag}`);
+    if (value === undefined || value.startsWith("--")) fail("--id requires a decision identifier such as DD-84");
+    id = /^\d+$/.test(value) ? `DD-${value}` : value.toUpperCase();
+    if (!/^DD-\d+$/.test(id)) fail(`--id must look like DD-84, not ${value}`);
     index += 1;
   }
-  return { lang };
+  return { id };
 }
 
-function parseSource(relative) {
-  const text = fs.readFileSync(relative, "utf8");
-  const lines = text.split(/\r?\n/);
+function field(text, name) {
+  const match = new RegExp(`^- ${name}: (.+)$`, "m").exec(text);
+  return match ? match[1].trim() : "";
+}
+
+function parseDirectory(directory) {
+  if (!fs.existsSync(directory)) fail(`${directory}: decision directory is missing`);
+  const files = fs.readdirSync(directory).filter((name) => name.endsWith(".md")).sort();
   const decisions = [];
   const seen = new Set();
-  for (let index = 0; index < lines.length; index += 1) {
-    if (!lines[index].startsWith("### DD-")) continue;
-    const heading = /^### (DD-\d+) · (.+)$/.exec(lines[index]);
-    if (!heading || heading[2].trim() === "") fail(`${relative}:${index + 1}: decision title is missing`);
-    const [, id, rawTitle] = heading;
-    if (seen.has(id)) fail(`${relative}:${index + 1}: duplicate decision identifier ${id}`);
+  for (const name of files) {
+    const text = fs.readFileSync(path.join(directory, name), "utf8");
+    const heading = /^# (DD-\d+) · (.+)$/m.exec(text);
+    if (!heading || heading[2].trim() === "") fail(`${name}: first line must be "# DD-nn · <title>"`);
+    const [, id, title] = heading;
+    if (seen.has(id)) fail(`${name}: duplicate decision identifier ${id}`);
     seen.add(id);
-    let metadataIndex = index + 1;
-    while (metadataIndex < lines.length && lines[metadataIndex].trim() === "") metadataIndex += 1;
-    const metadata = METADATA_RE.exec(lines[metadataIndex] ?? "");
-    if (!metadata || metadata.slice(1).some((value) => value.trim() === "")) {
-      fail(`${relative}:${metadataIndex + 1}: metadata must contain nonempty Subject, Introduced, and State`);
+    const state = field(text, FIELD.state);
+    const subject = field(text, FIELD.subject);
+    const introduced = field(text, FIELD.introduced);
+    if (!state || !subject || !introduced) {
+      fail(`${name}: header needs nonempty ${FIELD.subject}, ${FIELD.introduced}, and ${FIELD.state}`);
     }
-    const [, rawSubject, , rawState] = metadata;
-    const state = rawState.trim();
-    if (!STATE_RE.test(state)) fail(`${relative}:${metadataIndex + 1}: invalid State: ${state}`);
-    decisions.push({ id, title: rawTitle.trim(), subject: rawSubject.trim(), state });
+    if (!STATE_RE.test(state)) fail(`${name}: invalid state: ${state}`);
+    decisions.push({ id, title: title.trim(), subject, introduced, state, file: name, text, rejection: rejectionSection(name, id, text) });
   }
-  if (decisions.length === 0) fail(`${relative}: no decisions found`);
+  if (decisions.length === 0) fail(`${directory}: no decisions found`);
   return decisions;
 }
 
-function assertParallel(english, korean) {
-  const en = english.map((item) => item.id);
-  const ko = korean.map((item) => item.id);
-  if (JSON.stringify(en) !== JSON.stringify(ko)) fail("English/Korean decision identifier set or order differs");
+function rejectionSection(name, id, text) {
+  const sections = [...text.matchAll(new RegExp(`^## ${REJECTED} — (.+)$`, "gm"))];
+  const entries = [...text.matchAll(/\*\*\[(DR-\d+)\s+·/g)];
+  if (sections.length > 1) fail(`${name}: more than one rejection section`);
+  if (sections.length === 0) {
+    if (entries.length) fail(`${name}: ${entries[0][1]} is outside a "## ${REJECTED} — <subject>" rejection section`);
+    return null;
+  }
+  const start = sections[0].index;
+  const next = text.indexOf("\n## ", start + 1);
+  const end = next < 0 ? text.length : next;
+  for (const entry of entries) {
+    if (entry.index < start || entry.index > end) fail(`${name}: ${entry[1]} is outside its rejection section`);
+  }
+  return { subject: sections[0][1].trim(), id, ids: entries.map((entry) => entry[1]) };
+}
+
+function rejectionsBySubject(decisions) {
+  const bySubject = new Map();
+  for (const { rejection } of decisions) {
+    if (!rejection) continue;
+    if (bySubject.has(rejection.subject)) fail(`subject ${rejection.subject} has two rejection sections`);
+    if (!decisions.some((decision) => decision.subject === rejection.subject)) {
+      fail(`rejection section names subject ${rejection.subject}, which no decision has`);
+    }
+    bySubject.set(rejection.subject, rejection);
+  }
+  return bySubject;
 }
 
 function cell(value) {
   return value.replace(/\\/g, "\\\\").replace(/\|/g, "\\|").replace(/\r?\n/g, " ");
 }
 
-function decisionTitle(value) {
-  return value.replace(/ \(v\d+\.\d+\.\d+(?:, [^()]+ v\d+\.\d+\.\d+)?\)$/, "");
+function subjectOrder(root) {
+  const file = path.join(root, "docs", "decisions", ".subjects.json");
+  if (!fs.existsSync(file)) return null;
+  const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
+  return Array.isArray(parsed.subjects) ? parsed.subjects : null;
 }
 
-function render(decisions) {
-  const lines = ["# Decision index", ""];
-  let subject = null;
+function render(decisions, order) {
+  const rejections = rejectionsBySubject(decisions);
+  const groups = new Map();
   for (const decision of decisions) {
-    if (decision.subject !== subject) {
-      if (subject !== null) lines.push("");
-      subject = decision.subject;
-      lines.push(`## ${subject}`, "", "| ID | Decision | State |", "|---|---|---|");
-    }
-    lines.push(`| ${decision.id} | ${cell(decisionTitle(decision.title))} | ${cell(decision.state)} |`);
+    if (!groups.has(decision.subject)) groups.set(decision.subject, []);
+    groups.get(decision.subject).push(decision);
   }
-  return `${lines.join("\n")}\n`;
+  const subjects = order
+    ? [...order.filter((s) => groups.has(s)), ...[...groups.keys()].filter((s) => !order.includes(s))]
+    : [...groups.keys()];
+  const lines = ["# 결정 색인", "",
+    "한 결정은 `docs/decisions/` 아래 한 파일이다. 하나만 열려면 `--id DD-nn`.", ""];
+  for (const subject of subjects) {
+    lines.push(`## ${subject}`, "", "| ID | 결정 | 상태 |", "|---|---|---|");
+    for (const decision of groups.get(subject).sort((a, b) => Number(a.id.slice(3)) - Number(b.id.slice(3)))) {
+      lines.push(`| ${decision.id} | ${cell(decision.title)} | ${cell(decision.state)} |`);
+    }
+    const rejection = rejections.get(subject);
+    if (rejection) {
+      lines.push("", `${REJECTED}: ${rejection.ids.length ? rejection.ids.join(" · ") : "아직 없음"} — \`--id ${rejection.id}\``);
+    }
+    lines.push("");
+  }
+  return `${lines.join("\n").trimEnd()}\n`;
 }
 
 try {
-  const { lang } = parseArguments(process.argv.slice(2));
+  const { id } = parseArguments(process.argv.slice(2));
   const root = process.cwd();
-  const english = parseSource(path.join(root, "docs", "design-decisions.md"));
-  const korean = parseSource(path.join(root, "docs", "design-decisions_ko.md"));
-  assertParallel(english, korean);
-  const output = render(lang === "ko" ? korean : english);
-  const bytes = Buffer.byteLength(output);
-  if (bytes > OUTPUT_ADVISORY) {
-    process.stderr.write(`warning: decision index is ${bytes} bytes; advisory threshold is ${OUTPUT_ADVISORY}\n`);
+  const decisions = parseDirectory(path.join(root, "docs", "decisions"));
+  if (id) {
+    const decision = decisions.find((item) => item.id === id);
+    if (!decision) fail(`${id} is not a decision in docs/decisions/`);
+    process.stdout.write(decision.text.endsWith("\n") ? decision.text : `${decision.text}\n`);
+  } else {
+    const output = render(decisions, subjectOrder(root));
+    const bytes = Buffer.byteLength(output);
+    if (bytes > OUTPUT_ADVISORY) {
+      process.stderr.write(`warning: decision index is ${bytes} bytes; advisory threshold is ${OUTPUT_ADVISORY}\n`);
+    }
+    process.stdout.write(output);
   }
-  process.stdout.write(output);
 } catch (error) {
   process.stderr.write(`error: ${error.message}\n`);
   process.exitCode = 1;

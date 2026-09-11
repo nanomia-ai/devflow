@@ -1,183 +1,181 @@
-# devflow design document — why it is built this way
+# devflow 설계 문서 — 왜 이렇게 만들어졌는가
 
-This document is the **canonical "why"** of devflow, and the one layer read on every
-change. Identity and philosophy, the invariants that are not touched, and the whole
-structural map live here. The decisions in full and the rejection lineage are owned by
-`design-decisions.md`, and their index is generated from that source (see the decision
-index below); observations and on-hold candidates are in `design-backlog.md`; what every
-other document owns and when it is read is fixed by the document map below.
+이 문서는 devflow 의 **정본 「왜」**다: 정체성과 철학, 건드리지 않는 불변식, 전체 구조 지도.
+**지금 참인 것**만 담고, 여기까지 온 경위는 담지 않는다 — 그것은 `docs/decisions/` 아래 한 결정당
+한 파일이 소유한다.
 
-**To overturn a decision recorded here, refute its recorded reason first.**
-To re-propose a rejected idea, refute its recorded rejection reason first.
-A reversal or re-proposal that does not refute the reason does not pass review.
+`docs/README.md` 가 모든 질문을 정본에 연결한다. 이 파일이 답하는 질문은 하나다 —
+**devflow 는 무엇이고 왜 이런 모양인가.**
 
-## Origin and philosophy
+**여기 기록된 결정을 뒤집으려면 기록된 이유부터 반박한다.**
+기각된 안을 재제안하려면 기록된 기각 사유부터 반박한다.
+이유를 반박하지 않은 번복과 재제안은 검토를 통과하지 못한다.
 
-Designed by the user (jmp) to manage the entire AI-driven development process
-(planning → implementation → verification). On 2026-08-05 the concepts were settled
-over six round-trips (v0 → v6) with the user, then implemented.
+## 기원과 철학
 
-Core philosophy — every modification must keep to it:
+소유자(jmp)가 AI 주도 개발 전 과정(기획 → 구현 → 검증)을 관리하려고 설계했다.
+2026-08-05 에 여섯 번의 왕복(v0 → v6)으로 개념을 확정하고 구현했다.
 
-1. **Rich direction + minimal harness.** Top-tier recent models know the how. State the
-   destination and the forbidden clearly; do not dictate methods. Strengthen the harness
-   only in inverse proportion to model tier. Prose carries goal, intent, and direction;
-   whatever must hold becomes a machine check that removes the place to break it. A longer
-   list of rules is obeyed less, not more.
-2. **Write taste, not knowledge.** Writing universal principles the model already knows
-   (e.g. injection defenses) is a tax. Write only what this project prioritizes (declarations).
-3. **Progress state lives in the file tree, not in documents.** Filename suffixes
-   (.wip./.done./.stale.) and location are canonical. Progress written into documents
-   always goes stale. Task progress is owned by the suffixes and the progress log; the
-   journal and verify.md state lines whose formats the canonical rules fix are transition
-   state, not a progress record, and documents still carry no progress.
-4. **One concept, one word.** Skill name = artifact name = the single word for that concept.
+핵심 철학 — 모든 수정이 지켜야 한다:
 
-## Structure at a glance
+1. **풍부한 방향 + 최소 하네스.** 최신 상위 모델은 방법을 안다. 목적지와 금지를 분명히 말하고
+   방법을 지시하지 않는다. 하네스는 모델 등급에 반비례해서만 강화한다. 산문은 목표·의도·방향을
+   나르고, **반드시 성립해야 하는 것은 어길 자리를 없애는 기계 검사가 된다.** 규칙 목록이 길수록
+   덜 지켜진다.
+   **기계의 매뉴얼은 그 기계의 비용이다.** 검사를 안전하게 쓰기 위한 설명·라우팅·예외·복구가
+   대체하려던 산문보다 커지면 복잡성이 사라진 것이 아니라 옮겨간 것이다. 그때 산문을 줄여 수치를
+   맞추지 말고 기계의 책임을 줄이거나, 더 단순한 기계로 바꾸거나, 범위를 분해한다.
+   **짧음은 목표가 아니라 정확한 경계의 부산물이다.**
+2. **지식이 아니라 취향을 쓴다.** 모델이 이미 아는 보편 원칙(예: 주입 방어)을 쓰는 것은 세금이다.
+   이 프로젝트가 우선하는 것(선언)만 쓴다.
+3. **진행 상태는 문서가 아니라 파일 트리에 산다.** 파일명 접미사(.wip./.done./.stale.)와 위치가
+   정본이다. 문서에 적은 진행은 반드시 낡는다. 작업 진행은 접미사와 진행 로그가 소유하고,
+   정본 규칙이 형식을 고정한 journal 과 verify.md 의 상태 줄은 전이 상태이지 진행 기록이 아니며
+   문서는 여전히 진행을 담지 않는다.
+4. **한 개념 한 단어.** 스킬 이름 = 산출물 이름 = 그 개념의 유일한 단어.
+
+## 한눈에 보는 구조
 
 ```
-Layer 0 (once, or inherited): product → arch → [design] · existing project evidence: adopt back-derives     Layer 1 (loop): direct → work ⇄ verify
-Shared: resume, principles (canonical rules)
-Created in the target project: .devflow/{project/, tree/, journal.md, users/<id>/ rooms}
-Distribution: Claude plugin (.claude-plugin) + Codex native plugin (.codex-plugin — registered by codex/install.*)
+Layer 0 (한 번, 또는 승계): product → arch → [design] · 기존 프로젝트: adopt 가 역산
+Layer 1 (루프): direct → work ⇄ verify
+공용: resume, principles (규칙 정본)
+대상 프로젝트에 생기는 것: .devflow/{project/, tree/, journal.md, users/<id>/ rooms}
+배포: Claude 플러그인 (.claude-plugin) + Codex 네이티브 플러그인 (.codex-plugin — codex/install.* 가 등록)
 ```
 
-### Skill intent index — the whole map first, rules from source inside the impact boundary
+### 스킬 의도 색인 — 전체 지도가 먼저, 규칙은 영향 경계 안에서 원문으로
 
-This table is a fast structural map, not a substitute for skill rules. Before judging a
-change, read the affected skill and the canonical companions and direct consumers this table
-points to from their actual sources.
+이 표는 빠른 구조 지도이지 스킬 규칙의 대체물이 아니다. 변경을 판단하기 전에 해당 스킬과
+이 표가 가리키는 정본 동반 파일·직접 소비자를 **실제 원문에서** 읽는다. **현재의 기계적 형태** —
+스테이지·guard·선언된 역할·경로 — 는 여기 재서술하지 않는다. `node scripts/runtime-map.mjs` 가
+아홉 spec 에서 그것을 투영한다.
 
-| Component | Why it exists and what it owns | Input → next consumer | Design lineage |
+| 구성물 | 왜 존재하고 무엇을 소유하는가 | 입력 → 다음 소비자 | 설계 계보 |
 |---|---|---|---|
-| `principles` | owns the shared policy index, commit discipline, and semantic-prose policy that follows the confirmed project Working language; it state-free-classifies only current-project devflow requests that enter Principles. A named stage reads the index projection from its own entry without Principles preflight | unnamed current-project devflow intent → resume; named stage → shared policy index then its named owner; role contract → contract directly | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 · DD-107 · DD-109 · DD-110 |
-| `product` | confirms the problem, identity, capabilities, boundary, success criteria, and project Working language with the owner, keeping that choice as one fact in `product.md` | explicit new-project or product-planning request → arch and design; fresh entry after completion rediscovers arch from the preserved Product boundary; initial existing-project reconstruction belongs to Adopt | origin · DD-33 · DD-67 · DD-97 · DD-107 · DD-109 · DD-110 |
-| `arch` | confirms and refreshes current technical Layer 0, stack, code structure, data, verify channel, glossary, and capability design zones in managed projects | product or a managed glossary/design/baseline route → direct, work, and verify | DD-42 · DD-43 · DD-69 · DD-97 · DD-99 |
-| `design` | optionally confirms UI approach, source, token/component strategies, decomposition axis, and review surface | product and arch → arch capability design and direct | DD-69 · DD-99 |
-| `adopt` | transiently accounts for all maintained brownfield sources, proposes the Working language from meaningful human prose, and transfers their durable meaning into self-contained Product, Architecture, applicable Design, code style, glossary, capability design zones, and owner-adjacent K without retaining absorbed inputs as current dependencies | unmanaged documents and/or code → an independently maintainable managed planning and knowledge surface plus the `product.md` Working language; a whole follow-on goes through the journal to direct, otherwise stop | DD-10 · DD-20 · DD-26 · DD-97 · DD-107 · DD-108 · DD-109 · DD-110 · DD-111 |
-| `direct` | owns work direction by judging planning depth and executable-unit size, materializing research or task cards, and approving their execution proposal and Work handoff; it does not assign or supervise agent processes | current request and approved scope plus Layer 0, records, and current code → a required unresolved Design decision or work | DD-25 · DD-50 · DD-67 · DD-99 · DD-110 |
-| `work` | carries one card's code, progress log, completion signal, and upper-document feedback to completion | approved card, canon, and baseline → verify or the next card | DD-09 · DD-48 · DD-56 |
-| `verify` | executes capability and product verdicts and owns survival paths for failure, audit, and retrospective events | closed code, signals, and baseline → repair through direct or closure | DD-21–DD-24 · DD-30 · DD-36 · DD-68 · DD-99 |
-| `resume` | solely reads structured disk state and transient entry observations, recovers interrupted transitions, and routes the next stage | Git, work and knowledge trees, journal, and verify projection → the applicable entry skill | DD-11 · DD-25 · DD-26 · DD-44 · DD-92 · DD-110 |
-| predicate companions | fix the shared baseline judgment in one place; state and verification judgments moved to the state tool | only named consumers read them; each stage owns its procedure | DD-28 · DD-42 · DD-56 · DD-80 · DD-92 |
-| state tool | owns the entry, predicate, and integrity computation, read-only and repairing nothing | disk and Git → fourteen zones, a bounded entry observation, and a derived `next:` line; one call, six consumers | DD-11 · DD-25 · DD-39 · DD-80 · DD-110 |
-| role contracts | brief reviewer, verifier, auditor, retrospector, channel-verifier, and refuter verbatim into clean contexts; the runtime renders each contract from its declaration and no devflow prose restates it | an entry-skill event → an independently constrained judgment | DD-19 · DD-21–DD-23 · DD-111 |
-| `coordinator` role contract | dispatches and supervises workers above devflow without creating a stage or state | orchestrator → existing entry skills | DD-70 |
+| `principles` | 공용 정책 색인, 커밋 규율, 확정된 프로젝트 Working language 를 따르는 의미 산문 정책을 소유한다. Principles 로 들어온 현재 프로젝트 devflow 요청만 상태 없이 분류한다. 이름 난 스테이지는 자기 진입에서 색인 투영을 읽고 Principles 예비 단계를 거치지 않는다 | 이름 없는 현재 프로젝트 devflow 의도 → resume · 이름 난 스테이지 → 공용 정책 색인 후 그 소유자 · 역할 계약 → 계약으로 직접 | DD-03 · DD-29 · DD-57 · DD-92 · DD-93 · DD-97 · DD-107 · DD-109 · DD-110 |
+| `product` | 문제·정체성·capability·경계·성공 기준·프로젝트 Working language 를 소유자와 확정하고 그 선택을 `product.md` 의 한 사실로 유지한다 | 명시적 신규 프로젝트 또는 제품 기획 요청 → arch·design · 완료 후 새 진입은 보존된 Product 경계에서 arch 를 재발견 · 기존 프로젝트의 최초 재구성은 Adopt 의 몫 | origin · DD-33 · DD-67 · DD-97 · DD-107 · DD-109 · DD-110 |
+| `arch` | 관리 중인 프로젝트에서 현재 기술 Layer 0, 스택, 코드 구조, 데이터, verify channel, 용어집, capability 설계 구역을 확정하고 갱신한다 | product 또는 관리되는 glossary/design/baseline 경로 → direct·work·verify | DD-42 · DD-43 · DD-69 · DD-97 · DD-99 |
+| `design` | 선택적으로 UI 접근·소스·토큰/컴포넌트 전략·분해 축·리뷰 면을 확정한다 | product·arch → arch 의 capability 설계와 direct | DD-69 · DD-99 |
+| `adopt` | 유지되는 브라운필드 소스 전부를 일시적으로 계산하고, 의미 있는 사람 산문에서 Working language 를 제안하며, 그 지속 의미를 자기완결적인 Product·Architecture·해당 Design·코드 스타일·용어집·capability 설계 구역·소유자 인접 K 로 옮긴다. 흡수한 입력을 현재 의존으로 남기지 않는다 | 무관리 문서와/또는 코드 → 독립적으로 유지 가능한 관리 기획·지식 표면과 `product.md` 의 Working language · 전체 후속은 journal 을 통해 direct 로, 아니면 정지 | DD-10 · DD-20 · DD-26 · DD-97 · DD-107 · DD-108 · DD-109 · DD-110 · DD-111 |
+| `direct` | 기획 깊이와 실행 단위 크기를 판단하고, 연구·작업 카드를 실체화하며, 그 실행 제안과 Work 인계를 승인받아 작업 방향을 소유한다. 에이전트 프로세스를 배정하거나 감독하지 않는다 | 현재 요청과 승인된 범위 + Layer 0·기록·현재 코드 → 미해결 Design 결정 또는 work | DD-25 · DD-50 · DD-67 · DD-99 · DD-110 |
+| `work` | 카드 하나의 코드·진행 로그·완료 신호·상위 문서 환류를 완료까지 나른다 | 승인된 카드·정본·기준선 → verify 또는 다음 카드 | DD-09 · DD-48 · DD-56 |
+| `verify` | capability 와 제품 수준의 판정을 실행하고, 실패·감리·회고 사건의 생존 경로를 소유한다 | 닫힌 코드·신호·기준선 → direct 를 통한 수리 또는 폐쇄 | DD-21–DD-24 · DD-30 · DD-36 · DD-68 · DD-99 |
+| `resume` | 구조화된 디스크 상태와 일시적 진입 관측만 읽고, 중단된 전이를 복구하며, 다음 스테이지로 라우팅한다 | Git·작업/지식 트리·journal·verify 투영 → 해당 진입 스킬 | DD-11 · DD-25 · DD-26 · DD-44 · DD-92 · DD-110 |
+| 술어 동반 파일 | 공용 기준선 판단을 한 곳에 고정한다. 상태·검증 판단은 상태 도구로 옮겨갔다 | 이름 난 소비자만 읽는다. 절차는 각 스테이지가 소유 | DD-28 · DD-42 · DD-56 · DD-80 · DD-92 |
+| 상태 도구 | 진입·술어·정합성 계산을 소유한다. 읽기 전용이고 아무것도 수리하지 않는다 | 디스크와 Git → 14 구역, 유계 진입 관측, 도출된 `next:` 줄 · 한 번 호출, 여덟 소비자 | DD-11 · DD-25 · DD-39 · DD-80 · DD-110 |
+| 역할 계약 | reviewer·verifier·auditor·retrospector·channel-verifier·refuter 를 깨끗한 문맥에 그대로 브리핑한다. 런타임이 각 계약을 선언에서 렌더하고 devflow 산문은 그것을 재서술하지 않는다 | 진입 스킬의 사건 → 독립적으로 구속된 판정 | DD-19 · DD-21–DD-23 · DD-111 |
+| `coordinator` 역할 계약 | devflow 위에서 작업자를 dispatch 하고 감독하되 스테이지나 상태를 만들지 않는다 | 오케스트레이터 → 기존 진입 스킬 | DD-70 |
 
-The grouped rows name `references/state/task-card-predicates.md`,
+묶음 행이 이름 부르는 것은 `references/state/task-card-predicates.md`,
 `references/verification/revision-predicates.md`, `references/verification/event-predicates.md`,
 `references/knowledge/baseline-contract.md`, `references/planning/evidence-discipline.md`,
 `work/references/reviewer-role.md`, `verify/references/verifier-role.md`,
 `verify/references/auditor-role.md`, `verify/references/retrospector-role.md`,
-`references/coordination/coordinator-contract.md`. Their actual consumers and role boundaries are
-judged from source and repository checks.
+`references/coordination/coordinator-contract.md` 다. 실제 소비자와 역할 경계는 원문과 저장소
+검사로 판단한다.
 
-## Document map — what lives where, and when it is read
+## 이 문서 체계가 누적되는 방식
 
-| Document | Standing | When it is read |
-|---|---|---|
-| `docs/design.md` (this file) | canon — identity, invariants, structural map | always, on every change |
-| `docs/design-decisions.md` | canon — decisions in full and the rejection lineage. The one home of a decision, and the source the index is generated from | when a row the index names moves; the index itself always |
-| `docs/design-backlog.md` | canon — observations and on-hold candidates | when planning a release |
-| `AGENTS.md` | procedure — minimal entry gate and conditional read wiring | automatically, at session start |
-| `docs/maintenance-protocol.md` | procedure canon — translation, record landing, verification, rounds, README, release, terminology | only the sections named by `AGENTS.md` |
-| `docs/audit-guideline_ko.md` | standing instrument — the canon of verification method | when reporting a verification result |
-| `docs/usecase-matrix_ko.md` | standing instrument — the enumerated shapes of use | when changing `skills/**` |
-| `docs/rounds/<version>/` | round record — request, handoff, plan, report, audit | the previous one only, when opening a round |
-| `docs/blueprints/` | snapshot — versioned blueprints kept per release (the target-project file system, among others). An existing snapshot is never edited | when a baseline is needed to compare a structure against, or roll it back to |
-| `CHANGELOG.md` | history — what shipped in which version, 0.10.0 onward. Deploy changes only | when tracing when a shipped behavior changed |
-| `docs/changelog-archive.md` | history — shipped changes before 0.10.0 | when tracing something older than 0.10.0 |
-| `skills/<name>/spec.mjs` · `body.md` | P2 executable authored canon — English structured behavior and prose body | when authoring, generating, or evaluating a P2 skill |
-| `skills/<name>/SKILL.md` · `.generated.json` | generated deploy artifact and receipt — the runtime entry built from authored canon and its generation identity | at devflow runtime and during build or release verification |
-| `skills/<name>/references/**` | exact-consumer companions and migration provenance — runtime references open by named path; `legacy-atoms/` preserves migration lineage and is not authored canon | when `spec.mjs` or `body.md` names the exact consumer; legacy atoms when migration provenance is inspected |
-| `skills/principles/references/policy-index.md` | runtime canon — before the first stage judgment, points from purpose, the current request, and the latest explicit approval or approved proposal/card to the current owner and required read path selected by the Decision, without copying those values | at each named-stage entry through the body's identical projection, before Decision opens its selected source |
-| `skills/principles/references/planning/evidence-discipline.md` | runtime companion — planning evidence discipline | on entry for product, arch, and adopt; boundedly when direct judges the maintenance planning depth grade |
-| `skills/principles/references/coordination/coordinator-contract.md` | role contract — duties of the `coordinator` that dispatches other executors above devflow | before the first dispatch |
-
-The two standing instruments are opened by the session changing this repository **itself**,
-not briefed in by the owner. What makes a session open them is fixed by the wiring table in
-`AGENTS.md`.
-
-`README.md` and `README_ko.md` are **a person's documents, and they live outside the AI's read
-set.** What skills, tools, and procedures reach is `skills/`, `scripts/`, `hooks/`, `codex/`,
-`docs/`, and the manifests; README is beyond that edge — not read, not updated, not used as
-grounds for a judgment. The owner decides directly what goes in one and when. **This line holds
-after README returns** — what returns is the file, not the wiring. Right now the files
-themselves are gone and git keeps the last version.
-
-Round records moved out of a flat `docs/` into `docs/rounds/<version>/` on 2026-08-13 and
-their filenames became roles (handoff, plan, report, audit). Sentences in `CHANGELOG.md` that
-name the older paths were left alone, being true of their moment — an old path resolves inside
-that version's round folder.
-
-## Invariants — not touched before the reason is refuted
-
-For the items below the cost is the function, so none of them is an optimization target. The
-source is the 0.13.0 plan §14; what follows is the digest the v0.14.0 execution report §6
-folded in, carried across unchanged. The list grows through the promotion table, so its
-length is not written into the prose.
-
-- **Re-reading Layer 0 for every card** — after compaction, "have read" is not "have".
-- **Review runs in a clean session** — implementation history colors the judgment.
-- **A closure replaces the whole verified zone** — a partial update leaves a contradiction.
-- **The progress log is updated before execution** — you cannot know the moment you die, so "later" is loss.
-- **A claim is a commit** — all concurrent work stands on this.
-- **resume always runs the integrity check** — it is the only net that catches a merge accident.
-- **`Read first` opens all of it** — that is the device that replaces searching.
-- **verify, audit and retrospective at closure** — that is the moment knowledge lands in the capability document.
-
-The places devflow **declares it does not guard** are a separate list, and that list lives in a
-person's document — that is, beyond the boundary above. The owner decides what enters and
-leaves it. That such a decision carries the same weight as overturning a decision here is
-unchanged, and the owner is the one who weighs it.
-
-## Decision index — read all of the generated projection, then state which rows this change moves
-
-The one home of a decision is `design-decisions.md`, and the index is a read-only projection
-generated from that source's titles and metadata. This document does not carry the index by hand.
+앞으로의 모든 릴리스에서 살아남아야 하는 성질: **정본은 결정 수에 비례해 자라지 않는다.**
 
 ```
-node scripts/decision-index.mjs
+결정 하나  ──▶  docs/decisions/<nnn>-<slug>.md     왜 · 범위 · 상태 · 기각 대안
+                 무한히 누적된다. 통째로 읽지 않는다. 색인은 생성된다.
+           │
+           └──▶  해당 정본의 현재형 규칙 한 줄
+                 정본은 지금 참인 것만 담으므로 크기가 유지된다.
 ```
 
-An entering session reads this document in full and that output. If even one row moves, open
-that row's subject section in `design-decisions.md`. Rejections are not indexed here — open the
-subject section for whatever is being proposed and that subject's rejection lineage sits behind
-its decisions. A re-proposal starts there.
+두 절반은 **같은 변경에서** 움직인다. 현재 규칙을 결정 파일에만 두면 정본이 낡으면서 계보만 자라고,
+이유를 정본에 옮겨 적으면 정본이 결정 수만큼 커진다. 그 두 방향이 실패이고, 위 분업이 둘 다 막는다.
 
-The output is `ID | Decision | State` grouped by subject; the introducing version is owned by
-the source metadata. The Korean pair is projected with `--lang ko`. The command writes nothing.
+저장소 루트의 `README` 는 **사람의 문서이고 AI 의 읽기 집합 밖에 산다.** 스킬·도구·절차가
+닿는 것은 `skills/`·`scripts/`·`hooks/`·`codex/`·`docs/` 와 매니페스트다. README 는 그 경계 너머라
+읽지도, 갱신하지도, 판단의 근거로 쓰지도 않는다. 무엇을 언제 넣을지는 소유자가 직접 정한다.
+**이 선은 README 가 돌아온 뒤에도 유지된다** — 돌아오는 것은 파일이지 배선이 아니다. 지금 파일
+자체는 없고 git 이 마지막 판본을 보관한다.
 
-## Borrowings and their boundary
+라운드 기록은 2026-08-13 부터 2026-09-11 까지 `docs/rounds/` 에 있었고, 그날 지속되는 내용 일부가
+이 문서 체계로 승격되고 폴더가 제거됐다. 76편 원본은 git 태그 `rounds-archive-v1` 이 보관한다.
+그 경로를 이름 부르는 `CHANGELOG.md` 의 문장은 그 순간의 사실이므로 그대로 두었다.
+**그 계층을 되살리지 않는다** — 라운드가 나르던 것은 이제 `AGENTS.md` §4 를 통해 착지한다.
 
-Borrowed from Matt Pocock's (mattpocock) skills repository: the research card (a distillation
-of prototype+wayfinder), the 3 ADR conditions (domain-modeling), the dual verification axes
-(code-review), and part of the value declarations in code-style's Values section
-(codebase-design·tdd with the procedures removed — taste only), grilling's decision frontier
-and fact/decision separation, boundary scenarios, and primary-source discipline. Isolating
-answer-only internal and external evidence search borrows research's separation of reading,
-but is bounded by grouping questions in the same search scope under one researcher and
-keeping raw-source structural understanding with the main session.
+## 불변식 — 이유를 반박하기 전에는 건드리지 않는다
 
-**Deliberately not borrowed**: enforced vocabulary, the Red-Green procedure, the 12-smell
-list, unbounded grilling, a research-file layer, indirect skill dependencies, and 3-agent
-parallel design.
+아래 항목들은 비용이 곧 기능이므로 어느 것도 최적화 대상이 아니다. 출처는 v0.12.0 인계·0.13.0 기획·v0.14.0 실행 보고이고(git 태그 `rounds-archive-v1`), 그 요약을 그대로 옮겼다. 목록은 결정이 불변식을
+세울 때 같은 변경에서 자라므로(`AGENTS.md` §4) 그 길이를 산문에 적지 않는다.
 
-User rule: any further borrowing into this repository requires prior permission.
+- **카드마다 Layer 0 재독** — 압축 후에는 「읽었다」가 「가지고 있다」가 아니다.
+- **리뷰는 깨끗한 세션에서** — 구현 이력이 판단을 물들인다.
+- **폐쇄는 검증 구역 전체를 교체한다** — 부분 갱신은 모순을 남긴다.
+- **진행 로그는 실행 전에 갱신한다** — 죽는 순간을 알 수 없으므로 「나중에」는 손실이다.
+- **점유는 곧 커밋이다** — 모든 동시 작업이 이 위에 선다.
+- **resume 은 항상 정합성 검사를 돈다** — 병합 사고를 잡는 유일한 그물이다.
+- **`Read first` 는 전부 연다** — 그것이 탐색을 대체하는 장치다.
+- **폐쇄 시점의 verify·감리·회고** — 그 순간이 지식이 capability 문서에 착지하는 때다.
+- **카드 하나가 capability 문서 하나를 읽는다(O(1))** — 아니면 규모에서 비용이 폭발한다.
+- **번호가 정체성이다** — 개명이 트리를 부순다.
+- **work·reviewer·retrospector 의 유계 투영** — 정본 통독은 비용이 폭발한다.
+- **정합성 검사는 보고만 한다** — 오판의 자동 교정은 오염을 가속한다.
+- **실행축은 차단되지 않는다** — 문서 문제로 개발이 멈추면 안 된다.
+- **테스트가 정본을 고정한다** — 아니면 회귀가 조용히 일어난다.
+- **resume 은 파일을 쓰지 않는다** — 여러 복구 규칙이 여기 기댄다.
+- **능력 문서의 두 구역은 바이트로 나뉜 작성자가 따로 쓴다** — 아니면 소유가 충돌한다.
+- **복구와 경계 판정은 HEAD 기준이다** — 아니면 거짓 경보가 데이터를 지운다(v0.11.1 에서 실제로 겪었다).
+- **낡은 진술은 가설로 강등한다** — 아니면 낡은 계약이 사실로 구현된다.
 
-## How to change this document set
+devflow 가 **지키지 않는다고 선언한** 자리들은 별도 목록이고, 그 목록은 위의 사람의 문서(README —
+지금은 git 의 마지막 판본에만 있다)에 산다. 즉 위 경계 너머다. 무엇이 들고 나는지는 소유자가 정한다. 그 결정이 여기 있는 결정을 뒤집는 것과
+같은 무게를 갖는다는 점은 변하지 않고, 저울에 올리는 사람은 소유자다.
 
-- **A new decision takes the next number.** `DD-` numbers are never reused — round records
-  cite decisions by them. Rejections follow the same discipline under `DR-`.
-- **An overturned decision is not deleted.** Its body stays; only the state changes. There
-  are three states and the format is fixed (a test enforces it): `active` ·
-  `replaced by DD-nn (vX.Y.Z)` · and, when only part of a decision has retreated,
-  `active, partly corrected by DD-nn (vX.Y.Z)`; when another correction follows, append
-  `, DD-nn (vX.Y.Z)` in introduction order under the same state. What replaced it is what the next
-  re-proposal has to refute.
-- **The index is not maintained by hand.** One source owns the decisions and the index is its
-  projection, so a new row appears in exactly one place. A projection that is not 1:1 with the
-  source turns a test red.
-- **What rises here out of a round record** is fixed by the promotion table in
-  `docs/maintenance-protocol.md` §5.
-  This document set takes only what that table names.
+## 결정 색인 — 생성 투영을 전부 읽고, 이 변경이 어느 행을 움직이는지 말하라
+
+한 결정은 `docs/decisions/` 아래 한 파일이고, 색인은 그 파일들의 헤더에서 생성되는 읽기 전용
+투영이다. 이 문서는 색인을 손으로 담지 않는다.
+
+```
+node scripts/decision-index.mjs              색인 전체
+node scripts/decision-index.mjs --id DD-84   결정 하나 전문
+```
+
+진입하는 세션은 이 문서 전문과 색인을 읽는다. 한 행이라도 움직이면 `--id` 로 그 결정을 연다.
+기각(`DR-`)은 주제마다 결정 파일 하나의 「기각된 안 — <주제>」 절에 있고, 색인의 각 주제 끝 줄이 그
+파일을 가리킨다. 재제안은 거기서 시작한다.
+
+출력은 주제별로 묶인 `ID | Decision | State` 이고, 도입 버전은 각 파일 헤더에 있다.
+이 명령은 아무것도 쓰지 않는다.
+
+## 차용과 그 경계
+
+Matt Pocock(mattpocock) 스킬 저장소에서 차용: 연구 카드(prototype+wayfinder 의 증류),
+ADR 3조건(domain-modeling), 이중 검증 축(code-review), code-style 의 Values 절 일부
+(codebase-design·tdd 에서 절차를 뺀 취향만), grilling 의 결정 프론티어와 사실/결정 분리,
+경계 시나리오, 1차 출처 규율. 답만 격리하는 내외부 증거 탐색은 research 의 읽기 분리를 차용하되,
+같은 탐색 범위의 질문을 한 researcher 아래 묶고 원문의 구조적 이해는 메인 세션에 남기는 것으로 제한한다.
+
+인접 저장소 `skill-rails` 의 저작 경험 문서에서 소유자의 사전 허가를 받아 2026-09-11 에 차용:
+**기계·산문·매뉴얼 비용의 경계**(위 철학 ①)와 **비수렴 실패 패턴**(`AGENTS.md` §2).
+**일부러 차용하지 않은 것**: V5/V6 계보 서술, 후임 이해 행동 게이트 절차, 적응형 timebox 규율 —
+그것들은 그 저장소 자신의 도구를 유지하기 위한 것이고 여기서의 판단에 필요하지 않다.
+
+mattpocock 에서 **일부러 차용하지 않은 것**: 강제 어휘, Red-Green 절차, 12 냄새 목록,
+무한 grilling, 연구 파일 계층, 간접 스킬 의존, 3 에이전트 병렬 설계.
+
+위 차용은 전부 **참조가 아니라 흡수했다** — 이 저장소 밖의 어떤 경로도 살아 있는 의존이 아니고,
+각 출처가 사라져도 여기서 달라지는 것은 없다.
+
+소유자 규칙: 이 저장소로의 추가 차용은 사전 허가를 요한다.
+
+## 이 문서 체계를 바꾸는 법
+
+- **새 결정은 다음 번호를 받는다.** `DD-` 번호는 재사용하지 않는다. 기각은 `DR-` 로 같은 규율을 따르고,
+  그 주제의 「기각된 안」 절에 덧붙인다 — 절 밖의 `DR-` 는 색인 도구가 거부한다.
+- **뒤집힌 결정은 삭제하지 않는다.** 파일은 남고 `상태` 헤더만 바뀐다. 상태는 셋이고 형식은
+  고정돼 있다(시험이 강제한다): `유효` · `대체됨 → DD-nn (vX.Y.Z)` · 일부만 후퇴했을 때는
+  `유효 · 일부 정정 → DD-nn (vX.Y.Z)`. 정정이 이어지면 같은 상태 아래 도입 순서로
+  `, DD-nn (vX.Y.Z)` 를 덧붙인다.
+- **색인은 손으로 유지하지 않는다.** 한 파일이 한 결정을 소유하고 색인은 그 투영이므로 새 결정은
+  정확히 한 곳에만 생긴다. 파일들과 1:1 이 아닌 투영은 시험을 빨갛게 만든다.
+- **세션에서 여기로 올라오는 것**은 `AGENTS.md` §4 의 착지표가 정한다.
+  이 문서는 현재형 규칙만 받는다. 이유는 `docs/decisions/` 로 간다.
