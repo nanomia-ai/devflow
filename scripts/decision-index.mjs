@@ -16,7 +16,7 @@ const STATE_RE = new RegExp(
   `^(?:${ACTIVE}|${REPLACED} → DD-\\d+ ${VERSION}`
   + `|${ACTIVE} · ${PARTLY} → DD-\\d+ ${VERSION}(?:, DD-\\d+ ${VERSION})*)$`,
 );
-const FIELD = { state: "상태", subject: "주제", introduced: "도입" };
+const FIELD = { state: "상태", subject: "주제", introduced: "도입", modified: "최종 수정" };
 // One section per subject holds that subject's rejections (DR-nn). The index names where it lives, so a
 // re-proposal reaches the recorded rejection from the always-read projection.
 const REJECTED = "기각된 안";
@@ -59,11 +59,12 @@ function parseDirectory(directory) {
     const state = field(text, FIELD.state);
     const subject = field(text, FIELD.subject);
     const introduced = field(text, FIELD.introduced);
-    if (!state || !subject || !introduced) {
-      fail(`${name}: header needs nonempty ${FIELD.subject}, ${FIELD.introduced}, and ${FIELD.state}`);
+    const modified = field(text, FIELD.modified);
+    if (!state || !subject || !introduced || !modified) {
+      fail(`${name}: header needs nonempty ${FIELD.subject}, ${FIELD.introduced}, ${FIELD.modified}, and ${FIELD.state}`);
     }
     if (!STATE_RE.test(state)) fail(`${name}: invalid state: ${state}`);
-    decisions.push({ id, title: title.trim(), subject, introduced, state, file: name, text, rejection: rejectionSection(name, id, text) });
+    decisions.push({ id, title: title.trim(), subject, introduced, modified, state, file: name, text, rejection: rejectionSection(name, id, text) });
   }
   if (decisions.length === 0) fail(`${directory}: no decisions found`);
   return decisions;
@@ -123,9 +124,9 @@ function render(decisions, order) {
   const lines = ["# 결정 색인", "",
     "한 결정은 `docs/decisions/` 아래 한 파일이다. 하나만 열려면 `--id DD-nn`.", ""];
   for (const subject of subjects) {
-    lines.push(`## ${subject}`, "", "| ID | 결정 | 도입 | 상태 |", "|---|---|---|---|");
+    lines.push(`## ${subject}`, "", "| ID | 결정 | 도입 | 최종 수정 | 상태 |", "|---|---|---|---|---|");
     for (const decision of groups.get(subject).sort((a, b) => Number(a.id.slice(3)) - Number(b.id.slice(3)))) {
-      lines.push(`| ${decision.id} | ${cell(decision.title)} | ${cell(decision.introduced)} | ${cell(decision.state)} |`);
+      lines.push(`| ${decision.id} | ${cell(decision.title)} | ${cell(decision.introduced)} | ${cell(decision.modified)} | ${cell(decision.state)} |`);
     }
     const rejection = rejections.get(subject);
     if (rejection) {

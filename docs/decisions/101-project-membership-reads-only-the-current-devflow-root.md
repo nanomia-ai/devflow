@@ -3,6 +3,7 @@
 - 상태: 유효
 - 주제: 정체성 · 배포 · 플랫폼
 - 도입: v0.23.7
+- 최종 수정: 2026-09-05
 
 관측된 문제: 상태 도구가 `git log --all -- .devflow`를 멤버십 증거로 사용했다. 그래서 현재
 checkout에는 `.devflow`가 전혀 없어도 형제 worktree의 branch나 remote-tracking ref에 과거

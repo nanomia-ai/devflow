@@ -14,7 +14,7 @@ const OUTPUT_ADVISORY = 24 * 1024;
 const DECISIONS = path.join(ROOT, "docs", "decisions");
 
 // docs/ is Korean, so decision header fields are Korean and there is no language option.
-const F = { state: "상태", subject: "주제", introduced: "도입", reviewed: "최종 검토" };
+const F = { state: "상태", subject: "주제", introduced: "도입", modified: "최종 수정" };
 const ACTIVE = "유효";
 const KOREAN = /[가-힣]/;
 
@@ -22,9 +22,9 @@ function run(cwd, ...args) {
   return spawnSync(process.execPath, [TOOL, ...args], { cwd, encoding: "utf8", maxBuffer: 4 * 1024 * 1024 });
 }
 
-function decisionFile(id, title, { subject = "Fixture subject", state = ACTIVE, introduced = "fixture" } = {}) {
+function decisionFile(id, title, { subject = "Fixture subject", state = ACTIVE, introduced = "fixture", modified = "2026-09-11" } = {}) {
   return `# ${id} · ${title}\n\n- ${F.state}: ${state}\n- ${F.subject}: ${subject}\n`
-    + `- ${F.introduced}: ${introduced}\n- ${F.reviewed}: 2026-09-11\n\nFixture reason.\n`;
+    + `- ${F.introduced}: ${introduced}\n- ${F.modified}: ${modified}\n\nFixture reason.\n`;
 }
 
 function fixture(t, files) {
@@ -38,9 +38,9 @@ function fixture(t, files) {
 
 function rows(output) {
   return output.split(/\r?\n/).flatMap((line) => {
-    const match = /^\|\s*(DD-\d+)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|$/.exec(line);
+    const match = /^\|\s*(DD-\d+)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|$/.exec(line);
     return match && match[1] !== "ID"
-      ? [{ id: match[1], title: match[2], introduced: match[3], state: match[4] }]
+      ? [{ id: match[1], title: match[2], introduced: match[3], modified: match[4], state: match[5] }]
       : [];
   });
 }
