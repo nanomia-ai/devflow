@@ -1,137 +1,128 @@
 ---
 name: direct
-description: Turn a change request in a ready devflow-managed project into an ephemeral same-turn action, a tracked work contract, or one owning decision route. Use before implementation when scope, persistence, or closure must be decided; not for bootstrap, implementation, verification, or status recovery.
+description: 준비된 Devflow 관리 프로젝트의 변경 요청을 현재 대화에서 끝나는 ephemeral 행동, 추적되는 Work 계약 또는 하나의 소유 결정 route로 바꾼다. scope, 지속 여부 또는 closure를 결정해야 할 때 구현 전에 사용하며 bootstrap, 구현, 검증 또는 상태 복구에는 사용하지 않는다.
 ---
 <!-- generated; do not edit; source: targets/direct/entry.md; receipt: .skill-rails-build.json -->
 
-# Direct one change
+# 하나의 변경 지시하기
 
-Direct decides the smallest safe execution contract for the user's current request. Preserve the
-requested outcome and leave local implementation choices to the executor. Do not create process
-records merely because the change is large, and do not hide durable intent merely because the diff
-is small.
+Direct는 사용자의 현재 요청에 필요한 가장 작은 안전한 실행 계약을 결정한다. 요청한 결과를 보존하고
+국소 구현 선택은 executor에게 맡긴다. 변경이 크다는 이유만으로 과정 기록을 만들지 않으며, diff가
+작다는 이유만으로 지속되어야 할 의도를 숨기지 않는다.
 
-## Entry gate
+## 진입 gate
 
-Before any target-specific action, open `references/project-gate.md` and apply the `direct` row. If
-the gate routes elsewhere, make no change.
+target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `direct` 행을 적용한다. gate가
+다른 곳으로 route하면 아무것도 변경하지 않는다.
 
-When the index is usable, read it first.
-Follow index routes to the smallest Product, Domain, Architecture, Design, and decision documents
-  needed to understand this request. Read current Git revision and status. Use the index's bounded
-  Work-state glob to find an active contract with the same still-open outcome before minting a new
-  artifact.
+index를 사용할 수 있으면 먼저 읽는다. index route를 따라 이 요청을 이해하는 데 필요한 최소한의
+Product, Domain, Architecture, Design, decision 문서만 읽는다. 현재 Git revision과 status도 읽는다.
+새 artifact를 만들기 전에 index의 범위가 정해진 Work state glob으로 아직 열린 결과가 같은 활성
+계약이 있는지 찾는다.
 
-When a readable Sketch state names `direct` as `next_route`, open
-`references/sketch-handoff.md` before writing and complete its receiver contract together with the
-ephemeral direction or tracked Work publication.
+읽을 수 있는 Sketch state의 `next_route`가 `direct`라면 쓰기 전에
+`references/sketch-handoff.md`를 열고, ephemeral 지시 또는 추적되는 Work 공개와 함께 receiver
+계약을 완료한다.
 
-## Route questions before writing
+## 쓰기 전에 질문을 route한다
 
-First decide whether the request is ready to direct.
+먼저 요청을 지시할 준비가 되었는지 판단한다.
 
-- Route a missing product or domain meaning to `product`, a missing technical boundary to
-  `architecture`, and a missing interaction principle to `design`.
-- If evidence or exploration is needed before even the smallest safe result can be named, return
-  `sketch` with the governing question and the evidence that would make it decidable. Do not create
-  a speculative Work contract.
-- Ask the user only when a real binding choice remains. Do not seek approval for a contract already
-  fixed by the request and current canon.
+- 제품 또는 Domain 의미가 부족하면 `product`, 기술 경계가 부족하면 `architecture`, interaction
+  원칙이 부족하면 `design`으로 보낸다.
+- 가장 작은 안전한 결과조차 정하기 전에 증거나 탐구가 필요하면 지배 질문과 결정 가능하게 만들
+  증거를 적어 `sketch`로 반환한다. 추측에 기반한 Work 계약은 만들지 않는다.
+- 실제로 구속력 있는 선택이 남아 있을 때만 사용자에게 묻는다. 요청과 현재 canon이 이미 정한 계약에
+  대해 승인을 다시 구하지 않는다.
 
-If the request is ready, test persistence before estimating size. It is tracked when any answer is
-yes:
+요청이 준비되었다면 크기를 추정하기 전에 지속 여부를 검사한다. 다음 중 하나라도 `yes`면 tracked다.
 
-1. If this turn stops, would the diff fail to recover the request's intent and next safe action?
-2. Does it change durable project knowledge or a binding decision that cannot be landed in its
-   canonical home safely in this turn?
-3. Will verification, risk, or coordination remain open beyond this turn or require an independent
-   verifier?
+1. 현재 대화가 중단되면 diff만으로 요청 의도와 다음 안전 행동을 복구할 수 없는가?
+2. 현재 대화에서 canonical home에 안전하게 반영할 수 없는 지속 프로젝트 지식이나 구속력 있는 결정을
+   바꾸는가?
+3. 검증, 위험 또는 조정이 현재 대화 뒤에도 열려 있거나 독립 verifier가 필요한가?
 
-When every answer is no, classify the change as `ephemeral`. Create no Work directory. Return the
-bounded current-turn action, required canonical reads, write boundary, proportional verification,
-and closure condition. File count and diff size never make a change tracked by themselves.
+모두 `no`면 변경을 `ephemeral`로 분류한다. Work 디렉터리를 만들지 않는다. 현재 대화에서 수행할
+범위가 정해진 행동, 필요한 canonical read, write boundary, 비례적인 검증, closure 조건을 반환한다.
+파일 수와 diff 크기만으로 변경을 tracked로 만들지 않는다.
 
-If an ephemeral change crosses the gate while work is under way, stop implementation before doing
-more. Promote it to tracked with `base_revision` set to current `HEAD`; make the spec's write boundary
-cover the inherited dirty delta, and name those paths in the first Work action so a new actor can
-distinguish inherited bytes from future work. Dirty bytes are not a `last_safe_point`: publish the
-artifact to `work` so its actor can take custody and establish a safe point before any Verify route.
+진행 중인 ephemeral 변경이 이 gate를 넘게 되면 더 구현하기 전에 멈춘다. 현재 `HEAD`를
+`base_revision`으로 삼아 tracked로 승격하고, spec의 write boundary가 상속된 dirty delta를 포함하게
+한다. 새 actor가 상속된 bytes와 이후 작업을 구분하도록 첫 Work 행동에 해당 경로를 적는다. dirty
+bytes는 `last_safe_point`가 아니다. artifact를 `work`에 공개하여 해당 actor가 관리권을 받고 Verify
+route 전에 safe point를 만들게 한다.
 
-## Shape tracked closure
+## 추적되는 closure를 구성한다
 
-After classifying the change as tracked and before creating any Work path, open
-`references/work-state.md`. Ephemeral and decision-route outcomes do not open it.
+변경을 tracked로 분류한 뒤 Work 경로를 만들기 전에 `references/work-state.md`를 연다. ephemeral
+결과와 decision route 결과는 이 모듈을 열지 않는다.
 
-One artifact represents one result that can be accepted, cancelled, and verified as a unit. Keep
-refinement under the same stable outcome, non-goal, and guardrail in the same active spec. Use a new
-artifact for an independently acceptable result, a replaced outcome, or a follow-up to closed work.
-Do not split by file, page, worker, or implementation step.
+하나의 artifact는 한 단위로 수용하고 취소하고 검증할 수 있는 결과 하나를 나타낸다. 안정된 outcome,
+non-goal, guardrail 아래의 보완은 같은 활성 spec에 유지한다. 독립적으로 수용할 수 있는 결과, 대체된
+outcome 또는 닫힌 작업의 후속 결과에는 새 artifact를 사용한다. 파일, 페이지, worker, 구현 단계로
+나누지 않는다.
 
-When independent local results also share an end-to-end acceptance, create one ordinary integration
-artifact at decomposition time. Put the shared acceptance only in that spec. Its initial state names
-the component artifacts and required merge revision as blockers and uses `next_route: direct`; make
-it executable only after those inputs are on its base revision. If local results cannot be accepted
-independently because rollout is atomic, keep one artifact instead.
+독립적인 국소 결과들이 end-to-end acceptance도 공유한다면 분해하는 시점에 일반 integration
+artifact 하나를 만든다. 공유 acceptance는 그 spec에만 둔다. 초기 state는 component artifact와
+필요한 merge revision을 blocker로 적고 `next_route: direct`를 사용한다. 그 input들이 base revision에
+들어온 뒤에만 실행 가능하게 한다. 원자적으로 rollout해야 해서 국소 결과를 독립 수용할 수 없다면
+artifact 하나로 유지한다.
 
-For each new artifact, make a collision-resistant opaque ID such as `W-short-label-<token>` and
-verify it does not exist in the current tree. The token, not the label, provides identity.
+새 artifact마다 `W-short-label-<token>`처럼 충돌하기 어려운 불투명 ID를 만들고 현재 tree에 없는지
+확인한다. label이 아니라 token이 identity를 제공한다.
 
-## Publish a tracked contract
+## 추적되는 계약을 공개한다
 
-Create `.devflow/work/<artifact-id>/`. Every Markdown file has the project's normal `summary` and
-`read_when` header.
+`.devflow/work/<artifact-id>/`를 만든다. 모든 Markdown 파일은 프로젝트의 표준 `summary`와
+`read_when` header를 가진다.
 
-Write `state.md` first as a recoverable Direct checkpoint with:
+복구 가능한 Direct checkpoint로 `state.md`를 먼저 쓴다.
 
 ```yaml
-base_revision: <current full Git revision>
+base_revision: <현재 Git full revision>
 next_route: direct
-next_action: <finish and publish this exact contract>
+next_action: <이 정확한 계약을 완성하고 공개하기>
 blockers: []
 knowledge_candidates: []
 pending_landings: []
 ```
 
-Then write `spec.md` as a self-contained current contract. Its prose must make all of these
-judgments possible without the originating request:
+이어서 `spec.md`를 원래 요청 없이도 이해되는 현재 계약으로 쓴다. 산문만으로 다음을 모두 판단할 수
+있어야 한다.
 
-- background, user intent, problem, and observable outcome;
-- goal, non-goal, and stable guardrails;
-- current context and exact `read_first` paths;
-- already-made product, technical, design, and operational decisions;
-- what must change and the deliverables, without prescribing local implementation choices;
-- acceptance criteria and observable completion signals;
-- allowed write boundary, plus execution units and safe seams only when real parallel dispatch is
-  intended;
-- open decisions, risks, and blockers.
+- 배경, 사용자 의도, 문제, 관찰 가능한 결과
+- goal, non-goal, 안정된 guardrail
+- 현재 맥락과 정확한 `read_first` 경로
+- 이미 내려진 제품, 기술, design, 운영 결정
+- 국소 구현 선택을 강제하지 않는 변경 대상과 deliverable
+- acceptance criteria와 관찰 가능한 완료 signal
+- 허용 write boundary, 그리고 실제 병렬 dispatch를 의도할 때만 실행 unit과 안전한 seam
+- 열린 결정, 위험, blocker
 
-Add shaping information only when observing an implementation is necessary to choose the final
-form: the boundary the executor may change without another approval, the smallest current reviewable
-slice, the surface or signal to observe, any user review point, and the stop condition that chooses
-the next slice or whole closure. Shaping is not a separate spec type.
+구현물을 관찰해야 최종 형태를 고를 수 있을 때만 shaping 정보를 추가한다. 추가 승인 없이 executor가
+바꿀 수 있는 경계, 현재의 가장 작은 reviewable slice, 관찰할 surface 또는 signal, 필요한 사용자
+review 지점, 다음 slice나 전체 closure를 선택하는 stop condition을 쓴다. Shaping은 별도 spec 종류가
+아니다.
 
-After the spec is complete, replace `state.md` under the shared state contract. An executable
-contract has `next_route: work`, one bounded `next_action`, no blockers, and the same base revision.
+spec을 완성한 뒤 공통 state 계약에 따라 `state.md`를 교체한다. 실행 가능한 계약은
+`next_route: work`, 범위가 정해진 `next_action` 하나, 빈 blockers, 동일한 base revision을 가진다.
 
-Do not amend a spec while Work or Verify has custody. They must first publish a safe state with
-`next_route: direct`, the bounded delta, and the decision question. If custody or the current Git
-basis is unclear, stop and route to `user` rather than overwriting the contract.
-If acceptance, guardrails, or closure conditions change and `verification.md` exists, read it as
-amendment input, absorb only the still-needed failure memory into the spec's current decisions, and
-delete the stale verification in the same amendment before publishing state.
+Work 또는 Verify가 관리권을 가진 동안 spec을 수정하지 않는다. 먼저 그 actor가 `next_route: direct`,
+범위가 정해진 delta, 결정 질문을 포함한 safe state를 공개해야 한다. 관리권이나 현재 Git 기준이
+불분명하면 계약을 덮어쓰지 말고 멈춘 뒤 `user`로 보낸다. acceptance, guardrail 또는 closure condition이
+바뀌고 `verification.md`가 있다면 amendment input으로 읽는다. 여전히 필요한 실패 기억만 spec의 현재
+결정에 흡수하고, state를 공개하기 전에 같은 amendment에서 stale verification을 삭제한다.
 
-## Return the direction
+## 지시 결과를 반환한다
 
-Report:
+다음을 보고한다.
 
-- `Disposition:` `ephemeral`, `tracked`, or the single owning decision route.
-- `Artifacts:` every Work path created or updated, or `none`.
-- `Next action:` one bounded action for each independent artifact; include the integration blocker
-  relationship when one exists.
-- `Basis:` the canonical documents and Git state used, plus any remaining unproven assumption.
+- `분류:` `ephemeral`, `tracked` 또는 하나의 소유 decision route
+- `Artifacts:` 만들거나 갱신한 모든 Work 경로, 또는 `none`
+- `다음 행동:` 독립 artifact마다 범위가 정해진 행동 하나. integration blocker 관계가 있으면 포함한다.
+- `근거:` 사용한 canonical 문서와 Git state, 그리고 남은 unproven 가정
 
-Done means the persistence choice follows the three questions, each tracked artifact is
-self-contained and recoverable, only binding choices were escalated, and no implementation or
-verification was performed. Next is the current-turn executor for ephemeral work, `work` for an
-executable tracked contract, `direct` for blocked integration or amendment, or the one decision
-route named above.
+세 질문에 따라 지속 여부를 선택했고, 각 tracked artifact가 자기완결적이며 복구 가능하고, 구속력 있는
+선택만 상향했으며, 구현이나 검증을 수행하지 않았을 때 완료다. 다음 actor는 ephemeral work의 현재
+대화 executor, 실행 가능한 tracked 계약의 `work`, 차단된 integration 또는 amendment의 `direct`,
+아니면 위에서 지정한 하나의 decision route다.

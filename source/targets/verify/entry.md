@@ -1,108 +1,103 @@
 ---
 name: verify
-description: Independently execute one ready Devflow Work contract's acceptance checks, record criterion-level evidence and verdicts, and route failures or proven closure without changing implementation or canon. Use only for a valid tracked Work artifact ready for verification.
+description: 준비된 Devflow Work 계약 하나의 acceptance check를 독립적으로 실행하고, criterion별 evidence와 verdict를 기록하며, 구현이나 canon을 바꾸지 않고 실패 또는 proven closure를 route한다. verification 준비가 된 유효한 tracked Work artifact에만 사용한다.
 ---
 
-# Verify one Work result
+# 하나의 Work 결과 검증하기
 
-Verify judges the accepted Work result against its current contract through actual execution and
-observation. Preserve uncertainty: an unexecuted or unavailable observation is `unproven`, never a
-pass. Verification evidence belongs in the selected artifact; implementation, contract, and
-project canon remain with their owning routes.
+Verify는 실제 실행과 관찰로 수용된 Work 결과를 현재 계약에 비추어 판단한다. 불확실성을 보존한다.
+실행하지 않았거나 관찰할 수 없는 항목은 pass가 아니라 `unproven`이다. verification evidence는 선택한
+artifact에 속하며, 구현·계약·프로젝트 canon은 각각의 소유 route에 남는다.
 
-## Enter through a valid contract
+## 유효한 계약으로 진입한다
 
-Before any target-specific action, open `references/project-gate.md` and apply the `verify` row. If
-the gate routes elsewhere, make no change.
+target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `verify` 행을 적용한다. gate가 다른
+곳으로 route하면 아무것도 변경하지 않는다.
 
-When the index is usable, read it first. Select exactly one immediate Work state named by the user
-or current route. If several eligible artifacts remain and no selection is determined, route to the
-user without writing.
+index를 사용할 수 있으면 먼저 읽는다. 사용자 또는 현재 route가 지정한 immediate Work state 하나만
+선택한다. 대상이 정해지지 않은 채 eligible artifact가 여러 개면 쓰지 않고 사용자에게 보낸다.
 
-Open `references/work-state.md`, then the selected state and sibling spec. Verification may begin
-only when state gives `verify` custody, has no blockers, names a reachable committed safe point, and
-the spec is self-contained for outcome, acceptance, and write boundary. Read the spec's
-`read_first` documents and only the implementation, test, environment, and team context needed to
-execute its criteria. Compare the current Git revision, relevant bytes, and safe point before
-using any result as evidence.
+`references/work-state.md`를 연 뒤 선택한 state와 sibling spec을 연다. state가 Verify에 관리권을 주고,
+blocker가 없고, 도달 가능한 committed safe point를 지정하며, spec이 outcome·acceptance·write boundary를
+스스로 설명할 때만 verification을 시작할 수 있다. spec의 `read_first` 문서와 criterion 실행에 필요한
+구현·test·환경·team context만 읽는다. 어떤 결과든 evidence로 쓰기 전에 현재 Git revision, 관련 bytes,
+safe point를 비교한다.
 
-If a required document is missing, unreadable, or inconsistent, or the checkout cannot identify
-the exact bytes under judgment, do not infer current. Make no project change and route to `resume`
-with the inconsistency. If Verify already has clear custody and execution exposes a contract or
-owner defect, finish the evidence that remains trustworthy, then publish the owning failure route
-through state.
+필수 문서가 없거나 읽을 수 없거나 일치하지 않거나, checkout에서 판단 대상 bytes를 정확히 식별할 수
+없다면 current라고 추정하지 않는다. 프로젝트를 변경하지 않고 불일치를 적어 `resume`으로 보낸다.
+Verify가 이미 명확한 관리권을 가졌고 실행 중 계약 또는 owner defect가 드러났다면 신뢰할 수 있는
+나머지 evidence를 끝까지 기록한 뒤 state를 통해 소유 failure route를 공개한다.
 
-## Execute the acceptance contract
+## acceptance 계약을 실행한다
 
-Evaluate every current acceptance criterion separately. For each one record:
+현재 acceptance criterion을 하나씩 독립적으로 평가한다. 각각 다음을 기록한다.
 
-- the expected observable result;
-- what was actually observed and through which revision, environment, and channel;
-- the evidence that supports the observation; and
-- exactly one verdict: `proven`, `failed`, or `unproven`.
+- 기대하는 관찰 가능 결과
+- 실제로 관찰한 것과 그 revision, 환경, channel
+- 관찰을 뒷받침하는 evidence
+- 정확히 하나의 verdict: `proven`, `failed`, `unproven`
 
-Use real execution or observation. A structural check does not prove a visual result, a successful
-review does not prove a different environment, and a prior run is not current evidence when its
-revision or preconditions changed. When a required channel is unavailable, record `unproven` and
-the condition that would reopen it. Qualitative acceptance may use an explicit user judgment when
-the spec names that review surface, but never invent acceptance from silence.
+실제 실행 또는 관찰을 사용한다. 구조 check는 시각 결과를 증명하지 않고, 성공한 review는 다른 환경을
+증명하지 않으며, revision이나 전제 조건이 바뀌었다면 과거 실행은 현재 evidence가 아니다. 필요한
+channel을 사용할 수 없으면 `unproven`과 재개 조건을 기록한다. spec이 해당 review surface를 지정한
+경우 질적 acceptance에 명시적인 사용자 판단을 쓸 수 있지만, 침묵을 acceptance로 꾸며내지 않는다.
 
-Derive the overall result from the criterion verdicts; do not create a second status field. For
-every failed or unproven criterion name the broken or missing premise, the one `failure_route`, the
-specific target it owns, and what must change before retry:
+criterion verdict로 전체 결과를 도출하며 두 번째 status field를 만들지 않는다. failed 또는 unproven인
+criterion마다 깨졌거나 부족한 전제, 하나의 `failure_route`, 그것이 소유하는 구체적인 대상, 재시도 전에
+바뀌어야 할 것을 적는다.
 
-- implementation, tests, or local behavior -> `work`;
-- goal, acceptance, write boundary, or shaping contract -> `direct`;
-- product or Domain meaning -> `product`;
-- structure, dependency, runtime, data flow, or verification channel -> `architecture`;
-- UI or interaction principle -> `design`;
-- maintained-source readiness or disposition -> `adopt`;
-- evidence that only a person or external decision can supply -> `user` or that decision route.
+- 구현, test 또는 local behavior → `work`
+- goal, acceptance, write boundary 또는 shaping contract → `direct`
+- 제품 또는 Domain 의미 → `product`
+- 구조, dependency, runtime, data flow 또는 verification channel → `architecture`
+- UI 또는 interaction 원칙 → `design`
+- maintained source readiness 또는 disposition → `adopt`
+- 사람이나 외부 결정만 제공할 수 있는 evidence → `user` 또는 해당 decision route
 
-Do not modify code, tests, spec, Product, Architecture, Design, Domain, or adoption canon. Do not
-repair a failing result in the verification session or weaken a criterion to make it pass.
+code, test, spec, Product, Architecture, Design, Domain 또는 adoption canon을 수정하지 않는다.
+verification session에서 실패한 결과를 직접 수리하거나 통과시키기 위해 criterion을 약화하지 않는다.
 
-## Publish evidence before the route
+## route보다 evidence를 먼저 공개한다
 
-Write `verification.md` first as one current whole-file record with the project's normal `summary`
-and `read_when` header. It owns:
+프로젝트의 표준 `summary`와 `read_when` header를 가진 하나의 현재 whole-file record로
+`verification.md`를 먼저 쓴다. 이 파일이 다음을 소유한다.
 
-- the exact target revision, environment, and channels;
-- every criterion's expected result, observation, evidence, and verdict;
-- the derived overall judgment;
-- each failure route and retry precondition; and
-- evidence for any durable current fact discovered during verification.
+- 정확한 target revision, 환경, channel
+- 각 criterion의 expected result, observation, evidence, verdict
+- 도출된 전체 judgment
+- 각 failure route와 retry precondition
+- verification 중 발견한 지속 가능한 현재 사실의 evidence
 
-The verification file is the only verdict owner. Do not copy its verdict or evidence into state.
-After rereading the completed verification record, replace `state.md` last under the shared state
-contract. Preserve the implementation safe point and existing unresolved candidates. Add a
-`knowledge_candidate` only when the new evidence supports a durable current fact worth judging for
-canon; observations, verdicts, code paths, and test results are not candidates.
+verification 파일만 verdict를 소유한다. verdict나 evidence를 state에 복제하지 않는다. 완성한
+verification record를 다시 읽은 뒤 공통 state 계약에 따라 `state.md`를 마지막에 교체한다. 구현 safe
+point와 기존 unresolved candidate를 보존한다. 새 evidence가 canon에서 판단할 가치가 있는 지속적인
+현재 사실을 뒷받침할 때만 `knowledge_candidate`를 추가한다. observation, verdict, code path, test result는
+candidate가 아니다.
 
-Choose one bounded next route and action:
+범위가 정해진 다음 route와 행동 하나를 선택한다.
 
-- a failed or unproven criterion follows its recorded failure route and retry precondition;
-- an interim risk criterion that is proven returns to `direct` or `work` when the spec still has a
-  bounded continuation;
-- when the stop condition has arrived and every closure criterion is proven, route to `work` to
-  judge candidates, land confirmed facts, and close the artifact.
+- failed 또는 unproven criterion은 기록된 failure route와 retry precondition을 따른다.
+- proven인 중간 risk criterion은 spec에 범위가 정해진 후속 행동이 남아 있으면 `direct` 또는 `work`로
+  돌아간다.
+- stop condition에 도달하고 모든 closure criterion이 proven이면 candidate를 판단하고 확인된 사실을
+  반영한 뒤 artifact를 닫도록 `work`로 보낸다.
 
-Publishing state is the final commit point. If the session stops after `verification.md` but before
-the matching state, or state points past a missing or unreadable verification record, the result is
-not current; Resume must report `reconcile -> verify`. Do not append attempts or preserve superseded
-verdict copies. If Direct later amends acceptance or guardrails, Direct owns carrying forward only
-the still-needed failure memory and deleting the stale verification record.
+state 공개가 마지막 commit point다. `verification.md`를 쓴 뒤 일치하는 state를 쓰기 전에 session이
+멈췄거나, state가 없거나 읽을 수 없는 verification record 너머를 가리킨다면 결과는 current가 아니다.
+Resume은 `reconcile -> verify`를 보고해야 한다. 시도를 덧붙이거나 대체된 verdict 사본을 보존하지
+않는다. 이후 Direct가 acceptance 또는 guardrail을 수정하면, 여전히 필요한 실패 기억만 이어가고 stale
+verification record를 삭제할 책임은 Direct에 있다.
 
-## Return the judgment
+## 판단을 반환한다
 
-Report:
+다음을 보고한다.
 
-- `Target:` the artifact and exact revision, environment, and channels judged;
-- `Criteria:` each criterion and its `proven`, `failed`, or `unproven` verdict with evidence;
-- `Route and action:` the one published next route and bounded action;
-- `Unverified:` unavailable observations and their reopen conditions, or `none`;
-- `Read set:` every project, Work, implementation, and evidence path actually opened.
+- `대상:` 판단한 artifact와 정확한 revision, 환경, channel
+- `Criteria:` 각 criterion, `proven`·`failed`·`unproven` verdict, evidence
+- `Route와 행동:` 공개한 다음 route 하나와 범위가 정해진 행동
+- `미검증:` 사용할 수 없는 observation과 재개 조건, 또는 `none`
+- `읽은 범위:` 실제로 연 모든 project, Work, implementation, evidence 경로
 
-Done means every current criterion has an honest verdict, evidence was published before the route,
-state contains no verdict copy, the next owner can tell what must change or close, and Verify changed
-no implementation, contract, or project canon.
+모든 현재 criterion에 정직한 verdict가 있고, route 전에 evidence가 공개되었으며, state에 verdict
+사본이 없고, 다음 owner가 무엇을 바꾸거나 닫아야 하는지 알 수 있고, Verify가 구현·계약·프로젝트
+canon을 바꾸지 않았을 때 완료다.

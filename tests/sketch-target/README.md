@@ -16,8 +16,9 @@ Observe separately:
 
 ## Result
 
-Verdict: **proven on this host for project creation and transcript-free recovery to a
-decision-ready hand-off. Receiver-side canonical landing and final cleanup are unproven.**
+Verdict: **proven on this host for project creation, transcript-free recovery to a decision-ready
+hand-off, and one Product receiver landing through final cleanup. Other destination receivers
+remain unproven.**
 
 Package evidence (Core `1.0.3`, package `0.3.0`):
 
@@ -78,8 +79,55 @@ team notes.
 
 Skill Rails Core `1.0.4` built the nine-target cohort twice to identical per-target tree hashes.
 The generated artifacts report current source and intact receipts. This proves delivery of the
-shared contract, not receiver behavior. One fresh Product landing after the planned language
-conversion will attack both remaining risks without multiplying target-by-target tests.
+shared contract, not receiver behavior. The Korean conversion observation below attacks both
+remaining risks without multiplying target-by-target tests.
+
+## Korean Product receiver observation
+
+After the canonical entries and shared modules were converted to Korean-led prose, the final
+Product package was given to two independent fresh sessions against byte-identical disposable Git
+repositories:
+
+- Codex `gpt-5.6-sol`, medium reasoning;
+- Claude `claude-opus-5`, medium effort.
+
+Both read the project `AGENTS.md`, generated Product entry, `project-gate`, `project-knowledge`,
+`sketch-handoff`, index, active state, and brief. Codex also opened the repository's inherited RTK
+instruction and reread the generated entry and references explicitly as UTF-8 after Windows
+PowerShell 5 first displayed Korean bytes incorrectly. Claude read the bounded team note before
+deleting it; Codex only located that note for cleanup. Neither session opened another Devflow
+target, parent plan, canonical source package, test answer key, implementation, or unrelated
+project knowledge.
+
+Each session independently:
+
+- selected `.devflow/project/product.md` as the one canonical home;
+- published the staged-JSONL local-validation promise and the same five non-goals;
+- created no Domain because the fixture exposed no independent business knowledge boundary;
+- reread the published Product and index;
+- removed the last Sketch and its bounded team note only after the canonical write succeeded; and
+- returned `architecture` with Product and index as the next bounded input.
+
+The two Product documents used different natural wording while preserving the same promise,
+boundary, vocabulary, invariants, and route. This is the intended result: Korean carries the
+explanation, while identity-bearing terms such as Product, foundation, route, artifact, state,
+landing, field names, paths, and verdict enums remain recognizable rather than being forcibly
+translated.
+
+Classification:
+
+- `proven`: current Korean Product prose is executable on both requested model families for this
+  receiver landing; the shared hand-off contract reaches the receiver and final cleanup occurs;
+- `failed`: none in Devflow behavior for this case;
+- `unproven`: Product behavior on other hosts and models, the other three receiver targets,
+  translation comprehension across the other eight complete target flows, and an uncustomized
+  Claude host. The Claude run loaded a user-global brevity hook, but its trace still shows the
+  Devflow reads and contract-derived judgment; this cell is not evidence about hook-free Claude.
+
+The Codex encoding retry is host-shell friction, not evidence to add a BOM rule or alter Skill
+Rails: the same generated UTF-8 bytes were read correctly when the shell specified UTF-8, Claude
+read them directly, and both produced the required effect. Reopen encoding only if a current host
+fails to recover or the normal installed-skill loader presents corrupted text.
 
 ## Reopen boundaries
 
@@ -87,6 +135,6 @@ conversion will attack both remaining risks without multiplying target-by-target
 - A polished research narrative is a failure if it does not change Product or Direct's decision.
 - No research method, transcript store, Work subtype, renderer, or state schema is implied by these
   cases.
-- Actual Product/Direct absorption and final Sketch deletion, optional independently selected
-  findings, external research, team handoff, cross-host repetition, and an ephemeral same-turn
+- Direct, Architecture, and Design absorption, optional independently selected findings, external
+  research, cross-host repetition beyond the two observed families, and an ephemeral same-turn
   Sketch outcome remain unproven.

@@ -1,122 +1,115 @@
 ---
 name: sketch
-description: Narrow a project idea or change-blocking question that needs evidence before Product, Architecture, Design, or Direct can decide and whose context must survive interruption. Use for durable exploration; not for a clear brief, an implementation-ready change, or a question whose cheapest evidence is implementation.
+description: Product, Architecture, Design 또는 Direct가 결정하기 전에 증거가 필요하고 중단 후에도 맥락을 보존해야 하는 프로젝트 아이디어나 변경 차단 질문을 좁힌다. 명확한 brief, 바로 구현할 수 있는 변경, 또는 구현이 가장 저렴한 증거인 질문이 아니라 지속해야 할 탐구에 사용한다.
 ---
 <!-- generated; do not edit; source: targets/sketch/entry.md; receipt: .skill-rails-build.json -->
 
-# Narrow one open question
+# 하나의 열린 질문 좁히기
 
-Sketch preserves only the exploration needed to make one governing question decidable. It can serve
-a new project's uncertain idea or an existing project's blocked change, but it does not turn a
-conversation into a research archive or prescribe one analysis method.
+Sketch는 하나의 지배 질문을 결정 가능한 상태로 만드는 데 필요한 탐구만 보존한다. 새 프로젝트의
+불확실한 아이디어와 기존 프로젝트에서 변경을 막는 질문 모두를 다룰 수 있지만, 대화를 조사
+보관소로 만들거나 하나의 분석 방법을 강제하지 않는다.
 
-## Enter only when exploration must persist
+## 탐구를 지속해야 할 때만 진입한다
 
-Before any target-specific action, open `references/project-gate.md` and apply the `sketch` row.
-Then open `references/project-knowledge.md`. Read `.devflow/index.md` first when it is readable and
-follow only the project routes relevant to the governing question.
+target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `sketch` 행을 적용한다. 이어서
+`references/project-knowledge.md`를 연다. `.devflow/index.md`를 읽을 수 있으면 먼저 읽고, 지배
+질문에 관련된 프로젝트 route만 따른다.
 
-Create a Sketch only when all three statements hold:
+다음 세 조건이 모두 참일 때만 Sketch를 만든다.
 
-1. Product or delivery cannot safely name its next result until an open question is narrowed.
-2. Evidence or a user decision is needed before implementation; implementation is not the cheapest
-   discriminating evidence.
-3. The question, current evidence, or next action must survive the present custody interval.
+1. 열린 질문을 좁히기 전에는 Product나 delivery가 다음 결과를 안전하게 정할 수 없다.
+2. 구현 전에 증거나 사용자 결정이 필요하며, 구현이 후보를 가르는 가장 저렴한 증거가 아니다.
+3. 질문, 현재 증거 또는 다음 행동이 현재 관리권 구간을 넘어 보존되어야 한다.
 
-Otherwise keep the discussion ephemeral and route a clear project brief to `product`, an executable
-change to `direct`, or implementation-led learning to Direct shaping. File count, novelty, and the
-word “research” do not make exploration durable.
+그렇지 않다면 논의를 현재 대화 안에만 두고, 명확한 프로젝트 brief는 `product`로, 실행 가능한
+변경은 `direct`로, 구현하며 얻어야 하는 학습은 Direct shaping으로 보낸다. 파일 수, 새로움,
+“research”라는 단어 자체는 탐구를 지속할 이유가 아니다.
 
-Choose `project` scope when the answer will establish product meaning before a foundation exists.
-Choose `change` scope when a current project decision blocks one delivery outcome. Do not combine
-unrelated questions merely because they arose in one conversation.
+foundation이 생기기 전에 답이 제품 의미를 확립한다면 `project` scope를 선택한다. 현재 프로젝트
+결정이 하나의 delivery 결과를 막고 있다면 `change` scope를 선택한다. 한 대화에서 나왔다는 이유만으로
+서로 무관한 질문을 합치지 않는다.
 
-## Open the smallest recoverable artifact
+## 복구 가능한 최소 artifact를 연다
 
-Make a collision-resistant opaque ID such as `S-short-label-<token>` and confirm that it is absent
-from the current tree. Create `.devflow/sketches/<artifact-id>/brief.md` and `state.md`; every file
-uses the shared routing header.
+`S-short-label-<token>`처럼 충돌하기 어려운 불투명 ID를 만들고 현재 tree에 없는지 확인한다.
+`.devflow/sketches/<artifact-id>/brief.md`와 `state.md`를 만들며, 모든 파일은 공통 routing header를
+사용한다.
 
-`brief.md` is the self-contained reason for the exploration. State its project or change scope, one
-governing question, the background and user intent, facts already established, explicit non-scope,
-and the criteria by which an answer becomes decision-ready. Do not store the conversation,
-chronology, proposed implementation, or a generic research plan.
+`brief.md`는 탐구 이유를 스스로 설명해야 한다. project/change scope, 하나의 지배 질문, 배경과
+사용자 의도, 이미 확인된 사실, 명시적인 비범위, 답이 결정 가능한 상태가 되는 기준을 쓴다. 대화,
+시간 순서, 제안 구현, 범용 조사 계획은 저장하지 않는다.
 
-`state.md` is one replaceable current snapshot, not a log. Keep this shape:
+`state.md`는 log가 아니라 교체되는 하나의 현재 snapshot이다. 다음 형태를 지킨다.
 
 ```yaml
 next_route: sketch
-next_action: <one bounded evidence-gathering or decision action>
+next_action: <하나의 범위가 정해진 증거 수집 또는 결정 행동>
 blockers: []
 unresolved_findings:
-  - question: <one unresolved question>
+  - question: <하나의 미해결 질문>
     destination: <product | architecture | design | direct>
-    landing_condition: <evidence or decision that makes it ready to absorb>
+    landing_condition: <흡수할 준비가 되게 하는 증거나 결정>
 ```
 
-All four fields are required while the artifact exists. A finding remains in
-`unresolved_findings` until its conclusion is absorbed into the named canonical home; meeting its
-`landing_condition` makes it eligible for hand-off but does not remove it. A blocker is something
-that prevents the next action, not the fact that the answer is not known yet. Replace the snapshot
-before custody can change if the current action cannot finish; do not append attempts, transcript,
-progress percentage, or prior routes. The actor for the published `next_route` owns the snapshot.
-If custody is unclear, do not overwrite it and route to the user.
+artifact가 존재하는 동안 네 필드는 모두 필수다. finding은 결론이 지정된 canonical home에 흡수될
+때까지 `unresolved_findings`에 남는다. `landing_condition`을 충족하면 handoff할 수 있을 뿐, 그
+자체로 항목이 제거되지는 않는다. blocker는 다음 행동을 막는 것이며, 아직 답을 모른다는 사실 자체가
+아니다. 현재 행동을 끝내지 못한 채 관리권이 바뀔 수 있다면 먼저 snapshot을 교체한다. 시도, 대화,
+진행률, 이전 route를 덧붙이지 않는다. 공개된 `next_route`의 actor가 snapshot을 소유한다. 관리권이
+불분명하면 덮어쓰지 말고 사용자에게 보낸다.
 
-For the selected artifact, open `references/team-context.md` when a bounded note for its ID exists
-or when you hold local delta, environment-specific, or tentative context that must survive a
-hand-off; otherwise skip it.
+선택한 artifact ID에 해당하는 범위가 정해진 note가 있거나, handoff 뒤에도 보존해야 하는 local
+delta, 환경 고유 맥락 또는 잠정 맥락을 가지고 있다면 `references/team-context.md`를 연다. 그렇지
+않으면 건너뛴다.
 
-When Sketch is the first project entry, also publish a small `.devflow/index.md`. Give one-line
-project orientation, route open exploration through the bounded Sketch-state glob, expose only the immediate
-`sketches/*/state.md`, `adoption/state.md`, and `work/*/state.md` recovery globs, and say that the
-foundation is not ready until Product and Architecture plus any applicable Design are complete.
-Do not copy the question's evidence or enumerate active IDs in the index. With an existing index,
-change it only when a question route or readiness statement actually changes.
+Sketch가 프로젝트의 첫 진입점이면 작은 `.devflow/index.md`도 공개한다. 프로젝트를 한 줄로 설명하고,
+열린 탐구는 범위가 정해진 Sketch state glob으로 route하며, 즉시 복구에 쓰는
+`sketches/*/state.md`, `adoption/state.md`, `work/*/state.md` glob만 노출한다. Product와
+Architecture, 그리고 해당되는 Design이 완료되기 전에는 foundation이 준비되지 않았다고 밝힌다.
+질문의 증거를 index에 복제하거나 활성 ID를 열거하지 않는다. index가 이미 있다면 질문 route나
+readiness 문장이 실제로 바뀔 때만 수정한다.
 
-## Gather only decision-changing evidence
+## 결정을 바꾸는 증거만 모은다
 
-Choose the cheapest evidence that can change the current decision. The method may be source
-inspection, a bounded experiment, external research, comparison, or a user choice; Sketch does not
-require a market-analysis sequence, questionnaire, or fixed number of options. Distinguish observed
-facts, interpretations, unresolved questions, and the condition that would resolve each one.
+현재 결정을 바꿀 수 있는 가장 저렴한 증거를 선택한다. 방법은 source 검사, 범위가 정해진 실험,
+외부 조사, 비교 또는 사용자 선택일 수 있다. Sketch는 시장 분석 순서, 설문지, 고정된 선택지 수를
+요구하지 않는다. 관찰한 사실, 해석, 미해결 질문, 각 질문을 해결하는 조건을 구분한다.
 
-Keep evidence in `brief.md` when every reader of the governing question needs it. Create
-`findings/<concern>.md` only when its independent question can be selected from the brief before the
-file is opened and the avoided reading or write collision exceeds the new route cost. A finding
-contains its question, relevant evidence, observation versus interpretation, material options and
-trade-offs, current conclusion or unknown, and confirmation condition. It does not repeat its
-destination, preserve search-result lists, or become a second brief.
+지배 질문을 읽는 모든 독자에게 증거가 필요하면 `brief.md`에 둔다. 독립 질문을 brief만 보고
+본문을 열기 전에 선택할 수 있고, 피하는 읽기나 write 충돌이 새 route 비용보다 클 때만
+`findings/<concern>.md`를 만든다. finding에는 질문, 관련 증거, 관찰과 해석의 구분, 중요한 선택지와
+trade-off, 현재 결론 또는 unknown, 확인 조건을 둔다. destination을 반복하거나 검색 결과 목록을
+보존하거나 두 번째 brief가 되게 하지 않는다.
 
-Ask the user only for a binding choice evidence cannot settle. When the next evidence is unavailable,
-put the exact dependency in `blockers`, use `next_route: user`, and name what answer would resume
-Sketch rather than inventing a conclusion.
+증거로 정할 수 없는 구속력 있는 선택만 사용자에게 묻는다. 다음 증거를 구할 수 없으면 정확한
+의존성을 `blockers`에 넣고 `next_route: user`를 사용하며, 결론을 꾸며내는 대신 어떤 답이 Sketch를
+재개시키는지 적는다.
 
-## Hand off conclusions to their owners
+## 결론을 소유자에게 넘긴다
 
-Before publishing a decision-ready conclusion, open `references/sketch-handoff.md` and follow its
-sender contract.
+결정 가능한 결론을 공개하기 전에 `references/sketch-handoff.md`를 열고 sender 계약을 따른다.
 
-When a finding is decision-ready, express the conclusion in the destination's own terms rather than
-as a research narrative. Project-scope product meaning routes mainly to `product`; technical and UI
-findings route to `architecture` or `design` when those stages can absorb them. Change-scope answers
-route only the delivery decision to `direct`, while facts that remain true beyond the change first
-route to their one Product, Domain, Architecture, Design, or decision home.
+finding이 결정 가능한 상태가 되면 조사 서술이 아니라 destination의 언어로 결론을 표현한다.
+project scope의 제품 의미는 주로 `product`로 보낸다. 기술 및 UI finding은 해당 stage가 흡수할 수
+있을 때 `architecture` 또는 `design`으로 보낸다. change scope의 답은 delivery 결정만 `direct`로
+보내며, 해당 변경 뒤에도 계속 참인 사실은 먼저 하나의 Product, Domain, Architecture, Design 또는
+decision home으로 보낸다.
 
-Publish one bounded landing at a time and keep the selected item and every remaining item in the
-snapshot until the receiving actor completes the shared hand-off contract. Do not write the owner
-document from Sketch. Git retains the final history after the receiver closes the artifact.
+한 번에 범위가 정해진 landing 하나만 공개하고, receiving actor가 공통 handoff 계약을 완료할 때까지
+선택한 항목과 남은 모든 항목을 snapshot에 유지한다. Sketch에서 owner 문서를 작성하지 않는다.
+receiver가 artifact를 닫은 뒤에는 Git이 최종 이력을 보존한다.
 
-## Return the current decision edge
+## 현재 결정 경계를 반환한다
 
-Return:
+다음을 반환한다.
 
-- `Scope and question:` `project` or `change`, plus the governing question;
-- `Artifact:` the Sketch paths created or updated, or `none` for an ephemeral outcome;
-- `Evidence and conclusion:` what is observed, what it currently supports, and what remains unknown;
-- `Route and action:` exactly one next route and one bounded action; and
-- `Unproven or blocked:` missing evidence, binding user choices, and their reopen condition.
+- `범위와 질문:` `project` 또는 `change`와 지배 질문
+- `Artifact:` 만들거나 갱신한 Sketch 경로, 또는 현재 대화 안에서 끝난 결과라면 `none`
+- `증거와 결론:` 관찰한 것, 현재 지지하는 결론, 아직 모르는 것
+- `Route와 행동:` 정확히 하나의 다음 route와 범위가 정해진 행동 하나
+- `미검증 또는 차단:` 부족한 증거, 구속력 있는 사용자 선택, 각각의 재개 조건
 
-Do not create or amend Product, Domain, Architecture, Design, Work, adoption, implementation, or
-verification files. Done means the question either became an ephemeral handoff in the current turn,
-or a durable Sketch can be resumed from its brief and current snapshot without the originating
-conversation.
+Product, Domain, Architecture, Design, Work, adoption, 구현 또는 verification 파일을 만들거나
+수정하지 않는다. 질문이 현재 대화에서 바로 handoff할 수 있게 되었거나, 원래 대화 없이도 brief와
+현재 snapshot만으로 재개할 수 있는 지속 Sketch가 되었을 때 완료다.

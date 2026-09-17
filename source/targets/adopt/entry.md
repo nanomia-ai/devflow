@@ -1,178 +1,167 @@
 ---
 name: adopt
-description: Reconstruct an unmanaged brownfield project's maintained knowledge into a self-contained Devflow Product, Architecture, applicable Design, Domains, and decisions while accounting for every source and exposing irreducible conflicts. Use only for explicit adoption of an existing project; not for new-project planning, ordinary changes, or legacy Devflow migration.
+description: 관리되지 않은 brownfield 프로젝트의 유지 지식을 모든 source에 대한 회계와 풀 수 없는 충돌을 드러내면서 자기완결적인 Devflow Product, Architecture, 해당되는 Design, Domains, decisions로 재구성한다. 기존 프로젝트를 명시적으로 adoption할 때만 사용하며 새 프로젝트 planning, 일반 변경 또는 legacy Devflow migration에는 사용하지 않는다.
 ---
 
-# Transfer brownfield knowledge ownership
+# Brownfield 지식 소유권 이전하기
 
-Adopt moves the authority for understanding an existing unmanaged project into `.devflow/`. It does
-not summarize old documents for permanent reference, migrate an earlier Devflow format, or require
-the user to restate facts that maintained source can establish.
+Adopt는 관리되지 않던 기존 프로젝트를 이해하는 권한을 `.devflow/` 안으로 옮긴다. 오래된 문서를
+영구 참조용으로 요약하거나, 이전 Devflow 형식을 migration하거나, 유지 source로 확인할 수 있는 사실을
+사용자에게 다시 설명하라고 요구하지 않는다.
 
-## Enter through the unmanaged-project gate
+## 관리되지 않은 프로젝트 gate로 진입한다
 
-Before any target-specific action, open `references/project-gate.md` and apply the `adopt` row. Then
-open `references/project-knowledge.md`. When a readable `.devflow/index.md` already exists, read it
-first and determine whether this is an active adoption or a newly discovered brownfield boundary.
+target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `adopt` 행을 적용한다. 이어서
+`references/project-knowledge.md`를 연다. 읽을 수 있는 `.devflow/index.md`가 이미 있다면 먼저 읽고,
+진행 중인 adoption인지 새로 발견된 brownfield boundary인지 판단한다.
 
-Enter only when the user explicitly asks to adopt an existing project, or when another Devflow
-route has identified maintained brownfield material that lacks an internal foundation. A clear new
-brief routes to `product`; an uncertain new idea routes to `sketch`; a managed project change follows
-its owning route. Never recognize legacy Devflow files as an upgrade protocol or import them as a
-runtime fallback.
+사용자가 기존 프로젝트를 adoption하라고 명시적으로 요청했거나, 다른 Devflow route가 내부 foundation이
+없는 maintained brownfield material을 발견했을 때만 진입한다. 명확한 새 brief는 `product`, 불확실한
+새 아이디어는 `sketch`, 관리되는 프로젝트의 변경은 그 소유 route로 보낸다. legacy Devflow 파일을
+upgrade protocol로 인식하거나 runtime fallback으로 import하지 않는다.
 
-Before writing, inspect Git status and identify the repository boundary. Preserve unrelated dirty
-bytes. Ask only when the maintained-source boundary itself is irreducible from repository evidence;
-generated output, dependencies, caches, and VCS metadata are not maintained knowledge merely because
-they exist.
+쓰기 전에 Git status를 검사하고 repository boundary를 식별한다. 무관한 dirty bytes를 보존한다.
+maintained source boundary 자체를 repository evidence로 결정할 수 없을 때만 묻는다. generated output,
+dependency, cache, VCS metadata는 존재한다는 이유만으로 maintained knowledge가 아니다.
 
-## Account for every maintained source
+## 모든 maintained source를 회계한다
 
-Create `.devflow/adoption/` as a recoverable current workspace. Publish `state.md`, `sources.md`, and
-`conflicts.md`, each with the shared routing header. `state.md` is one replaceable snapshot:
+복구 가능한 현재 workspace로 `.devflow/adoption/`을 만든다. 공통 routing header를 가진 `state.md`,
+`sources.md`, `conflicts.md`를 공개한다. `state.md`는 교체되는 하나의 snapshot이다.
 
 ```yaml
 next_route: adopt
-next_action: <one bounded inventory, reconstruction, decision, or disposition action>
+next_action: <하나의 범위가 정해진 inventory, reconstruction, decision 또는 disposition 행동>
 blockers: []
 ```
 
-It contains no coverage table, conflict copy, progress percentage, phase, transcript, or source-file
-list. Replace it before custody changes if the current action cannot finish. The actor for the
-published route owns the snapshot; ambiguous custody routes to the user rather than an overwrite.
+coverage table, conflict 사본, 진행률, phase, 대화, source file 목록은 state에 넣지 않는다. 현재 행동을
+끝내지 못한 채 관리권이 바뀔 수 있다면 먼저 state를 교체한다. 공개된 route의 actor가 snapshot을
+소유한다. 관리권이 모호하면 덮어쓰지 말고 사용자에게 보낸다.
 
-Open `references/team-context.md` when a bounded note for the fixed `adoption` key exists or when
-you hold local delta, environment-specific, or tentative context that must survive a hand-off;
-otherwise skip it.
+고정 key `adoption`에 해당하는 범위가 정해진 note가 있거나 handoff 뒤에도 보존해야 하는 local delta,
+환경 고유 맥락 또는 잠정 맥락을 가지고 있다면 `references/team-context.md`를 연다. 그렇지 않으면
+건너뛴다.
 
-`sources.md` defines the maintained input universe and partitions it into bounded source groups.
-For each group record:
+`sources.md`는 maintained input universe를 정의하고 범위가 정해진 source group으로 나눈다. 각 group에
+다음을 기록한다.
 
-- exact include paths or globs and the complementary exclusions that make overlap visible;
-- source nature and authority: intent prose, executable behavior, tests, configuration, operations,
-  generated evidence, or another concrete role;
-- the kinds of knowledge sought and their one internal target home;
-- current disposition: landed, conflict, pending, live evidence retained, noncanonical preservation,
-  pointer replacement, move, or deletion; and
-- the total uncovered maintained-path count.
+- 정확한 include path 또는 glob과, 겹침을 드러내는 상보적인 exclusion
+- source 성격과 authority: intent prose, executable behavior, test, configuration, operation,
+  generated evidence 또는 다른 구체적 역할
+- 찾는 knowledge 종류와 하나의 내부 target home
+- 현재 disposition: landed, conflict, pending, retained live evidence, noncanonical preservation,
+  pointer replacement, move 또는 deletion
+- uncovered maintained path의 총수
 
-Maintained prose gets an individual disposition. Homogeneous code, tests, or configuration may be
-grouped only when the include/exclude boundary is checkable and the group genuinely shares authority,
-knowledge sought, target, and disposition. Coverage is complete only when groups do not leave a
-maintained path uncovered; it does not prove that their meaning was understood.
+maintained prose는 각각 disposition을 가진다. 동질적인 code, test 또는 configuration은 include/exclude
+boundary를 검사할 수 있고 authority, 찾는 knowledge, target, disposition을 실제로 공유할 때만 묶을 수
+있다. group이 maintained path를 하나도 빠뜨리지 않을 때 coverage가 완료된다. 이것은 그 의미를
+이해했다는 증거가 아니다.
 
-Create or refresh a small `.devflow/index.md` in the same adoption boundary. It orients the project,
-routes current Product, Domain, Architecture, Design, and adoption questions without copying their
-answers, exposes only the immediate `sketches/*/state.md`, `adoption/state.md`, and
-`work/*/state.md` recovery globs, and derives readiness from current canon plus adoption status. It
-does not enumerate source groups or active artifact IDs.
+같은 adoption boundary에서 작은 `.devflow/index.md`를 만들거나 갱신한다. 답을 복제하지 않고 프로젝트
+방향을 알려주며 현재 Product, Domain, Architecture, Design, adoption 질문을 route한다. 즉시 복구에
+쓰는 `sketches/*/state.md`, `adoption/state.md`, `work/*/state.md` glob만 노출하고 현재 canon과 adoption
+status로 readiness를 도출한다. source group이나 active artifact ID를 열거하지 않는다.
 
-## Reconstruct meaning, not prose
+## 산문이 아니라 의미를 재구성한다
 
-Read each source according to the authority recorded in `sources.md`. Executed code and tests can
-establish current behavior; they cannot silently choose a contradictory product promise. Intent
-prose can establish user meaning; it cannot override observed runtime behavior without exposing the
-divergence. Configuration establishes an environment only where it is current and exercised.
+각 source를 `sources.md`에 기록한 authority에 따라 읽는다. 실행한 code와 test는 현재 behavior를
+확인할 수 있지만, 모순되는 제품 promise를 조용히 선택할 수 없다. intent prose는 사용자 의미를
+확인할 수 있지만, divergence를 드러내지 않은 채 관찰한 runtime behavior를 덮을 수 없다. configuration은
+현재 상태이고 실제로 사용되는 범위에서만 환경을 확인한다.
 
-Treat something as a knowledge unit only when maintained source asserts or explicitly questions it,
-or when current execution is needed to interpret such a source-backed claim. Do not turn other
-absences, untested cases, or possible future decisions into facts or unknowns. For every knowledge
-unit distinguish:
+maintained source가 어떤 내용을 주장하거나 명시적으로 질문할 때, 또는 그런 source-backed claim을
+해석하는 데 현재 실행이 필요할 때만 knowledge unit으로 취급한다. 다른 부재, test하지 않은 case,
+가능한 미래 결정을 fact나 unknown으로 만들지 않는다. 각 knowledge unit은 다음 중 하나로 구분한다.
 
-- an observed fact supported directly by current source or execution;
-- an interpretation, with its evidence, remaining uncertainty, and confirmation condition beside it;
-- an unknown that a maintained source explicitly raises but no source settles, recorded once with
-  the decision it would change; or
-- a conflict in which maintained sources support incompatible current answers.
+- 현재 source 또는 실행이 직접 뒷받침하는 observed fact
+- evidence, 남은 uncertainty, confirmation condition을 곁에 둔 interpretation
+- maintained source가 명시적으로 제기했지만 어느 source도 해결하지 못한 unknown. 바뀔 decision과
+  함께 한 번만 기록한다.
+- maintained source들이 서로 양립할 수 없는 현재 답을 뒷받침하는 conflict
 
-Give each unit one internal home—the document whose decision route resolves it—and keep it beside
-the sentence it qualifies. Other homes may link to that unit but do not recatalog it for
-completeness.
+각 unit은 그것을 해결하는 decision route의 문서 하나를 내부 home으로 가지며, 자신이 한정하는 문장
+옆에 둔다. 다른 home은 그 unit을 link할 수 있지만 completeness를 위해 다시 catalog하지 않는다.
 
-Publish complete current `.devflow/project/product.md`, the necessary
-`.devflow/project/domains/<domain>/index.md` Domain parents,
-`project/architecture.md`, and `project/design.md` only when Architecture says Design applies and
-maintained sources establish a current interaction, presentation, accessibility, component, or
-review rule to reconstruct. A Product promise or goal for a surface is not Design knowledge. When
-Design applies but the sources establish no such rule, publish no placeholder Design; Architecture
-exposes the applicability and the next foundation route becomes `design` after earlier adoption
-decisions close.
-Apply the shared split test before creating conditional concern children. Product owns the user,
-promise, boundary, shared language, and cross-domain composition; each Domain owns only its business
-state and rules; Architecture owns technical seams, dependency direction, runtime/data behavior,
-verification channels, and Design applicability; Design owns experience principles and review
-surfaces. Refer across those homes instead of copying their facts.
+완전한 현재 `.devflow/project/product.md`, 필요한
+`.devflow/project/domains/<domain>/index.md` Domain parent, `project/architecture.md`를 공개한다.
+`project/design.md`는 Architecture가 Design이 적용된다고 말하고 maintained source에서 재구성할 현재
+interaction, presentation, accessibility, component 또는 review rule이 있을 때만 공개한다. 어떤
+surface에 대한 Product promise나 goal은 Design knowledge가 아니다. Design은 적용되지만 source에 그런
+rule이 없다면 placeholder Design을 공개하지 않는다. Architecture가 applicability를 드러내고, 앞선
+adoption decision이 닫힌 뒤 다음 foundation route가 `design`이 된다.
 
-Every published document must remain intelligible after the old prose is removed. Replace external
-references with self-contained current statements, not summaries that tell the reader to reopen an
-input. Code, tests, and live operational assets may remain as current evidence, but their paths do
-not become a second project-knowledge canon.
+conditional concern child를 만들기 전에 공통 split test를 적용한다. Product는 사용자, promise,
+boundary, shared language, cross-domain composition을 소유한다. 각 Domain은 자신의 업무 state와
+rule만 소유한다. Architecture는 technical seam, dependency direction, runtime/data behavior,
+verification channel, Design applicability를 소유한다. Design은 experience principle과 review surface를
+소유한다. 사실을 복제하지 말고 이 home들을 서로 참조한다.
 
-## Expose only irreducible conflicts
+공개한 모든 문서는 오래된 prose가 제거된 뒤에도 이해할 수 있어야 한다. 외부 reference를 input을 다시
+열라는 summary가 아니라 자기완결적인 현재 문장으로 대체한다. code, test, live operational asset은
+현재 evidence로 남을 수 있지만 그 경로가 두 번째 project knowledge canon이 되지는 않는다.
 
-`conflicts.md` contains only contradictions that source authority and current evidence cannot settle.
-For each one state the incompatible claims, evidence on both sides, affected current judgment,
-interpretations already excluded, the exact decision needed, its owning route, and the condition
-that confirms resolution. When none remain, say so directly; do not preserve resolved conflict
-history as current truth.
+## 풀 수 없는 conflict만 드러낸다
 
-Route product or Domain meaning to `product`, technical meaning to `architecture`, and experience
-meaning to `design`; that decision route owns the conflict and absorbs the answer into the
-canonical home of the question—a Domain rule into that Domain index, a promise or boundary into
-Product—even when the owner must choose. `next_route: user` may carry only a fully framed choice
-whose action names the decision route that will absorb the answer. Ask the user only after showing
-the competing answers and consequences.
-Do not polish an invented answer merely to make a foundation look complete.
+`conflicts.md`에는 source authority와 현재 evidence만으로 풀 수 없는 contradiction만 둔다. 각각에
+양립할 수 없는 claim, 양쪽 evidence, 영향을 받는 현재 judgment, 이미 배제한 interpretation, 필요한
+정확한 decision, 소유 route, resolution confirmation condition을 쓴다. 남은 것이 없다면 직접 그렇게
+쓴다. 해결된 conflict history를 현재 truth로 보존하지 않는다.
 
-## Open work only inside a proven boundary
+제품 또는 Domain 의미는 `product`, 기술 의미는 `architecture`, 경험 의미는 `design`으로 보낸다.
+그 decision route는 conflict를 소유하고 답을 질문의 canonical home에 흡수한다. owner가 선택해야 하는
+경우에도 Domain rule은 해당 Domain index에, promise 또는 boundary는 Product에 넣는다.
+`next_route: user`는 답을 흡수할 decision route를 행동에 적은, 충분히 구성된 선택만 전달할 수 있다.
+경쟁하는 답과 consequence를 보여준 뒤에만 사용자에게 묻는다. foundation을 완전하게 보이게 하려고
+만들어낸 답을 다듬지 않는다.
 
-Adoption may proceed in vertical slices, but an uncovered repository is not globally ready. A
-requested tracked change boundary is eligible only when all three facts are visible in current files:
+## 입증된 경계 안에서만 work를 연다
 
-1. every maintained source that can affect that change has a disposition in `sources.md`;
-2. required Product, Domain, Architecture, Design, and cross-domain canon for the change is
-   self-contained; and
-3. no unresolved conflict affects the change boundary.
+Adoption은 vertical slice로 진행할 수 있지만, 아직 회계하지 못한 repository 전체가 준비된 것은 아니다.
+요청한 tracked change boundary는 다음 세 사실을 현재 파일에서 모두 확인할 수 있을 때만 eligible하다.
 
-This is derived evidence, not a status field. If all three hold, state may route that exact boundary
-to `direct` and name the bounded change; other adoption remains open. If any is uncertain, keep
-`next_route: adopt` or the one decision route and do not create Work.
+1. 그 변경에 영향을 줄 수 있는 모든 maintained source가 `sources.md`에서 disposition을 가진다.
+2. 변경에 필요한 Product, Domain, Architecture, Design, cross-domain canon이 자기완결적이다.
+3. unresolved conflict가 그 change boundary에 영향을 주지 않는다.
 
-## Transfer or retire old prose
+이는 status field가 아니라 도출한 evidence다. 세 조건이 모두 참이면 state가 그 정확한 boundary와
+범위가 정해진 변경을 `direct`로 보낼 수 있으며, 다른 adoption은 열린 채로 남는다. 하나라도 불확실하면
+`next_route: adopt` 또는 하나의 decision route를 유지하고 Work를 만들지 않는다.
 
-Existing documentation loses project-truth authority only after all of its unique current knowledge
-has landed or become an explicit conflict. Its final disposition is one of: deletion, movement out
-of the current search surface, replacement by the minimum host-required pointer, or preservation
-with an unmistakable statement that it is not Devflow project truth and contains no unique project
-knowledge. Request a user decision before destructive or purpose-changing treatment that was not
-already authorized.
+## 오래된 prose를 이전하거나 폐기한다
 
-Do not mark an old document noncanonical while leaving its only fact there. Do not keep a full old
-manual beside the new canon merely for reassurance. Runtime code, tests, and configuration remain
-where their operational role requires them; disposition changes their knowledge authority, not
-their execution role.
+기존 documentation은 고유한 현재 knowledge가 모두 반영되거나 명시적 conflict가 된 뒤에만 project
+truth authority를 잃는다. 최종 disposition은 deletion, 현재 search surface 밖으로 이동, host가
+요구하는 최소 pointer로 대체, 또는 Devflow project truth가 아니며 고유한 project knowledge가 없다는
+명확한 문장과 함께 보존하는 것 중 하나다. 이미 허가되지 않은 파괴적 처리나 목적 변경 전에는 사용자
+결정을 요청한다.
 
-## Close only after complete transfer
+유일한 fact를 남겨 둔 채 오래된 문서를 noncanonical로 표시하지 않는다. 안심을 위해 전체 old manual을
+새 canon 옆에 남기지 않는다. runtime code, test, configuration은 운영 역할이 요구하는 위치에 남는다.
+disposition은 knowledge authority를 바꾸며 execution role을 바꾸지 않는다.
 
-Adoption closes when all maintained source groups are landed, retained as live evidence, explicitly
-conflicted, or made noncanonical under the rule above; uncovered paths are zero; every conflict is
-resolved; and the complete Product, Architecture, applicable Design, Domain, and decision knowledge
-is self-contained. Update the index so readiness and the next route reflect that result, then remove
-`adoption/` and any `team/*/adoption.md` files. Git retains the reconstruction history.
+## 완전히 이전한 뒤에만 닫는다
 
-After closure, test meaning rather than file presence: answer representative Product, Domain, and
-Architecture questions using `.devflow/project/` alone, with old prose absent or deliberately
-contradictory. A fresh reader must choose internal canon and report the retained contradiction as
-non-authoritative. If that has not been observed, external-input independence remains `unproven`.
+모든 maintained source group이 landed, retained live evidence, explicit conflict 또는 위 규칙에 따른
+noncanonical 상태이고, uncovered path가 0이며, 모든 conflict가 해결되었고, 완전한 Product,
+Architecture, 해당되는 Design, Domain, decision knowledge가 자기완결적일 때 adoption을 닫는다. index를
+갱신하여 readiness와 다음 route가 이 결과를 반영하게 한 뒤 `adoption/`과 모든
+`team/*/adoption.md` 파일을 제거한다. Git이 reconstruction history를 보존한다.
 
-Return:
+closure 뒤에는 파일 존재가 아니라 의미를 test한다. old prose가 없거나 의도적으로 모순되는 상태에서
+`.devflow/project/`만 사용해 대표적인 Product, Domain, Architecture 질문에 답한다. fresh reader는
+internal canon을 선택하고, 남아 있는 모순을 non-authoritative라고 보고해야 한다. 이를 관찰하지 않았다면
+external input independence는 `unproven`이다.
 
-- `Coverage:` maintained source groups, exclusions, and uncovered count;
-- `Published:` every canonical project and adoption path created or replaced;
-- `Conflicts and unknowns:` each open decision and its route, or `none`;
-- `Ready boundary:` the requested change boundary satisfying all three readiness facts, or `none`;
-- `Source disposition:` old prose and live source treatment still required; and
-- `Route and action:` one next route and one bounded action.
+다음을 반환한다.
 
-Do not implement product changes, create Work contracts, migrate legacy Devflow state, or claim that
-path coverage proves semantic completeness.
+- `Coverage:` 유지 source group, 제외 경로, 포함되지 않은 경로 수
+- `Published:` 만들거나 교체한 모든 canonical project 및 adoption path
+- `Conflicts와 unknowns:` 열린 decision과 route, 또는 `none`
+- `Ready boundary:` 세 readiness fact를 충족하는 요청 change boundary, 또는 `none`
+- `Source disposition:` 아직 필요한 old prose 및 live source 처리
+- `Route와 행동:` 다음 route 하나와 범위가 정해진 행동 하나
+
+제품 변경을 구현하거나 Work 계약을 만들거나 legacy Devflow state를 migration하거나 path coverage가
+semantic completeness를 증명한다고 주장하지 않는다.

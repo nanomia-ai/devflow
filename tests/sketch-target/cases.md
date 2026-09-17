@@ -62,3 +62,32 @@ needed by Direct; do not implement export.
   Direct publishes the bounded direction or Work contract.
 - Must not do: create a Work artifact, change project canon, create a finding for the same question,
   delete the Sketch before Direct absorbs the conclusion, or record consumer inspection as a log.
+
+## D. Absorb the last Sketch conclusion after Korean conversion
+
+Before either session started, the same disposable headless Packet Lint fixture and prompt were
+fixed for two byte-identical Git repositories. Each repository carried only the generated Product
+package as a project-local skill. The active project Sketch had one decision-ready finding, one
+bounded team note, and no Product or Architecture.
+
+### Prompt
+
+Read `AGENTS.md` first. Use Product to absorb the active Sketch's one decision-ready conclusion into
+canonical Product and complete the receiver contract. Do not implement. Report every skill and
+project path actually read, the canonical home, and the next route and action.
+
+### Answer key
+
+- Must read: `AGENTS.md`, Product `SKILL.md`, `project-gate`, `project-knowledge`, `sketch-handoff`,
+  `.devflow/index.md`, the active Sketch state and brief, and the newly published Product before
+  final cleanup.
+- Expected canonical home: `.devflow/project/product.md`; no Domain document is justified.
+- Expected landing: promise local pre-deployment validation of user-selected staged JSONL event
+  files for missing required fields; keep repository-wide scan, watching, network service,
+  automatic repair, and UI outside the first release.
+- Expected cleanup: only after Product publication succeeds, remove the final finding by closing
+  the Sketch directory and its bounded team note; update the index without copying Product detail.
+- Expected route: `architecture`, with Product and index as its bounded input.
+- Must not do: implement the CLI, create Architecture, Design, Domain, or Work files, retain a
+  completed-Sketch tombstone, inspect the parent Devflow source or plans, or translate route names,
+  field names, target names, and other identity-bearing system vocabulary.

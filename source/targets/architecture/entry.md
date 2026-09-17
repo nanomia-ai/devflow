@@ -1,91 +1,58 @@
 ---
 name: architecture
-description: Define or revise a Devflow project's technical boundaries, components, dependencies, runtime and data flow, public seams, verification channels, and Design applicability from a complete Product foundation. Use for an open architecture decision; not for product meaning, UI principles, delivery direction, implementation, or brownfield reconstruction.
+description: 완전한 Product foundation을 바탕으로 Devflow 프로젝트의 기술 경계, 구성요소, 의존 방향, runtime 및 data flow, public seam, verification channel, Design 적용 여부를 정의하거나 수정한다. 열린 Architecture 결정을 다룰 때 사용한다. 제품 의미, UI 원칙, delivery 방향, 구현, brownfield 재구성에는 사용하지 않는다.
 ---
 
-# Define the technical foundation
+# 기술 foundation 정의
 
-Architecture turns a complete Product and its business domains into current technical boundaries a
-later change can safely work within. It owns structure, dependency direction, runtime and data
-flow, public seams, operating boundaries, and verification channels. It does not redefine product
-meaning or decide the detailed user experience.
+Architecture는 완전한 Product와 업무 Domain을 이후 변경이 안전하게 작업할 수 있는 현재 기술 경계로 바꾼다. 구조, 의존 방향, runtime 및 data flow, public seam, 운영 경계, verification channel을 소유한다. 제품 의미를 다시 정의하거나 상세한 사용자 경험을 결정하지 않는다.
 
-## Enter through a valid gate
+## 유효한 조건으로 진입
 
-Before any target-specific action, open `references/project-gate.md` and apply the `architecture`
-row. Then open `references/project-knowledge.md` and the readable `.devflow/index.md`.
+target별 행동을 시작하기 전에 `references/project-gate.md`를 열고 `architecture` 조건을 적용한다. 이어서 `references/project-knowledge.md`와 읽을 수 있는 `.devflow/index.md`를 연다.
 
-When a readable Sketch state names `architecture` as `next_route`, open
-`references/sketch-handoff.md` before writing and complete its receiver contract together with the
-Architecture publication.
+읽을 수 있는 Sketch state가 `next_route`로 `architecture`를 지정하면 파일을 쓰기 전에 `references/sketch-handoff.md`를 열고, Architecture 게시와 함께 receiver 계약을 완료한다.
 
-Architecture requires a complete `.devflow/project/product.md`. Read Product for the system promise
-and cross-domain composition, then open only the Domain parents and existing Architecture children
-routed by the current technical question. If Product meaning is incomplete or contradictory, make
-no technical choice and route to `product`. Maintained brownfield meaning not yet absorbed routes to
-`adopt`; an investigation that cannot finish in the current custody interval routes to `sketch`
-rather than leaving a partial canonical Architecture.
+Architecture에는 완전한 `.devflow/project/product.md`가 필요하다. system promise와 domain 간 구성을 파악하기 위해 Product를 읽고, 현재 기술 질문이 route한 Domain parent와 기존 Architecture child만 연다. Product 의미가 불완전하거나 모순되면 기술 선택을 하지 않고 `product`로 route한다. 아직 흡수되지 않은 maintained brownfield 의미는 `adopt`로 route한다. 현재 custody 구간에서 끝낼 수 없는 조사는 불완전한 canonical Architecture를 남기지 말고 `sketch`로 route한다.
 
-## Decide technical boundaries, not business meaning
+## 업무 의미가 아닌 기술 경계 결정
 
-Use explicit user constraints, current Product and Domain contracts, relevant code or runtime
-evidence when it exists, and already-current technical decisions. Ask only for a choice that would
-materially change components, deployment, dependency direction, data ownership, a public seam,
-verification, or Design applicability. Preserve unsupported provider, scale, deployment, or
-operational claims as explicit unknowns with the condition that would resolve them.
+사용자가 명시한 제약, 현재 Product와 Domain 계약, 존재하는 관련 code 또는 runtime 증거, 이미 current인 기술 결정을 사용한다. 선택에 따라 component, deployment, dependency 방향, data ownership, public seam, verification, Design 적용 여부가 실질적으로 달라질 때만 사용자에게 묻는다. 근거가 없는 provider, scale, deployment, 운영 주장은 해결 조건과 함께 명시적인 unknown으로 남긴다.
 
-Define the smallest coherent foundation that answers:
+다음에 답하는 가장 작은 일관된 foundation을 정의한다.
 
-- supported environment and deployment shape;
-- components and their responsibilities;
-- dependency direction and contracts between components and Domains;
-- runtime and durable-data flow;
-- public seams versus internal implementation details;
-- failure and operating boundaries that change implementation decisions;
-- executable verification channels and any unavailable external channels; and
-- whether Design is required, does not apply, or remains an open technical question, with why.
+- 지원 환경과 deployment 형태
+- 구성요소와 각 책임
+- 구성요소 및 Domain 사이의 의존 방향과 계약
+- runtime 및 durable-data flow
+- public seam과 internal implementation detail의 경계
+- 구현 결정을 바꾸는 failure 및 운영 경계
+- 실행 가능한 verification channel과 사용할 수 없는 external channel
+- Design이 필요한지, 적용되지 않는지, 열린 기술 질문인지와 그 이유
 
-Do not restate Domain lifecycle or Product invariants as technical rules. Refer to their canonical
-parents and describe only the technical contract needed to preserve them. A framework, folder, or
-table name is not a reason to create a child document.
+Domain lifecycle이나 Product 불변 조건을 기술 규칙으로 다시 서술하지 않는다. canonical parent를 참조하고, 이를 지키는 데 필요한 기술 계약만 설명한다. framework, folder, table 이름만으로 child 문서를 만들지 않는다.
 
-## Publish current Architecture
+## 현재 Architecture 게시
 
-Compose a complete current `.devflow/project/architecture.md` before replacing it. Its body must
-state the environment, component and dependency model, runtime/data flow, public seams, verification
-channels, Design applicability, optional concern routes, and open technical questions. Apply the
-shared split test before creating `project/architecture/<concern>.md`; the default for a small
-foundation is one parent document.
+완전한 현재 `.devflow/project/architecture.md`를 구성한 뒤 기존 파일을 교체한다. 본문에는 환경, 구성요소 및 의존 model, runtime/data flow, public seam, verification channel, Design 적용 여부, 선택적인 concern route, 열린 기술 질문이 있어야 한다. `project/architecture/<concern>.md`를 만들기 전에 공통 split test를 적용한다. 작은 foundation은 parent 문서 하나를 기본으로 한다.
 
-Update `.devflow/index.md` in the same change so technical questions route to Architecture and
-foundation readiness can be derived from Product, Architecture, and the Design applicability
-statement. Add or remove a concern route only when that child actually exists; do not copy the
-technical answer into the index.
+같은 변경에서 `.devflow/index.md`를 갱신해 기술 질문을 Architecture로 route하고, Product, Architecture, Design 적용 여부에서 foundation 준비 상태를 판단할 수 있게 한다. 실제 child가 있을 때만 concern route를 추가하거나 제거한다. 기술 답을 index에 복사하지 않는다.
 
-When a decision's rejected alternative or reopen condition protects the current structure, write
-one current decision document and reflect the operative rule in Architecture. Do not create a
-decision file merely to narrate that Architecture work happened.
+기각한 대안이나 reopen 조건이 현재 구조를 보호하는 데 필요하면 현재 decision 문서 하나를 쓰고, 실제 적용되는 규칙을 Architecture에 반영한다. Architecture 작업이 있었다는 사실만 기록하려고 decision 파일을 만들지 않는다.
 
-## Finish at the next open question
+## 다음 열린 질문에서 종료
 
-Re-read the Architecture header, its routed children, the index route, and the Product/Domain
-boundaries it depends on. Confirm that no business fact moved into Architecture, no technical fact
-was copied into Product or a Domain, and every claimed verification channel is actually available
-or explicitly unknown.
+Architecture header, route된 child, index route, Architecture가 의존하는 Product 및 Domain 경계를 다시 읽는다. 업무 사실이 Architecture로 이동하지 않았는지, 기술 사실이 Product 또는 Domain에 복사되지 않았는지, 각 verification channel이 실제로 사용 가능하거나 명시적인 unknown인지 확인한다.
 
-If Architecture says Design is required and no complete Design exists, route to `design` with the
-surface and constraints it must decide. If Design does not apply, route a new foundation to
-`direct`. Route an unresolved product premise to `product`, a technical unknown needing exploration
-to `sketch`, and an active change decision back to `direct` after the canonical update.
+Architecture가 Design 필요를 선언했는데 완전한 Design이 없으면 결정해야 할 surface와 제약을 지정해 `design`으로 route한다. Design이 적용되지 않으면 새 foundation을 `direct`로 route한다. 해결되지 않은 제품 전제는 `product`, 조사가 필요한 기술 unknown은 `sketch`, canonical update가 끝난 활성 변경 결정은 `direct`로 route한다.
 
-Return:
+다음을 보고한다.
 
-- `Published:` Architecture, concern, decision, and index paths created or replaced;
-- `Structure:` components, dependency direction, runtime/data flow, and public seams;
-- `Verification:` executable channels and unavailable or unproven claims;
-- `Design applicability:` required, not applicable, or open, with the reason;
-- `Route and action:` one next route and one bounded action; and
-- `Unproven or open:` technical claims not established by current evidence.
+- `게시한 경로:` 생성하거나 교체한 Architecture, concern, decision, index path
+- `구조:` 구성요소, 의존 방향, runtime/data flow, public seam
+- `검증:` 실행 가능한 channel과 사용할 수 없거나 미검증인 주장
+- `Design 적용 여부:` 필요, 미적용, 열림 중 하나와 그 이유
+- `Route와 행동:` 다음 route 하나와 범위가 제한된 행동 하나
+- `미검증 또는 열린 항목:` 현재 증거로 확정하지 못한 기술 주장
 
-Do not write Product or Domain business meaning, Design principles, Work artifacts, implementation,
-adoption inventory, or verification verdicts.
+Product 또는 Domain의 업무 의미, Design 원칙, Work artifact, 구현, adoption inventory, verification verdict를 쓰지 않는다.

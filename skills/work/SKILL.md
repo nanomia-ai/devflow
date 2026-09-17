@@ -1,113 +1,105 @@
 ---
 name: work
-description: Implement one ready Devflow Work contract or one agreed same-turn action, preserve a recoverable safe point, and route the result without changing its goal or verdict. Use for implementation and Work closure; not for direction, verification, status recovery, or bootstrap.
+description: 준비된 Devflow Work 계약 하나 또는 합의된 현재 대화의 행동 하나를 구현하고, 복구 가능한 safe point를 보존하며, goal이나 verdict를 바꾸지 않고 결과를 route한다. 구현과 Work closure에 사용하며 지시, 검증, 상태 복구 또는 bootstrap에는 사용하지 않는다.
 ---
 <!-- generated; do not edit; source: targets/work/entry.md; receipt: .skill-rails-build.json -->
 
-# Work one change
+# 하나의 변경 구현하기
 
-Work turns an already bounded result into actual code, tests, and Git history. Choose local
-implementation methods inside the agreed boundary, but never make implementation convenience a new
-goal, acceptance rule, or product boundary.
+Work는 이미 경계가 정해진 결과를 실제 코드, test, Git history로 만든다. 합의된 경계 안의 국소 구현
+방법은 Work가 선택하지만, 구현 편의를 새 goal, acceptance rule 또는 제품 경계로 만들지 않는다.
 
-## Enter through a valid gate
+## 유효한 gate로 진입한다
 
-Before any target-specific action, open `references/project-gate.md` and apply the `work` row. If
-the gate routes elsewhere, make no change.
+target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `work` 행을 적용한다. gate가 다른
+곳으로 route하면 아무것도 변경하지 않는다.
 
-When the index is usable, read it before selecting or executing an input.
+index를 사용할 수 있으면 input을 선택하거나 실행하기 전에 읽는다.
 
-Work accepts exactly one of these inputs:
+Work는 다음 두 input 중 정확히 하나만 받는다.
 
-- a tracked artifact whose readable `state.md` says `next_route: work`, has no blockers, and has a
-  self-contained `spec.md`; or
-- an ephemeral goal, write boundary, and proportional check agreed in the current session.
+- 읽을 수 있는 `state.md`의 `next_route`가 `work`이고 blocker가 없으며 자기완결적인 `spec.md`를
+  가진 tracked artifact
+- 현재 session에서 합의한 ephemeral goal, write boundary, 비례적인 check
 
-For tracked input, open `references/work-state.md` before reading or writing Work state. After
-selecting the artifact, open `references/team-context.md` when a bounded note for its ID exists or
-when you hold local delta, environment-specific, or tentative context that must survive a hand-off;
-otherwise skip it. Read the selected spec and state, the spec's `read_first` documents, context
-allowed by that module, and current Git revision, status, and relevant diff. Do not expand into
-unrelated project knowledge. Confirm that `base_revision` is reachable and that any inherited dirty
-paths named by the contract still match before touching them.
+tracked input이라면 Work state를 읽거나 쓰기 전에 `references/work-state.md`를 연다. artifact를
+선택한 뒤 그 ID에 해당하는 범위가 정해진 note가 있거나 handoff 뒤에도 보존해야 하는 local delta,
+환경 고유 맥락 또는 잠정 맥락을 가지고 있다면 `references/team-context.md`를 연다. 그렇지 않으면
+건너뛴다. 선택한 spec과 state, spec의 `read_first` 문서, 그 모듈이 허용하는 context, 현재 Git
+revision·status·관련 diff를 읽는다. 무관한 프로젝트 지식까지 확장하지 않는다. 파일을 건드리기 전에
+`base_revision`에 도달할 수 있고 계약에 적힌 상속 dirty path가 여전히 일치하는지 확인한다.
 
-If a required contract document is missing, unreadable, or inconsistent before custody is clear,
-do not implement or repair it. Report the exact inconsistency and route to `resume`. If the state is
-readable and already gives Work custody, publish `next_route: direct` with the inconsistency as the
-decision question.
+관리권이 명확해지기 전에 필수 계약 문서가 없거나 읽을 수 없거나 서로 모순되면 구현하거나 수리하지
+않는다. 정확한 불일치를 보고하고 `resume`으로 보낸다. state를 읽을 수 있고 이미 Work에 관리권을
+주었다면, 그 불일치를 결정 질문으로 적어 `next_route: direct`를 공개한다.
 
-## Execute within the contract
+## 계약 안에서 실행한다
 
-Implement the smallest current result or shaping slice that satisfies the spec. Work owns local
-factoring, names, algorithms, and test technique inside the write boundary. Preserve unrelated
-dirty bytes and do not stage or rewrite them.
+spec을 만족하는 가장 작은 현재 결과 또는 shaping slice를 구현한다. Work는 write boundary 안의
+국소 factoring, 이름, algorithm, test 기법을 소유한다. 무관한 dirty bytes를 보존하며 stage하거나
+다시 쓰지 않는다.
 
-Run the checks that can reveal whether this implementation and its guardrails hold. When a slice is
-safe, create a focused commit containing only the owned change when the repository permits commits,
-then record that commit as `last_safe_point`. A dirty tree is never a safe point.
+이 구현과 guardrail이 유지되는지 드러낼 수 있는 check를 실행한다. slice가 안전하면 저장소가 commit을
+허용할 때 소유한 변경만 포함하는 집중된 commit을 만들고 그 commit을 `last_safe_point`로 기록한다.
+dirty tree는 safe point가 아니다.
 
-If implementation exposes a broken premise, a required out-of-boundary change, or a contract
-conflict defined by `work-state`, stop at the last safe point. Publish `next_route: direct` with the
-broken premise, the smallest proposed change, its boundary impact, and one decision question. If
-the affected boundary is not Adoption-ready, route to `adopt` instead. Do not amend the spec.
+구현 중 잘못된 전제, 경계 밖의 필수 변경 또는 `work-state`가 정의한 계약 충돌이 드러나면 마지막
+safe point에서 멈춘다. 잘못된 전제, 가장 작은 제안 변경, boundary 영향, 결정 질문 하나를 포함해
+`next_route: direct`를 공개한다. 영향을 받는 경계가 Adoption-ready가 아니라면 대신 `adopt`로 보낸다.
+spec은 수정하지 않는다.
 
-For a shaping contract, complete and observe only the current slice. Route to `direct` with the
-observed signal and the next decision question. A successful intermediate review is not a Verify
-failure. Route to `verify` when the spec names an interim risk criterion for this slice, or after
-its stop condition says the closure result is ready for acceptance judgment.
+shaping 계약이라면 현재 slice만 완성하고 관찰한다. 관찰된 signal과 다음 결정 질문을 가지고
+`direct`로 보낸다. 성공한 중간 review는 Verify 실패가 아니다. spec이 이 slice에 대한 중간 risk
+criterion을 지정했거나 stop condition이 closure 결과를 acceptance judgment할 준비가 되었다고 말할 때
+`verify`로 보낸다.
 
-## Keep the hand-off recoverable
+## 인계를 복구 가능하게 유지한다
 
-Before another actor or session can take custody, replace state with the actual safe point and one
-bounded next action. Use `next_route: work` when the same contract has a bounded continuation,
-`direct` for amendment or the next shaping decision, `verify` when the result is ready for an
-independent acceptance judgment, `adopt` for a broken adoption boundary, and `user` for destructive
-or ambiguous disposition. Never write `verification.md` or a verdict.
+다른 actor나 session이 관리권을 받기 전에 실제 safe point와 범위가 정해진 다음 행동 하나로 state를
+교체한다. 같은 계약에 범위가 정해진 후속 행동이 있으면 `next_route: work`, amendment 또는 다음
+shaping 결정이면 `direct`, 독립적인 acceptance judgment 준비가 되었으면 `verify`, adoption 경계가
+깨졌으면 `adopt`, 파괴적이거나 모호한 처분이면 `user`를 사용한다. `verification.md`나 verdict는
+절대 쓰지 않는다.
 
-Record implementation-discovered durable facts only as `knowledge_candidates` under the shared
-state contract. Reproducible tests and code may be handed to Verify; do not invent an evidence file
-or put verification evidence in state. A shaping hand-off's `next_action` carries only the bounded
-observed signal and decision question needed for Direct. If the spec requires non-reproducible
-evidence to survive into a later Verify session, treat that as a contract conflict and route to
-`direct` rather than pretending the evidence was preserved.
+구현 중 발견한 지속 사실은 공통 state 계약의 `knowledge_candidates`에만 기록한다. 재현 가능한
+test와 code는 Verify에 넘길 수 있지만, evidence 파일을 새로 만들거나 verification evidence를 state에
+넣지 않는다. shaping handoff의 `next_action`은 Direct에 필요한 범위가 정해진 관찰 signal과 결정
+질문만 전달한다. spec이 재현 불가능한 evidence를 이후 Verify session까지 보존하라고 요구하면 보존된
+척하지 말고 계약 충돌로 취급하여 `direct`로 보낸다.
 
-## Close only after verification
+## 검증 뒤에만 닫는다
 
-When a published verification returns custody to Work, read its criterion evidence without copying
-the verdict into state. A failed or unproven criterion follows its recorded failure route. When the
-closure condition is reached and every required criterion is proven, adopt or reject each knowledge
-candidate. Send unresolved judgments to the owning decision route as blockers; turn only confirmed
-current facts into `fact -> canonical path` pending landings.
+공개된 verification이 관리권을 Work로 돌려주면 verdict를 state에 복제하지 않고 criterion evidence를
+읽는다. failed 또는 unproven criterion은 verification에 기록된 failure route를 따른다. closure condition에
+도달하고 모든 필수 criterion이 proven이면 각 knowledge candidate를 채택하거나 기각한다. 미해결 판단은
+소유 decision route에 blocker로 보내고, 확인된 현재 사실만 `fact -> canonical path` 형태의 pending
+landing으로 바꾼다.
 
-Judge each candidate by the invariant it proves rather than the code that exposed it: adopt it when
-that invariant would change a later actor's judgment and land it in its home's own terms; reject it
-only when no such invariant remains.
+각 candidate는 그것을 드러낸 code가 아니라 그것이 증명하는 invariant로 판단한다. 그 invariant가 이후
+actor의 판단을 바꾼다면 채택하여 home의 언어로 반영하고, 그런 invariant가 남지 않을 때만 기각한다.
 
-Apply each pending landing to its canonical Product, Architecture, Design, Domain, or decision home,
-re-read the touched document's `summary`, `read_when`, and related body, and clear the landing only
-after the fact is present without duplication. If closure creates a commit, include a short goal,
-acceptance, and verification summary in that commit message before deleting the artifact; use the
-PR instead when it is the review surface. Delete the Work artifact directory itself and bounded
-member files only when no blocker, candidate, or pending landing remains. Git keeps the history; do not
-leave a completed-spec tombstone.
+각 pending landing을 해당 canonical Product, Architecture, Design, Domain 또는 decision home에
+반영한다. 수정한 문서의 `summary`, `read_when`, 관련 본문을 다시 읽고, 중복 없이 사실이 존재하는 것을
+확인한 뒤에만 landing을 지운다. closure가 commit을 만들면 artifact를 삭제하기 전에 그 commit message에
+goal, acceptance, verification을 짧게 요약한다. PR이 review surface라면 대신 PR에 쓴다. blocker,
+candidate, pending landing이 하나도 남지 않았을 때만 Work artifact 디렉터리와 범위가 정해진 team
+파일을 삭제한다. Git이 이력을 보존하므로 완료된 spec tombstone을 남기지 않는다.
 
-## Handle ephemeral work
+## 현재 대화에서 끝나는 작업을 처리한다
 
-For an ephemeral input, open no `work-state` module and create no Work artifact. Read the relevant
-canon, implement inside the agreed boundary, run the agreed check, and finish in the current
-session. If interruption recovery, a durable knowledge decision, independent verification, or
-unclosed risk becomes necessary, stop before doing more and route to `direct` to promote the current
-dirty delta with `base_revision: HEAD`.
+ephemeral input에는 `work-state` 모듈을 열지 않고 Work artifact도 만들지 않는다. 관련 canon을 읽고
+합의된 경계 안에서 구현하며 합의한 check를 실행하고 현재 session에서 끝낸다. 중단 복구, 지속 지식
+결정, 독립 verification 또는 닫히지 않은 risk가 필요해지면 더 진행하기 전에 멈추고, 현재 dirty
+delta를 `base_revision: HEAD`로 승격하도록 `direct`로 보낸다.
 
-## Report the hand-off
+## 인계를 보고한다
 
-Return:
+다음을 반환한다.
 
-- `Safe point:` the commit or `none`, plus owned dirty paths that remain;
-- `Route and action:` one next route and one bounded action, or `closed`;
-- `Divergences:` broken premises, out-of-owner spec clauses, blockers, candidates, and unproven
-  observations, or `none`;
-- `Read set:` the canonical and Work files actually opened.
+- `Safe point:` commit 또는 `none`, 그리고 남아 있는 소유 dirty path
+- `Route와 행동:` 다음 route 하나와 범위가 정해진 행동 하나, 또는 `closed`
+- `이탈:` 잘못된 전제, owner 밖의 spec 조항, blocker, candidate, unproven observation, 또는 `none`
+- `읽은 범위:` 실제로 연 canonical 및 Work 파일
 
-Do not direct a new goal, change acceptance, perform the independent Verify judgment, reconstruct
-project status, coordinate branches, or absorb maintained brownfield sources.
+새 goal을 지시하거나 acceptance를 바꾸거나 독립적인 Verify judgment를 수행하거나 프로젝트 status를
+재구성하거나 branch를 조정하거나 유지되는 brownfield source를 흡수하지 않는다.
