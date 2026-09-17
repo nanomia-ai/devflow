@@ -1,0 +1,6 @@
+# Reproducible local build and fresh-session workspaces
+.tmp/
+dist/
+
+# Local Codex marketplace registration used by installation tests
+.agents/plugins/marketplace.json
