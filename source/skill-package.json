@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "packageId": "devflow",
+  "packageVersion": "0.3.0",
+  "modules": {
+    "project-knowledge": "modules/project-knowledge.md",
+    "project-gate": "modules/project-gate.md",
+    "team-context": "modules/team-context.md",
+    "work-state": "modules/work-state.md"
+  },
+  "targets": {
+    "adopt": "targets/adopt/target.json",
+    "architecture": "targets/architecture/target.json",
+    "design": "targets/design/target.json",
+    "direct": "targets/direct/target.json",
+    "product": "targets/product/target.json",
+    "resume": "targets/resume/target.json",
+    "sketch": "targets/sketch/target.json",
+    "verify": "targets/verify/target.json",
+    "work": "targets/work/target.json"
+  }
+}

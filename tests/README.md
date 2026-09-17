@@ -1,0 +1,32 @@
+# Devflow vNext implementation evidence
+
+`plan/**` is the immutable accepted baseline. This index routes to implementation evidence and
+records only places where current implementation bytes do not yet execute that baseline literally;
+it does not amend or restate the plan.
+
+## Evidence routes
+
+| Question | Evidence home |
+|---|---|
+| Can a fresh AI select the right project document and next action? | [document routing preflight](document-routing-preflight/README.md) |
+| Can Resume recover one trustworthy route without writing? | [Resume target](resume-target/README.md) |
+| Can Direct choose persistence and publish a usable contract? | [Direct target](direct-target/README.md) |
+| Can Work implement, preserve custody, and survive interruption? | [Work target](work-target/README.md) |
+| Can Verify execute acceptance honestly and publish evidence before routing? | [Verify target](verify-target/README.md) |
+| Can Product, Architecture, and optional Design publish a coherent project foundation without duplicating ownership? | [Foundation targets](foundation-target/README.md) |
+| Can Sketch preserve only decision-making exploration and return project/change conclusions to the right owner? | [Sketch target](sketch-target/README.md) |
+| Can Adopt transfer unmanaged brownfield knowledge, expose conflicts, retire old prose, and become independent of its inputs? | [Adopt target](adopt-target/README.md) |
+| Can interrupted actors hand off bounded private context without splitting shared state, and can parallel branches integrate through Git? | [Team hand-off and parallel integration](team-handoff/README.md) |
+| Can one npm artifact install, update, and uninstall through both host adapters, and what host behavior remains unproven? | [Host delivery](host-delivery/README.md) |
+| Can one session-written foundation carry a real change through Direct, Work, Resume, Verify, and clean closure on the same evolving tree? | [Whole journey](whole-journey/README.md) |
+
+## Plan-execution differences
+
+Keep a row only while a current byte-level difference changes a later implementation decision.
+Detailed observations stay in the linked evidence home.
+
+| Plan coordinate | Current implementation difference | Evidence | Status and next decision |
+|---|---|---|---|
+| `plan/02-skill-and-document-architecture.md` §6, eligibility projection | The current Skill Rails builder projects the authored entry verbatim and has no separate host-description projection. Eligibility therefore lives in `project-gate` and the generated entries, while their frontmatter descriptions remain trigger-only. | [`source/modules/project-gate.md`](../source/modules/project-gate.md), [`source/targets/resume/entry.md`](../source/targets/resume/entry.md), [installed-host observations](host-delivery/accepted-observations.md) | `proven` for the observed Resume status/continuation route, including hook-off projects with no host connector; the other eight installed entry routes remain `unproven`. Keep the gate in its one authored owner and reopen only on an observed misroute. |
+| `plan/02-skill-and-document-architecture.md` §5, index-owned orientation | Resume currently carries bounded orientation steps in addition to deferring to the index because no bootstrap target yet generates an index skeleton that can own the complete procedure. | [`source/targets/resume/entry.md`](../source/targets/resume/entry.md), [Resume evidence](resume-target/README.md) | `unproven`; when the first bootstrap writer is observed, compare one index owner with the current fallback and remove the duplicate only if the index remains usable without the skill. |
+| `plan/02-skill-and-document-architecture.md` §4 and `plan/08-document-contracts.md` §3, the unstated CLI/UI boundary | The current targets treat a promised human-facing command line as Design-applicable. Adopt publishes Design only when maintained source contains current experience knowledge to reconstruct; otherwise Architecture records applicability and the post-adoption route is Design, avoiding a placeholder filled with Product or Domain facts. | [`source/targets/adopt/entry.md`](../source/targets/adopt/entry.md), [`source/targets/architecture/entry.md`](../source/targets/architecture/entry.md), [Adopt evidence](adopt-target/README.md) | `unproven` across project types. Reopen if a later CLI-only Architecture reasonably declares Design inapplicable without a recorded condition, or Work is observed deciding command interaction with no Design route. |

@@ -1,0 +1,14 @@
+{
+  "name": "@nanomia/devflow",
+  "version": "0.3.0",
+  "description": "Nine portable AI skills for planning, implementing, verifying, and resuming software work through a self-contained .devflow document system.",
+  "license": "MIT",
+  "author": "nanomia",
+  "type": "module",
+  "files": [
+    "plugin.json",
+    ".claude-plugin/plugin.json",
+    "skills/",
+    "LICENSE"
+  ]
+}

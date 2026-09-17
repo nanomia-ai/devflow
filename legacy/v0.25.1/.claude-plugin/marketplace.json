@@ -1,0 +1,12 @@
+{
+  "name": "nanomia",
+  "description": "nanomia's AI-session development tooling — devflow: planning → implementation → verification flow",
+  "owner": { "name": "nanomia" },
+  "plugins": [
+    {
+      "name": "devflow",
+      "source": "./",
+      "description": "Planning → architecture → design → direct → work → verify → resume development flow, with adopt for existing codebases"
+    }
+  ]
+}

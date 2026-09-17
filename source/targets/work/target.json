@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "targetId": "work",
+  "mode": "prose",
+  "entry": "entry.md",
+  "imports": ["project-gate", "team-context", "work-state"]
+}

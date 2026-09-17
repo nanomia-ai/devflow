@@ -1,0 +1,34 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "devflow",
+  "version": "0.3.0",
+  "description": "Nine portable AI skills that keep project knowledge, work custody, and verification evidence in a self-contained .devflow tree.",
+  "author": {
+    "name": "nanomia"
+  },
+  "license": "MIT",
+  "keywords": [
+    "ai-skills",
+    "development-workflow",
+    "project-knowledge"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Devflow",
+        "shortDescription": "Plan, deliver, verify, and resume through durable project documents.",
+        "longDescription": "Nine AI skills for new projects, brownfield adoption, bounded delivery, verification, recovery, and durable project knowledge in .devflow.",
+        "developerName": "nanomia",
+        "category": "Productivity",
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
+        "defaultPrompt": [
+          "Resume this project's current Devflow route.",
+          "Plan and deliver this change through Devflow."
+        ]
+      }
+    }
+  }
+}
