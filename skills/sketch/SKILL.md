@@ -54,12 +54,13 @@ unresolved_findings:
     landing_condition: <evidence or decision that makes it ready to absorb>
 ```
 
-All four fields are required while the artifact exists; after every finding is ready, keep
-`unresolved_findings: []` through its landing handoff. A blocker is something that prevents the
-next action, not the fact that the answer is not known yet. Replace the snapshot before custody can
-change if the current action cannot finish; do not append attempts, transcript, progress percentage,
-or prior routes. The actor for the published `next_route` owns the snapshot. If custody is unclear,
-do not overwrite it and route to the user.
+All four fields are required while the artifact exists. A finding remains in
+`unresolved_findings` until its conclusion is absorbed into the named canonical home; meeting its
+`landing_condition` makes it eligible for hand-off but does not remove it. A blocker is something
+that prevents the next action, not the fact that the answer is not known yet. Replace the snapshot
+before custody can change if the current action cannot finish; do not append attempts, transcript,
+progress percentage, or prior routes. The actor for the published `next_route` owns the snapshot.
+If custody is unclear, do not overwrite it and route to the user.
 
 For the selected artifact, open `references/team-context.md` when a bounded note for its ID exists
 or when you hold local delta, environment-specific, or tentative context that must survive a
@@ -92,22 +93,18 @@ Sketch rather than inventing a conclusion.
 
 ## Hand off conclusions to their owners
 
+Before publishing a decision-ready conclusion, open `references/sketch-handoff.md` and follow its
+sender contract.
+
 When a finding is decision-ready, express the conclusion in the destination's own terms rather than
 as a research narrative. Project-scope product meaning routes mainly to `product`; technical and UI
 findings route to `architecture` or `design` when those stages can absorb them. Change-scope answers
 route only the delivery decision to `direct`, while facts that remain true beyond the change first
 route to their one Product, Domain, Architecture, Design, or decision home.
 
-Remove a resolved item from `unresolved_findings`. If any remain, keep `next_route: sketch` and name
-one next action. When all are ready for one owner, publish that owner as `next_route` and make the
-next action name the conclusion to absorb and its canonical destination. Do not write the owner
-document from Sketch. The destination actor absorbs the named conclusion and removes that item from
-the snapshot. It republishes the next owner and action when another landing remains; after the final
-landing it removes the Sketch directory and any `team/*/<artifact-id>.md` files. Git retains history.
-
-If ready conclusions have different owners, hand off one bounded landing at a time and keep the
-remaining items in the same snapshot. Do not duplicate a conclusion in several destinations or
-delete the artifact before every landing is complete.
+Publish one bounded landing at a time and keep the selected item and every remaining item in the
+snapshot until the receiving actor completes the shared hand-off contract. Do not write the owner
+document from Sketch. Git retains the final history after the receiver closes the artifact.
 
 ## Return the current decision edge
 

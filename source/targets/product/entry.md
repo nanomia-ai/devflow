@@ -15,6 +15,10 @@ Before any target-specific action, open `references/project-gate.md` and apply t
 Then open `references/project-knowledge.md`. When a readable `.devflow/index.md` already exists,
 read it before selecting Product inputs.
 
+When a readable Sketch state names `product` as `next_route`, open
+`references/sketch-handoff.md` before writing and complete its receiver contract together with the
+Product publication.
+
 Enter Product only for a clear new-project brief, a completed project Sketch routed here, or an
 open question that changes product meaning. Maintained brownfield sources without an internal
 Devflow foundation route to `adopt`; an uncertain idea that still needs investigation routes to

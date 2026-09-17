@@ -3,5 +3,5 @@
   "targetId": "direct",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["project-gate", "work-state"]
+  "imports": ["project-gate", "sketch-handoff", "work-state"]
 }

@@ -16,6 +16,10 @@ Before any target-specific action, open `references/project-gate.md` and apply t
 Then open `references/project-knowledge.md` and the readable `.devflow/index.md`. Read Product and
 Architecture before deciding whether Design applies.
 
+When a readable Sketch state names `design` as `next_route`, open
+`references/sketch-handoff.md` before writing and complete its receiver contract together with the
+Design publication.
+
 If Architecture says Design does not apply, create or edit no project document and route to
 `direct`. If applicability is absent, contradictory, or technically open, route to `architecture`
 rather than guessing. When Design applies, read only the Domain parents and existing Design

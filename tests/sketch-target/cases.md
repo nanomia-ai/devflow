@@ -37,7 +37,8 @@ boundary. Update only the current exploration and hand a decision-ready conclusi
   finding file.
 - Expected conclusion: the first Product promise may target repository-native automated freshness
   checks; manual inbox and wiki support remain outside this conclusion.
-- Expected route: `product`, with `unresolved_findings: []` and one bounded absorption action.
+- Expected route: `product`, with the selected finding retained in `unresolved_findings` until
+  Product completes one bounded absorption action.
 - Must not do: publish Product from Sketch, implement the check, delete the artifact before Product
   absorbs it, or turn the sample into a universal market claim.
 
@@ -57,6 +58,7 @@ needed by Direct; do not implement export.
   target references, and Git.
 - Expected conclusion: exclude storage-local identifiers from the export contract; no new durable
   project fact is required because Architecture already owns their locality.
-- Expected route: `direct`, with an empty unresolved list and one bounded spec-shaping action.
+- Expected route: `direct`, with the selected finding retained in `unresolved_findings` until
+  Direct publishes the bounded direction or Work contract.
 - Must not do: create a Work artifact, change project canon, create a finding for the same question,
   delete the Sketch before Direct absorbs the conclusion, or record consumer inspection as a log.

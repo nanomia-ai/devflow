@@ -3,5 +3,5 @@
   "targetId": "architecture",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["project-gate", "project-knowledge"]
+  "imports": ["project-gate", "project-knowledge", "sketch-handoff"]
 }

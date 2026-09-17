@@ -5,6 +5,7 @@
   "modules": {
     "project-knowledge": "modules/project-knowledge.md",
     "project-gate": "modules/project-gate.md",
+    "sketch-handoff": "modules/sketch-handoff.md",
     "team-context": "modules/team-context.md",
     "work-state": "modules/work-state.md"
   },

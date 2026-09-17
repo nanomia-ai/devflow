@@ -16,6 +16,10 @@ meaning or decide the detailed user experience.
 Before any target-specific action, open `references/project-gate.md` and apply the `architecture`
 row. Then open `references/project-knowledge.md` and the readable `.devflow/index.md`.
 
+When a readable Sketch state names `architecture` as `next_route`, open
+`references/sketch-handoff.md` before writing and complete its receiver contract together with the
+Architecture publication.
+
 Architecture requires a complete `.devflow/project/product.md`. Read Product for the system promise
 and cross-domain composition, then open only the Domain parents and existing Architecture children
 routed by the current technical question. If Product meaning is incomplete or contradictory, make

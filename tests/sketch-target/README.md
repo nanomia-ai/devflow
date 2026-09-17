@@ -16,8 +16,8 @@ Observe separately:
 
 ## Result
 
-Verdict: **proven on this host for project creation, transcript-free project recovery, and
-change-decision recovery.**
+Verdict: **proven on this host for project creation and transcript-free recovery to a
+decision-ready hand-off. Receiver-side canonical landing and final cleanup are unproven.**
 
 Package evidence (Core `1.0.3`, package `0.3.0`):
 
@@ -45,23 +45,41 @@ evidence. It found the active Sketch through the index/state route, opened its s
 updated those two current files without creating another artifact or reconstructing a transcript.
 
 The result distinguished observed Git/cohort facts from its bounded interpretation, excluded the
-wiki-only teams from the conclusion, cleared `unresolved_findings`, and routed one Product landing:
-the first release may promise repository-native freshness checks in the existing pull-request path.
-It did not publish Product or delete the Sketch before absorption.
+wiki-only teams from the conclusion, and routed one Product landing: the first release may promise
+repository-native freshness checks in the existing pull-request path. On those earlier bytes it
+cleared `unresolved_findings` before Product absorbed the conclusion. That state transition is not
+current proof of a complete hand-off; the current contract retains the item until its receiver
+publishes the canonical landing.
 
 ### C — interrupted change decision
 
 One fresh session read the ready foundation, the pre-existing change brief and state, the consumer
 evidence in the prompt, target references, and Git. It replaced the brief's unknown with the current
-consumer evidence and conclusion, then published `next_route: direct` with an empty unresolved
-list. The conclusion excludes storage-local identifiers from backup export and adds no project
-canon because Architecture already owns identifier locality.
+consumer evidence and conclusion, then published `next_route: direct`. On those earlier bytes it
+also removed the item before Direct absorbed it. The conclusion excludes storage-local identifiers
+from backup export and adds no project canon because Architecture already owns identifier locality;
+the current contract now keeps the item until Direct publishes that landing.
 
 No Work contract, finding child, code, project-canon edit, or early Sketch deletion appeared. The
 project and change cases used the same brief/state shape without Work's acceptance, write boundary,
 base revision, verification, or implementation custody. For these cases, an independent Sketch is
 simpler than treating exploration as a Work subtype while preserving the user-requested exploration
 entry.
+
+## Current hand-off contract repair
+
+The prior Sketch entry assigned canonical absorption and cleanup to a destination actor, but the
+Product, Architecture, Design, and Direct entries did not make that obligation reachable. It also
+removed a ready item before saying that the receiver would remove the same item. The canonical
+source now has one conditional `sketch-handoff` module consumed by the sender and all four possible
+receivers. A finding remains current until its named canonical landing succeeds; only the receiver
+then removes it, advances the next bounded action, or deletes the finished Sketch and its bounded
+team notes.
+
+Skill Rails Core `1.0.4` built the nine-target cohort twice to identical per-target tree hashes.
+The generated artifacts report current source and intact receipts. This proves delivery of the
+shared contract, not receiver behavior. One fresh Product landing after the planned language
+conversion will attack both remaining risks without multiplying target-by-target tests.
 
 ## Reopen boundaries
 

@@ -21,6 +21,10 @@ Follow index routes to the smallest Product, Domain, Architecture, Design, and d
   Work-state glob to find an active contract with the same still-open outcome before minting a new
   artifact.
 
+When a readable Sketch state names `direct` as `next_route`, open
+`references/sketch-handoff.md` before writing and complete its receiver contract together with the
+ephemeral direction or tracked Work publication.
+
 ## Route questions before writing
 
 First decide whether the request is ready to direct.
