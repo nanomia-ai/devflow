@@ -19,8 +19,8 @@ Product, Domain, Architecture, Design, decision 문서만 읽는다. 현재 Git 
 새 artifact를 만들기 전에 index의 범위가 정해진 Work state glob으로 아직 열린 결과가 같은 활성
 계약이 있는지 찾는다.
 
-읽을 수 있는 Sketch state의 `next_route`가 `direct`라면 쓰기 전에
-`references/sketch-handoff.md`를 열고, ephemeral 지시 또는 추적되는 Work 공개와 함께 receiver
+현재 member의 Sketch state의 `next_route`가 `direct`라면 쓰기 전에
+`references/sketch-handoff.md`를 열고, ephemeral 지시 또는 추적되는 Work 공개와 함께 landing
 계약을 완료한다.
 
 ## 쓰기 전에 질문을 route한다

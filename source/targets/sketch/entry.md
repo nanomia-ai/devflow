@@ -12,7 +12,7 @@ Sketch는 하나의 지배 질문을 결정 가능한 상태로 만드는 데 �
 ## 탐구를 지속해야 할 때만 진입한다
 
 target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `sketch` 행을 적용한다. 이어서
-`references/project-knowledge.md`를 연다. `.devflow/index.md`를 읽을 수 있으면 먼저 읽고, 지배
+`references/project-knowledge.md`와 `references/team-context.md`를 연다. `.devflow/index.md`를 읽을 수 있으면 먼저 읽고, 지배
 질문에 관련된 프로젝트 route만 따른다.
 
 다음 세 조건이 모두 참일 때만 Sketch를 만든다.
@@ -32,8 +32,9 @@ foundation이 생기기 전에 답이 제품 의미를 확립한다면 `project`
 ## 복구 가능한 최소 artifact를 연다
 
 `S-short-label-<token>`처럼 충돌하기 어려운 불투명 ID를 만들고 현재 tree에 없는지 확인한다.
-`.devflow/sketches/<artifact-id>/brief.md`와 `state.md`를 만들며, 모든 파일은 공통 routing header를
-사용한다.
+`.devflow/team/<current-member>/sketches/<artifact-id>/brief.md`와 `state.md`를 만들며, 모든 파일은
+공통 routing header를 사용한다. 이 폴더는 현재 member의 개인 탐구 작업면이다. 다른 member의 Sketch를
+중복 질문 탐색, 비교 또는 취합을 위해 열지 않는다.
 
 `brief.md`는 탐구 이유를 스스로 설명해야 한다. project/change scope, 하나의 지배 질문, 배경과
 사용자 의도, 이미 확인된 사실, 명시적인 비범위, 답이 결정 가능한 상태가 되는 기준을 쓴다. 대화,
@@ -52,19 +53,15 @@ unresolved_findings:
 ```
 
 artifact가 존재하는 동안 네 필드는 모두 필수다. finding은 결론이 지정된 canonical home에 흡수될
-때까지 `unresolved_findings`에 남는다. `landing_condition`을 충족하면 handoff할 수 있을 뿐, 그
+때까지 `unresolved_findings`에 남는다. `landing_condition`을 충족하면 게시할 준비가 되었을 뿐, 그
 자체로 항목이 제거되지는 않는다. blocker는 다음 행동을 막는 것이며, 아직 답을 모른다는 사실 자체가
-아니다. 현재 행동을 끝내지 못한 채 관리권이 바뀔 수 있다면 먼저 snapshot을 교체한다. 시도, 대화,
-진행률, 이전 route를 덧붙이지 않는다. 공개된 `next_route`의 actor가 snapshot을 소유한다. 관리권이
-불분명하면 덮어쓰지 말고 사용자에게 보낸다.
-
-선택한 artifact ID에 해당하는 범위가 정해진 note가 있거나, handoff 뒤에도 보존해야 하는 local
-delta, 환경 고유 맥락 또는 잠정 맥락을 가지고 있다면 `references/team-context.md`를 연다. 그렇지
-않으면 건너뛴다.
+아니다. 현재 행동을 끝내지 못한 채 같은 member의 다음 역할로 전환해야 한다면 먼저 snapshot을
+교체한다. 시도, 대화, 진행률, 이전 route를 덧붙이지 않는다. `next_route`는 다음 Devflow 역할을
+지정하며 member를 바꾸지 않는다. 별도의 `team/<member>/<artifact-id>.md` note는 만들지 않는다.
 
 Sketch가 프로젝트의 첫 진입점이면 작은 `.devflow/index.md`도 공개한다. 프로젝트를 한 줄로 설명하고,
 열린 탐구는 범위가 정해진 Sketch state glob으로 route하며, 즉시 복구에 쓰는
-`sketches/*/state.md`, `adoption/state.md`, `work/*/state.md` glob만 노출한다. Product와
+`team/<current-member>/sketches/*/state.md`, `adoption/state.md`, `work/*/state.md` glob만 노출한다. Product와
 Architecture, 그리고 해당되는 Design이 완료되기 전에는 foundation이 준비되지 않았다고 밝힌다.
 질문의 증거를 index에 복제하거나 활성 ID를 열거하지 않는다. index가 이미 있다면 질문 route나
 readiness 문장이 실제로 바뀔 때만 수정한다.
@@ -85,9 +82,9 @@ trade-off, 현재 결론 또는 unknown, 확인 조건을 둔다. destination을
 의존성을 `blockers`에 넣고 `next_route: user`를 사용하며, 결론을 꾸며내는 대신 어떤 답이 Sketch를
 재개시키는지 적는다.
 
-## 결론을 소유자에게 넘긴다
+## 확정된 결론만 canonical owner에 반영한다
 
-결정 가능한 결론을 공개하기 전에 `references/sketch-handoff.md`를 열고 sender 계약을 따른다.
+결정 가능한 결론을 공개하기 전에 `references/sketch-handoff.md`를 열고 landing 계약을 따른다.
 
 finding이 결정 가능한 상태가 되면 조사 서술이 아니라 destination의 언어로 결론을 표현한다.
 project scope의 제품 의미는 주로 `product`로 보낸다. 기술 및 UI finding은 해당 stage가 흡수할 수
@@ -95,9 +92,9 @@ project scope의 제품 의미는 주로 `product`로 보낸다. 기술 및 UI f
 보내며, 해당 변경 뒤에도 계속 참인 사실은 먼저 하나의 Product, Domain, Architecture, Design 또는
 decision home으로 보낸다.
 
-한 번에 범위가 정해진 landing 하나만 공개하고, receiving actor가 공통 handoff 계약을 완료할 때까지
+한 번에 범위가 정해진 landing 하나만 공개하고, 같은 member의 다음 역할이 공통 landing 계약을 완료할 때까지
 선택한 항목과 남은 모든 항목을 snapshot에 유지한다. Sketch에서 owner 문서를 작성하지 않는다.
-receiver가 artifact를 닫은 뒤에는 Git이 최종 이력을 보존한다.
+다음 역할이 artifact를 닫은 뒤에는 Git이 최종 이력을 보존한다.
 
 ## 현재 결정 경계를 반환한다
 
@@ -110,5 +107,5 @@ receiver가 artifact를 닫은 뒤에는 Git이 최종 이력을 보존한다.
 - `미검증 또는 차단:` 부족한 증거, 구속력 있는 사용자 선택, 각각의 재개 조건
 
 Product, Domain, Architecture, Design, Work, adoption, 구현 또는 verification 파일을 만들거나
-수정하지 않는다. 질문이 현재 대화에서 바로 handoff할 수 있게 되었거나, 원래 대화 없이도 brief와
+수정하지 않는다. 질문이 현재 대화에서 바로 landing할 수 있게 되었거나, 원래 대화 없이도 brief와
 현재 snapshot만으로 재개할 수 있는 지속 Sketch가 되었을 때 완료다.

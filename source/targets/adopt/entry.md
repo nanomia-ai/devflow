@@ -61,7 +61,7 @@ boundary를 검사할 수 있고 authority, 찾는 knowledge, target, dispositio
 
 같은 adoption boundary에서 작은 `.devflow/index.md`를 만들거나 갱신한다. 답을 복제하지 않고 프로젝트
 방향을 알려주며 현재 Product, Domain, Architecture, Design, adoption 질문을 route한다. 즉시 복구에
-쓰는 `sketches/*/state.md`, `adoption/state.md`, `work/*/state.md` glob만 노출하고 현재 canon과 adoption
+쓰는 `team/<current-member>/sketches/*/state.md`, `adoption/state.md`, `work/*/state.md` glob만 노출하고 현재 canon과 adoption
 status로 readiness를 도출한다. source group이나 active artifact ID를 열거하지 않는다.
 
 ## 산문이 아니라 의미를 재구성한다

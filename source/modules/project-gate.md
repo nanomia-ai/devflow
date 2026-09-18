@@ -12,3 +12,5 @@ target별 행동을 시작하기 전에 이 진입 조건을 적용한다. 폴�
 준비 상태는 경로 존재가 아니라 문서 내용과 index 규칙으로 판단한다. 사용할 수 있는 index가 있으면 먼저 읽는다. 프로젝트별 routing은 index가 소유하며, 전역 lifecycle이 소유하지 않는다.
 
 조정 상태의 `next_route` 값은 `sketch`, `adopt`, `product`, `architecture`, `design`, `direct`, `work`, `verify`, `user` 중 정확히 하나다. `resume`은 진입 및 복구 보고 기능이며, 지속되는 custody route가 아니다.
+
+경로의 `<current-member>`는 repository의 `git config user.name`을 안정적인 slug로 변환한 현재 팀 identity다. 값이 없거나 안정적인 slug를 만들 수 없으면 registry를 만들지 말고 사용자에게 짧은 team label 하나를 요청한다. index에는 `<current-member>` placeholder를 그대로 두고, 각 reader가 현재 identity로 해석한다. member별 glob을 나열하지 않는다. 이 namespace는 개인 작업의 기본 발견 경계이지 Git 접근 제어나 비밀 보장이 아니다.

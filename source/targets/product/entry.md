@@ -11,7 +11,7 @@ Product는 처음 대화가 없어도 프로젝트의 목적과 업무 의미를
 
 target별 행동을 시작하기 전에 `references/project-gate.md`를 열고 `product` 조건을 적용한다. 이어서 `references/project-knowledge.md`를 연다. 읽을 수 있는 `.devflow/index.md`가 이미 있으면 Product 입력을 선택하기 전에 읽는다.
 
-읽을 수 있는 Sketch state가 `next_route`로 `product`를 지정하면 파일을 쓰기 전에 `references/sketch-handoff.md`를 열고, Product 게시와 함께 receiver 계약을 완료한다.
+현재 member의 Sketch state가 `next_route`로 `product`를 지정하면 파일을 쓰기 전에 `references/sketch-handoff.md`를 열고, Product 게시와 함께 landing 계약을 완료한다.
 
 명확한 새 프로젝트 brief, 여기로 route된 완료된 project Sketch, 또는 제품 의미를 바꾸는 열린 질문이 있을 때만 Product에 진입한다. 내부 Devflow foundation이 없는 maintained brownfield source는 `adopt`로 route한다. 아직 조사가 필요한 불확실한 아이디어는 `sketch`로 route한다. 여러 session이 필요한 인터뷰를 보관하려고 불완전한 canonical Product를 게시하지 않는다. 불확실성은 Sketch에 보존하고, 일관된 현재 답만 Product에 게시한다.
 
@@ -33,7 +33,7 @@ Domain은 지식 경계이며 menu item, code module, team, skill이 아니다. 
 
 새 프로젝트에서는 `.devflow/project/product.md`, 필요한 `.devflow/project/domains/<domain>/index.md`, `.devflow/index.md`를 게시하기 전에 완전한 현재 문서로 구성한다. Product 문서는 누가 어떤 문제를 겪는지, 약속할 가치, scope와 non-scope, 공통 언어, domain 간 구성, 제품 불변 조건, 열린 제품 질문에 답해야 한다. 빈 section은 생략하고 문서를 완전해 보이게 하려고 사실을 만들지 않는다.
 
-index는 제품 경계 질문을 Product로, Domain 업무 질문을 알맞은 Domain parent로, 기술 질문을 존재하는 Architecture로, UI 질문을 적용 가능한 Design으로 route한다. 활성 작업 복구에는 immediate `sketches/*/state.md`, `adoption/state.md`, `work/*/state.md` glob만 노출한다. Architecture 준비 상태는 완전한 Product와 `project/architecture.md`에서 판단하고, Design 준비 상태는 Architecture의 적용 여부와 필요한 경우 `project/design.md`에서 판단한다고 설명한다. 존재하지 않는 Architecture나 Design 파일을 placeholder로 만들지 않는다.
+index는 제품 경계 질문을 Product로, Domain 업무 질문을 알맞은 Domain parent로, 기술 질문을 존재하는 Architecture로, UI 질문을 적용 가능한 Design으로 route한다. 활성 작업 복구에는 immediate `team/<current-member>/sketches/*/state.md`, `adoption/state.md`, `work/*/state.md` glob만 노출한다. Architecture 준비 상태는 완전한 Product와 `project/architecture.md`에서 판단하고, Design 준비 상태는 Architecture의 적용 여부와 필요한 경우 `project/design.md`에서 판단한다고 설명한다. 존재하지 않는 Architecture나 Design 파일을 placeholder로 만들지 않는다.
 
 기존 프로젝트를 수정할 때는 현재 의미가 바뀐 canonical Product와 Domain 문서만 교체한다. 질문 route가 바뀐 경우에만 가장 가까운 parent index를 갱신한다. 이후에도 존재해야 결정을 보호할 수 있는 이유는 현재 decision 문서 하나에 둔다. Product 본문을 change log로 만들지 않는다.
 

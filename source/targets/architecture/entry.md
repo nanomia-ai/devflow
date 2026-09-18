@@ -11,7 +11,7 @@ Architecture는 완전한 Product와 업무 Domain을 이후 변경이 안전하
 
 target별 행동을 시작하기 전에 `references/project-gate.md`를 열고 `architecture` 조건을 적용한다. 이어서 `references/project-knowledge.md`와 읽을 수 있는 `.devflow/index.md`를 연다.
 
-읽을 수 있는 Sketch state가 `next_route`로 `architecture`를 지정하면 파일을 쓰기 전에 `references/sketch-handoff.md`를 열고, Architecture 게시와 함께 receiver 계약을 완료한다.
+현재 member의 Sketch state가 `next_route`로 `architecture`를 지정하면 파일을 쓰기 전에 `references/sketch-handoff.md`를 열고, Architecture 게시와 함께 landing 계약을 완료한다.
 
 Architecture에는 완전한 `.devflow/project/product.md`가 필요하다. system promise와 domain 간 구성을 파악하기 위해 Product를 읽고, 현재 기술 질문이 route한 Domain parent와 기존 Architecture child만 연다. Product 의미가 불완전하거나 모순되면 기술 선택을 하지 않고 `product`로 route한다. 아직 흡수되지 않은 maintained brownfield 의미는 `adopt`로 route한다. 현재 custody 구간에서 끝낼 수 없는 조사는 불완전한 canonical Architecture를 남기지 말고 `sketch`로 route한다.
 
