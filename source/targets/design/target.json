@@ -3,5 +3,5 @@
   "targetId": "design",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["project-gate", "project-knowledge", "sketch-handoff"]
+  "imports": ["communication", "project-gate", "project-knowledge", "sketch-handoff"]
 }

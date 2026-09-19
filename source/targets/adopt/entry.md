@@ -9,6 +9,8 @@ Adopt는 관리되지 않던 기존 프로젝트를 이해하는 권한을 `.dev
 영구 참조용으로 요약하거나, 이전 Devflow 형식을 migration하거나, 유지 source로 확인할 수 있는 사실을
 사용자에게 다시 설명하라고 요구하지 않는다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 관리되지 않은 프로젝트 gate로 진입한다
 
 target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `adopt` 행을 적용한다. 이어서

@@ -3,5 +3,5 @@
   "targetId": "resume",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["project-gate"]
+  "imports": ["communication", "project-gate"]
 }

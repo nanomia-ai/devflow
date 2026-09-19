@@ -7,6 +7,8 @@ description: 완전한 Product foundation을 바탕으로 Devflow 프로젝트�
 
 Architecture는 완전한 Product와 업무 Domain을 이후 변경이 안전하게 작업할 수 있는 현재 기술 경계로 바꾼다. 구조, 의존 방향, runtime 및 data flow, public seam, 운영 경계, verification channel을 소유한다. 제품 의미를 다시 정의하거나 상세한 사용자 경험을 결정하지 않는다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 유효한 조건으로 진입
 
 target별 행동을 시작하기 전에 `references/project-gate.md`를 열고 `architecture` 조건을 적용한다. 이어서 `references/project-knowledge.md`와 읽을 수 있는 `.devflow/index.md`를 연다.

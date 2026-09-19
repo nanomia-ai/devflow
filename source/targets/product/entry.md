@@ -7,6 +7,8 @@ description: Devflow 프로젝트의 사용자, 문제, 가치, 제품 경계, �
 
 Product는 처음 대화가 없어도 프로젝트의 목적과 업무 의미를 이해할 수 있게 만든다. 제품이 어떤 문제를 누구를 위해 해결하고, 약속의 경계가 어디에서 끝나는지 결정한다. 구현 기술, runtime 구조, UI 체계, delivery task는 선택하지 않는다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 유효한 조건으로 진입
 
 target별 행동을 시작하기 전에 `references/project-gate.md`를 열고 `product` 조건을 적용한다. 이어서 `references/project-knowledge.md`를 연다. 읽을 수 있는 `.devflow/index.md`가 이미 있으면 Product 입력을 선택하기 전에 읽는다.

@@ -9,6 +9,8 @@ Devflow는 프로젝트 지식과 active work state를 `.devflow/` 아래에 둔
 checkout에서 신뢰할 수 있는 위치를 복구하고 안전한 다음 route와 행동 하나를 찾는 것이다. 실행
 stage가 아니라 read-only 방향 확인 작업이다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 진입 gate
 
 target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `resume` 행을 적용한다. gate가

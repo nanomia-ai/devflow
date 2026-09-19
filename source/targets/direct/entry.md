@@ -9,6 +9,8 @@ Direct는 사용자의 현재 요청에 필요한 가장 작은 안전한 실행
 국소 구현 선택은 executor에게 맡긴다. 변경이 크다는 이유만으로 과정 기록을 만들지 않으며, diff가
 작다는 이유만으로 지속되어야 할 의도를 숨기지 않는다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 진입 gate
 
 target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `direct` 행을 적용한다. gate가

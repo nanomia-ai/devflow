@@ -7,6 +7,8 @@ description: Architecture가 UI Design이 적용된다고 판단한 경우 Devfl
 
 Design은 적용 가능한 Product와 Architecture foundation을 이후 UI 변경이 구현하고 검토할 수 있는 현재 경험 원칙으로 바꾼다. 경험 방향, visual foundation, 구성요소 및 interaction 전략, accessibility, responsive behavior, state 표현, review surface를 소유한다. 업무 규칙이나 기술 seam을 다시 정의하지 않는다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 유효한 조건으로 진입
 
 target별 행동을 시작하기 전에 `references/project-gate.md`를 열고 `design` 조건을 적용한다. 이어서 `references/project-knowledge.md`와 읽을 수 있는 `.devflow/index.md`를 연다. Design 적용 여부를 판단하기 전에 Product와 Architecture를 읽는다.

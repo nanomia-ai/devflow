@@ -3,5 +3,5 @@
   "targetId": "verify",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["project-gate", "work-state"]
+  "imports": ["communication", "project-gate", "work-state"]
 }
