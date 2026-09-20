@@ -10,11 +10,16 @@ Adopt는 관리되지 않던 기존 프로젝트를 이해하는 권한을 `.dev
 영구 참조용으로 요약하거나, 이전 Devflow 형식을 migration하거나, 유지 source로 확인할 수 있는 사실을
 사용자에게 다시 설명하라고 요구하지 않는다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 관리되지 않은 프로젝트 gate로 진입한다
 
 target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `adopt` 행을 적용한다. 이어서
 `references/project-knowledge.md`를 연다. 읽을 수 있는 `.devflow/index.md`가 이미 있다면 먼저 읽고,
 진행 중인 adoption인지 새로 발견된 brownfield boundary인지 판단한다.
+
+Product 또는 Domain 문서를 구성하거나 교체하기 전에 `references/product-document.md`를 열고 문서의
+내용과 완료 기준에 적용한다.
 
 사용자가 기존 프로젝트를 adoption하라고 명시적으로 요청했거나, 다른 Devflow route가 내부 foundation이
 없는 maintained brownfield material을 발견했을 때만 진입한다. 명확한 새 brief는 `product`, 불확실한
@@ -62,7 +67,7 @@ boundary를 검사할 수 있고 authority, 찾는 knowledge, target, dispositio
 
 같은 adoption boundary에서 작은 `.devflow/index.md`를 만들거나 갱신한다. 답을 복제하지 않고 프로젝트
 방향을 알려주며 현재 Product, Domain, Architecture, Design, adoption 질문을 route한다. 즉시 복구에
-쓰는 `sketches/*/state.md`, `adoption/state.md`, `work/*/state.md` glob만 노출하고 현재 canon과 adoption
+쓰는 `team/<current-member>/sketches/*/state.md`, `adoption/state.md`, `work/*/state.md` glob만 노출하고 현재 canon과 adoption
 status로 readiness를 도출한다. source group이나 active artifact ID를 열거하지 않는다.
 
 ## 산문이 아니라 의미를 재구성한다
@@ -81,6 +86,10 @@ maintained source가 어떤 내용을 주장하거나 명시적으로 질문할 
 - maintained source가 명시적으로 제기했지만 어느 source도 해결하지 못한 unknown. 바뀔 decision과
   함께 한 번만 기록한다.
 - maintained source들이 서로 양립할 수 없는 현재 답을 뒷받침하는 conflict
+
+어느 maintained source에도 제품의 목적, 대상 또는 핵심 약속을 뒷받침하는 주장이 없어 자기완결적인 Product를 만들
+수 없다면 동작에서 의도를 추론하지 않는다. 현재 source가 확인하는 동작과 그 동작만으로는 정할 수
+없는 제품 의미를 구분해 `product`로 보낸다.
 
 각 unit은 그것을 해결하는 decision route의 문서 하나를 내부 home으로 가지며, 자신이 한정하는 문장
 옆에 둔다. 다른 home은 그 unit을 link할 수 있지만 completeness를 위해 다시 catalog하지 않는다.
@@ -116,6 +125,16 @@ verification channel, Design applicability를 소유한다. Design은 experience
 `next_route: user`는 답을 흡수할 decision route를 행동에 적은, 충분히 구성된 선택만 전달할 수 있다.
 경쟁하는 답과 consequence를 보여준 뒤에만 사용자에게 묻는다. foundation을 완전하게 보이게 하려고
 만들어낸 답을 다듬지 않는다.
+
+제품 의미가 자료끼리 충돌하는 경우와, 제품 의미를 뒷받침할 자료가 없는 경우를 구분한다. 전자는
+`conflicts.md`에 기록한다. 후자는 conflict로 만들지 않고 state를 `next_route: product`와 필요한 제품
+판단 및 Product가 읽을 source 경로를 적은 `next_action`으로 교체한다. 확인한 사실을 state에 복제하지
+않는다.
+
+Product가 답을 canonical Product 또는 Domain에 게시하고 state를 `next_route: adopt`로 되돌리면,
+그 답으로 해결된 conflict를 `conflicts.md`에서 지우고 게시된 의미를 기준으로 나머지 source 회계와
+foundation 완성을 계속한다. 그 전에는 목적, 대상이나 핵심 약속을 추측한 Product를 게시하거나
+adoption을 닫지 않는다.
 
 ## 입증된 경계 안에서만 work를 연다
 

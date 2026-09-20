@@ -67,3 +67,26 @@ Architecture, update the index only for the new UI question route, and route to 
 not create component-per-file children or implementation code. The supplied desktop and
 narrow-tablet classes may guide responsive behavior and review viewports, but an exact supported
 width boundary remains open unless Product or Architecture establishes it.
+
+## E. 해석에 따라 제품 약속이 달라지는 짧은 brief
+
+이 사례가 없으면 Product가 문서 항목을 설문처럼 묻지 않으면서도 중요한 제품 질문을 찾아내는지
+알 수 없다.
+
+### 첫 요청
+
+Product를 사용해 동네 공방이 수업을 등록하고 수강생이 예약과 결제를 할 수 있는 서비스를 정의해 주세요.
+운영자는 공방을 승인합니다.
+
+### 사용자 후속 답변
+
+이 제품은 공방 주인이 전화와 메신저로 받던 예약을 한곳에서 관리하도록 돕는 것이 우선입니다.
+여러 공방을 비교하거나 추천하는 서비스가 되는 것은 현재 목적이 아닙니다.
+
+### 관찰 기준
+
+- 첫 요청만으로 완성된 Product를 지어내지 않는다.
+- 사용자·가치·불변식 같은 문서 항목을 차례대로 묻지 않는다.
+- 현재 이해와 가능한 다른 해석이 제품 약속을 어떻게 바꾸는지 설명한 뒤, 두 방향을 가르는 질문을 한다.
+- 후속 답변에서 정해진 목적을 반영하고 결제 제공자·화면·기술 구조는 묻지 않는다.
+- 사용자가 명시적으로 제외한 비교·추천은 경계로 남길 수 있지만 다른 non-goal을 추가하지 않는다.

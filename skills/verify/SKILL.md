@@ -10,6 +10,8 @@ Verify는 실제 실행과 관찰로 수용된 Work 결과를 현재 계약에 �
 실행하지 않았거나 관찰할 수 없는 항목은 pass가 아니라 `unproven`이다. verification evidence는 선택한
 artifact에 속하며, 구현·계약·프로젝트 canon은 각각의 소유 route에 남는다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 유효한 계약으로 진입한다
 
 target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `verify` 행을 적용한다. gate가 다른

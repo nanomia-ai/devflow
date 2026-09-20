@@ -10,6 +10,8 @@ Direct는 사용자의 현재 요청에 필요한 가장 작은 안전한 실행
 국소 구현 선택은 executor에게 맡긴다. 변경이 크다는 이유만으로 과정 기록을 만들지 않으며, diff가
 작다는 이유만으로 지속되어야 할 의도를 숨기지 않는다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 진입 gate
 
 target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `direct` 행을 적용한다. gate가
@@ -20,8 +22,8 @@ Product, Domain, Architecture, Design, decision 문서만 읽는다. 현재 Git 
 새 artifact를 만들기 전에 index의 범위가 정해진 Work state glob으로 아직 열린 결과가 같은 활성
 계약이 있는지 찾는다.
 
-읽을 수 있는 Sketch state의 `next_route`가 `direct`라면 쓰기 전에
-`references/sketch-handoff.md`를 열고, ephemeral 지시 또는 추적되는 Work 공개와 함께 receiver
+현재 member의 Sketch state의 `next_route`가 `direct`라면 쓰기 전에
+`references/sketch-handoff.md`를 열고, ephemeral 지시 또는 추적되는 Work 공개와 함께 landing
 계약을 완료한다.
 
 ## 쓰기 전에 질문을 route한다

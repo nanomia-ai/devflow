@@ -3,5 +3,5 @@
   "targetId": "adopt",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["communication", "project-gate", "project-knowledge", "team-context"]
+  "imports": ["communication", "project-gate", "project-knowledge", "product-document", "team-context"]
 }

@@ -53,3 +53,22 @@ still-missing command-line experience foundation to Design.
 - Expected closure: remove `adoption/`, update index readiness, and route `design`.
 - Must not do: retain a competing authoritative guide, leave conflict history as current project
   truth, or claim verified runtime behavior beyond the existing executable tests.
+
+## C. Behavior exists but product purpose is absent
+
+Use Adopt to reconstruct this unmanaged repository into Devflow. Account for every maintained
+source, but do not infer why the product exists from implementation behavior alone.
+
+### Answer key
+
+- Confirm current behavior from code and tests without turning it into a product purpose or target
+  user, and do not catalog every unmentioned possibility as an unknown.
+- Because no maintained source supports the purpose, target, or core promise needed for a
+  self-contained Product, route only that product judgment through adoption state to `product`.
+- Do not publish a completed Product, close adoption, or record source absence as a conflict before
+  the decision is made.
+- Product publishes the decided meaning to canonical Product or Domain, replaces adoption state
+  with `next_route: adopt`, and does not edit `sources.md` or `conflicts.md`.
+- A later Adopt actor rereads the canon and completes the remaining source accounting and
+  foundation. Resume between actors must report the route recorded on disk; `direct` and `work`
+  remain closed until the existing readiness conditions are met.

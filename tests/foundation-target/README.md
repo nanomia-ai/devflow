@@ -105,6 +105,27 @@ updated the index, and routed to `direct`. It also replaced repeated Queue lifec
 references to the Queue Domain. The corrected Design behavior is proven for this fixture on this
 host.
 
+### Product document and elicitation evolution
+
+The Product target now imports a shared Product/Domain document contract and derives questions from
+meaningful competing product interpretations rather than from document fields. Two builds of the
+question-and-grounding source produced tree
+`87b6aa30165a11888a05ac54a4b46ad022e00df73612c7db1e53099a3055bb18`; integrity and source
+currentness passed. A fresh rerun of case A published the clear Incident Relay foundation without
+new questions or invented policy. In case E, earlier outputs that silently chose a marketplace
+purpose or cataloged unsupported payment and approval rules remain failed evidence. The repaired
+target first asked which product promise governed the brief, then used the user's workshop-operator
+answer to publish only the supported Product and Domains. Case E is proven for that single fresh
+run and bounded brief; the earlier divergent failures remain part of the evidence.
+
+The later shared adoption-return rule changed only the generated gate reference and the Product
+return wording. The current Product tree is
+`3a3f6c6874f21be269447afa107f9087ee51d25861f33bc2d65c6c8da38c1866`; two builds matched and
+integrity/currentness passed. Its Product leg was freshly observed in Adopt case C: it published the
+owner-supplied product meaning, left adoption accounting untouched, and returned custody to Adopt.
+Cases A and E were not rerun byte-for-byte on this final tree, so arbitrary ambiguous briefs,
+multi-session Sketch transfer, and broader stakeholder interviews remain unproven.
+
 ## Reopen boundaries
 
 - A coherent current foundation matters more than matching answer-key headings or wording.

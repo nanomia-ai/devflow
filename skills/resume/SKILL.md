@@ -10,13 +10,15 @@ Devflow는 프로젝트 지식과 active work state를 `.devflow/` 아래에 둔
 checkout에서 신뢰할 수 있는 위치를 복구하고 안전한 다음 route와 행동 하나를 찾는 것이다. 실행
 stage가 아니라 read-only 방향 확인 작업이다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 진입 gate
 
 target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `resume` 행을 적용한다. gate가
 Resume을 멈추면 아무것도 변경하지 않는다.
 
 `.devflow/`는 있지만 `index.md`가 없거나 읽을 수 없다면, 쓰지 않고 현재 존재하는 모든
-`.devflow/project/`, `.devflow/sketches/*/state.md`, `.devflow/adoption/state.md`,
+`.devflow/project/`, `.devflow/team/<current-member>/sketches/*/state.md`, `.devflow/adoption/state.md`,
 `.devflow/work/*/state.md` 경로를 inventory한다. foundation 문서만으로 route를 고르기 전에 범위가
 정해진 모든 active state 위치를 확인한다. 남아 있는 project 또는 artifact evidence로 index를 복구할
 writer route를 정한다. 그 route를 정할 수 없다면 사용자에게 보낸다. 기존 state 위에서 관리되지 않은
@@ -27,14 +29,14 @@ bootstrap을 다시 시작하지 않는다.
 
 ## 현재 위치를 복구한다
 
-1. index의 bounded glob으로 immediate active state만 열거한다. 모든 project 또는 Domain 문서를
-   재귀적으로 읽지 않는다.
+1. index의 bounded glob으로 immediate active state만 열거한다. Sketch는 현재 member의 glob만 따르며
+   다른 member의 Sketch를 찾거나 읽지 않는다. 모든 project 또는 Domain 문서를 재귀적으로 읽지 않는다.
 2. 현재 checkout의 Git revision과 bytes를 선택한 각 state의 intent, base, last safe point, next action과
    비교한다. active artifact 없는 dirty change는 소유자 없는 work이며, 진행 중인 것이 없다는 증거가
    아니다.
 3. active item이 여러 개면 모두 보고하고 하나를 고르도록 사용자에게 보낸다. 하나라면 해당
-   `spec.md` 또는 `brief.md`, 존재하는 범위가 정해진 `team/*/<artifact-id>.md`, Resume 자체가 현재
-   route를 해석하는 데 필요한 project 문서만 연다. spec 또는 brief의 `read_first`는 routed actor의
+   `spec.md` 또는 `brief.md`, Work의 `team/*/<work-id>.md` 또는 Adoption의 `team/*/adoption.md`,
+   Resume 자체가 현재 route를 해석하는 데 필요한 project 문서만 연다. spec 또는 brief의 `read_first`는 routed actor의
    input이다. 선택한 state·sibling·Git evidence가 서로 어긋나고 recovery owner를 찾는 데 그 project
    문서가 필요한 경우가 아니라면 방향 확인 중에는 따르지 않는다.
 4. foundation 문서는 그 내용이 index가 지정한 contract와 readiness rule을 충족할 만큼 완전할 때만

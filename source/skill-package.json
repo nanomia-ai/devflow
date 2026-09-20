@@ -4,6 +4,7 @@
   "packageVersion": "0.3.0",
   "modules": {
     "communication": "modules/communication.md",
+    "product-document": "modules/product-document.md",
     "project-knowledge": "modules/project-knowledge.md",
     "project-gate": "modules/project-gate.md",
     "sketch-handoff": "modules/sketch-handoff.md",

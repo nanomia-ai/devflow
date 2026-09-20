@@ -7,8 +7,10 @@ target별 행동을 시작하기 전에 이 진입 조건을 적용한다. 폴�
 - index와 활성 Sketch만 있으면 `sketch`, `product`, `adopt`가 쓸 수 있고 `resume`이 읽을 수 있다. `direct`, `work`, `verify`는 아직 진입할 수 없다.
 - Product는 완전하지만 Architecture가 완전하지 않으면 Product, Architecture, 선택적 Design, Sketch, Adopt와 읽기 전용 Resume가 진입할 수 있다. `direct`, `work`, `verify`는 아직 진입할 수 없다.
 - Product와 Architecture가 완전하고, 필요한 Design이 준비됐으며, Adoption이 닫혔으면 모든 target이 진입할 수 있다. `work`와 `verify`에는 추가로 유효한 Work 계약이 필요하다.
-- `.devflow/adoption/`이 존재하는 동안 기본 route는 `adopt` 또는 conflict 해결에 필요한 결정 route다. 추적되는 변경 작업은 관련 maintained source의 처분이 정해지고, 필요한 canon이 자기완결적이며, 관련 모순이 닫힌 경계 안에서만 진입할 수 있다.
+- `.devflow/adoption/`이 존재하는 동안 기본 route는 `adopt`다. adoption이 source만으로 정할 수 없어 넘긴 판단은 adoption state가 지정한 `product`, `architecture`, `design` 중 하나가 받는다. 받은 route는 답을 canonical home에 게시한 뒤 adoption state를 `next_route: adopt`와 이어갈 행동 하나로 교체한다. 추적되는 변경 작업은 관련 maintained source의 처분이 정해지고, 필요한 canon이 자기완결적이며, 관련 모순이 닫힌 경계 안에서만 진입할 수 있다.
 
 준비 상태는 경로 존재가 아니라 문서 내용과 index 규칙으로 판단한다. 사용할 수 있는 index가 있으면 먼저 읽는다. 프로젝트별 routing은 index가 소유하며, 전역 lifecycle이 소유하지 않는다.
 
 조정 상태의 `next_route` 값은 `sketch`, `adopt`, `product`, `architecture`, `design`, `direct`, `work`, `verify`, `user` 중 정확히 하나다. `resume`은 진입 및 복구 보고 기능이며, 지속되는 custody route가 아니다.
+
+경로의 `<current-member>`는 repository의 `git config user.name`을 안정적인 slug로 변환한 현재 팀 identity다. 값이 없거나 안정적인 slug를 만들 수 없으면 registry를 만들지 말고 사용자에게 짧은 team label 하나를 요청한다. index에는 `<current-member>` placeholder를 그대로 두고, 각 reader가 현재 identity로 해석한다. member별 glob을 나열하지 않는다. 이 namespace는 개인 작업의 기본 발견 경계이지 Git 접근 제어나 비밀 보장이 아니다.

@@ -9,6 +9,8 @@ description: 준비된 Devflow Work 계약 하나 또는 합의된 현재 대화
 Work는 이미 경계가 정해진 결과를 실제 코드, test, Git history로 만든다. 합의된 경계 안의 국소 구현
 방법은 Work가 선택하지만, 구현 편의를 새 goal, acceptance rule 또는 제품 경계로 만들지 않는다.
 
+이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
+
 ## 유효한 gate로 진입한다
 
 target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `work` 행을 적용한다. gate가 다른

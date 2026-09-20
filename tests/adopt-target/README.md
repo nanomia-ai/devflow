@@ -74,6 +74,28 @@ the fresh sessions below provide the bounded Phase 8 behavior evidence.
     category; named the Ledger Domain as canonical home; and routed the next foundation to Design.
     Neither session opened Product, the retired guide, an installed skill, or a global instruction.
 
+### Product-meaning absence and return path
+
+The current Adopt target imports the shared Product/Domain document contract. Two builds produced
+tree `70959ed05cd4d9e96309557d3df331e1606b98585f88cf6de40782a2de9d1105`; integrity and source
+currentness passed.
+
+Fresh case C used a disposable variant whose code, tests, and prose described behavior but not the
+product's purpose, intended user, promise, or responsibility boundary. Adopt accounted for all
+seven maintained paths, published only source-backed Domain and Architecture knowledge, recorded no
+source contradiction, kept Direct and Work closed, and routed the missing product judgment to
+Product. A fresh Product actor published the owner's answer without editing `sources.md` or
+`conflicts.md` and returned the state to Adopt. A third fresh actor reread the canon, completed
+source disposition, passed both maintained tests, and removed `adoption/`. This bounded round trip
+is proven. The state bytes were inspected at both custody transitions, but a separate Resume actor
+was not run between them; Resume's reporting of those routes remains unproven.
+
+Cases A and B were also rerun on the same tree. A exposed only the referenced-category deletion
+contradiction and left adoption open without creating Work. B placed the selected deletion rule in
+the Domain, replaced the authorized old prose with pointers, passed both tests, and closed adoption.
+Architecture/Design decision returns, adoption-to-Sketch transfer, arbitrary repositories, and
+other absence shapes remain unproven.
+
 The v4 reconstruction expanded six tiny sources into 319 nonblank document lines, mostly through
 repeated interpretations and unknown catalogs. The v6 snapshot reduced this to 260 lines, v7 to 247,
 and the successful snapshot to 92. The reduction is supporting evidence only; the gate is the
