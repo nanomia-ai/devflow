@@ -3,5 +3,5 @@
   "targetId": "architecture",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["communication", "project-gate", "project-knowledge", "sketch-handoff"]
+  "imports": ["architecture-document", "communication", "decision-document", "project-gate", "project-knowledge", "sketch-handoff"]
 }

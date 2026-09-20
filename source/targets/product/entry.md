@@ -80,8 +80,9 @@ Architecture나 Design 파일을 placeholder로 만들지 않는다.
 
 기존 Product를 바꿀 때는 영향을 받는 사용자, 기존 약속, 데이터·권한 의미와 Domain 경계를 함께
 확인한다. 현재 의미가 바뀐 canonical Product와 Domain 문서만 교체하고, 질문 route가 바뀐 경우에만
-가장 가까운 parent index를 갱신한다. 이후에도 결정을 지켜야 하는 이유는 현재 decision 문서 하나에
-두며 Product 본문을 변경 이력으로 만들지 않는다.
+가장 가까운 parent index를 갱신한다. 중요한 기각 대안이나 재검토 조건이 현재 방향을 계속 지키는 데
+필요하면 `references/decision-document.md`를 열고 현재 decision 문서 하나를 만들거나 교체한다. 작업이
+있었다는 사실이나 현재 규칙의 사본을 남기려고 만들지 않는다.
 
 ## 다음 열린 질문에서 종료
 

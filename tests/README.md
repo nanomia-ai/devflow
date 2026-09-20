@@ -15,6 +15,8 @@ it does not amend or restate the plan.
 | Can Verify execute acceptance honestly and publish evidence before routing? | [Verify target](verify-target/README.md) |
 | Can Product, Architecture, and optional Design publish a coherent project foundation without duplicating ownership? | [Foundation targets](foundation-target/README.md) |
 | How should the Product document contract, Product elicitation, and Adopt-to-Product decision round trip be delivered and observed? | [Product document evolution plan](product-document-evolution/README.md) |
+| How should Architecture scale from a small foundation to a complex working system while keeping decisions, registries, and mechanical checks proportional? | [Architecture foundation evolution plan](architecture-foundation-evolution/README.md) |
+| How should optional Design scale from no document through a small experience foundation to a live design system without turning examples or catalogs into universal structure? | [Design foundation evolution plan](design-foundation-evolution/README.md) |
 | Can Sketch preserve only decision-making exploration and return project/change conclusions to the right owner? | [Sketch target](sketch-target/README.md) |
 | Can Adopt transfer unmanaged brownfield knowledge, expose conflicts, retire old prose, and become independent of its inputs? | [Adopt target](adopt-target/README.md) |
 | Can interrupted actors hand off bounded private context without splitting shared state, and can parallel branches integrate through Git? | [Team hand-off and parallel integration](team-handoff/README.md) |

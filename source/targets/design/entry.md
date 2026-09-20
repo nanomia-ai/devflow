@@ -41,7 +41,9 @@ Domain 상태와 규칙을 Design에 복사하지 말고 참조한다. rendering
 
 같은 변경에서 `.devflow/index.md`를 갱신해 UI 및 interaction 질문을 Design으로 route하고, Architecture의 적용 선언과 Design 문서에서 foundation 준비 상태를 판단할 수 있게 한다. 실제 child가 있을 때만 concern route를 추가한다. pattern이나 Domain 규칙을 index에 복사하지 않는다.
 
-기각한 대안이나 reopen 조건이 현재 경험 방향을 보호하는 데 필요하면 현재 decision 문서 하나를 쓰고, 실제 적용되는 규칙을 Design에 반영한다. Design 작업이 있었다는 사실만 기록하려고 decision 파일을 만들지 않는다.
+중요한 기각 대안이나 재검토 조건이 현재 경험 방향을 계속 지키는 데 필요하면
+`references/decision-document.md`를 열고 현재 decision 문서 하나를 만들거나 교체한다. 작업이 있었다는
+사실이나 현재 규칙의 사본을 남기려고 만들지 않는다. 실제 적용되는 규칙은 Design에 반영한다.
 
 ## 다음 열린 질문에서 종료
 

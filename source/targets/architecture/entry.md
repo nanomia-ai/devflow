@@ -1,60 +1,94 @@
 ---
 name: architecture
-description: 완전한 Product foundation을 바탕으로 Devflow 프로젝트의 기술 경계, 구성요소, 의존 방향, runtime 및 data flow, public seam, verification channel, Design 적용 여부를 정의하거나 수정한다. 열린 Architecture 결정을 다룰 때 사용한다. 제품 의미, UI 원칙, delivery 방향, 구현, brownfield 재구성에는 사용하지 않는다.
+description: 완전한 Product foundation을 바탕으로 Devflow 프로젝트의 현재 기술 경계, 구성요소, 의존 방향, runtime 및 data flow, public seam, verification channel, Design 적용 여부를 정의하거나 수정한다. 열린 Architecture 결정을 다룰 때 사용한다. 제품 의미, UI 원칙, delivery 방향, 구현, brownfield 재구성에는 사용하지 않는다.
 ---
 
-# 기술 foundation 정의
+# 현재 기술 foundation 정의
 
-Architecture는 완전한 Product와 업무 Domain을 이후 변경이 안전하게 작업할 수 있는 현재 기술 경계로 바꾼다. 구조, 의존 방향, runtime 및 data flow, public seam, 운영 경계, verification channel을 소유한다. 제품 의미를 다시 정의하거나 상세한 사용자 경험을 결정하지 않는다.
+Architecture는 완전한 Product와 업무 Domain을 이후 변경이 안전하게 작업할 수 있는 현재 기술 구조로
+바꾼다. 미래의 완성 설계도를 예측하지 않고, 다음 단계가 주요 기술 경계를 새로 만들지 않아도 되는
+가장 작은 일관된 foundation을 게시한다.
 
 이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
 
 ## 유효한 조건으로 진입
 
-target별 행동을 시작하기 전에 `references/project-gate.md`를 열고 `architecture` 조건을 적용한다. 이어서 `references/project-knowledge.md`와 읽을 수 있는 `.devflow/index.md`를 연다.
+target별 행동을 시작하기 전에 `references/project-gate.md`를 열고 `architecture` 조건을 적용한다. 이어서
+`references/project-knowledge.md`, `references/architecture-document.md`와 읽을 수 있는
+`.devflow/index.md`를 연다. decision 문서를 만들거나 교체할 때만
+`references/decision-document.md`를 연다.
 
-현재 member의 Sketch state가 `next_route`로 `architecture`를 지정하면 파일을 쓰기 전에 `references/sketch-handoff.md`를 열고, Architecture 게시와 함께 landing 계약을 완료한다.
+현재 member의 Sketch state가 `next_route`로 `architecture`를 지정하면 파일을 쓰기 전에
+`references/sketch-handoff.md`를 열고, Architecture 게시와 함께 landing 계약을 완료한다.
 
-Architecture에는 완전한 `.devflow/project/product.md`가 필요하다. system promise와 domain 간 구성을 파악하기 위해 Product를 읽고, 현재 기술 질문이 route한 Domain parent와 기존 Architecture child만 연다. Product 의미가 불완전하거나 모순되면 기술 선택을 하지 않고 `product`로 route한다. 아직 흡수되지 않은 maintained brownfield 의미는 `adopt`로 route한다. 현재 custody 구간에서 끝낼 수 없는 조사는 불완전한 canonical Architecture를 남기지 말고 `sketch`로 route한다.
+완전한 Product를 읽고, 현재 기술 질문이 route한 Domain과 Architecture 계보만 연다. Product 의미가
+불완전하거나 모순되면 `product`, 흡수되지 않은 maintained brownfield 의미는 `adopt`로 보낸다.
+다만 진행 중인 Adopt가 state로 기술 판단을 이곳에 보냈다면 다시 Adopt로 반송하지 않고 그 판단만
+다룬다.
+현재 대화에서 확인할 수 있는 code, configuration, runtime과 공식 기술 근거는 먼저 확인한다. 추가
+조사나 prototype이 필요하고 그 질문과 맥락을 현재 관리권 구간을 넘어 보존해야 하면 불완전한 canon을
+남기지 말고 `sketch`로 보낸다.
 
-## 업무 의미가 아닌 기술 경계 결정
+## 현재 기술 설명을 먼저 만든다
 
-사용자가 명시한 제약, 현재 Product와 Domain 계약, 존재하는 관련 code 또는 runtime 증거, 이미 current인 기술 결정을 사용한다. 선택에 따라 component, deployment, dependency 방향, data ownership, public seam, verification, Design 적용 여부가 실질적으로 달라질 때만 사용자에게 묻는다. 근거가 없는 provider, scale, deployment, 운영 주장은 해결 조건과 함께 명시적인 unknown으로 남긴다.
+사용자에게 기술 목록을 묻기 전에 Product·Domain 계약, 명시한 제약, 현재 decision과 관련
+code/runtime evidence로 하나의 현재 기술 설명을 만든다. 무엇이 실행·배포되어야 하는지, 어떤 조건이
+구조를 바꾸는지, 이미 정해진 경계와 근거 없는 선택이 무엇인지 드러낸다.
 
-다음에 답하는 가장 작은 일관된 foundation을 정의한다.
+문서 항목, framework 이름과 pattern 목록을 차례대로 질문하지 않는다. 현재 설명과 공통 Architecture
+계약 사이에서, 답에 따라 실제 기술 경계가 달라지는 지점만 질문 후보로 둔다.
 
-- 지원 환경과 deployment 형태
-- 구성요소와 각 책임
-- 구성요소 및 Domain 사이의 의존 방향과 계약
-- runtime 및 durable-data flow
-- public seam과 internal implementation detail의 경계
-- 구현 결정을 바꾸는 failure 및 운영 경계
-- 실행 가능한 verification channel과 사용할 수 없는 external channel
-- Design이 필요한지, 적용되지 않는지, 열린 기술 질문인지와 그 이유
+## 지금 결정할 질문만 가른다
 
-Domain lifecycle이나 Product 불변 조건을 기술 규칙으로 다시 서술하지 않는다. canonical parent를 참조하고, 이를 지키는 데 필요한 기술 계약만 설명한다. framework, folder, table 이름만으로 child 문서를 만들지 않는다.
+비어 있는 선택 때문에 다음 단계가 주요 경계를 새로 발명해야 한다면 지금 다룬다. 구현하면서 값싸게
+배울 수 있는 가역적인 local 선택은 미리 정하지 않는다.
 
-## 현재 Architecture 게시
+여러 후보가 실제로 성립하면 현재 제약을 만족하는 가장 작은 후보를 결과, 가역성, 운영 책임과 검증
+비용으로 비교하고 Architecture가 추천한다. 비용·운영 주체·지원 환경·외부 계약처럼 사용자만 정할 수
+있는 제약이 남을 때만 묻는다. 질문에는 현재 이해, 추천과 답에 따라 달라지는 구조를 설명한다.
 
-완전한 현재 `.devflow/project/architecture.md`를 구성한 뒤 기존 파일을 교체한다. 본문에는 환경, 구성요소 및 의존 model, runtime/data flow, public seam, verification channel, Design 적용 여부, 선택적인 concern route, 열린 기술 질문이 있어야 한다. `project/architecture/<concern>.md`를 만들기 전에 공통 split test를 적용한다. 작은 foundation은 parent 문서 하나를 기본으로 한다.
+진행 중인 adoption에서 받은 판단을 다른 route로 넘기면, 떠나기 전에 adoption state를 그 판단을
+이어받을 route 하나와 범위가 정해진 다음 행동 하나로 교체한다.
 
-같은 변경에서 `.devflow/index.md`를 갱신해 기술 질문을 Architecture로 route하고, Product, Architecture, Design 적용 여부에서 foundation 준비 상태를 판단할 수 있게 한다. 실제 child가 있을 때만 concern route를 추가하거나 제거한다. 기술 답을 index에 복사하지 않는다.
+## 현재 Architecture를 게시한다
 
-기각한 대안이나 reopen 조건이 현재 구조를 보호하는 데 필요하면 현재 decision 문서 하나를 쓰고, 실제 적용되는 규칙을 Architecture에 반영한다. Architecture 작업이 있었다는 사실만 기록하려고 decision 파일을 만들지 않는다.
+`references/architecture-document.md`의 완성 조건과 split/fold 판정을 적용해
+`project/architecture.md`와 필요한 child를 구성하고 기존 파일을 교체한다. 기계 판독 model이나 자동
+검사가 필요하다는 판정이 나오더라도 Architecture에서 구현하지 않는다. 지킬 불변식, 관찰 가능한
+위반과 미검증 범위를 게시하고, 구현은 이후 `direct`가 다루는 변경으로 남긴다.
 
-## 다음 열린 질문에서 종료
+중요한 이유·기각 대안·재검토 조건이 필요하면 `references/decision-document.md`를 열고 현재 decision
+문서 하나를 만들거나 교체한다. 작업 사실, stack 목록과 현재 규칙의 사본을 남기려고 만들지 않는다.
 
-Architecture header, route된 child, index route, Architecture가 의존하는 Product 및 Domain 경계를 다시 읽는다. 업무 사실이 Architecture로 이동하지 않았는지, 기술 사실이 Product 또는 Domain에 복사되지 않았는지, 각 verification channel이 실제로 사용 가능하거나 명시적인 unknown인지 확인한다.
+같은 변경에서 `.devflow/index.md`가 기술 질문을 Architecture root로 route하고 foundation readiness를
+판단하게 한다. leaf와 기술 답을 index에 복사하지 않는다.
 
-Architecture가 Design 필요를 선언했는데 완전한 Design이 없으면 결정해야 할 surface와 제약을 지정해 `design`으로 route한다. Design이 적용되지 않으면 새 foundation을 `direct`로 route한다. 해결되지 않은 제품 전제는 `product`, 조사가 필요한 기술 unknown은 `sketch`, canonical update가 끝난 활성 변경 결정은 `direct`로 route한다.
+진행 중인 adoption에서 받은 판단이라면 canonical Architecture·decision과 route를 먼저 게시한 뒤
+공통 gate에 따라 adoption state를 `next_route: adopt`와 이어갈 행동 하나로 교체한다. 독립적인 새
+foundation 흐름으로 계속 진행하지 않는다.
+
+## 현재 결과를 다시 읽고 route한다
+
+Architecture root와 현재 질문에 선택된 child 계보를 다시 읽는다. 이 child는 Architecture subtree나
+한 Domain의 technical subtree에 있을 수 있다. index와 Product·Domain 경계도 함께 확인한다. 업무
+의미가 이동하거나 기술 사실이 다른 home에 복제되지 않았는지, 불변식과 교체 가능한 선택이 섞이지
+않았는지, verification channel이 실행 가능하거나 명시적으로 미검증인지 확인한다.
+
+진행 중인 adoption에서 받은 판단을 게시했으면 다른 route보다 먼저 `adopt`로 route한다.
+Architecture가 Design 필요를 선언했고 완전한 Design이 없거나 이번 변경으로 경험 판단이 다시
+필요하면 결정해야 할 surface와 제약을 지정해 `design`으로 route한다. Design이 적용되지 않거나 필요한
+Design이 이미 완전하면 새 foundation을 `direct`로 route한다. 해결되지 않은 제품 전제는 `product`,
+보존할 조사가 필요하면 `sketch`, canonical update가 끝난 활성 변경 결정은 `direct`로 route한다.
 
 다음을 보고한다.
 
 - `게시한 경로:` 생성하거나 교체한 Architecture, concern, decision, index path
 - `구조:` 구성요소, 의존 방향, runtime/data flow, public seam
+- `선택 근거:` 구조를 지배한 제약·증거와 Architecture가 고른 선택의 짧은 이유
 - `검증:` 실행 가능한 channel과 사용할 수 없거나 미검증인 주장
 - `Design 적용 여부:` 필요, 미적용, 열림 중 하나와 그 이유
 - `Route와 행동:` 다음 route 하나와 범위가 제한된 행동 하나
 - `미검증 또는 열린 항목:` 현재 증거로 확정하지 못한 기술 주장
 
-Product 또는 Domain의 업무 의미, Design 원칙, Work artifact, 구현, adoption inventory, verification verdict를 쓰지 않는다.
+Product 또는 Domain의 업무 의미, Design 원칙, Work artifact, 구현, adoption inventory, verification
+verdict를 쓰지 않는다.
