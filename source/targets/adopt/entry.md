@@ -24,6 +24,8 @@ Architecture root 또는 concern child를 구성하거나 교체하기 전에
 `references/architecture-document.md`를 연다. Product·Architecture·Design의 현재 decision 문서를
 만들거나 교체할 때만 `references/decision-document.md`를 연다.
 
+Design root 또는 concern child를 구성하거나 교체하기 전에 `references/design-document.md`를 연다.
+
 사용자가 기존 프로젝트를 adoption하라고 명시적으로 요청했거나, 다른 Devflow route가 내부 foundation이
 없는 maintained brownfield material을 발견했을 때만 진입한다. 명확한 새 brief는 `product`, 불확실한
 새 아이디어는 `sketch`, 관리되는 프로젝트의 변경은 그 소유 route로 보낸다. legacy Devflow 파일을

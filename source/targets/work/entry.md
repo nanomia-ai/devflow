@@ -79,6 +79,14 @@ landing으로 바꾼다.
 각 candidate는 그것을 드러낸 code가 아니라 그것이 증명하는 invariant로 판단한다. 그 invariant가 이후
 actor의 판단을 바꾼다면 채택하여 home의 언어로 반영하고, 그런 invariant가 남지 않을 때만 기각한다.
 
+pending landing이 Architecture 또는 Domain technical 경로를 가리킬 때만
+`references/architecture-document.md`를 열고, Design 또는 Domain design child를 가리킬 때만
+`references/design-document.md`를 열며, 기존 decision 경로를 가리킬 때만
+`references/decision-document.md`를 연다. 반영하려면 새로운 기술 판단이나 child 분리·통합이 필요하면
+`architecture`, 새로운 경험 방향·공통 pattern이나 Design child 분리·통합 판단이 필요하면 `design`,
+decision identity를 선택하거나 기존 결정의 의미를 바꿔야 하면 그 결정을 소유하는 route에 blocker를
+보낸다.
+
 각 pending landing을 해당 canonical Product, Architecture, Design, Domain 또는 decision home에
 반영한다. 수정한 문서의 `summary`, `read_when`, 관련 본문을 다시 읽고, 중복 없이 사실이 존재하는 것을
 확인한 뒤에만 landing을 지운다. closure가 commit을 만들면 artifact를 삭제하기 전에 그 commit message에

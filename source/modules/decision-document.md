@@ -1,9 +1,12 @@
 # 현재 decision 문서 계약
 
 이 계약은 Product, Architecture, Design 또는 Adopt가
-`.devflow/project/decisions/<id>-<slug>.md`를 만들거나 교체할 때 적용한다. decision은 프로젝트 전체가
-공유하는 현재 결정 이유다. 개인 Sketch, member note, Work state, verification record 또는 시간순
-회의 기록이 아니다.
+`.devflow/project/decisions/<id>-<slug>.md`를 만들거나 교체할 때, Work가 확인된 pending landing을 기존
+decision 경로에 반영할 때 적용한다. decision은 프로젝트 전체가 공유하는 현재 결정 이유다. 개인
+Sketch, member note, Work state, verification record 또는 시간순 회의 기록이 아니다.
+
+Work는 이 계약을 확인된 사실을 기존 정본에 통합하는 데만 사용하며, decision identity를 선택하거나
+기존 결정의 의미를 바꾸지 않는다.
 
 ## 미래 판단을 실제로 보호할 때만 만든다
 

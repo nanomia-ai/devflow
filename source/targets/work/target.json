@@ -3,5 +3,5 @@
   "targetId": "work",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["communication", "project-gate", "team-context", "work-state"]
+  "imports": ["architecture-document", "communication", "decision-document", "design-document", "project-gate", "team-context", "work-state"]
 }

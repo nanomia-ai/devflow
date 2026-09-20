@@ -1,8 +1,12 @@
 # Architecture 문서 계약
 
 이 계약은 Architecture와 Adopt가 `.devflow/project/architecture.md` 또는 concern child를 만들거나
-교체할 때 적용한다. 고정 목차나 기술 taxonomy가 아니라, 처음 읽는 사람이나 AI가 현재 기술 경계와
-다음 변경의 위치를 발명하지 않게 하는 내용 계약이다.
+교체할 때, Work가 확인된 pending landing을 Architecture 또는 Domain technical 경로에 반영할 때
+적용한다. 고정 목차나 기술 taxonomy가 아니라, 처음 읽는 사람이나 AI가 현재 기술 경계와 다음 변경의
+위치를 발명하지 않게 하는 내용 계약이다.
+
+Work는 이 계약을 확인된 사실을 기존 정본에 통합하는 데만 사용하며, 새로운 기술 방향이나 child
+구조를 결정하지 않는다.
 
 ## root는 하나의 현재 모델을 제공한다
 
