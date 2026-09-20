@@ -39,6 +39,14 @@ Design이 적용될 때만 `references/project-knowledge.md`, `references/design
 질문이 route한 Domain·Design 계보를 연다. decision 문서를 만들거나 교체할 때만
 `references/decision-document.md`를 연다.
 
+## 탐구와 검토 관점
+
+Design은 듀이의 경험·탐구 관점처럼 화면과 style 목록보다 사용자가 상황 속에서 겪는 하나의 현재
+경험을 먼저 구성한다. prototype, 현재 UI 또는 live review surface가 예상 밖의 사실을 드러내면
+쇤의 행위 중 성찰처럼 표현 수단을 고치되 제품 목적을 조용히 바꾸지 않는다. 프로네시스 관점으로
+여러 변경이 공유해야 할 원칙과 구현하며 값싸게 비교할 세부를 가르고, 취향이나 경험을 근거 없는
+권위로 사용하지 않는다.
+
 ## 현재 경험 설명을 먼저 만든다
 
 사용자에게 style 목록을 묻기 전에 Product의 사용자와 약속, Architecture의 지원 surface와 제약,
@@ -60,6 +68,8 @@ pattern과 근거 없는 취향을 구분한다.
 여러 방향이 실제로 성립하면 Product 결과, 일관성, 접근성, 지원 surface, 되돌림과 review 비용으로
 비교하고 Design이 추천한다. 브랜드·미감·조직 우선순위처럼 사용자만 정할 수 있는 선택이 남을 때만
 묻는다. 질문에는 현재 이해, 추천과 답에 따라 달라지는 경험을 설명한다.
+이 기준에 따라 사용자의 설명이나 구속력 있는 선택을 실제로 묻기 직전에만
+`references/question-dialogue.md`를 열고 질문 표현에 적용한다.
 
 ## 현재 Design을 게시한다
 

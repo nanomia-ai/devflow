@@ -37,6 +37,9 @@ Product, Domain, Architecture, Design, decision 문서만 읽는다. 현재 Git 
 - 실제로 구속력 있는 선택이 남아 있을 때만 사용자에게 묻는다. 요청과 현재 canon이 이미 정한 계약에
   대해 승인을 다시 구하지 않는다.
 
+사용자의 구속력 있는 선택을 실제로 묻기 직전에만 `references/question-dialogue.md`를 열고 질문
+표현에 적용한다.
+
 요청이 준비되었다면 크기를 추정하기 전에 지속 여부를 검사한다. 다음 중 하나라도 `yes`면 tracked다.
 
 1. 현재 대화가 중단되면 diff만으로 요청 의도와 다음 안전 행동을 복구할 수 없는가?

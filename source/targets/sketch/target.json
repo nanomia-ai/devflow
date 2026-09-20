@@ -3,5 +3,5 @@
   "targetId": "sketch",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["communication", "project-gate", "project-knowledge", "sketch-handoff", "team-context"]
+  "imports": ["communication", "project-gate", "project-knowledge", "question-dialogue", "sketch-handoff", "team-context"]
 }

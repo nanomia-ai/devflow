@@ -21,6 +21,12 @@ target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `ad
 Product 또는 Domain 문서를 구성하거나 교체하기 전에 `references/product-document.md`를 열고 문서의
 내용과 완료 기준에 적용한다.
 
+Architecture root 또는 concern child를 구성하거나 교체하기 전에
+`references/architecture-document.md`를 연다. Product·Architecture·Design의 현재 decision 문서를
+만들거나 교체할 때만 `references/decision-document.md`를 연다.
+
+Design root 또는 concern child를 구성하거나 교체하기 전에 `references/design-document.md`를 연다.
+
 사용자가 기존 프로젝트를 adoption하라고 명시적으로 요청했거나, 다른 Devflow route가 내부 foundation이
 없는 maintained brownfield material을 발견했을 때만 진입한다. 명확한 새 brief는 `product`, 불확실한
 새 아이디어는 `sketch`, 관리되는 프로젝트의 변경은 그 소유 route로 보낸다. legacy Devflow 파일을
@@ -77,6 +83,10 @@ status로 readiness를 도출한다. source group이나 active artifact ID를 �
 확인할 수 있지만, divergence를 드러내지 않은 채 관찰한 runtime behavior를 덮을 수 없다. configuration은
 현재 상태이고 실제로 사용되는 범위에서만 환경을 확인한다.
 
+기존 ADR이나 decision record는 현재 규칙, 그 규칙을 계속 지킬 현재 이유와 과거 기록으로 나눈다.
+현재 규칙은 원래 canonical home에 두고, 이유는 계속 필요할 때만 현재 decision 문서로 재구성한다.
+끝난 migration과 대체된 과거 결론은 기존 disposition 규칙에 따라 처분한다.
+
 maintained source가 어떤 내용을 주장하거나 명시적으로 질문할 때, 또는 그런 source-backed claim을
 해석하는 데 현재 실행이 필요할 때만 knowledge unit으로 취급한다. 다른 부재, test하지 않은 case,
 가능한 미래 결정을 fact나 unknown으로 만들지 않는다. 각 knowledge unit은 다음 중 하나로 구분한다.
@@ -90,6 +100,11 @@ maintained source가 어떤 내용을 주장하거나 명시적으로 질문할 
 어느 maintained source에도 제품의 목적, 대상 또는 핵심 약속을 뒷받침하는 주장이 없어 자기완결적인 Product를 만들
 수 없다면 동작에서 의도를 추론하지 않는다. 현재 source가 확인하는 동작과 그 동작만으로는 정할 수
 없는 제품 의미를 구분해 `product`로 보낸다.
+
+현재 code, 실제로 사용되는 configuration과 runtime evidence로 현재 구조를 먼저 재구성한다. 이
+증거만으로는 정할 수 없고 사용자 제약에 달린 기술 경계가 Architecture 완성에 꼭 필요할 때만
+conflict로 만들지 않고 state를 `next_route: architecture`와 필요한 판단을 적은 `next_action`으로
+교체한다.
 
 각 unit은 그것을 해결하는 decision route의 문서 하나를 내부 home으로 가지며, 자신이 한정하는 문장
 옆에 둔다. 다른 home은 그 unit을 link할 수 있지만 completeness를 위해 다시 catalog하지 않는다.
@@ -125,16 +140,18 @@ verification channel, Design applicability를 소유한다. Design은 experience
 `next_route: user`는 답을 흡수할 decision route를 행동에 적은, 충분히 구성된 선택만 전달할 수 있다.
 경쟁하는 답과 consequence를 보여준 뒤에만 사용자에게 묻는다. foundation을 완전하게 보이게 하려고
 만들어낸 답을 다듬지 않는다.
+사용자의 설명이나 구속력 있는 선택을 실제로 묻기 직전에만 `references/question-dialogue.md`를 열고
+질문 표현에 적용한다.
 
 제품 의미가 자료끼리 충돌하는 경우와, 제품 의미를 뒷받침할 자료가 없는 경우를 구분한다. 전자는
 `conflicts.md`에 기록한다. 후자는 conflict로 만들지 않고 state를 `next_route: product`와 필요한 제품
 판단 및 Product가 읽을 source 경로를 적은 `next_action`으로 교체한다. 확인한 사실을 state에 복제하지
 않는다.
 
-Product가 답을 canonical Product 또는 Domain에 게시하고 state를 `next_route: adopt`로 되돌리면,
+결정을 받은 route가 답을 해당 canonical home에 게시하고 state를 `next_route: adopt`로 되돌리면,
 그 답으로 해결된 conflict를 `conflicts.md`에서 지우고 게시된 의미를 기준으로 나머지 source 회계와
-foundation 완성을 계속한다. 그 전에는 목적, 대상이나 핵심 약속을 추측한 Product를 게시하거나
-adoption을 닫지 않는다.
+foundation 완성을 계속한다. 그 전에는 필요한 의미를 추측해 canon을 완전하게 보이게 하거나 adoption을
+닫지 않는다.
 
 ## 입증된 경계 안에서만 work를 연다
 

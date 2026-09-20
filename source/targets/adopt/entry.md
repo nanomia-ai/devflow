@@ -139,6 +139,8 @@ verification channel, Design applicability를 소유한다. Design은 experience
 `next_route: user`는 답을 흡수할 decision route를 행동에 적은, 충분히 구성된 선택만 전달할 수 있다.
 경쟁하는 답과 consequence를 보여준 뒤에만 사용자에게 묻는다. foundation을 완전하게 보이게 하려고
 만들어낸 답을 다듬지 않는다.
+사용자의 설명이나 구속력 있는 선택을 실제로 묻기 직전에만 `references/question-dialogue.md`를 열고
+질문 표현에 적용한다.
 
 제품 의미가 자료끼리 충돌하는 경우와, 제품 의미를 뒷받침할 자료가 없는 경우를 구분한다. 전자는
 `conflicts.md`에 기록한다. 후자는 conflict로 만들지 않고 state를 `next_route: product`와 필요한 제품

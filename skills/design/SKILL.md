@@ -1,61 +1,113 @@
 ---
 name: design
-description: Architecture가 UI Design이 적용된다고 판단한 경우 Devflow 프로젝트의 사용자 경험, visual foundation, 구성요소 및 interaction 전략, accessibility, responsive 및 state 원칙, review surface를 정의하거나 수정한다. 열린 UI 체계 결정을 다룰 때 사용한다. 제품 의미, 기술 Architecture, delivery 방향, 구현, headless 프로젝트에는 사용하지 않는다.
+description: Architecture가 사람이 직접 사용하는 UI 또는 상호작용 접점에 Design이 적용된다고 판단한 경우 Devflow 프로젝트의 현재 경험 방향, 공통 표현·interaction 체계, 접근성, 상태 원칙과 review surface를 정의하거나 수정한다. 열린 경험 체계 결정을 다룰 때 사용한다. 제품·업무 의미, 기술 surface와 구현, delivery 방향, brownfield 재구성, 비대화형 프로젝트에는 사용하지 않는다.
 ---
 <!-- generated; do not edit; source: targets/design/entry.md; receipt: .skill-rails-build.json -->
 
-# 경험 foundation 정의
+# 현재 경험 foundation 정의
 
-Design은 적용 가능한 Product와 Architecture foundation을 이후 UI 변경이 구현하고 검토할 수 있는 현재 경험 원칙으로 바꾼다. 경험 방향, visual foundation, 구성요소 및 interaction 전략, accessibility, responsive behavior, state 표현, review surface를 소유한다. 업무 규칙이나 기술 seam을 다시 정의하지 않는다.
+Design은 적용 가능한 Product와 Architecture foundation을 이후 경험 변경이 구현하고 검토할 수 있는
+가장 작은 현재 경험 모델로 바꾼다. 모든 component와 화면을 미리 설계하지 않고, 다음 변경이 공통
+경험 기준을 새로 발명하지 않아도 되는 foundation을 게시한다.
 
 이 스킬을 수행하기 전에 `references/communication.md`를 열고, 수행 중 독자에게 보내거나 문서에 저장하는 자연어에 적용한다. gate에서 종료할 때 보내는 안내도 포함한다.
 
-## 유효한 조건으로 진입
+## 적용 가능한 상태로 진입한다
 
-target별 행동을 시작하기 전에 `references/project-gate.md`를 열고 `design` 조건을 적용한다. 이어서 `references/project-knowledge.md`와 읽을 수 있는 `.devflow/index.md`를 연다. Design 적용 여부를 판단하기 전에 Product와 Architecture를 읽는다.
+target별 행동을 시작하기 전에 `references/project-gate.md`를 열고 `design` 조건을 적용한다. 이어서
+읽을 수 있는 `.devflow/index.md`, 완전한 Product와 Architecture를 연다.
 
-현재 member의 Sketch state가 `next_route`로 `design`을 지정하면 파일을 쓰기 전에 `references/sketch-handoff.md`를 열고, Design 게시와 함께 landing 계약을 완료한다.
+현재 member의 Sketch state가 `next_route`로 `design`을 지정하면 파일을 쓰기 전에
+`references/sketch-handoff.md`를 열고, Design 게시와 함께 landing 계약을 완료한다. 진행 중인 adoption이
+Design 판단을 넘겼다면 adoption state와 그 판단이 가리키는 source를 읽는다.
 
-Architecture가 Design 미적용을 선언하면 project 문서를 만들거나 수정하지 않고 `direct`로 route한다. 적용 여부가 없거나 모순되거나 기술적으로 열려 있으면 추측하지 말고 `architecture`로 route한다. Design이 적용되면 UI surface 또는 interaction 질문이 선택한 Domain parent와 기존 Design child만 읽는다. 현재 custody 구간에서 끝낼 수 없는 불확실한 경험 조사는 불완전한 canonical Design을 남기지 말고 `sketch`로 route한다.
+진행 중인 adoption에서 받은 판단을 Design 답 없이 다른 route로 넘기면, 떠나기 전에 adoption state를
+그 판단을 이어받을 route 하나와 범위가 정해진 다음 행동 하나로 교체한다.
 
-## 제품이나 기술이 아닌 경험 원칙 결정
+현재 member의 Sketch가 넘긴 결론을 Design이 게시할 수 없으면 다른 target으로 직접 보내지 않는다.
+`references/sketch-handoff.md`에 따라 이유와 다음 행동 하나를 지정해 같은 member의 `sketch`로
+돌려보낸다.
 
-Product의 사용자와 약속, Architecture가 지원하는 surface와 seam, 사용자가 명시한 선택, 존재하는 관찰 가능한 UI 증거를 사용한다. 선택에 따라 경험 방향, visual foundation, 구성요소 체계, interaction behavior, accessibility, responsive behavior, state 표현, review method가 실질적으로 달라질 때만 사용자에게 묻는다.
+Architecture가 Design 미적용을 선언하면 다른 Design reference를 열거나 project 문서를 수정하지 않는다.
+새 사용자 접점이 생겼거나 현재 evidence가 그 선언과 충돌하면 Design 취향으로 정하지 않고
+`architecture`로 보낸다. 그렇지 않고 진행 중인 adoption에서 판단을 받았다면 state를
+`next_route: adopt`와 이어갈 행동 하나로 교체하고 `adopt`로 route한다. 그 외에는 `direct`로 route한다.
 
-다음에 답하는 가장 작은 일관된 foundation을 정의한다.
+적용 여부가 없거나 지원 surface가 열려 있거나 모순되면 `architecture`로 route한다. Product 약속이나
+Domain 의미가 부족하면 `product`로 route한다.
 
-- 적용되는 사용자와 surface를 위한 경험 목표와 원칙
-- 모든 token을 미리 열거하지 않는 visual foundation과 token 전략
-- 구성요소 전략과 구성요소들이 공유하는 안정적인 pattern
-- interaction, navigation, feedback, error-recovery 원칙
-- accessibility와 input method 기대
-- Product와 Architecture가 정한 presentation range의 responsive behavior
-- loading, empty, error, partial, success, permission, destructive-action 상태 원칙
-- 구체적인 review surface와 reviewer가 관찰해야 할 내용
-- 열린 Design 질문과 이를 닫을 증거 또는 결정
+Design이 적용될 때만 `references/project-knowledge.md`, `references/design-document.md`와 현재 경험
+질문이 route한 Domain·Design 계보를 연다. decision 문서를 만들거나 교체할 때만
+`references/decision-document.md`를 연다.
 
-Domain 상태와 규칙을 Design에 복사하지 말고 참조한다. rendering 경계, data seam, platform 제약은 Architecture를 참조한다. framework 내부 구현, endpoint 형태, storage, 구현 task를 선택하지 않는다.
+## 탐구와 검토 관점
 
-## 현재 Design 게시
+Design은 듀이의 경험·탐구 관점처럼 화면과 style 목록보다 사용자가 상황 속에서 겪는 하나의 현재
+경험을 먼저 구성한다. prototype, 현재 UI 또는 live review surface가 예상 밖의 사실을 드러내면
+쇤의 행위 중 성찰처럼 표현 수단을 고치되 제품 목적을 조용히 바꾸지 않는다. 프로네시스 관점으로
+여러 변경이 공유해야 할 원칙과 구현하며 값싸게 비교할 세부를 가르고, 취향이나 경험을 근거 없는
+권위로 사용하지 않는다.
 
-완전한 현재 `.devflow/project/design.md`를 구성한 뒤 기존 파일을 교체한다. `project/design/<concern>.md`를 만들기 전에 공통 split test를 적용한다. page, component, framework 이름만으로는 독립된 concern이 되지 않는다. 작은 제품은 Design parent 하나를 기본으로 한다.
+## 현재 경험 설명을 먼저 만든다
 
-같은 변경에서 `.devflow/index.md`를 갱신해 UI 및 interaction 질문을 Design으로 route하고, Architecture의 적용 선언과 Design 문서에서 foundation 준비 상태를 판단할 수 있게 한다. 실제 child가 있을 때만 concern route를 추가한다. pattern이나 Domain 규칙을 index에 복사하지 않는다.
+사용자에게 style 목록을 묻기 전에 Product의 사용자와 약속, Architecture의 지원 surface와 제약,
+현재 선택, 관찰 가능한 interaction, 존재하는 경우의 UI·token·component code, live review surface와
+명시된 reference로 하나의 현재 경험 설명을 만든다. 이미 정해진 원칙, evidence로 확인할 수 있는
+pattern과 근거 없는 취향을 구분한다.
 
-기각한 대안이나 reopen 조건이 현재 경험 방향을 보호하는 데 필요하면 현재 decision 문서 하나를 쓰고, 실제 적용되는 규칙을 Design에 반영한다. Design 작업이 있었다는 사실만 기록하려고 decision 파일을 만들지 않는다.
+문서 항목, 색·component·화면 목록을 차례대로 질문하지 않는다. 현재 설명과 공통 Design 계약 사이에서,
+답에 따라 경험 방향이나 여러 변경이 공유할 pattern·review 기준이 실제로 달라지는 지점만 질문 후보로
+둔다.
 
-## 다음 열린 질문에서 종료
+## 지금 결정할 질문만 가른다
 
-Design header와 본문, index route, Design이 의존하는 Product·Architecture·Domain 경계를 다시 읽는다. 지정된 surface에서 경험을 검토할 수 있는지, 사용자가 만날 수 있는 모든 상태에 원칙이 있는지, 업무 또는 기술 사실이 중복되지 않았는지 확인한다.
+비어 있는 선택 때문에 다음 단계가 공통 경험 원칙이나 system pattern을 새로 발명해야 한다면 지금
+다룬다. 한 surface에서 구현하며 값싸게 비교할 수 있는 가역적인 세부 선택은 미리 고정하지 않는다.
+별도 조사·prototype·사용자 관찰이 필요하고 그 맥락을 현재 관리권 구간 밖에서도 보존해야 하면
+`sketch`로 보낸다.
 
-완전한 foundation은 `direct`로 route한다. 제품 경계 질문은 `product`, 기술 적용 여부 또는 platform 질문은 `architecture`, 조사가 필요한 경험 질문은 `sketch`로 route한다.
+여러 방향이 실제로 성립하면 Product 결과, 일관성, 접근성, 지원 surface, 되돌림과 review 비용으로
+비교하고 Design이 추천한다. 브랜드·미감·조직 우선순위처럼 사용자만 정할 수 있는 선택이 남을 때만
+묻는다. 질문에는 현재 이해, 추천과 답에 따라 달라지는 경험을 설명한다.
+이 기준에 따라 사용자의 설명이나 구속력 있는 선택을 실제로 묻기 직전에만
+`references/question-dialogue.md`를 열고 질문 표현에 적용한다.
+
+## 현재 Design을 게시한다
+
+`references/design-document.md`의 완성 조건과 split/fold 판정을 적용해 `project/design.md`와 필요한
+child를 구성하고 기존 파일을 교체한다. code, external design source와 live catalog가 필요하면 그
+역할, 선택 조건과 review route를 Design에 두되 내용을 복제하지 않는다.
+
+중요한 이유·기각 대안·재검토 조건이 필요하면 `references/decision-document.md`를 열고 현재 decision
+문서 하나를 만들거나 교체한다. 작업 사실, component 목록과 현재 규칙의 사본을 남기려고 만들지 않는다.
+
+같은 변경에서 `.devflow/index.md`가 UI·interaction 질문을 Design root로 route하고, Architecture의
+적용 선언과 Design 문서에서 foundation readiness를 판단하게 한다. leaf, token과 pattern을 index에
+복사하지 않는다.
+
+진행 중인 adoption에서 받은 판단이라면 canonical Design·decision과 route를 먼저 게시한 뒤 공통
+gate에 따라 adoption state를 `next_route: adopt`와 이어갈 행동 하나로 교체한다. 독립적인 새
+foundation 흐름으로 계속 진행하지 않는다.
+
+## 현재 결과를 다시 읽고 route한다
+
+Design root와 현재 질문에 선택된 Design 또는 Domain design child 계보를 다시 읽는다. index와
+Product·Architecture·Domain 경계, 사용한다고 밝힌 live review surface도 확인한다. 업무 상태나 기술
+제약이 Design으로 이동하지 않았는지, Design 규칙이 code·catalog와 서로 다른 두 정본이 되지 않았는지
+본다.
+
+진행 중인 adoption에서 받은 판단을 게시했으면 다른 route보다 먼저 `adopt`로 route한다. 지정된
+surface와 현재 알려진 state에서 결과를 관찰할 수 있고 다음 변경이 공통 경험 기준을 새로 만들지 않아도
+되면 `direct`로 route한다. 제품 경계는 `product`, 지원 surface·platform 질문은 `architecture`,
+보존할 탐구는 `sketch`로 route한다.
 
 다음을 보고한다.
 
 - `게시한 경로:` 생성하거나 교체한 Design, concern, decision, index path. Design이 적용되지 않으면 `none`
-- `경험:` 경험, 구성요소, interaction, accessibility, responsive, state를 지배하는 원칙
-- `검토 surface:` 결과를 어디에서 어떻게 관찰할지
+- `경험:` 현재 경험 방향과 여러 변경이 공유하는 표현·interaction·접근성·state 원칙
+- `검토 surface:` 결과를 어디에서 무엇으로 관찰할지
 - `Route와 행동:` 다음 route 하나와 범위가 제한된 행동 하나
-- `미검증 또는 열린 항목:` 현재 증거로 확정하지 못한 경험 주장
+- `미검증 또는 열린 항목:` 현재 증거로 확정하지 못한 경험 주장과 다시 확인할 조건
 
-Product 또는 Domain의 업무 의미, Architecture, Work artifact, 구현, adoption inventory, verification verdict를 쓰지 않는다.
+Product 또는 Domain의 업무 의미, Architecture 제약, Work artifact, 구현, adoption inventory,
+verification verdict를 쓰지 않는다.

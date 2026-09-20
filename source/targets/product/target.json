@@ -3,5 +3,5 @@
   "targetId": "product",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["communication", "decision-document", "project-gate", "project-knowledge", "product-document", "sketch-handoff"]
+  "imports": ["communication", "decision-document", "project-gate", "project-knowledge", "product-document", "question-dialogue", "sketch-handoff"]
 }
