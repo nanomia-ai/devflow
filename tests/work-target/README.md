@@ -174,6 +174,31 @@ Delivery is reported only after two equal builds, receipt inspection, integrity/
 and source-to-generated projection checks. Behavior is reported per case after fresh sessions.
 External product effect remains unproven unless a case directly observes it.
 
+## Canonical landing and active-Work decision return
+
+Two bounded fresh-use scenes used independent Git repositories and project-local generated skills:
+
+- Work integrated two independently verified eligibility outcomes into the existing Lending Domain
+  path, ran the existing test, committed the canonical change, and removed the completed artifact.
+  It did not create a new business rule, Domain, or canonical path.
+- In the final custody fixture, Verify passed both project tests, proved two behavioral criteria and
+  kept the unresolved technical criterion `unproven`: `verification.md` named `architecture` as the decision owner while Work
+  state named `direct` as custody. Resume initially collapsed those meanings and reported
+  `architecture`; after rule 5 was narrowed at its existing source location, a new session reported
+  `direct` and left the project unchanged.
+- Direct returned one Architecture question without changing the Work artifact. Architecture
+  changed only its canon and returned through its ordinary `direct` route. Direct then reconciled
+  the changed canon with the existing spec and verification, amended the Work contract, removed the
+  stale verification, and published `work`. A final Work session moved retry ownership to the queue
+  worker, passed all four tests, committed a safe point, and published `verify`.
+
+The earlier receiver fixture, in which Architecture directly changed Work state from `architecture`
+to `work`, records a superseded intermediate design and is not evidence for the final custody model.
+The first Direct fixture also reduced an unresolved Architecture question to a write-boundary choice;
+because its `next_action` omitted the required decision route, that observation is excluded. Product,
+Design, Adopt, Sketch and user-answer broker paths were not executed. The exact interruption behavior
+between stages and behavior on other hosts or models remain `unproven`.
+
 ## Reopen boundaries
 
 - A module skipped by a fresh agent is a failed delivery-to-behavior boundary, not a reason to add a

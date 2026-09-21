@@ -76,10 +76,10 @@ canon을 이용해 현재 제품을 먼저 하나의 설명으로 구성한다. 
 
 ## foundation 게시
 
-새 프로젝트에서는 `.devflow/project/product.md`, 필요한
-`.devflow/project/domains/<domain>/index.md`, `.devflow/index.md`를 완전한 현재 문서로 구성한 뒤
-게시한다. 역할, 구성 단위, Domain과 책임의 병렬 비교가 필요한 경우에는 표를 사용할 수 있지만,
-고정된 제목이나 빈 절을 만들지 않는다.
+새 프로젝트에서는 `.devflow/project/product.md`, 필요한 Domain parent와 공통 분해 기준을 실제로
+통과한 Domain 업무 child, `.devflow/index.md`를 완전한 현재 문서로 구성한 뒤 게시한다. Domain
+parent로 충분하면 child를 만들지 않는다. 역할, 구성 단위, Domain과 책임의 병렬 비교가 필요한
+경우에는 표를 사용할 수 있지만, 고정된 제목이나 빈 절을 만들지 않는다.
 
 index는 제품 경계 질문을 Product로, Domain 업무 질문을 알맞은 Domain parent로, 기술 질문을 존재하는
 Architecture로, UI 질문을 적용 가능한 Design으로 route한다. 활성 작업 복구에는 immediate

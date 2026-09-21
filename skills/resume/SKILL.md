@@ -44,6 +44,8 @@ bootstrap을 다시 시작하지 않는다.
    보지 않는다.
 5. spec, state, verification, foundation 또는 Git evidence가 없거나 읽을 수 없거나 서로 다를 때
    추측하지 않는다. 불일치를 보고하고 복구를 소유한 정확한 writer 또는 decision route로 보낸다.
+   verification의 `failure_route`는 판단 owner이고 state의 `next_route`는 현재 관리권이므로, 둘이
+   다른 것만으로 불일치로 보지 않으며 다음 route는 state 값을 보고한다.
 6. active item이 없다면 “진행 중인 작업 없음”만 보고하지 말고 다음 foundation route를 도출한다.
    Product가 없으면 bootstrap이 가능하고, Product가 완전하지만 Architecture가 없으면 `architecture`,
    Architecture가 Design을 요구하지만 Design이 없으면 `design`으로 보낸다.

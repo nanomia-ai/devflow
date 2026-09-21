@@ -28,7 +28,7 @@ safe point를 비교한다.
 필수 문서가 없거나 읽을 수 없거나 일치하지 않거나, checkout에서 판단 대상 bytes를 정확히 식별할 수
 없다면 current라고 추정하지 않는다. 프로젝트를 변경하지 않고 불일치를 적어 `resume`으로 보낸다.
 Verify가 이미 명확한 관리권을 가졌고 실행 중 계약 또는 owner defect가 드러났다면 신뢰할 수 있는
-나머지 evidence를 끝까지 기록한 뒤 state를 통해 소유 failure route를 공개한다.
+나머지 evidence를 끝까지 기록한 뒤 verification.md에는 failure owner를, Work state에는 공통 인계 계약에 따른 현재 관리권을 공개한다.
 
 ## acceptance 계약을 실행한다
 
@@ -56,6 +56,10 @@ criterion마다 깨졌거나 부족한 전제, 하나의 `failure_route`, 그것
 - maintained source readiness 또는 disposition → `adopt`
 - 사람이나 외부 결정만 제공할 수 있는 evidence → `user` 또는 해당 decision route
 
+이 목록은 `verification.md`에 기록할 실제 failure owner를 정한다. 구현 결함은 Work state를 `work`로
+보내고, 나머지 상위 판단·보존할 탐구·사용자 답은 `references/work-state.md`의 인계 계약에 따라
+`direct`로 보낸다.
+
 code, test, spec, Product, Architecture, Design, Domain 또는 adoption canon을 수정하지 않는다.
 verification session에서 실패한 결과를 직접 수리하거나 통과시키기 위해 criterion을 약화하지 않는다.
 
@@ -78,7 +82,8 @@ candidate가 아니다.
 
 범위가 정해진 다음 route와 행동 하나를 선택한다.
 
-- failed 또는 unproven criterion은 기록된 failure route와 retry precondition을 따른다.
+- failed 또는 unproven criterion은 기록된 failure route와 retry precondition을 보존하되, 구현 결함만
+  `work`, 그 밖의 판단은 `direct`로 보낸다.
 - proven인 중간 risk criterion은 spec에 범위가 정해진 후속 행동이 남아 있으면 `direct` 또는 `work`로
   돌아간다.
 - stop condition에 도달하고 모든 closure criterion이 proven이면 candidate를 판단하고 확인된 사실을

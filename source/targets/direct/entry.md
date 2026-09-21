@@ -21,6 +21,14 @@ Product, Domain, Architecture, Design, decision 문서만 읽는다. 현재 Git 
 새 artifact를 만들기 전에 index의 범위가 정해진 Work state glob으로 아직 열린 결과가 같은 활성
 계약이 있는지 찾는다.
 
+선택한 활성 Work state가 `next_route: direct`로 자신을 지정했다면 판단 전에
+`references/work-state.md`를 열고 그 인계만 처리한다.
+
+인계가 상위 판단이나 보존할 탐구를 요구하면 Work state의 관리권은 `direct`에 둔 채 `next_action`이
+지정한 `product`, `architecture`, `design`, `adopt` 또는 `sketch`로 질문을 보낸다. 해당 route는 Work
+artifact를 수정하지 않고 자신의 책임과 기존 종료 규칙만 따른다. 활성 Work와 관련된 사용자 선택도
+Direct가 묻고 답을 같은 조정 흐름에서 처리한다.
+
 현재 member의 Sketch state의 `next_route`가 `direct`라면 쓰기 전에
 `references/sketch-handoff.md`를 열고, ephemeral 지시 또는 추적되는 Work 공개와 함께 landing
 계약을 완료한다.
@@ -111,11 +119,15 @@ review 지점, 다음 slice나 전체 closure를 선택하는 stop condition을 
 spec을 완성한 뒤 공통 state 계약에 따라 `state.md`를 교체한다. 실행 가능한 계약은
 `next_route: work`, 범위가 정해진 `next_action` 하나, 빈 blockers, 동일한 base revision을 가진다.
 
-Work 또는 Verify가 관리권을 가진 동안 spec을 수정하지 않는다. 먼저 그 actor가 `next_route: direct`,
+다른 actor가 관리권을 가진 동안 spec을 수정하지 않는다. 먼저 그 actor가 `next_route: direct`,
 범위가 정해진 delta, 결정 질문을 포함한 safe state를 공개해야 한다. 관리권이나 현재 Git 기준이
 불분명하면 계약을 덮어쓰지 말고 멈춘 뒤 `user`로 보낸다. acceptance, guardrail 또는 closure condition이
 바뀌고 `verification.md`가 있다면 amendment input으로 읽는다. 여전히 필요한 실패 기억만 spec의 현재
 결정에 흡수하고, state를 공개하기 전에 같은 amendment에서 stale verification을 삭제한다.
+
+상위 판단이 Direct로 돌아오면 변경된 canon을 기존 spec과 verification에 대조한다. 계약을 다시 정리해야 하면
+위 amendment 경계에서 처리하고, 구현만 이어가면 `work`, 같은 acceptance를 다시 판정해야 하면
+`verify`로 state를 공개한다.
 
 ## 지시 결과를 반환한다
 

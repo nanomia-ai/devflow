@@ -18,6 +18,10 @@ pending_landings: []
 
 custody는 마지막으로 게시된 `next_route`의 actor에게 있다. snapshot은 그 actor만 쓴다. custody를 바꾸기 전에 최신 safe point와 next action을 게시한다. 비활성 artifact를 되살리는 actor는 대조를 마친 snapshot을 쓸 때 custody를 맡는다. custody 또는 Git basis가 모호하면 덮어쓰지 말고 `user`로 route한다.
 
+활성 Work에서 상위 판단, 현재 관리권 구간을 넘어 보존할 탐구 또는 사용자 답이 필요하면 다른 route에
+관리권을 넘기지 않고 `next_route: direct`로 공개한다. `next_action`에는 필요한 decision route와 정확한
+질문, 답에 따라 Work 계약에서 달라질 내용을 적는다.
+
 구현이나 검증에서 canon 후보로 판단할 가치가 있는 지속적인 현재 사실이 드러났을 때만 `knowledge_candidate`를 추가한다. 해당 사실이 확인된 뒤에만 `pending_landing`을 추가하고 canonical project path 하나와 짝지은다. 코드 경로, artifact dependency, 관찰, verdict는 landing이 아니다.
 
 state를 읽을 수 없거나, 필수 field 또는 sibling이 없거나, spec에 outcome·acceptance·write boundary가 없거나, spec·state·Git이 서로 일치하지 않으면 Work 계약을 current로 취급하지 않는다. 추측으로 계속하지 말고 불일치를 복구 또는 결정 route에 드러낸다.
