@@ -9,8 +9,8 @@
 
 이 계약이 요구하는 내용은 새로운 사실을 만들 권한이 아니다. Product와 Adopt의 문장은 각 entry가
 사용하도록 정한 입력, 사용자 결정, current canon 또는 source-backed claim으로 뒷받침되어야 한다.
-Work의 문장은 검증 뒤 채택한 pending landing으로만 뒷받침되며, Work는 이 계약을 그 사실을 landing이
-가리키는 기존 의미에 통합하는 데만 사용하고 새 제품·업무 의미, Domain 경계나 child 구조를 결정하지 않는다.
+tracked Work의 문장은 검증 뒤 채택한 pending landing으로만 뒷받침된다. Work는 이 계약을 확인된 사실을
+기존 의미에 통합하는 데만 사용하며, 새 제품·업무 의미, Domain 경계나 child 구조를 결정하지 않는다.
 
 ## 제품이 존재하는 이유를 설명한다
 

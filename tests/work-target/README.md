@@ -176,7 +176,7 @@ External product effect remains unproven unless a case directly observes it.
 
 ## Canonical landing and active-Work decision return
 
-Two bounded fresh-use scenes used independent Git repositories and project-local generated skills:
+Bounded fresh-use scenes used independent Git repositories and project-local generated skills:
 
 - Work integrated two independently verified eligibility outcomes into the existing Lending Domain
   path, ran the existing test, committed the canonical change, and removed the completed artifact.
@@ -191,13 +191,26 @@ Two bounded fresh-use scenes used independent Git repositories and project-local
   the changed canon with the existing spec and verification, amended the Work contract, removed the
   stale verification, and published `work`. A final Work session moved retry ownership to the queue
   worker, passed all four tests, committed a safe point, and published `verify`.
+- In an independent interruption fixture, Resume found one Work state at `direct` and one
+  current-member Sketch state at `sketch`, reported both, and stopped for the plan-owned user
+  selection instead of inferring a relationship. After the Work was selected, a fresh Direct
+  session found and reused the existing Sketch rather than creating a duplicate.
+- A second cold Direct session from a different model family began without the preceding Resume
+  exchange. It followed the index's current-member Sketch state route, matched the Work question to
+  the existing brief, reused that Sketch, kept Work custody at `direct`, and changed no files.
+- A fresh Sketch session published the confirmed finding for Architecture. Architecture wrote the
+  canon, removed the final Sketch, and left Work untouched. A final fresh Direct session compared
+  that canon with the same Work contract, amended only its spec and state, and published `work`
+  with no blocker. No source rule was added because the proposed duplicate and premature-return
+  failures did not occur.
 
 The earlier receiver fixture, in which Architecture directly changed Work state from `architecture`
 to `work`, records a superseded intermediate design and is not evidence for the final custody model.
 The first Direct fixture also reduced an unresolved Architecture question to a write-boundary choice;
-because its `next_action` omitted the required decision route, that observation is excluded. Product,
-Design, Adopt, Sketch and user-answer broker paths were not executed. The exact interruption behavior
-between stages and behavior on other hosts or models remain `unproven`.
+because its `next_action` omitted the required decision route, that observation is excluded. The
+observed Sketch broker path proves only this same-member, single-Work interruption and landing
+shape. Product, Design, Adopt, user-answer brokerage, ambiguous multiple-Sketch matching, other
+interruption points, other hosts, and broader model behavior remain `unproven`.
 
 ## Reopen boundaries
 

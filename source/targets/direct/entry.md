@@ -63,8 +63,7 @@ Direct가 묻고 답을 같은 조정 흐름에서 처리한다.
 ## 추적되는 계약에만 작성 상세를 적용한다
 
 변경을 tracked로 분류한 뒤 계약을 구성·생성·수정하거나 integration 계약을 활성화하기 전에
-`references/work-state.md`와 `references/direct-tracked-contract.md`를 연다. 진행 중인 ephemeral 변경이
-지속성 gate를 넘으면 더 구현하기 전에 멈추고 같은 상세에 따라 승격한다. ephemeral 지시, 소유 decision
+`references/work-state.md`와 `references/direct-tracked-contract.md`를 연다. ephemeral 지시, 소유 decision
 route 반환 또는 기존 활성 Work의 상위 질문 전달만으로 끝나면 tracked 작성 상세를 열지 않는다.
 
 다른 actor가 관리권을 가진 동안 spec을 수정하지 않는다. 먼저 그 actor가 `next_route: direct`,

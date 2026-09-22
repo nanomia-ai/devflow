@@ -13,9 +13,8 @@ Sketch는 하나의 지배 질문을 결정 가능한 상태로 만드는 데 �
 
 ## 탐구를 지속해야 할 때만 진입한다
 
-target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `sketch` 행을 적용한다. 이어서
-`references/project-knowledge.md`를 연다. `.devflow/index.md`를 읽을 수 있으면 먼저 읽고, 지배 질문에
-관련된 프로젝트 route만 따른다.
+target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `sketch` 행을 적용한다. `.devflow/index.md`를
+읽을 수 있으면 먼저 읽고, 지배 질문에 관련된 프로젝트 route만 따른다.
 
 다음 세 조건이 모두 참일 때만 Sketch를 만든다.
 
@@ -26,6 +25,8 @@ target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `sk
 그렇지 않다면 논의를 현재 대화 안에만 두고, 명확한 프로젝트 brief는 `product`로, 실행 가능한
 변경은 `direct`로, 구현하며 얻어야 하는 학습은 Direct shaping으로 보낸다. 파일 수, 새로움,
 “research”라는 단어 자체는 탐구를 지속할 이유가 아니다.
+
+지속 Sketch를 새로 만들거나 이어갈 때는 `references/project-knowledge.md`를 먼저 연다.
 
 foundation이 생기기 전에 답이 제품 의미를 확립한다면 `project` scope를 선택한다. 현재 프로젝트
 결정이 하나의 delivery 결과를 막고 있다면 `change` scope를 선택한다. 한 대화에서 나왔다는 이유만으로
@@ -105,8 +106,6 @@ project scope의 제품 의미는 주로 `product`로 보낸다. 기술 및 UI f
 보내며, 해당 변경 뒤에도 계속 참인 사실은 먼저 하나의 Product, Domain, Architecture, Design 또는
 decision home으로 보낸다.
 
-한 번에 범위가 정해진 landing 하나만 공개하고, 같은 member의 다음 역할이 공통 landing 계약을 완료할 때까지
-선택한 항목과 남은 모든 항목을 snapshot에 유지한다. Sketch에서 owner 문서를 작성하지 않는다.
 다음 역할이 artifact를 닫은 뒤에는 Git이 최종 이력을 보존한다.
 
 ## 현재 결정 경계를 반환한다

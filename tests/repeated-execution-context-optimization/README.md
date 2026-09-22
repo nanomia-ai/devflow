@@ -42,6 +42,12 @@ Independent source reviews reconstructed the moved Work and Direct rules from th
 without finding a lost condition, owner, action, order, or result. This is meaning evidence, not
 runtime behavior evidence.
 
+The final local refinement removed Direct's repeated promotion instruction, left Sketch landing
+detail at its shared handoff owner, and made Sketch's project-knowledge read conditional on creating
+or continuing a durable Sketch. It also limited Product's pending-landing evidence requirement to
+tracked Work so it no longer contradicts the existing ephemeral canonical-write path. No import,
+route, state, ownership, or lifecycle changed.
+
 ## Cost measurement
 
 Counts are Unicode characters from the canonical Markdown source. They exclude project documents,
@@ -61,10 +67,15 @@ code, conversation history, model-specific tokenization, and the generated-marke
 These values show a frequency trade rather than universal compression. No average saving is claimed
 because real invocation frequencies and model token counts have not been observed.
 
+The final refinement reduced the Direct entry by another 64 Unicode characters and the Sketch entry
+by 109; the Product contract changed by 3 characters for meaning rather than compression. A
+file-free Sketch now avoids the 1,271-character project-knowledge reference, while new and continued
+durable Sketches still pay that read.
+
 ## Fresh-use observations
 
-Five clean-context, read-only sessions received only one standalone generated target and a bounded
-scenario. They did not receive source, plan, tests, Git history, or the authoring discussion.
+Seven clean-context, read-only sessions received only the relevant standalone generated target and
+a bounded scenario. They did not receive source, plan, tests, Git history, or the authoring discussion.
 
 - Work ordinary implementation opened `SKILL.md`, communication, project-gate, and work-state. It
   did not open work-closure, kept custody at Work, and treated the candidate as neither adopted nor
@@ -79,14 +90,24 @@ scenario. They did not receive source, plan, tests, Git history, or the authorin
 - Sketch opened `SKILL.md`, communication, project-gate, and project-knowledge. It had no
   team-context reference, did not inspect the other member's similar Sketch, kept findings inside
   its own folder, and interpreted `next_route` as a same-member role transition.
+- One final session kept a bounded typo fix ephemeral, then stopped a different change when it
+  crossed the persistence gate and opened work-state plus direct-tracked-contract before publishing
+  tracked Work. In the same session, a file-free Sketch skipped project-knowledge while an existing
+  same-member persistent Sketch opened it and continued the existing artifact.
+- Another final session used sketch-handoff to publish one of two ready findings, retained both until
+  the first canonical absorption, and kept the second finding afterward. It read Product and project
+  knowledge contracts for both verified tracked landing and current-dialogue ephemeral integration
+  into existing meaning, but rejected an ephemeral write that required a new Domain boundary.
 
 ## Evidence status
 
 - `proven`: source-to-reference delivery; deterministic double builds; integrity/currentness;
-  source meaning reconstruction; the five named conditional-open decisions in the observed fresh-agent sessions.
+  source meaning reconstruction; the named conditional-open, promotion, handoff, and authority
+  decisions in the seven observed fresh-agent sessions.
 - `failed`: none in the bounded observations.
 - `unproven`: actual implementation bytes, failed/unproven repair, missing-home or new-meaning
-  routing, canonical landing writes, artifact deletion, Direct upper-question handoff,
+  routing, post-move creation of a new durable Sketch, canonical landing writes, artifact deletion,
+  Direct upper-question handoff,
   promotion/amendment/integration, Adopt member-note behavior, repeated-read recovery cost, real
   invocation frequencies, model-specific token savings, other hosts and models, and external
   product effect.
