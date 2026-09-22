@@ -8,6 +8,7 @@
     "decision-document": "modules/decision-document.md",
     "design-document": "modules/design-document.md",
     "direct-tracked-contract": "targets/direct/tracked-contract.md",
+    "member-preferences": "modules/member-preferences.md",
     "product-document": "modules/product-document.md",
     "project-knowledge": "modules/project-knowledge.md",
     "project-gate": "modules/project-gate.md",

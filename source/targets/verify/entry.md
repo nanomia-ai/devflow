@@ -30,6 +30,12 @@ safe point를 비교한다.
 Verify가 이미 명확한 관리권을 가졌고 실행 중 계약 또는 owner defect가 드러났다면 신뢰할 수 있는
 나머지 evidence를 끝까지 기록한 뒤 verification.md에는 failure owner를, Work state에는 공통 인계 계약에 따른 현재 관리권을 공개한다.
 
+개인 설정은 공유 계약을 유지하며 팀원마다 검증 방법을 조정하는 입력이다. 유효한 계약과 관리권을
+확인한 뒤 첫 criterion을 실행하기 전에, `.devflow/team/`이 있으면 `references/project-gate.md`의 현재
+team identity로 `.devflow/team/<current-member>/preferences/verify.md` 하나만 확인한다. 이미 확인한
+identity는 재사용한다. 파일이 있으면 `references/member-preferences.md`를 먼저 열고 개인 파일을
+적용하며, 없으면 만들지 않고 기본 방법으로 진행한다.
+
 ## acceptance 계약을 실행한다
 
 현재 acceptance criterion을 하나씩 독립적으로 평가한다. 각각 다음을 기록한다.
@@ -103,7 +109,7 @@ verification record를 삭제할 책임은 Direct에 있다.
 - `Criteria:` 각 criterion, `proven`·`failed`·`unproven` verdict, evidence
 - `Route와 행동:` 공개한 다음 route 하나와 범위가 정해진 행동
 - `미검증:` 사용할 수 없는 observation과 재개 조건, 또는 `none`
-- `읽은 범위:` 실제로 연 모든 project, Work, implementation, evidence 경로
+- `읽은 범위:` 실제로 연 모든 project, Work, implementation, evidence 및 개인 설정 경로
 
 모든 현재 criterion에 정직한 verdict가 있고, route 전에 evidence가 공개되었으며, state에 verdict
 사본이 없고, 다음 owner가 무엇을 바꾸거나 닫아야 하는지 알 수 있고, Verify가 구현·계약·프로젝트

@@ -34,6 +34,12 @@ revision·status·관련 diff를 읽는다. 무관한 프로젝트 지식까지 
 않는다. 정확한 불일치를 보고하고 `resume`으로 보낸다. state를 읽을 수 있고 이미 Work에 관리권을
 주었다면, 그 불일치를 결정 질문으로 적어 `next_route: direct`를 공개한다.
 
+개인 설정은 공유 계약을 유지하며 팀원마다 실행 방법을 조정하는 입력이다. 유효한 input과 관리권을
+확인한 뒤 첫 구현·종료 행동 전에, `.devflow/team/`이 있으면 `references/project-gate.md`의 현재 team
+identity로 `.devflow/team/<current-member>/preferences/work.md` 하나만 확인한다. 이미 확인한 identity는
+재사용한다. 파일이 있으면 `references/member-preferences.md`를 먼저 열고 개인 파일을 적용하며, 없으면
+만들지 않고 기본 방법으로 진행한다.
+
 ## 계약 안에서 실행한다
 
 spec을 만족하는 가장 작은 현재 결과 또는 shaping slice를 구현한다. Work는 write boundary 안의
@@ -103,7 +109,7 @@ delta를 `base_revision: HEAD`로 승격하도록 `direct`로 보낸다.
 - `Safe point:` commit 또는 `none`, 그리고 남아 있는 소유 dirty path
 - `Route와 행동:` 다음 route 하나와 범위가 정해진 행동 하나, 또는 `closed`
 - `이탈:` 잘못된 전제, owner 밖의 spec 조항, blocker, candidate, unproven observation, 또는 `none`
-- `읽은 범위:` 실제로 연 canonical 및 Work 파일
+- `읽은 범위:` 실제로 연 canonical, Work 및 개인 설정 파일
 
 새 goal을 지시하거나 acceptance를 바꾸거나 독립적인 Verify judgment를 수행하거나 프로젝트 status를
 재구성하거나 branch를 조정하거나 유지되는 brownfield source를 흡수하지 않는다.

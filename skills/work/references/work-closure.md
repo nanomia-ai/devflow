@@ -30,5 +30,5 @@ landing 대상이 없으면 새 문서를 만들어 닫지 않고, 사실과 판
 반영한다. 수정한 문서의 `summary`, `read_when`, 관련 본문을 다시 읽고, 중복 없이 사실이 존재하는 것을
 확인한 뒤에만 landing을 지운다. closure가 commit을 만들면 artifact를 삭제하기 전에 그 commit message에
 goal, acceptance, verification을 짧게 요약한다. PR이 review surface라면 대신 PR에 쓴다. blocker,
-candidate, pending landing이 하나도 남지 않았을 때만 Work artifact 디렉터리와 범위가 정해진 team
-파일을 삭제한다. Git이 이력을 보존하므로 완료된 spec tombstone을 남기지 않는다.
+candidate, pending landing이 하나도 남지 않았을 때만 Work artifact 디렉터리와 같은 Work ID의
+`.devflow/team/*/<work-id>.md`만 삭제한다. Git이 이력을 보존하므로 완료된 spec tombstone을 남기지 않는다.
