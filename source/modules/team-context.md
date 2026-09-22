@@ -1,8 +1,4 @@
-# member 작업면과 범위가 제한된 context
-
-Sketch는 `.devflow/team/<current-member>/sketches/<artifact-id>/` 전체를 현재 member의 개인 탐구 작업면으로 사용한다. 다른 member의 Sketch를 기본 탐색하거나 읽거나 이어받지 않는다. 이 경계는 중간 질문과 가설을 서로의 입력으로 취합하지 않게 하지만 repository 접근 권한을 제한하지는 않는다. 확정된 결론만 Sketch landing 계약을 통해 project canon 또는 Direct로 올린다.
-
-개인 Sketch 폴더가 brief, state와 선택적인 findings를 모두 소유하므로 별도의 `.devflow/team/<member>/<sketch-id>.md` note를 만들지 않는다. `next_route`는 같은 member가 수행할 다음 Devflow 역할을 고르며 다른 member에게 탐구 관리권을 넘기지 않는다.
+# Work와 Adoption의 범위가 제한된 member context
 
 Work와 Adoption의 member note는 공유 artifact state, spec, project canon과 Git을 보충할 뿐 덮어쓰지 않는다. 선택한 Work ID 또는 고정 key `adoption`에 대해 `.devflow/team/*/<artifact-key>.md`만 읽고, 각 note의 branch 또는 worktree 좌표를 현재 checkout과 비교한다. 일치하지 않는 내용은 공유 사실로 취급하지 말고 불일치로 드러낸다.
 

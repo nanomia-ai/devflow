@@ -3,5 +3,5 @@
   "targetId": "direct",
   "mode": "prose",
   "entry": "entry.md",
-  "imports": ["communication", "project-gate", "question-dialogue", "sketch-handoff", "work-state"]
+  "imports": ["communication", "direct-tracked-contract", "project-gate", "question-dialogue", "sketch-handoff", "work-state"]
 }

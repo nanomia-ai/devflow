@@ -15,8 +15,8 @@ Sketch는 하나의 지배 질문을 결정 가능한 상태로 만드는 데 �
 ## 탐구를 지속해야 할 때만 진입한다
 
 target 고유 행동을 하기 전에 `references/project-gate.md`를 열고 `sketch` 행을 적용한다. 이어서
-`references/project-knowledge.md`와 `references/team-context.md`를 연다. `.devflow/index.md`를 읽을 수 있으면 먼저 읽고, 지배
-질문에 관련된 프로젝트 route만 따른다.
+`references/project-knowledge.md`를 연다. `.devflow/index.md`를 읽을 수 있으면 먼저 읽고, 지배 질문에
+관련된 프로젝트 route만 따른다.
 
 다음 세 조건이 모두 참일 때만 Sketch를 만든다.
 
@@ -44,7 +44,8 @@ Sketch는 듀이의 탐구처럼 막연한 불확실성을 다음 결정을 막�
 `S-short-label-<token>`처럼 충돌하기 어려운 불투명 ID를 만들고 현재 tree에 없는지 확인한다.
 `.devflow/team/<current-member>/sketches/<artifact-id>/brief.md`와 `state.md`를 만들며, 모든 파일은
 공통 routing header를 사용한다. 이 폴더는 현재 member의 개인 탐구 작업면이다. 다른 member의 Sketch를
-중복 질문 탐색, 비교 또는 취합을 위해 열지 않는다.
+기본 탐색하거나 읽거나 이어받지 않는다. 이 경계는 중간 질문과 가설을 서로의 입력으로 취합하지 않게
+하지만 repository 접근 권한을 제한하지는 않는다.
 
 `brief.md`는 탐구 이유를 스스로 설명해야 한다. project/change scope, 하나의 지배 질문, 배경과
 사용자 의도, 이미 확인된 사실, 명시적인 비범위, 답이 결정 가능한 상태가 되는 기준을 쓴다. 대화,

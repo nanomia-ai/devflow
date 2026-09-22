@@ -7,12 +7,14 @@
     "communication": "modules/communication.md",
     "decision-document": "modules/decision-document.md",
     "design-document": "modules/design-document.md",
+    "direct-tracked-contract": "targets/direct/tracked-contract.md",
     "product-document": "modules/product-document.md",
     "project-knowledge": "modules/project-knowledge.md",
     "project-gate": "modules/project-gate.md",
     "question-dialogue": "modules/question-dialogue.md",
     "sketch-handoff": "modules/sketch-handoff.md",
     "team-context": "modules/team-context.md",
+    "work-closure": "targets/work/closure.md",
     "work-state": "modules/work-state.md"
   },
   "targets": {
