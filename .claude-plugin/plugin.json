@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "devflow",
   "displayName": "Devflow",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "AI skills that keep project knowledge, work custody, verification evidence, and personal execution methods in a self-contained .devflow tree.",
   "author": {
     "name": "nanomia"
