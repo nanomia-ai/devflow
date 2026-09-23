@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "targetId": "workflow-customize",
+  "mode": "prose",
+  "entry": "entry.md",
+  "imports": ["communication", "member-preferences", "project-gate"]
+}

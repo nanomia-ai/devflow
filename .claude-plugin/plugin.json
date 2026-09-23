@@ -3,7 +3,7 @@
   "name": "devflow",
   "displayName": "Devflow",
   "version": "0.3.0",
-  "description": "Nine AI skills that keep project knowledge, work custody, and verification evidence in a self-contained .devflow tree.",
+  "description": "AI skills that keep project knowledge, work custody, verification evidence, and personal execution methods in a self-contained .devflow tree.",
   "author": {
     "name": "nanomia"
   },

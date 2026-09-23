@@ -27,6 +27,7 @@
     "resume": "targets/resume/target.json",
     "sketch": "targets/sketch/target.json",
     "verify": "targets/verify/target.json",
-    "work": "targets/work/target.json"
+    "work": "targets/work/target.json",
+    "workflow-customize": "targets/workflow-customize/target.json"
   }
 }
