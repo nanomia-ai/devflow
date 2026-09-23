@@ -65,6 +65,9 @@ review 지점, 다음 slice나 전체 closure를 선택하는 stop condition을 
 spec과 필요한 상세를 완성한 뒤 공통 state 계약에 따라 `state.md`를 교체한다. 실행 가능한 계약은
 `next_route: work`, 범위가 정해진 `next_action` 하나, 빈 blockers, 동일한 base revision을 가진다.
 
+spec이나 상세를 고칠 때는 바뀌는 결정만 현재 이유와 함께 고치고, 사용자 의도와 여전히 유효한 결정
+이유는 남긴다. 이전 판본과 변경 과정은 Git에 맡긴다.
+
 상세를 바꾸는 amendment는 바꿀 상세, `spec.md` 순으로 쓰고 `state.md`를 마지막에 공개하며, 그동안
 `next_action`에 바꾸는 concern과 의도를 남긴다. acceptance, guardrail, closure condition 또는 상세가
 바뀌고 `verification.md`가 있다면 amendment input으로 읽는다. 여전히 필요한 실패 기억만 spec의 현재
