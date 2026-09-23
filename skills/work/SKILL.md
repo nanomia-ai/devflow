@@ -27,8 +27,9 @@ Work는 다음 두 input 중 정확히 하나만 받는다.
 tracked input이라면 Work state를 읽거나 쓰기 전에 `references/work-state.md`를 연다. artifact를
 선택한 뒤 그 ID에 해당하는 범위가 정해진 note가 있거나 handoff 뒤에도 보존해야 하는 local delta,
 환경 고유 맥락 또는 잠정 맥락을 가지고 있다면 `references/team-context.md`를 연다. 그렇지 않으면
-건너뛴다. 선택한 spec과 state, spec의 `read_first` 문서, 그 모듈이 허용하는 context, 현재 Git
-revision·status·관련 diff를 읽는다. 무관한 프로젝트 지식까지 확장하지 않는다. 파일을 건드리기 전에
+건너뛴다. 선택한 spec과 state, spec의 `read_first` 문서, 현재 행동에 대해 spec 지도가 가리키는 상세,
+그 모듈이 허용하는 context, 현재 Git revision·status·관련 diff를 읽는다. 무관한 프로젝트 지식까지
+확장하지 않는다. 파일을 건드리기 전에
 `base_revision`에 도달할 수 있고 계약에 적힌 상속 dirty path가 여전히 일치하는지 확인한다.
 
 관리권이 명확해지기 전에 필수 계약 문서가 없거나 읽을 수 없거나 서로 모순되면 구현하거나 수리하지

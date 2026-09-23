@@ -1,6 +1,6 @@
 # Direct의 상세 기획·대형 작업 수용 — 설계 검토
 
-상태: 교차 검토 완료 · 채택 제안. 구현 승인이 아니며 새 동작은 아직 `unproven`이다.
+상태: 조건부 상세 구현·전달 확인 완료. 실제 Work·Verify·중단 재개 효과는 `unproven`이다.
 검토일: 2026-09-23. 기준: Devflow `7af7667`과 현재 작업 트리의 관련 source.
 `plan/**`는 변경하지 않는다. 이 문서는 기존 설계와 제안의 차이, 적용 위치, 실행 검증 조건을 소유한다.
 
@@ -313,7 +313,97 @@ receipt의 요청·실효 agent/model/effort가 일치함을 확인하고 후속
 소스에 집중했다. 서로 다른 검토 범위를 한 명이 모두 검증한 것으로 표현하지 않는다. 외부
 도구의 문서 구조에서 실제 비용 순위나 모든 안전장치의 부재를 추론한 표현은 채택하지 않았다.
 
-이번에 완료한 것은 **소스·설계 대조, 외부 원문 조사, 반복 교차 검토와 구현 전 기획**이다.
-새 source·배포 skill은 작성하지 않았고 §7의 행동 실험도 실행하지 않았다. 따라서 대형 원자
+§9까지 완료한 것은 **소스·설계 대조, 외부 원문 조사, 반복 교차 검토와 구현 전 기획**이었다.
+그 시점에는 새 source·배포 skill을 작성하지 않았고 §7의 행동 실험도 실행하지 않았다. 따라서 대형 원자
 결과의 읽기 절감, 비선형 부분 구현 재개, 상세 amendment 중단, 종료·지식 착지의 실제 효과는
 여전히 `unproven`이다. 이 구분을 유지하는 것이 이 기획의 완료 조건이다.
+
+## 10. 구현 착수 뒤의 단일 spec 대조 관찰
+
+사용자의 구현 요청 뒤 commit `7547b86`에서 §8의 진입 조건에 따라 조건부 상세를 쓰기 전에 현재 Direct의 단일 spec을
+먼저 관찰했다. 원래 대화와 이 문서를 모르는 새 Claude 세션에 standalone Direct 생성물, 독립 Git
+fixture와 하나의 원자적 결과를 이루는 현재 요청만 제공했다. 요청은 exact binary 포맷, crash 복구,
+동시 제출과 압력 제어, 다섯 개의 개별·통합 관찰을 포함했다.
+
+현재 Direct는 하나의 Work artifact를 만들고 checkpoint `state.md`를 먼저 쓴 뒤 자기완결적인
+`spec.md`를 게시했다. spec은 5,378자였으며 배경과 의도, 필수 정본, exact byte 표, 복구·동시성 계약,
+deliverable, 비범위, guardrail, 다섯 개의 관찰 가능한 acceptance, write boundary와 열린 위험을 모두
+보존했다. 세 concern은 독립 배포·수용할 수 없으므로 artifact도 나누지 않았고 조건부 상세도 만들지
+않았다. 최종 state는 같은 base revision과 `next_route: work`를 공개했다.
+
+이 관찰은 현재 source가 이 상세 요청 하나에서 구조화된 단일 spec을 만들 수 있음을
+`proven`으로 만든다. 조건부 상세가 불필요한 읽기나 요구 유실을 줄인다는 효과는 입증하지 않는다.
+현재 plan과 §7·§8은 정돈된 단일 spec이 같은 정확성을 내면 더 작은 안을 선택하도록 하므로,
+`spec/<concern>.md`, work-state 확장과 Work·Verify 연결은 이번에 구현하지 않았다. source와 생성물도
+변경하지 않았다.
+
+기획의 실제 대형 입력이었던 SealQL R2 원문도 다시 대조했다. 지정된 README, specification,
+protocol, API, examples, delivery와 progress는 약 6.7만 자, UTF-8로 약 8.9만 byte였지만, 그 대부분은 완료 뒤에도 유지되어야
+하는 제품·보안·공개 API·wire·storage 계약이었다. 이는 임시 Work 상세가 아니라 Product·Domain·
+Architecture의 조건부 정본이 소유할 내용이다. Delivery의 R2-01~R2-07도 각각 구현 경계와 완료 증거를
+가지며 실제 progress가 단계별 결과를 기록하므로, 기존 component Work와 공유 acceptance를 소유하는
+integration Work가 맞다. SealQL 규모만으로 같은 artifact 아래의 조건부 상세를 정당화하면 장기 계약을
+closure 때 삭제되는 임시 경로에 두거나, 독립 수용 가능한 결과를 하나의 관리권으로 묶게 된다.
+
+독립 반증자는 원래 제안과 현재 source를 다시 대조한 뒤 이 결론을 수용했다. 여러 파일을 먼저
+도입하면 Direct의 amendment 순서와 상세가 바뀐 경우의 stale verification 판정이라는 새 문제가
+생기지만, 현재 관찰은 그 비용을 정당화하지 못했다. fresh Codex 교차 관찰은 스킬을 실행하기 전에
+host의 `codex-update-prompt`에서 차단되어 행동 증거가 아니다.
+
+다음은 계속 `unproven`이다.
+
+- 훨씬 큰 원자적 계약에서 단일 spec 때문에 Work가 무관한 상세를 반복해 읽거나 요구를 놓치는지
+- 여러 부분을 구현한 뒤 새 Work·Resume 세션이 `last_safe_point`와 `next_action`만으로 남은 일을
+  정확하게 이어가는지
+- Verify가 root의 전체 criterion을 빠뜨리지 않고 판단하는지
+- 조건부 상세가 실제 읽기·재탐색·복구 비용을 줄이는지
+
+fresh Work·Verify·Resume에서 위 실패가 실제로 관찰될 때만 조건부 상세를 다시 검토한다. 그때도
+root가 전체 목적·공통 제약·모든 acceptance를 소유하고, Direct만 계약을 수정하며, criterion이
+가리키는 상세를 바꾸면 기존 verification을 무효화한다는 경계부터 적용한다.
+
+## 11. 대형 입력 재검토와 구현
+
+§10의 5,378자 관찰은 중간 규모의 정돈된 요청 하나가 단일 spec으로 표현될 수 있다는 증거였지만,
+사전에 합의된 대형 구현 계약의 전달 한계를 판단할 증거는 아니었다. 당시 SealQL의 README·delivery·
+progress와 나머지 문서의 제목 구조만 대조한 뒤 대부분을 장기 정본으로 분류한 것도 불충분했다.
+
+이후 `specification.md`, `protocol.md`, `api.md`, `examples.md`의 실제 본문을 다시 읽었다. 여기에는 제품과
+Architecture에 남아야 하는 지속 불변식뿐 아니라, 구현 뒤에는 code·declaration·migration·test vector가
+소유할 정확한 signature, byte layout, crypto input, DB constraint, 전이 순서와 검증 값도 함께 있었다.
+이를 모두 장기 정본에 복제하면 code와 다른 두 번째 현재 사실이 되고, 반대로 짧은 root spec에서
+생략하면 새 Work가 이미 끝난 조사와 결정을 반복해야 한다. 따라서 §10의 “조건부 상세 도입 보류”
+판단은 이 입력 계층에 대해 철회한다.
+
+현재 source는 한 Work artifact와 관리권을 유지하면서 다음 경계를 구현한다.
+
+- `spec.md`는 전체 결과, 공통 맥락·제약, 모든 acceptance, write boundary와 상세 선택 지도를 소유한다.
+- 같은 결과에만 필요한 확정 구현 계약은 현재 `next_action` 대상이나 criterion만으로 미리 고를 수
+  있을 때 `spec/<concern>.md`로 나눌 수 있다. 길이만으로 나누지 않으며 대부분 함께 읽으면 접는다.
+- 모든 상세는 하나 이상의 root criterion에 연결된다. Work는 현재 행동의 상세만 읽고 Verify는 각
+  criterion이 가리키는 상세를 읽는다.
+- 완료 뒤에도 판단을 바꾸는 계약은 상세에 두지 않고 owner route로 보낸다. 여러 artifact가 같은
+  임시 상세를 필요로 하면 상세를 공유하지 않고 artifact를 나누지 않는다.
+- 상세에는 별도 ID, state, verdict, custody가 없다. Direct만 쓰며, 생성 때는 spec과 상세 뒤에 state를
+  공개한다. amendment는 상세, root spec, state 순으로 게시하고 상세가 바뀌면 기존 verification을
+  stale로 처리한다.
+
+Resume은 기존처럼 state, root spec과 Git으로 현재 좌표를 복구하고, root의 선택 지도를 routed actor에게
+남긴다. Closure도 기존 artifact 디렉터리 전체를 삭제하므로 별도 규칙이 필요하지 않았다. 새 field,
+registry, schema, checker, route 또는 lifecycle은 추가하지 않았다.
+
+### 11.1 교차검증과 전달 증거
+
+기존 검증자에게 실제 대형 본문과 사용자의 상세 spec 중심 작업 방식을 다시 제공했다. 검증자는 기존의
+“대부분 장기 정본”과 “관찰 전 보류” 판단을 철회하고 위 구조를 수용했다. 첫 적용 뒤에는 모든 상세를
+대조하게 읽히는 표현과 Direct가 정본을 직접 쓸 수 있게 읽히는 표현을 반박했고, 각각 필요한 상세만
+대조하고 owner route로 보내도록 수정했다. 재검토에서 남은 이견은 없었다.
+
+Skill Rails로 Direct, Work, Verify를 각각 두 번 build했으며 같은 target별 tree hash가 재현됐다.
+세 target의 check는 모두 `artifactIntact: true`, `sourceCurrent: true`였다. 이는 source가 의도한
+standalone 전달물에 반영됐다는 `proven` 증거이지 AI 행동 증거는 아니다.
+
+깨끗한 Direct 세션에서 실제 SealQL 입력을 사용하려 한 관찰은 target source가 없는 fixture와 이미
+구현된 외부 저장소를 결합한 잘못된 전제를 발견해 쓰기 전에 중단했다. 이를 성공이나 실패 행동으로
+계산하지 않고 `unproven`으로 남긴다. 실제 구현 전 checkout에서의 상세 분리, 새 Work의 선택적 실행,
+Verify의 전체 criterion 판단, amendment 중단 복구, Resume 뒤 재개와 비용 절감은 아직 관찰하지 않았다.

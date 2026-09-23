@@ -48,14 +48,24 @@ pending_landings: []
 - 허용 write boundary, 그리고 실제 병렬 dispatch를 의도할 때만 실행 unit과 안전한 seam
 - 열린 결정, 위험, blocker
 
+한 결과에 이미 정해진 구현 계약이 많고 현재 행동마다 필요한 부분이 다르면, 공통 맥락·제약과 모든
+acceptance는 `spec.md`에 두고 concern별 확정 계약만 `spec/<concern>.md`로 나눌 수 있다. `spec.md`의
+지도는 `next_action`의 대상이나 criterion만으로 읽을 상세를 고를 수 있게 쓴다. 상세에는 그 concern의
+확정된 값·순서·형식과 적용에 필요한 이유만 두고 공통 제약·acceptance·조사 과정을 반복하지 않는다.
+모든 상세는 하나 이상의 criterion이 가리킨다. artifact가 닫힌 뒤에도 판단을 바꾸는 계약과 여러
+artifact가 함께 쓰는 미구현 계약은 상세에 두지 않는다. 전자는 해당 owner route로 보내고, 후자는
+artifact를 나누지 않는다. 길이만으로 나누지 않고, 대부분의 행동이 대부분의 상세를 열게 되면
+`spec.md` 하나로 합친다.
+
 구현물을 관찰해야 최종 형태를 고를 수 있을 때만 shaping 정보를 추가한다. 추가 승인 없이 executor가
 바꿀 수 있는 경계, 현재의 가장 작은 reviewable slice, 관찰할 surface 또는 signal, 필요한 사용자
 review 지점, 다음 slice나 전체 closure를 선택하는 stop condition을 쓴다. Shaping은 별도 spec 종류가
 아니다.
 
-spec을 완성한 뒤 공통 state 계약에 따라 `state.md`를 교체한다. 실행 가능한 계약은
+spec과 필요한 상세를 완성한 뒤 공통 state 계약에 따라 `state.md`를 교체한다. 실행 가능한 계약은
 `next_route: work`, 범위가 정해진 `next_action` 하나, 빈 blockers, 동일한 base revision을 가진다.
 
-acceptance, guardrail 또는 closure condition이 바뀌고 `verification.md`가 있다면 amendment input으로
-읽는다. 여전히 필요한 실패 기억만 spec의 현재 결정에 흡수하고, state를 공개하기 전에 같은
-amendment에서 stale verification을 삭제한다.
+상세를 바꾸는 amendment는 바꿀 상세, `spec.md` 순으로 쓰고 `state.md`를 마지막에 공개하며, 그동안
+`next_action`에 바꾸는 concern과 의도를 남긴다. acceptance, guardrail, closure condition 또는 상세가
+바뀌고 `verification.md`가 있다면 amendment input으로 읽는다. 여전히 필요한 실패 기억만 spec의 현재
+결정에 흡수하고, state를 공개하기 전에 같은 amendment에서 stale verification을 삭제한다.

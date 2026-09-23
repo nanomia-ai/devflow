@@ -22,9 +22,9 @@ index를 사용할 수 있으면 먼저 읽는다. 사용자 또는 현재 route
 
 `references/work-state.md`를 연 뒤 선택한 state와 sibling spec을 연다. state가 Verify에 관리권을 주고,
 blocker가 없고, 도달 가능한 committed safe point를 지정하며, spec이 outcome·acceptance·write boundary를
-스스로 설명할 때만 verification을 시작할 수 있다. spec의 `read_first` 문서와 criterion 실행에 필요한
-구현·test·환경·team context만 읽는다. 어떤 결과든 evidence로 쓰기 전에 현재 Git revision, 관련 bytes,
-safe point를 비교한다.
+스스로 설명할 때만 verification을 시작할 수 있다. spec의 `read_first` 문서, 각 criterion이 가리키는
+상세와 criterion 실행에 필요한 구현·test·환경·team context만 읽는다. 어떤 결과든 evidence로 쓰기 전에
+현재 Git revision, 관련 bytes, safe point를 비교한다.
 
 필수 문서가 없거나 읽을 수 없거나 일치하지 않거나, checkout에서 판단 대상 bytes를 정확히 식별할 수
 없다면 current라고 추정하지 않는다. 프로젝트를 변경하지 않고 불일치를 적어 `resume`으로 보낸다.

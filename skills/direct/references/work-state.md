@@ -2,6 +2,9 @@
 
 `spec.md`는 현재 outcome, non-goal, acceptance, `read_first`, write boundary를 소유한다. Git은 실제 revision과 byte를 소유한다. `state.md`는 현재 복구 가능한 좌표와 custody 인계만 소유한다.
 
+`spec.md`가 가리키는 `spec/<concern>.md`는 Direct만 쓰는 같은 계약이며 별도 state, verdict 또는 custody를
+갖지 않는다. 필요한 상세를 읽을 수 없거나 `spec.md`와 모순되면 아래 불일치 규칙을 따른다.
+
 다음 field를 가진 현재 snapshot block 하나만 유지한다.
 
 ```yaml
